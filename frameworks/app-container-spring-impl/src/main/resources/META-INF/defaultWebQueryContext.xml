@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+	
+	<!-- データソース取得サービス-->
+	<bean id="dataSourceManagerImpl" class="framework.service.ext.query.DataSourceManagerImpl" scope="prototype">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- SQLエンジン用コネクション(JTA専用、JTA以外で使用するとコネクションが不整合となる) -->
+	<bean id="connectionProvider" class="framework.service.core.query.DataSourceConnectionProviderImpl" />
+	
+	<!-- WEB層からのクエリファクトリ -->
+	<bean id="clientQueryFactory" class="framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
+		<property name="sqlBuilder" ref="sqlBuilder"/>	
+		<property name="emptyHandler" ref="emptyHandler"/>	
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+ 
+</beans>

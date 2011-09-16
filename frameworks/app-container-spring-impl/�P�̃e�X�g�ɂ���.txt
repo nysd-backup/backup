@@ -1,0 +1,20 @@
+・AspectJ使用時にはRequiresNewが使用可能（ただしトランザクションが成功するとコミットしてしまう）
+・-javaagentの指定が必要
+・PersistenceUnitのトランザクションタイプがJTAの場合以下の制約がつく
+	・ロールバック不可能。setAutoCommit(false)は有効でSpringとJPAのrollbackメソッドは実行されるが、
+	Connection#rollbackは実行されずcloseになるためOracleだと勝手にコミットされる。
+	（org.eclipse.persistence.internal.databaseaccess.DatasourceAccessor）
+	トランザクションがJTAだとロールバックが明示的に打たれないようになる。以下のコードでtrueが返却されるようになるとcloseしかよばれない。
+	（EntityManagerSetupImplの以下のところ
+	login.setUsesExternalTransactionController(transactionType == PersistenceUnitTransactionType.JTA);）
+・コネクションをネイティブで取得できない。
+→基本的に単体テストには向かない。本番向け
+
+
+・AspectJ使用しない場合は自律トランザクションのテストは不可能
+・デフォルトでロールバックされる（コネクション取得してしまうとされない）
+・JTA使用不可能
+・コネクション取得すると別コネクションになる（プールサイズ1じゃないとまずい？）
+→単体テスト向け、ただしRequiresNewを呼び出す部分はモックにして同一トランザクションスコープにする必要がある。
+
+
