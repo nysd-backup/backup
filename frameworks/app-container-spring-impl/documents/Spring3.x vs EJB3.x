@@ -1,4 +1,4 @@
-◆単体テストはSpring有利（圧倒的）	
+﻿◆単体テストはSpring有利（圧倒的）	
 	○EJB
 	まともな単体テストツールがない。glassfishのEJBContainer.create()は動作が怪しい。
 		・起動が遅い	
@@ -18,18 +18,16 @@
 ◆移植性
 	○EJB
 	EJBコンテナがないと動作しない。Tomcat/Jettyでは動作させることはできない。
-	アノテーションドリブンの場合侵略的なコードになる。(java.ejbのパッケージを使用するため）CDIを使用しても（javax.injectが必要）
-	
+	ejb-jar.xmlに記載しただけでは認識しない。@SessionBeanが必ず必要（glassfish v3以外はどうか不明）
+
 	○Spring
 	Spring自身がコンテナであるためどこでも動作する。JavaEEコンテナである必要はない。
-	アノテーションドリブンの場合侵略的なコードになる。(springのパッケージを使用するため）
 	
 ◆トランザクション管理
 	○EJB
 	JTA使用可能。
 	SessionContextにrollbackフラグがあり、EJBコンテナが発生したExceptionの種類に従ってこのフラグを設定する。
-	setRollbackOnlyをたたくことでアプリから制御することも可能。
-	ただし、この処理を拡張することはできない。setRollbackOnlyを立てたらトランザクション境界でExceptionが発生するが抑制することができない。
+	setRollbackOnlyをたたくことでアプリから制御することも可能。トランザクション境界の判定方法がEJBコンテナの実装に依存する。
 	getRollbackOnlyがtrueだと以降でSessionBeanの生成ができない。基本的に即時終了しかない。
 	
 	○Spring
