@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.AbstractDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.excel.XlsDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
@@ -180,24 +181,19 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	private IDataSet loadDataSet(String dataFileName, Map<Object, Object> replace) {
 
-		OriginalReplacementDataSet dataset = null;
+		AbstractDataSet dataset = null;
 
 		try {
 
 			// 拡張子がxlsの場合、XlsDataSetを生成
 			if (dataFileName.endsWith(".xls")) {
-				dataset = new OriginalReplacementDataSet(new XlsDataSet(this.getClass().getResourceAsStream(dataFileName)));
+				dataset = new XlsDataSet(this.getClass().getResourceAsStream(dataFileName));
 			} else if (dataFileName.endsWith(".xml")) {
-				dataset = new OriginalReplacementDataSet(new XmlDataSet(this.getClass().getResourceAsStream(dataFileName)));
+				dataset = new XmlDataSet(this.getClass().getResourceAsStream(dataFileName));
 			} else {
 				throw new IllegalArgumentException("File is not supported. Supported file types are .xml, .xls, and .csv");
 			}
-			// 置換文字列の設定
-			if (replace != null) {
-				for (Map.Entry<Object, Object> entry : replace.entrySet()) {
-					dataset.addReplacementObject(entry.getKey(), entry.getValue());
-				}
-			}
+			
 			return dataset;
 
 		} catch (IOException e) {			
