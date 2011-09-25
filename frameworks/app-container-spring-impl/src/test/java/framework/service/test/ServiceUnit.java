@@ -122,7 +122,7 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	protected void setUpData(String dataPath){
 		//javaagentを使用しない単体テストの場合、コミットされる
-		EntityManager em = ServiceLocator.lookupDefault(EntityManagerProvider.class).getEntityManager();		
+		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
 		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
@@ -143,7 +143,7 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	protected void setUpDataForceCommit(String dataPath){
 	
-		EntityManager em = ServiceLocator.lookupDefault(EntityManagerProvider.class).getEntityManager();		
+		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
 		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();

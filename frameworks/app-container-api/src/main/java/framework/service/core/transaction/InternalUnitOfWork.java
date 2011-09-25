@@ -23,7 +23,7 @@ public class InternalUnitOfWork {
 	private Connection currentConnection = null;
 
 	/**
-	 * @param rollbackOnly the rollbackOnly to set
+	 * ロールバックフラグをonにする
 	 */
 	public void setRollbackOnly() {
 		this.rollbackOnly = true;

@@ -15,7 +15,7 @@ import framework.service.core.persistence.EntityManagerAccessor;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * function.
+ * DIコンテナに代わりコンポーネントを生成する.
  *
  * @author yoshida-n
  * @version	created.
@@ -23,54 +23,54 @@ import framework.sqlclient.api.free.QueryFactory;
 public interface ComponentBuilder {
 	
 	/**
-	 * @return
+	 * @return メッセージングファクトリ
 	 */
 	public MessageClientFactory createMessagingClientFactory();
 	
 	
 	/**
-	 * @return
+	 * @return リクエストリスナー
 	 */
 	public RequestListener createRequestListener();
 	
 	/**
-	 * @return
+	 * @return JMS topic送信エンジン
 	 */
 	public InvocationHandler createPublisher();
 	
 	
 	/**
-	 * @return
+	 * @return JMS queue送信エンジン
 	 */
 	public InvocationHandler createSender();
 	
 	/**
-	 * @return
+	 * @return メッセージアクセサ
 	 */
 	public MessageAccessor<MessageBean> createMessageAccessor();
 	
 	/**
-	 * @return
+	 * @return クエリファクトリ
 	 */
 	public QueryFactory createQueryFactory();
 	
 	/**
-	 * @return
+	 * @return WEB層からのクエリ用のファクトリ
 	 */
 	public QueryFactory createWebQueryFactory();
 	
 	/**
-	 * @return
+	 * @return 非同期サービスファクトリ
 	 */
 	public AsyncServiceFactory createAsyncServiceFactory();
 	
 	/**
-	 * @return
+	 * @return ORMクエリファクトリ
 	 */
 	public AdvancedOrmQueryFactory createOrmQueryFactory();
 	
 	/**
-	 * @return
+	 * @return エンティティマネージャラッパー
 	 */
 	public EntityManagerAccessor createEntityManagerAccessor();
 

@@ -42,7 +42,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	
 	public String test() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-		query.findWithLockNoWait("1");
+		query.setPessimisticRead().find("1");
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
 	}
@@ -52,7 +52,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰していなければJPASessionのロールバックフラグはtrueになる
-			query.findWithLockNoWait("1");
+			query.setPessimisticRead().find("1");
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}

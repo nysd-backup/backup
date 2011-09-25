@@ -8,7 +8,6 @@ import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.api.query.services.OrmQueryService;
 import framework.core.entity.AbstractEntity;
-import framework.core.message.MessageBean;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
@@ -25,7 +24,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	protected abstract AdvancedOrmQueryFactory getQueryFactory();
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#find(framework.sqlclient.api.free.orm.OrmCondition, java.lang.Object[])
+	 * @see framework.api.query.services.OrmQueryService#find(framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
 	 */
 	@Override
 	public T find(OrmCondition<T> request, Object[] pks) {
@@ -34,7 +33,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	}
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#findAny(framework.sqlclient.api.free.orm.OrmCondition)
+	 * @see framework.api.query.services.OrmQueryService#findAny(framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public T findAny(OrmCondition<T> request) {
@@ -43,7 +42,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	}
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#getResultList(framework.sqlclient.api.free.orm.OrmCondition)
+	 * @see framework.api.query.services.OrmQueryService#getResultList(framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public List<T> getResultList(OrmCondition<T> request) {		
@@ -52,7 +51,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	}
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#getSingleResult(framework.sqlclient.api.free.orm.OrmCondition)
+	 * @see framework.api.query.services.OrmQueryService#getSingleResult(framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public T getSingleResult(OrmCondition<T> request) {
@@ -61,7 +60,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	}
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#exists(framework.sqlclient.api.free.orm.OrmCondition)
+	 * @see framework.api.query.services.OrmQueryService#exists(framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public boolean exists(OrmCondition<T> request) {
@@ -70,16 +69,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	}
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#exists(framework.sqlclient.api.free.orm.OrmCondition, framework.api.message.MessageBean)
-	 */
-	@Override
-	public boolean exists(OrmCondition<T> request, MessageBean message) {
-		StrictQuery<T> query = createStrictQuery(request);
-		return query.exists(message);
-	}
-
-	/**
-	 * @see framework.api.query.services.OrmQueryService#exists(framework.sqlclient.api.free.orm.OrmCondition, java.lang.Object[])
+	 * @see framework.api.query.services.OrmQueryService#exists(framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
 	 */
 	@Override
 	public boolean exists(OrmCondition<T> request, Object[] pks) {
@@ -88,7 +78,7 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	}
 
 	/**
-	 * @see framework.api.query.services.OrmQueryService#existsByAny(framework.sqlclient.api.free.orm.OrmCondition)
+	 * @see framework.api.query.services.OrmQueryService#existsByAny(framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public boolean existsByAny(OrmCondition<T> request) {

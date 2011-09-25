@@ -12,8 +12,11 @@ import framework.service.core.transaction.ServiceContext;
 
 /**
  * トランザクション境界における処理を行うインターセプター.
+ * 
+ * <pre>
  * トランザクションIDの取得はEJBコンテナの実装に依存するので抽象化する。
  * 一番外側で実行するようにすること。
+ * </pre>
  *
  * @author yoshida-n
  * @version	created.
@@ -23,6 +26,11 @@ public abstract class AbstractTransactionInterceptor {
 	@Resource
 	private SessionContext context;
 	
+	/**
+	 * @param ic　コンテキスト
+	 * @return 実行結果
+	 * @throws Throwable 例外
+	 */
 	@AroundInvoke
 	public Object invoke(InvocationContext ic) throws Throwable {
 		
@@ -57,6 +65,7 @@ public abstract class AbstractTransactionInterceptor {
 	}
 	
 	/**
+	 * SessionContextからトランザクションを識別するためのIDを取得する。
 	 * @param context コンテキスト
 	 * @return　トランザクションID
 	 */

@@ -21,9 +21,9 @@ public class QueryUtils {
 	private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 	/**
-	 * @param params
-	 * @param sqlString
-	 * @return
+	 * @param params　パラメータ
+	 * @param sqlString preparedStatement用のSQL
+	 * @return ?がバインドパラメータに置換された完全SQL
 	 */
 	public static final String applyValues(List<Object> params , String sqlString){
 

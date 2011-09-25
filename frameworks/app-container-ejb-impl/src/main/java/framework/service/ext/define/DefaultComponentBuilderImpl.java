@@ -102,8 +102,7 @@ public class DefaultComponentBuilderImpl implements ComponentBuilder {
 	 */
 	@Override
 	public AsyncServiceFactory createAsyncServiceFactory() {
-		AsyncServiceFactoryImpl impl = new AsyncServiceFactoryImpl();
-		return impl;
+		return new AsyncServiceFactoryImpl();
 	}
 	
 	/**
@@ -114,7 +113,7 @@ public class DefaultComponentBuilderImpl implements ComponentBuilder {
 	}
 
 	/**
-	 * @see framework.service.ext.define.ComponentBuilder#createNativeQueryFactory()
+	 * @see framework.service.ext.define.ComponentBuilder#createWebQueryFactory()
 	 */
 	@Override
 	public QueryFactory createWebQueryFactory() {

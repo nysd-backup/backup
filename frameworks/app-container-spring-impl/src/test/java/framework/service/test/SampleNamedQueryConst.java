@@ -3,7 +3,7 @@
  */
 package framework.service.test;
 
-import framework.service.ext.query.EclipseLinkNamedQuery;
+import framework.service.core.query.EclipseLinkNamedQuery;
 import framework.sqlclient.api.free.AnonymousQuery;
 
 /**

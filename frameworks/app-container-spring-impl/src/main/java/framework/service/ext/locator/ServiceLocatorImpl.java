@@ -3,9 +3,12 @@
  */
 package framework.service.ext.locator;
 
-
 /**
- * リソースパスのコンテキストを初期化する.
+ * APコンテナ専用のコンテキストを初期化する.
+ * 
+ * <pre>
+ * WEB/APでSpringコンテナを分割する場合に使用する。
+ * </pre>
  *
  * @author yoshida-n
  * @version	2011/05/11 created.

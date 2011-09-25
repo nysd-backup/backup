@@ -14,18 +14,12 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
  * @author yoshida-n
  * @version	2011/06/15 created.
  */
-class ParameterConverter {
-
-	/**
-	 * コンストラクタ
-	 */
-	private ParameterConverter(){
-		
-	}
+abstract class ParameterConverter {
 	
 	/**
-	 * @param request
-	 * @param query
+	 * パラメータを設定する。
+	 * @param request リクエスト
+	 * @param query クエリ
 	 */
 	public static AbstractNativeQuery setParameters(QueryRequest request,AbstractNativeQuery query){
 

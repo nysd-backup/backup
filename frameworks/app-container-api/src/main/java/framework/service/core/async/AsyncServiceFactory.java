@@ -12,7 +12,7 @@ package framework.service.core.async;
 public interface AsyncServiceFactory {
 
 	/**
-	 * @param <T> 方
+	 * @param <T> 型
 	 * @param serviceType サービスタイプ
 	 * @return サービス
 	 */

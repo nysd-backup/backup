@@ -70,7 +70,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
   	<!-- WEB/帳票からのアクセス用（単体テストはJTA使用不可能なので）-->
-	<bean id="connectionProvider" class="framework.service.ext.query.EntityManagerConnectionProviderImpl" scope="prototype" >
+	<bean id="connectionProvider" class="framework.service.core.query.EntityManagerConnectionProviderImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 	</bean>	
 	<bean id="clientQueryFactory" class="framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >

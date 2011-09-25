@@ -20,7 +20,7 @@ public class MessageListenerImpl extends AbstractMessageListener{
 	 */
 	@Override
 	protected RequestListener createListener() {
-		return ServiceLocator.lookupDefault(RequestListener.class);
+		return ServiceLocator.lookupByInterface(RequestListener.class);
 	}
 
 }

@@ -5,8 +5,8 @@ package framework.service.ext.advice;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 
-import framework.logics.log.LogWriter;
 import framework.logics.log.LogWriterFactory;
+import framework.logics.log.NormalLogWriter;
 import framework.service.core.transaction.ServiceContext;
 
 
@@ -19,7 +19,7 @@ import framework.service.core.transaction.ServiceContext;
 public class PerfInterceptor{
 
 	/** ログ */
-	private static final LogWriter LOG = LogWriterFactory.getLog(PerfInterceptor.class);
+	private static final NormalLogWriter LOG = LogWriterFactory.getPerfLog(PerfInterceptor.class);
 	
 	/**
 	 * @param ic 起動情報
@@ -28,7 +28,7 @@ public class PerfInterceptor{
 	 */
 	public Object around(ProceedingJoinPoint ic) throws Throwable {
 		
-		if(LOG.isPerfEnabled()){
+		if(LOG.isDebugEnabled()){
 			ServiceContext context = ServiceContext.getCurrentInstance();
 			if(context == null){
 				return ic.proceed();
@@ -48,7 +48,7 @@ public class PerfInterceptor{
 					for (int i = 1; i < context.getCallStackLevel(); i++) {
 						builder.append("\t");
 					}
-					LOG.perf(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getSignature().getDeclaringTypeName(), ic.getSignature().getName()));
+					LOG.debug(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getSignature().getDeclaringTypeName(), ic.getSignature().getName()));
 		
 					context.popCallStack();
 				}

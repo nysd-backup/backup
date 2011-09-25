@@ -32,7 +32,8 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 	
 	public String test() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-		query.findWithLockNoWait("1");
+		query.setPessimisticRead();
+		query.find("1");
 		return "OK";
 	}
 
@@ -41,7 +42,8 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰していなければJPASessionのロールバックフラグはtrueになる
-			query.findWithLockNoWait("1");
+			query.setPessimisticRead();
+			query.find("1");
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}

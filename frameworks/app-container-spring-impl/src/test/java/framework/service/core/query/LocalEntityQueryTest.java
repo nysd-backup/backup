@@ -516,7 +516,8 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		impl.setSuppressOptimisticLockError();
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findWithLockNoWait("1");
+		
+		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead().find("1");
 		
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -532,7 +533,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findWithLockNoWait("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead().find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -557,7 +558,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findWithLockNoWait("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead().find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -582,7 +583,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findWithLockNoWait("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead().find("1");
 
 		RequiresNewReadOnlyService service = ServiceLocator.lookupByInterface(RequiresNewReadOnlyService.class);
 		
@@ -606,7 +607,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void queryPessimisticLockError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimiticLockNoWait();
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead();
 		query.eq(ITestEntity.TEST,"1");
 		
 		query.getResultList();	//getSingleResultやmaxResult指定の場合SQL構文エラー　→ EclipseLinkのバグ
@@ -635,7 +636,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		impl.setSuppressOptimisticLockError();
 	
 		setUpDataForceCommit("TEST.xls");
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimiticLockNoWait();
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead();
 		query.eq(ITestEntity.TEST,"1");
 		query.setHint(QueryHints.HINT, "/* TEST */");
 		

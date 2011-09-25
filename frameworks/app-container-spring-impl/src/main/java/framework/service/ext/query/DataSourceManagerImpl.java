@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 import framework.service.core.query.DataSourceManager;
 
 /**
- * function.
+ * DIされたデータソースの取得.
  *
  * @author yoshida-n
  * @version	created.
@@ -19,7 +19,7 @@ public class DataSourceManagerImpl implements DataSourceManager{
 	private DataSource dataSource;
 	
 	/**
-	 * @param dataSource
+	 * @param dataSource　the dataSource to set
 	 */
 	public void setDataSource(DataSource dataSource){
 		this.dataSource = dataSource;

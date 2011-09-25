@@ -11,6 +11,11 @@ import framework.core.exception.application.BusinessException;
 
 /**
  * EJB用業務例外.
+ * 
+ * <pre>
+ * BusinessExceptionのままだとシステムエ例外として扱われてしまうため、
+ * ApplicationException(rollback=true)を設定した例外を用意する。
+ *</pre>
  *
  * @author yoshida-n
  * @version	created.
@@ -37,7 +42,7 @@ public class EJBBusinessException extends BusinessException{
 	
 	/**
 	 * @param message メッセージ
-	 * @param リプライ
+	 * @param reply リプライ
 	 */
 	public EJBBusinessException(String message,Serializable reply){
 		super(message,reply);

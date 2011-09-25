@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import framework.jpqlclient.api.EntityManagerProvider;
 
 /**
- * function.
+ * エンティティマネージャの提供者.
  *
  * @author yoshida-n
  * @version	created.
@@ -23,7 +23,7 @@ public class EntityManagerProviderImpl implements EntityManagerProvider{
 	private EntityManager em;
 		
 	/**
-	 * @see framework.jpqlclient.internal.em.EntityManagerProvider#getEntityManager()
+	 * @see framework.jpqlclient.api.EntityManagerProvider#getEntityManager()
 	 */
 	@Override
 	public EntityManager getEntityManager(){	

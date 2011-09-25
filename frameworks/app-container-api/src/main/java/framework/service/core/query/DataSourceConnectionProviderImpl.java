@@ -25,7 +25,7 @@ import framework.sqlclient.api.ConnectionProvider;
 public class DataSourceConnectionProviderImpl implements ConnectionProvider{
 
 	/**
-	 * @see framework.sqlclient.api.free.ConnectionProvider#getConnection(javax.persistence.EntityManager)
+	 * @see framework.sqlclient.api.ConnectionProvider#getConnection()
 	 */
 	@Override
 	public Connection getConnection() {	

@@ -6,8 +6,8 @@ package framework.service.ext.advice;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import framework.logics.log.LogWriter;
 import framework.logics.log.LogWriterFactory;
+import framework.logics.log.NormalLogWriter;
 import framework.service.core.transaction.ServiceContext;
 
 
@@ -20,16 +20,16 @@ import framework.service.core.transaction.ServiceContext;
 public class PerfInterceptor {
 
 	/** ログ */
-	private static final LogWriter LOG = LogWriterFactory.getLog(PerfInterceptor.class);
+	private static final NormalLogWriter LOG = LogWriterFactory.getPerfLog(PerfInterceptor.class);
 	
 	/**
-	 * @param ic
-	 * @return
-	 * @throws Throwable
+	 * @param ic コンテキスト
+	 * @return 実行結果
+	 * @throws Throwable 例外
 	 */
 	@AroundInvoke
 	public Object invoke(InvocationContext ic) throws Throwable {
-		if(LOG.isPerfEnabled()){
+		if(LOG.isDebugEnabled()){
 			ServiceContext context = ServiceContext.getCurrentInstance();
 			context.pushCallStack();
 	
@@ -46,7 +46,7 @@ public class PerfInterceptor {
 				for (int i = 1; i < context.getCallStackLevel(); i++) {
 					builder.append("\t");
 				}
-				LOG.perf(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getMethod().getDeclaringClass().getName(), ic.getMethod().getName()));
+				LOG.debug(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getMethod().getDeclaringClass().getName(), ic.getMethod().getName()));
 	
 				context.popCallStack();
 			}

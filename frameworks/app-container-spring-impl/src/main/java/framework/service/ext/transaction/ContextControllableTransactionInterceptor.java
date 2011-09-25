@@ -24,9 +24,12 @@ import framework.service.core.transaction.TransactionManagingContext;
 
 /**
  * コンテキストのロールバック情報の利用したトランザクション管理を行う.
+ * 
+ * <pre>
  * ServiceContextにエラーレベル以上のメッセージがある場合、transactionManagerのロールバックフラグを立てる。
  * トランザクション境界の場合はServiceContextのロールバックフラグをfalseに戻し、トランザクション内の業務エラーの影響が他トランザクションに影響ないようにする。
  * 一番外側で実行するようにすること。
+ * </pre>
  *
  * @author yoshida-n
  * @version	2011/05/15 created.

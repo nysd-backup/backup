@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+] * Use is subject to license terms.
  */
 package framework.service.core.advice;
 
@@ -21,6 +21,7 @@ public class SQLBuilderInterceptor implements Advice{
 
 	private static final LogWriter LOG = LogWriterFactory.getLog(SQLBuilderInterceptor.class);
 	
+	/** ログ出力を無視するクエリIDのリスト */
 	private List<String> ignoreList = new ArrayList<String>();
 	
 	/**
@@ -32,7 +33,7 @@ public class SQLBuilderInterceptor implements Advice{
 	}
 
 	/**
-	 * @see framework.service.core.advice.Advice#before(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+	 * @see framework.service.core.advice.Advice#before(java.lang.Object, java.lang.String, java.lang.Object[])
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -53,7 +54,7 @@ public class SQLBuilderInterceptor implements Advice{
 	}
 
 	/**
-	 * @see framework.service.core.advice.Advice#after(java.lang.Object, java.lang.reflect.Method, java.lang.Object[], java.lang.Object)
+	 * @see framework.service.core.advice.Advice#after(java.lang.Object, java.lang.String, java.lang.Object[], java.lang.Object)
 	 */
 	@Override
 	public void after(Object target, String method, Object[] argments,Object result) {

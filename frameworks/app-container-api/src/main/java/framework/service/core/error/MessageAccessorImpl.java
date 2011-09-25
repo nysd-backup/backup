@@ -30,7 +30,7 @@ public class MessageAccessorImpl implements MessageAccessor<MessageBean>{
 	}
 	
 	/**
-	 * @see framework.api.message.MessageAccessor#createMesasge(int, java.lang.Object[])
+	 * @see framework.logics.builder.MessageAccessor#createMessage(int, java.lang.Object[])
 	 */
 	@Override
 	public MessageBean createMessage(int code, Object... args) {
@@ -38,7 +38,7 @@ public class MessageAccessorImpl implements MessageAccessor<MessageBean>{
 	}
 
 	/**
-	 * @see framework.api.message.MessageAccessor#addMesasge(framework.api.message.MessageBean)
+	 * @see framework.logics.builder.MessageAccessor#addMessage(framework.core.message.MessageBean)
 	 */
 	@Override
 	public MessageBean addMessage(MessageBean message) {

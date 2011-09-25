@@ -66,7 +66,7 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	/**
 	 * 非同期サービス起動
 	 * @param dto DTO
-	 * @param method メソッド
+	 * @param destinationName 宛先名称
 	 * @return 戻り値
 	 * @throws Throwable　例外
 	 */

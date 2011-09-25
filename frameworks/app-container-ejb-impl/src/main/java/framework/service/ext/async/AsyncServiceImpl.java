@@ -21,7 +21,7 @@ import framework.service.core.locator.ServiceLocator;
 public class AsyncServiceImpl implements AsyncService{
 
 	/**
-	 * @see framework.service.ext.core.async.AsyncExecutor#execute(java.lang.Object, java.lang.reflect.Method, java.lang.Object)
+	 * @see framework.service.core.async.AsyncService#execute(java.lang.Object, java.lang.reflect.Method, java.lang.Object)
 	 */
 	public Future<Object> execute(Object proxy, Method method , Object args) throws Exception{	
 		

@@ -8,10 +8,6 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * 外部で初期化されたコンテキストを保持.
- * 
- * <pre>
- * WEB/APのSpringコンテナを分割する場合に使用する。
- * </pre>
  *
  * @author yoshida-n
  * @version	2011/05/11 created.

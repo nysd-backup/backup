@@ -16,13 +16,11 @@ import framework.jdoclient.api.PersistenceManagerProvider;
  */
 public class PersistenceManagerAccessorImpl implements PersistenceManagerAccessor{
 	
-	
 	/** パーシステンスマネージャ */
 	private PersistenceManager pm;
 
 	/**
-	 * 初期化処理
-	 * @param パーシステンスマネージャ
+	 * @param provider the provider to set
 	 */
 	public void setEPersistenceManagerProvider(PersistenceManagerProvider provider){		
 		pm = provider.getPersistenceManager();
@@ -37,7 +35,7 @@ public class PersistenceManagerAccessorImpl implements PersistenceManagerAccesso
 	}
 
 	/**
-	 * @see framework.service.core.persistence.PersistenceManagerAccessor#deletePersistence(framework.core.entity.AbstractEntity)
+	 * @see framework.service.core.persistence.PersistenceManagerAccessor#deletePersistent(framework.core.entity.AbstractEntity)
 	 */
 	@Override
 	public <T extends AbstractEntity> void deletePersistent(T entity) {

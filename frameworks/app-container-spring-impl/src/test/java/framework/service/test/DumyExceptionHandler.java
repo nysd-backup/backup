@@ -8,8 +8,8 @@ import javax.persistence.PessimisticLockException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 
+import framework.service.core.exception.AbstractJPAExceptionHandler;
 import framework.service.core.transaction.ServiceContext;
-import framework.service.ext.transaction.AbstractJPAExceptionHandler;
 
 /**
  * function.
@@ -20,7 +20,7 @@ import framework.service.ext.transaction.AbstractJPAExceptionHandler;
 public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 
 	/**
-	 * @see framework.service.ext.transaction.AbstractJPAExceptionHandler#handleOptimisticLockException(org.eclipse.persistence.exceptions.OptimisticLockException)
+	 * @see framework.service.core.exception.AbstractJPAExceptionHandler#handleOptimisticLockException(org.eclipse.persistence.exceptions.OptimisticLockException)
 	 */
 	@Override
 	protected Object handleOptimisticLockException(OptimisticLockException e){
@@ -35,7 +35,7 @@ public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 	}
 	
 	/**
-	 * @see framework.service.ext.transaction.AbstractJPAExceptionHandler#handleOptimisticLockException(org.eclipse.persistence.exceptions.OptimisticLockException)
+	 * @see framework.service.core.exception.AbstractJPAExceptionHandler#handleOptimisticLockException(org.eclipse.persistence.exceptions.OptimisticLockException)
 	 */
 	@Override
 	protected Object handleDatabaseException(DatabaseException e){
@@ -50,7 +50,7 @@ public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 	}
 	
 	/**
-	 * @see framework.service.ext.transaction.AbstractJPAExceptionHandler#handleOptimisticLockException(org.eclipse.persistence.exceptions.OptimisticLockException)
+	 * @see framework.service.core.exception.AbstractJPAExceptionHandler#handleOptimisticLockException(org.eclipse.persistence.exceptions.OptimisticLockException)
 	 */
 	@Override
 	protected Object handlePessimisticLockException(PessimisticLockException e){

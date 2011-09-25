@@ -21,6 +21,7 @@
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" sourcepath="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-sources.jar"/>
   <classpathentry kind="src" path="/container-core"/>
+  <classpathentry kind="src" path="/container-core-eclipselink-diarect"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/eclipselink/2.0.2/eclipselink-2.0.2.jar" sourcepath="M2_REPO/org/eclipse/persistence/eclipselink/2.0.2/eclipselink-2.0.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/javaee-api/6.0/javaee-api-6.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/javax.persistence/2.0.2/javax.persistence-2.0.2.jar" sourcepath="M2_REPO/org/eclipse/persistence/javax.persistence/2.0.2/javax.persistence-2.0.2-sources.jar"/>

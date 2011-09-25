@@ -9,10 +9,6 @@ import framework.api.service.ServiceLocatorInitializer;
 
 /**
  * Webに連動したサービスロケータの初期化.
- * 
- * <pre>
- * Tomcatではこちらを使用する必要がある。
- * </pre>
  *
  * @author yoshida-n
  * @version	2011/05/11 created.
@@ -22,7 +18,7 @@ public class ServiceLocatorInitilizerImpl implements ServiceLocatorInitializer{
 	private SpringServiceLocator locater = null;
 
 	/**
-	 * @see framework.api.service.ServiceLocatorInitializer#initializeLocater(java.lang.Object)
+	 * @see framework.api.service.ServiceLocatorInitializer#construct(java.lang.Object)
 	 */
 	@Override
 	public void construct(Object resource) {

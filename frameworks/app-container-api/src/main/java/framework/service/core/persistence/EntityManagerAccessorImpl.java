@@ -20,14 +20,14 @@ public class EntityManagerAccessorImpl implements EntityManagerAccessor{
 	private EntityManager em;
 
 	/**
-	 * 初期化処理
+	 * @param provider the provider to set
 	 */
 	public void setEntityManagerProvider(EntityManagerProvider provider){		
 		em = provider.getEntityManager();
 	}
 
 	/**
-	 * @see framework.service.core.query.GenericPersistingDao#persist(T)
+	 * @see framework.service.core.persistence.EntityManagerAccessor#persist(framework.core.entity.AbstractEntity)
 	 */
 	@Override
 	public <T extends AbstractEntity> void persist(T entity){
@@ -35,7 +35,7 @@ public class EntityManagerAccessorImpl implements EntityManagerAccessor{
 	}
 	
 	/**
-	 * @see framework.service.core.query.GenericPersistingDao#remove(T)
+	 * @see framework.service.core.persistence.EntityManagerAccessor#remove(framework.core.entity.AbstractEntity)
 	 */
 	@Override
 	public <T extends AbstractEntity> void remove(T entity){
@@ -43,7 +43,7 @@ public class EntityManagerAccessorImpl implements EntityManagerAccessor{
 	}
 	
 	/**
-	 * @see framework.service.core.query.GenericPersistingDao#flush(java.lang.Class)
+	 * @see framework.service.core.persistence.EntityManagerAccessor#flush(framework.service.core.persistence.FlushHandler[])
 	 */
 	@Override
 	public <T extends AbstractEntity> void flush(FlushHandler... handlers){
@@ -61,7 +61,7 @@ public class EntityManagerAccessorImpl implements EntityManagerAccessor{
 	}
 
 	/**
-	 * @see framework.service.core.persistence.EntityManagerAccessor#detach(framework.api.entity.AbstractEntity)
+	 * @see framework.service.core.persistence.EntityManagerAccessor#detach(framework.core.entity.AbstractEntity)
 	 */
 	@Override
 	public <T extends AbstractEntity> void detach(T entity) {
@@ -69,7 +69,7 @@ public class EntityManagerAccessorImpl implements EntityManagerAccessor{
 	}
 
 	/**
-	 * @see framework.service.core.persistence.EntityManagerAccessor#reflesh(framework.api.entity.AbstractEntity)
+	 * @see framework.service.core.persistence.EntityManagerAccessor#reflesh(framework.core.entity.AbstractEntity)
 	 */
 	@Override
 	public <T extends AbstractEntity> void reflesh(T entity) {

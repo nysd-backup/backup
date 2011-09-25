@@ -16,7 +16,7 @@ import framework.sqlclient.api.MultiResultHandler;
 public class CustomMultiResultHandlerImpl implements MultiResultHandler{
 
 	/**
-	 * @param condition 検索条件
+	 * @see framework.sqlclient.api.MultiResultHandler#handleResult(java.lang.Object)
 	 */
 	public void handleResult(Object condition){
 		throw new UnexpectedMultiResultException(condition.toString());

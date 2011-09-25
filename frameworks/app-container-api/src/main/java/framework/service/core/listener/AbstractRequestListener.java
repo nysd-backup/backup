@@ -27,7 +27,7 @@ public abstract class AbstractRequestListener implements RequestListener{
 	private final LogWriter LOG = LogWriterFactory.getLog(getClass());
 	
 	/**
-	 * @see framework.api.service.RequestListener#onMessage(framework.api.dto.RequestDto)
+	 * @see framework.api.service.RequestListener#processService(framework.api.dto.RequestDto)
 	 */
 	@Override
 	public ReplyDto processService(RequestDto dto) {
@@ -80,7 +80,7 @@ public abstract class AbstractRequestListener implements RequestListener{
 	/**
 	 * 終了処理
 	 * @param startTime 開始時間
-	 * @param 例外、正常時はnull
+	 * @param cause 例外、正常時はnull
 	 */
 	protected void terminate(long startTime,Throwable cause){
 		
@@ -90,6 +90,7 @@ public abstract class AbstractRequestListener implements RequestListener{
 	 * 例外処理
 	 * @param t　例外
 	 * @param reply リプライ
+	 * @param context コンテキスト
 	 */
 	protected void handle(Throwable t, ReplyDto reply ,ServiceContext context) {
 

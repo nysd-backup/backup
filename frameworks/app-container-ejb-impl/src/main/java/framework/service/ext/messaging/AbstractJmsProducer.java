@@ -14,12 +14,12 @@ import javax.jms.Session;
 import framework.api.dto.RequestDto;
 
 /**
- * JmsProducer.
+ * JMSプロデューサ.
  * 
  * <pre>
  * コネクションの取得とメッセージ送信を行う。
  * 宛先作成、コネクションファクトリ作成用にSessionBeanを作成すること。
- * また、XAコネクションが生成できるコネクションファクトリとすること。
+ * また、XAコネクションが生成できるConnectionFactoryを私用すること。
  * </pre>
  *
  * @author yoshida-n
@@ -48,9 +48,9 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	/**
 	 * メッセージ送信
 	 * @param factory XAコネクションファクトリ
-	 * @param dto
-	 * @param destinationName
-	 * @throws JMSException
+	 * @param dto DTO
+	 * @param destinationName 宛先
+	 * @throws JMSException 例外
 	 */
 	protected void sendMessage(ConnectionFactory factory ,RequestDto dto, String destinationName) throws JMSException{
 		Connection connection = null;
@@ -89,9 +89,8 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	
 	/**
 	 * 宛先の作成
-	 * @param dto
-	 * @param destinationName
-	 * @return
+	 * @param destinationName 宛先名
+	 * @return 宛先
 	 */
 	protected abstract Destination createDestination(String destinationName);	
 

@@ -15,7 +15,7 @@ public interface Advice {
 	/**
 	 * 前処理.
 	 * @param target　JoinPointの対象オブジェクト
-	 * @param method JoinPointの対象メソッド
+	 * @param methodName JoinPointの対象メソッド
 	 * @param argments メソッドの引数
 	 */
 	public void before(Object target , String methodName , Object[] argments);
@@ -24,7 +24,7 @@ public interface Advice {
 	/**
 	 * 後処理
 	 * @param target　JoinPointの対象オブジェクト
-	 * @param method JoinPointの対象メソッド
+	 * @param methodName JoinPointの対象メソッド
 	 * @param argments メソッドの引数
 	 * @param result メソッド実行結果
 	 */

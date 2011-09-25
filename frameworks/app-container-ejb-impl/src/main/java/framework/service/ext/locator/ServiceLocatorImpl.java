@@ -3,9 +3,7 @@
  */
 package framework.service.ext.locator;
 
-import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,17 +19,14 @@ import framework.service.ext.define.ComponentBuilder;
  */
 public class ServiceLocatorImpl extends ServiceLocator{
 
-	/** 通常JNDI名 */
+	/** JNDI名プリフィクス */
 	private static final String PREFIX = "java:module";
-
-	/** デフォルトサービスマップ （必要があればコンテナ起動時などに初期化する*/
-	private static Map<String,String> defaultServiceMap = new ConcurrentHashMap<String,String>();
 	
 	/** コンポーネントビルダ */
 	private ComponentBuilder builder;
 	
 	/**
-	 * @param builder コンポーネントビルダ
+	 * @param componentBuilder コンポーネントビルダ
 	 */
 	public void initialize(ComponentBuilder componentBuilder){
 		builder = componentBuilder;
@@ -46,21 +41,10 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 	
 	/**
-	 * サービスを登録する.
-	 * コンテナ起動時などの初期処理で実行する
-	 * 
-	 * @param serviceType サービスタイプ
-	 * @param defaultServiceName サービス名
-	 */
-	protected static void registDefaultService(Class<?> serviceType, String defaultServiceName){
-		defaultServiceMap.put(serviceType.getName(), defaultServiceName);
-	}
-
-	/**
 	 * サービス取得
-	 * @param <T> サービス
-	 * @param serviceType サービスタイプ
-	 * @param サービス
+	 * @param <T> 型
+	 * @param ifType サービスタイプ
+	 * @return サービス
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T lookupByInterface(Class<T> ifType){
@@ -69,24 +53,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 
 	/**
-	 * @see framework.framework.service.ext.locator.ServiceLocator#lookupDefaultService(java.lang.Class)
-	 */
-	@Override
-	public <T> T lookupDefaultService(Class<T> serviceType) {
-		String name = defaultServiceMap.get(serviceType);
-		if( name == null){
-			if( serviceType.isInterface()){
-				return lookupByInterface(serviceType);
-			}else{
-				return serviceType.cast(lookup(serviceType.getSimpleName()));
-			}
-		}else {
-			return  serviceType.cast(lookup(name));
-		}
-	}
-
-	/**
-	 * @see framework.framework.service.ext.locator.ServiceLocator#lookupServiceByInterface(java.lang.Class)
+	 * @see framework.service.core.locator.ServiceLocator#lookupServiceByInterface(java.lang.Class)
 	 */
 	@Override
 	public <T> T lookupServiceByInterface(Class<T> clazz) {
@@ -94,7 +61,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 
 	/**
-	 * @see framework.framework.service.ext.locator.ServiceLocator#lookupService(java.lang.String)
+	 * @see framework.service.core.locator.ServiceLocator#lookupService(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -103,7 +70,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 
 	/**
-	 * @see framework.framework.service.ext.locator.ServiceLocator#lookupRemoteService(java.lang.Class)
+	 * @see framework.service.core.locator.ServiceLocator#lookupRemoteService(java.lang.Class)
 	 */
 	@Override
 	public <T> T lookupRemoteService(Class<T> serviceType) {
@@ -118,9 +85,9 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 	
 	/**
-	 * @param serviceName
-	 * @param prop
-	 * @return
+	 * @param serviceName サービス名
+	 * @param prop プロパティ
+	 * @return サービス
 	 */
 	private Object lookup(String serviceName, Properties prop){
 		
