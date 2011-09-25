@@ -14,14 +14,6 @@ public abstract class ComponentLocator {
 
 	/** シングルトン */
 	protected static ComponentLocator delegate = null;
-		
-	/**
-	 * デフォルトサービス取得
-	 * @param <T>　型
-	 * @param clazz クラス
-	 * @return サービス
-	 */
-	public abstract <T> T lookupDefaultService(Class<T> clazz);
 	
 	/**
 	 * インターフェースからのサービス取得
@@ -39,20 +31,10 @@ public abstract class ComponentLocator {
 	public abstract <T> T lookupService(String name);
 	
 	/**
-	 * デフォルトで提供されているサービスを取得する
-	 * @param <T> 型
-	 * @param serviceType サービスタイプ
-	 * @return サービス
-	 */
-	public static <T> T lookupDefault(Class<T> serviceType){
-		return delegate.lookupDefaultService(serviceType);
-	}
-	
-	/**
 	 * サービス取得
-	 * @param <T> サービス
-	 * @param serviceType サービスタイプ
-	 * @param サービス
+	 * @param <T> 型
+	 * @param ifType サービスタイプ
+	 * @return サービス
 	 */
 	public static <T> T lookupByInterface(Class<T> ifType){
 		return delegate.lookupServiceByInterface(ifType);
@@ -60,9 +42,9 @@ public abstract class ComponentLocator {
 	
 	/**
 	 * サービス取得
-	 * @param <T> サービス
+	 * @param <T> 型
 	 * @param name サービスタイプ
-	 * @param サービス
+	 * @return サービス
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T lookup(String name){

@@ -25,9 +25,9 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	private final EmptyHandler emptyHandler;
 	
 	/**
+
+	/**
 	 * @param delegate クエリ
-	 * @param em エンティティマネージャ
-	 * @param lazyDetach true:detachを即時実行しない
 	 * @param handler ハンドラー
 	 */
 	public LocalNamedQueryEngine(InternalNamedQueryImpl delegate , EmptyHandler handler){
@@ -68,7 +68,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.FreeQuery#setHint(java.lang.String, java.lang.Object)
+	 * @see framework.jpqlclient.api.free.NamedQuery#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setHint(String arg0, Object arg1) {

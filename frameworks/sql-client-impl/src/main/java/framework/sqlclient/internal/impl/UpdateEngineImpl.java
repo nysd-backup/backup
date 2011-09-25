@@ -16,14 +16,14 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 public class UpdateEngineImpl extends AbstractLocalUpdateEngine<InternalQueryImpl<?>> implements NativeUpdate{
 
 	/**
-	 * @param delegate
+	 * @param delegate delegate
 	 */
 	public UpdateEngineImpl(InternalQueryImpl<?> delegate) {
 		super(delegate);
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.Update#setBranchParameter(java.lang.String, java.lang.Object)
+	 * @see framework.sqlclient.api.free.FreeUpdate#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -33,7 +33,7 @@ public class UpdateEngineImpl extends AbstractLocalUpdateEngine<InternalQueryImp
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.Update#update()
+	 * @see framework.sqlclient.api.Update#update()
 	 */
 	@Override
 	public int update() {

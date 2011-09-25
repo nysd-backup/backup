@@ -24,9 +24,10 @@ import framework.api.service.Remote;
  */
 public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcessor,ApplicationContextAware{
 	
+	/** ローカル用のBusinessDelegate */
 	private String handlerBeanName = null;
 	
-	/** リモート用のデリゲート */
+	/** リモート用のBusinessDelegate */
 	private String remoteHandlerBeanName = null;	
 	
 	/** ホワイトリスト */
@@ -39,21 +40,21 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	private ApplicationContext context = null;
 	
 	/**
-	 * @param handlerBeanName
+	 * @param handlerBeanName the handlerBeanName to set
 	 */
 	public void setHandlerBeanName(String handlerBeanName){
 		this.handlerBeanName = handlerBeanName;
 	}
 	
 	/**
-	 * @param remoteHandlerBeanName
+	 * @param remoteHandlerBeanName the remoteHandlerBeanName to set
 	 */
 	public void setRemoteHandlerBeanName(String remoteHandlerBeanName){
 		this.remoteHandlerBeanName = remoteHandlerBeanName;
 	}
 	
 	/**
-	 * @param whiteList
+	 * @param whiteList インジェクションを許可するサービス
 	 */
 	public void setWhiteList(String whiteList){
 		if(StringUtils.isNotEmpty(whiteList)){
@@ -62,7 +63,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	}
 	
 	/**
-	 * @param control
+	 * @param allowOnlyMarked true:アノテーションが設定されているクラスのみインジェクションする
 	 */
 	public void setAllowOnlyMarked(boolean allowOnlyMarked){
 		this.allowOnlyMarked = allowOnlyMarked;

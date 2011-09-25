@@ -30,8 +30,8 @@ public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	private final OrmCondition<E> request;
 	
 	/**
-	 * @param service
-	 * @param entityClass
+	 * @param service サービス
+	 * @param entityClass エンティティクラス
 	 */
 	WebOrmQueryEngine(OrmQueryService<E> service,Class<E> entityClass){
 		this.service = service;
@@ -182,15 +182,7 @@ public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	public E find(Object... pks) {
 		return service.find(request, pks);
 	}
-
-	/**
-	 * @see framework.sqlclient.api.orm.OrmQuery#findWithLockNoWait(java.lang.Object[])
-	 */
-	@Override
-	public E findWithLockNoWait(Object... pks) {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * @see framework.sqlclient.api.orm.OrmQuery#findAny()
 	 */

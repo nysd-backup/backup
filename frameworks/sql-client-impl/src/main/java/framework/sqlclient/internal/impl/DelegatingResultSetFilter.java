@@ -14,11 +14,11 @@ import framework.sqlengine.executer.RecordFilter;
  */
 public class DelegatingResultSetFilter<T> implements RecordFilter<T>{
 
-	/** フィルター実態 */
+	/** フィルター */
 	private ResultSetFilter<T> filter = null;
 	
 	/**
-	 * @param delegate
+	 * @param delegate　delegate
 	 */
 	public DelegatingResultSetFilter(ResultSetFilter<T> delegate){
 		this.filter = delegate;

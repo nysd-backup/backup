@@ -50,33 +50,16 @@ public class QueryRequest implements Serializable{
 	/** フィルター */
 	private ResultSetFilter filter;
 	
-	/** コメント */
-	private StringBuilder comment = new StringBuilder();
-	
 	/**
-	 * @param comment
-	 */
-	public void addComment(String comment){
-		this.comment.append(comment);
-	}
-	
-	/**
-	 * @return
-	 */
-	public String getComment(){
-		return this.comment.toString();
-	}
-	
-	/**
-	 * @return self
+	 * @param queryClass クエリクラス
 	 */
 	public QueryRequest(Class<? extends Query> queryClass){
 		this.queryClass = queryClass;
 	}
 	
 	/**
-	 * @param <T>
-	 * @return
+	 * @param <T>　型
+	 * @return クエリクラス
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Query> Class<T> getQueryClass(){
@@ -106,7 +89,7 @@ public class QueryRequest implements Serializable{
 	
 	/**
 	 * @param key the key to set
-	 * @param vallue the value to set
+	 * @param value the value to set
 	 */
 	public void setParam(String key , Object value) {
 		this.param.put(key, value);
@@ -128,7 +111,7 @@ public class QueryRequest implements Serializable{
 	
 	/**
 	 * @param key the key to set
-	 * @param vallue the value to set
+	 * @param value the value to set
 	 */
 	public void setBranchParam(String key , Object value) {
 		this.branchParam.put(key, value);
@@ -177,7 +160,9 @@ public class QueryRequest implements Serializable{
 	}
 	
 	/**
-	 * @param hint the hint to set
+	 * ヒント句設定.
+	 * @param key　キー
+	 * @param value 値
 	 */
 	public void setHint(String key , Object value) {
 		this.hint.put(key, value);
@@ -199,7 +184,7 @@ public class QueryRequest implements Serializable{
 
 	/**
 	 * @param key the key to set
-	 * @param vallue the value to set
+	 * @param value the value to set
 	 */
 	public void setTemporal(String key , TemporalType value) {
 		this.temporal.put(key, value);

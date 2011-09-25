@@ -29,7 +29,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	private EmptyHandler eh;
 	
 	/**
-	 * @param pm パーシステンスマネージャ
+	 * @param pmf パーシステンスマネージャ
 	 */
 	public void setPersistenceManagerProvider(PersistenceManagerProvider pmf){
 		this.pmf = pmf;

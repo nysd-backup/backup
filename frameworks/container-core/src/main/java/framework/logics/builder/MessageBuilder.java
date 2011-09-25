@@ -1,5 +1,5 @@
 /**
- * 
+ * Use is subject to license terms.
  */
 package framework.logics.builder;
 
@@ -19,8 +19,8 @@ public interface MessageBuilder {
 
 	/**
 	 * メッセージロード
-	 * @param code コード
-	 * @param local ロケール
+	 * @param bean メッセージビーン
+	 * @param locale ロケール
 	 * @return メッセージ
 	 */
 	public DefinedMessage load(MessageBean bean, Locale locale);
@@ -28,7 +28,7 @@ public interface MessageBuilder {
 	/**
 	 * メッセージロード
 	 * @param bean メッセージビーン
-	 * @param local ロケール
+	 * @param locale ロケール
 	 * @param baseFileName メッセージファイル名
 	 * @return メッセージ
 	 */

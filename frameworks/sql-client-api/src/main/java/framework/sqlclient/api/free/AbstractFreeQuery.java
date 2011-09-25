@@ -45,9 +45,8 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 		return (T)this;
 	}
 
-	
 	/**
-	 * @see framework.sqlclient.api.free.FreeQuery#setNoDataErrorEnabled()
+	 * @see framework.sqlclient.api.Query#enableNoDataError()
 	 */
 	@Override
 	public <T extends Query> T enableNoDataError() {
@@ -56,7 +55,7 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.FreeQuery#getResultList()
+	 * @see framework.sqlclient.api.Query#getResultList()
 	 */
 	@Override
 	public <T> List<T> getResultList() {
@@ -72,7 +71,7 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.free.FreeQuery#count()
+	 * @see framework.sqlclient.api.Query#count()
 	 */
 	@Override
 	public int count() {

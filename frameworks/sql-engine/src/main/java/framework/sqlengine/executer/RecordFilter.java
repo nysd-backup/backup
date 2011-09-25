@@ -4,7 +4,7 @@
 package framework.sqlengine.executer;
 
 /**
- * function.
+ * 検索結果の行ごとに実行されるフィルター.
  *
  * @author yoshida-n
  * @version	created.

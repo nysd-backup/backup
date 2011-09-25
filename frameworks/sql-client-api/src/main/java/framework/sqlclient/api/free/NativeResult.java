@@ -26,7 +26,7 @@ public class NativeResult<T> implements Serializable {
 	private final int hitCount;
 	
 	/**
-	 * @param limited リミットオーバ
+	 * @param limitedOver リミットオーバ
 	 * @param result 結果
 	 * @param hitCount ヒット件数
 	 */
@@ -44,7 +44,6 @@ public class NativeResult<T> implements Serializable {
 	}
 	
 	/**
-	 * 
 	 * @return 検索結果
 	 */
 	public List<T> getResultList(){

@@ -19,7 +19,7 @@ public class PageMement {
 	
 	/**
 	 * @param viewId 画面ID
-	 * @param data データ
+	 * @param state データ
 	 */
 	public PageMement(String viewId, Object state){
 		this.viewId = viewId;

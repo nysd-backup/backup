@@ -40,7 +40,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.orm.api.query.OrmQueryFactory#createQuery(java.lang.Class)
+	 * @see framework.sqlclient.api.orm.OrmQueryFactory#createUpdate(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -51,7 +51,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	
 	/**
 	 * @param <T> type
-	 * @param <Q> ype
+	 * @param <Q> type
 	 * @param engine エンジン
 	 * @return クエリ
 	 */
@@ -62,7 +62,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	
 	/**
 	 * @param <T> type
-	 * @param <Q> ype
+	 * @param <Q> type
 	 * @param engine エンジン
 	 * @return クエリ
 	 */

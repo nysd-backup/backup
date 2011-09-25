@@ -5,7 +5,7 @@ import java.util.List;
 import framework.core.entity.Metadata;
 
 /**
- * 拡張ORMクエリ.
+ * ORMクエリ.
  *
  * @author yoshida-n
  * @version	2011/06/05 created.
@@ -61,7 +61,8 @@ public interface StrictQuery<T> extends AdvancedOrmQuery<T>{
 	 * BETWEE条件の追加
 	 * @param <V> 型
 	 * @param column カラム
-	 * @param value 値
+	 * @param from from値
+	 * @param to to値
 	 * @return self
 	 */
 	public abstract <V> StrictQuery<T> between(Metadata<T, V> column,

@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * ネイティブクエリ基底.
+ * ネイティブクエリ.
  *
  * @author yoshida-n
  * @version	created.
@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery> implements NativeQuery{
 
 	/**
-	 * @see framework.sqlclient.api.free.FreeQuery#count()
+	 * @see framework.sqlclient.api.free.AbstractFreeQuery#count()
 	 */
 	@Override
 	public int count() {

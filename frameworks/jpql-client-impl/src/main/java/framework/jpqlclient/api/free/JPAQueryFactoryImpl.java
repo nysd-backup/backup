@@ -19,7 +19,7 @@ import framework.sqlclient.api.free.FreeUpdate;
 public class JPAQueryFactoryImpl extends AbstractQueryFactory {
 
 	/**
-	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeQueryEngine(java.lang.Class, javax.persistence.EntityManager)
+	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeQueryEngine(java.lang.Class)
 	 */
 	@Override
 	protected FreeQuery createNativeQueryEngine(Class<?> queryClass) {
@@ -37,7 +37,7 @@ public class JPAQueryFactoryImpl extends AbstractQueryFactory {
 	}
 
 	/**
-	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeUpdateEngine(java.lang.Class, javax.persistence.EntityManager)
+	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeUpdateEngine(java.lang.Class)
 	 */
 	@Override
 	protected FreeUpdate createNativeUpdateEngine(Class<?> updateClass) {

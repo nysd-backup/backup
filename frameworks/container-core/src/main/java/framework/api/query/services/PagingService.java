@@ -12,12 +12,14 @@ package framework.api.query.services;
 public interface PagingService {
 
 	/**
-	 * @param request
-	 * @return
+	 * 初回検索。
+	 * @param request　リクエスト
+	 * @return 結果
 	 */
 	public PagingResult prepare(PagingRequest request);
 	
 	/**
+	 * 2回目以降の検索。
 	 * @param request リクエスト
 	 * @return 結果
 	 */

@@ -17,7 +17,7 @@ import framework.sqlengine.executer.Updater;
 public class UpdaterImpl implements Updater{
 
 	/**
-	 * @see framework.sqlengine.executer.Selecter#update(java.sql.PreparedStatement)
+	 * @see framework.sqlengine.executer.Updater#update(java.sql.PreparedStatement)
 	 */
 	@Override
 	public int update(PreparedStatement stmt) throws SQLException {

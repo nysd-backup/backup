@@ -28,9 +28,8 @@ public class WebNativeQueryFactory implements QueryFactory{
 	@ServiceFacade
 	private NativeQueryService service;
 	
-
 	/**
-	 * @see framework.sqlclient.api.free.sql.QueryFactory#createQuery(java.lang.Class)
+	 * @see framework.sqlclient.api.free.QueryFactory#createQuery(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -48,7 +47,7 @@ public class WebNativeQueryFactory implements QueryFactory{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.QueryFactory#createUpdate(java.lang.Class)
+	 * @see framework.sqlclient.api.free.QueryFactory#createUpdate(java.lang.Class)
 	 */
 	@Override
 	public <K extends FreeUpdate, T extends AbstractUpdate<K>> T createUpdate(Class<T> entityClass) {

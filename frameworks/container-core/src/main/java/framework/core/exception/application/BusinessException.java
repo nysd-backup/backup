@@ -10,8 +10,7 @@ import framework.api.dto.ReplyDto;
 /**
  * 業務例外.
  * <pre>
- * EJBの場合、
- * RuntimeExceptionは@ApplicationExceptionを設定しないとrollbackOnly=trueとなり処理継続不可能となる上にシステムエラー扱いとなる。
+ * EJBの場合、RuntimeExceptionは@ApplicationExceptionを設定しないとrollbackOnly=trueとなり処理継続不可能となる上にシステムエラー扱いとなる。
  * 同一トランザクション内のSessionBeanの作成すらも不可能となり、同一トランザクション内のSessionBeanを使用した是正処理が不可能となる。
  * EJBで使用する場合は必ずこのクラスを継承し@ApplicationExceptionとすること
  *</pre>
@@ -47,7 +46,7 @@ public class BusinessException extends RuntimeException{
 	
 	/**
 	 * @param message メッセージ
-	 * @param リプライ
+	 * @param reply リプライ
 	 */
 	public BusinessException(String message,Serializable reply){
 		super(DEFAULT_MESSAGE+message);

@@ -33,7 +33,7 @@ public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQuer
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#getResultList()
+	 * @see framework.sqlclient.api.Query#getResultList()
 	 */
 	@Override
 	public <T> List<T> getResultList() {
@@ -45,7 +45,7 @@ public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQuer
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#setBranchParameter(java.lang.String, java.lang.Object)
+	 * @see framework.sqlclient.internal.AbstractLocalQueryEngine#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setBranchParameter(String arg0, Object arg1) {
@@ -54,7 +54,7 @@ public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQuer
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.NativeQuery#setFilter(framework.api.sql.RecordFilter)
+	 * @see framework.sqlclient.api.free.NativeQuery#setFilter(framework.sqlclient.api.free.ResultSetFilter)
 	 */
 	@Override
 	public <T extends NativeQuery> T setFilter(ResultSetFilter filter) {
@@ -63,7 +63,7 @@ public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQuer
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.NativeQuery#getTotalResult()
+	 * @see framework.sqlclient.api.free.NativeQuery#getTotalResult()
 	 */
 	@Override
 	public <T> NativeResult<T> getTotalResult() {
@@ -71,7 +71,7 @@ public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQuer
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.NativeQuery#count()
+	 * @see framework.sqlclient.api.Query#count()
 	 */
 	@Override
 	public int count() {

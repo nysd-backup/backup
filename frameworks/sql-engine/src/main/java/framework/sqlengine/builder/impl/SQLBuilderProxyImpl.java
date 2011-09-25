@@ -42,7 +42,7 @@ public class SQLBuilderProxyImpl implements SQLBuilder{
 	}
 	
 	/**
-	 * @see framework.sqlengine.builder.SQLBuilder#build(java.lang.String, java.lang.String, java.util.Map)
+	 * @see framework.sqlengine.builder.SQLBuilder#build(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public String build(String queryId, String rowString) {
@@ -63,7 +63,7 @@ public class SQLBuilderProxyImpl implements SQLBuilder{
 	}
 
 	/**
-	 * @see framework.sqlengine.builder.SQLBuilder#evaluate(java.lang.String, java.util.Map)
+	 * @see framework.sqlengine.builder.SQLBuilder#evaluate(java.lang.String, java.util.Map, java.lang.String)
 	 */
 	@Override
 	public String evaluate(String query, Map<String, Object> parameter,String sqlId) {

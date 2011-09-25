@@ -18,7 +18,7 @@ import framework.sqlengine.facade.SQLEngineFacade;
 import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 /**
- * NativeQueryファクトリ.
+ * クエリファクトリ.
  *
  * @author yoshida-n
  * @version	created.
@@ -42,7 +42,7 @@ public class QueryFactoryImpl implements QueryFactory{
 	}
 	
 	/**
-	 * @param emptyHandler
+	 * @param emptyHandler 0件処理
 	 */
 	public void setEmptyHandler(EmptyHandler emptyHandler){
 		this.emptyHandler = emptyHandler;
@@ -56,7 +56,7 @@ public class QueryFactoryImpl implements QueryFactory{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.QueryFactory#createQuery(java.lang.Class)
+	 * @see framework.sqlclient.api.free.QueryFactory#createQuery(java.lang.Class)
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -76,7 +76,7 @@ public class QueryFactoryImpl implements QueryFactory{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.QueryFactory#createUpdate(java.lang.Class)
+	 * @see framework.sqlclient.api.free.QueryFactory#createUpdate(java.lang.Class)
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override

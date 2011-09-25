@@ -26,6 +26,7 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<In
 	
 	/**
 	 * @param delegate クエリ
+	 * @param emptyHandler 0件処理
 	 */
 	public LocalJPANativeQueryEngine(InternalNativeJPAQueryImpl delegate , EmptyHandler emptyHandler){
 		super(delegate);

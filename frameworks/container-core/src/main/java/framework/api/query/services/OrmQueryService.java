@@ -6,7 +6,6 @@ package framework.api.query.services;
 import java.util.List;
 
 import framework.core.entity.AbstractEntity;
-import framework.core.message.MessageBean;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
@@ -49,12 +48,6 @@ public interface OrmQueryService<T extends AbstractEntity> {
 	 */
 	public boolean exists(OrmCondition<T> request);
 	
-	/**
-	 * 存在チェック
-	 * @return true:存在する
-	 */
-	public boolean exists(OrmCondition<T> request,MessageBean message);
-
 	/**
 	 * 主キー指定存在チェック
 	 * @param pks 主キー

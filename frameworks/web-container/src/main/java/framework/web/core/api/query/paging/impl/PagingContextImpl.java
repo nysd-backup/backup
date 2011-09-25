@@ -75,7 +75,7 @@ public class PagingContextImpl implements PagingContext {
 	}
 
 	/**
-	 * @see framework.web.core.api.query.paging.PagingContext#prepare(framework.sqlclient.api.free.sql.AbstractNativeQuery, int)
+	 * @see framework.web.core.api.query.paging.PagingContext#prepare(framework.sqlclient.api.free.AbstractNativeQuery, int)
 	 */
 	@Override
 	public List prepare(AbstractNativeQuery query,int pageSize){

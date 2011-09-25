@@ -76,6 +76,7 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	
 	/**
 	 * @param query クエリ
+	 * @return クエリ
 	 */
 	private Query setParameters(Query query){
 		

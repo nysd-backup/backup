@@ -43,7 +43,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.NativeQuery#getTotalResult()
+	 * @see framework.sqlclient.api.free.NativeQuery#getTotalResult()
 	 */
 	@Override
 	public <T> NativeResult<T> getTotalResult() {
@@ -51,7 +51,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.FreeQuery#getResultList()
+	 * @see framework.sqlclient.api.Query#getResultList()
 	 */
 	@Override
 	public <T> List<T> getResultList() {
@@ -59,7 +59,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.free.NativeQuery#fetch()
+	 * @see framework.sqlclient.api.free.NativeQuery#getFetchResult()
 	 */
 	@Override
 	public <T> List<T> getFetchResult() {
@@ -67,7 +67,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.FreeQuery#getSingleResult()
+	 * @see framework.sqlclient.api.Query#getSingleResult()
 	 */
 	@Override
 	public <T> T getSingleResult() {
@@ -75,7 +75,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.FreeQuery#setBranchParameter(java.lang.String, java.lang.Object)
+	 * @see framework.sqlclient.api.free.FreeQuery#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setBranchParameter(String arg0, Object arg1) {
@@ -84,7 +84,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.FreeQuery#setParameter(java.lang.String, java.lang.Object)
+	 * @see framework.sqlclient.api.free.FreeQuery#setParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setParameter(String arg0, Object arg1) {
@@ -93,7 +93,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.api.sql.Query#enableNoDataError()
+	 * @see framework.sqlclient.api.Query#enableNoDataError()
 	 */
 	@Override
 	public <T extends Query> T enableNoDataError() {
@@ -102,7 +102,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.api.sql.Query#setMaxResults(int)
+	 * @see framework.sqlclient.api.Query#setMaxResults(int)
 	 */
 	@Override
 	public <T extends Query> T setMaxResults(int arg0) {
@@ -111,7 +111,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.api.sql.Query#setFirstResult(int)
+	 * @see framework.sqlclient.api.Query#setFirstResult(int)
 	 */
 	@Override
 	public <T extends Query> T setFirstResult(int arg0) {
@@ -120,7 +120,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.api.sql.Query#exists()
+	 * @see framework.sqlclient.api.Query#exists()
 	 */
 	@Override
 	public boolean exists() {
@@ -128,7 +128,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.sql.NativeQuery#count()
+	 * @see framework.sqlclient.api.Query#count()
 	 */
 	@Override
 	public int count() {

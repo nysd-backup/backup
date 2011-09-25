@@ -33,7 +33,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	}
 	
 	/**
-	 * @see framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, int, boolean)
+	 * @see framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, int, boolean, java.lang.String, framework.sqlengine.executer.RecordFilter)
 	 */
 	@Override
 	public <T> QueryResult<T> getResultList(ResultSet resultSet, Class<T> resultType,int maxSize, 

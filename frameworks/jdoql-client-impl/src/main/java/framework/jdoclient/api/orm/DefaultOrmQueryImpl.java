@@ -119,14 +119,6 @@ public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.orm.OrmQuery#findWithLockNoWait(java.lang.Object[])
-	 */
-	@Override
-	public T findWithLockNoWait(Object... pks) {
-		return delegate.findWithLockNoWait(pks);
-	}
-
-	/**
 	 * @see framework.sqlclient.api.orm.OrmQuery#findAny()
 	 */
 	@Override
@@ -226,7 +218,7 @@ public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
 	}
 
 	/**
-	 * @see framework.jdoclient.api.orm.JDOOrmQuery#setFilter(java.lang.String)
+	 * @see framework.sqlclient.api.orm.OrmQuery#filter(java.lang.String)
 	 */
 	@Override
 	public OrmQuery<T> filter(String filterString) {

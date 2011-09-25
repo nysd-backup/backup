@@ -4,7 +4,7 @@
 package framework.core.exception;
 
 /**
- * 実装不備の例外
+ * 実装不備。
  *
  * @author yoshida-n
  * @version	2011/05/08 created.

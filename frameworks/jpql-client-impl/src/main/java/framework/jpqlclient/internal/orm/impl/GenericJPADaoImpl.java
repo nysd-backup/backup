@@ -3,15 +3,12 @@
  */
 package framework.jpqlclient.internal.orm.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 
 import framework.jpqlclient.api.EntityManagerProvider;
-import framework.jpqlclient.api.JPAQueryHints;
 import framework.jpqlclient.api.free.NamedQuery;
 import framework.jpqlclient.api.free.NamedUpdate;
 import framework.jpqlclient.api.orm.JPAOrmCondition;
@@ -154,28 +151,6 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @see framework.jpqlclient.internal.orm.GenericDao#findWithLock(framework.jpqlclient.api.orm.JPAOrmCondition, java.lang.Object[])
-	 */
-	@Override
-	public <E> E findWithLock(JPAOrmCondition<E> query,int timeout, Object... pks){
-		Object v = pks;
-		if( pks.length == 1){
-			v = pks[0];
-		}	
-		Map<String,Object> hints = new HashMap<String,Object>();
-		if(!query.getHints().isEmpty()){
-			hints.putAll(query.getHints());
-		}
-		hints.put(JPAQueryHints.PESSIMISTIC_READ_TIMEOUT,timeout);
-		
-		E result = (E)em.find(query.getEntityClass(),v, LockModeType.PESSIMISTIC_READ,hints);
-		if( result == null && query.isNoDataErrorEnabled()){
-			eh.handleEmptyResult(query.getEntityClass());			
-		}
-		return result;
-	}
-
-	/**
 	 * @see framework.jpqlclient.internal.orm.GenericDao#getResultList(framework.jpqlclient.api.orm.JPAOrmCondition)
 	 */
 	@Override
@@ -210,8 +185,9 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param entityQuery 条件 
-	 * @return　クエリ
+	 * @param <E> 型
+	 * @param entityQuery　条件
+	 * @return クエリ
 	 */
 	protected <E> NamedQuery createJPAQuery(JPAOrmCondition<E> entityQuery){
 		

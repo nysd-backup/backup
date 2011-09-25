@@ -14,7 +14,7 @@ import framework.sqlclient.api.EmptyHandler;
 public class DefaultEmptyHandlerImpl implements EmptyHandler{
 
 	/**
-	 * @see framework.sqlclient.api.free.EmptyHandler#handleEmptyResult(java.lang.Object)
+	 * @see framework.sqlclient.api.EmptyHandler#handleEmptyResult(java.lang.Object)
 	 */
 	@Override
 	public void handleEmptyResult(Object condition) {

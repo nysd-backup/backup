@@ -36,10 +36,12 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	protected final SQLEngineFacade facade;
 	
 	/**
+	 * @param useRowSql if文評価有無
 	 * @param sql SQL
-	 * @param em エンティティマネージャ
 	 * @param queryId クエリID
-	 * @param resultType 結果格納クラス
+	 * @param cs コネクション提供者
+	 * @param resultType 結果クラス
+	 * @param facade SQLEngine
 	 */
 	public InternalQueryImpl(boolean useRowSql ,String sql , String queryId, ConnectionProvider cs , Class<T> resultType,SQLEngineFacade facade){
 		super(useRowSql,sql,queryId);
@@ -49,8 +51,8 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param filter
-	 * @return
+	 * @param filter　リザルトセットフィルター
+	 * @return self
 	 */
 	public InternalQueryImpl<T> setFilter(ResultSetFilter<T> filter){
 		this.filter = filter;
@@ -99,7 +101,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @see javax.persistence.Query#getSingleResult()
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#getSingleResult()
 	 */
 	@Override
 	public Object getSingleResult() {
@@ -122,7 +124,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return
+	 * @return パラメータ
 	 */
 	private QueryParameter<T> createQueryParameter(){
 		QueryParameter<T> parameter = createParameter(new QueryParameter<T>());		
@@ -137,9 +139,9 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param <S>
-	 * @param parameter
-	 * @return
+	 * @param <S> 型
+	 * @param parameter パラメータ
+	 * @return パラメータ
 	 */
 	private <S extends SQLParameter> S createParameter(S parameter){
 		parameter.setSqlId(queryId);

@@ -26,26 +26,37 @@ import framework.sqlclient.api.orm.OrmQuery;
 @SuppressWarnings("unchecked")
 public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 
+	/** 結果クラス */
 	private final Class<T> resultClass;
 	
+	/** パーシステンスマネージャ */
 	private final PersistenceManager pm;
 
+	/** 複数件処理 */
 	private final MultiResultHandler mrh;
 
+	/** 0件処理 */
 	private final EmptyHandler eh;
 	
+	/** パラメータ数 */
 	private int parameterCount = 0;
 	
+	/** フィルタ */
 	private StringBuilder filterString = new StringBuilder();
 	
+	/** ORDER BY */
 	private StringBuilder orderString = new StringBuilder();
 	
+	/** パラメータ */
 	private List<Object> params = new ArrayList<Object>();
 	
+	/** 0件システムエラー */
 	private boolean noDataErrorEnabled = false;
 	
+	/** 最大件数 */
 	private int maxResults = 0;
 	
+	/** 先頭位置 */
 	private int firstResult = 0;
 		
 	/**
@@ -147,14 +158,6 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 			throw new IllegalArgumentException("count of pk must be one");
 		}
 		return pm.getObjectById(resultClass, pks[0]);
-	}
-
-	/**
-	 * @see framework.sqlclient.api.orm.OrmQuery#findWithLockNoWait(java.lang.Object[])
-	 */
-	@Override
-	public T findWithLockNoWait(Object... pks) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

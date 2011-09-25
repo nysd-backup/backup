@@ -20,7 +20,7 @@ public class EntityManagerProviderImpl implements EntityManagerProvider{
 	private EntityManager em;
 		
 	/**
-	 * @see framework.jpqlclient.internal.em.EntityManagerProvider#getEntityManager()
+	 * @see framework.jpqlclient.api.EntityManagerProvider#getEntityManager()
 	 */
 	@Override
 	public EntityManager getEntityManager(){	

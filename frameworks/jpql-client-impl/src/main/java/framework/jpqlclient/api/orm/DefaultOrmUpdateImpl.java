@@ -91,7 +91,7 @@ public class DefaultOrmUpdateImpl<T> implements JPAOrmUpdate<T>{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.Update#setHint(java.lang.String, java.lang.Object)
+	 * @see framework.jpqlclient.api.orm.JPAOrmUpdate#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public JPAOrmUpdate<T> setHint(String arg0, Object arg1) {
@@ -117,7 +117,7 @@ public class DefaultOrmUpdateImpl<T> implements JPAOrmUpdate<T>{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String)
+	 * @see framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String[])
 	 */
 	@Override
 	public OrmUpdate<T> set(String... setString) {

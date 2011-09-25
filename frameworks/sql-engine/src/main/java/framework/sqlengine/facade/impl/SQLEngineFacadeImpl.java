@@ -69,28 +69,28 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	private Updater updater = new UpdaterImpl();
 	
 	/**
-	 * @param beanFactory set by DIContainer
+	 * @param recordHandlerFactory the recordHandlerFactory to set
 	 */
 	public void setRecordHandlerFactory(RecordHandlerFactory recordHandlerFactory){
 		this.recordHandlerFactory = recordHandlerFactory;
 	}
 
 	/**
-	 * @param provider set by DIContainer
+	 * @param provider the provider to set
 	 */
 	public void setProvider(StatementProvider provider){
 		this.provider = provider;
 	}
 	
 	/**
-	 * @param resultSetHandler set by DIContainer
+	 * @param resultSetHandler the resultSetHandler to set
 	 */
 	public void setResultSetHandler(ResultSetHandler resultSetHandler){
 		this.resultSetHandler = resultSetHandler;
 	}
 	
 	/**
-	 * @param sqlBuilder set by DIContainer
+	 * @param sqlBuilder the sqlBuilder to set
 	 */
 	public void setSqlBuilder(SQLBuilder sqlBuilder){
 		this.sqlBuilder = sqlBuilder;
@@ -143,7 +143,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 
 	/**
-	 * @see framework.sqlengine.facade.SQLEngineFacade#executeQuery(framework.sqlengine.facade.QueryParameter, javax.sql.DataSource, java.lang.Class)
+	 * @see framework.sqlengine.facade.SQLEngineFacade#executeQuery(framework.sqlengine.facade.QueryParameter, java.sql.Connection)
 	 */
 	@Override
 	public <T> QueryResult<T> executeQuery(QueryParameter<T> param , Connection con){	
@@ -199,8 +199,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 
 	/**
-	 * 
-	 * @see framework.sqlengine.facade.SQLEngineFacade#executeUpdate(java.lang.String, java.lang.String, java.util.Map, javax.sql.DataSource)
+	 * @see framework.sqlengine.facade.SQLEngineFacade#executeUpdate(framework.sqlengine.facade.UpdateParameter, java.sql.Connection)
 	 */
 	@Override
 	public int executeUpdate(UpdateParameter param, Connection con) {
@@ -230,10 +229,11 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
-	 * クエリを組み立てる
-	 * @param <T>
-	 * @param param
-	 * @return
+	 * クエリを組み立てる.
+	 * @param <T>　型
+	 * @param param パラメータ
+	 * @param bindList バインド値
+	 * @return クエリ
 	 */
 	private <T> String createQuery(QueryParameter<T> param, List<Object> bindList){
 		//SQL生成
@@ -246,10 +246,11 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
-	 * SQLを組み立てる
-	 * @param param
-	 * @param bindList
-	 * @return
+	 * SQLを組み立てる.
+	 * @param <T>　型
+	 * @param param パラメータ
+	 * @param bindList バインド値
+	 * @return SQL
 	 */
 	private String createSql(SQLParameter param, List<Object> bindList){
 		String executingSql = param.getSql();
@@ -291,8 +292,10 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	
 	
 	/**
-	 * @param rs
-	 * @param stmt
+	 * クローズ.
+	 * 
+	 * @param rs リザルトセット
+	 * @param stmt ステートメント
 	 */
 	private void close(ResultSet rs , Statement stmt){
 		try{
@@ -306,7 +309,9 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
-	 * @param stmt
+	 * ステートメントクローズ.
+	 * 
+	 * @param stmt ステートメント
 	 */
 	private void close(Statement stmt){
 		try{

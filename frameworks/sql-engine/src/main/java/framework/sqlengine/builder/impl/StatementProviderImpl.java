@@ -24,7 +24,7 @@ import framework.sqlengine.builder.StatementProvider;
 public class StatementProviderImpl implements StatementProvider{
 	
 	/**
-	 * @see framework.sqlengine.builder.StatementProvider#createStatement(java.lang.String, java.util.Map)
+	 * @see framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
 	public PreparedStatement createStatement(Connection con ,String sql,List<Object> bindList,String queryId) throws SQLException{
@@ -55,9 +55,9 @@ public class StatementProviderImpl implements StatementProvider{
 	}
 	
 	/**
-	 * @param statement
-	 * @param bind
-	 * @return
+	 * パラメータバインド。
+	 * @param statement ステートメント
+	 * @param bind バインド値
 	 */
 	protected void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException{
 		

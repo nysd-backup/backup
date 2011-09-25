@@ -57,7 +57,8 @@ public interface OrmQuery<T> extends Query{
 	/**
 	 * BETWEE条件の追加
 	 * @param column カラム
-	 * @param value 値
+	 * @param from from値
+	 * @param to to値
 	 * @return self
 	 */
 	public abstract OrmQuery<T> between(String column, Object from, Object to);
@@ -100,7 +101,7 @@ public interface OrmQuery<T> extends Query{
 	
 	/**
 	 * 単一検索
-	 * @param パラメータ
+	 * @param params パラメータ
 	 * @return 1件取得
 	 */
 	public abstract T single(Object... params);
@@ -126,13 +127,6 @@ public interface OrmQuery<T> extends Query{
 	 * @return 検索結果
 	 */
 	public abstract T find(Object... pks);
-
-	/**
-	 * 主キー検索
-	 * @param pks　主キー
-	 * @return 検索結果
-	 */
-	public abstract T findWithLockNoWait(Object... pks);
 
 	/**
 	 * 候補キー検索.

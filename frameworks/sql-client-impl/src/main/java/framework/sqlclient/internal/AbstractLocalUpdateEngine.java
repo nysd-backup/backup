@@ -25,8 +25,8 @@ public abstract class AbstractLocalUpdateEngine<D extends AbstractInternalQuery>
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#setParameter(java.lang.String, java.lang.Object)
-	 */	
+	 * @see framework.sqlclient.api.free.FreeUpdate#setParameter(java.lang.String, java.lang.Object)
+	 */
 	@Override
 	public <T extends FreeUpdate> T setParameter(String arg0 , Object arg1){
 		delegate.setParameter(arg0, arg1);

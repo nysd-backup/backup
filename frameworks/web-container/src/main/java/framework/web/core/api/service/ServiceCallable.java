@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * function.
+ * BusinessDelegateをインジェクションすることを示すマーカーアノテーション.
  *
  * @author yoshida-n
  * @version	2011/05/13 created.

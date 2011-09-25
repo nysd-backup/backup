@@ -39,8 +39,9 @@ public class RequestDto implements Serializable{
 	
 	/**
 	 * @param targetClass サービスインターフェース
+	 * @param parameterTypes パラメータ型
 	 * @param param パラメータ
-	 * @param serviceName サービス名
+	 * @param alias サービス名のエイリアス
 	 * @param methodName メソッド名
 	 * @param clientSessionBean クライアントセッション
 	 * @param webRequestBean WEB層のパラメータ

@@ -51,7 +51,6 @@ public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 
 	/**
 	 * @param dao DAO
-	 * @param accessor メッセージ
 	 * @return self
 	 */
 	public LocalOrmUpdateEngine<T> setAccessor(GenericDao dao){
@@ -60,7 +59,7 @@ public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.Update#setHint(java.lang.String, java.lang.Object)
+	 * @see framework.jpqlclient.api.orm.JPAOrmUpdate#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public JPAOrmUpdate<T> setHint(String key, Object value){
@@ -140,7 +139,7 @@ public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.orm.OrmUpdate#execute(java.lang.Object[], java.lang.Object[])
+	 * @see framework.sqlclient.api.orm.OrmUpdate#execute(java.util.List, java.lang.Object[])
 	 */
 	@Override
 	public int execute(List<Object> sets,Object... value){
@@ -153,7 +152,7 @@ public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String)
+	 * @see framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String[])
 	 */
 	@Override
 	public OrmUpdate<T> set(String... setColumn) {

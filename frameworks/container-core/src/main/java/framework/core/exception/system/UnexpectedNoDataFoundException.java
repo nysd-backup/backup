@@ -4,7 +4,7 @@
 package framework.core.exception.system;
 
 /**
- * function.
+ * 0件エラー.
  *
  * @author yoshida-n
  * @version	2011/06/24 created.

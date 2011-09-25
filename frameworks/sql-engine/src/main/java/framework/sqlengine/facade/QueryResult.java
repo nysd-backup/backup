@@ -34,21 +34,21 @@ public class QueryResult<T> {
 	}
 	
 	/**
-	 * @return
+	 * @return true:上限超過
 	 */
 	public boolean isLimited(){
 		return this.limited;
 	}
 	
 	/**
-	 * @return
+	 * @return 検索結果
 	 */
 	public List<T> getResultList(){
 		return this.resultList;
 	}
 	
 	/**
-	 * @return
+	 * @return ヒット件数
 	 */
 	public int getHitCount(){
 		return this.hitCount;

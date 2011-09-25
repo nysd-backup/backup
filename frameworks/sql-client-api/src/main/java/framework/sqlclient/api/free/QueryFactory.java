@@ -17,7 +17,7 @@ public interface QueryFactory {
 	 * SQLを記述する場合に使用する。
 	 *
 	 * @param <T>　型
-	 * @param query クエリ
+	 * @param query クエリクラス
 	 * @return クエリ
 	 */
 	public <K extends FreeQuery,T extends AbstractFreeQuery<K>> T createQuery(Class<T> query);
@@ -28,7 +28,7 @@ public interface QueryFactory {
 	 * SQLを記述する場合に使用する。
 	 * 
 	 * @param <T>　型
-	 * @param entityClass エンティティクラス
+	 * @param query クエリクラス
 	 * @return クエリ
 	 */
 	public <K extends FreeUpdate,T extends AbstractUpdate<K>> T createUpdate(Class<T> query);

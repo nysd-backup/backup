@@ -42,7 +42,7 @@ public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	}
 
 	/**
-	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeQueryEngine(java.lang.Class, javax.persistence.EntityManager)
+	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeQueryEngine(java.lang.Class)
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
@@ -54,7 +54,7 @@ public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	}
 
 	/**
-	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeUpdateEngine(java.lang.Class, javax.persistence.EntityManager)
+	 * @see framework.jpqlclient.api.free.AbstractQueryFactory#createNativeUpdateEngine(java.lang.Class)
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override

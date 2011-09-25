@@ -18,7 +18,7 @@ import framework.sqlclient.api.orm.OrmCondition;
 class SQLStatementBuilderImpl extends AbstractStatementBuilder implements SQLStatementBuilder{
 
 	/**
-	 * @see framework.jpqlclient.internal.orm.AbstractStatementBuilder#createPrefix(framework.api.query.OrmCondition)
+	 * @see framework.jpqlclient.internal.orm.AbstractStatementBuilder#createPrefix(framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	protected StringBuilder createPrefix(OrmCondition<?> condition) {

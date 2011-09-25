@@ -32,7 +32,7 @@ public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNa
 	}
 
 	/**
-	 * @see framework.sqlclient.api.Update#setHint(java.lang.String, java.lang.Object)
+	 * @see framework.jpqlclient.api.free.NamedUpdate#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends NamedUpdate> T setHint(String arg0, Object arg1) {

@@ -66,8 +66,8 @@ public class OrmCondition<T> implements Serializable{
 	}
 	
 	/**
-	 * @param key
-	 * @param value
+	 * @param key キー
+	 * @param value 値
 	 */
 	public void setHint(String key , Object value){
 		hints.put(key, value);
@@ -110,7 +110,7 @@ public class OrmCondition<T> implements Serializable{
 	}
 	
 	/**
-	 * @param size 最大件数
+	 * @param maxSize 最大件数
 	 */
 	public void setMaxSize(int maxSize){
 		this.maxSize = maxSize;

@@ -60,7 +60,7 @@ public class SQLBuilderImpl implements SQLBuilder{
 	}
 	
 	/**
-	 * @see framework.sqlengine.builder.SQLBuilder#build(java.lang.String)
+	 * @see framework.sqlengine.builder.SQLBuilder#build(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public String build(String queryId ,String rowString) {
@@ -90,14 +90,14 @@ public class SQLBuilderImpl implements SQLBuilder{
 	}
 	
 	/**
-	 * @see framework.sqlengine.builder.SQLBuilder#evaluate(java.lang.String, java.util.Map)
+	 * @see framework.sqlengine.builder.SQLBuilder#evaluate(java.lang.String, java.util.Map, java.lang.String)
 	 */
 	public String evaluate(String query , Map<String,Object> parameter,String queryId){
 		return engine.evaluate(query, parameter);
 	}
-	
+
 	/**
-	 * @see framework.sqlengine.builder.StatementProvider#setCount(java.lang.String)
+	 * @see framework.sqlengine.builder.SQLBuilder#setCount(java.lang.String)
 	 */
 	@Override
 	public String setCount(String sql) {
@@ -105,7 +105,7 @@ public class SQLBuilderImpl implements SQLBuilder{
 	}
 
 	/**
-	 * @see framework.sqlengine.builder.StatementProvider#replaceToPreparedSql(java.lang.String, java.util.Map, java.util.List)
+	 * @see framework.sqlengine.builder.SQLBuilder#replaceToPreparedSql(java.lang.String, java.util.Map, java.util.List, java.lang.String)
 	 */
 	@Override
 	public String replaceToPreparedSql(String sql , Map<String,Object> params ,List<Object> bindList,String sqlId){
@@ -162,7 +162,7 @@ public class SQLBuilderImpl implements SQLBuilder{
 	}
 	
 	/**
-	 * @see framework.sqlengine.builder.StatementProvider#setFirstResult(java.lang.String, int)
+	 * @see framework.sqlengine.builder.SQLBuilder#setRange(java.lang.String, int, int, java.util.List)
 	 */
 	@Override
 	public String setRange(String sql , int firstResult , int getSize, List<Object> bindList){

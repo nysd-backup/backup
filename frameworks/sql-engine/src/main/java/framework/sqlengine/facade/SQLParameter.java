@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * SQLエンジンのパラメータ基底.
+ * SQLエンジンのパラメータ.
  *
  * @author yoshida-n
  * @version	created.
@@ -47,21 +47,22 @@ public abstract class SQLParameter {
 	}
 	
 	/**
-	 * @param param
+	 * @param param the param to set 
 	 */
 	public void setAllParameter(Map<String,Object> param){
 		this.parameter = param;
 	}
 	
 	/**
-	 * @param param
+	 * @param param the param to set
 	 */
 	public void setAllBranchParameter(Map<String,Object> param){
 		this.branchParameter = param;
 	}
 	
 	/**
-	 * @param parameter the parameter to set
+	 * @parma name パラメータ名
+	 * @param param 値
 	 */
 	public void putParameter(String name,Object param) {
 		parameter.put(name, param);
@@ -119,14 +120,14 @@ public abstract class SQLParameter {
 	}
 	
 	/**
-	 * @param ignoreEvaluate the ignoreEvaluate to set
+	 * @param useRowSql the useRowSql to set
 	 */
 	public void setUseRowSql(boolean useRowSql) {
 		this.useRowSql = useRowSql;
 	}
 
 	/**
-	 * @return the ignoreEvaluate
+	 * @return the useRowSql
 	 */
 	public boolean isUseRowSql() {
 		return useRowSql;

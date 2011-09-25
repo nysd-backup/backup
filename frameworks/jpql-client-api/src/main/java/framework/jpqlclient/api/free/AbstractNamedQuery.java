@@ -17,7 +17,7 @@ import framework.sqlclient.api.free.FreeQuery;
 public abstract class AbstractNamedQuery extends AbstractFreeQuery<NamedQuery> implements NamedQuery{
 	
 	/**
-	 * @see framework.sqlclient.api.free.FreeQuery#setHint(java.lang.String, java.lang.Object)
+	 * @see framework.jpqlclient.api.free.NamedQuery#setHint(java.lang.String, java.lang.Object)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

@@ -3,8 +3,6 @@
  */
 package framework.web.core.loader;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -18,9 +16,6 @@ public class ComponentLocatorImpl extends ComponentLocator{
 	
 	/** コンテキスト */
 	protected WebApplicationContext context = null;	
-	
-	/** デフォルトサービスマップ （必要があればコンテナ起動時などに初期化する*/
-	private static Map<String,String> defaultServiceMap = new ConcurrentHashMap<String,String>();
 
 	/**
 	 * @see framework.web.core.loader.ComponentLocator#initialize(org.springframework.web.context.WebApplicationContext)
@@ -35,41 +30,6 @@ public class ComponentLocatorImpl extends ComponentLocator{
 	 */
 	static void terminate(){
 		delegate = null;
-	}
-	
-	/**
-	 * サービスを登録する.
-	 * コンテナ起動時などの初期処理で実行する
-	 * 
-	 * @param serviceType サービスタイプ
-	 * @param defaultServiceName サービス名
-	 */
-	protected static void registDefaultService(Class<?> serviceType, String defaultServiceName){
-		registDefaultService(StringUtils.uncapitalize(serviceType.getSimpleName()), defaultServiceName);
-	}
-	
-	/**
-	 * サービスを登録する.
-	 * コンテナ起動時などの初期処理で実行する
-	 * 
-	 * @param name
-	 * @param defaultServiceName
-	 */
-	protected static void registDefaultService(String name, String defaultServiceName){
-		defaultServiceMap.put(name, defaultServiceName);
-	}
-
-	/**
-	 * @see framework.web.core.loader.ComponentLocator#lookupDefaultService(java.lang.Class)
-	 */
-	@Override
-	public <T> T lookupDefaultService(Class<T> clazz) {
-		String serviceName = StringUtils.uncapitalize(clazz.getSimpleName());
-		String name = defaultServiceMap.get(serviceName);
-		if(name == null){
-			return clazz.cast(context.getBean(serviceName));
-		}
-		return clazz.cast(context.getBean(name));
 	}
 
 	/**

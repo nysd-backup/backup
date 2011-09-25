@@ -3,8 +3,6 @@
  */
 package framework.sqlclient.api.free;
 
-
-
 /**
  * デベロッパーに公開しないAPIへのアクセサ.
  *

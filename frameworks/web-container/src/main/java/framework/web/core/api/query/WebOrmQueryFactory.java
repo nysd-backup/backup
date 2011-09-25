@@ -4,12 +4,12 @@
 package framework.web.core.api.query;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
+import framework.api.query.orm.DefaultEasyQuery;
+import framework.api.query.orm.DefaultStrictQuery;
 import framework.api.query.orm.EasyQuery;
 import framework.api.query.orm.EasyUpdate;
 import framework.api.query.orm.StrictQuery;
 import framework.api.query.orm.StrictUpdate;
-import framework.api.query.orm.impl.DefaultEasyQuery;
-import framework.api.query.orm.impl.DefaultStrictQuery;
 import framework.api.query.services.OrmQueryService;
 import framework.core.entity.AbstractEntity;
 import framework.logics.builder.MessageAccessor;
@@ -33,8 +33,9 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	
 	/** メッセージ */
 	protected MessageAccessor accessor;
+
 	/**
-	 * @see framework.api.query.orm.AdvancedOrmQueryFactory#createQuery(java.lang.Class)
+	 * @see framework.api.query.orm.AdvancedOrmQueryFactory#createStrictQuery(java.lang.Class)
 	 */
 	@Override
 	public <T extends AbstractEntity> StrictQuery<T> createStrictQuery(Class<T> entityClass) {
@@ -54,7 +55,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	}
 
 	/**
-	 * @see framework.api.query.orm.AdvancedOrmQueryFactory#createUpdate(java.lang.Class)
+	 * @see framework.api.query.orm.AdvancedOrmQueryFactory#createStrictUpdate(java.lang.Class)
 	 */
 	@Override
 	public <T extends AbstractEntity> StrictUpdate<T> createStrictUpdate(Class<T> entityClass) {

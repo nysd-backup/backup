@@ -4,7 +4,7 @@
 package framework.jdoclient.internal;
 
 /**
- * function.
+ * 演算子.
  *
  * @author yoshida-n
  * @version	created.

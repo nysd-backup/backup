@@ -29,7 +29,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 
 	/**
-	 * @see framework.api.sql.Query#enableNoDataError()
+	 * @see framework.sqlclient.api.Query#enableNoDataError()
 	 */
 	@Override
 	public <T extends Query> T enableNoDataError(){
@@ -38,7 +38,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#getSingleResult()
+	 * @see framework.sqlclient.api.Query#getSingleResult()
 	 */
 	@Override
 	public <T> T getSingleResult() {
@@ -46,7 +46,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#setFirstResult(int)
+	 * @see framework.sqlclient.api.Query#setFirstResult(int)
 	 */
 	@Override
 	public <T extends Query> T setFirstResult(int arg0) {
@@ -55,7 +55,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#setMaxResults(int)
+	 * @see framework.sqlclient.api.Query#setMaxResults(int)
 	 */
 	@Override
 	public <T extends Query> T setMaxResults(int arg0) {
@@ -64,7 +64,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 
 	/**
-	 * @see framework.sqlclient.api.free.free.api.sql.FreeQuery#setParameter(java.lang.String, java.lang.Object)
+	 * @see framework.sqlclient.api.free.FreeQuery#setParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setParameter(String arg0 , Object arg1){
@@ -73,7 +73,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 	
 	/**
-	 * @see framework.sqlclient.api.free.free.FreeQuery#setBranchParameter(java.lang.String, java.lang.Object)
+	 * @see framework.sqlclient.api.free.FreeQuery#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setBranchParameter(String arg0, Object arg1) {
@@ -82,7 +82,7 @@ public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> 
 	}
 
 	/**
-	 * @see framework.api.sql.Query#exists()
+	 * @see framework.sqlclient.api.Query#exists()
 	 */
 	@Override
 	public boolean exists() {

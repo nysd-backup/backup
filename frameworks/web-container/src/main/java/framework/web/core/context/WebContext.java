@@ -17,7 +17,8 @@ import framework.core.message.MessageLevel;
  */
 public abstract class WebContext extends AbstractGlobalContext{
 
-	protected boolean processFailed = false;
+	/** 処理失敗を示す */
+	protected boolean requestFailed = false;
 	
 	/** スレッドローカル */
 	private static ThreadLocal<WebContext> instance = new ThreadLocal<WebContext>(){
@@ -52,17 +53,17 @@ public abstract class WebContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @see framework.core.context.AbstractGlobalContext#setRollbackOnly()
+	 * 処理失敗を設定する
 	 */
-	public void setProcessFailed(){
-		this.processFailed = true;
+	public void setRequestFailed(){
+		this.requestFailed = true;
 	}
 	
 	/**
-	 * @see framework.core.context.AbstractGlobalContext#isRollbackOnly()
+	 * @return true:リクエスト失敗
 	 */
-	public boolean isProcessFailed(){
-		return processFailed;
+	public boolean isRequestFailed(){
+		return requestFailed;
 	}
 	
 	/**
@@ -73,7 +74,7 @@ public abstract class WebContext extends AbstractGlobalContext{
 		
 		//エラーレベル以上のメッセージはエラー扱い
 		if( MessageLevel.Error.getLevel() <= message.getDefined().getLevel().getLevel()){
-			setProcessFailed();
+			setRequestFailed();
 		}
 		globalMessageList.add(message);
 		
@@ -86,12 +87,13 @@ public abstract class WebContext extends AbstractGlobalContext{
 	@Override
 	public void release(){
 		super.release();
-		processFailed = false;
+		requestFailed = false;
 		setCurrentInstance(null);
 	}
 	
 	/**
 	 * コンテキスト初期化
+	 * @param request リクエスト
 	 */
 	public abstract void initialize(HttpServletRequest request );
 	

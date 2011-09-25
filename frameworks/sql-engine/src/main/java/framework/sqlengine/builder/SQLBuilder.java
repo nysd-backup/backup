@@ -53,7 +53,6 @@ public interface SQLBuilder {
 	 * 先頭行取得SQLを設定する.
 	 * 
 	 * @param sql SQL
-	 * @param firstResult 先頭位置
 	 * @return 先頭位置付きSQL
 	 */
 	public String setCount(String sql);

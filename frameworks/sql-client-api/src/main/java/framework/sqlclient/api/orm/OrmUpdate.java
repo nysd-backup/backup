@@ -4,9 +4,6 @@ import java.util.List;
 
 import framework.sqlclient.api.Update;
 
-
-
-
 /**
  * ORマッピング用クエリ.
  *
@@ -64,7 +61,8 @@ public interface OrmUpdate<T> extends Update{
 	 * BETWEE条件の追加
 	 * @param <V> 型
 	 * @param column カラム
-	 * @param value 値
+	 * @param from from値
+	 * @param to to値
 	 * @return self
 	 */
 	public abstract OrmUpdate<T> between(String column, Object from, Object to);
@@ -86,7 +84,7 @@ public interface OrmUpdate<T> extends Update{
 	
 	/**
 	 * 条件
-	 * @param fitlerString フィルター
+	 * @param filterString フィルター
 	 * @return self
 	 */
 	public OrmUpdate<T> filter(String filterString);
@@ -94,7 +92,7 @@ public interface OrmUpdate<T> extends Update{
 	/**
 	 * 更新
 	 * @param set set句
-	 * @param fitlerString フィルター
+	 * @param params パラメータ
 	 * @return 件数
 	 */
 	public int execute(List<Object> set , Object... params);

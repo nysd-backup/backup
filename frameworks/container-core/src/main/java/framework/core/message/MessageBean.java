@@ -6,7 +6,7 @@ package framework.core.message;
 import java.io.Serializable;
 
 /**
- * メッセージBean.
+ * メッセージ.
  *
  * @author	yoshida-n
  * @version	2010/12/30 new create

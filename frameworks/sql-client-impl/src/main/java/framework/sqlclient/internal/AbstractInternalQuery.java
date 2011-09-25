@@ -41,7 +41,9 @@ public abstract class AbstractInternalQuery{
 	protected final boolean useRowSql;
 	
 	/**
-	 * @param queryString クエリ
+	 * @param useRowSql　if文評価するか否か
+	 * @param sql SQL
+	 * @param queryId クエリID
 	 */
 	public AbstractInternalQuery(boolean useRowSql,String sql, String queryId){		
 		this.queryId = queryId;
@@ -60,23 +62,22 @@ public abstract class AbstractInternalQuery{
 	}
 
 	/**
-	 * @see javax.persistence.Query#getFirstResult()
+	 * @return 検索開始位置
 	 */
 	public int getFirstResult() {
 		return this.firstResult;
 	}
 
 	/**
-	 * @see javax.persistence.Query#getMaxResults()
+	 * @return 最大件数
 	 */
 	public int getMaxResults() {
 		return maxSize;
 	}
 
 	/**
-	 * 0件処理
-	 * @param arg0 
-	 * @return
+	 * @param arg0 検索開始位置
+	 * @return self
 	 */
 	public AbstractInternalQuery setFirstResult(int arg0) {
 		this.firstResult = arg0;
@@ -84,7 +85,8 @@ public abstract class AbstractInternalQuery{
 	}
 
 	/**
-	 * @see javax.persistence.Query#setMaxResults(int)
+	 * @param arg0 最大件数
+	 * @return self
 	 */
 	public AbstractInternalQuery setMaxResults(int arg0) {
 		maxSize = arg0;
@@ -92,7 +94,9 @@ public abstract class AbstractInternalQuery{
 	}
 
 	/**
-	 * @see javax.persistence.Query#setParameter(java.lang.String, java.lang.Object)
+	 * @param arg0 キー
+	 * @param arg1 値
+	 * @return self
 	 */
 	public AbstractInternalQuery setParameter(String arg0, Object arg1) {
 		param.put(arg0, arg1);
@@ -111,7 +115,7 @@ public abstract class AbstractInternalQuery{
 	public abstract int count();
 	
 	/**
-	 * @see javax.persistence.Query#getSingleResult()
+	 * @return 先頭行
 	 */
 	public abstract Object getSingleResult();
 	

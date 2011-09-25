@@ -125,21 +125,18 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	
 	/**
 	 * @param queryClass　クエリクラス
-	 * @param em エンティティマネージャ
 	 * @return クエリ
 	 */
 	protected abstract FreeQuery createNativeQueryEngine(Class<?> queryClass);
 	
 	/**
-	 * @param queryClass　クエリクラス
-	 * @param em エンティティマネージャ
+	 * @param updateClass　クエリクラス
 	 * @return クエリ
 	 */
 	protected abstract FreeUpdate createNativeUpdateEngine(Class<?> updateClass);
 	
 	/**
 	 * @param queryClass　クエリクラス
-	 * @param em エンティティマネージャ
 	 * @return クエリ
 	 */
 	protected FreeQuery createNamedQueryEngine(Class<?> queryClass){
@@ -147,8 +144,7 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	}
 	
 	/**
-	 * @param queryClass　クエリクラス
-	 * @param em エンティティマネージャ
+	 * @param updateClass　クエリクラス
 	 * @return クエリ
 	 */
 	protected Update createNamedUpdateEngine(Class<?> updateClass){

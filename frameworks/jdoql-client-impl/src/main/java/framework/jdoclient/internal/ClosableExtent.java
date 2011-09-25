@@ -21,7 +21,7 @@ public class ClosableExtent<T> implements Extent<T>{
 	private final Extent<T> delegate;
 
 	/**
-	 * @param delegate
+	 * @param delegate　delegate
 	 */
 	public ClosableExtent(Extent<T> delegate){
 		this.delegate = delegate;

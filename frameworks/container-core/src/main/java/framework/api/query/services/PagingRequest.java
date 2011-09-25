@@ -43,7 +43,7 @@ public class PagingRequest implements Serializable{
 	}
 
 	/**
-	 * @param request the request to set
+	 * @param internal the internal to set
 	 */
 	public void setInternal(QueryRequest internal) {
 		this.internal = internal;

@@ -49,7 +49,6 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 
 	/**
 	 * @param dao DAO
-	 * @param accessor メッセージ
 	 * @return self
 	 */
 	public LocalOrmQueryEngine<T> setAccessor(GenericDao dao){
@@ -76,7 +75,7 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 	}
 
 	/**
-	 * @see framework.jpqlclient.api.orm.JPAOrmQuery#setLockModeType(javax.persistence.LockModeType)
+	 * @see framework.jpqlclient.api.orm.JPAOrmQuery#setLockMode(javax.persistence.LockModeType)
 	 */
 	@Override
 	public JPAOrmQuery<T> setLockMode(LockModeType lockModeType) {
@@ -194,14 +193,6 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 	@Override
 	public T find(Object... pks) {
 		return dao.find(condition,pks);
-	}
-	
-	/**
-	 * @see framework.sqlclient.api.orm.OrmQuery#findWithLockNoWait(java.lang.Object[])
-	 */
-	@Override
-	public T findWithLockNoWait(Object... pks) {	
-		return dao.findWithLock(condition,0,pks);
 	}
 
 	/**

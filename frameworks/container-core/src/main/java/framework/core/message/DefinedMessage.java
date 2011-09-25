@@ -1,5 +1,5 @@
 /**
- * 
+ * Use is subject to license terms.
  */
 package framework.core.message;
 

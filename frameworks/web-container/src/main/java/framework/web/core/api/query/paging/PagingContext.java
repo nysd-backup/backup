@@ -15,35 +15,35 @@ public interface PagingContext {
 	/**
 	 * @return 現在のページのデータ
 	 */
-	public abstract List getCurrentPageData();
+	public List getCurrentPageData();
 
 	/**
 	 * @return 総件数
 	 */
-	public abstract int getTotalCount();
+	public int getTotalCount();
 
 	/**
 	 * @return 総ページ数
 	 */
-	public abstract int getTotalPage();
+	public int getTotalPage();
 
 	/**
 	 * @return 現在取得しているデータのページ番号(1～)
 	 */
-	public abstract int getCurrentPageNo();
+	public int getCurrentPageNo();
 
 	/**
 	 * ページング準備.
 	 * @param query クエリ
 	 * @param pageSize ページサイズ
 	 */
-	public abstract List prepare(AbstractNativeQuery query, int pageSize);
+	public List prepare(AbstractNativeQuery query, int pageSize);
 
 	/**
 	 * ページデータ管理機構に問い合わせてデータをロードする.
 	 * @param pageNo ページ番号
 	 * @return データ
 	 */
-	public abstract List getPageData(int pageNo);
+	public List getPageData(int pageNo);
 
 }

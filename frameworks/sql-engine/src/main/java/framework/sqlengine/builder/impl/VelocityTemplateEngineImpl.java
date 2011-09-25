@@ -57,7 +57,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	}
 	
 	/**
-	 * @see framework.sqlengine.builder.TemplateEngine#load(java.lang.String, java.util.Map)
+	 * @see framework.sqlengine.builder.TemplateEngine#load(java.io.InputStream)
 	 */
 	@Override
 	public String load(InputStream source){
@@ -178,9 +178,10 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	
 	/**
 	 * 評価用のパラメータ作成.
-	 * 型変換などが必要であればここで実施する
-	 * @param parameter
-	 * @return
+	 * 型変換などが必要であればここで実施する.
+	 * 
+	 * @param parameter パラメータ
+	 * @return 変換後パラメータ
 	 */
 	protected Map<String,Object> createEvaluatingParam(Map<String,Object> parameter){		
 		return parameter;

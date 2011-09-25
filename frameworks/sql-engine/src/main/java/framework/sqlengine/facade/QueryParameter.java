@@ -6,7 +6,7 @@ package framework.sqlengine.facade;
 import framework.sqlengine.executer.RecordFilter;
 
 /**
- * Queryパラメータ.
+ * 検索パラメータ.
  *
  * @author yoshida-n
  * @version	created.
@@ -16,6 +16,7 @@ public class QueryParameter<T> extends SQLParameter{
 	/** マックス件数 */
 	private int maxSize = 0;
 	
+	/** 先頭位置 */
 	private int firstResult = 0;
 	
 	/** 結果セット用 */

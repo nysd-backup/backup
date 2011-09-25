@@ -14,7 +14,7 @@ import framework.sqlclient.api.free.NativeQuery;
 public abstract class AbstractLocalNativeQueryEngine<T extends AbstractInternalQuery> extends AbstractLocalQueryEngine<T> implements NativeQuery{
 
 	/**
-	 * @param delegate　クエリ
+	 * @param delegate　delegate
 	 */
 	public AbstractLocalNativeQueryEngine(T delegate){
 		super(delegate);

@@ -22,8 +22,9 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	/** 履歴を保持するLinkedList */
 	private final LinkedList<PageMement> history = new LinkedList<PageMement>();
 
+
 	/**
-	 * @see framework.web.core.history.StateCaretaker#exist(java.lang.String)
+	 * @see framework.web.core.history.StateCaretaker#exists(java.lang.String)
 	 */
 	@Override
 	public boolean exists(String viewId) {

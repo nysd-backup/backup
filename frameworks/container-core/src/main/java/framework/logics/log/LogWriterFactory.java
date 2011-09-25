@@ -3,7 +3,8 @@
  */
 package framework.logics.log;
 
-import framework.logics.log.impl.DefaultLogWriter;
+import framework.logics.log.impl.DebugLogWriterImpl;
+import framework.logics.log.impl.PerfLogWriterImpl;
 
 /**
  * ログファクトリ.
@@ -13,18 +14,25 @@ import framework.logics.log.impl.DefaultLogWriter;
  */
 public final class LogWriterFactory {
 
-
 	/**
 	 * プライベートコンストラクタ
 	 */
 	private LogWriterFactory(){
-
 	}
+	
 	/**
 	 * @param clazz カテゴリ
 	 * @return ライター
 	 */
 	public static LogWriter getLog(Class<?> clazz) {
-		return new DefaultLogWriter(clazz);
+		return new DebugLogWriterImpl(clazz);
+	}
+	
+	/**
+	 * @param clazz カテゴリ
+	 * @return ライター
+	 */
+	public static NormalLogWriter getPerfLog(Class<?> clazz) {
+		return new PerfLogWriterImpl(clazz);
 	}
 }

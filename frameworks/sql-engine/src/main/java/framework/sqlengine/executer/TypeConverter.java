@@ -15,9 +15,11 @@ import java.sql.SQLException;
 public interface TypeConverter {
 
 	/**
-	 * @param cast
-	 * @param resultSet
-	 * @return
+	 * @param cast 変換先クラス
+	 * @param resultSet リザルトセット
+	 * @param columnLabel カラムラベル
+	 * @return オブジェクト
+	 * @throws SQLException 例外
 	 */
 	public Object getParameter(Class<?> cast , ResultSet resultSet , String columnLabel)throws SQLException ;
 }

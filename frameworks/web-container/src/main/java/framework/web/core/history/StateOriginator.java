@@ -19,7 +19,7 @@ public interface StateOriginator {
 	
 	/**
 	 * スナップショットから状態を復元する。
-	 * @param 状態
+	 * @param mement 状態
 	 */
 	public void restore(PageMement mement);
 }

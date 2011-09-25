@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * EasyQuery.
+ * 簡易ORMクエリ.
  *
  * @author yoshida-n
  * @version	created.

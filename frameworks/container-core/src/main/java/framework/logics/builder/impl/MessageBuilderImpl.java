@@ -22,7 +22,7 @@ import framework.logics.builder.MessageBuilder;
 public class MessageBuilderImpl implements MessageBuilder{
 	
 	/**
-	 * @see framework.logics.builder.MessageBuilder#load(int, java.util.Locale)
+	 * @see framework.logics.builder.MessageBuilder#load(framework.core.message.MessageBean, java.util.Locale)
 	 */
 	@Override
 	public DefinedMessage load(MessageBean bean, Locale locale){
@@ -30,7 +30,7 @@ public class MessageBuilderImpl implements MessageBuilder{
 	}
 	
 	/**
-	 * @see framework.logics.builder.MessageBuilder#load(int, java.util.Locale, java.lang.String)
+	 * @see framework.logics.builder.MessageBuilder#load(framework.core.message.MessageBean, java.util.Locale, java.lang.String)
 	 */
 	@Override
 	public DefinedMessage load(MessageBean bean, Locale locale, String base){
@@ -47,7 +47,7 @@ public class MessageBuilderImpl implements MessageBuilder{
 	}
 
 	/**
-	 * @see framework.logics.builder.MessageBuilder#build(framework.core.message.DefinedMessage, java.lang.Object[])
+	 * @see framework.logics.builder.MessageBuilder#build(framework.core.message.DefinedMessage)
 	 */
 	@Override
 	public BuildedMessage build(DefinedMessage defined) {

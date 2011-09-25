@@ -95,7 +95,7 @@ public class DefaultOrmQueryImpl<T> implements JPAOrmQuery<T>{
 	}
 	
 	/**
-	 * @see framework.jdoclient.api.orm.JDOOrmQuery#contains(java.lang.String, java.util.List)
+	 * @see framework.sqlclient.api.orm.OrmQuery#contains(java.lang.String, java.util.List)
 	 */
 	@Override
 	public OrmQuery<T> contains(String column, List<?> value) {
@@ -127,14 +127,6 @@ public class DefaultOrmQueryImpl<T> implements JPAOrmQuery<T>{
 	@Override
 	public T find(Object... pks) {
 		return delegate.find(pks);
-	}
-
-	/**
-	 * @see framework.sqlclient.api.orm.OrmQuery#findWithLockNoWait(java.lang.Object[])
-	 */
-	@Override
-	public T findWithLockNoWait(Object... pks) {
-		return delegate.findWithLockNoWait(pks);
 	}
 
 	/**
@@ -239,7 +231,7 @@ public class DefaultOrmQueryImpl<T> implements JPAOrmQuery<T>{
 	}
 
 	/**
-	 * @see framework.sqlclient.api.orm.OrmQuery#where(java.lang.String)
+	 * @see framework.sqlclient.api.orm.OrmQuery#filter(java.lang.String)
 	 */
 	@Override
 	public OrmQuery<T> filter(String filterString) {

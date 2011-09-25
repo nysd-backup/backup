@@ -15,21 +15,21 @@ public class ClientRequestBean implements Serializable,Cloneable{
 
 	private static final long serialVersionUID = -5810188274130263782L;
 
-	/** トランザクションID */
-	private String transactionId = null;
+	/** リクエストID */
+	private String requestId = null;
 	
 	/**
-	 * @return トランザクションID
+	 * @return requestId
 	 */
-	public String getTransactionId(){
-		return transactionId;
+	public String getRequestId(){
+		return requestId;
 	}
 	
 	/**
-	 * @param トランザクションID
+	 * @param requestId the requestId to sset
 	 */
-	public void setTransactionId(String transactionId){
-		this.transactionId = transactionId;
+	public void setRequestId(String requestId){
+		this.requestId = requestId;
 	}
 
 	/**

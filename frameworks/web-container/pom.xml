@@ -45,6 +45,12 @@
 		    <version>${javaee.version}</version>
 		    <scope>provided</scope>
 		</dependency>		
+		<dependency>
+		    <groupId>framework</groupId>
+			<artifactId>container-core-eclipselink-diarect</artifactId>
+		    <version>${framework.eclipse.diarect.version}</version>	   
+		    <scope>compile</scope>
+		</dependency>	
 	</dependencies>
 
 </project>

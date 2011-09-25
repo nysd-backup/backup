@@ -14,30 +14,38 @@ import framework.core.entity.AbstractEntity;
 public interface AdvancedOrmQueryFactory {
 
 	/**
-	 * @param <T>
-	 * @param <Q>
-	 * @param entityClass
+	 * StrictQueryを生成する。
+	 * 
+	 * @param <T>　型
+	 * @param <Q> 　型
+	 * @param entityClass エンティティクラス
 	 */
 	public <T extends AbstractEntity> StrictQuery<T> createStrictQuery(Class<T> entityClass);
 	
 	/**
-	 * @param <T>
-	 * @param <Q>
-	 * @param entityClass
+	 * EasyQueryを生成する。
+	 * 
+	 * @param <T>　型
+	 * @param <Q> 　型
+	 * @param entityClass エンティティクラス
 	 */
 	public <T extends AbstractEntity> EasyQuery<T> createEasyQuery(Class<T> entityClass);
 	
 	/**
-	 * @param <T>
-	 * @param <Q>
-	 * @param entityClass
+	 * StrictUpdateを生成する。
+	 * 
+	 * @param <T>　型
+	 * @param <Q> 　型
+	 * @param entityClass エンティティクラス
 	 */
 	public <T extends AbstractEntity> StrictUpdate<T> createStrictUpdate(Class<T> entityClass);
 
 	/**
-	 * @param <T>
-	 * @param <Q>
-	 * @param entityClass
+	 * EasyUpdateを生成する。
+	 * 
+	 * @param <T>　型
+	 * @param <Q> 　型
+	 * @param entityClass エンティティクラス
 	 */
 	public <T extends AbstractEntity> EasyUpdate<T> createEasyUpdate(Class<T> entityClass);
 
