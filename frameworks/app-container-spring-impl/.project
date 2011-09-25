@@ -4,7 +4,7 @@
   <projects>
     <project>app-container-api</project>
     <project>container-core</project>
-    <project>container-core-eclipselink-diarect</project>
+    <project>container-core-eclipselink-dialect</project>
     <project>jdoql-client-api</project>
     <project>jdoql-client-impl</project>
     <project>jpql-client-api</project>

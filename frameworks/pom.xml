@@ -22,6 +22,7 @@
 		<module>jdoql-client-api</module>
 		<module>jdoql-client-impl</module>		
 		<module>container-core</module>
+		<module>container-core-eclipselink-dialect</module>
 		<module>app-container-api</module>
 		<module>app-container-spring-impl</module>	
 		<module>app-container-ejb-impl</module>		

@@ -30,7 +30,7 @@
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" sourcepath="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-sources.jar"/>
   <classpathentry kind="src" path="/container-core"/>
-  <classpathentry kind="src" path="/container-core-eclipselink-diarect"/>
+  <classpathentry kind="src" path="/container-core-eclipselink-dialect"/>
   <classpathentry kind="var" path="M2_REPO/org/dbunit/dbunit/2.4.3/dbunit-2.4.3.jar" sourcepath="M2_REPO/org/dbunit/dbunit/2.4.3/dbunit-2.4.3-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/persistence/eclipselink/2.0.2/eclipselink-2.0.2.jar" sourcepath="M2_REPO/org/eclipse/persistence/eclipselink/2.0.2/eclipselink-2.0.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-stax-api_1.0_spec/1.0/geronimo-stax-api_1.0_spec-1.0.jar" sourcepath="M2_REPO/org/apache/geronimo/specs/geronimo-stax-api_1.0_spec/1.0/geronimo-stax-api_1.0_spec-1.0-sources.jar">

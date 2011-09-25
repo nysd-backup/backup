@@ -74,8 +74,8 @@
 		</dependency>	
 		<dependency>
 		    <groupId>framework</groupId>
-			<artifactId>container-core-eclipselink-diarect</artifactId>
-		    <version>${framework.eclipse.diarect.version}</version>
+			<artifactId>container-core-eclipselink-dialect</artifactId>
+		    <version>${framework.eclipse.dialect.version}</version>
 		    <scope>compile</scope>
 		</dependency>		
 	</dependencies>
