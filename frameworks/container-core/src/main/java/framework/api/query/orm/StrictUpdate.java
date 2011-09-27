@@ -6,7 +6,7 @@ import framework.core.entity.Metadata;
  * ORM更新.
  *
  * @author yoshida-n
- * @version	2011/06/05 created.
+ * @version 2011/08/31 created.
  */
 public interface StrictUpdate<T> extends AdvancedOrmUpdate<T>{
 

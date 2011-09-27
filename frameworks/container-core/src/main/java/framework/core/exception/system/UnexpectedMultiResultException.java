@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.core.exception.system;
 
@@ -7,7 +7,7 @@ package framework.core.exception.system;
  * 複数件存在エラー.
  *
  * @author yoshida-n
- * @version	2011/04/02 created.
+ * @version 2011/08/31 created.
  */
 public class UnexpectedMultiResultException extends SystemException{
 

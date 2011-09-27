@@ -8,7 +8,7 @@ import framework.core.entity.Metadata;
  * ORMクエリ.
  *
  * @author yoshida-n
- * @version	2011/06/05 created.
+ * @version 2011/08/31 created.
  */
 public interface StrictQuery<T> extends AdvancedOrmQuery<T>{
 

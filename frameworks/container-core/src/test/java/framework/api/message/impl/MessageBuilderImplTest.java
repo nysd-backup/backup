@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.message.impl;
 
@@ -21,13 +21,13 @@ import framework.logics.builder.impl.MessageBuilderImpl;
  * function.
  *
  * @author	yoshida-n
- * @version	2011/02/20 new create
+ * @version 2011/08/31 created.
  */
 @RunWith(BlockJUnit4ClassRunner.class)
 public class MessageBuilderImplTest{
 	
 	/**
-	 * リソースバンドル取得
+	 * リソースバンドル取征E
 	 * @throws Exception
 	 */
 	@Test
@@ -42,7 +42,7 @@ public class MessageBuilderImplTest{
 	}
 	
 	/**
-	 * ロケール指定のリソースバンドル取得
+	 * ロケール持E���Eリソースバンドル取征E
 	 * @throws Exception
 	 */
 	@Test
@@ -55,7 +55,7 @@ public class MessageBuilderImplTest{
 	}
 	
 	/**
-	 * ロケール指定のリソースバンドル取得
+	 * ロケール持E���Eリソースバンドル取征E
 	 * @throws Exception
 	 */
 	@Test

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.logics.log;
 
@@ -10,7 +10,7 @@ import framework.logics.log.impl.PerfLogWriterImpl;
  * ログファクトリ.
  *
  * @author yoshida-n
- * @version	2011/05/08 created.
+ * @version 2011/08/31 created.
  */
 public final class LogWriterFactory {
 

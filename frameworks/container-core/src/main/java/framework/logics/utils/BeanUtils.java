@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.logics.utils;
 
@@ -16,7 +16,7 @@ import framework.logics.converter.TypeConverter;
  * Bean操作.
  *
  * @author yoshida-n
- * @version	2011/02/21 created.
+ * @version 2011/08/31 created.
  */
 public abstract class BeanUtils{
 	

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.core.exception.system;
 
@@ -7,7 +7,7 @@ package framework.core.exception.system;
  * システム例外.
  *
  * @author	yoshida-n
- * @version	2010/12/30 new create
+ * @version 2011/08/31 created.
  */
 public class SystemException extends RuntimeException{
 

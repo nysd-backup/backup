@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.core.exception.application;
 
@@ -16,7 +16,7 @@ import framework.api.dto.ReplyDto;
  *</pre>
  *
  * @author	yoshida-n
- * @version	2010/12/30 new create
+ * @version 2011/08/31 created.
  */
 public class BusinessException extends RuntimeException{
 

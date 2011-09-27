@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.query.orm;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * 簡易ORMクエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface EasyQuery<T> extends AdvancedOrmQuery<T>{
 

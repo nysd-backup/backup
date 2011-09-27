@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.service;
 
@@ -7,7 +7,7 @@ package framework.api.service;
  * リモートサービスを示す.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public @interface Remote {
 

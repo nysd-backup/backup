@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.logics.builder;
 
@@ -13,7 +13,7 @@ import framework.core.message.MessageBean;
  * メッセージビルダー.
  *
  * @author yoshida-n
- * @version	2011/05/08 created.
+ * @version 2011/08/31 created.
  */
 public interface MessageBuilder {
 

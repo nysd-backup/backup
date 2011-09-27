@@ -1,6 +1,6 @@
 /**
 
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.core.entity;
 
@@ -8,7 +8,7 @@ package framework.core.entity;
  * エンティティのメタデータ.
  *
  * @author yoshida-n
- * @version	2011/04/20 created.
+ * @version 2011/08/31 created.
  */
 public class Metadata<C,T> {
 	

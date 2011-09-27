@@ -7,7 +7,7 @@ package framework.core.exception;
  * 実装不備。
  *
  * @author yoshida-n
- * @version	2011/05/08 created.
+ * @version 2011/08/31 created.
  */
 public class PoorImplementationException extends RuntimeException{
 

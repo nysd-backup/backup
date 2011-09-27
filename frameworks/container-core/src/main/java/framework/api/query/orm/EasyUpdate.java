@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.query.orm;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * 簡易ORM更新.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface EasyUpdate<T> extends AdvancedOrmUpdate<T>{
 

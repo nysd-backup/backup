@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.logics.log.impl;
 
@@ -11,7 +11,7 @@ import framework.logics.log.NormalLogWriter;
  * 性能ログエンジン.
  *
  * @author yoshida-n
- * @version	2011/05/08 created.
+ * @version 2011/08/31 created.
  */
 public class PerfLogWriterImpl implements NormalLogWriter {
 

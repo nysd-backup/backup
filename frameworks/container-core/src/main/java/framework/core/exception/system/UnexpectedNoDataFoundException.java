@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.core.exception.system;
 
@@ -7,7 +7,7 @@ package framework.core.exception.system;
  * 0件エラー.
  *
  * @author yoshida-n
- * @version	2011/06/24 created.
+ * @version 2011/08/31 created.
  */
 public class UnexpectedNoDataFoundException extends SystemException{
 

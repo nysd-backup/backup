@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.query.services;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * ページング用リクエストパラメタ.
  *
  * @author yoshida-n
- * @version	2011/06/11 created.
+ * @version 2011/08/31 created.
  */
 public class PagingRequest implements Serializable{
 
