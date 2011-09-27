@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jdoclient.internal.orm;
 
@@ -21,7 +21,7 @@ import framework.sqlclient.api.orm.OrmQuery;
  * ORMクエリのエンジン.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
@@ -29,13 +29,13 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	/** 結果クラス */
 	private final Class<T> resultClass;
 	
-	/** パーシステンスマネージャ */
+	/** パ�EシスチE��スマネージャ */
 	private final PersistenceManager pm;
 
-	/** 複数件処理 */
+	/** 褁E��件処琁E*/
 	private final MultiResultHandler mrh;
 
-	/** 0件処理 */
+	/** 0件処琁E*/
 	private final EmptyHandler eh;
 	
 	/** パラメータ数 */
@@ -50,7 +50,7 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	/** パラメータ */
 	private List<Object> params = new ArrayList<Object>();
 	
-	/** 0件システムエラー */
+	/** 0件シスチE��エラー */
 	private boolean noDataErrorEnabled = false;
 	
 	/** 最大件数 */
@@ -60,8 +60,8 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	private int firstResult = 0;
 		
 	/**
-	 * @param entityClass エンティティクラス
-	 * @param pm パーシステンスマネージャ
+	 * @param entityClass エンチE��チE��クラス
+	 * @param pm パ�EシスチE��スマネージャ
 	 * @param mrh マルチリザルトハンドラ
 	 * @param eh 0件ハンドラ
 	 */
@@ -341,7 +341,7 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	/**
 	 * @param column カラム
 	 * @param value 値
-	 * @param operand 演算子
+	 * @param operand 演算孁E
 	 * @return
 	 */
 	private OrmQuery<T> setOperand(String column, Object value,JdoWhereOperand operand) {

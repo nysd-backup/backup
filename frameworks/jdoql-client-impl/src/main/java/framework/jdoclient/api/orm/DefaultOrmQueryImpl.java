@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jdoclient.api.orm;
 
@@ -14,7 +14,7 @@ import framework.sqlclient.api.orm.OrmQuery;
  * JDO用ORMクエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
