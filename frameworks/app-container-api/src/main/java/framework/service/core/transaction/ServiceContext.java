@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.transaction;
 
@@ -13,7 +13,7 @@ import framework.core.message.BuildedMessage;
  * 1スレッド内のサービス開始/終了間で情報を保持する。
  *
  * @author	yoshida-n
- * @version	2010/12/29 new create
+ * @version 2011/08/31 created.
  */
 public abstract class ServiceContext extends AbstractGlobalContext{
 	

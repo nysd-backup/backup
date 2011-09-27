@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.services;
 
@@ -14,7 +14,7 @@ import framework.sqlclient.api.orm.OrmCondition;
  * ORMクエリ.	
  *
  * @author yoshida-n
- * @version	2011/05/16 created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractOrmQueryService<T extends AbstractEntity> implements OrmQueryService<T>{
 	

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.listener;
 
@@ -16,10 +16,10 @@ import framework.service.core.locator.ServiceLocator;
 import framework.service.core.transaction.ServiceContext;
 
 /**
- * リクエストリスナー.
+ * リクエストリスナ�E.
  *
  * @author yoshida-n
- * @version	2011/05/12 created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractRequestListener implements RequestListener{
 
@@ -62,7 +62,7 @@ public abstract class AbstractRequestListener implements RequestListener{
 	
 	/**
 	 * @param dto DTO
-	 * @return サービス名
+	 * @return サービス吁E
 	 */
 	protected Object getService(RequestDto dto){
 		if(dto.getAlias() != null){
@@ -73,24 +73,24 @@ public abstract class AbstractRequestListener implements RequestListener{
 	}
 	
 	/**
-	 * コンテキスト取得
+	 * コンチE��スト取征E
 	 */
 	protected abstract ServiceContext createContext();
 	
 	/**
-	 * 終了処理
-	 * @param startTime 開始時間
-	 * @param cause 例外、正常時はnull
+	 * 終亁E�E琁E
+	 * @param startTime 開始時閁E
+	 * @param cause 例外、正常時�Enull
 	 */
 	protected void terminate(long startTime,Throwable cause){
 		
 	}
 	
 	/**
-	 * 例外処理
-	 * @param t　例外
+	 * 例外�E琁E
+	 * @param t　例夁E
 	 * @param reply リプライ
-	 * @param context コンテキスト
+	 * @param context コンチE��スチE
 	 */
 	protected void handle(Throwable t, ReplyDto reply ,ServiceContext context) {
 
@@ -98,7 +98,7 @@ public abstract class AbstractRequestListener implements RequestListener{
 		
 		Throwable target = t;
 		
-		//業務例外はメッセージを詰めて返却
+		//業務例外�EメチE��ージを詰めて返却
 		if( t instanceof BusinessException){
 			
 			BusinessException se = (BusinessException)t;

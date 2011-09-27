@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.messaging;
 
@@ -11,7 +11,7 @@ package framework.service.core.messaging;
  * </pre>
  * 
  * @author yoshida-n
- * @version	2011/05/21 created.
+ * @version 2011/08/31 created.
  */
 public @interface Prefix {
 

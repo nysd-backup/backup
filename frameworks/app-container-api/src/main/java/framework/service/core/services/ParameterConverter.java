@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.services;
 
@@ -12,7 +12,7 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
  * パラメータ設定.
  *
  * @author yoshida-n
- * @version	2011/06/15 created.
+ * @version 2011/08/31 created.
  */
 abstract class ParameterConverter {
 	

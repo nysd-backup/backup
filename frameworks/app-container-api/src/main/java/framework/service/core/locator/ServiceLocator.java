@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.locator;
 
@@ -8,7 +8,7 @@ package framework.service.core.locator;
  * サービスロケータ.
  *
  * @author	yoshida-n
- * @version	2010/12/30 new create
+ * @version 2011/08/31 created.
  */
 public abstract class ServiceLocator {
 	

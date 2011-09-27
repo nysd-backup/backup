@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.persistence;
 
@@ -8,7 +8,7 @@ package framework.service.core.persistence;
  * 永続化失敗時処理.
  *
  * @author	yoshida-n
- * @version	2011/01/09 new create
+ * @version 2011/08/31 created.
  */
 public interface FlushHandler {
 

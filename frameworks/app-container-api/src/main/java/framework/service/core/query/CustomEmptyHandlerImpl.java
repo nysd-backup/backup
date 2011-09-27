@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -10,7 +10,7 @@ import framework.sqlclient.api.EmptyHandler;
  * 0件時処理.
  *
  * @author yoshida-n
- * @version	2011/04/09 created.
+ * @version 2011/08/31 created.
  */
 public class CustomEmptyHandlerImpl implements EmptyHandler{
 

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -11,7 +11,7 @@ import framework.sqlclient.api.MultiResultHandler;
  * 複数件取得時処理.
  *
  * @author yoshida-n
- * @version	2011/02/26 created.
+ * @version 2011/08/31 created.
  */
 public class CustomMultiResultHandlerImpl implements MultiResultHandler{
 

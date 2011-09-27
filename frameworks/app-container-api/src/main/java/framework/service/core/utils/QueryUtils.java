@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.utils;
 
@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
  * クエリ用ユーティリティ.
  *
  * @author yoshida-n
- * @version	2011/06/21 created.
+ * @version 2011/08/31 created.
  */
 public class QueryUtils {
 

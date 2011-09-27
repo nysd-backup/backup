@@ -7,7 +7,7 @@ package framework.service.core.messaging;
  * メッセージングクライアントファクトリー.
  *
  * @author	yoshida-n
- * @version	2010/12/29 new create
+ * @version 2011/08/31 created.
  */
 public interface MessageClientFactory{
 	

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.async;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
  * 非同期実行エンジン.
  *
  * @author	yoshida-n
- * @version	2011/01/16 new create
+ * @version 2011/08/31 created.
  */
 public interface AsyncService {
 

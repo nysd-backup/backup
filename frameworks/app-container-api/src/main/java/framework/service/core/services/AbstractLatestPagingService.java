@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.services;
 
@@ -15,7 +15,7 @@ import framework.sqlclient.api.free.QueryFactory;
  * 最新取得用ページングサービス.
  *
  * @author yoshida-n
- * @version	2011/05/13 created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractLatestPagingService implements PagingService{
 
