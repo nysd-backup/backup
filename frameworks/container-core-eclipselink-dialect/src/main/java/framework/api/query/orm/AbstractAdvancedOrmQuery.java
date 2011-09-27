@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.query.orm;
 
@@ -18,7 +18,7 @@ import framework.sqlclient.api.orm.OrmQuery;
  * AbstractAdvancedOrmQuery.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>{

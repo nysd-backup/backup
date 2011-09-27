@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -15,7 +15,7 @@ import framework.jpqlclient.api.free.NamedQuery;
  * EclipseLinkのオプションを使用したNamedQuery.
 
  * @author yoshida-n
- * @version	2011/06/05 created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public abstract class EclipseLinkNamedQuery extends AbstractNamedQuery{

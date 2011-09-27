@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.api.query.orm;
 
@@ -16,7 +16,7 @@ import framework.sqlclient.api.orm.OrmQuery;
  * StrictQuery.
  *
  * @author yoshida-n
- * @version	2011/04/02 created.
+ * @version 2011/08/31 created.
  */
 public class DefaultStrictQuery<T> extends AbstractAdvancedOrmQuery<T> implements StrictQuery<T>{
 

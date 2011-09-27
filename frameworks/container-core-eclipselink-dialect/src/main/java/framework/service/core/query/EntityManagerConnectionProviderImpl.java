@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -16,30 +16,30 @@ import framework.jpqlclient.api.EntityManagerProvider;
 import framework.sqlclient.api.ConnectionProvider;
 
 /**
- * SQLエンジン用のコネクション取得[エンティティマネージャ経由].
+ * SQLエンジン用のコネクション取得[エンチE��チE��マネージャ経由].
  * <b>Spring専用</b>
  * 
  * <pre>
- * 前提として、JTA以外のトランザクションマネージャで使用すること。
- * JTAの時はDataSourceから取得してもコネクション不整合を起こさないため使用する必要はない。
+ * 前提として、JTA以外�Eトランザクションマネージャで使用すること、E
+ * JTAの時�EDataSourceから取得してもコネクション不整合を起こさなぁE��め使用する忁E���EなぁE��E
  * 
  * <p>
- * DataSourceからの直接取得やDataSourceUtils#getConnection(DataSource)では、
- * 現在実行中のトランザクションが使用しているコネクションとは異なるコネクションが使用されてしまうためデータ不整合となるため
- * 帳票出力などビジネスロジックでSQLエンジンを利用する場合はこのクラスを使用してコネクションを取得すること。
- * 検索しか実行しないのであればDataSource経由でも問題ない。
+ * DataSourceからの直接取得やDataSourceUtils#getConnection(DataSource)では、E
+ * 現在実行中のトランザクションが使用してぁE��コネクションとは異なるコネクションが使用されてしまぁE��めデータ不整合となるためE
+ * 帳票出力などビジネスロジチE��でSQLエンジンを利用する場合�Eこ�Eクラスを使用してコネクションを取得すること、E
+ * 検索しか実行しなぁE�EであればDataSource経由でも問題なぁE��E
  *
- * このクラスを使用する場合トランザクションを開始していないとgetConnection()時にNPEが発生するため、必ずトランザクションを開始して実行すること。
- * TransactionalアノテーションをつけていてもreadOnly=trueとなっていたらNG。
+ * こ�Eクラスを使用する場合トランザクションを開始してぁE��ぁE��getConnection()時にNPEが発生するため、忁E��トランザクションを開始して実行すること、E
+ * TransactionalアノテーションをつけてぁE��もreadOnly=trueとなってぁE��らNG、E
  * </p>
  * 
  * </pre>
  * @author yoshida-n
- * @version	2011/05/03 created.
+ * @version 2011/08/31 created.
  */
 public class EntityManagerConnectionProviderImpl implements ConnectionProvider{
 
-	/** エンティティマネージャ */
+	/** エンチE��チE��マネージャ */
 	private EntityManager em;
 	
 	/**

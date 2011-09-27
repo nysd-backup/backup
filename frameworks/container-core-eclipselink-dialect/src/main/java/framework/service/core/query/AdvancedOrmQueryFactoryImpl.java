@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -18,10 +18,10 @@ import framework.sqlclient.api.orm.OrmQueryFactory;
 import framework.sqlclient.api.orm.OrmUpdate;
 
 /**
- * ORMクエリを生成する.
+ * ORMクエリを生成すめE
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class AdvancedOrmQueryFactoryImpl implements AdvancedOrmQueryFactory{
 	
