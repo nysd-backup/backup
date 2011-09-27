@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.messaging;
 
@@ -14,7 +14,7 @@ import framework.service.ext.locator.ServiceLocatorImpl;
  * メッセージングクライアントのファクトリ.
  *
  * @author yoshida-n
- * @version	2011/05/07 created.
+ * @version 2011/08/31 created.
  */
 public class MessageClientFactoryImpl implements MessageClientFactory{
 

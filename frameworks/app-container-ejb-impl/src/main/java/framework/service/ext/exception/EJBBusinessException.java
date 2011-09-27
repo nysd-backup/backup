@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.exception;
 
@@ -18,7 +18,7 @@ import framework.core.exception.application.BusinessException;
  *</pre>
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @ApplicationException(rollback=true)
 public class EJBBusinessException extends BusinessException{

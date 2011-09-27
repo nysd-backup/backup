@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.tool;
 
@@ -21,7 +21,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
  * function.
  *
  * @author	yoshida-n
- * @version	2011/02/15 new create
+ * @version 2011/08/31 created.
  */
 @RunWith(BlockJUnit4ClassRunner.class)
 public abstract class ContainerTestCase extends Assert{
@@ -29,25 +29,25 @@ public abstract class ContainerTestCase extends Assert{
 	protected static EJBContainer container;
 	
 	/**
-	 * コンテキスト初期化
+	 * コンチE��スト�E期化
 	 */
 	@BeforeClass
 	public static void initialize(){
 		
 		Map<String,Object> arg0 = new HashMap<String,Object>();
 		
-		//domain.xmlからjdbc-resourceなどの設定を読み込むための設定
+		//domain.xmlからjdbc-resourceなどの設定を読み込むための設宁E
 		arg0.put("org.glassfish.ejb.embedded.glassfish.instance.root","C:\\Env\\Personal\\glassfishv3\\glassfish\\domains\\domain1");		
 		arg0.put("org.glassfish.ejb.embedded.glassfish.installation.root","C:\\Env\\Personal\\glassfishv3\\glassfish");
 		
 		arg0.put(EJBContainer.APP_NAME, "app");
 		
-		//test-classesにclassesのソースを読ませることでtest/resource/ejb-jarとclassesのクラス両方のSessionBeanを作成可能にする
+		//test-classesにclassesのソースを読ませることでtest/resource/ejb-jarとclassesのクラス両方のSessionBeanを作�E可能にする
 		try{
 			FileUtils.copyDirectory(new File("target/classes/framework"), new File("target/test-classes/framework"));
 		}catch(IOException e){
 			e.printStackTrace();
-			throw new RuntimeException("コピー失敗");
+			throw new RuntimeException("コピ�E失敁E);
 		}
 		//ServiceLocatorImpl.setModuleName("app/test-classes");
 		arg0.put(EJBContainer.MODULES, new File[]{ new File("target/test-classes"),new File("./container-core-1.0.0-SNAPSHOT.jar"),new File("./service-api-ext-1.0.0-SNAPSHOT.jar")});
@@ -56,7 +56,7 @@ public abstract class ContainerTestCase extends Assert{
 	}
 
 	/**
-	 * コンテキスト破棄
+	 * コンチE��スト破棁E
 	 */
 	@AfterClass
 	public static void tearDown(){

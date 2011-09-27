@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.transaction;
 
@@ -19,7 +19,7 @@ import framework.service.core.transaction.ServiceContext;
  * </pre>
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractTransactionInterceptor {
 

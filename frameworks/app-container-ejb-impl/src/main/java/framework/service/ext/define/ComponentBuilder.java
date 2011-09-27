@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.define;
 
@@ -15,21 +15,21 @@ import framework.service.core.persistence.EntityManagerAccessor;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * DIコンテナに代わりコンポーネントを生成する.
+ * DIコンチE��に代わりコンポ�Eネントを生�Eする.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface ComponentBuilder {
 	
 	/**
-	 * @return メッセージングファクトリ
+	 * @return メチE��ージングファクトリ
 	 */
 	public MessageClientFactory createMessagingClientFactory();
 	
 	
 	/**
-	 * @return リクエストリスナー
+	 * @return リクエストリスナ�E
 	 */
 	public RequestListener createRequestListener();
 	
@@ -45,7 +45,7 @@ public interface ComponentBuilder {
 	public InvocationHandler createSender();
 	
 	/**
-	 * @return メッセージアクセサ
+	 * @return メチE��ージアクセサ
 	 */
 	public MessageAccessor<MessageBean> createMessageAccessor();
 	
@@ -70,7 +70,7 @@ public interface ComponentBuilder {
 	public AdvancedOrmQueryFactory createOrmQueryFactory();
 	
 	/**
-	 * @return エンティティマネージャラッパー
+	 * @return エンチE��チE��マネージャラチE��ー
 	 */
 	public EntityManagerAccessor createEntityManagerAccessor();
 

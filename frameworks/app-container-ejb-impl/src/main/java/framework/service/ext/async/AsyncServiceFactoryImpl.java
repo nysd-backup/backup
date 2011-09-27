@@ -11,7 +11,7 @@ import framework.service.core.async.AbstractAsyncServiceFactory;
  * 非同期処理用のアノテーション.
  *
  * @author yoshida-n
- * @version	2011/06/15 created.
+ * @version 2011/08/31 created.
  */
 @Stateless
 public class AsyncServiceFactoryImpl extends AbstractAsyncServiceFactory {

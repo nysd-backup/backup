@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.define;
 
@@ -13,7 +13,7 @@ import framework.jpqlclient.api.EntityManagerProvider;
  * エンティティマネージャの提供者.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @Stateless
 public class EntityManagerProviderImpl implements EntityManagerProvider{

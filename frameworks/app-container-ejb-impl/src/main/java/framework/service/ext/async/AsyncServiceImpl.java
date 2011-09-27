@@ -14,7 +14,7 @@ import framework.service.core.locator.ServiceLocator;
  * 非同期処理実行エンジン.
  *
  * @author yoshida-n
- * @version	2011/04/07 created.
+ * @version 2011/08/31 created.
  */
 @Asynchronous
 @Stateless

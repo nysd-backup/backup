@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.services;
 
@@ -14,7 +14,7 @@ import framework.sqlclient.api.free.QueryFactory;
  * リモートからのNativeQuery実行.
  *
  * @author yoshida-n
- * @version	2011/05/13 created.
+ * @version 2011/08/31 created.
  */
 @Stateless
 public class NativeQueryServiceImpl extends AbstractNativeQueryService implements NativeQueryService{

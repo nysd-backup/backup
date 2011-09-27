@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.listener;
 
@@ -12,7 +12,7 @@ import framework.service.ext.transaction.ServiceContextImpl;
  * リクエストリスナー.
  *
  * @author yoshida-n
- * @version	2011/05/12 created.
+ * @version 2011/08/31 created.
  */
 public class RequestListenerImpl extends AbstractRequestListener implements RequestListener{
 

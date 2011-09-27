@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.advice;
 
@@ -15,7 +15,7 @@ import framework.service.core.transaction.ServiceContext;
  * パフォーマンスログ用インターセプター.
  *
  * @author	yoshida-n
- * @version	2011/02/19 new create
+ * @version 2011/08/31 created.
  */
 public class PerfInterceptor {
 

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.define;
 
@@ -33,19 +33,19 @@ import framework.sqlclient.api.free.QueryFactory;
 import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 /**
- * フレームワークのコンポーネントを生成する.
+ * フレームワークのコンポ�Eネントを生�Eする.
  * 
  * <pre>
- * SessionBeanはロールバックフラグがたっていると新規作成できないため、設計によっては処理続行不可能となる。(EntityManager単体の取得は可能）
- * フレームワークの各種コンポーネントをSessionBeanとしてしまうと逃げがきかなくなるためPOJOとして生成する。
- * (ただしくはSessionBeanのメソッドコール時にインターセプターでTransactionRolledBackExceptionがスローされる）
- * ただし、EntityManagerの提供者のみ、AsyncServiceはSessionBeanとせざるを得ないのでSessionBeanとする。
+ * SessionBeanはロールバックフラグがたってぁE��と新規作�EできなぁE��め、設計によっては処琁E��行不可能となる、EEntityManager単体�E取得�E可能�E�E
+ * フレームワークの吁E��コンポ�EネントをSessionBeanとしてしまぁE��送E��がきかなくなるためPOJOとして生�Eする、E
+ * (ただしくはSessionBeanのメソチE��コール時にインターセプターでTransactionRolledBackExceptionがスローされる！E
+ * ただし、EntityManagerの提供老E�Eみ、AsyncServiceはSessionBeanとせざるを得なぁE�EでSessionBeanとする、E
  *
- * インターセプターを仕込みたければPOJOでなく、独自で動的プロキシを使うかCDIを使用すること。
+ * インターセプターを仕込みたけれ�EPOJOでなく、独自で動的プロキシを使ぁE��CDIを使用すること、E
  * </pre>
  * 
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class DefaultComponentBuilderImpl implements ComponentBuilder {
 
@@ -106,7 +106,7 @@ public class DefaultComponentBuilderImpl implements ComponentBuilder {
 	}
 	
 	/**
-	 * @return エンティティマネージャの供給者
+	 * @return エンチE��チE��マネージャの供給老E
 	 */
 	protected EntityManagerProvider createEntityManagerProvider() {
 		return ServiceLocator.lookupByInterface(EntityManagerProvider.class);
