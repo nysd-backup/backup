@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.rest;
 
@@ -11,7 +11,7 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
  * Jeysey-spring連携.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class JerseyServlet extends ServletContainer{
 

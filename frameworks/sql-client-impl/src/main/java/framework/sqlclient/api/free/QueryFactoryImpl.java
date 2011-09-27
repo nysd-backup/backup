@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.free;
 
@@ -21,17 +21,17 @@ import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
  * クエリファクトリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class QueryFactoryImpl implements QueryFactory{
 	
-	/** コネクション供給者 */
+	/** コネクション供給老E*/
 	private ConnectionProvider connectionProvider;
 	
-	/** 0件時処理 */
+	/** 0件時�E琁E*/
 	private EmptyHandler emptyHandler;
 	
-	/** エンジン（デフォルト） */
+	/** エンジン�E�デフォルト！E*/
 	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
 
 	/**
@@ -42,14 +42,14 @@ public class QueryFactoryImpl implements QueryFactory{
 	}
 	
 	/**
-	 * @param emptyHandler 0件処理
+	 * @param emptyHandler 0件処琁E
 	 */
 	public void setEmptyHandler(EmptyHandler emptyHandler){
 		this.emptyHandler = emptyHandler;
 	}
 	
 	/**
-	 * @param connectionProvider コネクション供給者
+	 * @param connectionProvider コネクション供給老E
 	 */
 	public void setConnectionProvider(ConnectionProvider connectionProvider){
 		this.connectionProvider = connectionProvider;

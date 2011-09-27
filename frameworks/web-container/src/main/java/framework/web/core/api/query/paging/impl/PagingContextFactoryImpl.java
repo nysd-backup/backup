@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.query.paging.impl;
 
@@ -13,7 +13,7 @@ import framework.web.core.api.service.ServiceFacade;
  * ページングコンテキストファクトリ.
  *
  * @author yoshida-n
- * @version	2011/06/14 created.
+ * @version 2011/08/31 created.
  */
 @ServiceCallable
 public class PagingContextFactoryImpl implements PagingContexFactory{

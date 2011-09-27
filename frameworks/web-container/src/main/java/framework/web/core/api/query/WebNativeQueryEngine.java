@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.query;
 
@@ -16,7 +16,7 @@ import framework.sqlclient.api.free.ResultSetFilter;
  * WEBコンテナ用NativeQueryのエンジン.
  *
  * @author yoshida-n
- * @version	2011/05/12 created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public class WebNativeQueryEngine implements NativeQuery{

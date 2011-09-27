@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.internal.impl;
 
@@ -16,7 +16,7 @@ import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
  *　内部クエリ実行エンジン
  *
  * @author	yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQueryImpl> implements NativeQuery{

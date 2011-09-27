@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.query;
 
@@ -15,15 +15,15 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- * WEBコンテナ用ORMクエリエンジン.
+ * WEBコンチE��用ORMクエリエンジン.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	
-	/** クエリの実行体 */
+	/** クエリの実行佁E*/
 	private OrmQueryService<E> service;
 	
 	/**　DTO */
@@ -31,7 +31,7 @@ public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	
 	/**
 	 * @param service サービス
-	 * @param entityClass エンティティクラス
+	 * @param entityClass エンチE��チE��クラス
 	 */
 	WebOrmQueryEngine(OrmQueryService<E> service,Class<E> entityClass){
 		this.service = service;
@@ -140,7 +140,7 @@ public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	/**
 	 * @param column カラム
 	 * @param value 値
-	 * @param operand 演算子
+	 * @param operand 演算孁E
 	 * @return
 	 */
 	private OrmQuery<E> setOperand(String column, Object value,WhereOperand operand) {

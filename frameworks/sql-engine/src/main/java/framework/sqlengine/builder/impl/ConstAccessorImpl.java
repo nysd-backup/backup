@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.builder.impl;
 
@@ -11,7 +11,7 @@ import framework.sqlengine.exception.SQLEngineException;
  * 定数キャッシュにアクセスしバインド値を取得する.
  *
  * @author yoshida-n
- * @version created.
+ * @version 2011/08/31 created.
  */
 public class ConstAccessorImpl implements ConstAccessor {
 

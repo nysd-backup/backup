@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.internal.free.impl;
 
@@ -16,7 +16,7 @@ import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
  *　JPAのNativeQueryを使用するクエリエンジン.
  *
  * @author	yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<InternalNativeJPAQueryImpl> implements NativeQuery{

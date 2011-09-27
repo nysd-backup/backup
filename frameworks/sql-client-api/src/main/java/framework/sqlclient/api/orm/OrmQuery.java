@@ -10,7 +10,7 @@ import framework.sqlclient.api.Query;
  * ORマッピング用クエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface OrmQuery<T> extends Query{
 

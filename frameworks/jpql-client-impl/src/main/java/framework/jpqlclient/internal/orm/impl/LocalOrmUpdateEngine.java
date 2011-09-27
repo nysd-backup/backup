@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * FOR FREE
  */
 package framework.jpqlclient.internal.orm.impl;
 
@@ -16,7 +16,7 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- * エンティティクエリ.
+ * エンチE��チE��クエリ.
  *
  * @author yoshida-n
  * @version	created.
@@ -29,11 +29,11 @@ public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 	/** 検索条件 */
 	protected JPAOrmCondition<T> condition;
 	
-	/** エンティティ更新時のset値 */
+	/** エンチE��チE��更新時�Eset値 */
 	protected final Map<String,Object> set;
 	
 	/**
-	 * @param entityClass エンティティクラス
+	 * @param entityClass エンチE��チE��クラス
 	 */
 	public LocalOrmUpdateEngine(Class<T> entityClass){
 		condition = new JPAOrmCondition<T>(entityClass);

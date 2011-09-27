@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.free;
 
@@ -10,7 +10,7 @@ import framework.sqlclient.api.Query;
  * SQL/JPQL/CQL.
  *
  * @author yoshida-n
- * @version	2011/04/02 created.
+ * @version 2011/08/31 created.
  */
 public interface FreeQuery extends Query{
 	

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.api.orm;
 
@@ -15,7 +15,7 @@ import framework.sqlclient.api.orm.OrmUpdate;
  * ORMクエリファクトリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	

@@ -8,7 +8,7 @@ import framework.web.core.loader.ComponentLocator;
  * コンポーネントプロバイダ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class ComponentProviderImpl implements IoCManagedComponentProvider {
 

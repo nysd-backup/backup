@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.api.free;
 
@@ -31,14 +31,14 @@ import framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
  * Queryファクトリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractQueryFactory  implements QueryFactory{
 	
-	/** エンティティマネージャ */
+	/** エンチE��チE��マネージャ */
 	protected EntityManager em;
 	
-	/** 0件時処理 */
+	/** 0件時�E琁E*/
 	protected EmptyHandler emptyHandler = new DefaultEmptyHandlerImpl();
 	
 	/** 定数アクセス */
@@ -63,7 +63,7 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	}
 	
 	/**
-	 * @param emptyHandler 0件時処理
+	 * @param emptyHandler 0件時�E琁E
 	 */
 	public void setEmptyHandler(EmptyHandler emptyHandler){
 		this.emptyHandler = emptyHandler;
@@ -153,20 +153,20 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	
 
 	/**
-	 * NamedQueryを作成する
+	 * NamedQueryを作�Eする
 	 * @param clazz クラス
-	 * @return Queryオブジェクト
+	 * @return QueryオブジェクチE
 	 */
 	protected InternalNamedQueryImpl getNamedQuery(Class<?> clazz){
 		
 		javax.persistence.NamedQuery nq = clazz.getAnnotation(javax.persistence.NamedQuery.class);
 		InternalNamedQueryImpl query = null;
 		QueryHint[] hints = new QueryHint[0];
-		//標準
+		//標溁E
 		if(nq != null){
 			query = new InternalNamedQueryImpl(nq.name(),nq.query(), em,clazz.getSimpleName() ,false,builder,accessor);				
 			hints = nq.hints();
-		//拡張-if文使用	
+		//拡張-if斁E��用	
 		}else{
 			AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);
 			query = new InternalNamedQueryImpl(null,aq.query(), em, clazz.getSimpleName(),false,builder,accessor);				
@@ -183,7 +183,7 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	
 	
 	/**
-	 * @param <T>　型
+	 * @param <T>　垁E
 	 * @param clazz クラス
 	 * @return インスタンス
 	 */

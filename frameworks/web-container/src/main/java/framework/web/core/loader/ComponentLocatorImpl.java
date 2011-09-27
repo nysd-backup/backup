@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.loader;
 
@@ -10,7 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
  * SpringのWebApplicationContextからリソースを取得する
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class ComponentLocatorImpl extends ComponentLocator{
 	

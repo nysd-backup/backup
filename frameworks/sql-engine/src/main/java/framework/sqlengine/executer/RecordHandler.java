@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.executer;
 
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
  * ResultSetの1行を取得する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface RecordHandler<T> {
 	

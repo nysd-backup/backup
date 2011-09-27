@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.exception.impl;
 
@@ -10,7 +10,7 @@ import framework.sqlengine.exception.SQLEngineException;
  * 例外ハンドラ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class ExceptionHandlerImpl implements ExceptionHandler{
 

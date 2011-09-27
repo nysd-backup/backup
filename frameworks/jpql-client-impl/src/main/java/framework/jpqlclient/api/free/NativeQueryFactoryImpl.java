@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.api.free;
 
@@ -17,18 +17,18 @@ import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
  * NativeQuerはJPAではなくSQLエンジンを使用する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	
-	/** コネクション供給者 */
+	/** コネクション供給老E*/
 	private ConnectionProvider connectionProvider;
 	
-	/** SQLエンジンのファサード */
+	/** SQLエンジンのファサーチE*/
 	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
 
 	/**
-	 * @param connectionProvider コネクション供給者
+	 * @param connectionProvider コネクション供給老E
 	 */
 	public void setConnectionProvider(ConnectionProvider connectionProvider){
 		this.connectionProvider = connectionProvider;

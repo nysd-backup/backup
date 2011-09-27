@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.internal.impl;
 
@@ -11,7 +11,7 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
  * 内部更新実行エンジン.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class UpdateEngineImpl extends AbstractLocalUpdateEngine<InternalQueryImpl<?>> implements NativeUpdate{
 

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.api.orm;
 
@@ -13,7 +13,7 @@ import framework.sqlclient.api.orm.OrmUpdate;
  * ラッパーを作成してeq、ascなどの条件指定はタイプセーフにすることが望ましい。
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class DefaultOrmUpdateImpl<T> implements JPAOrmUpdate<T>{
 	

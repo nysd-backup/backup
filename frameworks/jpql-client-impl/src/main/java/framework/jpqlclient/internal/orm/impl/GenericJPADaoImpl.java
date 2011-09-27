@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.internal.orm.impl;
 
@@ -32,17 +32,17 @@ import framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
  * JPAを使用したGenericDao
  *
  * @author	yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class GenericJPADaoImpl implements GenericDao {
 
-	/** エンティティマネージャ */
+	/** エンチE��チE��マネージャ */
 	private EntityManager em = null;
 	
-	/** 0件時処理  */
+	/** 0件時�E琁E */
 	private EmptyHandler eh = new DefaultEmptyHandlerImpl();
 	
-	/** 複数件存在時処理 */
+	/** 褁E��件存在時�E琁E*/
 	private MultiResultHandler mrh = new DefaultMultiResultHandlerImpl();
 	
 	/** 定数アクセス */
@@ -185,13 +185,13 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param <E> 型
+	 * @param <E> 垁E
 	 * @param entityQuery　条件
 	 * @return クエリ
 	 */
 	protected <E> NamedQuery createJPAQuery(JPAOrmCondition<E> entityQuery){
 		
-		//クエリ作成
+		//クエリ作�E
 		final NamedQuery delegate = createEngine(entityQuery);
 
 		if(entityQuery.isNoDataErrorEnabled()){
@@ -215,7 +215,7 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param <E>　型
+	 * @param <E>　垁E
 	 * @param entityQuery 条件
 	 * @return クエリ
 	 */
@@ -227,7 +227,7 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @return ステートメントビルダー
+	 * @return スチE�Eトメントビルダー
 	 */
 	protected JPQLStatementBuilder createStatementBuilder(){
 		return new JPQLStatementBuilderImpl();
@@ -242,12 +242,12 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * 検索条件を設定する
+	 * 検索条件を設定すめE
 	 * @param condition 条件
 	 * @param delegate クエリ
 	 */
 	protected <E> void setConditionParameters(JPAOrmCondition<E> condition, Bindable delegate){
-		//簡易フィルターが設定されている場合、実行時に設定されたパラメータを使用する
+		//簡易フィルターが設定されてぁE��場合、実行時に設定されたパラメータを使用する
 		if(condition.getFilterString() != null){
 			Object[] params = condition.getEasyParams();
 			if(params != null){

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.internal.free.impl;
 
@@ -11,7 +11,7 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
  * NativeQueryの更新エンジン.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class LocalJPANativeUpdateEngine extends AbstractLocalUpdateEngine<InternalNativeJPAQueryImpl> implements NativeUpdate{
 

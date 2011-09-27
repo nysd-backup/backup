@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.service;
 
@@ -20,7 +20,7 @@ import framework.api.service.Remote;
  * サービスファサードにプロキシをインジェクションする.
  *
  * @author yoshida-n
- * @version	2011/05/11 created.
+ * @version 2011/08/31 created.
  */
 public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcessor,ApplicationContextAware{
 	
@@ -30,13 +30,13 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	/** リモート用のBusinessDelegate */
 	private String remoteHandlerBeanName = null;	
 	
-	/** ホワイトリスト */
+	/** ホワイトリスチE*/
 	private Pattern whiteList = null;
 	
-	/** ホワイトリスト */
+	/** ホワイトリスチE*/
 	private boolean allowOnlyMarked = false;
 
-	/** コンテキスト */
+	/** コンチE��スチE*/
 	private ApplicationContext context = null;
 	
 	/**
@@ -63,7 +63,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	}
 	
 	/**
-	 * @param allowOnlyMarked true:アノテーションが設定されているクラスのみインジェクションする
+	 * @param allowOnlyMarked true:アノテーションが設定されてぁE��クラスのみインジェクションする
 	 */
 	public void setAllowOnlyMarked(boolean allowOnlyMarked){
 		this.allowOnlyMarked = allowOnlyMarked;
@@ -119,7 +119,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 				
 				f.setAccessible(true);
 				
-				//プロキシの設定
+				//プロキシの設宁E
 				BusinessDelegate handler = null;
 				if( f.getType().getAnnotation(Remote.class) != null){
 					handler = BusinessDelegate.class.cast(context.getBean(remoteHandlerBeanName));

@@ -8,7 +8,7 @@ import framework.sqlclient.api.Update;
  * ORマッピング用クエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface OrmUpdate<T> extends Update{
 

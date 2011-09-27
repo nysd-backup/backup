@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.service;
 
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * サービスファサードを示すアノテーション.
  *
  * @author yoshida-n
- * @version	2011/05/11 created.
+ * @version 2011/08/31 created.
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

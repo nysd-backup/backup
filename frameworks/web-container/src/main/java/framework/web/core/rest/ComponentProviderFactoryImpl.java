@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2010-2011 by Future Architect, Inc. Japan
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.rest;
 
@@ -13,7 +13,7 @@ import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
  * コンポーネントプロバイダファクトリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class ComponentProviderFactoryImpl implements IoCComponentProviderFactory {
 

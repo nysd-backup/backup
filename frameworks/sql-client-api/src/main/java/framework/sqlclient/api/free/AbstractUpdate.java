@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.free;
 
@@ -9,7 +9,7 @@ package framework.sqlclient.api.free;
  * アップデート基底.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractUpdate<D extends FreeUpdate> implements FreeUpdate{

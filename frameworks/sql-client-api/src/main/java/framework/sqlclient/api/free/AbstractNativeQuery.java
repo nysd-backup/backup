@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.free;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * ネイティブクエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery> implements NativeQuery{
 

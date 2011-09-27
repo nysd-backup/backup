@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.executer.impl;
 
@@ -18,7 +18,7 @@ import framework.sqlengine.facade.QueryResult;
  * ResultSetの全件をBeanに設定する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class ResultSetHandlerImpl implements ResultSetHandler{
 	

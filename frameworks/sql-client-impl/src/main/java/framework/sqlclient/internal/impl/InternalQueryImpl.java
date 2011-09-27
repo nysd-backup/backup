@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.internal.impl;
 
@@ -16,14 +16,14 @@ import framework.sqlengine.facade.SQLParameter;
 import framework.sqlengine.facade.UpdateParameter;
 
 /**
- * SQLエンジン用内部クエリ.
+ * SQLエンジン用冁E��クエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	
-	/** コネクション生成者 */
+	/** コネクション生�E老E*/
 	protected final ConnectionProvider cs;
 	
 	/** 結果格納クラス */
@@ -36,10 +36,10 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	protected final SQLEngineFacade facade;
 	
 	/**
-	 * @param useRowSql if文評価有無
+	 * @param useRowSql if斁E��価有無
 	 * @param sql SQL
 	 * @param queryId クエリID
-	 * @param cs コネクション提供者
+	 * @param cs コネクション提供老E
 	 * @param resultType 結果クラス
 	 * @param facade SQLEngine
 	 */
@@ -51,7 +51,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param filter　リザルトセットフィルター
+	 * @param filter　リザルトセチE��フィルター
 	 * @return self
 	 */
 	public InternalQueryImpl<T> setFilter(ResultSetFilter<T> filter){
@@ -60,7 +60,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return 結果取得
+	 * @return 結果取征E
 	 */
 	public NativeResult<T> getNativeResult(){
 		QueryParameter<T> param = createQueryParameter();
@@ -69,7 +69,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return フェッチして取得
+	 * @return フェチE��して取征E
 	 */
 	@SuppressWarnings("rawtypes")
 	public List getFetchResult(){
@@ -139,7 +139,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param <S> 型
+	 * @param <S> 垁E
 	 * @param parameter パラメータ
 	 * @return パラメータ
 	 */

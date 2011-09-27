@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api;
 
@@ -8,7 +8,7 @@ package framework.sqlclient.api;
  * 検索結果0件時の処理.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface EmptyHandler {
 

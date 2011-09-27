@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.internal.orm.impl;
 
@@ -17,10 +17,10 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- * エンティティクエリ.
+ * エンチE��チE��クエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
 public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
@@ -32,7 +32,7 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 	protected JPAOrmCondition<T> condition;
 	
 	/**
-	 * @param entityClass エンティティクラス
+	 * @param entityClass エンチE��チE��クラス
 	 */
 	public LocalOrmQueryEngine(Class<T> entityClass){
 		condition = new JPAOrmCondition<T>(entityClass);		
@@ -144,7 +144,7 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 	/**
 	 * @param column カラム
 	 * @param value 値
-	 * @param operand 演算子
+	 * @param operand 演算孁E
 	 * @return
 	 */
 	private OrmQuery<T> setOperand(String column, Object value,WhereOperand operand) {

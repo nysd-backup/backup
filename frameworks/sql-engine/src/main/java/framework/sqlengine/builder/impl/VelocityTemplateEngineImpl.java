@@ -21,17 +21,17 @@ import framework.sqlengine.builder.TemplateEngine;
 import framework.sqlengine.exception.SQLEngineException;
 
 /**
- * Velocityを使用してif文を解析する.
+ * Velocityを使用してif斁E��解析すめE
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class VelocityTemplateEngineImpl implements TemplateEngine{
 
-	/** SQLファイル文字コード */
+	/** SQLファイル斁E��コーチE*/
 	protected static final String CHARSET = "UTF-8";
 
-	/** 改行文字 */
+	/** 改行文孁E*/
 	private static final String SEPARATOR = "\n";
 	
 	/** ソートエンジン */
@@ -40,10 +40,10 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	/** 制御構文にマッチする正規表現パターン */
 	private static final Pattern controlStatementPattern = Pattern.compile("--%\\s*(\\w+)");
 
-	/** 1行コメント(ヒント句を除く)にマッチする正規表現パターン */
+	/** 1行コメンチEヒント句を除ぁEにマッチする正規表現パターン */
 	private static final Pattern singleLineCommentPattern = Pattern.compile("--([^+].*[\n\r]*)");
 	
-	/** 複数行コメント(ヒント句を除く)にマッチする正規表現パターン */
+	/** 褁E��行コメンチEヒント句を除ぁEにマッチする正規表現パターン */
 	private static final Pattern multiLineCommentPattern = Pattern.compile("/\\*\\**[^+]([^/*][^*]*\\*+)*/", Pattern.MULTILINE);
 	
 	/** 定数アクセサ. */
@@ -67,14 +67,14 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 			scanner.useDelimiter(SEPARATOR);
 
 			StringBuffer templateSQL = new StringBuffer();
-			int mode = 0; // モード
+			int mode = 0; // モーチE
 			while (scanner.hasNext()) {
 				String line = scanner.next();
 				if (line.startsWith("--% end") && mode == 1) {
-					// defineモード終了
+					// defineモード終亁E
 					mode = 0;
 				} else if (line.startsWith("--% define")) {
-					// defineモード開始
+					// defineモード開姁E
 					mode = 1;
 				} else {
 					if (mode != 1) {
@@ -99,20 +99,20 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	protected String convert(String template){
 		
 		String vtl = template;
-		// '#'を"\#"としてエスケープ
+		// '#'めE\#"としてエスケーチE
 		vtl = vtl.replaceAll("#", "\\\\#");
-		// 制御構文"--%"を"#"に変換
+		// 制御構文"--%"めE#"に変換
 		vtl = controlStatementPattern.matcher(vtl).replaceAll("#$1");
 		// SQLコメントを削除
 		vtl = singleLineCommentPattern.matcher(vtl).replaceAll("##$1");
 		vtl = multiLineCommentPattern.matcher(vtl).replaceAll("#*$1*#");
-		// if文内の変数置換
+		// if斁E�Eの変数置揁E
 		String[] lines = vtl.split("[\r\n]");
 		StringBuilder buff = new StringBuilder();
 		for (String line : lines) {
 			Set<String> duplicationCheck = new HashSet<String>();
 			if (line.contains("#if") || line.contains("#elseif")) {
-				// fixed [バグ #30] シングルクオートを認識しない
+				// fixed [バグ #30] シングルクオートを認識しなぁE
 				String newLine = line.replaceAll("'", "\"");
 
 				int begin = newLine.indexOf('(');
@@ -127,7 +127,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 					if (!(token.matches("\\w+") && !token.equalsIgnoreCase("true") && !token.equalsIgnoreCase("false") && !token.startsWith("\"") && !duplicationCheck.contains(token))) {
 						continue;
 					}
-					// 定数設定 c_で始まる物理名称は定数なので、定数値に置き換える
+					// 定数設宁Ec_で始まる物琁E��称は定数なので、定数値に置き換える
 					Object[] val = accessor.getConstTarget(token);
 					if (val.length > 0) {
 						Object o = val[0];					
@@ -156,7 +156,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	 */
 	@Override
 	public String evaluate(String rowString, Map<String, Object> parameter) {
-		// 変換開始
+		// 変換開姁E
 		Map<String, Object> evaluatingParam = createEvaluatingParam(parameter);
 		VelocityContext context = new VelocityContext(evaluatingParam);
 		StringWriter writer = new StringWriter();
@@ -166,7 +166,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 			throw new SQLEngineException(e);
 		}
 		writer.flush();
-		// エスケープしても'\#'となるのでそれを'#'に戻す
+		// エスケープしてめE\#'となる�EでそれめE#'に戻ぁE
 		String sql = writer.toString().replaceAll("\\\\#", "#");
 		try {
 			writer.close();
@@ -177,8 +177,8 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	}
 	
 	/**
-	 * 評価用のパラメータ作成.
-	 * 型変換などが必要であればここで実施する.
+	 * 評価用のパラメータ作�E.
+	 * 型変換などが忁E��であればここで実施する.
 	 * 
 	 * @param parameter パラメータ
 	 * @return 変換後パラメータ
@@ -187,13 +187,13 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 		return parameter;
 	}
 	
-	/** 文字列比較.*/
+	/** 斁E���E比輁E*/
 	private static class LengthComparator implements Comparator<String> {
 		
 		/**
-		 * @param arg0 トーク
-		 * @param arg1 トークン
-		 * @return 比較結果
+		 * @param arg0 ト�Eク
+		 * @param arg1 ト�Eクン
+		 * @return 比輁E��果
 		 */
 		public int compare(String arg0, String arg1) {
 			if (arg0.length() > arg1.length()) {

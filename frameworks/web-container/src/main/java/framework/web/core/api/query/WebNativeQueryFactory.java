@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.query;
 
@@ -17,10 +17,10 @@ import framework.web.core.api.service.ServiceCallable;
 import framework.web.core.api.service.ServiceFacade;
 
 /**
- * WEB用のネイティブクエリファクトリ.
+ * WEB用のネイチE��ブクエリファクトリ.
  *
  * @author yoshida-n
- * @version	2011/06/13 created.
+ * @version 2011/08/31 created.
  */
 @ServiceCallable
 public class WebNativeQueryFactory implements QueryFactory{

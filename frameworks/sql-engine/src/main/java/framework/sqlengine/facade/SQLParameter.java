@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.facade;
 
@@ -10,7 +10,7 @@ import java.util.Map;
  * SQLエンジンのパラメータ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class SQLParameter {
 

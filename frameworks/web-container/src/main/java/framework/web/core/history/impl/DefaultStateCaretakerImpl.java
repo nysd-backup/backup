@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.history.impl;
 
@@ -12,7 +12,7 @@ import framework.web.core.history.StateCaretaker;
  * 画面状態履歴を保持する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class DefaultStateCaretakerImpl implements StateCaretaker {
 

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.context;
 
@@ -13,7 +13,7 @@ import framework.core.message.MessageLevel;
  * WebContext.
  *
  * @author yoshida-n
- * @version	2011/05/11 created.
+ * @version 2011/08/31 created.
  */
 public abstract class WebContext extends AbstractGlobalContext{
 

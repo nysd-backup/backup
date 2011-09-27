@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.executer;
 
@@ -17,7 +17,7 @@ import framework.sqlengine.exception.SQLEngineException;
  * ResultSetをフェッチして取得するためのリスト.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class LazyList<E> implements List<E>{
 
@@ -302,7 +302,7 @@ public class LazyList<E> implements List<E>{
 	 * イテレータ.
 	 *
 	 * @author yoshida-n
-	 * @version	2011/05/03 created.
+	 * @version 2011/08/31 created.
 	 */
 	private class ResultSetIterator implements Iterator<E>{
 

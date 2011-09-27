@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.loader;
 
@@ -13,7 +13,7 @@ import framework.api.service.ServiceLocatorInitializer;
  * サービスコンテナのApplicationContextの初期化をWEBの初期化と同期化させる.
  *
  * @author yoshida-n
- * @version	2011/05/11 created.
+ * @version 2011/08/31 created.
  */
 public class SynchronizingContextLoaderListener extends ContextLoaderListener{
 

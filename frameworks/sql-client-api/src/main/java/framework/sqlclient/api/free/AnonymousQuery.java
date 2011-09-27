@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.free;
 
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * NamedQuery/NamedNativeQueryとは排他となる
  *
  * @author yoshida-n
- * @version	2011/06/21 created.
+ * @version 2011/08/31 created.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

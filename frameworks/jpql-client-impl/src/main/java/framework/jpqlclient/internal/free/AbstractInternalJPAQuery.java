@@ -15,7 +15,7 @@ import framework.sqlclient.internal.AbstractInternalQuery;
  * JPA用クエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	

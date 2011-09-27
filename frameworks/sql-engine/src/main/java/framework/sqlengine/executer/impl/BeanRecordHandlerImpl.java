@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.executer.impl;
 
@@ -15,7 +15,7 @@ import framework.sqlengine.executer.TypeConverter;
  * ResultSetの1行をBeanに設定する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class BeanRecordHandlerImpl<T> implements RecordHandler<T> {
 

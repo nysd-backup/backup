@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.executer;
 
@@ -7,7 +7,7 @@ package framework.sqlengine.executer;
  * 検索結果の行ごとに実行されるフィルター.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface RecordFilter<T> {
 

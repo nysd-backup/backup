@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.service;
 
@@ -16,7 +16,7 @@ import framework.api.service.RequestListener;
  * リモートサービス実行プロキシ.
  *
  * @author yoshida-n
- * @version	2011/05/10 created.
+ * @version 2011/08/31 created.
  */
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class RemoteBusinessDelegate extends AbstractBusinessDelegate implements ApplicationContextAware {

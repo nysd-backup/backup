@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.web.core.api.query;
 
@@ -21,17 +21,17 @@ import framework.web.core.api.service.ServiceFacade;
  * WEB用のORMクエリファクトリ.
  *
  * @author yoshida-n
- * @version	2011/06/13 created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings({"rawtypes","unchecked"})
 @ServiceCallable
 public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	
-	/** ファサード */
+	/** ファサーチE*/
 	@ServiceFacade
 	protected OrmQueryService service;
 	
-	/** メッセージ */
+	/** メチE��ージ */
 	protected MessageAccessor accessor;
 
 	/**

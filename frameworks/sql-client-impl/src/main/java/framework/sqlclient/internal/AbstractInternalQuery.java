@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * 内部クエリ.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractInternalQuery{
 	

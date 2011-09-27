@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlengine.executer.impl;
 
@@ -12,7 +12,7 @@ import framework.sqlengine.executer.Updater;
  * SQL発行処理、リトライ等が必要な場合にはここで対応する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class UpdaterImpl implements Updater{
 

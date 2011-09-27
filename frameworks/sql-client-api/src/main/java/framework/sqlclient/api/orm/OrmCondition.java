@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.orm;
 
@@ -14,7 +14,7 @@ import java.util.Map;
  * ORマッピング用の検索条件.
  *
  * @author yoshida-n
- * @version	2011/03/17 created.
+ * @version 2011/08/31 created.
  */
 public class OrmCondition<T> implements Serializable{
 

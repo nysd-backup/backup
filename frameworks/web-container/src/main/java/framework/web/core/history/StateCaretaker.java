@@ -6,7 +6,7 @@ import java.util.Iterator;
  * 画面状態履歴を保持する.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public interface StateCaretaker {
 

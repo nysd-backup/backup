@@ -7,7 +7,7 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
  * ページングコンテキスト.
  *
  * @author yoshida-n
- * @version	2011/06/12 created.
+ * @version 2011/08/31 created.
  */
 @SuppressWarnings("rawtypes")
 public interface PagingContext {

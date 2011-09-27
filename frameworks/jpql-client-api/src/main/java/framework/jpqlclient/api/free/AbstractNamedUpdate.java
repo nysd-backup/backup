@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.jpqlclient.api.free;
 
@@ -9,7 +9,7 @@ import framework.sqlclient.api.free.AbstractUpdate;
  * UpdateのAPI.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public abstract class AbstractNamedUpdate extends AbstractUpdate<NamedUpdate> implements NamedUpdate{
 	
