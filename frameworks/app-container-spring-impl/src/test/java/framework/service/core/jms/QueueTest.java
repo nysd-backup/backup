@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.jms;
 
@@ -17,7 +17,7 @@ import framework.service.test.ServiceUnit;
  * function.
  *
  * @author yoshida-n
- * @version	2011/05/05 created.
+ * @version 2011/08/31 created.
  */
 @Ignore
 @ContextConfiguration(locations = {"/META-INF/context/oracleAgentApplicationContext.xml","/META-INF/context/jmsApplicationContext.xml"})

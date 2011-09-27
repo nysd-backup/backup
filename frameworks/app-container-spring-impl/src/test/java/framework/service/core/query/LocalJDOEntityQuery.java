@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -20,7 +20,7 @@ import framework.service.test.entity.TestEntity;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @ContextConfiguration(locations={"/META-INF/context/jdoApplicationContext.xml"})
 public class LocalJDOEntityQuery extends ServiceUnit implements ITestEntity{

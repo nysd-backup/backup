@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -29,10 +29,10 @@ import framework.sqlclient.api.free.NativeResult;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * SQLエンジンのテスト.
+ * SQLエンジンのチE��チE
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @ContextConfiguration(locations = "/META-INF/context/oracleAgentApplicationContext.xml")
 public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity{
@@ -70,7 +70,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * 通常検索if分
+	 * 通常検索if刁E
 	 */
 	@Test
 	public void selectIfAttr(){
@@ -85,8 +85,8 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	
 
 	/**
-	 * if文検索
-	 * 数値比較、not null、文字列比較
+	 * if斁E��索
+	 * 数値比輁E��not null、文字�E比輁E
 	 */
 	@Test
 	public void selectIfAttr2(){
@@ -99,7 +99,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * 結果0件システムエラー
+	 * 結果0件シスチE��エラー
 	 */
 	@Test
 	public void nodataError(){
@@ -152,7 +152,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * setFirstResult、2件目～5件目取得
+	 * setFirstResult、E件目�E�E件目取征E
 	 */
 	@Test
 	public void setFirstResult(){
@@ -163,7 +163,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		per.persist(f);
 		
 		TestEntity s = new TestEntity();
-		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの指定は無視される
+		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
 		per.persist(s);
 		
 		TestEntity t = new TestEntity();
@@ -177,7 +177,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		List<TestEntity> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//必ず楽観ロック番号は1からinsert
+		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
 		assertEquals("900",result.get(1).getAttr());
 	}
 	
@@ -228,7 +228,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * ヒット件数等取得
+	 * ヒット件数等取征E
 	 */
 	@Test
 	public void count(){
@@ -240,7 +240,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * ヒット件数等取得
+	 * ヒット件数等取征E
 	 */
 	@Test	
 	public void getHitCount(){
@@ -256,7 +256,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * ResultSetフェッチ取得
+	 * ResultSetフェチE��取征E
 	 */
 	@Test
 	public void lazySelect(){

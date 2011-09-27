@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.locator;
 
@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
  * 外部で初期化されたコンテキストを保持.
  *
  * @author yoshida-n
- * @version	2011/05/11 created.
+ * @version 2011/08/31 created.
  */
 public class ExternalServiceLocatorImpl extends SpringServiceLocator{
 

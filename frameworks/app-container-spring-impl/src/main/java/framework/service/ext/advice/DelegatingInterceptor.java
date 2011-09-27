@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.advice;
 
@@ -11,7 +11,7 @@ import framework.service.core.advice.Advice;
  * 汎用インターセプター、beforeとafterのみサポート.
  *
  * @author yoshida-n
- * @version	2011/05/07 created.
+ * @version 2011/08/31 created.
  */
 public class DelegatingInterceptor{
 	

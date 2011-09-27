@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -20,7 +20,7 @@ import framework.service.test.entity.TestEntity;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @Service
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -41,7 +41,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 	public String crushException() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		try{
-			//握り潰し、ただしExceptionHandlerでにぎり潰していなければJPASessionのロールバックフラグはtrueになる
+			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setPessimisticRead();
 			query.find("1");
 		}catch(PessimisticLockException pe){

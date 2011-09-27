@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -30,7 +30,7 @@ import framework.sqlclient.api.free.QueryFactory;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @ContextConfiguration(locations = "/META-INF/context/oracleAgentApplicationContext.xml")
 public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
@@ -59,7 +59,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 通常検索if分
+	 * 通常検索if刁E
 	 */
 	@Test
 	public void selectIfAttr(){
@@ -74,8 +74,8 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	
 
 	/**
-	 * if文検索
-	 * 数値比較、not null、文字列比較
+	 * if斁E��索
+	 * 数値比輁E��not null、文字�E比輁E
 	 */
 	@Test
 	public void selectIfAttr2(){
@@ -88,7 +88,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 結果0件システムエラー
+	 * 結果0件シスチE��エラー
 	 */
 	@Test
 	public void nodataError(){
@@ -203,7 +203,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * setFirstResult、2件目～5件目取得
+	 * setFirstResult、E件目�E�E件目取征E
 	 */
 	@Test
 	public void setFirstResult(){
@@ -214,7 +214,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		per.persist(f);
 		
 		TestEntity s = new TestEntity();
-		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの指定は無視される
+		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
 		per.persist(s);
 		
 		TestEntity t = new TestEntity();
@@ -228,7 +228,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		List<TestEntity> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//必ず楽観ロック番号は1からinsert
+		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
 		assertEquals("900",result.get(1).getAttr());
 	}
 	
@@ -278,7 +278,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * サポートしない例外
+	 * サポ�EトしなぁE��夁E
 	 */
 	@Test
 	public void unsupported(){
@@ -352,8 +352,8 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		
 		StrictQuery<TestEntity> e = ormQueryFactory.createStrictQuery(TestEntity.class);
 		
-		//NativeUpdateを実行しても永続化コンテキストは実行されない。従って最初に検索した永続化コンテキスト内のエンティティが再利用される。
-		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする。
+		//NativeUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
+		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		
 		TestEntity res = e.eq(ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);

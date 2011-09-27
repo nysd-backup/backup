@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.services;
 
@@ -24,7 +24,7 @@ import framework.sqlclient.api.orm.OrmCondition;
  * ORMクエリ.	
  *
  * @author yoshida-n
- * @version	2011/05/16 created.
+ * @version 2011/08/31 created.
  */
 @Service
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -48,7 +48,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> extends AbstractOrmQu
 	 */
 	@Override
 	protected StrictQuery<T> createStrictQuery(OrmCondition<T> request) {
-		//永続化コンテキストのキャッシュを使用しない
+		//永続化コンチE��スト�EキャチE��ュを使用しなぁE
 		StrictQuery<T> query = super.createStrictQuery(request);
 		query.setHint(QueryHints.CACHE_STORE_MODE, CacheStoreMode.BYPASS);
 		query.setHint(QueryHints.CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS);

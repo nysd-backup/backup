@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -8,7 +8,7 @@ package framework.service.test;
  * function.
  *
  * @author yoshida-n
- * @version	2011/05/05 created.
+ * @version 2011/08/31 created.
  */
 public interface MockRequiresNewService {
 

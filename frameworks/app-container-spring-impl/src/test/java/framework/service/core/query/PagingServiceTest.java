@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -21,10 +21,10 @@ import framework.service.test.ServiceUnit;
 import framework.service.test.entity.TestEntity;
 
 /**
- * ページングサービスのテスト.
+ * ペ�EジングサービスのチE��チE
  *
  * @author yoshida-n
- * @version	2011/06/14 created.
+ * @version 2011/08/31 created.
  */
 @ContextConfiguration(locations = "/META-INF/context/oracleAgentApplicationContext.xml")
 public class PagingServiceTest extends ServiceUnit{
@@ -58,7 +58,7 @@ public class PagingServiceTest extends ServiceUnit{
 
 	
 	/**
-	 * 1ページ5件境界取得
+	 * 1ペ�Eジ5件墁E��取征E
 	 */
 	@Test
 	public void onePageJust(){
@@ -85,7 +85,7 @@ public class PagingServiceTest extends ServiceUnit{
 	
 
 	/**
-	 * 3ページ2件取得
+	 * 3ペ�Eジ2件取征E
 	 */
 	@Test
 	public void threePagejust(){
@@ -132,7 +132,7 @@ public class PagingServiceTest extends ServiceUnit{
 	}
 	
 	/**
-	 * 2ページ4件、2件取得
+	 * 2ペ�Eジ4件、E件取征E
 	 */
 	@Test
 	public void twoPage(){

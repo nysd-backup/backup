@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -15,7 +15,7 @@ import framework.service.core.transaction.ServiceContext;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 
@@ -27,7 +27,7 @@ public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
-			System.out.println("ロック連番チェックエラー無視");
+			System.out.println("ロチE��連番チェチE��エラー無要E);
 		}else{
 			throw e;
 		}
@@ -42,7 +42,7 @@ public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
-			System.out.println("データベースエラー無視");
+			System.out.println("チE�Eタベ�Eスエラー無要E);
 		}else{
 			throw e;
 		}
@@ -57,7 +57,7 @@ public class DumyExceptionHandler extends AbstractJPAExceptionHandler{
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
-			System.out.println("悲観ロックエラー無視");
+			System.out.println("悲観ロチE��エラー無要E);
 		}else{
 			throw e;
 		}

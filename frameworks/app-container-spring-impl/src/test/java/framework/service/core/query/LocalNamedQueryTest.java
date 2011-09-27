@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -34,7 +34,7 @@ import framework.sqlclient.api.free.QueryFactory;
  * function.
  *
  * @author yoshida-n
- * @version created.
+ * @version 2011/08/31 created.
  */
 @ContextConfiguration(locations = "/META-INF/context/oracleAgentApplicationContext.xml")
 public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
@@ -68,7 +68,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 通常検索if分
+	 * 通常検索if刁E
 	 */
 	@Test
 	public void selectIfAttr(){
@@ -83,8 +83,8 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	
 
 	/**
-	 * if文検索
-	 * 数値比較、not null、文字列比較
+	 * if斁E��索
+	 * 数値比輁E��not null、文字�E比輁E
 	 */
 	@Test
 	public void selectIfAttr2(){
@@ -97,7 +97,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 結果0件システムエラー
+	 * 結果0件シスチE��エラー
 	 */
 	@Test
 	public void nodataError(){
@@ -210,7 +210,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * setFirstResult、2件目～5件目取得
+	 * setFirstResult、E件目�E�E件目取征E
 	 */
 	@Test
 	public void setFirstResult(){
@@ -221,7 +221,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		per.persist(f);
 		
 		TestEntity s = new TestEntity();
-		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの指定は無視される
+		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
 		per.persist(s);
 		
 		TestEntity t = new TestEntity();
@@ -234,20 +234,20 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		List<TestEntity> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//必ず楽観ロック番号は1からinsert
+		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
 		assertEquals("900",result.get(1).getAttr());
 		
 		//更新
 		result.get(0).setAttr("AAA");
 		per.flush();
 		
-		//楽観ロック番号インクリメント確認
+		//楽観ロチE��番号インクリメント確誁E
 		result = query.getResultList();		
 		assertEquals(2,result.get(0).getVersion());
 	}
 	
 	/**
-	 * setLockMode firstSize、maxSize指定不可能
+	 * setLockMode firstSize、maxSize持E��不可能
 	 */
 	@Test
 	public void setLockMode() throws Exception{ 
@@ -336,7 +336,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		int count = update.update();
 		assertEquals(1,count);
 
-		//e2が永続化コンテキストに入ったままなので、JPQLアップデートを実行するので更新
+		//e2が永続化コンチE��ストに入ったままなので、JPQLアチE�EチE�Eトを実行する�Eで更新
 		StrictQuery<DateEntity> e = ormQueryFactory.createStrictQuery(DateEntity.class);
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		DateEntity res = e.eq(IDateEntity.TEST, "1").getSingleResult();
@@ -391,8 +391,8 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		
 		StrictQuery<DateEntity> e = ormQueryFactory.createStrictQuery(DateEntity.class);
 		
-		//NamedUpdateを実行しても永続化コンテキストは実行されない。従って最初に検索した永続化コンテキスト内のエンティティが再利用される。
-		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする。
+		//NamedUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
+		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		
 		DateEntity res = e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);

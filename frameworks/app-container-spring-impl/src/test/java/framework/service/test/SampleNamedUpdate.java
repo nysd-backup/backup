@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -12,7 +12,7 @@ import framework.sqlclient.api.free.AnonymousQuery;
  * function.
  *
  * @author yoshida-n
- * @version	2011/04/24 created.
+ * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_UPDATE.sql")
 public class SampleNamedUpdate extends AbstractNamedUpdate{

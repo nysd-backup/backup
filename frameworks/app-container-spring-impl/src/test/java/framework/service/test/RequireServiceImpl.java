@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -19,7 +19,7 @@ import framework.service.test.entity.TestEntity;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @Service
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)

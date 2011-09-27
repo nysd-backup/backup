@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test.entity;
 
@@ -17,7 +17,7 @@ import framework.core.entity.AbstractEntity;
  * function.
  *
  * @author yoshida-n
- * @version	2011/04/09 created.
+ * @version 2011/08/31 created.
  */
 @Entity
 @Table(name="child3")

@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -11,7 +11,7 @@ import framework.sqlclient.api.free.AnonymousQuery;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_NATIVE_QUERY.sql",resultClass=TestEntity.class)
 public class SampleNativeQuery extends AbstractNativeQuery{

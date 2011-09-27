@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.ext.services;
 
@@ -15,10 +15,10 @@ import framework.service.core.services.AbstractLatestPagingService;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * 最新取得用ページングサービス.
+ * 最新取得用ペ�Eジングサービス.
  *
  * @author yoshida-n
- * @version	2011/05/13 created.
+ * @version 2011/08/31 created.
  */
 @Service("LatestPagingServiceImpl")
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)

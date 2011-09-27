@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -48,7 +48,7 @@ import framework.sqlengine.builder.ConstCache;
  * function.
  *
  * @author yoshida-n
- * @version	2011/04/08 created.
+ * @version 2011/08/31 created.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
@@ -65,8 +65,8 @@ public abstract class ServiceUnit extends Assert{
 	private ServiceTestContextImpl context = null;
 	
 	/**
-	 * コンテキストロード、個別テストケースで使用するServiceLocatorもContextConfigurationを使用できるようにする
-	 * AutowiredよりもResourceの方がタイミング的に早いためResourceを使用する
+	 * コンチE��ストロード、個別チE��トケースで使用するServiceLocatorめEontextConfigurationを使用できるようにする
+	 * AutowiredよりもResourceの方がタイミング皁E��早ぁE��めResourceを使用する
 	 * 
 	 * @param applicationContext
 	 */
@@ -118,10 +118,10 @@ public abstract class ServiceUnit extends Assert{
 	}
 	
 	/**
-	 * @param dataPath データのセットアップ
+	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpData(String dataPath){
-		//javaagentを使用しない単体テストの場合、コミットされる
+		//javaagentを使用しなぁE��体テスト�E場合、コミットされる
 		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
@@ -139,7 +139,7 @@ public abstract class ServiceUnit extends Assert{
 	}
 	
 	/**
-	 * @param dataPath データのセットアップ
+	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpDataForceCommit(String dataPath){
 	
@@ -185,7 +185,7 @@ public abstract class ServiceUnit extends Assert{
 
 		try {
 
-			// 拡張子がxlsの場合、XlsDataSetを生成
+			// 拡張子がxlsの場合、XlsDataSetを生戁E
 			if (dataFileName.endsWith(".xls")) {
 				dataset = new XlsDataSet(this.getClass().getResourceAsStream(dataFileName));
 			} else if (dataFileName.endsWith(".xml")) {
@@ -197,21 +197,21 @@ public abstract class ServiceUnit extends Assert{
 			return dataset;
 
 		} catch (IOException e) {			
-			throw new RuntimeException("テストデータファイルのI/O中にエラーが発生しました。", e);
+			throw new RuntimeException("チE��トデータファイルのI/O中にエラーが発生しました、E, e);
 		} catch (Exception e) {			
 			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
-	 * 初期処理
+	 * 初期処琁E
 	 */
 	protected void beforeTest(){
 		
 	}
 	
 	/**
-	 * 終了処理
+	 * 終亁E�E琁E
 	 */
 	@After
 	public void afterTest(){

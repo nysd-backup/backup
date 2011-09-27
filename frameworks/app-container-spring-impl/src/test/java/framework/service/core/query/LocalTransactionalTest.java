@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.core.query;
 
@@ -20,13 +20,13 @@ import framework.service.test.ServiceUnit;
  * function.
  *
  * @author yoshida-n
- * @version	2011/05/15 created.
+ * @version 2011/08/31 created.
  */
 @ContextConfiguration(locations = "/META-INF/context/oracleAgentApplicationContext.xml")
 public class LocalTransactionalTest extends ServiceUnit{
 	
 	/**
-	 * 別トランザクションでエラーがあっても現在トランザクションには影響なし
+	 * 別トランザクションでエラーがあっても現在トランザクションには影響なぁE
 	 */
 	@Test
 	@Rollback(false)
@@ -40,7 +40,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	}
 	
 	/**
-	 * 別トランザクションでBusinessExceptionスローしてもキャッチすれば現在トランザクションには影響なし
+	 * 別トランザクションでBusinessExceptionスローしてもキャチE��すれば現在トランザクションには影響なぁE
 	 */
 	@Test
 	@Rollback(false)
@@ -59,8 +59,8 @@ public class LocalTransactionalTest extends ServiceUnit{
 	}
 	
 	/**
-	 *　呼び出し先の別トランザクション内でメッセージ追加＋永続化してもこのトランザクションには影響ない。
-	 * また、呼び出し先でSessionBeanのようにサービスがコールできないということもない。
+	 *　呼び出し�Eの別トランザクション冁E��メチE��ージ追加�E�永続化してもこのトランザクションには影響なぁE��E
+	 * また、呼び出し�EでSessionBeanのようにサービスがコールできなぁE��ぁE��こともなぁE��E
 	 */
 	@Test
 	@Rollback(false)

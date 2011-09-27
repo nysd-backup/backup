@@ -1,5 +1,5 @@
 /**
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package framework.service.test;
 
@@ -9,7 +9,7 @@ import framework.service.ext.transaction.ServiceContextImpl;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version 2011/08/31 created.
  */
 public class ServiceTestContextImpl extends ServiceContextImpl{
 
