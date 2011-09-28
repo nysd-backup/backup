@@ -39,18 +39,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	public static ComponentBuilder getComponentBuilder(){
 		return ((ServiceLocatorImpl)delegate).builder;
 	}
-	
-	/**
-	 * サービス取得
-	 * @param <T> 型
-	 * @param ifType サービスタイプ
-	 * @return サービス
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T lookupByInterface(Class<T> ifType){
-		T service =  (T)lookup(ifType.getSimpleName()+"Impl");
-		return service;
-	}
 
 	/**
 	 * @see framework.service.core.locator.ServiceLocator#lookupServiceByInterface(java.lang.Class)

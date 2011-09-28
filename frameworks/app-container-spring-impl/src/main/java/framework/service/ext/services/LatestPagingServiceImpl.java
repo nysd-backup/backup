@@ -15,7 +15,7 @@ import framework.service.core.services.AbstractLatestPagingService;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * 最新取得用ペ�Eジングサービス.
+ * 最新取得用ページングサービス.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

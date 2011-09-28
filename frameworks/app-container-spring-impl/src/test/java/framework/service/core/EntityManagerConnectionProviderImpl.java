@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.service.ext.query;
+package framework.service.core;
 
 import java.sql.Connection;
 
@@ -16,12 +16,13 @@ import framework.jpqlclient.api.EntityManagerProvider;
 import framework.sqlclient.api.ConnectionProvider;
 
 /**
- * SQLエンジン用のコネクション取得[エンチE��チE��マネージャ経由].
+ * SQLエンジン用のコネクション取得[エンティティマネージャ経由].
  * <b>Spring専用</b>
  * 
  * <pre>
  * 前提として、JTA以外のトランザクションマネージャで使用すること。
  * JTAの時にはこのクラスを使用する必要はなく、DataSourceからの取得でよい。
+ * 本番ではJTAを使用することがほとんどのはずなので、基本的にJTAが使用できないローカルでの単体テストで使用する。
  * 
  * JTA以外の場合、DataSourceからの直接取得やDataSourceUtils#getConnection(DataSource)では、
  * 現在実行中のトランザクションが使用しているコネクションとは異なるコネクションが使用されてしまいデータ不整合となるため、

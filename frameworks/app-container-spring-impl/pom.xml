@@ -158,26 +158,27 @@
 		    <groupId>aspectj</groupId>
 		    <artifactId>aspectjweaver</artifactId>
 		    <version>${aspectj.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.persistence</groupId>
-		    <artifactId>javax.persistence</artifactId>
-		    <version>${eclipselink.version}</version>
-		    <scope>compile</scope>
-		</dependency>		
-		<dependency>
-		    <groupId>org.eclipse.persistence</groupId>
-		    <artifactId>eclipselink</artifactId>
-		    <version>${eclipselink.version}</version>
-		    <scope>compile</scope>
-		</dependency>					
+		</dependency>						
 		<dependency>
 		    <groupId>javax.jms</groupId>
 		    <artifactId>jms</artifactId>
 		    <version>${jms.version}</version>
 		    <scope>provided</scope>
-		</dependency>		
+		</dependency>				
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>javax.persistence</artifactId>
+		    <version>${eclipselink.version}</version>
+		    <scope>provided</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>eclipselink</artifactId>
+		    <version>${eclipselink.version}</version>
+		    <scope>test</scope>
+		</dependency>	
 		
+		<!-- for test -->
 		<dependency>
 			<groupId>org.dbunit</groupId>
 			<artifactId>dbunit</artifactId>
@@ -198,12 +199,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml-schemas</artifactId>
-			<version>${poi.version}</version>
-			<scope>test</scope>
-		</dependency>
-			<dependency>
-			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>${poi.version}</version>
 			<scope>test</scope>
@@ -214,12 +209,5 @@
 			<version>${slf4j.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
 	</dependencies>
-	
-	<properties>
-		<dbunit.version>2.4.3</dbunit.version>	
-		<poi.version>3.7</poi.version>
-		<slf4j.version>1.6.1</slf4j.version>
-	</properties>
 </project>

@@ -21,14 +21,14 @@ import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
  */
 public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	
-	/** コネクション供給老E*/
+	/** コネクション供給者*/
 	private ConnectionProvider connectionProvider;
 	
-	/** SQLエンジンのファサーチE*/
+	/** SQLエンジンのファサード*/
 	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
 
 	/**
-	 * @param connectionProvider コネクション供給老E
+	 * @param connectionProvider コネクション供給者
 	 */
 	public void setConnectionProvider(ConnectionProvider connectionProvider){
 		this.connectionProvider = connectionProvider;

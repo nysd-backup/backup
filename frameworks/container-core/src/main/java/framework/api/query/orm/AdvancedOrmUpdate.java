@@ -28,13 +28,4 @@ public interface AdvancedOrmUpdate<T> {
 	 */
 	public <Q extends AdvancedOrmUpdate<T>> Q setHint(String key, Object value);
 	
-	/**
-	 * SQLヒント句を設定する。
-	 * @param <Q> 型
-	 * @param hintValue ヒント句
-	 * @return self
-	 */
-	public <Q extends AdvancedOrmUpdate<T>> Q setHintString(String hintValue);
-	
-	
 }

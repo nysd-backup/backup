@@ -7,18 +7,17 @@ import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
 import javax.persistence.CacheStoreMode;
 
-import org.eclipse.persistence.config.QueryHints;
-
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.api.query.services.OrmQueryService;
 import framework.core.entity.AbstractEntity;
+import framework.jpqlclient.api.PersistenceHints;
 import framework.service.core.services.AbstractOrmQueryService;
 import framework.service.ext.locator.ServiceLocatorImpl;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * リモートから�EORMクエリ実衁E
+ * リモートからのORMクエリ実行
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -39,10 +38,10 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> extends AbstractOrmQu
 	 */
 	@Override
 	protected StrictQuery<T> createStrictQuery(OrmCondition<T> request) {
-		//永続化コンチE��スト�EキャチE��ュを使用しなぁE
+		//永続化コンテキストを使用しない。
 		StrictQuery<T> query = super.createStrictQuery(request);
-		query.setHint(QueryHints.CACHE_STORE_MODE, CacheStoreMode.BYPASS);
-		query.setHint(QueryHints.CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS);
+		query.setHint(PersistenceHints.CACHE_STORE_MODE, CacheStoreMode.BYPASS);
+		query.setHint(PersistenceHints.CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS);
 		return query;
 	}
 

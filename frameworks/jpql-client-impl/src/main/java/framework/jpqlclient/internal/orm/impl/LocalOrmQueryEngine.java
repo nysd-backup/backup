@@ -17,7 +17,7 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- * 繧ｨ繝ｳ繝・ぅ繝・ぅ繧ｯ繧ｨ繝ｪ.
+ * 繝ｭ繝ｼ繧ｫ繝ｫ逕ｨORM繧ｯ繧ｨ繝ｪ縺ｮ繧ｨ繝ｳ繧ｸ繝ｳ.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -32,7 +32,7 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 	protected JPAOrmCondition<T> condition;
 	
 	/**
-	 * @param entityClass 繧ｨ繝ｳ繝・ぅ繝・ぅ繧ｯ繝ｩ繧ｹ
+	 * @param entityClass 繧ｨ繝ｳ繝�繧｣繝�繧｣繧ｯ繝ｩ繧ｹ
 	 */
 	public LocalOrmQueryEngine(Class<T> entityClass){
 		condition = new JPAOrmCondition<T>(entityClass);		

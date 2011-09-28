@@ -5,7 +5,6 @@ package framework.service.ext.locator;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.util.StringUtils;
 
 import framework.service.core.locator.ServiceLocator;
 
@@ -54,7 +53,7 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	 */
 	@Override
 	public <T> T lookupServiceByInterface(Class<T> clazz) {
-		return clazz.cast(lookupService(StringUtils.uncapitalize(clazz.getSimpleName())+ "Impl"));
+		return clazz.cast(context.getBean(clazz));
 	}
 
 	/**

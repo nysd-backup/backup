@@ -1,5 +1,5 @@
 /**
- * 
+ * Copyright 2011 the original author
  */
 package framework.api.dto;
 

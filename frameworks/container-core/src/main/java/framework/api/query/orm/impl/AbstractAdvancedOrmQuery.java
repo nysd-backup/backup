@@ -5,10 +5,8 @@ package framework.api.query.orm.impl;
 
 import javax.persistence.LockModeType;
 
-import org.eclipse.persistence.config.HintValues;
-import org.eclipse.persistence.config.QueryHints;
-
 import framework.api.query.orm.AdvancedOrmQuery;
+import framework.jpqlclient.api.PersistenceHints;
 import framework.jpqlclient.api.orm.JPAOrmCondition;
 import framework.jpqlclient.api.orm.JPAOrmQuery;
 import framework.sqlclient.api.orm.OrmCondition;
@@ -32,24 +30,6 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	public AbstractAdvancedOrmQuery(OrmQuery<T> delegate){
 		this.delegate = delegate;
 	}
-
-	/**
-	 * @see framework.api.query.orm.AdvancedOrmQuery#setHintString(java.lang.String)
-	 */
-	@Override
-	public <Q extends AdvancedOrmQuery<T>> Q setHintString(String hintValue){
-		setHint(QueryHints.HINT,hintValue);
-		return (Q)this;
-	}
-	
-	/**
-	 * @see framework.api.query.orm.AdvancedOrmQuery#setRefleshMode()
-	 */
-	@Override
-	public <Q extends AdvancedOrmQuery<T>> Q setRefleshMode(){
-		setHint(QueryHints.REFRESH,HintValues.TRUE);
-		return (Q)this;
-	}
 	
 	/**
 	 * @see framework.sqlclient.api.orm.OrmQuery#enableNoDataError()
@@ -57,6 +37,16 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	@Override
 	public <Q extends AdvancedOrmQuery<T>> Q enableNoDataError() {
 		delegate.enableNoDataError();
+		return (Q)this;
+	}
+	
+	/**
+	 * @see framework.api.query.orm.AdvancedOrmQuery#setPessimisticReadNoWait()
+	 */
+	@Override
+	public <Q extends AdvancedOrmQuery<T>> Q setPessimisticReadNoWait(){
+		setLockMode(LockModeType.PESSIMISTIC_READ);
+		setHint(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		return (Q)this;
 	}
 	
@@ -130,15 +120,6 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 		}else{
 			throw new UnsupportedOperationException();
 		}
-		return (Q)this;
-	}
-
-	/**
-	 * @see framework.api.query.orm.AdvancedOrmQuery#setPessimisticRead()
-	 */
-	@Override
-	public <Q extends AdvancedOrmQuery<T>> Q setPessimisticRead() {
-		setLockMode(LockModeType.PESSIMISTIC_READ);
 		return (Q)this;
 	}
 

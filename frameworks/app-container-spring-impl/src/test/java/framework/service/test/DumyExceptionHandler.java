@@ -54,8 +54,14 @@ public class DumyExceptionHandler implements ExceptionHandler{
 
 	@Override
 	public Object handleException(RuntimeException exception) {
-		// TODO Auto-generated method stub
-		return null;
+		if(exception instanceof OptimisticLockException){
+			return handleOptimisticLockException((OptimisticLockException)exception);
+		}else if(exception instanceof PessimisticLockException){
+			return handlePessimisticLockException((PessimisticLockException)exception);
+		}else if(exception instanceof DatabaseException){
+			return handleDatabaseException((DatabaseException)exception);
+		}
+		throw exception;
 	}
 
 }

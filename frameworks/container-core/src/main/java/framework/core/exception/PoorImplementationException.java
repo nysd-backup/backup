@@ -1,10 +1,11 @@
 /**
- * 
+ * Copyright 2011 the original author
  */
 package framework.core.exception;
 
 /**
- * 実装不備。
+ * 実装不備を示す例外。
+ * この例外がスローされた場合は実装ミスによるバグなのでアプリケーションを見直すこと。
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

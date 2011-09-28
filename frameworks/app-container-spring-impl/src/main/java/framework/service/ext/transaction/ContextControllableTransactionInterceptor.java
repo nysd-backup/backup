@@ -23,12 +23,12 @@ import framework.service.core.transaction.ServiceContext;
 import framework.service.core.transaction.TransactionManagingContext;
 
 /**
- * コンチE��スト�Eロールバック惁E��の利用したトランザクション管琁E��行う.
+ * コンテキストのロールバックフラグをTransactionManagerと同期化させる。
  * 
  * <pre>
- * ServiceContextにエラーレベル以上�EメチE��ージがある場合、transactionManagerのロールバックフラグを立てる、E
- * トランザクション墁E��の場合�EServiceContextのロールバックフラグをfalseに戻し、トランザクション冁E�E業務エラーの影響が他トランザクションに影響なぁE��ぁE��する、E
- * 一番外�Eで実行するよぁE��すること、E
+ * ServiceContextにエラーレベル以上のメッセージがある場合、transactionManagerのロールバックフラグを立てる。
+ * トランザクション境界の場合はServiceContextのロールバックフラグをfalseに戻し、トランザクション内の業務エラーの影響が他トランザクションに影響がないようにする。
+ * 一番外側のインターセプターとすること。
  * </pre>
  *
  * @author yoshida-n
@@ -58,7 +58,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
 			TransactionInfo txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);					
 			
-			//トランザクション墁E��の場合トランザクション開始（エラーメチE��ージの自動判定が不要であればこれ系の処琁E�EぁE��なぁE
+			//トランザクション墁E��の場合トランザクション開始（エラーメチE��ージの自動判定が不要であればこれ系の処琁E�EぁE��なぁE
 			if(txInfo.getTransactionStatus().isNewTransaction()){
 				((TransactionManagingContext)ServiceContext.getCurrentInstance()).startUnitOfWork();
 			}
@@ -70,7 +70,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 				// This will normally result in a target object being invoked.
 				retVal = invocation.proceed();
 			
-				//後�E琁E
+				//後�E琁E
 				commitable = afterProceed(txInfo,retVal,invocation);
 				
 			}
@@ -82,7 +82,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 			finally {
 				
 				if(txInfo.getTransactionStatus().isNewTransaction()){
-					//トランザクション墁E��でセチE��ョンコンチE��スト�E期化				
+					//トランザクション境界なのでコンテキスト初期化
 					((TransactionManagingContext)ServiceContext.getCurrentInstance()).endUnitOfWork();
 				}
 				
@@ -140,7 +140,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 	}
 
 	/**
-	 * メソチE��正常終亁E��E
+	 * メソチE��正常終亁E��E
 	 * 
 	 * @param txInfo トランザクション状慁E
 	 * @param retVal 戻り値
@@ -148,7 +148,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 	 */
 	protected boolean afterProceed(TransactionInfo txInfo,Object retVal , MethodInvocation invocation){
 		
-		//現在トランザクションでロールバックフラグが設定されてぁE��場吁E
+		//現在トランザクションでロールバックフラグが設定されている場合はエラーとする
 		if(((TransactionManagingContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly()){			
 			completeTransactionAfterThrowing(txInfo,new BusinessException("set rollback only in current transaction"));			
 			return false;

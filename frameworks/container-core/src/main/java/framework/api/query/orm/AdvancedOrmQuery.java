@@ -17,19 +17,11 @@ import framework.sqlclient.api.orm.OrmCondition;
 public interface AdvancedOrmQuery<T> {
 	
 	/**
-	 * SQLヒント句を設定する。
-	 * @param <Q> 型
-	 * @param hintValue ヒント句
+	 * LockModeTypeを指定する.
+	 * @param lockModeType ロックモード
 	 * @return self
 	 */
-	public <Q extends AdvancedOrmQuery<T>> Q setHintString(String hintValue);
-	
-	/**
-	 * DBから直接検索し永続化コンテキストを最新の値で更新する。
-	 * @param <Q> 型
-	 * @return self
-	 */
-	public <Q extends AdvancedOrmQuery<T>> Q setRefleshMode();
+	public <Q extends AdvancedOrmQuery<T>> Q setPessimisticReadNoWait();
 	
 	/**
 	 * @param <T> 型
@@ -39,20 +31,12 @@ public interface AdvancedOrmQuery<T> {
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setHint(String key, Object value);
 
-
 	/**
 	 * LockModeTypeを指定する.
 	 * @param lockModeType ロックモード
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setLockMode(LockModeType lockModeType);
-
-	/**
-	 * 悲観ロック設定.
-	 * 
-	 * @return self
-	 */
-	public <Q extends AdvancedOrmQuery<T>> Q setPessimisticRead();
 
 	/**
 	 * @param condition 条件

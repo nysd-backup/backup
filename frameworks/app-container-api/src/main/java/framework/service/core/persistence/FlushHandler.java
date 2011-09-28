@@ -3,7 +3,6 @@
  */
 package framework.service.core.persistence;
 
-
 /**
  * 永続化失敗時処理.
  *

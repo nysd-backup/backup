@@ -4,8 +4,10 @@
 package framework.service.test;
 
 import javax.annotation.Resource;
+import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
+import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -42,7 +44,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	
 	public String test() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-		query.setPessimisticRead().find("1");
+		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
 	}
@@ -51,8 +53,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	public String crushException() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		try{
-			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
-			query.setPessimisticRead().find("1");
+			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
+			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}

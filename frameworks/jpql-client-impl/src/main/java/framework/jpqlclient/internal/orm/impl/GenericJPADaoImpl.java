@@ -36,13 +36,13 @@ import framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
  */
 public class GenericJPADaoImpl implements GenericDao {
 
-	/** エンチE��チE��マネージャ */
+	/** エンティティマネージャ */
 	private EntityManager em = null;
 	
-	/** 0件時�E琁E */
+	/** 0件時処理 */
 	private EmptyHandler eh = new DefaultEmptyHandlerImpl();
 	
-	/** 褁E��件存在時�E琁E*/
+	/** 複数件処理*/
 	private MultiResultHandler mrh = new DefaultMultiResultHandlerImpl();
 	
 	/** 定数アクセス */
@@ -143,7 +143,12 @@ public class GenericJPADaoImpl implements GenericDao {
 		if( pks.length == 1){
 			v = pks[0];
 		}
-		E result = (E)em.find(query.getEntityClass(),v,query.getHints());
+		E result = null;
+		if(query.getLockModeType() != null){
+			result = (E)em.find(query.getEntityClass(),v,query.getLockModeType(),query.getHints());
+		}else{
+			result = (E)em.find(query.getEntityClass(),v,query.getHints()); 
+		}
 		if( result == null && query.isNoDataErrorEnabled()){
 			eh.handleEmptyResult(query.getEntityClass());			
 		}
@@ -185,13 +190,13 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param <E> 垁E
+	 * @param <E> 型
 	 * @param entityQuery　条件
 	 * @return クエリ
 	 */
 	protected <E> NamedQuery createJPAQuery(JPAOrmCondition<E> entityQuery){
 		
-		//クエリ作�E
+		//クエリ作�E
 		final NamedQuery delegate = createEngine(entityQuery);
 
 		if(entityQuery.isNoDataErrorEnabled()){
@@ -215,7 +220,7 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param <E>　垁E
+	 * @param <E>　型
 	 * @param entityQuery 条件
 	 * @return クエリ
 	 */
@@ -227,7 +232,7 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @return スチE�Eトメントビルダー
+	 * @return ステートメントビルダー
 	 */
 	protected JPQLStatementBuilder createStatementBuilder(){
 		return new JPQLStatementBuilderImpl();
@@ -242,12 +247,12 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * 検索条件を設定すめE
+	 * 検索条件を設定する。
 	 * @param condition 条件
 	 * @param delegate クエリ
 	 */
 	protected <E> void setConditionParameters(JPAOrmCondition<E> condition, Bindable delegate){
-		//簡易フィルターが設定されてぁE��場合、実行時に設定されたパラメータを使用する
+		//簡易フィルターが設定されている場合、実行時に設定されたパラメータを使用する
 		if(condition.getFilterString() != null){
 			Object[] params = condition.getEasyParams();
 			if(params != null){

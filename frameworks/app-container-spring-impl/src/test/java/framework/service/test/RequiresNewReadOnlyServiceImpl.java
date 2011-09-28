@@ -4,8 +4,10 @@
 package framework.service.test;
 
 import javax.annotation.Resource;
+import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
+import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 	
 	public String test() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-		query.setPessimisticRead();
+		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
 		query.find("1");
 		return "OK";
 	}
@@ -41,8 +43,8 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 	public String crushException() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		try{
-			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
-			query.setPessimisticRead();
+			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
+			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
 			query.find("1");
 		}catch(PessimisticLockException pe){
 			return "NG";

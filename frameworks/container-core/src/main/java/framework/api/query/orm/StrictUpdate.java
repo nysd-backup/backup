@@ -1,3 +1,6 @@
+/**
+ * Copyright 2011 the original author
+ */
 package framework.api.query.orm;
 
 import framework.core.entity.Metadata;

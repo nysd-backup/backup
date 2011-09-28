@@ -121,7 +121,6 @@ public abstract class ServiceUnit extends Assert{
 	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpData(String dataPath){
-		//javaagentを使用しなぁE��体テスト�E場合、コミットされる
 		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
