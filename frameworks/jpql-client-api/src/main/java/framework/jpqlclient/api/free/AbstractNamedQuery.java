@@ -36,4 +36,16 @@ public abstract class AbstractNamedQuery extends AbstractFreeQuery<NamedQuery> i
 		return (T)this;
 	}
 	
+	/**
+	 * 悲観ロックを設定する。
+	 * @param <Q> 型
+	 * @param timeout タイムアウト
+	 * @return self
+	 */
+	@SuppressWarnings("unchecked")
+	public <Q extends NamedQuery> Q setPessimisticRead(){
+		setLockMode(LockModeType.PESSIMISTIC_READ);
+		return (Q)this;
+	}
+	
 }

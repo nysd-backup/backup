@@ -31,6 +31,5 @@ public interface NamedQuery extends FreeQuery{
 	 * @return self
 	 */
 	public <T extends NamedQuery> T setLockMode(LockModeType arg0);
-
 	
 }
