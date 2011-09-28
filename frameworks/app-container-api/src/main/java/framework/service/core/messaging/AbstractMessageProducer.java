@@ -10,21 +10,21 @@ import framework.api.dto.RequestDto;
 import framework.service.core.transaction.ServiceContext;
 
 /**
- * メッセージプロデューサ.
+ * the message producer.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractMessageProducer implements InvocationHandler{
 	
-	/** 宛先セレクタ */
-	private DestinationSelecter destinationSelecter;
+	/** the selector for JMS destination */
+	private DestinationSelector destinationSelector;
 	
 	/**
-	 * @param selecter セレクタ
+	 * @param selecter the selector to set
 	 */
-	public void setDestinationSelecter(DestinationSelecter selecter){
-		this.destinationSelecter = selecter;
+	public void setDestinationSelector(DestinationSelector selector){
+		this.destinationSelector = selector;
 	}
 
 	/**
@@ -56,19 +56,19 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 		
 		//宛先生成
 		String dst = null;
-		if(destinationSelecter != null){
-			dst = destinationSelecter.createDestinationName(method);
+		if(destinationSelector != null){
+			dst = destinationSelector.createDestinationName(method);
 		}
 	
 		return invoke(dto,dst);
 	}
 	
 	/**
-	 * 非同期サービス起動
-	 * @param dto DTO
-	 * @param destinationName 宛先名称
-	 * @return 戻り値
-	 * @throws Throwable　例外
+	 * invoke service.
+	 * @param dto the DTO
+	 * @param destinationName the name
+	 * @return the result
+	 * @throws Throwable　any error
 	 */
 	protected abstract Object invoke(RequestDto dto ,String destinationName) throws Throwable;
 }

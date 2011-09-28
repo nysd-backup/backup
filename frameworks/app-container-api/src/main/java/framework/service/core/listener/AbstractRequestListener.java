@@ -16,14 +16,14 @@ import framework.service.core.locator.ServiceLocator;
 import framework.service.core.transaction.ServiceContext;
 
 /**
- * リクエストリスナー.
+ * A listener for calling request.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractRequestListener implements RequestListener{
 
-	/** ログ */
+	/** the instance for logging */
 	private final LogWriter LOG = LogWriterFactory.getLog(getClass());
 	
 	/**

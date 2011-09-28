@@ -7,7 +7,7 @@ import framework.core.exception.system.UnexpectedNoDataFoundException;
 import framework.sqlclient.api.EmptyHandler;
 
 /**
- * 0件時処理.
+ * Throw an <code>UnexpectedNoDataFoundException</code> if the no result was found.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

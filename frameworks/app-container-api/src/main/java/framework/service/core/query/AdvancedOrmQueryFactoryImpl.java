@@ -18,18 +18,18 @@ import framework.sqlclient.api.orm.OrmQueryFactory;
 import framework.sqlclient.api.orm.OrmUpdate;
 
 /**
- * ORMクエリを生成すめE
+ * The factory to create ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class AdvancedOrmQueryFactoryImpl implements AdvancedOrmQueryFactory{
 	
-	/** クエリファクトリ */
+	/** the internal factory */
 	private OrmQueryFactory internalFactory;
 	
 	/**
-	 * @param factory ファクトリ
+	 * @param factory the factory to set
 	 */
 	public void setInternalFactory(OrmQueryFactory factory){
 		this.internalFactory = factory;

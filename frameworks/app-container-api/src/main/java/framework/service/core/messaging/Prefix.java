@@ -4,7 +4,7 @@
 package framework.service.core.messaging;
 
 /**
- * メッセージ送信Queue/Topicのプリフィクス.
+ * the prefix of destination.
  * 
  * <pre>
  * 例:jms/{$prefix}/....
@@ -15,6 +15,6 @@ package framework.service.core.messaging;
  */
 public @interface Prefix {
 
-	/** プリフィクス */
+	/** the prefix */
 	String value();
 }

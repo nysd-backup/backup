@@ -12,7 +12,7 @@ import framework.logics.log.LogWriter;
 import framework.logics.log.LogWriterFactory;
 
 /**
- * SQL生成アドバイス.
+ * An advice for the SQL Builder.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -21,11 +21,11 @@ public class SQLBuilderInterceptor implements Advice{
 
 	private static final LogWriter LOG = LogWriterFactory.getLog(SQLBuilderInterceptor.class);
 	
-	/** ログ出力を無視するクエリIDのリスト */
+	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();
 	
 	/**
-	 * @param ignoreList ログ無視SQLIDリスト
+	 * @param ignoreList the ignoreList to set
 	 */
 	public void setIgnoreList(String ignoreList){
 		String[] ignore = ignoreList.split(",");

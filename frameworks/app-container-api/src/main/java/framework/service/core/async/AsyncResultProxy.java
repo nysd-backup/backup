@@ -10,18 +10,18 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
- * 非同期結果取得用プロキシ.
+ * A proxy for the result.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public class AsyncResultProxy implements InvocationHandler{
 	
-	/** 非同期処理未来結果 */
+	/** the result to return */
 	private Future<Object> returnValue = null;
 	
 	/**
-	 * @param returnValue　非同期処理未来結果
+	 * @param returnValue　the returnValue to set
 	 */
 	public AsyncResultProxy(Future<Object> returnValue){
 		this.returnValue = returnValue;

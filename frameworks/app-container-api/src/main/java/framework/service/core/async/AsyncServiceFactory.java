@@ -4,7 +4,7 @@
 package framework.service.core.async;
 
 /**
- * 非同期サービスファクトリ.
+ * The factory to create asynchronous services.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,9 +12,9 @@ package framework.service.core.async;
 public interface AsyncServiceFactory {
 
 	/**
-	 * @param <T> 型
-	 * @param serviceType サービスタイプ
-	 * @return サービス
+	 * @param <T> the type
+	 * @param serviceType the serviceType to set
+	 * @return the service
 	 */
 	public <T> T create(Class<T> serviceType);
 }

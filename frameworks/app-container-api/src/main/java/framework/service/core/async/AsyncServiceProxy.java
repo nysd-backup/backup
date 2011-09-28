@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 import framework.service.core.locator.ServiceLocator;
 
 /**
- * 非同期サービス用プロキシ.
+ * An interface of asynchronous proxy service.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.

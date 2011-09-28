@@ -5,54 +5,54 @@ package framework.service.core.locator;
 
 
 /**
- * サービスロケータ.
+ * A service locator.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class ServiceLocator {
 	
-	/** シングルトン */
+	/** the delegating locator */
 	protected static ServiceLocator delegate = null;
 	
 	/**
-	 * インターフェースからのサービス取得
-	 * @param <T>　型
-	 * @param clazz クラス
-	 * @return サービス
+	 * Look up service using interface.
+	 * @param <T>　the type
+	 * @param clazz the interface of target service
+	 * @return the service
 	 */
 	public abstract <T> T lookupServiceByInterface(Class<T> clazz);
 	
 	/**
-	 * サービス取得
-	 * @param name クラス
-	 * @return サービス
+	 * Look up service using name.
+	 * @param name the name of service
+	 * @return the service
 	 */
 	public abstract <T> T lookupService(String name);
 	
 	/**
-	 * リモートサービスの取得
-	 * @param <T>　型
-	 * @param clazz クラス
-	 * @return サービス
+	 * look up remote service.
+	 * @param <T>　the type
+	 * @param clazz the interface of target service
+	 * @return the service
 	 */
 	public abstract <T> T lookupRemoteService(Class<T> clazz);
 		
 	/**
-	 * サービス取得
-	 * @param <T> 型
-	 * @param ifType サービスタイプ
-	 * @return サービス
+	 * Look up service using interface.
+	 * @param <T> the type
+	 * @param ifType the interface of target service
+	 * @return the service
 	 */
 	public static <T> T lookupByInterface(Class<T> ifType){
 		return delegate.lookupServiceByInterface(ifType);
 	}
 	
 	/**
-	 * サービス取得
-	 * @param <T> 型
-	 * @param name サービスタイプ
-	 * @return サービス
+	 * Look up service using name.
+	 * @param <T> the type
+	 * @param name the name of target service
+	 * @return the service
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T lookup(String name){
@@ -61,10 +61,10 @@ public abstract class ServiceLocator {
 	
 	
 	/**
-	 * サービス取得
-	 * @param <T> サービス
-	 * @param clazz サービスタイプ
-	 * @return サービス
+	 * Look up remote service using interface.
+	 * @param <T> the type
+	 * @param clazz the interface of target service
+	 * @return the service
 	 */
 	public static <T> T lookupRemote(Class<T> clazz){
 		return delegate.lookupRemoteService(clazz);

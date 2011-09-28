@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * パッケージ名から宛先を生成する.
+ * A selector for JMS destination from name of package. 
  * 
  * <pre>
  * 例:jms/org/xxx/framework/service
@@ -17,20 +17,20 @@ import java.util.regex.Pattern;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DestinationSelecterImpl implements DestinationSelecter{
+public class DestinationSelectorImpl implements DestinationSelector{
 	
-	/** パターン */
+	/** the pattern */
 	private Pattern pattern;
 	
 	/**
-	 * @param expression 正規表現
+	 * @param expression the expression for pattern
 	 */
 	public void setPattern(String expression){
 		pattern = Pattern.compile(expression);
 	}
 
 	/**
-	 * @see framework.service.core.messaging.DestinationSelecter#createDestinationName(java.lang.reflect.Method)
+	 * @see framework.service.core.messaging.DestinationSelector#createDestinationName(java.lang.reflect.Method)
 	 */
 	@Override
 	public String createDestinationName(Method target) {

@@ -12,18 +12,18 @@ import framework.logics.builder.MessageBuilder;
 import framework.service.core.transaction.ServiceContext;
 
 /**
- * メッセージの作成、追加エンジン.
+ * A message handler.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public class MessageAccessorImpl implements MessageAccessor<MessageBean>{
 	
-	/** ビルダー */
+	/** the builder for message */
 	private MessageBuilder builder;
 	
 	/**
-	 * @param builder ビルダー
+	 * @param builder the builder to set
 	 */
 	public void setMessageBuilder(MessageBuilder builder){
 		this.builder = builder;

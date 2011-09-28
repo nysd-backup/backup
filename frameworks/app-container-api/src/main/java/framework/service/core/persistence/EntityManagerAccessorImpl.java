@@ -9,14 +9,14 @@ import framework.core.entity.AbstractEntity;
 import framework.jpqlclient.api.EntityManagerProvider;
 
 /**
- * エンティティマネージャのラッパー.
+ *  A wrapper for <code>EntityManager</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class EntityManagerAccessorImpl implements EntityManagerAccessor{
 	
-	/** エンティティマネージャ */
+	/** the manager for entity */
 	private EntityManager em;
 
 	/**

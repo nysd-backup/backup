@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Future;
 
 /**
- * 非同期実行エンジン.
+ * An interface of the asynchronous proxy service.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -15,10 +15,10 @@ import java.util.concurrent.Future;
 public interface AsyncService {
 
 	/**
-	 * @param proxy プロキシ
-	 * @param method メソッド
-	 * @param args 引数
-	 * @return 未来結果
+	 * @param proxy the proxy
+	 * @param method the method
+	 * @param args the arguments
+	 * @return the result
 	 */
 	public Future<Object> execute(Object proxy, Method method , Object args) throws Exception;
 }

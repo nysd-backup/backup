@@ -4,7 +4,7 @@
 package framework.service.core.messaging;
 
 /**
- * メッセージングクライアントファクトリー.
+ * The factory to create JMS producer.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -12,18 +12,18 @@ package framework.service.core.messaging;
 public interface MessageClientFactory{
 	
 	/**
-	 * Topic送信サービス
-	 * @param <T> 型
-	 * @param serviceType サービス
-	 * @return サービス
+	 * Creates a publisher for TOPIC.
+	 * @param <T> the type
+	 * @param serviceType the interface of service
+	 * @return the service
 	 */
 	public <T> T createPublisher(Class<T> serviceType);
 	
 	/**
-	 * Queue送信サービス
-	 * @param <T> 型
-	 * @param serviceType サービス
-	 * @return サービス
+	 * Creates a sender for QUEUE.
+	 * @param <T> the type
+	 * @param serviceType the interface of service
+	 * @return the service
 	 */
 	public <T> T createSender(Class<T> serviceType);
 }

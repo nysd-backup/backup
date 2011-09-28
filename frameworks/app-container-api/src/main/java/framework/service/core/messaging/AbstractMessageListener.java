@@ -11,7 +11,7 @@ import framework.api.dto.RequestDto;
 import framework.api.service.RequestListener;
 
 /**
- * メッセージリスナー.
+ * A listener for MDB and MDP.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -19,7 +19,7 @@ import framework.api.service.RequestListener;
 public abstract class AbstractMessageListener implements MessageListener{
 
 	/**
-	 * @param arg0 メッセージ
+	 * @param arg0 the message
 	 */
 	public void onMessage(Message arg0) {
 
@@ -35,7 +35,7 @@ public abstract class AbstractMessageListener implements MessageListener{
 	}
 	
 	/**
-	 * @return リクエストリスナー
+	 * @return the listener
 	 */
 	protected abstract RequestListener createListener();
 }

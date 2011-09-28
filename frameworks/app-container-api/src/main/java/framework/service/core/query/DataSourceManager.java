@@ -6,10 +6,11 @@ package framework.service.core.query;
 import javax.sql.DataSource;
 
 /**
- * データソース取得.
+ * Get a <code>DataSource</code>.
+ * 
  * <pre>
- * JTA用コネクションプールから取得すること。
- * Oracleの場合はoracle.jdbc.xa.client.OracleXADataSource。
+ * Get only from JTA connection pool.
+ * Use <code>oracle.jdbc.xa.client.OracleXADataSource</code> in oracle.
  * </pre>
  *
  * @author yoshida-n
@@ -18,7 +19,7 @@ import javax.sql.DataSource;
 public interface DataSourceManager {
 
 	/**
-	 * @return データソース
+	 * @return the <code>DataSource</code>
 	 */
 	public DataSource getDataSource();
 }

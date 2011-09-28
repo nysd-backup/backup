@@ -4,7 +4,7 @@
 package framework.service.core.advice;
 
 /**
- * AOP用のアドバイス.
+ * An advice for aop.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,21 +12,21 @@ package framework.service.core.advice;
 public interface Advice {
 	
 	/**
-	 * 前処理.
-	 * @param target　JoinPointの対象オブジェクト
-	 * @param methodName JoinPointの対象メソッド
-	 * @param argments メソッドの引数
+	 * Be invoked before main process.
+	 * @param target　the target instance of weaving
+	 * @param methodName the joinpoint
+	 * @param args arguments
 	 */
-	public void before(Object target , String methodName , Object[] argments);
+	public void before(Object target , String methodName , Object[] args);
 	
 	
 	/**
-	 * 後処理
-	 * @param target　JoinPointの対象オブジェクト
-	 * @param methodName JoinPointの対象メソッド
-	 * @param argments メソッドの引数
-	 * @param result メソッド実行結果
+	 * Be invoked after main process.
+	 * @param target　target instance of weaving
+	 * @param methodName the joinpoint
+	 * @param args the arguments
+	 * @param result the execution result
 	 */
-	public void after(Object target ,String methodName , Object[] argments, Object result);
+	public void after(Object target ,String methodName , Object[] args, Object result);
 
 }

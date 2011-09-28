@@ -9,14 +9,14 @@ import framework.core.entity.AbstractEntity;
 import framework.jdoclient.api.PersistenceManagerProvider;
 
 /**
- * パーシステンスマネージャのアクセサ.
+ * Access the <code>PersistenceManager</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class PersistenceManagerAccessorImpl implements PersistenceManagerAccessor{
 	
-	/** パーシステンスマネージャ */
+	/** the <code>PersistenceManager</code> */
 	private PersistenceManager pm;
 
 	/**

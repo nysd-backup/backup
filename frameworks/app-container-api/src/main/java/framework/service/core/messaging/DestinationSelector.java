@@ -6,16 +6,16 @@ package framework.service.core.messaging;
 import java.lang.reflect.Method;
 
 /**
- * Queue/Topic宛先を取得する.
+ * A selector for JMS's destination
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface DestinationSelecter {
+public interface DestinationSelector {
 
 	/**
-	 * @param target 実行メソッド
-	 * @return　宛先
+	 * @param target the method to invoke
+	 * @return　the destination name
 	 */
 	public String createDestinationName(Method target);
 }

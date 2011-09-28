@@ -10,13 +10,14 @@ import framework.service.core.transaction.TransactionManagingContext;
 import framework.sqlclient.api.ConnectionProvider;
 
 /**
- * SQLエンジン用のコネクション取得[データソース経由].
+ * A connection provider only for 'SQLEngine'.
  * 
  * <pre>
- * JTA専用。JTA以外で使用するとgetConnection毎にコネクションが変化してしまう。
- * Springの場合にDataSourceUtilsを使用しても解決不可能。
+ * Only available in JTA environment.
+ * connection changes per 'getConnection' in not JTA environment.
+ * Spring's 'DataSourceUtils' cannot resolve that problem.
  * 
- * WEB層からの直接検索で使用する場合には、一トランザクションに一回のSELECTなのでJTAでなくても使用可能。
+ * In not JTA environment only one SQL is allowed in one transaction.
  * </pre>
  * 
  * @author yoshida-n

@@ -4,7 +4,7 @@
 package framework.service.core.persistence;
 
 /**
- * 永続化失敗時処理.
+ * A aandler for failed process.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -12,10 +12,11 @@ package framework.service.core.persistence;
 public interface FlushHandler {
 
 	/**
-	 * em.flush実行時にPersistenceExceptionが発生した場合にハンドリングを行う。
-	 * 例えば、楽観ロックに失敗したら次回以降のflushで同じエラーにならないようrefreshするなど。
+	 * Handles the process if <code>PersistenceException</code> was thrown.
+	 *  
+	 * ex) refresh the context after an exception was thrown so as not to fail next 'em.flush'
 	 * 
-	 * @param pe　永続化失敗例外
+	 * @param pe　the exception
 	 */
 	public void handle(RuntimeException pe);
 }
