@@ -4,10 +4,10 @@
 package framework.jpqlclient.api;
 
 /**
- * JPQLのヒント(Vender非依存）.
+ * JPQLのヒント(Vendor非依存）.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	2011/08/31 created.
  */
 public class PersistenceHints {
 
