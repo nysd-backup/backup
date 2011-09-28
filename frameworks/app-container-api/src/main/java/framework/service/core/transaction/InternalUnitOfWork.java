@@ -9,21 +9,21 @@ import framework.service.core.locator.ServiceLocator;
 import framework.service.core.query.DataSourceManager;
 
 /**
- * 作業単位.
+ * An unit of work.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class InternalUnitOfWork {
 	
-	/** ロールバックフラグ. 一度設定すると解除不可能 */
+	/** the flag represent transaction is rolled back. Never to recover.*/
 	private boolean rollbackOnly = false;
 	
-	/** SQLエンジン専用のコネクション（帳票/WEB用） */
+	/** the connection for 'SQLEngine' */
 	private Connection currentConnection = null;
 
 	/**
-	 * ロールバックフラグをonにする
+	 * set the rollbackOnly true
 	 */
 	public void setRollbackOnly() {
 		this.rollbackOnly = true;
@@ -37,7 +37,7 @@ public class InternalUnitOfWork {
 	}
 	
 	/**
-	 * @return 現在トランザクションで利用可能なコネクション
+	 * @return the connection available in current transaction
 	 */
 	public Connection getCurrentConnection(){
 		if(currentConnection == null){
@@ -51,7 +51,7 @@ public class InternalUnitOfWork {
 	}
 
 	/**
-	 * 終了
+	 * terminate the process.
 	 */
 	public void terminate(){
 		if(currentConnection != null){

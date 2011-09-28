@@ -10,20 +10,20 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * クエリ用ユーティリティ.
+ * Utility for query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class QueryUtils {
 
-	/** 日付用フォーマット */
+	/** the date format */
 	private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 	/**
-	 * @param params　パラメータ
-	 * @param sqlString preparedStatement用のSQL
-	 * @return ?がバインドパラメータに置換された完全SQL
+	 * @param params　the parameter
+	 * @param sqlString the SQL for <code>PreparedStatement</code>
+	 * @return the SQL binded value to ?
 	 */
 	public static final String applyValues(List<Object> params , String sqlString){
 

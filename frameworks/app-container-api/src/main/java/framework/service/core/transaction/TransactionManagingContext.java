@@ -15,18 +15,18 @@ import framework.core.message.MessageLevel;
  */
 public class TransactionManagingContext extends ServiceContext{
 	
-	/** トランザクション階層 */
+	/** the stack of unit of work */
 	protected LinkedList<InternalUnitOfWork> unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
 	
 	/**
-	 * 開始
+	 * start unit of work.
 	 */
 	public void startUnitOfWork(){
 		unitOfWorkStack.push(createInternalUnitOfWork());
 	}
 	
 	/**
-	 * 終了
+	 * end unit of work.
 	 */
 	public void endUnitOfWork(){
 		try{
@@ -37,7 +37,7 @@ public class TransactionManagingContext extends ServiceContext{
 	}
 	
 	/**
-	 * @return 現在トランザクションの状態
+	 * @return the unit of work of current transaction
 	 */
 	public InternalUnitOfWork getCurrentUnitOfWork(){
 		return unitOfWorkStack.peek();
@@ -82,7 +82,7 @@ public class TransactionManagingContext extends ServiceContext{
 	}
 	
 	/** 
-	 * @return トランザクション内データの作成
+	 * @return the internal unit of work
 	 */
 	protected InternalUnitOfWork createInternalUnitOfWork(){
 		return new InternalUnitOfWork();

@@ -12,7 +12,11 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * 最新取得用ページングサービス.
+ * a paging service.
+ * 
+ * <pre>
+ * Always execute SQL to get latest data.
+ * </pre>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -20,7 +24,7 @@ import framework.sqlclient.api.free.QueryFactory;
 public abstract class AbstractLatestPagingService implements PagingService{
 
 	/**
-	 * @return クエリファクトリ
+	 * @return the factory to create the query
 	 */
 	protected abstract QueryFactory getQueryFactory();
 
@@ -67,8 +71,8 @@ public abstract class AbstractLatestPagingService implements PagingService{
 	}
 	
 	/**
-	 * @param request　リクエスト
-	 * @return クエリ
+	 * @param request　the request
+	 * @return the query
 	 */
 	private AbstractNativeQuery createQuery(PagingRequest request){
 		
@@ -88,11 +92,11 @@ public abstract class AbstractLatestPagingService implements PagingService{
 	}
 
 	/**
-	 * @param query クエリ
-	 * @param startPosition 開始位置
-	 * @param pageSize ページサイズ
-	 * @param totalCount 総件数
-	 * @return 検索結果
+	 * @param query the query
+	 * @param startPosition the start pointer
+	 * @param pageSize the size of one page
+	 * @param totalCount the total count
+	 * @return the result
 	 */
 	private PagingResult search(AbstractNativeQuery query, int startPosition, int pageSize,int totalCount){
 

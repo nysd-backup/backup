@@ -11,7 +11,7 @@ import framework.core.entity.AbstractEntity;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * ORMクエリ.	
+ * the ORM query.	
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -19,7 +19,7 @@ import framework.sqlclient.api.orm.OrmCondition;
 public abstract class AbstractOrmQueryService<T extends AbstractEntity> implements OrmQueryService<T>{
 	
 	/**
-	 * @return クエリファクトリ
+	 * @return the factory to create the query
 	 */
 	protected abstract AdvancedOrmQueryFactory getQueryFactory();
 
@@ -88,9 +88,9 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 
 	
 	/**
-	 * クエリを作成する
-	 * @param request リクエスト
-	 * @return クエリ
+	 * Creates the query.
+	 * @param request the request
+	 * @return the query
 	 */
 	@SuppressWarnings("unchecked")
 	protected StrictQuery<T> createStrictQuery(OrmCondition<T> request) {

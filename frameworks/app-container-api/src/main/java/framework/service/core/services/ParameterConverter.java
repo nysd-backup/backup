@@ -9,7 +9,7 @@ import framework.api.query.services.QueryRequest;
 import framework.sqlclient.api.free.AbstractNativeQuery;
 
 /**
- * パラメータ設定.
+ * parameter converter.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,9 +17,9 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
 abstract class ParameterConverter {
 	
 	/**
-	 * パラメータを設定する。
-	 * @param request リクエスト
-	 * @param query クエリ
+	 * Set parameter to query
+	 * @param request the request
+	 * @param query the query
 	 */
 	public static AbstractNativeQuery setParameters(QueryRequest request,AbstractNativeQuery query){
 

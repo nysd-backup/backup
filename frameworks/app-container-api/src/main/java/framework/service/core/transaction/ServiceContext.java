@@ -17,7 +17,7 @@ import framework.core.message.BuildedMessage;
  */
 public abstract class ServiceContext extends AbstractGlobalContext{
 	
-	/** スレッドローカル */
+	/** the thread local instance*/
 	private static ThreadLocal<ServiceContext> instance = new ThreadLocal<ServiceContext>(){
 		protected ServiceContext initialValue() {
 			return null;
@@ -25,7 +25,7 @@ public abstract class ServiceContext extends AbstractGlobalContext{
 	};
 
 	/**
-	 * @param context コンテキスト設定
+	 * @param context the context to set
 	 */
 	protected static void setCurrentInstance(ServiceContext context){
 		if (context == null) {
@@ -36,14 +36,14 @@ public abstract class ServiceContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @return 現在のコンテキスト
+	 * @return the current context
 	 */
 	public static ServiceContext getCurrentInstance(){
 		return instance.get();
 	}	
 	
 	/**
-	 * コンテキスト初期化
+	 * initialize the context
 	 */
 	public void initialize(){
 		release();
@@ -51,14 +51,14 @@ public abstract class ServiceContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @param request リクエスト
+	 * @param request the request from client
 	 */
 	public void setClientRequestBean(ClientRequestBean request){
 		this.clientRequest = request;
 	}
 	
 	/**
-	 * @param session セッション
+	 * @param session the session between client and server
 	 */
 	public void setClientSessionBean(ClientSessionBean session){
 		this.clientSession = session;

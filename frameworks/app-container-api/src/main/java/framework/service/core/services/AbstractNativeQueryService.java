@@ -10,14 +10,14 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * リモートからのクエリ実行のインターフェース.
+ * a native query service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractNativeQueryService implements NativeQueryService{
 
-	/** クエリファクトリ */
+	/** the factory to create the query */
 	protected abstract QueryFactory getQueryFactory();
 	
 	/**
