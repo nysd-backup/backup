@@ -3,7 +3,7 @@
  */
 package framework.service.test;
 
-import framework.service.core.query.EclipseLinkNamedQuery;
+import framework.jpqlclient.api.free.AbstractNamedQuery;
 import framework.sqlclient.api.free.AnonymousQuery;
 
 /**
@@ -13,7 +13,7 @@ import framework.sqlclient.api.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_QUERY_CONST.sql")
-public class SampleNamedQueryConst extends EclipseLinkNamedQuery{
+public class SampleNamedQueryConst extends AbstractNamedQuery{
 
 	public enum Bind {
 		test,

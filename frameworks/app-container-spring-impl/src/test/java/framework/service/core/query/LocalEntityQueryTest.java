@@ -67,7 +67,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void allCondition() throws SQLException{	
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);	
-		query.setHint(QueryHints.HINT,"/*+ HINT */");
+		query.setHintString("/*+ HINT */");
 		
 		List<TestEntity> result = getOneRecord(query);
 	
@@ -83,7 +83,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * チE��タチE��
+	 * チE��タチE��
 	 */
 	@Test
 	public void disableDetach(){
@@ -118,13 +118,13 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		//検索
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);		
 		
-		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
+		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(TEST, "2").getSingleResult();
 		assertEquals("AAA",entity.getAttr());
 	}
 	
 	/**
-	 * 1件取得　降頁E��ーチE
+	 * 1件取得　降頁E��ーチE
 	 */
 	@Test
 	public void getSingleResultWithDesc(){
@@ -135,7 +135,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 1件取得　昁E��E��ーチE
+	 * 1件取得　昁E��E��ーチE
 	 */
 	@Test
 	public void getSingleResultWithAsc(){
@@ -183,7 +183,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		per.persist(f);
 		
 		TestEntity s = new TestEntity();
-		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
+		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
 		per.persist(s);
 		
 		TestEntity t = new TestEntity();
@@ -197,20 +197,20 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		List<TestEntity> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
+		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
 		assertEquals("900",result.get(1).getAttr());
 		
 		//更新
 		result.get(0).setAttr("AAA");
 		per.flush();
 		
-		//楽観ロチE��番号インクリメント確誁E
+		//楽観ロチE��番号インクリメント確誁E
 		result = query.getResultList();		
 		assertEquals(2,result.get(0).getVersion());
 	}
 	
 	/**
-	 * 0件シスチE��エラー
+	 * 0件シスチE��エラー
 	 */
 	@Test
 	public void nodataError(){
@@ -259,7 +259,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 
 	/**
-	 * 0件シスチE��エラー
+	 * 0件シスチE��エラー
 	 */
 	@Test
 	public void findNodataError(){
@@ -300,7 +300,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 0件シスチE��エラー
+	 * 0件シスチE��エラー
 	 */
 	@Test
 	public void findAnyNodataError(){
@@ -319,7 +319,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	
 
 	/**
-	 * ANY褁E��件存在
+	 * ANY褁E��件存在
 	 */
 	@Test
 	public void findAnyMultiResultError(){
@@ -338,7 +338,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	
 	/**
-	 *  存在チェチE�� not 
+	 *  存在チェチE�� not 
 	 */
 	@Test
 	public void exists(){
@@ -348,7 +348,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * PK存在チェチE��
+	 * PK存在チェチE��
 	 */
 	@Test
 	public void isEmptyPK(){
@@ -358,7 +358,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * PK存在チェチE��
+	 * PK存在チェチE��
 	 */
 	@Test
 	public void existsPK(){
@@ -368,7 +368,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * ANY存在チェチE�� 
+	 * ANY存在チェチE�� 
 	 */
 	@Test
 	public void existsByAny(){
@@ -379,7 +379,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * ANY褁E��件存在チェチE��
+	 * ANY褁E��件存在チェチE��
 	 */
 	@Test
 	public void existsByAnyMultiResultError(){
@@ -394,7 +394,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 一意制紁E��ラー
+	 * 一意制紁E��ラー
 	 */
 	@Test	
 	public void uniqueConstraintError(){
@@ -418,12 +418,12 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 一意制紁E��ラー無要E
+	 * 一意制紁E��ラー無要E
 	 */
 	@Test	
 	public void ignoreUniqueConstraintError(){
 		
-		//一意制紁E��効匁E
+		//一意制紁E��効匁E
 		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 		impl.setSuppressOptimisticLockError();
 		
@@ -449,7 +449,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * ロチE��連番チェチE��エラー
+	 * ロチE��連番チェチE��エラー
 	 */
 	@Test	
 	public void versionNoError(){
@@ -465,12 +465,12 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		}
 	}
 	/**
-	 * ロチE��連番チェチE��エラー無要E
+	 * ロチE��連番チェチE��エラー無要E
 	 */
 	@Test	
 	public void ignoreVersionNoError(){
 		
-		//ロチE��連番エラー無効匁E行単位�E更新をさせる場合、こぁE��るか自律トランザクションにする忁E��がある�E�E
+		//ロチE��連番エラー無効匁E行単位�E更新をさせる場合、こぁE��るか自律トランザクションにする忁E��がある�E�E
 		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 		impl.setSuppressOptimisticLockError();
 		
@@ -480,7 +480,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		result.setVersion(2);
 		
 		
-		//ロチE��連番エラー無要EDumyExceptionHandlerで握りつぶし！E
+		//ロチE��連番エラー無要EDumyExceptionHandlerで握りつぶし！E
 		per.flush(
 //				new FlushHandler(){
 //
@@ -488,7 +488,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 //			public void handle(RuntimeException pe) {
 //				pe.printStackTrace();
 //				assertEquals(OptimisticLockException.class,pe.getClass());		
-//				//リフレチE��ュしてロチE��連番をDBと合わせておかなぁE��次のFlushでも失敗してしまぁE��E
+//				//リフレチE��ュしてロチE��連番をDBと合わせておかなぁE��次のFlushでも失敗してしまぁE��E
 //				per.reflesh(result);
 //			}
 //			
@@ -496,7 +496,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 				);
 		impl.setValidOptimisticLockError();
 		
-		//バ�Eジョン番号を指定しなぁE��め更新成功
+		//バ�Eジョン番号を指定しなぁE��め更新成功
 		TestEntity res2 = query.find("2");
 		assertEquals(0,res2.getVersion());
 		res2.setAttr("aa");
@@ -506,7 +506,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 悲観ロチE��エラー無効匁E
+	 * 悲観ロチE��エラー無効匁E
 	 * @throws SQLException 
 	 */
 	@Test
@@ -526,7 +526,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 悲観ロチE��エラー
+	 * 悲観ロチE��エラー
 	 * @throws SQLException 
 	 */
 	@Test
@@ -538,7 +538,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
 		try{
-			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
+			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
 			service.test();
 			fail();
 		}catch(PessimisticLockException pe){
@@ -550,7 +550,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	
 	/**
 	 * 自律トランザクション先で例外にぎり潰した時、E
-	 * 自律トランザクションで例外になっても呼び出し�EでキャチE��してぁE��ば問題なぁE
+	 * 自律トランザクションで例外になっても呼び出し�EでキャチE��してぁE��ば問題なぁE
 	 * 
 	 * @throws SQLException 
 	 */
@@ -563,10 +563,10 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
 		try{
-			//呼び出し�Eで例外握りつぶしてぁE��もロールバックフラグがたってぁE��ばトランザクション墁E��でコミット要求が実行されて例外発甁E
+			//呼び出し�Eで例外握りつぶしてぁE��もロールバックフラグがたってぁE��ばトランザクション墁E��でコミット要求が実行されて例外発甁E
 			service.crushException();
 			fail();
-			//ここでキャチE��しなぁE��呼びだし�EもロールバックになめE
+			//ここでキャチE��しなぁE��呼びだし�EもロールバックになめE
 		}catch(TransactionSystemException pe){
 			pe.printStackTrace();
 			assertEquals(RollbackException.class,pe.getCause().getClass());
@@ -576,7 +576,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	
 	/**
 	 * 読み取り専用の自律トランザクション先で例外にぎり潰した晁E
-	 * 結局トランザクションが開始されコミットしにぁE��のでreadOnly=falseとした場合とおなじ結果になる、E
+	 * 結局トランザクションが開始されコミットしにぁE��のでreadOnly=falseとした場合とおなじ結果になる、E
 	 * 
 	 * @throws SQLException 
 	 */
@@ -588,10 +588,10 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		RequiresNewReadOnlyService service = ServiceLocator.lookupByInterface(RequiresNewReadOnlyService.class);
 		
 		try{
-			//呼び出し�Eで例外握りつぶしてぁE��もロールバックフラグがたってぁE��ばトランザクション墁E��でコミット要求が実行されて例外発甁E
+			//呼び出し�Eで例外握りつぶしてぁE��もロールバックフラグがたってぁE��ばトランザクション墁E��でコミット要求が実行されて例外発甁E
 			service.crushException();
 			fail();
-			//ここでキャチE��しなぁE��呼びだし�EもロールバックになめE
+			//ここでキャチE��しなぁE��呼びだし�EもロールバックになめE
 		}catch(TransactionSystemException pe){
 			pe.printStackTrace();
 			assertEquals(RollbackException.class,pe.getCause().getClass());
@@ -600,7 +600,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	
 	
 	/**
-	 * 悲観ロチE��エラー
+	 * 悲観ロチE��エラー
 	 * @throws SQLException 
 	 */
 	@Test
@@ -610,7 +610,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticRead();
 		query.eq(ITestEntity.TEST,"1");
 		
-		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
+		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
 		
 		
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
@@ -626,7 +626,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 悲観ロチE��エラー
+	 * 悲観ロチE��エラー
 	 * @throws SQLException 
 	 */
 	@Test
@@ -640,7 +640,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		query.eq(ITestEntity.TEST,"1");
 		query.setHint(QueryHints.HINT, "/* TEST */");
 		
-		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
+		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 				
 		assertEquals("OK",service.test());
@@ -649,7 +649,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	
 	
 	/**
-	 * メチE��ージ持E��E
+	 * メチE��ージ持E��E
 	 */
 	@Test
 	public void existsMesasgeByAnyTrue(){
@@ -667,7 +667,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * メチE��ージ持E��E
+	 * メチE��ージ持E��E
 	 */
 	@Test
 	public void dateCheck(){
@@ -682,7 +682,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * EasyUpdate#executeのチE��チE
+	 * EasyUpdate#executeのチE��チE
 	 */
 	@Test
 	public void easyUpdate(){
@@ -700,7 +700,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * EasyQuery#listのチE��チE
+	 * EasyQuery#listのチE��チE
 	 */
 	@Test
 	public void easyList(){
@@ -718,7 +718,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * EasyQuery#singleのチE��チE
+	 * EasyQuery#singleのチE��チE
 	 */
 	@Test
 	public void easySingle(){
@@ -778,7 +778,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		rs.get(0).setAttr("800X");	
 		rs.get(1).setAttr("800X");	
 		
-		//変更がなぁE��とを確誁E
+		//変更がなぁE��とを確誁E
 		e = ormQueryFactory.createEasyQuery(ParentEntity.class).filter("e.test = :p1").single("1");
 		assertNotNull(e);
 		assertEquals("aa",e.getAttr());

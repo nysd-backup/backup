@@ -35,4 +35,6 @@ public interface AdvancedOrmUpdate<T> {
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmUpdate<T>> Q setHintString(String hintValue);
+	
+	
 }

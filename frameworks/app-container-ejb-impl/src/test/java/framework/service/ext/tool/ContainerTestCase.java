@@ -29,7 +29,7 @@ public abstract class ContainerTestCase extends Assert{
 	protected static EJBContainer container;
 	
 	/**
-	 * コンチE��スト�E期化
+	 * コンチE��スト�E期化
 	 */
 	@BeforeClass
 	public static void initialize(){
@@ -42,12 +42,12 @@ public abstract class ContainerTestCase extends Assert{
 		
 		arg0.put(EJBContainer.APP_NAME, "app");
 		
-		//test-classesにclassesのソースを読ませることでtest/resource/ejb-jarとclassesのクラス両方のSessionBeanを作�E可能にする
+		//test-classesにclassesのソースを読ませることでtest/resource/ejb-jarとclassesのクラス両方のSessionBeanを作�E可能にする
 		try{
 			FileUtils.copyDirectory(new File("target/classes/framework"), new File("target/test-classes/framework"));
 		}catch(IOException e){
 			e.printStackTrace();
-			throw new RuntimeException("コピ�E失敁E);
+			throw new RuntimeException("エラー");
 		}
 		//ServiceLocatorImpl.setModuleName("app/test-classes");
 		arg0.put(EJBContainer.MODULES, new File[]{ new File("target/test-classes"),new File("./container-core-1.0.0-SNAPSHOT.jar"),new File("./service-api-ext-1.0.0-SNAPSHOT.jar")});
@@ -56,7 +56,7 @@ public abstract class ContainerTestCase extends Assert{
 	}
 
 	/**
-	 * コンチE��スト破棁E
+	 * コンチE��スト破棁E
 	 */
 	@AfterClass
 	public static void tearDown(){

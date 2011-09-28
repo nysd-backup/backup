@@ -48,7 +48,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> extends AbstractOrmQu
 	 */
 	@Override
 	protected StrictQuery<T> createStrictQuery(OrmCondition<T> request) {
-		//永続化コンチE��スト�EキャチE��ュを使用しなぁE
+		//永続化コンテキストを使用しない。
 		StrictQuery<T> query = super.createStrictQuery(request);
 		query.setHint(QueryHints.CACHE_STORE_MODE, CacheStoreMode.BYPASS);
 		query.setHint(QueryHints.CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS);

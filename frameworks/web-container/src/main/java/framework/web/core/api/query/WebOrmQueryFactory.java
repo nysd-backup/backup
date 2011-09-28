@@ -4,12 +4,12 @@
 package framework.web.core.api.query;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
-import framework.api.query.orm.DefaultEasyQuery;
-import framework.api.query.orm.DefaultStrictQuery;
 import framework.api.query.orm.EasyQuery;
 import framework.api.query.orm.EasyUpdate;
 import framework.api.query.orm.StrictQuery;
 import framework.api.query.orm.StrictUpdate;
+import framework.api.query.orm.impl.DefaultEasyQuery;
+import framework.api.query.orm.impl.DefaultStrictQuery;
 import framework.api.query.services.OrmQueryService;
 import framework.core.entity.AbstractEntity;
 import framework.logics.builder.MessageAccessor;
@@ -31,7 +31,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	@ServiceFacade
 	protected OrmQueryService service;
 	
-	/** メチE��ージ */
+	/** メチE��ージ */
 	protected MessageAccessor accessor;
 
 	/**

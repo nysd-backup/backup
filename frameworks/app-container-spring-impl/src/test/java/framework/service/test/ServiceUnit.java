@@ -65,8 +65,8 @@ public abstract class ServiceUnit extends Assert{
 	private ServiceTestContextImpl context = null;
 	
 	/**
-	 * コンチE��ストロード、個別チE��トケースで使用するServiceLocatorめEontextConfigurationを使用できるようにする
-	 * AutowiredよりもResourceの方がタイミング皁E��早ぁE��めResourceを使用する
+	 * コンチE��ストロード、個別チE��トケースで使用するServiceLocatorめEontextConfigurationを使用できるようにする
+	 * AutowiredよりもResourceの方がタイミング皁E��早ぁE��めResourceを使用する
 	 * 
 	 * @param applicationContext
 	 */
@@ -118,10 +118,10 @@ public abstract class ServiceUnit extends Assert{
 	}
 	
 	/**
-	 * @param dataPath チE�EタのセチE��アチE�E
+	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpData(String dataPath){
-		//javaagentを使用しなぁE��体テスト�E場合、コミットされる
+		//javaagentを使用しなぁE��体テスト�E場合、コミットされる
 		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
@@ -139,7 +139,7 @@ public abstract class ServiceUnit extends Assert{
 	}
 	
 	/**
-	 * @param dataPath チE�EタのセチE��アチE�E
+	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpDataForceCommit(String dataPath){
 	
@@ -197,7 +197,7 @@ public abstract class ServiceUnit extends Assert{
 			return dataset;
 
 		} catch (IOException e) {			
-			throw new RuntimeException("チE��トデータファイルのI/O中にエラーが発生しました、E, e);
+			throw new RuntimeException(e);
 		} catch (Exception e) {			
 			throw new RuntimeException(e);
 		}
@@ -211,7 +211,7 @@ public abstract class ServiceUnit extends Assert{
 	}
 	
 	/**
-	 * 終亁E�E琁E
+	 * 終亁E�E琁E
 	 */
 	@After
 	public void afterTest(){

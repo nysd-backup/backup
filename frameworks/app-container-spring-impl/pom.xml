@@ -170,13 +170,7 @@
 		    <artifactId>eclipselink</artifactId>
 		    <version>${eclipselink.version}</version>
 		    <scope>compile</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>container-core-eclipselink-dialect</artifactId>
-		    <version>${framework.eclipse.dialect.version}</version>
-		    <scope>compile</scope>
-		</dependency>				
+		</dependency>					
 		<dependency>
 		    <groupId>javax.jms</groupId>
 		    <artifactId>jms</artifactId>
@@ -226,6 +220,6 @@
 	<properties>
 		<dbunit.version>2.4.3</dbunit.version>	
 		<poi.version>3.7</poi.version>
-		<slf4j.version>1.5.6</slf4j.version>
+		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
 </project>

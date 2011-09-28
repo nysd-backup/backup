@@ -15,7 +15,7 @@ import framework.service.core.services.AbstractNativeQueryService;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * リモートから�Eクエリ実行�Eインターフェース.
+ * リモートからのクエリ実行インターフェース
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
