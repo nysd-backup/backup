@@ -32,7 +32,7 @@ public abstract class AbstractAsyncServiceFactory implements AsyncServiceFactory
 	}
 
 	/**
-	 * @return the annotation indicates 'AsyncService'
+	 * @return the annotation that indicates 'AsyncService'
 	 */
 	protected abstract Class<? extends Annotation> getAnnotation();
 }
