@@ -9,7 +9,7 @@ import framework.sqlclient.api.free.AbstractFreeQuery;
 import framework.sqlclient.api.free.FreeQuery;
 
 /**
- * NamedQueryのAPI.
+ * NamedQuery.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

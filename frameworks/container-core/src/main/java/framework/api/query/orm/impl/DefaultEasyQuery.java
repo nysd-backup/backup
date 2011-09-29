@@ -18,7 +18,7 @@ import framework.sqlclient.api.orm.OrmQuery;
 public class DefaultEasyQuery<T> extends AbstractAdvancedOrmQuery<T> implements EasyQuery<T>{
 
 	/**
-	 * @param delegate delegate
+	 * @param delegate the delegate
 	 */
 	public DefaultEasyQuery(OrmQuery<T> delegate) {
 		super(delegate);

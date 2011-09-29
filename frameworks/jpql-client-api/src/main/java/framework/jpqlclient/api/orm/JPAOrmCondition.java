@@ -8,7 +8,7 @@ import javax.persistence.LockModeType;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * JPA用検索条件.
+ * The condition of JPA .
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,11 +17,11 @@ public class JPAOrmCondition<T> extends OrmCondition<T>{
 
 	private static final long serialVersionUID = 1L;
 
-	/** ロックモード */
+	/** the lock mode */
 	private LockModeType lockModeType;
 	
 	/**
-	 * @param entityClass エンティティクラス
+	 * @param entityClass the entityClass to set
 	 */
 	public JPAOrmCondition(Class<T> entityClass) {
 		super(entityClass);

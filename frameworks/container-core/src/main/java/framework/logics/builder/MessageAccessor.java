@@ -7,7 +7,7 @@ import framework.core.message.MessageBean;
 
 
 /**
- * メッセージの作成、追加エンジン.
+ * An engine of message.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -15,19 +15,19 @@ import framework.core.message.MessageBean;
 public interface MessageAccessor<T extends MessageBean> {
 
 	/**
-	 * メッセージの作成.
+	 * Creates the message.
 	 * 
-	 * @param code メッセージコード
-	 * @param args 埋め込み文字
-	 * @return メッセージ
+	 * @param code the code
+	 * @param args the binding arguments
+	 * @return the message
 	 */
 	public T createMessage(int code , Object... args);
 	
 
 	/**
-	 * メッセージの作成.
+	 * Adds the message to the context.
 	 * 
-	 * @param message メッセージ
+	 * @param message the message
 	 */
 	public T addMessage(MessageBean message);
 	

@@ -23,12 +23,11 @@ import framework.service.core.transaction.ServiceContext;
 import framework.service.core.transaction.TransactionManagingContext;
 
 /**
- * コンテキストのロールバックフラグをTransactionManagerと同期化させる。
+ * Synchronize the context's rolling back flag to <code>TransactionManager</code>
  * 
  * <pre>
- * ServiceContextにエラーレベル以上のメッセージがある場合、transactionManagerのロールバックフラグを立てる。
- * トランザクション境界の場合はServiceContextのロールバックフラグをfalseに戻し、トランザクション内の業務エラーの影響が他トランザクションに影響がないようにする。
- * 一番外側のインターセプターとすること。
+ * Set rolled back to <code>TransactionManager</code> if the error level messages are found in <code>ServiceContext</code>.
+ * Refresh the <code>ServiceContext</code> so as not to influent another transaction at the border of transaction.
  * </pre>
  *
  * @author yoshida-n
@@ -58,7 +57,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
 			TransactionInfo txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);					
 			
-			//トランザクション墁E��の場合トランザクション開始（エラーメチE��ージの自動判定が不要であればこれ系の処琁E�EぁE��なぁE
+			//トランザクションl境界の場合トランザクション開始（エラーメッセージによる自動ロールバックが不要であればこの処理は不要）
 			if(txInfo.getTransactionStatus().isNewTransaction()){
 				((TransactionManagingContext)ServiceContext.getCurrentInstance()).startUnitOfWork();
 			}
@@ -70,7 +69,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 				// This will normally result in a target object being invoked.
 				retVal = invocation.proceed();
 			
-				//後�E琁E
+				//後処理
 				commitable = afterProceed(txInfo,retVal,invocation);
 				
 			}
@@ -140,11 +139,12 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 	}
 
 	/**
-	 * メソチE��正常終亁E��E
+	 * set rolled back to <code>TransactionManager</code>
 	 * 
-	 * @param txInfo トランザクション状慁E
-	 * @param retVal 戻り値
-	 * @param invocation 実行情報
+	 * @param txInfo the transaction information
+	 * @param retVal the retVal
+	 * @param invocation the context
+	 * @return true:commitable
 	 */
 	protected boolean afterProceed(TransactionInfo txInfo,Object retVal , MethodInvocation invocation){
 		

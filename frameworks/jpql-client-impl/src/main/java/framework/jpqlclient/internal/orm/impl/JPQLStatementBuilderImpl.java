@@ -10,7 +10,7 @@ import framework.jpqlclient.internal.orm.JPQLStatementBuilder;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * JPQLのSQL文を作成する.
+ * The builder to create the JPQL statement.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -50,8 +50,8 @@ class JPQLStatementBuilderImpl extends AbstractStatementBuilder implements JPQLS
 	}
 	
 	/**
-	 * @param condition　更新条件
-	 * @return SET句
+	 * @param condition the condition
+	 * @return the statement
 	 */
 	private String generateSet(Collection<String> set){
 		if( set == null || set.isEmpty()){

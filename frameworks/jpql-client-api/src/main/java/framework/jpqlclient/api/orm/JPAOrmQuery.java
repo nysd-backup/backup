@@ -8,7 +8,7 @@ import javax.persistence.LockModeType;
 import framework.sqlclient.api.orm.OrmQuery;
 
 /**
- * ORマッピングクエリ.
+ * The ORM query for JPA.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,15 +16,15 @@ import framework.sqlclient.api.orm.OrmQuery;
 public interface JPAOrmQuery<T> extends OrmQuery<T>{
 	
 	/**
-	 * @param <T> 型
-	 * @param key　 ヒント句キー
-	 * @param value　ヒント句
+	 * @param <T> the type
+	 * @param key　 the key of the hint
+	 * @param value　the hint value
 	 * @return self
 	 */
 	public abstract JPAOrmQuery<T> setHint(String key, Object value);
 
 	/**
-	 * @param type ロックモード
+	 * @param type the lock mode
 	 * @return self
 	 */
 	public JPAOrmQuery<T> setLockMode(LockModeType type);

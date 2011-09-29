@@ -17,7 +17,7 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- * ローカル用ORMクエリのエンジン.
+ * The ORM query engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -25,14 +25,14 @@ import framework.sqlclient.api.orm.WhereOperand;
 @SuppressWarnings("unchecked")
 public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 
-	/** 検索エンジン */
+	/** the GenericDao */
 	private GenericDao dao;
 	
-	/** 検索条件 */
+	/** the condition */
 	protected JPAOrmCondition<T> condition;
 	
 	/**
-	 * @param entityClass エンティティクラス
+	 * @param entityClass the entityClass to set
 	 */
 	public LocalOrmQueryEngine(Class<T> entityClass){
 		condition = new JPAOrmCondition<T>(entityClass);		
@@ -48,10 +48,10 @@ public class LocalOrmQueryEngine<T> implements JPAOrmQuery<T>{
 	}
 
 	/**
-	 * @param dao DAO
+	 * @param dao the DAO to set
 	 * @return self
 	 */
-	public LocalOrmQueryEngine<T> setAccessor(GenericDao dao){
+	public LocalOrmQueryEngine<T> setDao(GenericDao dao){
 		this.dao = dao;
 		return this;
 	}

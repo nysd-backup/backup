@@ -4,7 +4,7 @@
 package framework.api.service;
 
 /**
- * リモートサービスを示す.
+ * Marking for remote service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

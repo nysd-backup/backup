@@ -33,15 +33,12 @@ import framework.sqlclient.api.free.QueryFactory;
 import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 /**
- * フレームワークのコンポ�Eネントを生�Eする.
+ * A Component builder instead of DI container.
  * 
  * <pre>
- * SessionBeanはロールバックフラグがたってぁE��と新規作�EできなぁE��め、設計によっては処琁E��行不可能となる、EEntityManager単体�E取得�E可能�E�E
- * フレームワークの吁E��コンポ�EネントをSessionBeanとしてしまぁE��送E��がきかなくなるためPOJOとして生�Eする、E
- * (ただしくはSessionBeanのメソチE��コール時にインターセプターでTransactionRolledBackExceptionがスローされる！E
- * ただし、EntityManagerの提供老E�Eみ、AsyncServiceはSessionBeanとせざるを得なぁE�EでSessionBeanとする、E
- *
- * インターセプターを仕込みたけれ�EPOJOでなく、独自で動的プロキシを使ぁE��CDIを使用すること、E
+ * <code>SessionBean</code> can not be created if the transaction is marked as rolled back.
+ * so build the components as POJO except <code>EntityManagerProvider</code>.
+ * <code>EntityManagerProvider</code> must be <code>SessionBean</code> to create an <code>EntityManager</code>.
  * </pre>
  * 
  * @author yoshida-n
@@ -106,7 +103,7 @@ public class DefaultComponentBuilderImpl implements ComponentBuilder {
 	}
 	
 	/**
-	 * @return エンチE��チE��マネージャの供給老E
+	 * @return エンチE��チE��マネージャの供給老E
 	 */
 	protected EntityManagerProvider createEntityManagerProvider() {
 		return ServiceLocator.lookupByInterface(EntityManagerProvider.class);

@@ -6,7 +6,7 @@ package framework.jpqlclient.api.free;
 import framework.sqlclient.api.free.AbstractUpdate;
 
 /**
- * UpdateのAPI.
+ * NamedUpdate.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

@@ -12,20 +12,20 @@ import framework.service.core.transaction.ServiceContext;
 
 
 /**
- * パフォーマンスログ用インターセプター.
+ * An intercepter to collect the performance log.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public class PerfInterceptor {
 
-	/** ログ */
+	/** the instance of logging */
 	private static final NormalLogWriter LOG = LogWriterFactory.getPerfLog(PerfInterceptor.class);
 	
 	/**
-	 * @param ic コンテキスト
-	 * @return 実行結果
-	 * @throws Throwable 例外
+	 * @param ic the context
+	 * @return the result
+	 * @throws Throwable any exception
 	 */
 	@AroundInvoke
 	public Object invoke(InvocationContext ic) throws Throwable {

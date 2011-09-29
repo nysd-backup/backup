@@ -8,7 +8,7 @@ import javax.jms.JMSException;
 import framework.api.dto.RequestDto;
 
 /**
- * JMSプロデューサ.
+ * The JMS producer.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,19 +16,19 @@ import framework.api.dto.RequestDto;
 public interface JmsProducer {
 
 	/**
-	 * Queueに送信。
-	 * @param dto DTO
-	 * @param destinationName 宛先名
-	 * @throws JMSException 例外
+	 * Send the message to QUEUE.
+	 * @param dto the DTO
+	 * @param destinationName the name of destination
+	 * @throws JMSException the exception
 	 */
 	public void send(RequestDto dto ,String destinationName) throws JMSException;
 	
 	
 	/**
-	 * Topicに送信。
-	 * @param dto DTO
-	 * @param destinationName 宛先名
-	 * @throws JMSException 例外
+	 * Publish the message to TOPIC.
+	 * @param dto the DTO
+	 * @param destinationName the name of destination
+	 * @throws JMSException the exception
 	 */
 	public void publish(RequestDto dto ,String destinationName) throws JMSException;
 }

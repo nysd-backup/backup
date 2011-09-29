@@ -9,28 +9,29 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import framework.service.core.locator.ServiceLocator;
 
 /**
- * Spring管理のサービスロケータ.
+ * The service locator using Spring
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class SpringServiceLocator extends ServiceLocator{
 	
-	/** コンテキスト */
+	/** the context */
 	protected ApplicationContext context = null;	
 
 	/**
-	 * 初期処理
+	 * Initialize the context.
 	 */
 	public abstract void construct();
 	
 	/**
-	 * 終了処理
+	 * Terminate the context.
 	 */
 	public abstract void destroy();
 	
 	/**
-	 * 初期処理
+	 * Initialize the context.
+	 * @param classpathResource the resource
 	 */
 	protected void initialize(String classpathResource) {
 		context = new ClassPathXmlApplicationContext(classpathResource);
@@ -38,7 +39,7 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	}
 	
 	/**
-	 * 終了処理
+	 * Terminate the context.
 	 */
 	protected void terminate(){		
 		if(context != null){

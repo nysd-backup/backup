@@ -7,7 +7,7 @@ import framework.service.core.transaction.TransactionManagingContext;
 import framework.service.core.transaction.InternalUnitOfWork;
 
 /**
- * コンテキスト.
+ * the context.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

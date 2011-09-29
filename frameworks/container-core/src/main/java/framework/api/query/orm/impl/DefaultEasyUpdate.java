@@ -18,7 +18,7 @@ import framework.sqlclient.api.orm.OrmUpdate;
 public class DefaultEasyUpdate<T> extends AbstractAdvancedOrmUpdate<T> implements EasyUpdate<T>{
 
 	/**
-	 * @param delegate delegate
+	 * @param delegate the delegate
 	 */
 	public DefaultEasyUpdate(OrmUpdate<T> delegate) {
 		super(delegate);

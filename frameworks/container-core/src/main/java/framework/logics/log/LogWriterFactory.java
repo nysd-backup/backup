@@ -7,7 +7,7 @@ import framework.logics.log.impl.DebugLogWriterImpl;
 import framework.logics.log.impl.PerfLogWriterImpl;
 
 /**
- * ログファクトリ.
+ * The factory to create the logger.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,22 +15,26 @@ import framework.logics.log.impl.PerfLogWriterImpl;
 public final class LogWriterFactory {
 
 	/**
-	 * プライベートコンストラクタ
+	 * Constructor
 	 */
 	private LogWriterFactory(){
 	}
 	
 	/**
-	 * @param clazz カテゴリ
-	 * @return ライター
+	 * Creates the debugging logger.
+	 * 
+	 * @param clazz the category
+	 * @return the writer
 	 */
 	public static LogWriter getLog(Class<?> clazz) {
 		return new DebugLogWriterImpl(clazz);
 	}
 	
 	/**
-	 * @param clazz カテゴリ
-	 * @return ライター
+	 * Creates the performance logger.
+	 * 
+	 * @param clazz the category
+	 * @return the writer
 	 */
 	public static NormalLogWriter getPerfLog(Class<?> clazz) {
 		return new PerfLogWriterImpl(clazz);

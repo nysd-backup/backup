@@ -28,49 +28,49 @@ import framework.sqlengine.builder.impl.ConstAccessorImpl;
 import framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
 
 /**
- * Queryファクトリ.
+ * The factory to create the query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractQueryFactory  implements QueryFactory{
 	
-	/** エンチE��チE��マネージャ */
+	/** the <code>EntityManager</code> */
 	protected EntityManager em;
 	
-	/** 0件時�E琁E*/
+	/** the <code>EmptyHandler</code> */
 	protected EmptyHandler emptyHandler = new DefaultEmptyHandlerImpl();
 	
-	/** 定数アクセス */
+	/** the <code>ConstAccessor</code> */
 	protected ConstAccessor accessor = new ConstAccessorImpl();
 	
-	/** SQLビルダー */
+	/** the <code>SQLBuilder</code> */
 	protected SQLBuilder builder = new SQLBuilderProxyImpl();
 
 
 	/**
-	 * @param builder ビルダー
+	 * @param builder the builder to set
 	 */
 	public void setSqlBuilder(SQLBuilder builder){
 		this.builder = builder;
 	}
 	
 	/**
-	 * @param accessor アクセサ
+	 * @param accessor the accessor to set
 	 */
 	public void setConstAccessor(ConstAccessor accessor){
 		this.accessor = accessor;
 	}
 	
 	/**
-	 * @param emptyHandler 0件時�E琁E
+	 * @param emptyHandler the empty handler to set
 	 */
 	public void setEmptyHandler(EmptyHandler emptyHandler){
 		this.emptyHandler = emptyHandler;
 	}
 
 	/**
-	 * @param provider プロバイダー
+	 * @param provider the provider to set
 	 */
 	public void setEntityManagerProvider(EntityManagerProvider provider){
 		em = provider.getEntityManager();
@@ -124,28 +124,28 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	}
 	
 	/**
-	 * @param queryClass　クエリクラス
-	 * @return クエリ
+	 * @param queryClass　the class of the query 
+	 * @return the query
 	 */
 	protected abstract FreeQuery createNativeQueryEngine(Class<?> queryClass);
 	
 	/**
-	 * @param updateClass　クエリクラス
-	 * @return クエリ
+	 * @param updateClass　the class of the updater
+	 * @return the updater
 	 */
 	protected abstract FreeUpdate createNativeUpdateEngine(Class<?> updateClass);
 	
 	/**
-	 * @param queryClass　クエリクラス
-	 * @return クエリ
+	 * @param queryClass　the class of the query
+	 * @return the query
 	 */
 	protected FreeQuery createNamedQueryEngine(Class<?> queryClass){
 		return new LocalNamedQueryEngine(getNamedQuery(queryClass),emptyHandler);
 	}
 	
 	/**
-	 * @param updateClass　クエリクラス
-	 * @return クエリ
+	 * @param updateClass　the class of the updater
+	 * @return the updater
 	 */
 	protected Update createNamedUpdateEngine(Class<?> updateClass){
 		return new LocalNamedUpdateEngine(getNamedQuery(updateClass));
@@ -153,9 +153,10 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	
 
 	/**
-	 * NamedQueryを作�Eする
-	 * @param clazz クラス
-	 * @return QueryオブジェクチE
+	 * Creates the internal named query.
+	 * 
+	 * @param clazz the class 
+	 * @return the query
 	 */
 	protected InternalNamedQueryImpl getNamedQuery(Class<?> clazz){
 		
@@ -166,7 +167,7 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 		if(nq != null){
 			query = new InternalNamedQueryImpl(nq.name(),nq.query(), em,clazz.getSimpleName() ,false,builder,accessor);				
 			hints = nq.hints();
-		//拡張-if斁E��用	
+		//拡張-if斁E��用	
 		}else{
 			AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);
 			query = new InternalNamedQueryImpl(null,aq.query(), em, clazz.getSimpleName(),false,builder,accessor);				
@@ -183,9 +184,9 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 	
 	
 	/**
-	 * @param <T>　垁E
-	 * @param clazz クラス
-	 * @return インスタンス
+	 * @param <T>　the type
+	 * @param clazz the class 
+	 * @return the new instance
 	 */
 	protected <T> T newInstance(Class<T> clazz){
 		try{

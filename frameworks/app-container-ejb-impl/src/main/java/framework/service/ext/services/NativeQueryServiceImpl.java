@@ -11,7 +11,7 @@ import framework.service.ext.locator.ServiceLocatorImpl;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * リモートからのNativeQuery実行.
+ * A native query service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

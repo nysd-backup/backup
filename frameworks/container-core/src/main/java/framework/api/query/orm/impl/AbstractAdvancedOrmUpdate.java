@@ -17,7 +17,7 @@ import framework.sqlclient.api.orm.OrmUpdate;
  */
 public abstract class AbstractAdvancedOrmUpdate<T> implements AdvancedOrmUpdate<T>{
 
-	/** エンジン */
+	/** the delegating query */
 	protected OrmUpdate<T> delegate;
 	
 	/**

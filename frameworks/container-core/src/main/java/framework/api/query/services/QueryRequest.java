@@ -13,7 +13,7 @@ import framework.sqlclient.api.Query;
 import framework.sqlclient.api.free.ResultSetFilter;
 
 /**
- * クエリリクエストパラメータ.
+ * A request parameter of query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -23,43 +23,43 @@ public class QueryRequest implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	/** 最大件数 */
+	/** the max size */
 	private int maxSize = 0;
 	
-	/** 先頭位置 */
+	/** the start position */
 	private int firstResult = 0;
 	
-	/** 検索結果0件時システムエラー */
+	/** true:exception is thrown if the no result is found */
 	private boolean noDataError = false;
 	
-	/** クエリクラス */
+	/** the class of the target query */
 	private final Class<? extends Query> queryClass;
 	
-	/** パラメータ */
+	/** the parameters */
 	private Map<String,Object> param = new HashMap<String,Object>();
 	
-	/** if文用パラメータ */
+	/** the parameters for branch-statement */
 	private Map<String,Object> branchParam = new HashMap<String,Object>();
 	
-	/** 日付用*/
+	/** the type of temporal */
 	private Map<String,TemporalType> temporal = new HashMap<String,TemporalType>();
 	
-	/** ヒント */
+	/** the hints */
 	private Map<String,Object> hint = new HashMap<String,Object>();
 		
-	/** フィルター */
+	/** the filter for ResultSet */
 	private ResultSetFilter filter;
 	
 	/**
-	 * @param queryClass クエリクラス
+	 * @param queryClass the class of the query
 	 */
 	public QueryRequest(Class<? extends Query> queryClass){
 		this.queryClass = queryClass;
 	}
 	
 	/**
-	 * @param <T>　型
-	 * @return クエリクラス
+	 * @param <T>　the type
+	 * @return the class of the query
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Query> Class<T> getQueryClass(){
@@ -160,9 +160,8 @@ public class QueryRequest implements Serializable{
 	}
 	
 	/**
-	 * ヒント句設定.
-	 * @param key　キー
-	 * @param value 値
+	 * @param key　the key of the hint
+	 * @param value the hint value
 	 */
 	public void setHint(String key , Object value) {
 		this.hint.put(key, value);

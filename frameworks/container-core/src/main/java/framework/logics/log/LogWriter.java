@@ -4,7 +4,7 @@
 package framework.logics.log;
 
 /**
- * ログエンジン.
+ * Logger for debugging.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,29 +12,29 @@ package framework.logics.log;
 public interface LogWriter extends NormalLogWriter{
 
 	/**
-	 * @param message エラーログメッセージ
+	 * @param message the message
 	 */
 	public void error(String message);
 
 	/**
-	 * @param message エラーメッセージ
-	 * @param t エラー
+	 * @param message the message
+	 * @param t the exception
 	 */
 	public void error(String message, Throwable t);
 
 	/**
-	 * @param t 例外
+	 * @param t the exception
 	 */
 	public void error(Throwable t);
 
 	/**
-	 * @param message 警告ログメッセージ
+	 * @param message the message
 	 */
 	public void warn(String message);
 
 	/**
-	 * @param message 警告メッセージ
-	 * @param t 例外
+	 * @param message the message
+	 * @param t the exception
 	 */
 	public void warn(String message, Throwable t);
 

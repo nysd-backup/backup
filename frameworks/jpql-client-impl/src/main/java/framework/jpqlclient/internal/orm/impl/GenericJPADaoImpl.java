@@ -29,58 +29,58 @@ import framework.sqlengine.builder.impl.ConstAccessorImpl;
 import framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
 
 /**
- * JPAを使用したGenericDao
+ * The generic DAO for JPA.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public class GenericJPADaoImpl implements GenericDao {
 
-	/** エンティティマネージャ */
+	/** the EntityManager */
 	private EntityManager em = null;
 	
-	/** 0件時処理 */
+	/** the EmptyHandler */
 	private EmptyHandler eh = new DefaultEmptyHandlerImpl();
 	
-	/** 複数件処理*/
+	/** the MultiResultHandler */
 	private MultiResultHandler mrh = new DefaultMultiResultHandlerImpl();
 	
-	/** 定数アクセス */
+	/** the ConstAccessor */
 	private ConstAccessor accessor = new ConstAccessorImpl();
 	
-	/** SQLビルダー */
+	/** the SQLBuilder */
 	private SQLBuilder builder = new SQLBuilderProxyImpl();
 
 	/**
-	 * @param builder ビルダー
+	 * @param builder the builder to set
 	 */
 	public void setSqlBuilder(SQLBuilder builder){
 		this.builder = builder;
 	}
 	
 	/**
-	 * @param accessor アクセサ
+	 * @param accessor the accessor to set
 	 */
 	public void setConstAccessor(ConstAccessor accessor){
 		this.accessor = accessor;
 	}
 	
 	/**
-	 * @param provider the em to set
+	 * @param provider the provider to set
 	 */
 	public void setEntityManagerProvider(EntityManagerProvider provider){
 		em = provider.getEntityManager();		
 	}	
 	
 	/**
-	 * @param handler the eh to set
+	 * @param handler the handler to set
 	 */
 	public void setEmptyHandler(EmptyHandler handler){
 		eh = handler;	
 	}
 
 	/**
-	 * @param handler the mrh to set
+	 * @param handler the handler to set
 	 */
 	public void setMultiResultHandler(MultiResultHandler handler){
 		mrh = handler;	
@@ -190,9 +190,11 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param <E> 型
-	 * @param entityQuery　条件
-	 * @return クエリ
+	 * Creates the named query.
+	 * 
+	 * @param <E> the type
+	 * @param entityQuery　the entityQuery
+	 * @return the named query
 	 */
 	protected <E> NamedQuery createJPAQuery(JPAOrmCondition<E> entityQuery){
 		
@@ -220,9 +222,11 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @param <E>　型
-	 * @param entityQuery 条件
-	 * @return クエリ
+	 * Creates the named query.
+	 * 
+	 * @param <E>　the type
+	 * @param entityQuery the entityQuery
+	 * @return the query
 	 */
 	protected <E> NamedQuery createEngine(JPAOrmCondition<E> entityQuery){
 		String statement = createStatementBuilder().createSelect(entityQuery);
@@ -232,24 +236,29 @@ public class GenericJPADaoImpl implements GenericDao {
 	}
 	
 	/**
-	 * @return ステートメントビルダー
+	 * Creates the statement builder.
+	 * 
+	 * @return the statement builder
 	 */
 	protected JPQLStatementBuilder createStatementBuilder(){
 		return new JPQLStatementBuilderImpl();
 	}
 	
 	/**
-	 * @param delegate クエリ
-	 * @return エンジン
+	 * Creates the named updater.
+	 * 
+	 * @param delegate the delegate
+	 * @return the engine
 	 */
 	protected NamedUpdate createNamedUpdateEngine(InternalNamedQueryImpl delegate){
 		return new LocalNamedUpdateEngine(delegate);
 	}
 	
 	/**
-	 * 検索条件を設定する。
-	 * @param condition 条件
-	 * @param delegate クエリ
+	 * Set the parameter to delegate.
+	 * 
+	 * @param condition the condition
+	 * @param delegate the delegate
 	 */
 	protected <E> void setConditionParameters(JPAOrmCondition<E> condition, Bindable delegate){
 		//簡易フィルターが設定されている場合、実行時に設定されたパラメータを使用する

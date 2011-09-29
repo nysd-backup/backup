@@ -15,7 +15,11 @@ import framework.service.core.services.AbstractLatestPagingService;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * 最新取得用ページングサービス.
+ * a paging service.
+ * 
+ * <pre>
+ * Always execute SQL to get latest data.
+ * </pre>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -25,7 +29,7 @@ import framework.sqlclient.api.free.QueryFactory;
 @Transactional
 public class LatestPagingServiceImpl extends AbstractLatestPagingService implements PagingService{
 
-	/** クエリファクトリ */
+	/** the factory to create query */
 	@Resource
 	private QueryFactory clientQueryFactory;
 

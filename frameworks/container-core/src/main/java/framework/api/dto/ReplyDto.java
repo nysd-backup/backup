@@ -4,13 +4,11 @@
 package framework.api.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import framework.core.message.BuildedMessage;
+import framework.core.message.DefinedMessage;
 
 /**
- * クライアントへの戻り値.
+ * A reply data to WEB container
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -19,8 +17,8 @@ public class ReplyDto implements Serializable{
 
 	private static final long serialVersionUID = -5671768150819629678L;
 	
-	/** メッセージリスト */
-	private List<BuildedMessage> messageList = new ArrayList<BuildedMessage>();
+	/** the list of messages */
+	private DefinedMessage[] messageList = null;
 	
 	/** データ */
 	private Serializable reply;
@@ -28,14 +26,14 @@ public class ReplyDto implements Serializable{
 	/**
 	 * @param messageList the messageList to set
 	 */
-	public void setMessageList(List<BuildedMessage> messageList) {
+	public void setMessageList(DefinedMessage[] messageList) {
 		this.messageList = messageList;
 	}
 
 	/**
 	 * @return the messageList
 	 */	
-	public List<BuildedMessage> getMessageList() {
+	public DefinedMessage[] getMessageList() {
 		return messageList;
 	}
 

@@ -14,18 +14,18 @@ import framework.api.dto.RequestDto;
 import framework.service.core.messaging.AbstractMessageProducer;
 
 /**
- * Spring用メッセージプロデューサ.
+ * The JMS producer for Spring
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class MessageProducerImpl extends AbstractMessageProducer{
 
-	/** JMSテンプレート */
+	/** the JMS template */
 	private JmsTemplate template;
 	
 	/**
-	 * @param template テンプレート
+	 * @param template the template to set
 	 */
 	public void setJmsTemplate(JmsTemplate template){
 		this.template = template;

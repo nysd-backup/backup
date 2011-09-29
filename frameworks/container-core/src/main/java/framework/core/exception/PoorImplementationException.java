@@ -4,9 +4,13 @@
 package framework.core.exception;
 
 /**
- * 実装不備を示す例外。
- * この例外がスローされた場合は実装ミスによるバグなのでアプリケーションを見直すこと。
- *
+ * A exception that represent the poor implementation.
+ * 
+ * <pre>
+ * your codes have any bugs when this exception is thrown.
+ * see your code.
+ * </pre>
+ * 
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
@@ -17,15 +21,15 @@ public class PoorImplementationException extends RuntimeException{
 	private static final String DEFAULT_MESSAGE = "Poor Implementation : ";
 	
 	/**
-	 * @param mes メッセージ
+	 * @param mes the message
 	 */
 	public PoorImplementationException(String mes){
 		super(DEFAULT_MESSAGE+mes);
 	}
 	
 	/**
-	 * @param mes メッセージ
-	 * @param t 例外
+	 * @param mes the message
+	 * @param t the exception
 	 */
 	public PoorImplementationException(String mes , Throwable t){
 		super(DEFAULT_MESSAGE+mes,t);

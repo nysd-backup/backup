@@ -14,12 +14,11 @@ import javax.jms.Session;
 import framework.api.dto.RequestDto;
 
 /**
- * JMSプロデューサ.
+ * The JMS producer.
  * 
  * <pre>
- * コネクションの取得とメッセージ送信を行う。
- * 宛先作成、コネクションファクトリ作成用にSessionBeanを作成すること。
- * また、XAコネクションが生成できるConnectionFactoryを私用すること。
+ * Connect server and send the message.
+ * <code>ConnectionFactory</code> must be XA connection factory.
  * </pre>
  *
  * @author yoshida-n
@@ -46,11 +45,11 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	}
 	
 	/**
-	 * メッセージ送信
-	 * @param factory XAコネクションファクトリ
-	 * @param dto DTO
-	 * @param destinationName 宛先
-	 * @throws JMSException 例外
+	 * Send the message.
+	 * @param factory the XA connection factory.
+	 * @param dto the DTO
+	 * @param destinationName the name of destination
+	 * @throws JMSException the exception
 	 */
 	protected void sendMessage(ConnectionFactory factory ,RequestDto dto, String destinationName) throws JMSException{
 		Connection connection = null;
@@ -88,19 +87,19 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	
 	
 	/**
-	 * 宛先の作成
-	 * @param destinationName 宛先名
-	 * @return 宛先
+	 * Creates the destination.
+	 * @param destinationName the name of destination
+	 * @return the destination
 	 */
 	protected abstract Destination createDestination(String destinationName);	
 
 	/**
-	 * @return キュー用XAコネクションの作成
+	 * @return the XA connection factory for QUEUE
 	 */
 	protected abstract ConnectionFactory createQueueConnectionFactory();
 	
 	/**
-	 * @return トピック用XAコネクションの作成
+	 * @return the XA connection factory for TOPIC
 	 */
 	protected abstract ConnectionFactory createTopicConnectionFactory();	
 	

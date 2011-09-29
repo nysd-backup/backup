@@ -13,7 +13,7 @@ import framework.sqlclient.api.free.ResultSetFilter;
 import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
 
 /**
- *　JPAのNativeQueryを使用するクエリエンジン.
+ *　The native query engine for JPA.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -21,12 +21,12 @@ import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
 @SuppressWarnings("unchecked")
 public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<InternalNativeJPAQueryImpl> implements NativeQuery{
 
-	/** 0件時処理 */
+	/** the <code>EmptyHandler</code> */
 	private final EmptyHandler emptyHandler;
 	
 	/**
-	 * @param delegate クエリ
-	 * @param emptyHandler 0件処理
+	 * @param delegate the delegate to set
+	 * @param emptyHandler the emptyHandler to set
 	 */
 	public LocalJPANativeQueryEngine(InternalNativeJPAQueryImpl delegate , EmptyHandler emptyHandler){
 		super(delegate);

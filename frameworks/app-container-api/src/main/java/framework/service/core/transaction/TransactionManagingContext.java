@@ -4,7 +4,8 @@
 package framework.service.core.transaction;
 
 import java.util.LinkedList;
-import framework.core.message.BuildedMessage;
+
+import framework.core.message.DefinedMessage;
 import framework.core.message.MessageLevel;
 
 /**
@@ -47,9 +48,9 @@ public class TransactionManagingContext extends ServiceContext{
 	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
 	 */
 	@Override
-	public void addMessage(BuildedMessage message){
+	public void addMessage(DefinedMessage message){
 		//エラーレベル以上のメッセージは現在トランザクションをロールバック状態にする
-		if( MessageLevel.Error.getLevel() <= message.getDefined().getLevel().getLevel()){
+		if( MessageLevel.Error.getLevel() <= message.getLevel().getLevel()){
 			getCurrentUnitOfWork().setRollbackOnly();			
 		}
 		super.addMessage(message);

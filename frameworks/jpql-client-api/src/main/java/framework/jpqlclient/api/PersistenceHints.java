@@ -4,7 +4,7 @@
 package framework.jpqlclient.api;
 
 /**
- * JPQLのヒント(Vendor非依存）.
+ * The hint of JPQL.
  *
  * @author yoshida-n
  * @version	2011/08/31 created.

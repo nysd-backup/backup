@@ -6,7 +6,7 @@ package framework.api.query.orm;
 import framework.core.entity.AbstractEntity;
 
 /**
- * ORMクエリを生成する.
+ * The factory to create ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,38 +14,38 @@ import framework.core.entity.AbstractEntity;
 public interface AdvancedOrmQueryFactory {
 
 	/**
-	 * StrictQueryを生成する。
+	 * Creates the <code>StrictQuery</code>.
 	 * 
-	 * @param <T>　型
-	 * @param <Q> 　型
-	 * @param entityClass エンティティクラス
+	 * @param <T>　the type
+	 * @param <Q> 　the type
+	 * @param entityClass the class of target entity
 	 */
 	public <T extends AbstractEntity> StrictQuery<T> createStrictQuery(Class<T> entityClass);
 	
 	/**
-	 * EasyQueryを生成する。
+	 * Creates the <code>EasyQuery</code>.
 	 * 
-	 * @param <T>　型
-	 * @param <Q> 　型
-	 * @param entityClass エンティティクラス
+	 * @param <T>　the type
+	 * @param <Q> 　the type
+	 * @param entityClass the class of target entity
 	 */
 	public <T extends AbstractEntity> EasyQuery<T> createEasyQuery(Class<T> entityClass);
 	
 	/**
-	 * StrictUpdateを生成する。
+	 * Creates the <code>StrictUpdate</code>.
 	 * 
-	 * @param <T>　型
-	 * @param <Q> 　型
-	 * @param entityClass エンティティクラス
+	 * @param <T>　the type
+	 * @param <Q> 　the type
+	 * @param entityClass the class of target entity
 	 */
 	public <T extends AbstractEntity> StrictUpdate<T> createStrictUpdate(Class<T> entityClass);
 
 	/**
-	 * EasyUpdateを生成する。
+	 * Creates the <code>EasyUpdate</code>.
 	 * 
-	 * @param <T>　型
-	 * @param <Q> 　型
-	 * @param entityClass エンティティクラス
+	 * @param <T>　the type
+	 * @param <Q> 　the type
+	 * @param entityClass the class of target entity
 	 */
 	public <T extends AbstractEntity> EasyUpdate<T> createEasyUpdate(Class<T> entityClass);
 

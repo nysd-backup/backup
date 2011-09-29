@@ -4,7 +4,7 @@
 package framework.logics.log;
 
 /**
- * ログエンジン.
+ * The logger.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,32 +12,32 @@ package framework.logics.log;
 public interface NormalLogWriter {
 
 	/**
-	 * @param message デバッグログメッセージ
+	 * @param message the message
 	 */
 	public void debug(String message);
 
 	/**
-	 * @param message 情報ログメッセージ
+	 * @param message the message
 	 */
 	public void info(String message);
 
 	/**
-	 * @param message トレースログメッセージ
+	 * @param message the message
 	 */
 	public void trace(String message);
 
 	/**
-	 * @return デバッグ有効有無
+	 * @return the debug mode
 	 */
 	public boolean isDebugEnabled();
 
 	/**
-	 * @return 情報有効有無
+	 * @return the info mode
 	 */
 	public boolean isInfoEnabled();
 
 	/**
-	 * @return 証跡有効有無
+	 * @return the trace mode
 	 */
 	public boolean isTraceEnabled();
 

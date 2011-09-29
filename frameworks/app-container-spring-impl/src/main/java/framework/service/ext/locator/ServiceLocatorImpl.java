@@ -4,10 +4,10 @@
 package framework.service.ext.locator;
 
 /**
- * APコンテナ専用のコンテキストを初期化する.
+ * Initialize the new context for AP container.
  * 
  * <pre>
- * WEB/APでSpringコンテナを分割する場合に使用する。
+ * Use this to separate the context between WEB and AP
  * </pre>
  *
  * @author yoshida-n
@@ -16,7 +16,7 @@ package framework.service.ext.locator;
 public class ServiceLocatorImpl extends SpringServiceLocator{
 
 	/**
-	 * @param resource 外部リソースパス
+	 * @param resource the external resource
 	 */
 	public void construct(String resource) {		
 		initialize(resource);

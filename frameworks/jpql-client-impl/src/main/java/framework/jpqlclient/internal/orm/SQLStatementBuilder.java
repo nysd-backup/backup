@@ -7,7 +7,7 @@ import framework.sqlclient.api.orm.OrmCondition;
 
 
 /**
- * SQLを作成する.
+ * The builder to create the SQL.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,9 +15,10 @@ import framework.sqlclient.api.orm.OrmCondition;
 public interface SQLStatementBuilder {
 
 	/**
-	 * SELECT文の作成.
-	 * @param condition 条件
-	 * @return　SELECT文
+	 * Creates the SQL statement.
+	 * 
+	 * @param condition the condition
+	 * @return　the statement
 	 */
 	public String createSelect(OrmCondition<?> condition);
 	

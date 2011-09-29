@@ -21,7 +21,7 @@ import framework.sqlclient.api.orm.OrmQuery;
 @SuppressWarnings("unchecked")
 public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>{
 	
-	/** ORクエリ */
+	/** the delegating query */
 	protected OrmQuery<T> delegate;
 
 	/**

@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * 簡易ORMクエリ.
+ * EasyQuery.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,53 +15,58 @@ import java.util.List;
 public interface EasyQuery<T> extends AdvancedOrmQuery<T>{
 
 	/**
-	 * WHERE句の追加
+	 * Adds the string of the filter to search.
+	 * 
 	 * @return self
 	 */
 	public EasyQuery<T> filter(String filterString);
 	
 	/**
-	 * ORDER BY句の追加
+	 * Adds the string to sort.
+	 * 
 	 * @return self
 	 */
 	public EasyQuery<T> order(String orderString);
 	
 	/**
-	 * 一覧検索
-	 * @param params
-	 * @return 結果
+	 * Searches the list of entities.
+	 * 
+	 * @param params the parameters
+	 * @return the result
 	 */
 	public List<T> list(Object... params);
 	
 	/**
-	 * 単一検索.
-	 * 複数件取得時はエラー
+	 * Finds by alter key.
+	 * Throw the error if the multiple result is found.
 	 * 
-	 * @param params パラメータ
-	 * @return 結果
+	 * @param params the parameters
+	 * @return the result
 	 */
 	public T findAny(Object... params);
 	
 	/**
-	 * 単一検索
-	 * @param params パラメタ
-	 * @return 結果
+	 * Searches first record hit.
+	 * 
+	 * @param params the parameters
+	 * @return the result
 	 */
 	public T single(Object... params);
 	
 	/**
-	 * 存在チェック.
-	 * 複数件取得時はエラー
+	 * Determines whether the result searched by alter keys is found.
+	 * Throw error if the multiple result is found.  
 	 * 
-	 * @param params パラメタ
-	 * @return 結果
+	 * @param params the parameters
+	 * @return the result
 	 */
 	public boolean existsByAny(Object... params);
 
 	/**
-	 * 存在チェック.
-	 * @param params パラメタ
-	 * @return 結果
+	 * Determines whether the result is found.
+	 * 
+	 * @param params the parmaeter
+	 * @return the result
 	 */
 	public boolean existsByList(Object... params);
 

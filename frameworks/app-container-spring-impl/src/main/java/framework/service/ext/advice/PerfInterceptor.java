@@ -9,22 +9,21 @@ import framework.logics.log.LogWriterFactory;
 import framework.logics.log.NormalLogWriter;
 import framework.service.core.transaction.ServiceContext;
 
-
 /**
- * パフォーマンスログ用インターセプター.
+ * An intercepter to collect the performance log.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public class PerfInterceptor{
 
-	/** ログ */
+	/** the instance of logging */
 	private static final NormalLogWriter LOG = LogWriterFactory.getPerfLog(PerfInterceptor.class);
 	
 	/**
-	 * @param ic 起動情報
-	 * @return 結果
-	 * @throws Throwable 例外
+	 * @param ic the context
+	 * @return the result
+	 * @throws Throwable the exception
 	 */
 	public Object around(ProceedingJoinPoint ic) throws Throwable {
 		

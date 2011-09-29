@@ -11,9 +11,13 @@ import framework.sqlclient.api.Query;
 import framework.sqlclient.api.orm.OrmQuery;
 
 /**
- * デフォルト提供のORMクエリ.
- * 開発者向けAPIはこのまま提供しないことが前提。
- * ラッパーを作成してeq、ascなどの条件指定はタイプセーフにすることが望ましい。
+ * The default ORM query.
+ * 
+ * <pre>
+ * Don't allow to use this.
+ * Create the wrapper class for this.
+ * the methods like eq and asc should be type safe.
+ * </pre>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -21,11 +25,11 @@ import framework.sqlclient.api.orm.OrmQuery;
 @SuppressWarnings("unchecked")
 public class DefaultOrmQueryImpl<T> implements JPAOrmQuery<T>{
 	
-	/** クエリ */
+	/** the delegate */
 	private JPAOrmQuery<T> delegate;
 
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the delegate to set
 	 */
 	public DefaultOrmQueryImpl(JPAOrmQuery<T> delegate){
 		this.delegate = delegate;

@@ -8,7 +8,7 @@ import framework.sqlclient.api.free.NativeUpdate;
 import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 
 /**
- * NativeQueryの更新エンジン.
+ * The native update engine for JPA.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,7 +16,7 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 public class LocalJPANativeUpdateEngine extends AbstractLocalUpdateEngine<InternalNativeJPAQueryImpl> implements NativeUpdate{
 
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the delegate to set
 	 */
 	public LocalJPANativeUpdateEngine(InternalNativeJPAQueryImpl delegate) {
 		super(delegate);		

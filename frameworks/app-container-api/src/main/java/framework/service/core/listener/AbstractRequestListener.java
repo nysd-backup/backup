@@ -6,10 +6,13 @@ package framework.service.core.listener;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+
 import framework.api.dto.ReplyDto;
 import framework.api.dto.RequestDto;
 import framework.api.service.RequestListener;
 import framework.core.exception.application.BusinessException;
+import framework.core.message.DefinedMessage;
 import framework.logics.log.LogWriter;
 import framework.logics.log.LogWriterFactory;
 import framework.service.core.locator.ServiceLocator;
@@ -45,8 +48,8 @@ public abstract class AbstractRequestListener implements RequestListener{
 			
 			Object service = getService(dto);
 			Method m = dto.getTargetClass().getMethod(dto.getMethodName(), dto.getParameterTypes());
-			Object replyData = m.invoke(service, (Object[])dto.getParameter());			
-			reply.setMessageList(context.getMessageList());
+			Object replyData = m.invoke(service, (Object[])dto.getParameter());	
+			setMessageList(context.getMessageList(), reply);
 			reply.setReply(Serializable.class.cast(replyData));
 			
 		}catch(Throwable e){
@@ -102,14 +105,14 @@ public abstract class AbstractRequestListener implements RequestListener{
 		if( t instanceof BusinessException){
 			
 			BusinessException se = (BusinessException)t;
-			se.getReply().setMessageList(context.getMessageList());
+			setMessageList(context.getMessageList(),se.getReply());
 			throw se;
 			
 		}else if (t instanceof InvocationTargetException){
 			target = ((InvocationTargetException)t).getTargetException();			
 			if( target instanceof BusinessException){			
 				BusinessException se = (BusinessException)target;
-				se.getReply().setMessageList(context.getMessageList());
+				setMessageList(context.getMessageList(),se.getReply());
 				throw se;
 			}
 		}
@@ -122,6 +125,16 @@ public abstract class AbstractRequestListener implements RequestListener{
 			throw new IllegalStateException("unexpected exception",target);
 		}
 		
+	}
+	
+	/**
+	 * @param messageList the messageList
+	 * @param reply the reply
+	 */
+	private void setMessageList(List<DefinedMessage> messageList , ReplyDto reply){
+		if(!messageList.isEmpty()){
+			reply.setMessageList(messageList.toArray(new DefinedMessage[messageList.size()]));
+		}
 	}
 
 }

@@ -8,11 +8,11 @@ import java.io.Serializable;
 import framework.api.dto.ReplyDto;
 
 /**
- * 業務例外.
+ * The business exception.
+ * 
  * <pre>
- * EJBの場合、RuntimeExceptionは@ApplicationExceptionを設定しないとrollbackOnly=trueとなり処理継続不可能となる上にシステムエラー扱いとなる。
- * 同一トランザクション内のSessionBeanの作成すらも不可能となり、同一トランザクション内のSessionBeanを使用した是正処理が不可能となる。
- * EJBで使用する場合は必ずこのクラスを継承し@ApplicationExceptionとすること
+ * In EJB environment this class is regarded as a system exception.
+ * Set '@ApplicationException' to subclass of this to prevent the EJB container from throwing system exception. 
  *</pre>
  *
  * @author	yoshida-n
@@ -23,47 +23,44 @@ public class BusinessException extends RuntimeException{
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;
 
-	/** デフォルトメッセージ */
-	private static final String DEFAULT_MESSAGE = "business error. ";
-	
-	/** WEB層へのリプライデータ */
+	/** the data to reply to WEB container */
 	private ReplyDto reply;
 	
 	/**
-	 * @param message メッセージ
-	 * @param cause 原因
+	 * @param message the message
+	 * @param cause the cause
 	 */
 	public BusinessException(String message , Throwable cause){
-		super(DEFAULT_MESSAGE+message,cause);
+		super(message,cause);
 	}
 	
 	/**
-	 * @param message メッセージ
+	 * @param message the  message
 	 */
 	public BusinessException(String message){
-		super(DEFAULT_MESSAGE+message);
+		super(message);
 	}
 	
 	/**
-	 * @param message メッセージ
-	 * @param reply リプライ
+	 * @param message the message
+	 * @param reply the data to reply to WEB container
 	 */
 	public BusinessException(String message,Serializable reply){
-		super(DEFAULT_MESSAGE+message);
+		super(message);
 		this.reply = new ReplyDto();
 		this.reply.setReply(reply);
 	}
 	
 	/**
-	 * @param reply リプライ
+	 * @param reply the data to reply to WEB container
 	 */
 	public BusinessException(Serializable reply){
-		this("",reply);
+		this(null,reply);
 	}
 
 	/**
-	 * @param <T> 型
-	 * @return データ
+	 * @param <T> the type
+	 * @return the data
 	 */
 	public ReplyDto getReply(){
 		return reply;

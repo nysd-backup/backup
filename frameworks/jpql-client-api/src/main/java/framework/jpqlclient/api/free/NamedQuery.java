@@ -9,7 +9,7 @@ import framework.sqlclient.api.free.FreeQuery;
 
 
 /**
- * NamedQueryのAPI.
+ * The named query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,17 +17,20 @@ import framework.sqlclient.api.free.FreeQuery;
 public interface NamedQuery extends FreeQuery{
 	
 	/**
-	 * JPAHint.
-	 * @param <T> 型
-	 * @param arg0 キー
-	 * @param arg1 値
+	 * Adds the JPA hint.
+	 * 
+	 * @param <T> the type
+	 * @param arg0 the key of the hint
+	 * @param arg1 the hint value
 	 * @return self
 	 */
 	public <T extends FreeQuery> T setHint(String arg0 , Object arg1);
 	
 	/**
-	 * @param <T> 型
-	 * @param arg0 ロックモード
+	 * Set the lock mode
+	 * 
+	 * @param <T> the type
+	 * @param arg0 the lock mode
 	 * @return self
 	 */
 	public <T extends NamedQuery> T setLockMode(LockModeType arg0);

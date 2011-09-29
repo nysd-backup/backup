@@ -8,14 +8,19 @@ import javax.sql.DataSource;
 import framework.service.core.query.DataSourceManager;
 
 /**
- * DIされたデータソースの取得.
+ * Get a <code>DataSource</code>.
+ * 
+ * <pre>
+ * Gets only from JTA connection pool.
+ * Use <code>oracle.jdbc.xa.client.OracleXADataSource</code> in oracle.
+ * </pre>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class DataSourceManagerImpl implements DataSourceManager{
 
-	/** データソース */
+	/** the dataSource */
 	private DataSource dataSource;
 	
 	/**

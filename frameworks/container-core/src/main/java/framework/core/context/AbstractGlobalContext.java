@@ -8,84 +8,83 @@ import java.util.List;
 
 import framework.api.dto.ClientRequestBean;
 import framework.api.dto.ClientSessionBean;
-import framework.core.message.BuildedMessage;
+import framework.core.message.DefinedMessage;
 
 /**
- * スレッドローカルコンテキストの基底.
+ * The thread-local context
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractGlobalContext {
 
-	/** メソッドの深さ */
+	/** the level of call stack */
 	protected int callStackLevel = 0;
 	
-	/** メッセージリスト */
-	protected List<BuildedMessage> globalMessageList = new ArrayList<BuildedMessage>();
+	/** the list of the messages */
+	protected List<DefinedMessage> globalMessageList = new ArrayList<DefinedMessage>();
 	
-	/** クライアントとのセッション */
+	/** the session */
 	protected ClientSessionBean clientSession = null;
 	
-	/** クライアントとのリクエストデータ */
+	/** the request */
 	protected ClientRequestBean clientRequest = null;
 	
 	/**
-	 * メッセージを追加する.
-	 * エラーレベル以上のメッセージが発生していたらロールバック対象とする。
+	 * Adds the message to reply to WEB container.
 	 * 
-	 * @param message メッセージ
+	 * @param message the message
 	 */
-	public abstract void addMessage(BuildedMessage message);
+	public abstract void addMessage(DefinedMessage message);
 	
 	/**
-	 * メソッドネストインクリメント
+	 * push call stack.
 	 */
 	public void pushCallStack(){
 		callStackLevel++;
 	}
 	
 	/**
-	 * メソッドネストデクリメント
+	 * pop call stack.
 	 */
 	public void popCallStack(){
 		callStackLevel--;
 	}
 	
 	/**
-	 * メソッドネスト
+	 * @return the level of the call stack
 	 */
 	public int getCallStackLevel(){
 		return callStackLevel;
 	}
 	
 	/**
-	 * @return クライアントとのセッションデータ
+	 * @return the session
 	 */
 	public ClientSessionBean getClientSessionBean(){
 		return clientSession;
 	}
 	
 	/**
-	 * @return クライアントとのリクエストデータ
+	 * @return the request
 	 */
 	public ClientRequestBean getClientRequestBean(){
 		return clientRequest;
 	}
 	
 	/**
-	 * @return メッセージリスト
+	 * @return the list of the messages
 	 */
-	public List<BuildedMessage> getMessageList() {
+	public List<DefinedMessage> getMessageList() {
 		return globalMessageList;
 	}
 	
 	/**
-	 * リリース
+	 * Releases the context.
 	 */
 	protected void release(){
 		callStackLevel = 0;
-		globalMessageList = new ArrayList<BuildedMessage>();
+		globalMessageList = new ArrayList<DefinedMessage>();
 		clientRequest = null;
 		clientSession = null;		
 	}

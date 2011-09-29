@@ -4,7 +4,7 @@
 package framework.api.service;
 
 /**
- * サービスロケータの初期化.
+ * The context initializer 
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,13 +12,14 @@ package framework.api.service;
 public interface ServiceLocatorInitializer {
 	
 	/**
-	 * 初期化
-	 * @param context コンテキスト
+	 * Initializes the context.
+	 * 
+	 * @param context the context
 	 */
 	public void construct(Object context);
 	
 	/**
-	 * 終了
+	 * Destroys the context.
 	 */
 	public void destroy();
 }

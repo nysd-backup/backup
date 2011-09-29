@@ -7,14 +7,13 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import framework.core.message.BuildedMessage;
 import framework.core.message.DefinedMessage;
 import framework.core.message.MessageBean;
 import framework.core.message.MessageLevel;
 import framework.logics.builder.MessageBuilder;
 
 /**
- * メッセージビルダー.
+ * The builder to create the message.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -50,9 +49,8 @@ public class MessageBuilderImpl implements MessageBuilder{
 	 * @see framework.logics.builder.MessageBuilder#build(framework.core.message.DefinedMessage)
 	 */
 	@Override
-	public BuildedMessage build(DefinedMessage defined) {
-		String buildedMessage = MessageFormat.format(defined.getMessage(),defined.getMessageBean().getDetail());
-		return new BuildedMessage( defined, buildedMessage);
+	public String build(DefinedMessage defined) {
+		return MessageFormat.format(defined.getMessage(),defined.getMessageBean().getDetail());
 	}
 
 }

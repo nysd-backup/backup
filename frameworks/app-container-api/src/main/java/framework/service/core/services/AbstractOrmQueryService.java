@@ -11,7 +11,7 @@ import framework.core.entity.AbstractEntity;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * the ORM query.	
+ * The ORM query.	
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

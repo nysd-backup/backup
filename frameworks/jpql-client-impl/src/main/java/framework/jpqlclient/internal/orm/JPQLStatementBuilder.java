@@ -8,7 +8,7 @@ import java.util.Collection;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * JPQLのSQL文を作成する.
+ * The builder to create the JPQL statement.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -16,25 +16,28 @@ import framework.sqlclient.api.orm.OrmCondition;
 public interface JPQLStatementBuilder {
 
 	/**
-	 * SELECT文の作成.
-	 * @param condition 条件
-	 * @return　SELECT文
+	 * Creates the SELECT statement.
+	 * 
+	 * @param condition the condition
+	 * @return　the statement
 	 */
 	public String createSelect(OrmCondition<?> condition);
 	
 	
 	/**
-	 * DELETE文の作成.
-	 * @param condition 条件
-	 * @return　DELTE文
+	 * Creates the DELETE statement.
+	 * 
+	 * @param condition the condition
+	 * @return　the statement
 	 */
 	public String createDelete(OrmCondition<?> condition);
 	
 	/**
-	 * UPDATE文の作成.
-	 * @param condition 条件
-	 * @param set 更新対象
-	 * @return UPDATE文
+	 * Creates the UPDATE statement.
+	 * 
+	 * @param condition the condition
+	 * @param set the updating target
+	 * @return　the statement
 	 */
 	public String createUpdate(OrmCondition<?> condition, Collection<String> set) ;
 	

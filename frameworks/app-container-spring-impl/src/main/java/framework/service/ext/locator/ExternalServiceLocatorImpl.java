@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 
 
 /**
- * 外部で初期化されたコンテキストを保持.
+ * Holding the context initialized at the external container.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContext;
 public class ExternalServiceLocatorImpl extends SpringServiceLocator{
 
 	/**
-	 * @param context 初期化されたコンテキスト
+	 * @param context the initialized context
 	 */
 	public void construct(ApplicationContext context) {	
 		this.context = context;

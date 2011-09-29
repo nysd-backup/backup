@@ -9,7 +9,7 @@ import framework.core.entity.AbstractEntity;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * ORMクエリ実行用サービス.
+ * The ORM query service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,47 +17,62 @@ import framework.sqlclient.api.orm.OrmCondition;
 public interface OrmQueryService<T extends AbstractEntity> {
 
 	/**
-	 * 主キー検索
-	 * @param pks　主キー
-	 * @return 検索結果
+	 * Finds by primary keys.
+	 * 
+	 * @param request the request
+	 * @param pks　the primary keys
+	 * @return the result
 	 */
 	public T find(OrmCondition<T> request,Object[] pks);
 
 	/**
-	 * 候補キー検索.
-	 * 複数件取得時エラー
-	 * @return　検索結果
+	 * Finds by alter keys.
+	 * Throws the error if the multiple records is found.
+	 * 
+	 * @param request the request
+	 * @return　the result
 	 */
 	public T findAny(OrmCondition<T> request);
 
 	/**
-	 * 任意条件検索.
-	 * @return 検索結果
+	 * Searches the records.
+	 * 
+	 * @param request the request
+	 * @return the result
 	 */
 	public List<T> getResultList(OrmCondition<T> request);
 	
 	/**
-	 * 先頭行検索
-	 * @return 先頭行
+	 * Searches the first record.
+	 *
+ 	 * @param request the request
+	 * @return the result
 	 */
 	public T getSingleResult(OrmCondition<T> request);
 	
 	/**
-	 * 存在チェック
-	 * @return true:存在する
+	 * Determines whether the result is found.
+	 * 
+	 * @param request the request
+	 * @return true:exists
 	 */
 	public boolean exists(OrmCondition<T> request);
 	
 	/**
-	 * 主キー指定存在チェック
-	 * @param pks 主キー
-	 * @return true:存在する
+	 * Determines whether the result searched by primary keys is found.
+	 *
+	 * @param request the request
+	 * @param pks the primary keys
+	 * @return true:exsists
 	 */
 	public boolean exists(OrmCondition<T> request,Object[] pks);
 	
 	/**
-	 * 候補キー指定存在チェック
-	 * @return true:存在する
+	 * Determines whether the result is found.
+	 * Throws the error if the multiple records is found. 
+	 * 
+	 * @param request the request
+	 * @return true:exsists
 	 */
 	public boolean existsByAny(OrmCondition<T> request);	
 

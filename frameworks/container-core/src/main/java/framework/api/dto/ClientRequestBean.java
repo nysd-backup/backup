@@ -6,7 +6,7 @@ package framework.api.dto;
 import java.io.Serializable;
 
 /**
- * クラインと層からのリクエスト情報.
+ * The request information from the client.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,7 +15,7 @@ public class ClientRequestBean implements Serializable,Cloneable{
 
 	private static final long serialVersionUID = -5810188274130263782L;
 
-	/** リクエストID */
+	/** the request id */
 	private String requestId = null;
 	
 	/**

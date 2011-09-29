@@ -4,7 +4,6 @@
 package framework.web.core.error;
 
 import framework.api.dto.ClientSessionBean;
-import framework.core.message.BuildedMessage;
 import framework.core.message.DefinedMessage;
 import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
@@ -44,8 +43,7 @@ public class WebMessageAccessorImpl implements MessageAccessor<MessageBean> {
 		WebContext context = WebContext.getCurrentInstance();
 		ClientSessionBean bean = context.getClientSessionBean();		
 		DefinedMessage defined = builder.load(message, bean.getLocale());
-		BuildedMessage builded = builder.build(defined);
-		context.addMessage(builded);
+		context.addMessage(defined);
 		return message;
 	}
 

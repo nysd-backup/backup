@@ -44,15 +44,15 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 				serial[i] = Serializable.class.cast(args[i]);
 			}
 		}
-		RequestDto dto = new RequestDto(
-			method.getDeclaringClass(),
-			method.getParameterTypes(),
-			serial,
-			null,
-			method.getName(),
-			context.getClientSessionBean(),
-			context.getClientRequestBean()
-		);
+		RequestDto dto = new RequestDto();
+		dto.setAlias(null);
+		dto.setTargetClass(method.getDeclaringClass());
+		dto.setClientRequestBean(context.getClientRequestBean());
+		dto.setClientSessionBean(context.getClientSessionBean());
+		dto.setMethodName(method.getName());
+		dto.setParameter(serial);
+		dto.setParameterTypes(method.getParameterTypes());
+		
 		
 		//宛先生成
 		String dst = null;

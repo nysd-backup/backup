@@ -4,7 +4,7 @@
 package framework.core.message;
 
 /**
- * メッセージ定義.
+ * A defined message.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,20 +13,20 @@ public class DefinedMessage{
 
 	private static final long serialVersionUID = 1L;
 
-	/** メッセージビーン */
+	/** the message bean*/
 	private MessageBean messageBean;
-	/** メッセージ */
+	/** the message */
 	private String message;
-	/** レベル */
+	/** the level */
 	private MessageLevel level;
-	/** レベル */
+	/** the flag that represent to notify */
 	private boolean notify;
 	
 	/**
-	 * @param bean メッセージビーン
-	 * @param message メッセージ
-	 * @param level レベル
-	 * @param notify 通知有無
+	 * @param bean the message bean
+	 * @param message the message
+	 * @param level the level
+	 * @param notify the notify
 	 */
 	public DefinedMessage(MessageBean bean ,String message ,MessageLevel level, boolean notify){
 		this.messageBean = bean;

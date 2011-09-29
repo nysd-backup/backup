@@ -12,18 +12,18 @@ import framework.sqlclient.api.orm.OrmQueryFactory;
 import framework.sqlclient.api.orm.OrmUpdate;
 
 /**
- * ORMクエリファクトリ.
+ * The factory to create the query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	
-	/** Dao */
+	/** the DAO */
 	private GenericDao genericDao;
 	
 	/**
-	 * @param dao DAO
+	 * @param dao the dao to set
 	 */
 	public void setGenericDao(GenericDao dao){
 		this.genericDao = dao;
@@ -35,7 +35,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T,Q extends OrmQuery<T>> Q createQuery(Class<T> entityClass) {
-		JPAOrmQuery<T> engine = new LocalOrmQueryEngine<T>(entityClass).setAccessor(genericDao);
+		JPAOrmQuery<T> engine = new LocalOrmQueryEngine<T>(entityClass).setDao(genericDao);
 		return (Q)create(engine);
 	}
 	
@@ -50,10 +50,10 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	}
 	
 	/**
-	 * @param <T> type
-	 * @param <Q> type
-	 * @param engine エンジン
-	 * @return クエリ
+	 * @param <T> the type
+	 * @param <Q> the type
+	 * @param engine the internal engine
+	 * @return the updater
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected JPAOrmUpdate create(JPAOrmUpdate engine ){
@@ -61,10 +61,10 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	}
 	
 	/**
-	 * @param <T> type
-	 * @param <Q> type
-	 * @param engine エンジン
-	 * @return クエリ
+	 * @param <T> the type
+	 * @param <Q> the type
+	 * @param engine the internal engine
+	 * @return the query
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected JPAOrmQuery create(JPAOrmQuery engine ){

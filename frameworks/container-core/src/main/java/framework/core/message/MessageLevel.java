@@ -4,7 +4,7 @@
 package framework.core.message;
 
 /**
- * メッセージレベル.
+ * The message level.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,15 +16,15 @@ public enum MessageLevel {
 	Error("E",2),
 	Fatal("F",3);
 	
-	/** レベル */
+	/** the level */
 	private int level = 0;
 	
-	/** イニシャル */
+	/** the initial */
 	private String initial = "I";
 	
 	/**
-	 * @param initial イニシャル
-	 * @param level レベル
+	 * @param initial the initial
+	 * @param level the level
 	 */
 	private MessageLevel( String initial,int level){
 		this.level = level;
@@ -32,22 +32,22 @@ public enum MessageLevel {
 	}
 	
 	/**
-	 * @return レベル
+	 * @return the level
 	 */
 	public int getLevel(){
 		return level;
 	}
 	
 	/**
-	 * @return イニシャル
+	 * @return the initial
 	 */
 	public String getInitial(){
 		return this.initial;
 	}
 	
 	/**
-	 * @param initial オブジェクト
-	 * @return メッセージレベル
+	 * @param initial the initial
+	 * @return the level
 	 */
 	public static MessageLevel find(String initial){
 		MessageLevel[] levels = values();

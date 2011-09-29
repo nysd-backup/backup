@@ -11,7 +11,7 @@ import framework.service.ext.locator.ServiceLocatorImpl;
 
 
 /**
- * メッセージングクライアントのファクトリ.
+ * The factory to create JMS producer.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

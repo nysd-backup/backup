@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * ページングデータ.
+ * The result of paging.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -19,19 +19,19 @@ public class PagingResult implements Serializable {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 1L;
 
-	/** 現在ページのデータ */
+	/** the current page's data */
 	private List currentPageData;
 	
-	/** 現在ページ番号 */
+	/** the current page's no */
 	private int currentPageNo;
 	
-	/** 総件数 */
+	/** the total count hit */
 	private int totalCount;
 	
 	/**
-	 * @param currentPageData　現在ページのデータ 
-	 * @param currentPageNo 現在ページ番号
-	 * @param totalCount 総件数
+	 * @param currentPageData　the current page data
+	 * @param currentPageNo the current page no
+	 * @param totalCount the total count
 	 */
 	public PagingResult(List currentPageData,int currentPageNo,int totalCount){
 		this.currentPageData = currentPageData;
@@ -40,21 +40,21 @@ public class PagingResult implements Serializable {
 	}
 
 	/**
-	 * @return 総件数
+	 * @return the total count
 	 */
 	public int getTotalCount() {
 		return this.totalCount;
 	}
 
 	/**
-	 * @return 現在ページ番号
+	 * @return the current page no
 	 */
 	public int getCurrentPageNo() {
 		return this.currentPageNo;
 	}
 
 	/**
-	 * @return 現在ページデータ
+	 * @return the current page data
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getCurrentPageData() {

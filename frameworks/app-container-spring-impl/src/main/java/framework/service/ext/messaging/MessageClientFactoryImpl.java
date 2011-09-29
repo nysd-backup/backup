@@ -10,7 +10,7 @@ import framework.service.core.messaging.MessageClientFactory;
 
 
 /**
- * メッセージングクライアントのファクトリ.
+ * The factory to create the JMS producer.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

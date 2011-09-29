@@ -6,7 +6,7 @@ package framework.service.ext.transaction;
 import framework.service.core.transaction.TransactionManagingContext;
 
 /**
- * コンテキスト.
+ * A context.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

@@ -12,21 +12,21 @@ import framework.service.core.locator.ServiceLocator;
 import framework.service.ext.define.ComponentBuilder;
 
 /**
- * サービスロケータ.
+ * A service locator.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class ServiceLocatorImpl extends ServiceLocator{
 
-	/** JNDI名プリフィクス */
+	/** the JNDI prefix */
 	private static final String PREFIX = "java:module";
 	
-	/** コンポーネントビルダ */
+	/** the <code>ComponentBuilder</code> */
 	private ComponentBuilder builder;
 	
 	/**
-	 * @param componentBuilder コンポーネントビルダ
+	 * @param componentBuilder the componentBuilder to set
 	 */
 	public void initialize(ComponentBuilder componentBuilder){
 		builder = componentBuilder;
@@ -34,7 +34,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 	
 	/**
-	 * @return　コンポーネントビルダ
+	 * @return　the component builder
 	 */
 	public static ComponentBuilder getComponentBuilder(){
 		return ((ServiceLocatorImpl)delegate).builder;
@@ -73,9 +73,9 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 	
 	/**
-	 * @param serviceName サービス名
-	 * @param prop プロパティ
-	 * @return サービス
+	 * @param serviceName the name of service
+	 * @param prop the properties to look up
+	 * @return the service
 	 */
 	private Object lookup(String serviceName, Properties prop){
 		

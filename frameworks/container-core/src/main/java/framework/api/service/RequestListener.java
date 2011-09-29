@@ -7,17 +7,18 @@ import framework.api.dto.ReplyDto;
 import framework.api.dto.RequestDto;
 
 /**
- * クライアントからサービス実行要求を受け付ける。
- * リモート呼び出しやメッセージ駆動による起動時にも使用する。
- *
+ * A listener receives the request.
+ * 
+ * <pre>
+ * Remote call and MDB call use this.
+ * </pre>
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
 public interface RequestListener {
 
-
 	/**
-	 * @param dto DTO
+	 * @param dto the DTO
 	 */
 	public ReplyDto processService(RequestDto dto);
 	

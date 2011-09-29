@@ -4,7 +4,7 @@
 package framework.core.exception.system;
 
 /**
- * システム例外.
+ * The system exception.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -14,15 +14,15 @@ public class SystemException extends RuntimeException{
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;
 	
-	/** メッセージコード */
+	/** the message code */
 	private int messageCode = -1;
 	
-	/** 埋め込み */
+	/** the binding arguments */
 	private Object[] args;
 	
 	/**
-	 * @param messageCode メッセージコード
-	 * @param args 引数
+	 * @param messageCode the message code
+	 * @param args the arguments
 	 */
 	public SystemException(int messageCode , Object... args){
 		this.messageCode = messageCode;
@@ -30,10 +30,10 @@ public class SystemException extends RuntimeException{
 	}
 	
 	/**
-	 * @param message メッセージ
-	 * @param cause 原因
-	 * @param messageCode コード
-	 * @param args 引数
+	 * @param message the messages
+	 * @param cause the cause
+	 * @param messageCode the message code
+	 * @param args the arguments
 	 */
 	public SystemException(String message , Throwable cause , int messageCode , Object... args){
 		super(message,cause);
@@ -41,9 +41,9 @@ public class SystemException extends RuntimeException{
 		this.args = args;
 	}
 	/**
-	 * @param message メッセージ
-	 * @param messageCode コード
-	 * @param args 引数
+	 * @param message the message
+	 * @param messageCode the message code
+	 * @param args the arguments
 	 */
 	public SystemException(String message , int messageCode , Object... args){
 		super(message);
@@ -52,29 +52,29 @@ public class SystemException extends RuntimeException{
 	}
 
 	/**
-	 * @param message メッセージ
-	 * @param cause 原因
+	 * @param message the message
+	 * @param cause the cause
 	 */
 	public SystemException(String message , Throwable cause){
 		super(message,cause);
 	}
 	
 	/**
-	 * @param message メッセージ
+	 * @param message the message
 	 */
 	public SystemException(String message){
 		super(message);
 	}
 	
 	/**
-	 * @return メッセージコード
+	 * @return the message code
 	 */
 	public int getMessageCode(){
 		return this.messageCode;
 	}
 	
 	/**
-	 * @return 引数
+	 * @return the arguments
 	 */
 	public Object[] getArgs(){
 		return this.args;

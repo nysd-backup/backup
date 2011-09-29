@@ -4,12 +4,10 @@
 package framework.api.dto;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
- * クライアントとのセッションに使用する情報.
+ * The session information between the client and the server.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -18,58 +16,24 @@ public class ClientSessionBean implements Serializable,Cloneable{
 
 	private static final long serialVersionUID = -5810188274130263782L;
 	
-	/** ユーザID */
+	/** the user's id */
 	private String userId = null;
 	
-	/** セッション作成時のIPアドレス */
+	/** the client's IP address */
 	private String sessionClientIp = null;
 	
-	/** ロケール */
+	/** the client's locale */
 	private Locale locale = null;
 	
-	/** ビジネスロジック層に連携しないデータ */
-	private Map<String,Object> webData = new HashMap<String,Object>();
-	
 	/**
-	 * @return クローンを取得する、webDataは取得しない
-	 */
-	protected ClientSessionBean cloneExceptWebData(){
-		try {
-			ClientSessionBean clone = (ClientSessionBean)(super.clone());
-			clone.webData.clear();
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new IllegalStateException(e);
-		}
-	}
-	
-	/**
-	 * @param <T>　型
-	 * @param key キー
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T> T getWebData(Enum<?> key){
-		return (T)webData.get(key.name());
-	}
-	
-	/**
-	 * @param <T> 型
-	 * @param key キー
-	 * @param value 値
-	 */
-	protected void putWebData(Enum<?> key, Object value){
-		webData.put(key.name(), value);
-	}
-
-	/**
-	 * @return ロケール
+	 * @return the locale
 	 */
 	public Locale getLocale(){
 		return locale;
 	}
 	
 	/**
-	 * @param locale ロケール
+	 * @param locale the locale to set
 	 */
 	public void setLocale(Locale locale){
 		this.locale = locale;
@@ -103,4 +67,14 @@ public class ClientSessionBean implements Serializable,Cloneable{
 		return sessionClientIp;
 	}
 
+	/**
+	 * @see java.lang.Object#clone()
+	 */
+	public ClientSessionBean clone(){
+		try {
+			return (ClientSessionBean)(super.clone());
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 }

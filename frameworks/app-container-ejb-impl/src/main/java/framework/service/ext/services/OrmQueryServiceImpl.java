@@ -17,7 +17,7 @@ import framework.service.ext.locator.ServiceLocatorImpl;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * リモートからのORMクエリ実行
+ * The ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

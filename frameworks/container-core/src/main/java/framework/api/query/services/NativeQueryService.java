@@ -8,7 +8,7 @@ import java.util.List;
 import framework.sqlclient.api.free.NativeResult;
 
 /**
- * ネイティブクエリ用サービス.
+ * A native query service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,41 +16,42 @@ import framework.sqlclient.api.free.NativeResult;
 public interface NativeQueryService {
 
 	/**
-	 * 件数取得.
+	 * Gets the count.
 	 * 
-	 * @param request リクエスト
-	 * @return 検索結果
+	 * @param request the request
+	 * @return the count
 	 */
 	public int count(QueryRequest request);
 	
 	/**
-	 * 複数件取得.
+	 * Searches the records.
 	 * 
-	 * @param request リクエスト
-	 * @return 検索結果
+	 * @param request the request
+	 * @return the result
 	 */
 	public <T> List<T> getResultList(QueryRequest request);
 	
 	/**
-	 * 総件数取得.
+	 * Searches the count of records hit and limited records.
 	 * 
-	 * @param request リクエスト
-	 * @return 検索結果
+	 * @param request the request
+	 * @return the result
 	 */
 	public <T> NativeResult<T> getTotalResult(QueryRequest request);
 	
 	/**
-	 * 1件取得.
+	 * Searches the first result.
 	 * 
-	 * @param request リクエスト
-	 * @return 検索結果
+	 * @param request the result
+	 * @return the result
 	 */
 	public <T> T getSingleResult(QueryRequest request);
 	
 	/**
-	 * 存在チェック.
-	 * @param request リクエスト
-	 * @return true:存在する
+	 * Determines whether the result is found.
+	 * 
+	 * @param request the request
+	 * @return true:exsits
 	 */
 	public boolean exists(QueryRequest request);
 	

@@ -15,29 +15,29 @@ import javax.persistence.Query;
 import framework.sqlclient.internal.AbstractInternalQuery;
 
 /**
- * JPA用クエリ.
+ * The internal query for JPA.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	
-	/** フラッシュモード */
+	/** the flush mode */
 	protected FlushModeType flush = null;
 	
-	/** ロックモード */
+	/** the lock mode */
 	protected LockModeType lock = null;
 	
-	/** エンティティマネージャ */
+	/** the EntityManager */
 	protected EntityManager em = null;
 	
-	/** ヒント */
+	/** the JPA hint */
 	private Map<String,Object> hints = null;
 	
 	/**
-	 * @param sql SQL
-	 * @param em エンティティマネージャ
-	 * @param queryId クエリID
+	 * @param sql the SQL
+	 * @param em the em
+	 * @param queryId the queryId
 	 */
 	public AbstractInternalJPAQuery(boolean useRowSql,String sql, EntityManager em , String queryId){
 		super(useRowSql,sql,queryId);
@@ -47,13 +47,13 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 
 	
 	/**
-	 * @return 新規生成したクエリ
+	 * @return the new query
 	 */
 	protected abstract Query createQuery();
 	
 	/**
-	 * @param arg0 キー
-	 * @param arg1 値 
+	 * @param arg0 the hint of the key
+	 * @param arg1 the hint value
 	 * @return self
 	 */
 	public AbstractInternalJPAQuery setHint(String arg0, Object arg1) {
@@ -97,22 +97,24 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	}
 
 	/**
-	 * @return フラッシュモード
+	 * @return the flush mode
 	 */
 	public FlushModeType getFlushMode() {
 		return flush;
 	}
 
 	/**
-	 * @return ロックモード
+	 * @return the lock mode
 	 */
 	public LockModeType getLockMode() {
 		return lock;
 	}
 	
 	/**
-	 * @param query クエリ
-	 * @return クエリ
+	 * Set the parameter to query.
+	 * 
+	 * @param query the query
+	 * @return the query
 	 */
 	private Query mapping(Query query){
 				
@@ -136,7 +138,7 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	}
 
 	/**
-	 * @param arg0 フラッシュモード
+	 * @param arg0 the arg0 to set
 	 * @return self
 	 */
 	public AbstractInternalJPAQuery setFlushMode(FlushModeType arg0) {
@@ -145,7 +147,7 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	}
 
 	/**
-	 * @param arg0 ロックモード
+	 * @param arg0 the arg0 to set
 	 * @return self
 	 */
 	public AbstractInternalJPAQuery setLockMode(LockModeType arg0) {

@@ -8,7 +8,7 @@ import framework.service.core.locator.ServiceLocator;
 import framework.service.core.messaging.AbstractMessageProducer;
 
 /**
- * キュー用.
+ * The producer for QUEUE.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

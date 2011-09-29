@@ -11,7 +11,7 @@ import framework.sqlclient.api.free.FreeQuery;
 import framework.sqlclient.api.free.FreeUpdate;
 
 /**
- * JPA Queryのファクトリ.
+ * The factory to create the JPA query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

@@ -14,27 +14,30 @@ import framework.sqlengine.builder.ConstAccessor;
 import framework.sqlengine.builder.SQLBuilder;
 
 /**
- * JPQL用NamedQuery用クエリ.
+ * The internal named query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 
-	/** クエリ名称（NamedXxxQueryのみ） */
+	/** 
+	 * the name of the query. 
+	 * only <code>javax.persistence.NamedQuery</code> is required to use name. 
+	 */
 	private final String name;
 	
-	/** クエリビルダー */
+	/** the <code>SQLBuilder</code> */
 	private final SQLBuilder builder;
 	
-	/** 定数アクセス */
+	/** the <code>ConstAccessor</code> */
 	private final ConstAccessor accessor;
 	
 	/**
-	 * @param sql SQL
-	 * @param em エンティティマネージャ
-	 * @param queryId クエリID
-	 * @param useRowSql SQL直使用有無
+	 * @param sql the SQL
+	 * @param em the EntityManager
+	 * @param queryId the queryId
+	 * @param useRowSql true:dont analyze template 
 	 */
 	public InternalNamedQueryImpl(String name ,String sql, EntityManager em,String queryId,boolean useRowSql,SQLBuilder builder,ConstAccessor accessor) {
 		super(useRowSql,sql, em, queryId);		
@@ -75,8 +78,10 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	}
 	
 	/**
-	 * @param query クエリ
-	 * @return クエリ
+	 * Set the parameters to the specified query.
+	 * 
+	 * @param query the query
+	 * @return the query
 	 */
 	private Query setParameters(Query query){
 		

@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
-import framework.core.message.BuildedMessage;
 import framework.core.message.DefinedMessage;
 import framework.core.message.MessageBean;
 import framework.logics.builder.MessageBuilder;
@@ -42,7 +41,7 @@ public class MessageBuilderImplTest{
 	}
 	
 	/**
-	 * ロケール持E���Eリソースバンドル取征E
+	 * ロケール持E���Eリソースバンドル取征E
 	 * @throws Exception
 	 */
 	@Test
@@ -55,17 +54,17 @@ public class MessageBuilderImplTest{
 	}
 	
 	/**
-	 * ロケール持E���Eリソースバンドル取征E
+	 * ロケール持E���Eリソースバンドル取征E
 	 * @throws Exception
 	 */
 	@Test
 	public void build() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
 		DefinedMessage defined = builder.load(new MessageBean(100,"TEST"), new Locale("en"));
-		BuildedMessage builded = builder.build(defined);
-		Assert.assertEquals(100,builded.getDefined().getMessageBean().getCode());
-		Assert.assertTrue(builded.getDefined().isNotify());
-		Assert.assertEquals("Error",builded.getDefined().getLevel().name());
+		builder.build(defined);
+		Assert.assertEquals(100,defined.getMessageBean().getCode());
+		Assert.assertTrue(defined.isNotify());
+		Assert.assertEquals("Error",defined.getLevel().name());
 	}
 
 }

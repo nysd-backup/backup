@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Class操作.
+ * The utility for the class.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,11 +17,11 @@ import java.io.InputStreamReader;
 public abstract class ClassUtils {
 	
 	/**
-	 * クラスパスファイルからリソースを取得する.
+	 * Gets the resource as string.
 	 * 
-	 * @param filePath ファイルパス
-	 * @param encode 文字コード
-	 * @return 内容
+	 * @param filePath the file path
+	 * @param encode the character set
+	 * @return the value
 	 */
 	public static String getResourceString(Class<?> clazz , String filePath , String encode) throws IOException{
 		InputStream stream = ClassUtils.getResourceAsStream(clazz, filePath);
@@ -44,9 +44,10 @@ public abstract class ClassUtils {
 	}
  
 	/**
-	 * インスタンス生成
-	 * @param <T>
-	 * @param clazz
+	 * Creates the new instance.
+	 * @param <T> the type
+	 * @param clazz the clazz
+	 * @return the object
 	 */
 	public static <T> T newInstance(Class<T> clazz){
 		T object = null;
@@ -61,11 +62,11 @@ public abstract class ClassUtils {
 
 
     /**
-     * ストリームを取得する.
+     * Gets the resource as stream.
      * 
-     * @param clazz クラス
-     * @param path パス
-     * @return ストリーム
+     * @param clazz the class
+     * @param path the path
+     * @return the stream
      */
     public static InputStream getResourceAsStream(Class<?> clazz, String path){
         InputStream result = null;

@@ -7,13 +7,13 @@ import javax.persistence.QueryHint;
 
 
 /**
- * JPA用ヒント.
+ * The JPA hint.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public @interface Hint {
 
-	/** JPA用ヒント. */
+	/** JPA hint */
 	QueryHint[] hitns();
 }

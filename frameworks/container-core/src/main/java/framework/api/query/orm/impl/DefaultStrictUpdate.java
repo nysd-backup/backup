@@ -16,7 +16,7 @@ import framework.sqlclient.api.orm.OrmUpdate;
 public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> implements StrictUpdate<T>{
 
 	/**
-	 * @param delegate delegate
+	 * @param delegate the delegate
 	 */
 	public DefaultStrictUpdate(OrmUpdate<T> delegate) {
 		super(delegate);

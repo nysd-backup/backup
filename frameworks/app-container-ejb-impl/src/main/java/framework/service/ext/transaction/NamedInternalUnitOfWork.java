@@ -6,14 +6,14 @@ package framework.service.ext.transaction;
 import framework.service.core.transaction.InternalUnitOfWork;
 
 /**
- * トランザクション識別可能な作業単位.
+ * The named unit of work.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class NamedInternalUnitOfWork extends InternalUnitOfWork {
 
-	/** トランザクションID */
+	/** the transaction id */
 	private String transactionId = null;
 	
 	/**

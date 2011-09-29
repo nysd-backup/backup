@@ -5,25 +5,25 @@
 package framework.core.entity;
 
 /**
- * エンティティのメタデータ.
+ * A meta data of the column.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class Metadata<C,T> {
 	
-	/** カラム名称 */
+	/** the name of column */
 	private final String name;
 	
 	/**
-	 * @param name カラム名称
+	 * @param name the name to set
 	 */
 	public Metadata(String name){
 		this.name = name;
 	}
 	
 	/**
-	 * @return カラム名称
+	 * @return the name
 	 */
 	public String name(){
 		return this.name;

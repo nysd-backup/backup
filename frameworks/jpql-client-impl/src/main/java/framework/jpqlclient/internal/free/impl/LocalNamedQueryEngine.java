@@ -13,7 +13,7 @@ import framework.sqlclient.api.free.FreeQuery;
 import framework.sqlclient.internal.AbstractLocalQueryEngine;
 
 /**
- *　NamedQueryの実行エンジン.
+ *　The named query engine.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -21,14 +21,12 @@ import framework.sqlclient.internal.AbstractLocalQueryEngine;
 @SuppressWarnings("unchecked")
 public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalNamedQueryImpl> implements NamedQuery{
 	
-	/** 0件時エラーハンドラ */
+	/** the EmptyHandler */
 	private final EmptyHandler emptyHandler;
 	
 	/**
-
-	/**
-	 * @param delegate クエリ
-	 * @param handler ハンドラー
+	 * @param delegate the delegate to set
+	 * @param handler the handler to set
 	 */
 	public LocalNamedQueryEngine(InternalNamedQueryImpl delegate , EmptyHandler handler){
 		super(delegate);	

@@ -8,27 +8,27 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import framework.service.core.advice.Advice;
 
 /**
- * 汎用インターセプター、beforeとafterのみサポート.
+ * the intercepter to delegate.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class DelegatingInterceptor{
 	
-	/** アドバイス */
+	/** the advice */
 	private Advice advice;
 	
 	/**
-	 * @param advice アドバイス
+	 * @param advice the advice
 	 */
 	public void setAdvice(Advice advice){
 		this.advice = advice;
 	}
 
 	/**
-	 * @param invocation　起動情報
-	 * @return 結果
-	 * @throws Throwable 例外
+	 * @param invocation　the context
+	 * @return the result
+	 * @throws Throwable the exception
 	 */
 	public Object invoke(ProceedingJoinPoint invocation) throws Throwable {
 		advice.before(invocation.getTarget(), invocation.getSignature().getName(),invocation.getArgs());

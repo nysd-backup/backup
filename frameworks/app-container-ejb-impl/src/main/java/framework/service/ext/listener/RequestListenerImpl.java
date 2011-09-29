@@ -9,7 +9,7 @@ import framework.service.core.transaction.ServiceContext;
 import framework.service.ext.transaction.ServiceContextImpl;
 
 /**
- * リクエストリスナー.
+ * A listener for calling request.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

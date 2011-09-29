@@ -6,7 +6,7 @@ package framework.service.core.transaction;
 import framework.api.dto.ClientRequestBean;
 import framework.api.dto.ClientSessionBean;
 import framework.core.context.AbstractGlobalContext;
-import framework.core.message.BuildedMessage;
+import framework.core.message.DefinedMessage;
 
 /**
  * コンテキスト.
@@ -68,7 +68,7 @@ public abstract class ServiceContext extends AbstractGlobalContext{
 	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
 	 */
 	@Override
-	public void addMessage(BuildedMessage message){
+	public void addMessage(DefinedMessage message){
 		globalMessageList.add(message);
 	}
 	

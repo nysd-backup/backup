@@ -13,30 +13,33 @@ import framework.jpqlclient.internal.free.AbstractInternalJPAQuery;
 import framework.sqlengine.builder.SQLBuilder;
 
 /**
- * JPA用NativeQuery.
+ * The internal native query for JPA.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class InternalNativeJPAQueryImpl extends AbstractInternalJPAQuery {
 
-	/** 結果格納クラス */
+	/** the type of the result */
 	private final Class<?> resultType;
 	
-	/** 名称 */
+	/** 
+	 * the name of the query. 
+	 * only <code>javax.persistence.NamedNativeQuery</code> is required to use name. 
+	 */
 	private String name = null;
 	
-	/** 解析なし有無 */
+	/** if true dont analiyze the template */
 	private boolean useRowSql;
 	
-	/** クエリビルダー */
+	/** the <code>SQLBuilder</code> */
 	private final SQLBuilder builder;
 	
 	/**
-	 * @param sql SQL
-	 * @param em エンティティマネージャ
-	 * @param queryId クエリID
-	 * @param resultType 結果格納クラス
+	 * @param sql the SQL
+	 * @param em the EntityManager
+	 * @param queryId the queryId
+	 * @param resultType the result type
 	 */
 	public InternalNativeJPAQueryImpl(String name ,String sql,EntityManager em, String queryId, Class<?> resultType,boolean useRowSql,SQLBuilder builder) {
 		super(useRowSql,sql, em, queryId);		

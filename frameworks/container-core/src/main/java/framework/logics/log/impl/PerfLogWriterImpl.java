@@ -8,18 +8,18 @@ import org.apache.log4j.Logger;
 import framework.logics.log.NormalLogWriter;
 
 /**
- * 性能ログエンジン.
+ * Logger to output the performance log.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class PerfLogWriterImpl implements NormalLogWriter {
 
-	/** 性能ログ */
+	/** the logger */
 	private final Logger logger;
 
 	/**
-	 * @param clazz カテゴリ
+	 * @param clazz the category
 	 */
 	public PerfLogWriterImpl(Class<?> clazz) {
 		logger = Logger.getLogger("PERF:" + clazz.getName());
@@ -49,16 +49,25 @@ public class PerfLogWriterImpl implements NormalLogWriter {
 		if(isInfoEnabled())logger.info(message);
 	}
 
+	/**
+	 * @see framework.logics.log.NormalLogWriter#isDebugEnabled()
+	 */
 	@Override
 	public boolean isDebugEnabled() {
 		return logger.isDebugEnabled();
 	}
 
+	/**
+	 * @see framework.logics.log.NormalLogWriter#isInfoEnabled()
+	 */
 	@Override
 	public boolean isInfoEnabled() {
 		return logger.isInfoEnabled();
 	}
 
+	/**
+	 * @see framework.logics.log.NormalLogWriter#isTraceEnabled()
+	 */
 	@Override
 	public boolean isTraceEnabled() {
 		return logger.isTraceEnabled();

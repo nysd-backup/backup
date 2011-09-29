@@ -5,12 +5,11 @@ package framework.logics.builder;
 
 import java.util.Locale;
 
-import framework.core.message.BuildedMessage;
 import framework.core.message.DefinedMessage;
 import framework.core.message.MessageBean;
 
 /**
- * メッセージビルダー.
+ * A builder to create the message.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -18,26 +17,29 @@ import framework.core.message.MessageBean;
 public interface MessageBuilder {
 
 	/**
-	 * メッセージロード
-	 * @param bean メッセージビーン
-	 * @param locale ロケール
-	 * @return メッセージ
+	 * Reads the message definition from the file.
+	 * 
+	 * @param bean the message bean
+	 * @param locale the locale
+	 * @return the message
 	 */
 	public DefinedMessage load(MessageBean bean, Locale locale);
 	
 	/**
-	 * メッセージロード
-	 * @param bean メッセージビーン
-	 * @param locale ロケール
-	 * @param baseFileName メッセージファイル名
-	 * @return メッセージ
+	 * Reads the message definition from the file.
+	 * 
+	 * @param bean the message bean
+	 * @param locale the locale
+	 * @param baseFileName the name of message file
+	 * @return the message
 	 */
 	public DefinedMessage load(MessageBean bean, Locale locale, String baseFileName);
 
 	/**
-	 * メッセージビルド
-	 * @param defined メッセージ定義
-	 * @return 出力されたメッセージ
+	 * Builds the message.
+	 * 
+	 * @param defined the message
+	 * @return the message
 	 */
-	public BuildedMessage build(DefinedMessage defined);
+	public String build(DefinedMessage defined);
 }

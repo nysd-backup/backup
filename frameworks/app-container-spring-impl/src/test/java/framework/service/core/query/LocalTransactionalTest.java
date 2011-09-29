@@ -40,7 +40,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	}
 	
 	/**
-	 * 別トランザクションでBusinessExceptionスローしてもキャチE��すれば現在トランザクションには影響なぁE
+	 * 別トランザクションでBusinessExceptionスローしてもキャチE��すれば現在トランザクションには影響なぁE
 	 */
 	@Test
 	@Rollback(false)
@@ -52,15 +52,15 @@ public class LocalTransactionalTest extends ServiceUnit{
 			fail();
 		}catch(BusinessException be){
 			be.printStackTrace();
-			assertEquals("business error. error",be.getMessage());
+			assertEquals("error",be.getMessage());
 		}
 		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());			
 		
 	}
 	
 	/**
-	 *　呼び出し�Eの別トランザクション冁E��メチE��ージ追加�E�永続化してもこのトランザクションには影響なぁE��E
-	 * また、呼び出し�EでSessionBeanのようにサービスがコールできなぁE��ぁE��こともなぁE��E
+	 *　呼び出し�Eの別トランザクション冁E��メチE��ージ追加�E�永続化してもこのトランザクションには影響なぁE��E
+	 * また、呼び出し�EでSessionBeanのようにサービスがコールできなぁE��ぁE��こともなぁE��E
 	 */
 	@Test
 	@Rollback(false)

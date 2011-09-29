@@ -10,12 +10,12 @@ import javax.ejb.ApplicationException;
 import framework.core.exception.application.BusinessException;
 
 /**
- * EJB用業務例外.
+ * Business exception for EJB.
  * 
  * <pre>
- * BusinessExceptionのままだとシステムエ例外として扱われてしまうため、
- * ApplicationException(rollback=true)を設定した例外を用意する。
- *</pre>
+ * <code>BusinessException</code> is regarded as System Exception 
+ * because the that is <code>RuntimeException</code> not annotated '@ApplicationException' to.
+ * </pre>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -26,30 +26,30 @@ public class EJBBusinessException extends BusinessException{
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @param message メッセージ
-	 * @param cause 原因
+	 * @param message the message
+	 * @param cause the exception
 	 */
 	public EJBBusinessException(String message , Throwable cause){
 		super(message,cause);
 	}
 	
 	/**
-	 * @param message メッセージ
+	 * @param message the message
 	 */
 	public EJBBusinessException(String message){
 		super(message);
 	}
 	
 	/**
-	 * @param message メッセージ
-	 * @param reply リプライ
+	 * @param message the message
+	 * @param reply the reply 
 	 */
 	public EJBBusinessException(String message,Serializable reply){
 		super(message,reply);
 	}
 	
 	/**
-	 * @param reply リプライ
+	 * @param reply the reply
 	 */
 	public EJBBusinessException(Serializable reply){
 		super(reply);

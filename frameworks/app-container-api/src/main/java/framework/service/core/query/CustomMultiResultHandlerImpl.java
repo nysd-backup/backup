@@ -8,7 +8,7 @@ import framework.sqlclient.api.MultiResultHandler;
 
 
 /**
- * Throw an <code>UnexpectedMultiResultException</code> if over one result were found.
+ * Throw an <code>UnexpectedMultiResultException</code> if the multiple result are found.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

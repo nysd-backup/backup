@@ -8,7 +8,7 @@ import framework.sqlclient.api.free.FreeUpdate;
 import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 
 /**
- * NamedQueryの更新用エンジン.
+ * The named update engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,7 +17,7 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNamedQueryImpl> implements NamedUpdate{
 
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the delegate to set.
 	 */
 	public LocalNamedUpdateEngine(InternalNamedQueryImpl delegate) {
 		super(delegate);		

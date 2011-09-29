@@ -10,7 +10,7 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * a native query service.
+ * A native query service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

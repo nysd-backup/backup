@@ -6,7 +6,7 @@ package framework.api.query.orm;
 import java.util.List;
 
 /**
- * 簡易ORM更新.
+ * EasyUpdate.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,24 +14,27 @@ import java.util.List;
 public interface EasyUpdate<T> extends AdvancedOrmUpdate<T>{
 
 	/**
-	 * セット句
-	 * @param setString 値
+	 * Adds the string to update.
+	 * 
+	 * @param setString the string
 	 * @return self 
 	 */
 	public EasyUpdate<T> set(String... setString);
 	
 	/**
-	 * 条件
-	 * @param filterString フィルター
+	 * Adds the filter to update.
+	 * 
+	 * @param filterString the filter
 	 * @return self
 	 */
 	public EasyUpdate<T> filter(String filterString);
 	
 	/**
-	 * 更新
-	 * @param set set句
-	 * @param params パラメータ
-	 * @return 件数
+	 * Updates the table.
+	 * 
+	 * @param set the parameter to update
+	 * @param params the condition to update
+	 * @return the updated count 
 	 */
 	public int execute(List<Object> set , Object... params);
 	

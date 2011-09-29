@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import framework.api.service.ServiceLocatorInitializer;
 
 /**
- * Webに連動したサービスロケータの初期化.
+ * The context initializer.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

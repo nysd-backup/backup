@@ -8,14 +8,14 @@ import javax.persistence.PersistenceContext;
 import framework.jpqlclient.api.EntityManagerProvider;
 
 /**
- * エンティティマネージャ提供者.
+ * Provides the <code>EntityManager</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class EntityManagerProviderImpl implements EntityManagerProvider{
 
-	/** エンティティマネージャ */
+	/** the EntityManager */
 	@PersistenceContext
 	private EntityManager em;
 		

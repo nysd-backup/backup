@@ -11,7 +11,7 @@ import framework.service.core.async.AsyncService;
 import framework.service.core.locator.ServiceLocator;
 
 /**
- * 非同期処理実行エンジン.
+ * An asynchoronous service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

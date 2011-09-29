@@ -8,7 +8,7 @@ import framework.service.core.messaging.AbstractMessageListener;
 import framework.service.ext.locator.ServiceLocatorImpl;
 
 /**
- * メッセージリスナー.
+ * A listener for MDB and MDP.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

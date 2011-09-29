@@ -16,24 +16,24 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- *　ローカル用ORMエンジン.
+ *　The ORM updating engine.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 
-	/** 検索エンジン */
+	/** the GenericDao */
 	private GenericDao dao;
 	
-	/** 検索条件 */
+	/** the condition */
 	protected JPAOrmCondition<T> condition;
 	
-	/** set句 */
+	/** the set statement */
 	protected final Map<String,Object> set;
 	
 	/**
-	 * @param entityClass エンティティクラス
+	 * @param entityClass the entityClass to set
 	 */
 	public LocalOrmUpdateEngine(Class<T> entityClass){
 		condition = new JPAOrmCondition<T>(entityClass);

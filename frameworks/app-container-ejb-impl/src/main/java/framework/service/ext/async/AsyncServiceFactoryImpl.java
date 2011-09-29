@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 import framework.service.core.async.AbstractAsyncServiceFactory;
 
 /**
- * 非同期処理用のアノテーション.
+ * the factory to create asynchronous service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

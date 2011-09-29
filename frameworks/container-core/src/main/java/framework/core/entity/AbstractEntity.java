@@ -5,7 +5,7 @@ package framework.core.entity;
 
 
 /**
- * エンティティの基底.
+ * The abstract entity.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.

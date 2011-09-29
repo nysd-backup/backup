@@ -4,7 +4,7 @@
 package framework.core.exception.system;
 
 /**
- * 複数件存在エラー.
+ * The unexpected exception thrown if the multiple result is found.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,15 +14,15 @@ public class UnexpectedMultiResultException extends SystemException{
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @param message メッセージ
-	 * @param cause 原因
+	 * @param message the message
+	 * @param cause the cause
 	 */
 	public UnexpectedMultiResultException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
 	/**
-	 * @param message メッセージ
+	 * @param message the message
 	 */
 	public UnexpectedMultiResultException(String message) {
 		super(message);

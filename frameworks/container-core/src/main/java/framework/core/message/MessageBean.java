@@ -6,7 +6,7 @@ package framework.core.message;
 import java.io.Serializable;
 
 /**
- * メッセージ.
+ * The message bean.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -15,21 +15,15 @@ public class MessageBean implements Serializable{
 
 	private static final long serialVersionUID = 7686881503687250217L;
 
-	/** メッセージコード  */
+	/** the message code  */
 	private int code = -1;
 	
-	/** 詳細情報 */
+	/** the detail */
 	private Object[] detail	= null;
 	
-	/** 行番号 */
-	private int rowIndex;
-	
-	/** オプション */
-	private Object option;
-	
 	/**
-	 * @param code　コード
-	 * @param args 引数
+	 * @param code　the code
+	 * @param args the arguments
 	 */
 	public MessageBean(int code , Object... args){
 		this.code = code;
@@ -53,35 +47,5 @@ public class MessageBean implements Serializable{
 	public Object[] getDetail() {
 		return detail;
 	}
-
-	/**
-	 * @param rowIndex the rowIndex to set
-	 */
-	public void setRowIndex(int rowIndex) {
-		this.rowIndex = rowIndex;
-	}
-
-	/**
-	 * @return the rowIndex
-	 */
-	public int getRowIndex() {
-		return rowIndex;
-	}
-
-	/**
-	 * @param option the option to set
-	 */
-	public void setOption(Object option) {
-		this.option = option;
-	}
-
-	/**
-	 * @return the option
-	 */
-	public Object getOption() {
-		return option;
-	} 
-
-	
 	
 }

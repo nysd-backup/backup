@@ -8,20 +8,24 @@ import java.util.List;
 import framework.sqlclient.api.orm.OrmUpdate;
 
 /**
- * デフォルト提供のORMクエリ.
- * 開発者向けAPIはこのまま提供しないことが前提。
- * ラッパーを作成してeq、ascなどの条件指定はタイプセーフにすることが望ましい。
- *
+ * The default ORM query.
+ * 
+ * <pre>
+ * Don't allow to use this.
+ * Create the wrapper class for this.
+ * the methods like eq and asc should be type safe.
+ * </pre>
+ * 
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class DefaultOrmUpdateImpl<T> implements JPAOrmUpdate<T>{
 	
-	/** クエリ */
+	/** the delegate */
 	private JPAOrmUpdate<T> delegate;
 
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the delegate
 	 */
 	public DefaultOrmUpdateImpl(JPAOrmUpdate<T> delegate){
 		this.delegate = delegate;

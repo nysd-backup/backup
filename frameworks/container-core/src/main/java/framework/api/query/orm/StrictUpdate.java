@@ -6,7 +6,7 @@ package framework.api.query.orm;
 import framework.core.entity.Metadata;
 
 /**
- * ORM更新.
+ * The ORM updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,74 +14,81 @@ import framework.core.entity.Metadata;
 public interface StrictUpdate<T> extends AdvancedOrmUpdate<T>{
 
 	/**
-	 * 等価条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> eq(Metadata<T, V> column, V value);
 
 	/**
-	 * 大なり条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '>'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> gt(Metadata<T, V> column, V value);
 
 	/**
-	 * 小なり条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '<'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> lt(Metadata<T, V> column, V value);
 
 	/**
-	 * 大なり=条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '>='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> gtEq(Metadata<T, V> column, V value);
 
 	/**
-	 * 小なり=条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '<='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> ltEq(Metadata<T, V> column, V value);
 
 	/**
-	 * BETWEE条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param from from値
-	 * @param to to値
+	 * Adds 'between'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param from the from-value to be added
+	 * @param to the to-value to be added 
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> between(Metadata<T, V> column,V from, V to);
 	
 	/**
-	 * SETの追加.
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds value to update.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> set(Metadata<T, V> column, V value);
 
 	
 	/**
-	 * 更新.
+	 * Updates the table.
 	 * 
-	 * @return 更新件数
+	 * @return the updated count
 	 */
 	public int update();
 

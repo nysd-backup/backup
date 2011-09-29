@@ -14,28 +14,28 @@ import framework.sqlengine.facade.SQLEngineFacade;
 import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 /**
- * NativeQuerはJPAではなくSQLエンジンを使用する.
+ * The factory to create the query using SQL-Engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	
-	/** コネクション供給者*/
+	/** the connection provider */
 	private ConnectionProvider connectionProvider;
 	
-	/** SQLエンジンのファサード*/
+	/** the facade of the SQL-Engine */
 	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
 
 	/**
-	 * @param connectionProvider コネクション供給者
+	 * @param connectionProvider the connectionProvider to set
 	 */
 	public void setConnectionProvider(ConnectionProvider connectionProvider){
 		this.connectionProvider = connectionProvider;
 	}
 
 	/**
-	 * @param facade SQLエンジン
+	 * @param facade the facade to set
 	 */
 	public void setSqlEngineFacade(SQLEngineFacade facade){
 		this.engineFacade = facade;
@@ -66,8 +66,8 @@ public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	}
 
 	/**
-	 * @param clazz クラス
-	 * @return アノテーション
+	 * @param clazz the class
+	 * @return the annotation
 	 */
 	private AnonymousQuery getAnonymousQuery(Class<?> clazz){
 		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);		

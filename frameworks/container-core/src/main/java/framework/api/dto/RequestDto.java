@@ -5,9 +5,8 @@ package framework.api.dto;
 
 import java.io.Serializable;
 
-
 /**
- * クライアントからのリクエスト.
+ * A request data from WEB container
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,45 +15,26 @@ public class RequestDto implements Serializable{
 
 	private static final long serialVersionUID = -5671768150819629678L;
 	
-	/** パラメータ */
-	private final Serializable[] parameter;
+	/** the parameter */
+	private Serializable[] parameter;
 
-	/** 実行対象クラス */
-	private final Class<?> targetClass;
+	/** the class of target service */
+	private Class<?> targetClass;
 	
-	/** 別名*/
-	private final String alias;
+	/** the alias of target service */
+	private String alias;
 	
-	/** メソッド名 */
-	private final String methodName;
+	/** the method name */
+	private String methodName;
 	
-	/** パラメータタイプ */
-	private final Class<?>[] parameterTypes;
+	/** the types of parameter */
+	private Class<?>[] parameterTypes;
 	
-	/** クライアントとのセッション情報 */
-	private final ClientSessionBean clientSessionBean;
+	/** the session */
+	private ClientSessionBean clientSessionBean;
 	
-	/** クライアントとのリクエスト情報 */
-	private final ClientRequestBean webRequestBean;
-	
-	/**
-	 * @param targetClass サービスインターフェース
-	 * @param parameterTypes パラメータ型
-	 * @param param パラメータ
-	 * @param alias サービス名のエイリアス
-	 * @param methodName メソッド名
-	 * @param clientSessionBean クライアントセッション
-	 * @param webRequestBean WEB層のパラメータ
-	 */
-	public RequestDto(Class<?> targetClass ,Class<?>[] parameterTypes , Serializable[] param , String alias , String methodName ,ClientSessionBean clientSessionBean,ClientRequestBean webRequestBean){
-		this.parameter = param;
-		this.parameterTypes = parameterTypes;
-		this.targetClass = targetClass;
-		this.alias = alias;
-		this.methodName = methodName;	
-		this.clientSessionBean = clientSessionBean != null ? clientSessionBean.cloneExceptWebData() : clientSessionBean;
-		this.webRequestBean = webRequestBean != null ? webRequestBean.clone() : webRequestBean;
-	}
+	/** the request */
+	private ClientRequestBean clientRequestBean;
 	
 	/**
 	 * @return the types
@@ -95,7 +75,7 @@ public class RequestDto implements Serializable{
 	 * @return the clientRequestBean
 	 */
 	public ClientRequestBean getClientRequestBean() {
-		return webRequestBean;
+		return clientRequestBean;
 	}
 
 	/**
@@ -103,5 +83,54 @@ public class RequestDto implements Serializable{
 	 */
 	public Class<?> getTargetClass() {
 		return targetClass;
+	}
+
+	/**
+	 * @param clientRequestBean the clientRequestBean to set
+	 */
+	public void setClientRequestBean(ClientRequestBean clientRequestBean) {
+		this.clientRequestBean = clientRequestBean;
+	}
+
+	/**
+	 * @param parameter the parameter to set
+	 */
+	public void setParameter(Serializable[] parameter) {
+		this.parameter = parameter;
+	}
+
+	/**
+	 * @param targetClass the targetClass to set
+	 */
+	public void setTargetClass(Class<?> targetClass) {
+		this.targetClass = targetClass;
+	}
+
+	/**
+	 * @param alias the alias to set
+	 */
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	/**
+	 * @param methodName the methodName to set
+	 */
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	/**
+	 * @param parameterTypes the parameterType to set
+	 */
+	public void setParameterTypes(Class<?>[] parameterTypes) {
+		this.parameterTypes = parameterTypes;
+	}
+
+	/**
+	 * @param clientSessionBean the clientSessionBean to set
+	 */
+	public void setClientSessionBean(ClientSessionBean clientSessionBean) {
+		this.clientSessionBean = clientSessionBean;
 	}
 }

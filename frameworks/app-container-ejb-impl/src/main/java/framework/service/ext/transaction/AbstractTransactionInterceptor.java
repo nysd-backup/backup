@@ -11,11 +11,10 @@ import javax.interceptor.InvocationContext;
 import framework.service.core.transaction.ServiceContext;
 
 /**
- * トランザクション境界における処理を行うインターセプター.
+ * The intercepter for border of transaction.
  * 
  * <pre>
- * トランザクションIDの取得はEJBコンテナの実装に依存するので抽象化する。
- * 一番外側で実行するようにすること。
+ * The method of getting the transaction id depends of EJB container.
  * </pre>
  *
  * @author yoshida-n
@@ -23,13 +22,14 @@ import framework.service.core.transaction.ServiceContext;
  */
 public abstract class AbstractTransactionInterceptor {
 
+	/** the context */
 	@Resource
 	private SessionContext context;
 	
 	/**
-	 * @param ic　コンテキスト
-	 * @return 実行結果
-	 * @throws Throwable 例外
+	 * @param ic　the context
+	 * @return the result
+	 * @throws Throwable the exception
 	 */
 	@AroundInvoke
 	public Object invoke(InvocationContext ic) throws Throwable {
@@ -65,9 +65,9 @@ public abstract class AbstractTransactionInterceptor {
 	}
 	
 	/**
-	 * SessionContextからトランザクションを識別するためのIDを取得する。
-	 * @param context コンテキスト
-	 * @return　トランザクションID
+	 * Creates the transaction id from <code>SessionContext</code>
+	 * @param context the context
+	 * @return　the transaction id
 	 */
 	protected abstract String getCurrentTransactionId(SessionContext context);
 }

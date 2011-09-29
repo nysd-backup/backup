@@ -10,7 +10,7 @@ import framework.jpqlclient.internal.orm.SQLStatementBuilder;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * JPQLのSQL文を作成する.
+ * The builder to create the SQL statement.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.

@@ -5,12 +5,12 @@ package framework.web.core.api.service;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.List;
+
 import framework.api.dto.ClientRequestBean;
 import framework.api.dto.ClientSessionBean;
 import framework.api.dto.ReplyDto;
 import framework.api.dto.RequestDto;
-import framework.core.message.BuildedMessage;
+import framework.core.message.DefinedMessage;
 import framework.web.core.context.WebContext;
 
 /**
@@ -36,11 +36,11 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		WebContext context = WebContext.getCurrentInstance();
-		ClientSessionBean clientBean = null;
-		ClientRequestBean webBean = null;
+		ClientSessionBean session = null;
+		ClientRequestBean request = null;
 		if( context != null){
-			clientBean = context.getClientSessionBean();
-			webBean = context.getClientRequestBean();
+			session = context.getClientSessionBean();
+			request = context.getClientRequestBean();
 		}		
 		Serializable[] serial = null;
 		if( args == null){
@@ -52,23 +52,24 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 			}
 		}
 			
-		RequestDto dto  = new RequestDto(
-			method.getDeclaringClass(),
-			method.getParameterTypes(),
-			serial,
-			alias,
-			method.getName(), 
-			clientBean,
-			webBean
-			);
+		RequestDto dto  = new RequestDto();
+		dto.setAlias(alias);
+		dto.setTargetClass(method.getDeclaringClass());
+		dto.setClientRequestBean(request);
+		dto.setClientSessionBean(session);
+		dto.setMethodName(method.getName());
+		dto.setParameter(serial);
+		dto.setParameterTypes(method.getParameterTypes());
 		
 		ReplyDto reply = processService(dto);
 		
 		//メッセージがある場合はメッセージを追加
 		if( context != null){
-			List<BuildedMessage> messageList = reply.getMessageList();
-			for(BuildedMessage message : messageList){	
-				context.addMessage(message);
+			DefinedMessage[] messageList = reply.getMessageList();
+			if(messageList != null){
+				for(DefinedMessage message : messageList){	
+					context.addMessage(message);
+				}
 			}
 		}
 		return reply.getReply();

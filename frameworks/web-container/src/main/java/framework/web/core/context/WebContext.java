@@ -4,9 +4,10 @@
 package framework.web.core.context;
 
 import javax.servlet.http.HttpServletRequest;
+
 import framework.api.dto.ClientSessionBean;
 import framework.core.context.AbstractGlobalContext;
-import framework.core.message.BuildedMessage;
+import framework.core.message.DefinedMessage;
 import framework.core.message.MessageLevel;
 
 /**
@@ -70,10 +71,10 @@ public abstract class WebContext extends AbstractGlobalContext{
 	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
 	 */
 	@Override
-	public void addMessage(BuildedMessage message){
+	public void addMessage(DefinedMessage message){
 		
 		//エラーレベル以上のメッセージはエラー扱い
-		if( MessageLevel.Error.getLevel() <= message.getDefined().getLevel().getLevel()){
+		if( MessageLevel.Error.getLevel() <= message.getLevel().getLevel()){
 			setRequestFailed();
 		}
 		globalMessageList.add(message);

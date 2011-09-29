@@ -9,7 +9,7 @@ import framework.sqlclient.api.orm.OrmCondition;
 
 
 /**
- *　ORMクエリ.
+ *　The ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,59 +17,59 @@ import framework.sqlclient.api.orm.OrmCondition;
 public interface AdvancedOrmQuery<T> {
 	
 	/**
-	 * LockModeTypeを指定する.
-	 * @param lockModeType ロックモード
+	 * Enables pessimistic read.
+	 * 
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setPessimisticReadNoWait();
 	
 	/**
-	 * @param <T> 型
-	 * @param key　 ヒント句キー
-	 * @param value　ヒント句
+	 * @param <T> the type
+	 * @param key　 the key of the hint
+	 * @param value　the hint value
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setHint(String key, Object value);
 
 	/**
-	 * LockModeTypeを指定する.
-	 * @param lockModeType ロックモード
+	 * @param lockModeType the lockModeType to set
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setLockMode(LockModeType lockModeType);
 
 	/**
-	 * @param condition 条件
+	 * @param condition the condition to set
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setCondition(OrmCondition<T> condition);
 	
 	/**
-	 * 主キー検索
-	 * @param pks　主キー
-	 * @return 検索結果
+	 * Finds by primary key.
+	 * @param pks　the primary keys
+	 * @return the result
 	 */
 	public T find(Object... pks);
 
 	/**
-	 * 主キー指定存在チェック
-	 * @param pks 主キー
-	 * @return true:存在する
+	 * Determines whether the result searched by primary keys is found.
+	 * @param pks the primary keys
+	 * @return true:exists
 	 */
 	public boolean exists(Object... pks);
 
 	/**
-	 * @return 0件時システムエラー
+	 * Throws error if no result is found.
+	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q enableNoDataError();
 
 	/**
-	 * @param arg0 最大件数
+	 * @param arg0 the max results
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setMaxResults(int arg0);
 
 	/**
-	 * @param arg0 先頭位置
+	 * @param arg0 the start position
 	 * @return self
 	 */
 	public <Q extends AdvancedOrmQuery<T>> Q setFirstResult(int arg0);

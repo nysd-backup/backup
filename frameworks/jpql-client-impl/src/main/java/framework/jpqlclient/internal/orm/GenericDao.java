@@ -9,7 +9,7 @@ import java.util.Map;
 import framework.jpqlclient.api.orm.JPAOrmCondition;
 
 /**
- * データアクセスオブジェクト
+ * The generic DAO.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -17,42 +17,46 @@ import framework.jpqlclient.api.orm.JPAOrmCondition;
 public interface GenericDao {
 	
 	/**
-	 *　UPDATE文.
-	 * @param condition 更新条件
-	 * @param set 更新値
+	 *　Updates the table.
+	 *
+	 * @param condition the condition
+	 * @param set the updating target
 	 */
 	public abstract int updateAny(JPAOrmCondition<?> condition , Map<String,Object> set);
 	
 	/** 
-	 * DELETE文.
-	 * @param condition 更新条件
+	 * Deletes the table.
+	 * 
+	 * @param condition the condition
 	 */
 	public abstract int deleteAny(JPAOrmCondition<?> condition);
 	
 	/**
-	 * 主キー検索
-	 * @param <E> 型
-	 * @param entity 対象エンティティ
-	 * @param pks 主キー
-	 * @return 検索結果
+	 * Finds by primary keys.
+	 * 
+	 * @param <E> the type
+	 * @param entity the condition
+	 * @param pks the primary keys
+	 * @return the result
  	 */
 	public <E> E find(JPAOrmCondition<E> entity , Object... pks);
 	
 	/**
-	 * 検索
-	 * @param <E> 型 
-	 * @param entity 検索条件
-	 * @return 検索結果
+	 * Searches the records.
+	 * 
+	 * @param <E> the type
+	 * @param entity the condition
+	 * @return the result
 	 */
  	public <E> List<E> getResultList(JPAOrmCondition<E> entity);
  	
 	/**
-	 * 候補キー検索.
-	 * 複数件取得時は即時システムエラー
+	 * Finds by alter keys.
+	 * Throws the error if the multiple result is found.
 	 * 
-	 * @param <E> 型 
-	 * @param entity　検索条件
-	 * @return 検索結果
+	 * @param <E> the type
+	 * @param entity　the condition
+	 * @return the result
 	 */
 	public <E> E findAny(JPAOrmCondition<E> entity);
 	

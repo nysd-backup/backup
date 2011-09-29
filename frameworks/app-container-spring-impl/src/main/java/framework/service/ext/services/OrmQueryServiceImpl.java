@@ -21,7 +21,7 @@ import framework.service.core.services.AbstractOrmQueryService;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
- * リモートからのORMクエリ.	
+ * The ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -31,7 +31,7 @@ import framework.sqlclient.api.orm.OrmCondition;
 @Transactional
 public class OrmQueryServiceImpl<T extends AbstractEntity> extends AbstractOrmQueryService<T> implements OrmQueryService<T>{
 	
-	/** クエリファクトリ */
+	/** the factory to create query */
 	@Resource
 	private AdvancedOrmQueryFactory ormQueryFactory;
 

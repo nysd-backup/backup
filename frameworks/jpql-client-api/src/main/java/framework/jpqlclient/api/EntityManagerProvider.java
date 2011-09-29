@@ -6,7 +6,7 @@ package framework.jpqlclient.api;
 import javax.persistence.EntityManager;
 
 /**
- * エンティティマネージャのソース.
+ * Provides the <code>EntityManager</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 public interface EntityManagerProvider {
 
 	/**
-	 * @return エンティティマネージャ
+	 * @return the entity manager
 	 */
 	public EntityManager getEntityManager();
 }
