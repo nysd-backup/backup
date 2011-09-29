@@ -7,7 +7,7 @@ import framework.sqlclient.api.Update;
 
 
 /**
- * ネイティブアップデート.
+ * The native updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

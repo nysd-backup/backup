@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * ネイティブクエリ.
+ * The native query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

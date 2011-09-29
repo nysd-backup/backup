@@ -4,9 +4,8 @@
 package framework.sqlclient.api.free;
 
 
-
 /**
- * アップデート基底.
+ * The base of the updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,7 +13,7 @@ package framework.sqlclient.api.free;
 @SuppressWarnings("unchecked")
 public abstract class AbstractUpdate<D extends FreeUpdate> implements FreeUpdate{
 	
-	/** クエリ */
+	/** the delegate */
 	protected D delegate;
 	
 	/**

@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * ネイティブクエリ.
+ * The native query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,18 +15,18 @@ import java.util.List;
 public interface NativeQuery extends FreeQuery{
 	
 	/**
-	 * @return ヒットカウント
+	 * @return the hit count and the limited records.
 	 */
 	public <T> NativeResult<T> getTotalResult();
 	
 	/**
-	 * @return フェッチして取得
+	 * @return the result holding the <code>ResultSet</code>
 	 */
 	public <T> List<T> getFetchResult();
 	
 	/**
-	 * @param <T> 型 
-	 * @param filter フィルター
+	 * @param <T> the type
+	 * @param filter the filter for <code>ResultSet</code>
 	 * @return self
 	 */
 	@SuppressWarnings("rawtypes")

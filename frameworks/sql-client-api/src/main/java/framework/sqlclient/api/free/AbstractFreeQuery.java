@@ -8,8 +8,8 @@ import java.util.List;
 import framework.sqlclient.api.Query;
 
 /**
- * 自由検索クエリ.
- * SQL/JPQL/CQL(予定）の基底
+ * The free writable query.
+ * The base of all the query.
  *
  * @author yoshida-n
  * @version　 created.
@@ -17,11 +17,11 @@ import framework.sqlclient.api.Query;
 @SuppressWarnings("unchecked")
 public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuery{
 	
-	/** クエリ */
+	/** the delegate */
 	protected D delegate;
 	
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the delegate to set
 	 */
 	protected <T extends FreeQuery> T setDelegate(D delegate){
 		this.delegate = delegate;
@@ -29,7 +29,7 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	}
 	
 	/**
-	 * @return クエリ
+	 * @return the delegate
 	 */
 	protected D getDelegate(){
 		return delegate;

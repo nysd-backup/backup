@@ -5,9 +5,8 @@ package framework.sqlclient.api.free;
 
 import framework.sqlclient.api.Update;
 
-
 /**
- * アップデート.
+ * The free writable updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,20 +14,22 @@ import framework.sqlclient.api.Update;
 public interface FreeUpdate extends Update{
 	
 	/**
-	 * バインドパラメータ
-	 * @param <T>　型
-	 * @param arg0 パラメータ名
-	 * @param arg1 パラメータ
+	 * Set the binding parameter.
+	 * 
+	 * @param <T> the type
+	 * @param arg0 the key
+	 * @param arg1 the value
 	 * @return self
 	 */
 	public <T extends FreeUpdate> T setParameter(String arg0 , Object arg1);
 	
 
 	/**
-	 * if文用パラメータ
-	 * @param <T>　型
-	 * @param arg0 パラメータ名
-	 * @param arg1 パラメータ
+	 * Set the branch parameter.
+	 * 
+	 * @param <T> the type
+	 * @param arg0 the key 
+	 * @param arg1 the value
 	 * @return self
 	 */
 	public <T extends FreeUpdate> T setBranchParameter(String arg0, Object arg1);

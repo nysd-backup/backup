@@ -9,8 +9,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * クエリを示すアノテーション.
- * NamedQuery/NamedNativeQueryとは排他となる
+ * Set this annotation to <code>FreeQuery</code>.
+ * 
+ * <code>javax.persistence.NamedQuery</code> and <code>javax.persistence.NamedNativeQuery</code> 
+ * can not be used if this annotation is set.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -19,10 +21,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AnonymousQuery {
 
-	/** SQLおよびSQLファイルパス */
+	/** the path or statement of query */
     String query();
 
-    /** 結果格納クラス (Any Bean or Map is available). */
+    /** the type of the result (Java bean or Map is available). */
     @SuppressWarnings("rawtypes")
 	Class resultClass() default void.class; 
     
