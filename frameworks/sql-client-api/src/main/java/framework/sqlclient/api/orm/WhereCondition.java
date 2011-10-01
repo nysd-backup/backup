@@ -1,47 +1,47 @@
 /**
- * 
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.orm;
 
 /**
- * 検索条件.
+ * The condition.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class WhereCondition {
 	
-	/** カラム名 */
+	/** the column name */
 	private final String colName; 
 	
-	/** バインド数 */
+	/** the binding value's count */
 	private int bindCount;
 	
-	/** 演算子 */
+	/** the operand */
 	private final WhereOperand operand;
 	
-	/** 値 */
+	/** the binding value */
 	private final Object value;
 	
-	/** betweenのto */
+	/** the binding value for 'between' */
 	private final Object toValue;
 
 	/**
-	 * @param colName カラム
-	 * @param bindCount バインド数
-	 * @param operand 演算子
-	 * @param value 値
+	 * @param colName the colName
+	 * @param bindCount the bindCount
+	 * @param operand the operand
+	 * @param value the value
 	 */
 	public WhereCondition(String colName , int bindCount ,WhereOperand operand , Object value){
 		this(colName,bindCount,operand,value,null);
 	}
 	
 	/**
-	 * @param colName カラム
-	 * @param bindCount バインド数
-	 * @param operand 演算子
-	 * @param value 値
-	 * @param toValue 値
+	 * @param colName the colName
+	 * @param bindCount the bindCount
+	 * @param operand the operand
+	 * @param value the from value
+	 * @param toValue the to value 
 	 */
 	public WhereCondition(String colName , int bindCount ,WhereOperand operand , Object value , Object toValue){
 		this.colName = colName;

@@ -6,7 +6,7 @@ package framework.sqlengine.builder;
 import framework.sqlengine.facade.SQLParameter;
 
 /**
- * SQLにコメントを設定する.
+ * Adds the comment to the specified SQL.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,8 +14,8 @@ import framework.sqlengine.facade.SQLParameter;
 public interface CommentAppender {
 
 	/**
-	 * @param param パラメータ
-	 * @param sql SQL
+	 * @param param the parameters
+	 * @param sql the SQL
 	 */
 	public String setExternalString(SQLParameter param , String sql);
 }

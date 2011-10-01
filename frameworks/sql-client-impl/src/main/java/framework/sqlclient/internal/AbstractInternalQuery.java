@@ -6,44 +6,44 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * 内部クエリ.
+ * The internal query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class AbstractInternalQuery{
 	
-	/** バインド変数の正規表現パターン */
+	/** the pattern */
 	protected static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
 	
-	/** パラメータ */
+	/** the parameter for <code>PreparedStatement</code> */
 	protected Map<String,Object> param = null;
 	
-	/** if文用パラメータ */
+	/** the parameter for analyze the template */
 	protected Map<String,Object> branchParam = null;
 	
-	/** 検索可能数 */
+	/** the max size */
 	protected int maxSize = 0;
 	
-	/** 先頭レコード位置 */
+	/** the start position */
 	protected int firstResult = 0;
 	
-	/** クエリID */
+	/** the queryId */
 	protected final String queryId;
 	
-	/** SQL */
+	/** the SQL */
 	protected final String sql;
 	
-	/** 実行SQL */
+	/** the executing SQL */
 	protected String firingSql = null;
 
-	/** if文解析有無 */
+	/** if true dont analyze the template*/
 	protected final boolean useRowSql;
 	
 	/**
-	 * @param useRowSql　if文評価するか否か
-	 * @param sql SQL
-	 * @param queryId クエリID
+	 * @param useRowSql　the useRowSql to set
+	 * @param sql the SQL to set
+	 * @param queryId the queryId to set
 	 */
 	public AbstractInternalQuery(boolean useRowSql,String sql, String queryId){		
 		this.queryId = queryId;
@@ -54,29 +54,29 @@ public abstract class AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param arg0 キー
-	 * @param arg1 値　
+	 * @param arg0 the key 
+	 * @param arg1 the value
 	 */
 	public void setBranchParameter(String arg0 , Object arg1){
 		this.branchParam.put(arg0,arg1);
 	}
 
 	/**
-	 * @return 検索開始位置
+	 * @return the firstResult
 	 */
 	public int getFirstResult() {
 		return this.firstResult;
 	}
 
 	/**
-	 * @return 最大件数
+	 * @return the maxResults
 	 */
 	public int getMaxResults() {
 		return maxSize;
 	}
 
 	/**
-	 * @param arg0 検索開始位置
+	 * @param arg0 the start position
 	 * @return self
 	 */
 	public AbstractInternalQuery setFirstResult(int arg0) {
@@ -85,7 +85,7 @@ public abstract class AbstractInternalQuery{
 	}
 
 	/**
-	 * @param arg0 最大件数
+	 * @param arg0 the max results
 	 * @return self
 	 */
 	public AbstractInternalQuery setMaxResults(int arg0) {
@@ -94,8 +94,8 @@ public abstract class AbstractInternalQuery{
 	}
 
 	/**
-	 * @param arg0 キー
-	 * @param arg1 値
+	 * @param arg0 the key
+	 * @param arg1 the value
 	 * @return self
 	 */
 	public AbstractInternalQuery setParameter(String arg0, Object arg1) {
@@ -104,24 +104,31 @@ public abstract class AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return 検索
+	 * Searches the result.
+	 * 
+	 * @return the result
 	 */
 	@SuppressWarnings("rawtypes")
 	public abstract List getResultList();
 	
 	/**
-	 * @return 件数
+	 * Gets the hit count.
+	 * 
+	 * @return the count
 	 */
 	public abstract int count();
 	
 	/**
-	 * @return 先頭行
+	 * Finds the first result hit.
+	 * @return the result
 	 */
 	public abstract Object getSingleResult();
 	
 
 	/**
-	 * @return 更新件数
+	 * Updates the data.
+	 * 
+	 * @return the updated count
 	 */
 	public abstract int executeUpdate();
 }

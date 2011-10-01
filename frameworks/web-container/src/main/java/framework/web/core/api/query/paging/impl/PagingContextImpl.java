@@ -13,7 +13,7 @@ import framework.web.core.api.query.WebNativeQueryEngine;
 import framework.web.core.api.query.paging.PagingContext;
 
 /**
- * ペ�Eジング用コンチE��スチE
+ * The paging context.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -21,20 +21,20 @@ import framework.web.core.api.query.paging.PagingContext;
 @SuppressWarnings("rawtypes")
 public class PagingContextImpl implements PagingContext {
 	
-	/** ペ�Eジングサービス */
+	/** the service */
 	private final PagingService pagingService;
 
-	/** 1ペ�Eジあたり�E件数  */
+	/** the one page size  */
 	private int pageSize;
 	
-	/** リクエストパラメータ */
+	/** the request */
 	private PagingRequest request;
 	
-	/** ペ�Eジング惁E�� */
+	/** the result */
 	private PagingResult result;
 	
 	/**
-	 * @param pagingService サービス
+	 * @param pagingService the service
 	 */
 	PagingContextImpl(PagingService pagingService){
 		this.pagingService = pagingService;
@@ -98,7 +98,7 @@ public class PagingContextImpl implements PagingContext {
 	@Override
 	public List getPageData(int pageNo) {
 
-		//例えばペ�Eジサイズ50件で2ペ�Eジ目が指定されためE1からにする
+		//例えばページサイズ50件で2ページ目が指定されたた場合51からにする
 		if( pageNo > getTotalPage() ){
 			throw new IllegalArgumentException("'pageNo' must be 'totalPageCount' and less ");
 		}	

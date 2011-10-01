@@ -5,46 +5,50 @@ package framework.web.core.loader;
 
 
 /**
- * WEB層のロケータ.
+ * Finds the component .
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class ComponentLocator {
 
-	/** シングルトン */
+	/** the singleton delegate */
 	protected static ComponentLocator delegate = null;
 	
 	/**
-	 * インターフェースからのサービス取得
-	 * @param <T>　型
-	 * @param clazz クラス
-	 * @return サービス
+	 * Look up service by interface.
+	 * 
+	 * @param <T>　the type
+	 * @param clazz the class
+	 * @return the service
 	 */
 	public abstract <T> T lookupServiceByInterface(Class<T> clazz);
 	
 	/**
-	 * サービス取得
-	 * @param name クラス
-	 * @return サービス
+	 * Look up service by name.
+	 * 
+	 * @param name the name
+	 * @return the service
 	 */
 	public abstract <T> T lookupService(String name);
 	
 	/**
-	 * サービス取得
-	 * @param <T> 型
-	 * @param ifType サービスタイプ
-	 * @return サービス
+	 * Look up service by interface.
+	 * 
+	 * @param <T>　the type
+	 * @param clazz the class
+	 * @return the service
 	 */
 	public static <T> T lookupByInterface(Class<T> ifType){
 		return delegate.lookupServiceByInterface(ifType);
 	}
 	
 	/**
-	 * サービス取得
-	 * @param <T> 型
-	 * @param name サービスタイプ
-	 * @return サービス
+	 * Look up service by name.
+	 * 
+	 * @param <T> the type
+	 * @param name the name of the service
+	 * @return the service
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T lookup(String name){

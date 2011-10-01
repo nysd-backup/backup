@@ -11,7 +11,7 @@ import framework.logics.builder.MessageBuilder;
 import framework.web.core.context.WebContext;
 
 /**
- * WEB用メッセージアクセサ.
+ * An engine of message.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -21,7 +21,7 @@ public class WebMessageAccessorImpl implements MessageAccessor<MessageBean> {
 	private MessageBuilder builder;
 	
 	/**
-	 * @param builder
+	 * @param builder to set
 	 */
 	public void setMessageBuilder(MessageBuilder builder){
 		this.builder = builder;

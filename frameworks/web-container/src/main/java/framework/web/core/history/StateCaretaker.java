@@ -3,7 +3,7 @@ package framework.web.core.history;
 import java.util.Iterator;
 
 /**
- * 画面状態履歴を保持する.
+ * Holds the state.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -11,42 +11,43 @@ import java.util.Iterator;
 public interface StateCaretaker {
 
 	/**
-	 * @param viewId 画面ID
-	 * @return true:存在している
+	 * @param viewId the viewId
+	 * @return true:exists
 	 */
 	public abstract boolean exists(String viewId);
 
 	/**
-	 * @param mement 追加する履歴
+	 * @param memento the memento to be added
 	 */
-	public abstract void push( PageMement mement);
+	public abstract void push( PageMemento memento);
 
 	/**
-	 * 取得した履歴はこのオブジェクトから取り除かれない.
+	 * Retrieves, but does not remove, the head (first element) of this list.
 	 * 
-	 * @return 一番最後に追加した履歴
+	 * @return the history that is added last.
 	 */
-	public abstract PageMement peek();
+	public abstract PageMemento peek();
 
-	/**	
-	 * 取得した履歴はこのオブジェクトから取り除かれる.
-	 * 
-	 * @return 一番最後に追加した履歴
-	 */
-	public abstract PageMement pop();
-
-	/**
-	 * @return 古い履歴から新しい順に履歴を返すイテレータ
-	 */
-	public abstract Iterator<PageMement> iterator();
+    /**
+     * Pops an element from the stack represented by this list.  In other
+     * words, removes and returns the first element of this list.
+     *
+     * @return the history that is added last.
+     */
+	public abstract PageMemento pop();
 
 	/**
-	 * @return 保持している履歴数
+	 * @return the iterator
+	 */
+	public abstract Iterator<PageMemento> iterator();
+
+	/**
+	 * @return the count of state
 	 */
 	public abstract int size();
 
 	/**
-	 * 履歴を消去する.
+	 * Clears the state.
 	 */
 	public abstract void clear();
 

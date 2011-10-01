@@ -14,7 +14,7 @@ import framework.core.message.DefinedMessage;
 import framework.web.core.context.WebContext;
 
 /**
- * サービス実行プロキシ.
+ * The BusinessDelegate.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -76,9 +76,9 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 	}
 	
 	/**
-	 * サービス起動
+	 * Invokes the service
 	 * @param dto DTO
-	 * @return リプライ
+	 * @return the reply
 	 */
 	protected abstract ReplyDto processService(RequestDto dto);
 

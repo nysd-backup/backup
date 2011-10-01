@@ -4,7 +4,7 @@
 package framework.web.core.api.query.paging;
 
 /**
- * ページングコンテキストファクトリ.
+ * The factor to create context.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,7 +12,7 @@ package framework.web.core.api.query.paging;
 public interface PagingContexFactory {
 
 	/**
-	 * @return コンテキスト
+	 * @return the context
 	 */
 	public PagingContext create();
 }

@@ -18,38 +18,38 @@ import framework.sqlengine.facade.SQLEngineFacade;
 import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 /**
- * クエリファクトリ.
+ * The factory to create the free writable query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class QueryFactoryImpl implements QueryFactory{
 	
-	/** コネクション供給老E*/
+	/** The ConnectionProvider */
 	private ConnectionProvider connectionProvider;
 	
-	/** 0件時�E琁E*/
+	/** the EmptyHandler */
 	private EmptyHandler emptyHandler;
 	
-	/** エンジン�E�デフォルト！E*/
+	/** the SQLEngineFacade */
 	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
 
 	/**
-	 * @param facade SQLエンジン
+	 * @param facade the facade to set
 	 */
 	public void setSqlEngineFacade(SQLEngineFacade facade){
 		this.engineFacade = facade;
 	}
 	
 	/**
-	 * @param emptyHandler 0件処琁E
+	 * @param emptyHandler the emptyHandler to set
 	 */
 	public void setEmptyHandler(EmptyHandler emptyHandler){
 		this.emptyHandler = emptyHandler;
 	}
 	
 	/**
-	 * @param connectionProvider コネクション供給老E
+	 * @param connectionProvider the connectionProvider to set
 	 */
 	public void setConnectionProvider(ConnectionProvider connectionProvider){
 		this.connectionProvider = connectionProvider;

@@ -7,7 +7,7 @@ import framework.sqlclient.api.Query;
 import framework.sqlclient.api.free.FreeQuery;
 
 /**
- * ローカルクエリ実行エンジン.
+ * The local query engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,14 +15,14 @@ import framework.sqlclient.api.free.FreeQuery;
 @SuppressWarnings("unchecked")
 public abstract class AbstractLocalQueryEngine<D extends AbstractInternalQuery> implements FreeQuery{
 
-	/** クエリ */
+	/** the delegate */
 	protected final D delegate;
 
-	/** 検索結果0件時システムエラー有無 */
+	/** if true raise the exception */
 	protected boolean nodataError = false;
 
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the query
 	 */
 	public AbstractLocalQueryEngine(D delegate){
 		this.delegate = delegate;		

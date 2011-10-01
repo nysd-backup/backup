@@ -5,7 +5,7 @@ package framework.sqlclient.api;
 
 
 /**
- * 検索結果0件時の処理.
+ * Handles the empty result.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,7 +13,7 @@ package framework.sqlclient.api;
 public interface EmptyHandler {
 
 	/**
-	 * @param condition 検索条件
+	 * @param condition the condition
 	 */
 	public void handleEmptyResult(Object condition);
 }

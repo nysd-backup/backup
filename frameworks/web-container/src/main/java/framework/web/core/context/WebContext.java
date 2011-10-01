@@ -11,17 +11,17 @@ import framework.core.message.DefinedMessage;
 import framework.core.message.MessageLevel;
 
 /**
- * WebContext.
+ * The context of WEB.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class WebContext extends AbstractGlobalContext{
 
-	/** 処理失敗を示す */
+	/** if ture request is failed */
 	protected boolean requestFailed = false;
 	
-	/** スレッドローカル */
+	/** the ThreadLocal */
 	private static ThreadLocal<WebContext> instance = new ThreadLocal<WebContext>(){
 		protected WebContext initialValue() {
 			return null;
@@ -29,7 +29,7 @@ public abstract class WebContext extends AbstractGlobalContext{
 	};
 	
 	/**
-	 * @param context コンテキスト設定
+	 * @param context the context to set
 	 */
 	protected static void setCurrentInstance(WebContext context){
 		if (context == null) {
@@ -40,28 +40,28 @@ public abstract class WebContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @return 現在のコンテキスト
+	 * @return the current thread's context
 	 */
 	public static WebContext getCurrentInstance(){
 		return instance.get();
 	}
 	
 	/**
-	 * @param session クライアントとのセッション情報
+	 * @param session the session between the client and the server
 	 */
 	public void setClientSessionBean(ClientSessionBean session){
 		super.clientSession = session;
 	}
 	
 	/**
-	 * 処理失敗を設定する
+	 * Set true to requestFailed.
 	 */
 	public void setRequestFailed(){
 		this.requestFailed = true;
 	}
 	
 	/**
-	 * @return true:リクエスト失敗
+	 * @return the requestFailed
 	 */
 	public boolean isRequestFailed(){
 		return requestFailed;
@@ -93,8 +93,9 @@ public abstract class WebContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * コンテキスト初期化
-	 * @param request リクエスト
+	 * Initialized the context.
+	 * 
+	 * @param request the request
 	 */
 	public abstract void initialize(HttpServletRequest request );
 	

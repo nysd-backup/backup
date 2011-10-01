@@ -6,7 +6,7 @@ package framework.sqlclient.internal.impl;
 import framework.sqlclient.api.EmptyHandler;
 
 /**
- * 0件時処理.
+ * Handles the empty result.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

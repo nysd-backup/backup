@@ -7,40 +7,40 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * SQLエンジンのパラメータ.
+ * The base of the parameter
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public abstract class SQLParameter {
 
-	/** SQL-ID */
+	/** the sqlId */
 	private String sqlId = null;
 	
-	/** SQL */
+	/** the SQL */
 	private String sql = null;
 	
-	/** コメント */
+	/** the comment */
 	private StringBuilder comment = new StringBuilder();
 	
-	/** パラメータ */
+	/** the parameter */
 	private Map<String,Object> parameter = new HashMap<String,Object>();
 	
-	/** if文用パラメータ */
+	/** the branch parameter */
 	private Map<String,Object> branchParameter = new HashMap<String,Object>();
 	
-	/** そのままのSQLを使用するか否か */
+	/** the use row sql */
 	private boolean useRowSql = false;
 
 	/**
-	 * @param comment コメント
+	 * @param comment the comment to set
 	 */
 	public void addComment(String comment){
 		this.comment.append(comment); 
 	}
 	
 	/**
-	 * @return コメント
+	 * @return the comment
 	 */
 	public String getComment(){
 		return this.comment.toString();
@@ -61,7 +61,7 @@ public abstract class SQLParameter {
 	}
 	
 	/**
-	 * @parma name パラメータ名
+	 * @param name パラメータ名
 	 * @param param 値
 	 */
 	public void putParameter(String name,Object param) {

@@ -7,20 +7,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 定数キャッシュ.
+ * The cache of the constant to bind to SQL.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class ConstCache {
 
-	/** キャッシュ保持用 */
+	/** the cache */
 	private static final Map<String,Object> cache = new ConcurrentHashMap<String,Object>();
 	
 	/**
-	 * キャッシュに追加
-	 * @param name 定数名
-	 * @param value 定数値
+	 * Adds the value to cache.
+	 * 
+	 * @param name the name
+	 * @param value the value
 	 */
 	public static void put(String name , Object value){
 		if(cache.containsKey(name)){
@@ -31,25 +32,27 @@ public class ConstCache {
 	}
 	
 	/**
-	 * キャッシュから取得
-	 * @param name 名称
-	 * @return 値
+	 * Gets the value.
+	 * 
+	 * @param name the name
+	 * @return the value
 	 */
 	public static Object get(String name){
 		return cache.get(name);
 	}
 	
 	/**
-	 * キャッシュ有無
-	 * @param name　名称
-	 * @return true:存在する
+	 * Determines whether the name exists.
+	 * 
+	 * @param name　the name
+	 * @return true:exists
 	 */
 	public static boolean containsKey(String name){
 		return cache.containsKey(name);
 	}
 	
 	/**
-	 * 削除
+	 * Clears the cache
 	 */
 	public static void destroy(){
 		cache.clear();

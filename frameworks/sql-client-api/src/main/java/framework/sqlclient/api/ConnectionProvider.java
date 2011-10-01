@@ -6,7 +6,7 @@ package framework.sqlclient.api;
 import java.sql.Connection;
 
 /**
- * コネクション供給者.
+ * Provides the <code>java.sql.Connection</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,7 +14,7 @@ import java.sql.Connection;
 public interface ConnectionProvider {
 
 	/**
-	 * @return コネクション
+	 * @return the Connection
 	 */
 	public Connection getConnection();
 }

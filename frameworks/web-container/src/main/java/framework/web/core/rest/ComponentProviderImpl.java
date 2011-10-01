@@ -5,7 +5,7 @@ import com.sun.jersey.core.spi.component.ioc.IoCManagedComponentProvider;
 import framework.web.core.loader.ComponentLocator;
 
 /**
- * コンポーネントプロバイダ.
+ * An IoC-managed component provider.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

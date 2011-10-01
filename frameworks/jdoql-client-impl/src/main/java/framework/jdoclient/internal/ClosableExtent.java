@@ -10,18 +10,18 @@ import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 
 /**
- * Iterator終了時に自動でクローズする.
+ * The iterator that can close automatically.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class ClosableExtent<T> implements Extent<T>{
 	
-	/** delegate */
+	/** the delegate */
 	private final Extent<T> delegate;
 
 	/**
-	 * @param delegate　delegate
+	 * @param delegate　the delegate to set
 	 */
 	public ClosableExtent(Extent<T> delegate){
 		this.delegate = delegate;

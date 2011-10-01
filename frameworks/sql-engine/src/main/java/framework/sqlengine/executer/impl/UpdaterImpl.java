@@ -9,7 +9,8 @@ import java.sql.SQLException;
 import framework.sqlengine.executer.Updater;
 
 /**
- * SQL発行処理、リトライ等が必要な場合にはここで対応する.
+ * The updating engine.
+ * Retry the call if needed.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

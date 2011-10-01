@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import framework.web.core.context.WebContext;
 
 /**
- * フィルターの基底.
+ * The base of the <code>Filter</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -55,14 +55,14 @@ public abstract class AbstractFilter implements Filter{
 	}
 
 	/**
-	 * @param request リクエスト
-	 * @return コンテキスト
+	 * @param request the request
+	 * @return the context
 	 */
 	protected abstract WebContext createContext(HttpServletRequest request);
 	
 	/**
-	 * @param context コンテキスト
-	 * @param request リクエスト
+	 * @param context the context
+	 * @param request the request
 	 */
 	protected void postConstructContext(WebContext context , HttpServletRequest request){	
 		
@@ -75,7 +75,7 @@ public abstract class AbstractFilter implements Filter{
 	
 	
 	/**
-	 * @param context コンテキスト
+	 * @param context the context
 	 */
 	protected void preDestroyContext(WebContext context){		
 	}

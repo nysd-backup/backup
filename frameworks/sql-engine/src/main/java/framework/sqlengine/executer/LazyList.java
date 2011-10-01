@@ -14,7 +14,7 @@ import java.util.ListIterator;
 import framework.sqlengine.exception.SQLEngineException;
 
 /**
- * ResultSetをフェッチして取得するためのリスト.
+ * The list holiding the <code>ResultSet</code> so as to get next record only when the get(i) is called.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -23,28 +23,28 @@ public class LazyList<E> implements List<E>{
 
 	private static final long serialVersionUID = 1L;
 
-	/** 検索結果 */
+	/** the result set */
 	private final ResultSet rs;
 
-	/** 実行済みステートメント */
+	/** the statement */
 	private final Statement statement;
 
-	/** 検索解析処理 */
+	/** the record handler */
 	private final RecordHandler<E> handler;
 
-	/** 結果 */
+	/** the iterator to fetch */
 	private final ResultSetIterator itr = new ResultSetIterator();
 	
-	/** サイズ */
+	/** the count */
 	private int size = 0;
 	
-	/** 検索可能最大件数 */
+	/** the max size */
 	private int maxSize = 0;
 	
-	/** 一回でも実行されたか否か */
+	/** if true over one rs.next is called */
 	private boolean firstExecuted = false;
 	
-	/** 取得した1行 */
+	/** one record get */
 	private E created = null;
 	
 
@@ -57,10 +57,10 @@ public class LazyList<E> implements List<E>{
 	}
 	
 	/**
-	 * @param statement ステートメント
-	 * @param rs 結果
-	 * @param maxSize 最大件数
-	 * @param handler ハンドラ
+	 * @param statement the statement
+	 * @param rs the rs
+	 * @param maxSize the maxSize
+	 * @param handler the handler
 	 */
 	public LazyList(Statement statement ,ResultSet rs, int maxSize , RecordHandler<E> handler){
 		this.rs = rs;
@@ -265,7 +265,7 @@ public class LazyList<E> implements List<E>{
 	}
 	
 	/**
-	 * @return ResultSetクローズ有無
+	 * @return if true result set is closed
 	 */
 	private boolean isClosed(){
 		try{
@@ -277,7 +277,7 @@ public class LazyList<E> implements List<E>{
 	}
 
 	/**
-	 * クローズ
+	 * Closes the statement and result set
 	 */
 	private void close(){
 
@@ -298,12 +298,6 @@ public class LazyList<E> implements List<E>{
 		}
 	}
 	
-	/**
-	 * イテレータ.
-	 *
-	 * @author yoshida-n
-	 * @version 2011/08/31 created.
-	 */
 	private class ResultSetIterator implements Iterator<E>{
 
 		/**

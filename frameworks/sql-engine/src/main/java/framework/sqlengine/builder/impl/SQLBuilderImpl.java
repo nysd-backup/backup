@@ -19,41 +19,41 @@ import framework.sqlengine.builder.TemplateEngine;
 import framework.sqlengine.exception.SQLEngineException;
 
 /**
- * SQLファイルからSQLを読み取る.
+ * Builds the SQL from the file.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class SQLBuilderImpl implements SQLBuilder{
 	
-	/** バインド変数の正規表現パターン. */
+	/** the pattern for binding value. */
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
 
-	/** チE��プレートエンジン. */
+	/** the template engine */
 	private TemplateEngine engine = new VelocityTemplateEngineImpl();
 	
-	/** 定数アクセス. */ 
+	/** the accessor */ 
 	private ConstAccessor accessor = new ConstAccessorImpl();
 	
-	/** 絶対パスの場合�EルーチE */
+	/** the root directory */
 	private String dirRoot = null;
 	
 	/**
-	 * @param accessor 定数アクセス
+	 * @param accessor the accessor to set
 	 */
 	public void setConstAccessor(ConstAccessorImpl accessor){
 		this.accessor = accessor;
 	}
 	
 	/**
-	 * @param dirRoot 絶対パスの場合�EルーチE
+	 * @param dirRoot the dirRoot to set
 	 */
 	public void setDirRoot(String dirRoot){
 		this.dirRoot = dirRoot;
 	}
 	
 	/**
-	 * @param engine チE��プレートエンジン
+	 * @param engine the engine to set
 	 */
 	public void setEngine(TemplateEngine engine){
 		this.engine = engine;
@@ -115,9 +115,9 @@ public class SQLBuilderImpl implements SQLBuilder{
 		// バインド変数を検索
 		final Matcher match = BIND_VAR_PATTERN.matcher(sql);
 
-		// バインド変数にマッチした部刁E��?に置換すめE
+		// バインド変数にマッチした部分を置換
 		while (match.find()) {
-			// マッチしたバインド変数名を取征E前後�E空白、E斁E��目のコロンを除ぁE
+			// マッチしたバインド変数名を取得後、空白、最初のコロンを除去する
 			String variableName = match.group(2);
 			Object variable = params.get(variableName);		
 			if(variable == null ){
@@ -129,7 +129,7 @@ public class SQLBuilderImpl implements SQLBuilder{
 
 			String question = match.group(1) + "?";
 
-			// List型へのバインド�Eそ�EListのサイズ刁E��ぁEに変換し、バインド変数用リストにListの中身を追加する
+			// List型へのバインドの場合はサイズ文?を追加する
 			if (variable != null){
 				Object val = variable;
 				if( val.getClass().isArray()){
@@ -138,10 +138,10 @@ public class SQLBuilderImpl implements SQLBuilder{
 				if(val instanceof List<?>) {
 					final List<?> list = (List<?>) val;
 					if (!list.isEmpty()) {
-						// リスト�E1番目の処琁E
+						// リストの1番目の追加
 						StringBuilder questions = new StringBuilder(question);
 						bindList.add(list.get(0));
-						// リスト�E2番目以降�E処琁E
+						// リストの番目以降に追加
 						for (int i = 1; i < list.size(); i++) {
 							questions.append(",?");
 							bindList.add(list.get(i));
@@ -167,7 +167,7 @@ public class SQLBuilderImpl implements SQLBuilder{
 	@Override
 	public String setRange(String sql , int firstResult , int getSize, List<Object> bindList){
 		
-		//JPQLから作�EされるOracleの仕様に合わせる
+		//JPQLから作成されるOracleの仕様に合わせる
 		String firingSql = sql;
 		if(firstResult > 0 && getSize > 0){
 			firingSql = String.format("SELECT * FROM (SELECT a.*,ROWNUM rnum FROM (%s) a WHERE ROWNUM <= ?) WHERE rnum > ? ",firingSql);

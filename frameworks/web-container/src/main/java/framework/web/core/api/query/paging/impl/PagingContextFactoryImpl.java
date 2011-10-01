@@ -10,7 +10,7 @@ import framework.web.core.api.service.ServiceCallable;
 import framework.web.core.api.service.ServiceFacade;
 
 /**
- * ページングコンテキストファクトリ.
+ *　The factory to create the context.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

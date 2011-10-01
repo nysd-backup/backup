@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * サービスファサードを示すアノテーション.
+ * A marker to represent that the proxy can be injected to.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

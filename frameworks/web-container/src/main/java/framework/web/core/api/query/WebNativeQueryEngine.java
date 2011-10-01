@@ -13,7 +13,7 @@ import framework.sqlclient.api.free.NativeResult;
 import framework.sqlclient.api.free.ResultSetFilter;
 
 /**
- * WEBコンテナ用NativeQueryのエンジン.
+ * The native query engine for WEB.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -21,14 +21,15 @@ import framework.sqlclient.api.free.ResultSetFilter;
 @SuppressWarnings("unchecked")
 public class WebNativeQueryEngine implements NativeQuery{
 	
-	/** クエリの実行体 */
+	/** the service */
 	private NativeQueryService service;
 	
 	/**　DTO */
 	private final QueryRequest request;
-	
+
 	/**
-	 * コンストラクタ
+	 * @param queryClass the queryClass to set
+	 * @param service the service
 	 */
 	WebNativeQueryEngine(Class<? extends Query> queryClass,NativeQueryService service){
 		request = new QueryRequest(queryClass);
@@ -36,7 +37,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	}
 	
 	/**
-	 * @return リクエストデータ
+	 * @return the request
 	 */
 	public QueryRequest getRequest(){
 		return request;

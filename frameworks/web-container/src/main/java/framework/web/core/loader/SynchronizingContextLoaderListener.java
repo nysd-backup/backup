@@ -10,7 +10,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import framework.api.service.ServiceLocatorInitializer;
 
 /**
- * サービスコンテナのApplicationContextの初期化をWEBの初期化と同期化させる.
+ * Synchronizes the WebApplicationContext to APP-container's ApplicationContext.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

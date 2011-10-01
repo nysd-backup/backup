@@ -8,7 +8,7 @@ import framework.sqlclient.api.free.NativeUpdate;
 import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 
 /**
- * 内部更新実行エンジン.
+ * The updating engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,7 +16,7 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
 public class UpdateEngineImpl extends AbstractLocalUpdateEngine<InternalQueryImpl<?>> implements NativeUpdate{
 
 	/**
-	 * @param delegate delegate
+	 * @param delegate the delegate
 	 */
 	public UpdateEngineImpl(InternalQueryImpl<?> delegate) {
 		super(delegate);

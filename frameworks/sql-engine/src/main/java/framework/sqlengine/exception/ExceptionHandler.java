@@ -4,7 +4,7 @@
 package framework.sqlengine.exception;
 
 /**
- * 例外ハンドラ.
+ * Handles the <code>SQLException</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,8 +12,8 @@ package framework.sqlengine.exception;
 public interface ExceptionHandler {
 
 	/**
-	 * @param t 例外
-	 * @return rethrow
+	 * @param t the exception
+	 * @return the exception
 	 */
 	public RuntimeException rethrow(Exception t);
 }

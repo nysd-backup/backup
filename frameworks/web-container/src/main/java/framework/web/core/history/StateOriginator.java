@@ -4,7 +4,7 @@
 package framework.web.core.history;
 
 /**
- * 状態を生成、復元する.
+ * Saves and restores the state.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,14 +12,16 @@ package framework.web.core.history;
 public interface StateOriginator {
 
 	/**
-	 * 現在の状態を保存したスナップショットを作成する。
-	 * @return 状態
+	 * Creates the snapshot of the current state.
+	 * 
+	 * @return the current state
 	 */	
-	public PageMement save();
+	public PageMemento save();
 	
 	/**
-	 * スナップショットから状態を復元する。
-	 * @param mement 状態
+	 * Restores the state from the snapshot.
+	 * 
+	 * @param mement the state
 	 */
-	public void restore(PageMement mement);
+	public void restore(PageMemento mement);
 }

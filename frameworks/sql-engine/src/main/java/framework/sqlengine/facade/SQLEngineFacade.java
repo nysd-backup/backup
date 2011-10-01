@@ -6,7 +6,7 @@ package framework.sqlengine.facade;
 import java.sql.Connection;
 
 /**
- * SQLエンジンのファサード.
+ * The facade of the SQLEngine
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,46 +14,52 @@ import java.sql.Connection;
 public interface SQLEngineFacade {
 
 	/**
-	 * クエリ実行
-	 * @param <T> 型
-	 * @param param パラメータ
-	 * @param con コネクション
-	 * @return 件数
+	 * Executes the COUNT.
+	 * 
+	 * @param <T> the type
+	 * @param param the parameters
+	 * @param con the connection
+	 * @return the hit count
 	 */
 	public int executeCount(QueryParameter<?> param , Connection con);
 	
 	/**
-	 * クエリ実行
-	 * @param <T> 型
-	 * @param param パラメータ
-	 * @param con コネクション
-	 * @return 結果
+	 * Executes the SELECT.
+	 * 
+	 * @param <T> the type
+	 * @param param the parameters
+	 * @param con the connection
+	 * @return the result
 	 */
 	public <T> QueryResult<T> executeQuery(QueryParameter<T> param , Connection con);
 	
 	/**
-	 * フェッチして取得
-	 * @param <T> 型
-	 * @param param パラメータ
-	 * @param con コネクション
-	 * @return 結果
+	 * Executes the SELECT and fetch the result. 
+	 * 
+	 * @param <T> the type
+	 * @param param the parameters
+	 * @param con the connection
+	 * @return the result
 	 */
 	public <T> QueryResult<T> executeFetch(QueryParameter<T> param , Connection con);
 	
 	/**
-	 * トータル件数取得あり
-	 * @param <T> 型
-	 * @param param パラメータ
-	 * @param con コネクション
-	 * @return 結果
+	 * Executes the SELECT and get the hit count.
+	 * 
+	 * @param <T> the type
+	 * @param param the parameters
+	 * @param con the connection
+	 * @return the result
 	 */
 	public <T> QueryResult<T> executeTotalQuery(QueryParameter<T> param , Connection con);
 	
 	/**
-	 * 更新
-	 * @param parameter パラメータ
-	 * @param con コネクション
-	 * @return 更新件数
+	 * Executes the UPDATE/DELETE/INSERT.
+	 * 
+	 * @param <T> the type
+	 * @param param the parameters
+	 * @param con the connection
+	 * @return the updated count
 	 */
 	public int executeUpdate(UpdateParameter parameter ,Connection con);
 }

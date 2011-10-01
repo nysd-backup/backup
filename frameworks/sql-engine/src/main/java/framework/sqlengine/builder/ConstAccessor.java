@@ -4,7 +4,7 @@
 package framework.sqlengine.builder;
 
 /**
- * 定数キャッシュにアクセスしバインド値を取得する.
+ * Gets the constant.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,8 +12,8 @@ package framework.sqlengine.builder;
 public interface ConstAccessor {
 
 	/**
-	 * @param variableName バインド変数名
-	 * @return 値
+	 * @param variableName the variableName
+	 * @return the value
 	 */
 	public Object[] getConstTarget(String variableName);
 }

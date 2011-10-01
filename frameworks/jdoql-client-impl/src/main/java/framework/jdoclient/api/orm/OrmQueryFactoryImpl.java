@@ -12,38 +12,38 @@ import framework.sqlclient.api.orm.OrmQueryFactory;
 import framework.sqlclient.api.orm.OrmUpdate;
 
 /**
- * JDOのクエリファクトリ.
+ * The factory to create the ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class OrmQueryFactoryImpl implements OrmQueryFactory{
 
-	/** パーシステンスマネージャ */
+	/** the PersistenceManager */
 	private PersistenceManagerProvider pmf;
 	
-	/** 複数件ハンドラ */
+	/** the MultiResultHandler */
 	private MultiResultHandler mrh;
 	
-	/** 0件ハンドラ */
+	/** the EmptyHandler */
 	private EmptyHandler eh;
 	
 	/**
-	 * @param pmf パーシステンスマネージャ
+	 * @param pmf the PersistenceManager
 	 */
 	public void setPersistenceManagerProvider(PersistenceManagerProvider pmf){
 		this.pmf = pmf;
 	}
 	
 	/**
-	 * @param mrh 複数件ハンドラ
+	 * @param mrh the MultiResultHandler
 	 */
 	public void setMultiResultHandler(MultiResultHandler mrh){
 		this.mrh = mrh;
 	}
 	
 	/**
-	 * @param eh 0件ハンドラ
+	 * @param eh the EmptyHandler
 	 */
 	public void setEmptyHandler(EmptyHandler eh){
 		this.eh = eh;

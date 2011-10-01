@@ -7,8 +7,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * SpringのWebApplicationContextからリソースを取得する
- *
+ * Finds the component from the Spring's context.
+ *  
  * @author yoshida-n
  * @version 2011/08/31 created.
  */

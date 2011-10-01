@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import framework.sqlengine.facade.QueryResult;
 
 /**
- * ResultSetからデータを取得する.
+ * Handles the <code>ResultSet</code> to get the data.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,15 +17,15 @@ import framework.sqlengine.facade.QueryResult;
 public interface ResultSetHandler {
 
 	/**
-	 * @param <T>　型
-	 * @param rs 結果
-	 * @param resultType 結果型
-	 * @param maxSize 最大件数
-	 * @param totalEnabled 総件数取得有無
-	 * @param sqlId SQLID
-	 * @param filter フィルター
-	 * @return 結果
-	 * @throws SQLException SQL例外
+	 * @param <T>　the type
+	 * @param rs the rs
+	 * @param resultType the resultType
+	 * @param maxSize the maxSize
+	 * @param totalEnabled if true get the total count hit
+	 * @param sqlId the sqlId
+	 * @param filter the filter for ResultSet
+	 * @return the result
+	 * @throws SQLException the exception
 	 */
 	public <T> QueryResult<T> getResultList(ResultSet rs, Class<T> resultType,int maxSize, boolean totalEnabled, String sqlId,RecordFilter<T> filter)
 	throws SQLException ;

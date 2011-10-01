@@ -24,11 +24,11 @@ import framework.sqlengine.executer.LazyList;
 import framework.sqlengine.executer.RecordHandler;
 import framework.sqlengine.executer.RecordHandlerFactory;
 import framework.sqlengine.executer.ResultSetHandler;
-import framework.sqlengine.executer.Selecter;
+import framework.sqlengine.executer.Selector;
 import framework.sqlengine.executer.Updater;
 import framework.sqlengine.executer.impl.RecordHandlerFactoryImpl;
 import framework.sqlengine.executer.impl.ResultSetHandlerImpl;
-import framework.sqlengine.executer.impl.SelecterImpl;
+import framework.sqlengine.executer.impl.SelectorImpl;
 import framework.sqlengine.executer.impl.UpdaterImpl;
 import framework.sqlengine.facade.QueryParameter;
 import framework.sqlengine.facade.QueryResult;
@@ -37,35 +37,35 @@ import framework.sqlengine.facade.SQLParameter;
 import framework.sqlengine.facade.UpdateParameter;
 
 /**
- * SQLエンジンのファサーチE
+ * The facade of the SQLEngine
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class SQLEngineFacadeImpl implements SQLEngineFacade{
 
-	/** 例外ハンドラ */
+	/** the ExceptionHandler */
 	private ExceptionHandler exceptionHandler = new ExceptionHandlerImpl();
 	
-	/** ResultSet全件ルーチE*/
+	/** the ResultSetHandler */
 	private ResultSetHandler resultSetHandler = new ResultSetHandlerImpl();
 
-	/** SQL斁E��ルダー */
+	/** the SQLBuilder */
 	private SQLBuilder sqlBuilder = new SQLBuilderProxyImpl();
 	
-	/** スチE�Eトメント作�Eエンジン */
+	/** the StatementProvider */
 	private StatementProvider provider = new StatementProviderImpl();
 	
-	/** Bean用のリザルトセチE��パ�Eサ */
+	/** the RecordHandlerFactory */
 	private RecordHandlerFactory recordHandlerFactory = new RecordHandlerFactoryImpl();
 	
-	/** コメントアペンダー */
+	/** the CommentAppender*/
 	private CommentAppender commentAppender = null;
 	
-	/** 検索処琁E*/
-	private Selecter selecter = new SelecterImpl();
+	/** the selector */
+	private Selector selector = new SelectorImpl();
 	
-	/** 更新処琁E*/
+	/** the updater*/
 	private Updater updater = new UpdaterImpl();
 	
 	/**
@@ -97,10 +97,10 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 
 	/**
-	 * @param selecter the selecter to set
+	 * @param selector the selector to set
 	 */
-	public void setSelecter(Selecter selecter) {
-		this.selecter = selecter;
+	public void setSelector(Selector selector) {
+		this.selector = selector;
 	}
 	
 	/**
@@ -124,7 +124,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 
 		try{
 			stmt = provider.createStatement(con, query, bindList,param.getSqlId());	
-			rs= selecter.select(stmt);
+			rs= selector.select(stmt);
 			QueryResult<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class, 1, false, param.getSqlId(), null);
 			Iterator itr = decimal.getResultList().get(0).values().iterator();
 			itr.hasNext();
@@ -165,9 +165,9 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		PreparedStatement stmt = null;
 		try{							
 			stmt = provider.createStatement(con, query, bindList,param.getSqlId());	
-			rs = selecter.select(stmt);				
+			rs = selector.select(stmt);				
 			
-			//ResultFetch用オブジェクト�E返却
+			//ResultFetch用オブジェクトに返却
 			RecordHandler<T> handler = recordHandlerFactory.create(param.getResultType(), rs);								
 			List<T> resultList = new LazyList<T>(stmt,rs, param.getMaxSize(),handler);
 			return new QueryResult<T>(false,resultList,-1);
@@ -189,7 +189,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		List<Object> bindList = new ArrayList<Object>();	
 		
 		String query = createSql(param,bindList);
-		//最大件数はresultSetを回しながら取得するため取得件数のrange設定�E行わなぁE��E
+		//最大件数はresultSetを回しながら取得するため取得件数のrange設定しない
 		query = sqlBuilder.setRange(query, param.getFirstResult() , 0 ,bindList);
 		if( commentAppender != null){
 			query = commentAppender.setExternalString(param, query);
@@ -204,7 +204,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	@Override
 	public int executeUpdate(UpdateParameter param, Connection con) {
 		
-		//SQL生�E
+		//SQL生成
 		List<Object> bindList = new ArrayList<Object>();			
 		String executingSql = createSql(param,bindList);
 		
@@ -213,7 +213,6 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			executingSql = commentAppender.setExternalString(param, executingSql);
 		}
 		
-		//スチE�Eトメント生戁E
 		PreparedStatement stmt = null;
 		
 		try{
@@ -229,14 +228,14 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
-	 * クエリを絁E��立てめE
-	 * @param <T>　垁E
-	 * @param param パラメータ
-	 * @param bindList バインド値
-	 * @return クエリ
+	 * Creates the query.
+	 * 
+	 * @param <T>　the type
+	 * @param param the paraemeter
+	 * @param bindList the bindList
+	 * @return the query
 	 */
 	private <T> String createQuery(QueryParameter<T> param, List<Object> bindList){
-		//SQL生�E
 		String executingSql = createSql(param,bindList);
 		executingSql = sqlBuilder.setRange(executingSql, param.getFirstResult() , param.getMaxSize(),bindList);
 		if( commentAppender != null){
@@ -246,11 +245,12 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
-	 * SQLを絁E��立てめE
-	 * @param <T>　垁E
-	 * @param param パラメータ
-	 * @param bindList バインド値
-	 * @return SQL
+	 * Creates the SQL.
+	 * 
+	 * @param <T>　the type
+	 * @param param the paraemeter
+	 * @param bindList the bindList
+	 * @return the query
 	 */
 	private String createSql(SQLParameter param, List<Object> bindList){
 		String executingSql = param.getSql();
@@ -264,21 +264,23 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 
 	/**
-	 * チE�Eタを検索してメモリに格納すめE
-	 * @param <T> 垁E
-	 * @param stmt スチE�EトメンチE
-	 * @param param パラメータ
-	 * @param con コネクション
-	 * @return 検索結果
+	 * Gets the result.
+	 * 
+	 * @param <T> the type
+	 * @param totalEnabled true get hit count
+	 * @param param the parameters
+	 * @param con the connection
+	 * @param executingSql the SQL
+	 * @param bindList the bindList
+	 * @return the result
 	 */
 	private <T> QueryResult<T> getResultList(boolean totalEnabled,QueryParameter<T> param,Connection con,String executingSql,List<Object> bindList){
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
 			stmt = provider.createStatement(con, executingSql, bindList,param.getSqlId());
-			rs = selecter.select(stmt);
+			rs = selector.select(stmt);
 
-			//持E��件数チE�Eタをメモリに格納すめE
 			return resultSetHandler.getResultList(rs, param.getResultType(), param.getMaxSize(), totalEnabled, param.getSqlId(), param.getFilter());
 			
 		}catch(Exception sqle){
@@ -292,10 +294,10 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	
 	
 	/**
-	 * クローズ.
+	 * Close.
 	 * 
-	 * @param rs リザルトセチE��
-	 * @param stmt スチE�EトメンチE
+	 * @param rs the rs
+	 * @param stmt the statement
 	 */
 	private void close(ResultSet rs , Statement stmt){
 		try{
@@ -309,9 +311,9 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
-	 * スチE�Eトメントクローズ.
+	 * Close.
 	 * 
-	 * @param stmt スチE�EトメンチE
+	 * @param stmt the statement
 	 */
 	private void close(Statement stmt){
 		try{

@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * ORマッピング用の検索条件.
+ * The condition to execute SQL.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -20,54 +20,54 @@ public class OrmCondition<T> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	/** 検索対象エンティティクラス */
+	/** the entityClass */
 	private final Class<T> entityClass;
 	
-	/** 検索結果0件時エラー */
+	/** if true raise the exception */
 	private boolean noDataErrorEnabled = false;
 	
-	/** 最大件数 */
+	/** the max size to be able to search */
 	private int maxSize = 0;
 	
-	/** 先頭位置 */
+	/** the start position */
 	private int firstResult = 0;
 	
-	/** ヒント */
+	/** the query hints */
 	private Map<String,Object> hints = new HashMap<String,Object>();
 	
-	/** ソートキー */
+	/** the keys of the sorting */
 	private List<SortKey> sortKeys = new ArrayList<SortKey>();
 	
-	/** エンティティクエリのWHERE句条件 */
+	/** the conditions */
 	private List<WhereCondition> conditions = new ArrayList<WhereCondition>();
 	
-	/** 条件 */
+	/** the filter to search */
 	private String filterString = null;
 	
-	/** ソート */
+	/** the order to sort */
 	private String orderString = null;
 	
-	/** パラメータ */
+	/** the parameter only for easy query */
 	private Object[] easyParams = new Object[0];
 
 	
 	/**
-	 * @param entityClass 検索対象クラス
+	 * @param entityClass the entityClass
 	 */
 	public OrmCondition(Class<T> entityClass){
 		this.entityClass = entityClass;
 	}
 	
 	/**
-	 * @return ヒント句
+	 * @return the hints
 	 */
 	public Map<String,Object> getHints(){
 		return hints;
 	}
 	
 	/**
-	 * @param key キー
-	 * @param value 値
+	 * @param key the key of the hint
+	 * @param value the hint value
 	 */
 	public void setHint(String key , Object value){
 		hints.put(key, value);
@@ -82,14 +82,14 @@ public class OrmCondition<T> implements Serializable{
 	}
 	
 	/**
-	 * @return 検索結果0件時エラー
+	 * @return if true raise the exception
 	 */
 	public boolean isNoDataErrorEnabled(){
 		return this.noDataErrorEnabled;
 	}
 	
 	/**
-	 * @return エンティティクラス
+	 * @return the entity class
 	 */
 	public Class<T> getEntityClass(){
 		return this.entityClass;
@@ -110,42 +110,42 @@ public class OrmCondition<T> implements Serializable{
 	}
 	
 	/**
-	 * @param maxSize 最大件数
+	 * @param maxSize the maxSize
 	 */
 	public void setMaxSize(int maxSize){
 		this.maxSize = maxSize;
 	}
 	
 	/**
-	 * @return 最大件数
+	 * @return the maxSize
 	 */
 	public int getMaxSize(){
 		return this.maxSize;
 	}
 	
 	/**
-	 * @param firstResult 先頭位置
+	 * @param firstResult the firstResult
 	 */
 	public void setFirstResult(int firstResult){
 		this.firstResult = firstResult;
 	}
 	
 	/**
-	 * @return 先頭位置
+	 * @return the firstResult
 	 */
 	public int getFirstResult(){
 		return this.firstResult;
 	}
 
 	/**
-	 * @param filterString 条件
+	 * @param filterString the filterString
 	 */
 	public void setFilterString(String filterString){
 		this.filterString = filterString;
 	}
 
 	/**
-	 * @return 条件
+	 * @return the filterSting
 	 */
 	public String getFilterString(){
 		return this.filterString;

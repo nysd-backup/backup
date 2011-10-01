@@ -8,18 +8,18 @@ import framework.sqlengine.builder.ConstAccessor;
 import framework.sqlengine.exception.SQLEngineException;
 
 /**
- * 定数キャッシュにアクセスしバインド値を取得する.
+ * Gets the constant.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class ConstAccessorImpl implements ConstAccessor {
 
-	/** プリフィクス. */
+	/** the prefix. */
 	private String constPrefix = "c_";
 
 	/**
-	 * @param constPrefix プリフィクス
+	 * @param constPrefix the constPrefix to set
 	 */
 	public final void setConstPrefix(String constPrefix) {
 		this.constPrefix = constPrefix;

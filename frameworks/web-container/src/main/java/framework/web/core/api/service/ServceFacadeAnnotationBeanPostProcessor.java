@@ -17,26 +17,26 @@ import org.springframework.context.ApplicationContextAware;
 import framework.api.service.Remote;
 
 /**
- * サービスファサードにプロキシをインジェクションする.
+ * Injects the <code>BusinessDelegate</code> to service declaring the <code>@ServiceFacade</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcessor,ApplicationContextAware{
 	
-	/** ローカル用のBusinessDelegate */
+	/** the name of the LocalBusinessDelegate */
 	private String handlerBeanName = null;
 	
-	/** リモート用のBusinessDelegate */
+	/** the name of the RemoteBusinessDelegate */
 	private String remoteHandlerBeanName = null;	
 	
-	/** ホワイトリスチE*/
+	/** the list of the serviceName to inject to */
 	private Pattern whiteList = null;
 	
-	/** ホワイトリスチE*/
+	/** if true only service declaring the <code>@ServiceCallable</code> can be injected the proxy */
 	private boolean allowOnlyMarked = false;
 
-	/** コンチE��スチE*/
+	/** the context */
 	private ApplicationContext context = null;
 	
 	/**
@@ -54,7 +54,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	}
 	
 	/**
-	 * @param whiteList インジェクションを許可するサービス
+	 * @param whiteList the whiteList to set
 	 */
 	public void setWhiteList(String whiteList){
 		if(StringUtils.isNotEmpty(whiteList)){
@@ -63,7 +63,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	}
 	
 	/**
-	 * @param allowOnlyMarked true:アノテーションが設定されてぁE��クラスのみインジェクションする
+	 * @param allowOnlyMarked the allowOnlyMarked to set
 	 */
 	public void setAllowOnlyMarked(boolean allowOnlyMarked){
 		this.allowOnlyMarked = allowOnlyMarked;
@@ -119,7 +119,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 				
 				f.setAccessible(true);
 				
-				//プロキシの設宁E
+				//プロキシの設定
 				BusinessDelegate handler = null;
 				if( f.getType().getAnnotation(Remote.class) != null){
 					handler = BusinessDelegate.class.cast(context.getBean(remoteHandlerBeanName));

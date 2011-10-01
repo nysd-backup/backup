@@ -6,7 +6,7 @@ package framework.jdoclient.api;
 import javax.jdo.PersistenceManager;
 
 /**
- * パーシステンスマネージャのソース.
+ * Provides the <code>PersistenceManager</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,7 +14,7 @@ import javax.jdo.PersistenceManager;
 public interface PersistenceManagerProvider {
 
 	/**
-	 * @return パーシステンスマネージャ
+	 * @return the PersistenceManager
 	 */
 	public PersistenceManager getPersistenceManager();
 }

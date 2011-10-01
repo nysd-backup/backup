@@ -6,26 +6,26 @@ package framework.sqlengine.facade;
 import java.util.List;
 
 /**
- * 実行結果.
+ * The query result.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class QueryResult<T> {
 
-	/** 上限値超過有無 */
+	/** if true hit count is more than max size */
 	private final boolean limited;
 	
-	/** 結果 */
+	/** the data */
 	private final List<T> resultList;
 	
-	/** ヒット件数 */
+	/** the hit count */
 	private final int hitCount;
 
 	/**
-	 * @param limited 上限値超過有無
-	 * @param result 検索結果
-	 * @param hitCount ヒット件数
+	 * @param limited the limited
+	 * @param result the result
+	 * @param hitCount the hit count
 	 */
 	public QueryResult(boolean limited ,List<T> result , int hitCount){
 		this.limited = limited;
@@ -34,21 +34,21 @@ public class QueryResult<T> {
 	}
 	
 	/**
-	 * @return true:上限超過
+	 * @return f true hit count is more than max size
 	 */
 	public boolean isLimited(){
 		return this.limited;
 	}
 	
 	/**
-	 * @return 検索結果
+	 * @return the result
 	 */
 	public List<T> getResultList(){
 		return this.resultList;
 	}
 	
 	/**
-	 * @return ヒット件数
+	 * @return the hit count
 	 */
 	public int getHitCount(){
 		return this.hitCount;

@@ -6,7 +6,7 @@ package framework.sqlclient.internal;
 import framework.sqlclient.api.free.FreeUpdate;
 
 /**
- * Update実行エンジン.
+ * The updating engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,11 +14,11 @@ import framework.sqlclient.api.free.FreeUpdate;
 @SuppressWarnings("unchecked")
 public abstract class AbstractLocalUpdateEngine<D extends AbstractInternalQuery> implements FreeUpdate{
 
-	/** クエリ */
+	/** the query */
 	protected final D delegate;
 	
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the query to delegate
 	 */
 	public AbstractLocalUpdateEngine(D delegate){
 		this.delegate = delegate;		

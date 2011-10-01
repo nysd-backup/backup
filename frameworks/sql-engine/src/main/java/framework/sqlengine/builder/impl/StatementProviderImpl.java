@@ -16,7 +16,7 @@ import java.util.List;
 import framework.sqlengine.builder.StatementProvider;
 
 /**
- * PreparedStatementを作成する.
+ * Provides the <code>Statement</code>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -46,18 +46,20 @@ public class StatementProviderImpl implements StatementProvider{
 	}
 	
 	/**
-	 * フェッチサイズなどの設定、ベンダ固有の設定もここで行う。
-	 * @param stmt ステートメント
-	 * @return 設定済みステートメント
+	 * Configures the JDBC parameters including the vendor-depending-parameters.
+	 * 
+	 * @param stmt the statement
+	 * @return the statement
 	 */
 	protected PreparedStatement configure(PreparedStatement stmt) throws SQLException{
 		return stmt;
 	}
 	
 	/**
-	 * パラメータバインド。
-	 * @param statement ステートメント
-	 * @param bind バインド値
+	 * Binds the parameter to statement.
+	 * 
+	 * @param statement the statement
+	 * @param bind the binding value
 	 */
 	protected void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException{
 		

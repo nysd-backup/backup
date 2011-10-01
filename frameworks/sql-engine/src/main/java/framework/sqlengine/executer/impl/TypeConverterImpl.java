@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import framework.sqlengine.executer.TypeConverter;
 
 /**
- * 型変換エンジン.
+ * Convert the result.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

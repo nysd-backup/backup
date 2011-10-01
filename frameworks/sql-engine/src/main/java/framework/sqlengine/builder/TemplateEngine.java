@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 /**
- * TemplateEngineを使用してSQLを評価する.
+ * The template engine to evaluate the SQL
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,15 +15,15 @@ import java.util.Map;
 public interface TemplateEngine {
 
 	/**
-	 * @param rowString ロード前SQL
-	 * @return SQL
+	 * @param rowString the SQL before loading.
+	 * @return the SQL
 	 */
 	public String load(InputStream rowString);
 	
 	/**
-	 * @param rowString ロード後SQL
-	 * @param parameter if文用パラメータ
-	 * @return if文解析後SQL
+	 * @param rowString the SQL after loading.
+	 * @param parameter the parameter to evaluate if-statement
+	 * @return the evaluated SQL
 	 */
 	public String evaluate(String rowString,Map<String,Object> parameter);
 }

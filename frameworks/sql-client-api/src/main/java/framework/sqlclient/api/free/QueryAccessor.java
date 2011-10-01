@@ -4,7 +4,7 @@
 package framework.sqlclient.api.free;
 
 /**
- * デベロッパーに公開しないAPIへのアクセサ.
+ * The accessor for query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -12,11 +12,11 @@ package framework.sqlclient.api.free;
 public class QueryAccessor {
 	
 	/**
-	 * デリゲーティングクエリの設定.
+	 * Set the delegating query.
 	 * 
-	 * @param <D> 型
-	 * @param query クエリ
-	 * @param delegate クエリ
+	 * @param <D> the type
+	 * @param query the query
+	 * @param delegate the delegate 
 	 */
 	public static <D extends FreeQuery> void setDelegate(AbstractFreeQuery<D> query , D delegate){
 		query.setDelegate(delegate);
@@ -24,21 +24,22 @@ public class QueryAccessor {
 	
 
 	/**
-	 * デリゲーティングクエリの取得.
+	 * Set the delegating query.
 	 * 
-	 * @param <D> 型
-	 * @param query クエリ
-	 * @return delegate
+	 * @param <D> the type
+	 * @param query the query
+	 * @param delegate the delegate 
 	 */
 	public static <D extends FreeQuery> D getDelegate(AbstractFreeQuery<D> query){
 		return query.getDelegate();
 	}
 	
 	/**
-	 * デリゲーティングクエリの設定.
-	 * @param <D> 型
-	 * @param query クエリ
-	 * @param delegate クエリ
+	 * Set the delegating query.
+	 * 
+	 * @param <D> the type
+	 * @param query the query
+	 * @param delegate the delegate 
 	 */
 	public static <D extends FreeUpdate> void setDelegate(AbstractUpdate<D> query , D delegate){
 		query.setDelegate(delegate);

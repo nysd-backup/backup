@@ -8,7 +8,7 @@ import javax.jdo.Extent;
 import framework.sqlclient.api.orm.OrmQuery;
 
 /**
- * JDO用ORMクエリ.
+ * The query for JDO.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -16,19 +16,19 @@ import framework.sqlclient.api.orm.OrmQuery;
 public interface JDOOrmQuery<T> extends OrmQuery<T>{
 
 	/**
-	 * filterにand条件を追加する.
+	 * Adds 'and' 
 	 * @return　self
 	 */
 	public JDOOrmQuery<T> and();
 	
 	/**
-	 * filterにor条件を追加する.
+	 * Adds 'or'
 	 * @return　self
 	 */
 	public JDOOrmQuery<T> or();
 	
 	/**
-	 * @return Iteratorでフェッチしながら全件取得
+	 * @return the extent
 	 */
 	public Extent<T> getExtent();
 }

@@ -17,7 +17,7 @@ import framework.web.core.api.service.ServiceCallable;
 import framework.web.core.api.service.ServiceFacade;
 
 /**
- * WEB用のネイチE��ブクエリファクトリ.
+ * The factor to create query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

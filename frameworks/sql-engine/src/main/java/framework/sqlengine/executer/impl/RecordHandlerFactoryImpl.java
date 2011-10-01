@@ -19,18 +19,18 @@ import framework.sqlengine.executer.RecordHandlerFactory;
 import framework.sqlengine.executer.TypeConverter;
 
 /**
- * Bean用のレコードハンドラを生成すめE
+ * The factory to create the <code>RecordHandler</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 
-	/** 型変換エンジン. */
+	/** the converter. */
 	private TypeConverter converter = new TypeConverterImpl();
 	
 	/**
-	 * @param converter コンバ�Eタ
+	 * @param converter the converter to set
 	 */
 	public void setConveter(TypeConverter converter){
 		this.converter = converter;
@@ -57,7 +57,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 						
 		//Bean	
 		}else{
-			//メソチE��のMap匁E
+		
 			Map<String,Method> methodMap = new HashMap<String,Method>();
 			if(!(Map.class.isAssignableFrom(type))){
 				Method[] ms = type.getMethods();
@@ -82,7 +82,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 	 * @return JavaString
 	 */
 	protected String toJavaString(String columnLabel){
-		//snake ↁEcamel
+		//snake to camel
 		Pattern p = Pattern.compile("_([a-z])");
 		Matcher m = p.matcher(columnLabel.toLowerCase());
 		StringBuffer sb = new StringBuffer(columnLabel.length());

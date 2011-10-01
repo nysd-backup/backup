@@ -4,7 +4,7 @@
 package framework.sqlengine.exception;
 
 /**
- * SQL例外.
+ * The SQL engine exception.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,23 +14,22 @@ public class SQLEngineException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @param mes メッセージ
+	 * @param mes the message
 	 */
 	public SQLEngineException(String mes){
 		super(mes);
 	}
 	
 	/**
-	 * @param mes メッセージ
-	 * @param t 例外
+	 * @param mes the message
+	 * @param t the exception
 	 */
 	public SQLEngineException(String mes,Throwable t){
 		super(mes,t);
 	}
-	
 
 	/**
-	 * @param t 例外
+	 * @param t the exception
 	 */
 	public SQLEngineException(Throwable t){
 		super(t);

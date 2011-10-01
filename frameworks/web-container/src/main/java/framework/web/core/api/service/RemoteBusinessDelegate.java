@@ -13,7 +13,7 @@ import framework.api.dto.RequestDto;
 import framework.api.service.RequestListener;
 
 /**
- * リモートサービス実行プロキシ.
+ * The RemoteBusinessDelegate.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -21,9 +21,10 @@ import framework.api.service.RequestListener;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class RemoteBusinessDelegate extends AbstractBusinessDelegate implements ApplicationContextAware {
 
-	/** リスナー名 */
+	/** the name of the listener */
 	private String remoteListenerName = null;
 
+	/** Spring's context */
 	private ApplicationContext context = null;
 	
 	/**
@@ -35,7 +36,7 @@ public class RemoteBusinessDelegate extends AbstractBusinessDelegate implements 
 	}
 	
 	/**
-	 * @param remoteListenerName サービスインターフェース
+	 * @param remoteListenerName the remoteListenerName to set
 	 */
 	public void setRemoteListenerName(String remoteListenerName){		
 		this.remoteListenerName = remoteListenerName;

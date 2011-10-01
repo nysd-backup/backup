@@ -5,7 +5,7 @@ package framework.sqlclient.api.free;
 
 
 /**
- * Queryのファクトリ.
+ * The factor to create query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,23 +13,21 @@ package framework.sqlclient.api.free;
 public interface QueryFactory {
 
 	/**
-	 * Queryの作成<br/>
-	 * SQLを記述する場合に使用する。
+	 * Creates the query.
 	 *
-	 * @param <T>　型
-	 * @param query クエリクラス
-	 * @return クエリ
+	 * @param <T>　the type
+	 * @param query the class of the query
+	 * @return the query
 	 */
 	public <K extends FreeQuery,T extends AbstractFreeQuery<K>> T createQuery(Class<T> query);
 	
 
 	/**
-	 * Queryの作成<br/>
-	 * SQLを記述する場合に使用する。
-	 * 
-	 * @param <T>　型
-	 * @param query クエリクラス
-	 * @return クエリ
+	 * Creates the updater.
+	 *
+	 * @param <T>　the type
+	 * @param query the class of the query
+	 * @return the query
 	 */
 	public <K extends FreeUpdate,T extends AbstractUpdate<K>> T createUpdate(Class<T> query);
 	

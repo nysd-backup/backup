@@ -7,7 +7,7 @@ import framework.sqlengine.exception.ExceptionHandler;
 import framework.sqlengine.exception.SQLEngineException;
 
 /**
- * 例外ハンドラ.
+ * Handles the exception.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

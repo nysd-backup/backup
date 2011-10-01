@@ -15,18 +15,18 @@ import framework.sqlengine.executer.ResultSetHandler;
 import framework.sqlengine.facade.QueryResult;
 
 /**
- * ResultSetの全件をBeanに設定する.
+ * Handles the <code>ResultSet</code> to get the data.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class ResultSetHandlerImpl implements ResultSetHandler{
 	
-	/** ファクトリ */
+	/** the factory */
 	private RecordHandlerFactory factory = new RecordHandlerFactoryImpl();
 	
 	/**
-	 * @param factory ファクトリ
+	 * @param factory the factory to set
 	 */
 	public void setFactory(RecordHandlerFactory factory){
 		this.factory = factory;

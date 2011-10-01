@@ -14,7 +14,7 @@ import framework.api.dto.RequestDto;
 import framework.service.core.messaging.AbstractMessageProducer;
 
 /**
- * The JMS producer for Spring
+ * The JMS producer for Spring.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -32,6 +32,18 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	}
 	
 	/**
+	 * Gets the template.
+	 * Override this method if you select the JmsTemplate by the DTO or the destination name .
+	 * 
+	 * @param dto the DTO
+	 * @param destinationName the destinationName
+	 * @return the template
+	 */
+	protected JmsTemplate getJmsTemplate(RequestDto dto , String destinationName){
+		return template;
+	}
+	
+	/**
 	 * @see framework.service.core.messaging.AbstractMessageProducer#invoke(framework.api.dto.RequestDto, java.lang.String)
 	 */
 	@Override
@@ -43,13 +55,14 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				return session.createObjectMessage(req);
+				
 			}
 		};	
 		
 		if(destinationName == null ){
-			template.send(creater);
+			getJmsTemplate(dto,null).send(creater);
 		}else{
-			template.send(destinationName, creater);
+			getJmsTemplate(dto,destinationName).send(destinationName, creater);
 		}
 		return null;
 	}

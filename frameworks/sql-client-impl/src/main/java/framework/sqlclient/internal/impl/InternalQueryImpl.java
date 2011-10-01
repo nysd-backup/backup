@@ -16,32 +16,32 @@ import framework.sqlengine.facade.SQLParameter;
 import framework.sqlengine.facade.UpdateParameter;
 
 /**
- * SQLエンジン用冁E��クエリ.
+ * The internal query for SQLEngine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	
-	/** コネクション生�E老E*/
+	/** the ConnectionProvider */
 	protected final ConnectionProvider cs;
 	
-	/** 結果格納クラス */
+	/** the resultType */
 	protected final Class<T> resultType;
 	
-	/** ResultSet用フィルター */
+	/** the filter for <code>ResultSet</code> */
 	protected ResultSetFilter<T> filter;
 	
-	/** SQLエンジン */
+	/** the facade of SQLEngine */
 	protected final SQLEngineFacade facade;
 	
 	/**
-	 * @param useRowSql if斁E��価有無
-	 * @param sql SQL
-	 * @param queryId クエリID
-	 * @param cs コネクション提供老E
-	 * @param resultType 結果クラス
-	 * @param facade SQLEngine
+	 * @param useRowSql if true dont analyze the template
+	 * @param sql the SQL
+	 * @param queryId the queryId
+	 * @param cs the cs
+	 * @param resultType the result type
+	 * @param facade the facade
 	 */
 	public InternalQueryImpl(boolean useRowSql ,String sql , String queryId, ConnectionProvider cs , Class<T> resultType,SQLEngineFacade facade){
 		super(useRowSql,sql,queryId);
@@ -51,7 +51,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param filter　リザルトセチE��フィルター
+	 * @param filter the filter to set
 	 * @return self
 	 */
 	public InternalQueryImpl<T> setFilter(ResultSetFilter<T> filter){
@@ -60,7 +60,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return 結果取征E
+	 * @return the result
 	 */
 	public NativeResult<T> getNativeResult(){
 		QueryParameter<T> param = createQueryParameter();
@@ -69,7 +69,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return フェチE��して取征E
+	 * @return the result holiding the <code>ResultSet</code>
 	 */
 	@SuppressWarnings("rawtypes")
 	public List getFetchResult(){
@@ -124,7 +124,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @return パラメータ
+	 * @return the parameter
 	 */
 	private QueryParameter<T> createQueryParameter(){
 		QueryParameter<T> parameter = createParameter(new QueryParameter<T>());		
@@ -139,9 +139,9 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	}
 	
 	/**
-	 * @param <S> 垁E
-	 * @param parameter パラメータ
-	 * @return パラメータ
+	 * @param <S> the type
+	 * @param parameter the parameter
+	 * @return the parameter
 	 */
 	private <S extends SQLParameter> S createParameter(S parameter){
 		parameter.setSqlId(queryId);

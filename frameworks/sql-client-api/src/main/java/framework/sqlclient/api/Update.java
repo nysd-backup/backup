@@ -5,7 +5,7 @@ package framework.sqlclient.api;
 
 
 /**
- * アップデート.
+ * The base of the queries.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,7 +13,9 @@ package framework.sqlclient.api;
 public interface Update {
 	
 	/**
-	 * @return 更新結果
+	 * Updates the data.
+	 * 
+	 * @return the updated count
 	 */
 	public int update();
 	

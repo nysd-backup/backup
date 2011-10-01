@@ -8,18 +8,20 @@ import javax.servlet.http.HttpSession;
 import framework.api.dto.ClientSessionBean;
 
 /**
- * セキュリティチェック.
+ * The utility for security.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SecurityUtil {
+public abstract class SecurityUtil {
 	
 	public static final String ONETIME_TOKEN = "onetime.token";
 	
 	/**
-	 * @param request リクエスト
-	 * @return true:トークン不正
+	 * Determines whether the one-time token is valid.
+	 * 
+	 * @param request the request
+	 * @return true:invalid token
 	 */
 	public static boolean isTokenInvalid(HttpServletRequest request){
 		String requestToken = request.getParameter(ONETIME_TOKEN);
@@ -29,16 +31,20 @@ public class SecurityUtil {
 	}
 
 	/**
-	 * @param request リクエスト
-	 * @return true:セッションなし
+	 * Determines whether the session is expired.
+	 * 
+	 * @param request the request
+	 * @return true:session is expired
 	 */
 	public static boolean isSessionExpired(HttpServletRequest request){
 		return getClientSessionBean(request) == null;
 	}
 	
 	/**
-	 * @param request リクエスト
-	 * @return true:IPアドレスが変更された
+	 * Determines whether the IP-address is changed in the session.
+	 * 
+	 * @param request the request
+	 * @return true:ip-address is changed
 	 */
 	public static boolean isClientIpChanged(HttpServletRequest request ){
 		String uid = request.getRemoteAddr();
@@ -50,8 +56,10 @@ public class SecurityUtil {
 	}
 	
 	/**
-	 * @param request リクエスト
-	 * @return セッション情報
+	 * Gets the session.
+	 * 
+	 * @param request the request
+	 * @return the session 
 	 */
 	private static ClientSessionBean getClientSessionBean(HttpServletRequest request ){
 		HttpSession session = request.getSession(false);

@@ -12,30 +12,30 @@ import framework.sqlengine.executer.RecordHandler;
 import framework.sqlengine.executer.TypeConverter;
 
 /**
- * ResultSetの1行をBeanに設定する.
+ * Gets the one record from ResultSet for JavaBean.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class BeanRecordHandlerImpl<T> implements RecordHandler<T> {
 
-	/** 結果型.*/
+	/** the type*/
 	private final Class<T> type;
 	
-	/** メソッドマップ. */
+	/** the cache of the setter methods */
 	private final Map<String,Method> methodMap;
 	
-	/** カラム名. */
+	/** the names of the column. */
 	private final String[] labels;
 	
-	/** 型変換エンジン. */
+	/** the engine. */
 	private TypeConverter converter;
 	
 	/**
-	 * @param type 結果型
-	 * @param labels カラム名
-	 * @param methodMap メソッドマップ
-	 * @param converter 型変換エンジン
+	 * @param resultType the resultType 
+	 * @param labels the labels
+	 * @param methodMap the setter methods
+	 * @param converter the converter
 	 */
 	public BeanRecordHandlerImpl(Class<T> type, String[] labels, Map<String,Method> methodMap,TypeConverter converter){
 		this.type = type;

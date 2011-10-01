@@ -8,7 +8,7 @@ import com.sun.jersey.spi.container.WebApplication;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 /**
- * Jeysey-spring連携.
+ * Jersey-Spring Servlet.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

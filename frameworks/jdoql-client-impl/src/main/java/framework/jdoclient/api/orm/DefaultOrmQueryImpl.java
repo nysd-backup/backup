@@ -11,7 +11,7 @@ import framework.sqlclient.api.Query;
 import framework.sqlclient.api.orm.OrmQuery;
 
 /**
- * JDO用ORMクエリ.
+ * The ORM query for JDO.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -19,11 +19,11 @@ import framework.sqlclient.api.orm.OrmQuery;
 @SuppressWarnings("unchecked")
 public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
 	
-	/** クエリ */
+	/** the delegate */
 	private JDOOrmQuery<T> delegate;
 
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the delegate
 	 */
 	public DefaultOrmQueryImpl(JDOOrmQuery<T> delegate){
 		this.delegate = delegate;

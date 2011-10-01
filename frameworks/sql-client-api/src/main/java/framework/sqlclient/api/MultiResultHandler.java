@@ -5,7 +5,7 @@ package framework.sqlclient.api;
 
 
 /**
- * 複数件取得時処理.
+ * Handles the multiple result.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,7 +13,7 @@ package framework.sqlclient.api;
 public interface MultiResultHandler {
 
 	/**
-	 * @param condition 検索条件
+	 * @param condition the condition
 	 */
 	public void handleResult(Object condition);
 }

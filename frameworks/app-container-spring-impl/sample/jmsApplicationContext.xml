@@ -22,7 +22,11 @@ http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
 
 	<context:annotation-config/>
 
-  	<!-- コネクションファクトリ -->
+  	<!-- 
+  		コネクションファクトリ 　接続先の設定はミドルウェアのJNDIの設定時にコネクションプールに対して実施する。
+  		glassfishであればaddressListプロパティにlocalhost:7676のように定義する
+  		http://download.oracle.com/docs/cd/E19528-01/820-0846/gbnnp/index.html
+  	-->
    	<jee:jndi-lookup id="jmsQueueConnectionFactory" jndi-name="javax/jms/QueueXAConnectionFactory" />	
 
     <!-- 配信先の取得 -->
@@ -54,6 +58,9 @@ http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
 	<!-- リスナー定義 -->
 	<bean id="messageListener" class="framework.service.ext.messaging.MessageListenerImpl" />
 	
+	<!-- 
+		MQを別サーバにする場合、送信時と同じコネクションファクトリを使用すると同じMDPはこのサーバで動作する可能性がある。
+	 -->
  	<jms:listener-container 
 		acknowledge="transacted"
 		connection-factory="jmsQueueConnectionFactory"

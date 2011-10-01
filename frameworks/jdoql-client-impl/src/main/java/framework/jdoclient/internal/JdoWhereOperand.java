@@ -4,7 +4,7 @@
 package framework.jdoclient.internal;
 
 /**
- * 演算子.
+ * The operand.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -26,18 +26,18 @@ public enum JdoWhereOperand {
 	/** contains */
 	Contains("%s.contains(%s) ");
 
-	/** 演算子 */
+	/** the operand */
 	private String operand = null;
 
 	/**
-	 * @param operand 演算子
+	 * @param operand the operand
 	 */
 	private JdoWhereOperand(String operand) {
 		this.operand = operand;
 	}
 
 	/**
-	 * @return 演算子
+	 * @return the operand
 	 */
 	public String getOperand() {
 		return operand;

@@ -3,9 +3,8 @@
  */
 package framework.sqlengine.facade;
 
-
 /**
- * 更新パラメータ.
+ * The updating parameter.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

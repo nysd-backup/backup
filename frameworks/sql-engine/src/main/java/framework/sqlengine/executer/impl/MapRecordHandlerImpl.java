@@ -11,30 +11,30 @@ import framework.sqlengine.executer.RecordHandler;
 import framework.sqlengine.executer.TypeConverter;
 
 /**
- * ResultSetの1行をMapに格納する.
+ * Gets the one record from ResultSet to map. 
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class MapRecordHandlerImpl<T> implements RecordHandler<T>{
 	
-	/** カラム名. */
+	/** the names of the column */
 	private final String[] labels;
 	
-	/** カラム型. */
+	/** the types of the column */
 	private final int[] types;
 	
-	/** 結果型. */
+	/** the result type */
 	private final Class<T> resultType;
 	
-	/** 型変換エンジン. */
+	/** the engine */
 	private TypeConverter converter;
 	
 	/**
-	 * @param resultType 結果型 
-	 * @param labels カラム名
-	 * @param types カラム型
-	 * @param converter 型変換エンジン
+	 * @param resultType the resultType 
+	 * @param labels the labels
+	 * @param types the types
+	 * @param converter the converter
 	 */
 	public MapRecordHandlerImpl(Class<T> resultType , String[] labels, int[] types ,TypeConverter converter){
 		this.labels = labels;

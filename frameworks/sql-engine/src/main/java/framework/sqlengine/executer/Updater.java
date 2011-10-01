@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * 更新エンジン.
+ * The updating engine.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,9 +15,9 @@ import java.sql.SQLException;
 public interface Updater {
 	
 	/**
-	 * @param stmt　パラメータ設定済みステートメント
-	 * @return 更新結果
-	 * @throws SQLException 実行失敗
+	 * @param stmt　the statement that is binded the parameter.
+	 * @return the updated count
+	 * @throws SQLException the exception
 	 */
 	public int update(PreparedStatement stmt) throws SQLException;
 }

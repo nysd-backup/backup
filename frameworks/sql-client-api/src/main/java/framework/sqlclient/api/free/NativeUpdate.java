@@ -4,7 +4,7 @@
 package framework.sqlclient.api.free;
 
 /**
- * ネイティブアップデート.
+ * The native updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

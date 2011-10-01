@@ -4,10 +4,8 @@ import java.util.List;
 
 import framework.sqlclient.api.Query;
 
-
-
 /**
- * ORマッピング用クエリ.
+ * The ORM query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -15,137 +13,154 @@ import framework.sqlclient.api.Query;
 public interface OrmQuery<T> extends Query{
 
 	/**
-	 * 等価条件の追加
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '='.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmQuery<T> eq(String column, Object value);
+	public OrmQuery<T> eq(String column, Object value);
 
 	/**
-	 * 大なり条件の追加
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '>'.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmQuery<T> gt(String column, Object value);
+	public OrmQuery<T> gt(String column, Object value);
 
 	/**
-	 * 小なり条件の追加
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '<'.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmQuery<T> lt(String column, Object value);
+	public OrmQuery<T> lt(String column, Object value);
 
 	/**
-	 * 大なり=条件の追加
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '>='.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmQuery<T> gtEq(String column, Object value);
+	public OrmQuery<T> gtEq(String column, Object value);
 
 	/**
-	 * 小なり=条件の追加
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '<='.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmQuery<T> ltEq(String column, Object value);
+	public OrmQuery<T> ltEq(String column, Object value);
 
 	/**
-	 * BETWEE条件の追加
-	 * @param column カラム
-	 * @param from from値
-	 * @param to to値
+	 * Adds 'between'.
+	 * 
+	 * @param column the columnt to add to
+	 * @param from the from value
+	 * @param to the to value
 	 * @return self
 	 */
-	public abstract OrmQuery<T> between(String column, Object from, Object to);
+	public OrmQuery<T> between(String column, Object from, Object to);
 	
 	/**
-	 * IN、CONTAIN条件の追加
-	 * @param column カラム
-	 * @param value 値
+	 * Adds 'IN' or 'CONTAINS'.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
 	public OrmQuery<T> contains(String column, List<?> value);
 
 	/**
-	 * 昇順ソートの追加
-	 * @param <V> 型
-	 * @param column カラム
+	 * Adds 'asc'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column
 	 * @return self
 	 */
-	public abstract OrmQuery<T> asc(String column);
+	public OrmQuery<T> asc(String column);
 
 	/**
-	 * 降順ソートの追加
-	 * @param <V> 型
-	 * @param column カラム
+	 * Adds 'desc'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column
 	 * @return self
 	 */
-	public abstract OrmQuery<T> desc(String column);
+	public OrmQuery<T> desc(String column);
 
 	/**
-	 * @param filterString フィルター文字列
+	 * @param filterString the filterString
 	 * @return self
 	 */
-	public abstract OrmQuery<T> filter(String filterString); 
+	public OrmQuery<T> filter(String filterString); 
 	
 	/**
-	 * @param orderString order by 文字列
+	 * @param orderString order by 
 	 * @return self　
 	 */
-	public abstract OrmQuery<T> order(String orderString); 
+	public OrmQuery<T> order(String orderString); 
 	
 	/**
-	 * 単一検索
-	 * @param params パラメータ
-	 * @return 1件取得
+	 * Finds the result.
+	 * 
+	 * @param params the parameters
+	 * @return the result
 	 */
-	public abstract T single(Object... params);
+	public T single(Object... params);
 	
 	/**
-	 * 複数検索
-	 * @param params パラメータ
-	 * @return 検索結果
+	 * Searches the result.
+	 * 
+	 * @param params the parmaeters
+	 * @return the result
 	 */
-	public abstract List<T> list(Object... params);
+	public List<T> list(Object... params);
 	
 	/**
-	 * 単一検索.
-	 * 複数件取得時エラー
-	 * @param params パラメータ
-	 * @return 検索結果
+	 * Finds the result by alter keys.
+	 * Throws the error if the multiple result is found.
+	 * 
+	 * @param params the alter keys
+	 * @return the result
 	 */
-	public abstract T findAny(Object... params);
+	public T findAny(Object... params);
 	
 	/**
-	 * 主キー検索
-	 * @param pks　主キー
-	 * @return 検索結果
+	 * Finds the result by primary keys.
+	 * Throws the error if the multiple result is found.
+	 * 
+	 * @param poks the primary keys
+	 * @return the result
 	 */
-	public abstract T find(Object... pks);
+	public T find(Object... pks);
 
 	/**
-	 * 候補キー検索.
-	 * 複数件取得時エラー
-	 * @return　検索結果
+	 * Finds the result by alter keys.
+	 * Throws the error if the multiple result is found.
+	 * 
+	 * @return the result
 	 */
-	public abstract T findAny();
+	public T findAny();
 
 	/**
-	 * 主キー指定存在チェック
-	 * @param pks 主キー
-	 * @return true:存在する
+	 * Determines the result searched by primary keys is found.
+	 * 
+	 * @param poks the primary keys
+	 * @return true:exists
 	 */
-	public abstract boolean exists(Object... pks);
+	public boolean exists(Object... pks);
 
 	/**
-	 * 候補キー指定存在チェック
-	 * @return true:存在する
+	 * Determines the result searched by alter keys is found.
+	 * 
+	 * @return true:exists
 	 */
-	public abstract boolean existsByAny();
+	public boolean existsByAny();
 
 }

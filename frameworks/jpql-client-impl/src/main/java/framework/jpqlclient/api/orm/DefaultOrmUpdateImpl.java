@@ -86,6 +86,15 @@ public class DefaultOrmUpdateImpl<T> implements JPAOrmUpdate<T>{
 	}
 
 	/**
+	 * @see framework.sqlclient.api.orm.OrmUpdate#contains(java.lang.String, java.util.List)
+	 */
+	@Override
+	public OrmUpdate<T> contains(String column, List<?> value) {
+		delegate.contains(column, value);
+		return this;
+	}
+	
+	/**
 	 * @see framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -145,5 +154,7 @@ public class DefaultOrmUpdateImpl<T> implements JPAOrmUpdate<T>{
 	public int execute(List<Object> set, Object... params) {
 		return delegate.execute(set, params);
 	}
+
+
 
 }

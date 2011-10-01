@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Statementを作成する.
+ * Provides the <code>Statement</code>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -17,13 +17,13 @@ import java.util.List;
 public interface StatementProvider {
 	
 	/**
-	 * ステートメントを取得する.
+	 * Creates the statement.
 	 * 
-	 * @param con コネクション
-	 * @param sql SQL
-	 * @param parameter パラメータ
-	 * @param queryId SQLID
-	 * @return ステートメント
+	 * @param con the connection
+	 * @param sql the SQL
+	 * @param parameter the parameter
+	 * @param queryId the queryId
+	 * @return the statement
 	 */
 	public PreparedStatement createStatement(Connection con ,String sql , List<Object> parameter, String queryId) throws SQLException;
 

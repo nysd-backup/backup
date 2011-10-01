@@ -18,7 +18,7 @@ import framework.sqlclient.api.Query;
 import framework.sqlclient.api.orm.OrmQuery;
 
 /**
- * ORM繧ｯ繧ｨ繝ｪ縺ｮ繧ｨ繝ｳ繧ｸ繝ｳ.
+ * The local engine of JDO.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -26,44 +26,44 @@ import framework.sqlclient.api.orm.OrmQuery;
 @SuppressWarnings("unchecked")
 public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 
-	/** 邨先棡繧ｯ繝ｩ繧ｹ */
+	/** the result type */
 	private final Class<T> resultClass;
 	
-	/** 繝代・繧ｷ繧ｹ繝・Φ繧ｹ繝槭ロ繝ｼ繧ｸ繝｣ */
+	/** the persistence manager */
 	private final PersistenceManager pm;
 
-	/** 隍・焚莉ｶ蜃ｦ逅・*/
+	/** the MultiResultHandler */
 	private final MultiResultHandler mrh;
 
-	/** 0莉ｶ蜃ｦ逅・*/
+	/** the EmptyHandler*/
 	private final EmptyHandler eh;
 	
-	/** 繝代Λ繝｡繝ｼ繧ｿ謨ｰ */
+	/** the parameter count */
 	private int parameterCount = 0;
 	
-	/** 繝輔ぅ繝ｫ繧ｿ */
+	/** the filter to search */
 	private StringBuilder filterString = new StringBuilder();
 	
-	/** ORDER BY */
+	/** the order string to sort */
 	private StringBuilder orderString = new StringBuilder();
 	
-	/** 繝代Λ繝｡繝ｼ繧ｿ */
+	/** the parameters */
 	private List<Object> params = new ArrayList<Object>();
 	
-	/** 0莉ｶ繧ｷ繧ｹ繝・Β繧ｨ繝ｩ繝ｼ */
+	/** if true raise the exception */
 	private boolean noDataErrorEnabled = false;
 	
-	/** 譛螟ｧ莉ｶ謨ｰ */
+	/** the max size to search */
 	private int maxResults = 0;
 	
-	/** 蜈磯ｭ菴咲ｽｮ */
+	/** the start position */
 	private int firstResult = 0;
 		
 	/**
-	 * @param entityClass 繧ｨ繝ｳ繝・ぅ繝・ぅ繧ｯ繝ｩ繧ｹ
-	 * @param pm 繝代・繧ｷ繧ｹ繝・Φ繧ｹ繝槭ロ繝ｼ繧ｸ繝｣
-	 * @param mrh 繝槭Ν繝√Μ繧ｶ繝ｫ繝医ワ繝ｳ繝峨Λ
-	 * @param eh 0莉ｶ繝上Φ繝峨Λ
+	 * @param entityClass the entityClass
+	 * @param pm the pm
+	 * @param mrh the mrh
+	 * @param eh the eh
 	 */
 	public LocalOrmQueryEngine(Class<T> entityClass,PersistenceManager pm,MultiResultHandler mrh , EmptyHandler eh){
 		this.resultClass = entityClass;
@@ -339,10 +339,10 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 
 	
 	/**
-	 * @param column 繧ｫ繝ｩ繝
-	 * @param value 蛟､
-	 * @param operand 貍皮ｮ怜ｭ・
-	 * @return
+	 * @param column the column
+	 * @param value the value
+	 * @param operand the operand
+	 * @return self
 	 */
 	private OrmQuery<T> setOperand(String column, Object value,JdoWhereOperand operand) {
 		parameterCount++;
@@ -352,7 +352,7 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	}
 	
 	/**
-	 * @return 繧ｯ繧ｨ繝ｪ
+	 * @return the query
 	 */
 	private javax.jdo.Query createQuery(){
 		javax.jdo.Query query = pm.newQuery(resultClass);

@@ -9,15 +9,18 @@ import javax.jdo.PersistenceManagerFactory;
 import framework.jdoclient.api.PersistenceManagerProvider;
 
 /**
- * パーシステンスマネージャのソース.
- * PersistenceManagerFactoryはSingletonでよいのでこのクラスもSingletonでよい。
- *
+ * Provides the <code>PersistenceManager</code>.
+ * 
+ * <pre>
+ * This class can be singleton.
+ * </pre>
+ * 
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class PersistenceManagerProviderImpl implements PersistenceManagerProvider{
 
-	/** パーシステンスマネージャ */
+	/** the PersistenceManagerFactory */
 	private PersistenceManagerFactory persistenceManagerFactory;
 
 	/**

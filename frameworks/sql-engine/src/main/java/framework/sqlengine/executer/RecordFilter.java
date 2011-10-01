@@ -4,16 +4,15 @@
 package framework.sqlengine.executer;
 
 /**
- * 検索結果の行ごとに実行されるフィルター.
+ * The filter for <code>ResultSet</code>.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public interface RecordFilter<T> {
 
-
 	/**
-	 * @param data データ
+	 * @param data the data of one record
 	 */
 	public T edit(T data);
 }

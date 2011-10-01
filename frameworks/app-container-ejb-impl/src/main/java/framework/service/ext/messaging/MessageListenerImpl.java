@@ -8,8 +8,19 @@ import framework.service.core.messaging.AbstractMessageListener;
 import framework.service.ext.locator.ServiceLocatorImpl;
 
 /**
- * A listener for MDB and MDP.
+ * A listener for MDB.
+ * 
+ * <pre>
+ * the properties of <code>@ActivationConfigProperty</code> is under.
  *
+ * destinationType 
+ *   - this is either Topic or Queue
+ * connectionFactoryJndiName 
+ *   - specifies the JNDI name of the connection factory that should create the JMS connection
+ * destinationName 
+ *   - specifies that we are listening for messages arriving at a destination with the JNDI name
+ * </pre>
+ * 
  * @author yoshida-n
  * @version 2011/08/31 created.
  */

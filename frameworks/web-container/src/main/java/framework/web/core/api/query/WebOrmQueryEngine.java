@@ -15,7 +15,7 @@ import framework.sqlclient.api.orm.WhereCondition;
 import framework.sqlclient.api.orm.WhereOperand;
 
 /**
- * WEB繧ｳ繝ｳ繝・リ逕ｨORM繧ｯ繧ｨ繝ｪ繧ｨ繝ｳ繧ｸ繝ｳ.
+ * The ORM query for WEB.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -23,15 +23,15 @@ import framework.sqlclient.api.orm.WhereOperand;
 @SuppressWarnings("unchecked")
 public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	
-	/** 繧ｯ繧ｨ繝ｪ縺ｮ螳溯｡御ｽ・*/
+	/** the service */
 	private OrmQueryService<E> service;
 	
 	/**縲DTO */
 	private final OrmCondition<E> request;
 	
 	/**
-	 * @param service 繧ｵ繝ｼ繝薙せ
-	 * @param entityClass 繧ｨ繝ｳ繝・ぅ繝・ぅ繧ｯ繝ｩ繧ｹ
+	 * @param service the service
+	 * @param entityClass the entityClass
 	 */
 	WebOrmQueryEngine(OrmQueryService<E> service,Class<E> entityClass){
 		this.service = service;
@@ -138,10 +138,10 @@ public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
 	}
 	
 	/**
-	 * @param column 繧ｫ繝ｩ繝
-	 * @param value 蛟､
-	 * @param operand 貍皮ｮ怜ｭ・
-	 * @return
+	 * @param column the column
+	 * @param value the value
+	 * @param operand the operand
+	 * @return self
 	 */
 	private OrmQuery<E> setOperand(String column, Object value,WhereOperand operand) {
 		request.getConditions().add(new WhereCondition(column,request.getConditions().size()+1,operand,value));

@@ -10,7 +10,7 @@ import framework.api.dto.RequestDto;
 import framework.api.service.RequestListener;
 
 /**
- * ローカルサービス実行プロキシ.
+ * The LocalBusinessDelegate.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -18,11 +18,11 @@ import framework.api.service.RequestListener;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class LocalBusinessDelegate extends AbstractBusinessDelegate{
 
-	/** サービスインターフェース */
+	/** the listener */
 	private RequestListener listener;
 
 	/**
-	 * @param listener サービスインターフェース
+	 * @param listener the listener to set
 	 */
 	public void setRequestListener(RequestListener listener){		
 		this.listener = listener;

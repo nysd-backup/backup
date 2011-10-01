@@ -4,7 +4,7 @@ import java.util.List;
 import framework.sqlclient.api.free.AbstractNativeQuery;
 
 /**
- * ページングコンテキスト.
+ * The paging context.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,36 +13,39 @@ import framework.sqlclient.api.free.AbstractNativeQuery;
 public interface PagingContext {
 
 	/**
-	 * @return 現在のページのデータ
+	 * @return the current page data
 	 */
 	public List getCurrentPageData();
 
 	/**
-	 * @return 総件数
+	 * @return the total count
 	 */
 	public int getTotalCount();
 
 	/**
-	 * @return 総ページ数
+	 * @return the total page count
 	 */
 	public int getTotalPage();
 
 	/**
-	 * @return 現在取得しているデータのページ番号(1～)
+	 * @return the current page no(1～)
 	 */
 	public int getCurrentPageNo();
 
 	/**
-	 * ページング準備.
-	 * @param query クエリ
-	 * @param pageSize ページサイズ
+	 * Prepares the paging.
+	 * Call first to do pagding.
+	 * 
+	 * @param query the query
+	 * @param pageSize the one page size 
 	 */
 	public List prepare(AbstractNativeQuery query, int pageSize);
 
 	/**
-	 * ページデータ管理機構に問い合わせてデータをロードする.
-	 * @param pageNo ページ番号
-	 * @return データ
+	 * Gets the specifed page's data.
+	 * 
+	 * @param pageNo the target page no
+	 * @return the data 
 	 */
 	public List getPageData(int pageNo);
 

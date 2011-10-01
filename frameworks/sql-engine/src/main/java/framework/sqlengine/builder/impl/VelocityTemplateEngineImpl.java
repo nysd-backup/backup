@@ -21,36 +21,36 @@ import framework.sqlengine.builder.TemplateEngine;
 import framework.sqlengine.exception.SQLEngineException;
 
 /**
- * Velocityを使用してif斁E��解析すめE
+ * The template engine using the Velocity.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class VelocityTemplateEngineImpl implements TemplateEngine{
 
-	/** SQLファイル斁E��コーチE*/
+	/** the encoding */
 	protected static final String CHARSET = "UTF-8";
 
-	/** 改行文孁E*/
+	/** the line separator */
 	private static final String SEPARATOR = "\n";
 	
-	/** ソートエンジン */
+	/** the comparator */
 	private static final LengthComparator COMPARATOR = new LengthComparator();
 	
-	/** 制御構文にマッチする正規表現パターン */
+	/** the pattern for velocity-statement */
 	private static final Pattern controlStatementPattern = Pattern.compile("--%\\s*(\\w+)");
 
-	/** 1行コメンチEヒント句を除ぁEにマッチする正規表現パターン */
+	/** the pattern that indicates the 1 line comment */
 	private static final Pattern singleLineCommentPattern = Pattern.compile("--([^+].*[\n\r]*)");
 	
-	/** 褁E��行コメンチEヒント句を除ぁEにマッチする正規表現パターン */
+	/** the pattern that indicates the multiple line comment */
 	private static final Pattern multiLineCommentPattern = Pattern.compile("/\\*\\**[^+]([^/*][^*]*\\*+)*/", Pattern.MULTILINE);
 	
-	/** 定数アクセサ. */
+	/** the accessor */
 	private ConstAccessor accessor = new ConstAccessorImpl();
 	
 	/**
-	 * @param accessor 定数アクセサ
+	 * @param accessor the accessor to set
 	 */
 	public void setConstAccessor(ConstAccessor accessor){
 		this.accessor = accessor;
@@ -67,14 +67,14 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 			scanner.useDelimiter(SEPARATOR);
 
 			StringBuffer templateSQL = new StringBuffer();
-			int mode = 0; // モーチE
+			int mode = 0; // モード
 			while (scanner.hasNext()) {
 				String line = scanner.next();
 				if (line.startsWith("--% end") && mode == 1) {
-					// defineモード終亁E
+					// define
 					mode = 0;
 				} else if (line.startsWith("--% define")) {
-					// defineモード開姁E
+					// define
 					mode = 1;
 				} else {
 					if (mode != 1) {
@@ -92,27 +92,28 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	}
 	
 	/**
-	 * 型変換する
-	 * @param template SQL
-	 * @return  変換後SQL
+	 * Convert the SQL 
+	 * 
+	 * @param template the template
+	 * @return the SQL
 	 */
 	protected String convert(String template){
 		
 		String vtl = template;
-		// '#'めE\#"としてエスケーチE
+		// '#'を"\#"としてエスケープ
 		vtl = vtl.replaceAll("#", "\\\\#");
-		// 制御構文"--%"めE#"に変換
+		// 制御構文"--%"を"#"に変換
 		vtl = controlStatementPattern.matcher(vtl).replaceAll("#$1");
 		// SQLコメントを削除
 		vtl = singleLineCommentPattern.matcher(vtl).replaceAll("##$1");
 		vtl = multiLineCommentPattern.matcher(vtl).replaceAll("#*$1*#");
-		// if斁E�Eの変数置揁E
+		// if変数置換
 		String[] lines = vtl.split("[\r\n]");
 		StringBuilder buff = new StringBuilder();
 		for (String line : lines) {
 			Set<String> duplicationCheck = new HashSet<String>();
 			if (line.contains("#if") || line.contains("#elseif")) {
-				// fixed [バグ #30] シングルクオートを認識しなぁE
+				// fixed [バグ #30] シングルクオートを認識しない。
 				String newLine = line.replaceAll("'", "\"");
 
 				int begin = newLine.indexOf('(');
@@ -127,7 +128,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 					if (!(token.matches("\\w+") && !token.equalsIgnoreCase("true") && !token.equalsIgnoreCase("false") && !token.startsWith("\"") && !duplicationCheck.contains(token))) {
 						continue;
 					}
-					// 定数設宁Ec_で始まる物琁E��称は定数なので、定数値に置き換える
+					// 定数置換
 					Object[] val = accessor.getConstTarget(token);
 					if (val.length > 0) {
 						Object o = val[0];					
@@ -156,7 +157,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	 */
 	@Override
 	public String evaluate(String rowString, Map<String, Object> parameter) {
-		// 変換開姁E
+		// 変換開始
 		Map<String, Object> evaluatingParam = createEvaluatingParam(parameter);
 		VelocityContext context = new VelocityContext(evaluatingParam);
 		StringWriter writer = new StringWriter();
@@ -166,7 +167,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 			throw new SQLEngineException(e);
 		}
 		writer.flush();
-		// エスケープしてめE\#'となる�EでそれめE#'に戻ぁE
+		// エスケープしても"\#'となるのでそれでも"#'に戻す
 		String sql = writer.toString().replaceAll("\\\\#", "#");
 		try {
 			writer.close();
@@ -177,23 +178,23 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	}
 	
 	/**
-	 * 評価用のパラメータ作�E.
-	 * 型変換などが忁E��であればここで実施する.
+	 * Creates the evaluating parameter.
+	 * Convert the parameter if needed.
 	 * 
-	 * @param parameter パラメータ
-	 * @return 変換後パラメータ
+	 * @param parameter the parameter
+	 * @return the converted the parameter
 	 */
 	protected Map<String,Object> createEvaluatingParam(Map<String,Object> parameter){		
 		return parameter;
 	}
 	
-	/** 斁E���E比輁E*/
+	/** */
 	private static class LengthComparator implements Comparator<String> {
 		
 		/**
-		 * @param arg0 ト�Eク
-		 * @param arg1 ト�Eクン
-		 * @return 比輁E��果
+		 * @param arg0 the token
+		 * @param arg1 the token
+		 * @return the result
 		 */
 		public int compare(String arg0, String arg1) {
 			if (arg0.length() > arg1.length()) {

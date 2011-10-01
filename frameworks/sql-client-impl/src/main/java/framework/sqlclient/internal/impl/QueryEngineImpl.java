@@ -13,7 +13,7 @@ import framework.sqlclient.api.free.ResultSetFilter;
 import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
 
 /**
- *　内部クエリ実行エンジン
+ *　The query engine.
  *
  * @author	yoshida-n
  * @version 2011/08/31 created.
@@ -21,11 +21,12 @@ import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQueryImpl> implements NativeQuery{
 
-	/** 0件時処理 */
+	/** the EmptyHandler */
 	private final EmptyHandler emptyHandler;
 	
 	/**
-	 * @param delegate クエリ
+	 * @param delegate the query to delegate
+	 * @param emtpyHandler the emtpyHandler to set
 	 */
 	public QueryEngineImpl(InternalQueryImpl delegate , EmptyHandler emptyHandler){
 		super(delegate);

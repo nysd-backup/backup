@@ -5,7 +5,7 @@ import java.util.List;
 import framework.sqlclient.api.Update;
 
 /**
- * ORマッピング用クエリ.
+ * The ORM Updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,87 +13,100 @@ import framework.sqlclient.api.Update;
 public interface OrmUpdate<T> extends Update{
 
 	/**
-	 * 等価条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '='.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmUpdate<T> eq(String column, Object value);
+	public OrmUpdate<T> eq(String column, Object value);
 
 	/**
-	 * 大なり条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '>'.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmUpdate<T> gt(String column, Object value);
+	public OrmUpdate<T> gt(String column, Object value);
 
 	/**
-	 * 小なり条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '<'.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmUpdate<T> lt(String column, Object value);
+	public OrmUpdate<T> lt(String column, Object value);
 
 	/**
-	 * 大なり=条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '>='.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmUpdate<T> gtEq(String column, Object value);
+	public OrmUpdate<T> gtEq(String column, Object value);
 
 	/**
-	 * 小なり=条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param value 値
+	 * Adds '<='.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
 	 * @return self
 	 */
-	public abstract OrmUpdate<T> ltEq(String column, Object value);
+	public OrmUpdate<T> ltEq(String column, Object value);
 
 	/**
-	 * BETWEE条件の追加
-	 * @param <V> 型
-	 * @param column カラム
-	 * @param from from値
-	 * @param to to値
+	 * Adds 'between'.
+	 * 
+	 * @param column the columnt to add to
+	 * @param from the from value
+	 * @param to the to value
 	 * @return self
 	 */
-	public abstract OrmUpdate<T> between(String column, Object from, Object to);
+	public OrmUpdate<T> between(String column, Object from, Object to);
 	
 	/**
-	 * セット句
-	 * @param column カラム
-	 * @param value 値
+	 * Adds 'IN' or 'CONTAINS'.
+	 * 
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public OrmUpdate<T> contains(String column, List<?> value);
+	
+	/**
+	 * Adds the updating value.
+	 * 
+	 * @param column the column to update to.
+	 * @param value the value 
 	 * @return self
 	 */
 	public OrmUpdate<T> set(String column , Object value);
 	
 	/**
-	 * セット句
-	 * @param setString 値
+	 * Adds the statement of update.
+	 * 
+	 * @param setString the set
 	 * @return self 
 	 */
 	public OrmUpdate<T> set(String... setString);
 	
 	/**
-	 * 条件
-	 * @param filterString フィルター
+	 * Add the filter to update.
+	 * 
+	 * @param filterString the filter
 	 * @return self
 	 */
 	public OrmUpdate<T> filter(String filterString);
 	
 	/**
-	 * 更新
-	 * @param set set句
-	 * @param params パラメータ
-	 * @return 件数
+	 * Updates the data.
+	 * 
+	 * @param set the set
+	 * @param params the parameters
+	 * @return the updated count
 	 */
 	public int execute(List<Object> set , Object... params);
 	

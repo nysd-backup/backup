@@ -10,7 +10,7 @@ import com.sun.jersey.core.spi.component.ioc.IoCComponentProvider;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
 
 /**
- * コンポーネントプロバイダファクトリ.
+ * The factor to create the ComponentProvider.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

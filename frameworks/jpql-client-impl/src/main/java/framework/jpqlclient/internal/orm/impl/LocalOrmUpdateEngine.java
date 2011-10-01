@@ -120,6 +120,15 @@ public class LocalOrmUpdateEngine<T> implements JPAOrmUpdate<T>{
 		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.Between,from,to));
 		return this;
 	}
+	
+	/**
+	 * @see framework.sqlclient.api.orm.OrmUpdate#contains(java.lang.String, java.util.List)
+	 */
+	@Override
+	public OrmUpdate<T> contains(String column, List<?> value){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.IN,value));
+		return this;
+	}
 
 	/**
 	 * @see framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String, java.lang.Object)

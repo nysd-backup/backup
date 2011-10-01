@@ -5,11 +5,11 @@ package framework.web.core.history.impl;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import framework.web.core.history.PageMement;
+import framework.web.core.history.PageMemento;
 import framework.web.core.history.StateCaretaker;
 
 /**
- * 画面状態履歴を保持する.
+ * Holds the state.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -19,8 +19,8 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 1L;
 
-	/** 履歴を保持するLinkedList */
-	private final LinkedList<PageMement> history = new LinkedList<PageMement>();
+	/** the holder */
+	private final LinkedList<PageMemento> history = new LinkedList<PageMemento>();
 
 
 	/**
@@ -29,9 +29,9 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	@Override
 	public boolean exists(String viewId) {
 
-		Iterator<PageMement> itr = this.iterator();
+		Iterator<PageMemento> itr = this.iterator();
 		while (itr.hasNext()) {
-			PageMement h = itr.next();
+			PageMemento h = itr.next();
 			if (h.getViewId().equals(viewId)) {
 				return true;
 			}
@@ -41,10 +41,10 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	}
 
 	/**
-	 * @see framework.web.core.history.StateCaretaker#push(framework.web.core.history.PageMement)
+	 * @see framework.web.core.history.StateCaretaker#push(framework.web.core.history.PageMemento)
 	 */
 	@Override
-	public void push(PageMement navigationHistory) {
+	public void push(PageMemento navigationHistory) {
 		history.add(navigationHistory);
 	}
 
@@ -52,7 +52,7 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	 * @see framework.web.core.history.StateCaretaker#peek()
 	 */
 	@Override
-	public PageMement peek() {		
+	public PageMemento peek() {		
 		if (size() == 0) {
 			return null;
 		}
@@ -63,8 +63,8 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	 * @see framework.web.core.history.StateCaretaker#pop()
 	 */
 	@Override
-	public PageMement pop() {
-		PageMement last = peek();
+	public PageMemento pop() {
+		PageMemento last = peek();
 		if (last != null) {
 			// 取り出した履歴を削除
 			history.removeLast();
@@ -77,7 +77,7 @@ public class DefaultStateCaretakerImpl implements StateCaretaker {
 	 * @see framework.web.core.history.StateCaretaker#iterator()
 	 */	
 	@Override
-	public Iterator<PageMement> iterator() {
+	public Iterator<PageMemento> iterator() {
 		return history.iterator();
 	}
 

@@ -31,7 +31,7 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	 */
 	@Override
 	public void send(RequestDto dto, String destinationName) throws JMSException{
-		ConnectionFactory factory = createQueueConnectionFactory();
+		ConnectionFactory factory = createQueueConnectionFactory(dto , destinationName);
 		sendMessage(factory,dto,destinationName);
 	}
 
@@ -40,7 +40,7 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	 */
 	@Override
 	public void publish(RequestDto dto, String destinationName)  throws JMSException{
-		ConnectionFactory factory = createTopicConnectionFactory();
+		ConnectionFactory factory = createTopicConnectionFactory(dto , destinationName);
 		sendMessage(factory,dto,destinationName);
 	}
 	
@@ -88,19 +88,24 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	
 	/**
 	 * Creates the destination.
+	 * 
 	 * @param destinationName the name of destination
 	 * @return the destination
 	 */
 	protected abstract Destination createDestination(String destinationName);	
 
 	/**
+	 * @param dto the DTO
+	 * @param destinationName the name of the destination
 	 * @return the XA connection factory for QUEUE
 	 */
-	protected abstract ConnectionFactory createQueueConnectionFactory();
+	protected abstract ConnectionFactory createQueueConnectionFactory(RequestDto dto ,String destinationName);
 	
 	/**
+ 	 * @param dto the DTO
+	 * @param destinationName the name of the destination
 	 * @return the XA connection factory for TOPIC
 	 */
-	protected abstract ConnectionFactory createTopicConnectionFactory();	
+	protected abstract ConnectionFactory createTopicConnectionFactory(RequestDto dto ,String destinationName);
 	
 }

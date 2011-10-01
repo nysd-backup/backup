@@ -1,25 +1,25 @@
 /**
- * 
+ * Copyright 2011 the original author
  */
 package framework.sqlclient.api.orm;
 
 /**
- * ソート用キー.
+ * The key to sort.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class SortKey {
 
-	/** true:昇順 */
+	/** sorting direction */
 	private final boolean ascending;
 	
-	/** カラム名 */
+	/** the column to sort */
 	private final String column;
 	
 	/**
-	 * @param ascending true:昇順
-	 * @param column カラム
+	 * @param ascending sorting direction
+	 * @param column the column
 	 */
 	public SortKey(boolean ascending , String column ){
 		this.ascending = ascending;

@@ -5,7 +5,7 @@ package framework.sqlclient.api.orm;
 
 
 /**
- * ORMクエリのファクトリ.
+ * The factory to create the query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -13,17 +13,19 @@ package framework.sqlclient.api.orm;
 public interface OrmQueryFactory {
 	
 	/**
-	 * ORマッピング用クエリを作成する
-	 * @param <T>　型
-	 * @param entityClass エンティティクラス
+	 * Creates the query.
+	 * 
+	 * @param <T>　the type
+	 * @param entityClass the entityClass
 	 * @return self
 	 */
 	public <T,Q extends OrmQuery<T>> Q createQuery(Class<T> entityClass);
 	
 	/**
-	 * ORマッピング用クエリを作成する
-	 * @param <T>　型
-	 * @param entityClass エンティティクラス
+	 * Creates the updater.
+	 * 
+	 * @param <T>　the type
+	 * @param entityClass the entityClass
 	 * @return self
 	 */
 	public <T,Q extends OrmUpdate<T>> Q createUpdate(Class<T> entityClass);

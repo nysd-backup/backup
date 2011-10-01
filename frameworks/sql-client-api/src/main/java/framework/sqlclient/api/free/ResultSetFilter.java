@@ -6,7 +6,7 @@ package framework.sqlclient.api.free;
 import java.io.Serializable;
 
 /**
- * ResultSet用のフィルター.
+ * The filter for <code>ResultSet</code>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -14,7 +14,7 @@ import java.io.Serializable;
 public interface ResultSetFilter<T> extends Serializable{
 
 	/**
-	 * @param data データ
+	 * @param data the data of the one record
 	 */
 	public T edit(T data);
 }
