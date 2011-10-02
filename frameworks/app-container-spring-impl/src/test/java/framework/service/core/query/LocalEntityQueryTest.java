@@ -29,8 +29,8 @@ import framework.api.query.orm.StrictQuery;
 import framework.api.query.orm.StrictUpdate;
 import framework.core.exception.system.UnexpectedMultiResultException;
 import framework.core.exception.system.UnexpectedNoDataFoundException;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.core.locator.ServiceLocator;
-import framework.service.core.persistence.EntityManagerAccessor;
 import framework.service.core.transaction.ServiceContext;
 import framework.service.ext.transaction.ServiceContextImpl;
 import framework.service.test.RequiresNewReadOnlyService;
@@ -57,7 +57,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	private AdvancedOrmQueryFactory ormQueryFactory;
 
 	@Autowired
-	private EntityManagerAccessor per;
+	private EntityManagerProvider per;
 	
 	/**
 	 * 条件追加
@@ -74,7 +74,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(1,result.size());
 		
 		TestEntity first = result.get(0);
-		per.detach(first);
+		per.getEntityManager().detach(first);
 		first.setAttr("100");
 		
 		StrictQuery<TestEntity> forres = ormQueryFactory.createStrictQuery(TestEntity.class);
@@ -180,15 +180,15 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		per.persist(f);
+		per.getEntityManager().persist(f);
 		
 		TestEntity s = new TestEntity();
 		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
-		per.persist(s);
+		per.getEntityManager().persist(s);
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		per.persist(t);
+		per.getEntityManager().persist(t);
 		
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).desc(TEST);
 		query.contains(TEST, "0","1,","2","900","901","902");
@@ -202,7 +202,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		//更新
 		result.get(0).setAttr("AAA");
-		per.flush();
+		per.getEntityManager().flush();
 		
 		//楽観ロチE��番号インクリメント確誁E
 		result = query.getResultList();		
@@ -233,7 +233,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		TestEntity result = query.find("1");
-		per.detach(result);
+		per.getEntityManager().detach(result);
 		result.setAttr("1100");
 		
 		StrictQuery<TestEntity> query2 = ormQueryFactory.createStrictQuery(TestEntity.class);
@@ -280,7 +280,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).eq(TEST,"1");
 		TestEntity result = query.findAny();
-		per.detach(result);
+		per.getEntityManager().detach(result);
 		result.setAttr("test");
 		result = query.findAny();
 		assertEquals("3",result.getAttr());
@@ -405,10 +405,10 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		entity.setAttr("aaa");
 		entity.setAttr2(30);
 		
-		per.persist(entity);
+		per.getEntityManager().persist(entity);
 		
 		try{
-			per.flush();
+			per.getEntityManager().flush();
 			fail();
 		}catch(PersistenceException de){
 			SQLIntegrityConstraintViolationException sqle = (SQLIntegrityConstraintViolationException)de.getCause().getCause();
@@ -434,8 +434,8 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		entity.setAttr("aaa");
 		entity.setAttr2(30);
 		
-		per.persist(entity);	
-		per.flush();
+		per.getEntityManager().persist(entity);	
+		per.getEntityManager().flush();
 		
 		impl.setValidOptimisticLockError();
 		
@@ -444,7 +444,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		entity2.setAttr("aaa");
 		entity2.setAttr2(30);
 	
-		per.persist(entity2);	
+		per.getEntityManager().persist(entity2);	
 
 	}
 	
@@ -458,7 +458,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		final TestEntity result = query.find("1");
 		result.setVersion(2);
 		try{
-			per.flush();
+			per.getEntityManager().flush();
 			fail();
 		}catch(OptimisticLockException e){
 			return;
@@ -481,7 +481,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		
 		//ロチE��連番エラー無要EDumyExceptionHandlerで握りつぶし！E
-		per.flush(
+		per.getEntityManager().flush(
 //				new FlushHandler(){
 //
 //			@Override
@@ -500,7 +500,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		TestEntity res2 = query.find("2");
 		assertEquals(0,res2.getVersion());
 		res2.setAttr("aa");
-		per.flush();
+		per.getEntityManager().flush();
 
 		assertEquals("aa", query.find("2").getAttr());
 	}
@@ -656,7 +656,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
 		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
 		
@@ -674,7 +674,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 		DateEntity entity = new DateEntity();
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());
-		per.persist(entity);
+		per.getEntityManager().persist(entity);
 		
 		StrictQuery<DateEntity> query = ormQueryFactory.createStrictQuery(DateEntity.class);
 		DateEntity result = query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").findAny();
@@ -689,11 +689,11 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
 		TestEntity e2 = new TestEntity();
 		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.persist(e2);
+		per.getEntityManager().persist(e2);
 		
 		int cnt = createUpdate().filter("e.test = :p1 and e.attr = :p2").set("attr","attr2").execute(Arrays.asList(new Object[]{"A",10}), "200","aa");
 		assertEquals(1,cnt);
@@ -707,11 +707,11 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
 		TestEntity e2 = new TestEntity();
 		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.persist(e2);
+		per.getEntityManager().persist(e2);
 		
 		List<TestEntity> ls = create().filter("e.test = :p1 or e.attr = :p2").order("e.test asc").list("200","aa");
 		assertEquals(2,ls.size());
@@ -725,11 +725,11 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
 		TestEntity e2 = new TestEntity();
 		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.persist(e2);
+		per.getEntityManager().persist(e2);
 		
 		TestEntity ls = create().filter("e.test = :p1 or e.attr = :p2").order("e.test asc").single("200","aa");
 		assertTrue(ls != null);
@@ -750,7 +750,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		lc.add(c1);
 		lc.add(c2);
 		p.setChilds(lc);
-		per.persist(p);
+		per.getEntityManager().persist(p);
 		
 		ParentEntity e = ormQueryFactory.createEasyQuery(ParentEntity.class).filter("e.test = :p1").single("1");
 		assertNotNull(e);
@@ -771,7 +771,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		EasyQuery<ParentEntity> q = ormQueryFactory.createEasyQuery(ParentEntity.class)
 			.filter("e.test = :p1");
 		e = q.single("1");
-		per.detach(e);
+		per.getEntityManager().detach(e);
 		e.setAttr("500");
 		rs = e.getChilds();
 		assertEquals(2,rs.size());

@@ -15,13 +15,13 @@ import framework.api.query.services.PagingRequest;
 import framework.api.query.services.PagingResult;
 import framework.api.query.services.PagingService;
 import framework.api.query.services.QueryRequest;
-import framework.service.core.persistence.EntityManagerAccessor;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.test.SampleNativeQuery;
 import framework.service.test.ServiceUnit;
 import framework.service.test.entity.TestEntity;
 
 /**
- * ペ�EジングサービスのチE��チE
+ * ペ�EジングサービスのチE��チE
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -33,32 +33,32 @@ public class PagingServiceTest extends ServiceUnit{
 	private PagingService pagingService;
 	
 	@Autowired
-	private EntityManagerAccessor per;
+	private EntityManagerProvider per;
 	
 	private void dataset(){
 		setUpData("TEST.xls");
 		TestEntity e = new TestEntity();
 		e.setTest("111").setAttr("1").setAttr2(100);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 
 		e = new TestEntity();
 		e.setTest("112").setAttr("1").setAttr2(100);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
 		e = new TestEntity();
 		e.setTest("113").setAttr("1").setAttr2(100);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
 		e = new TestEntity();
 		e.setTest("114").setAttr("1").setAttr2(100);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		
-		per.flush();
+		per.getEntityManager().flush();
 	}
 
 	
 	/**
-	 * 1ペ�Eジ5件墁E��取征E
+	 * 1ペ�Eジ5件墁E��取征E
 	 */
 	@Test
 	public void onePageJust(){
@@ -85,7 +85,7 @@ public class PagingServiceTest extends ServiceUnit{
 	
 
 	/**
-	 * 3ペ�Eジ2件取征E
+	 * 3ペ�Eジ2件取征E
 	 */
 	@Test
 	public void threePagejust(){
@@ -132,7 +132,7 @@ public class PagingServiceTest extends ServiceUnit{
 	}
 	
 	/**
-	 * 2ペ�Eジ4件、E件取征E
+	 * 2ペ�Eジ4件、E件取征E
 	 */
 	@Test
 	public void twoPage(){

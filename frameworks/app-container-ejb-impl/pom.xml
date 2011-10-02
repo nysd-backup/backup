@@ -22,12 +22,6 @@
 		</dependency>	
 		<dependency>
 		    <groupId>framework</groupId>
-		    <artifactId>sql-client-impl</artifactId>
-		    <version>${framework.sql.client.impl.version}</version>
-		    <scope>runtime</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
 		    <artifactId>sql-engine</artifactId>
 		    <version>${framework.sql.engine.version}</version>
 		    <scope>compile</scope>

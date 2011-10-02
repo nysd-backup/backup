@@ -7,9 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import framework.api.query.orm.StrictQuery;
-import framework.api.query.orm.impl.AbstractAdvancedOrmQuery;
 import framework.core.entity.Metadata;
-import framework.jdoclient.api.orm.JDOOrmQuery;
 import framework.sqlclient.api.orm.OrmQuery;
 
 /**
@@ -114,33 +112,7 @@ public class DefaultStrictQuery<T> extends AbstractAdvancedOrmQuery<T> implement
 	public StrictQuery<T> desc(Metadata<T,?> column){
 		delegate.desc(column.name());
 		return this;
-	}
-
-	/**
-	 * @see framework.api.query.orm.StrictQuery#and()
-	 */
-	@Override
-	public StrictQuery<T> and() {
-		if(delegate instanceof JDOOrmQuery){
-			JDOOrmQuery.class.cast(delegate).and();
-			return this;
-		}
-		throw new UnsupportedOperationException();
-	}
-
-
-	/**
-	 * @see framework.api.query.orm.StrictQuery#or()
-	 */
-	@Override
-	public StrictQuery<T> or() {
-		if(delegate instanceof JDOOrmQuery){
-			JDOOrmQuery.class.cast(delegate).or();
-			return this;
-		}
-		throw new UnsupportedOperationException();
-	}
-	
+	}	
 
 	/**
 	 * @see framework.sqlclient.api.orm.OrmQuery#findAny()

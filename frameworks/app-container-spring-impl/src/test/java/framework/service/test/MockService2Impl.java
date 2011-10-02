@@ -8,7 +8,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import framework.service.core.persistence.EntityManagerAccessor;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.test.entity.TestEntity;
 
 @Service
@@ -17,7 +17,7 @@ import framework.service.test.entity.TestEntity;
 public class MockService2Impl implements MockService2{
 
 	@Autowired
-	private EntityManagerAccessor per;
+	private EntityManagerProvider per;
 	
 	@Override
 	@Rollback(false)
@@ -26,7 +26,7 @@ public class MockService2Impl implements MockService2{
 		e.setTest("10");
 		e.setAttr("aaa");
 		e.setAttr2(2);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 	}
 
 }

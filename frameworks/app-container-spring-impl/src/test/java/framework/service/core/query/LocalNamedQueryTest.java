@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.core.exception.system.UnexpectedNoDataFoundException;
-import framework.service.core.persistence.EntityManagerAccessor;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.test.CachableConst;
 import framework.service.test.SampleNamedQuery;
 import framework.service.test.SampleNamedQueryConst;
@@ -46,7 +46,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	private AdvancedOrmQueryFactory ormQueryFactory;
 	
 	@Autowired
-	private EntityManagerAccessor per;
+	private EntityManagerProvider per;
 	
 	/**
 	 * 通常検索
@@ -60,7 +60,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		
 		List<TestEntity> result = query.getResultList();
 		assertEquals("3",result.get(0).getAttr());
-		per.detach(result.get(0));	
+		per.getEntityManager().detach(result.get(0));	
 		result.get(0).setAttr("500");	
 
 		TestEntity results =query.getSingleResult();
@@ -218,15 +218,15 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		per.persist(f);
+		per.getEntityManager().persist(f);
 		
 		TestEntity s = new TestEntity();
 		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
-		per.persist(s);
+		per.getEntityManager().persist(s);
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		per.persist(t);
+		per.getEntityManager().persist(t);
 		
 		SampleNamedQuery query = queryFactory.createQuery(SampleNamedQuery.class);		
 		query.setFirstResult(1);
@@ -239,7 +239,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		
 		//更新
 		result.get(0).setAttr("AAA");
-		per.flush();
+		per.getEntityManager().flush();
 		
 		//楽観ロチE��番号インクリメント確誁E
 		result = query.getResultList();		
@@ -327,7 +327,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	
 		DateEntity e2 = new DateEntity();
 		e2.setAttr("aa").setTest("1");
-		per.persist(e2);
+		per.getEntityManager().persist(e2);
 		
 		SampleNamedUpdate update = queryFactory.createUpdate(SampleNamedUpdate.class);//.setProviderHint(QueryHints.MAINTAIN_CACHE, HintValues.TRUE);
 		update.setTest("1");
@@ -352,7 +352,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	public void updateConstAttr(){
 		DateEntity e2 = new DateEntity();
 		e2.setAttr(CachableConst.TARGET_TEST_1_OK).setTest("2");
-		per.persist(e2);
+		per.getEntityManager().persist(e2);
 		
 		SampleNamedUpdate update = queryFactory.createUpdate(SampleNamedUpdate.class);
 		update.setTest("2");
@@ -377,7 +377,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	
 		DateEntity e2 = new DateEntity();
 		e2.setAttr(CachableConst.TARGET_TEST_1_OK).setTest("2").setDateCol(new Date());
-		per.persist(e2);
+		per.getEntityManager().persist(e2);
 		
 		StrictQuery<DateEntity> eq = ormQueryFactory.createStrictQuery(DateEntity.class);
 		eq.eq(IDateEntity.TEST, "2").getSingleResult().setAttr2(CachableConst.TARGET_INT);				

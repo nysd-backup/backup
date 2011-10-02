@@ -30,41 +30,11 @@
 		    <artifactId>sql-client-api</artifactId>
 		    <version>${framework.sql.client.api.version}</version>
 		    <scope>compile</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>sql-client-impl</artifactId>
-		    <version>${framework.sql.client.impl.version}</version>
-		    <scope>runtime</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>sql-engine</artifactId>
-		    <version>${framework.sql.engine.version}</version>
-		    <scope>runtime</scope>
-		</dependency>				
+		</dependency>		
 		<dependency>
 		    <groupId>framework</groupId>
 		    <artifactId>jpql-client-api</artifactId>
 		    <version>${framework.jpql.client.api.version}</version>
-		    <scope>compile</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>jpql-client-impl</artifactId>
-		    <version>${framework.jpql.client.impl.version}</version>
-		    <scope>runtime</scope>
-		</dependency>			
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>jdoql-client-api</artifactId>
-		    <version>${framework.jdoql.client.api.version}</version>
-		    <scope>compile</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>jdoql-client-impl</artifactId>
-		    <version>${framework.jdoql.client.impl.version}</version>
 		    <scope>compile</scope>
 		</dependency>	
 		<dependency>
@@ -209,5 +179,23 @@
 			<version>${slf4j.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>framework</groupId>
+		    <artifactId>sql-client-impl</artifactId>
+		    <version>${framework.sql.client.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>framework</groupId>
+		    <artifactId>jpql-client-impl</artifactId>
+		    <version>${framework.jpql.client.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>framework</groupId>
+		    <artifactId>sql-engine</artifactId>
+		    <version>${framework.sql.engine.version}</version>
+		    <scope>test</scope>
+		</dependency>		
 	</dependencies>
 </project>

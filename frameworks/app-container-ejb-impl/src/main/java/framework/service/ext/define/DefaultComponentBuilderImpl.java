@@ -19,8 +19,6 @@ import framework.service.core.async.AsyncServiceFactory;
 import framework.service.core.error.MessageAccessorImpl;
 import framework.service.core.locator.ServiceLocator;
 import framework.service.core.messaging.MessageClientFactory;
-import framework.service.core.persistence.EntityManagerAccessor;
-import framework.service.core.persistence.EntityManagerAccessorImpl;
 import framework.service.core.query.AdvancedOrmQueryFactoryImpl;
 import framework.service.core.query.CustomEmptyHandlerImpl;
 import framework.service.core.query.DataSourceConnectionProviderImpl;
@@ -68,16 +66,6 @@ public class DefaultComponentBuilderImpl implements ComponentBuilder {
 	}
 
 	/**
-	 * @see framework.service.ext.define.ComponentBuilder#createEntityManagerAccessor()
-	 */
-	@Override
-	public EntityManagerAccessor createEntityManagerAccessor() {
-		EntityManagerAccessorImpl accessor = new EntityManagerAccessorImpl();
-		accessor.setEntityManagerProvider(createEntityManagerProvider());
-		return accessor;
-	}
-
-	/**
 	 * @see framework.service.ext.define.ComponentBuilder#createOrmQueryFactory()
 	 */
 	@Override
@@ -103,7 +91,7 @@ public class DefaultComponentBuilderImpl implements ComponentBuilder {
 	}
 	
 	/**
-	 * @return エンチE��チE��マネージャの供給老E
+	 * @return EntityManagerProvider
 	 */
 	protected EntityManagerProvider createEntityManagerProvider() {
 		return ServiceLocator.lookupByInterface(EntityManagerProvider.class);

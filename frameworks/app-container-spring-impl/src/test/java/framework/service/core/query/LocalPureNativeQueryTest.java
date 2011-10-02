@@ -17,7 +17,7 @@ import framework.api.dto.ClientSessionBean;
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.core.exception.system.UnexpectedNoDataFoundException;
-import framework.service.core.persistence.EntityManagerAccessor;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.core.transaction.ServiceContext;
 import framework.service.test.CachableConst;
 import framework.service.test.SampleNativeQuery;
@@ -29,7 +29,7 @@ import framework.sqlclient.api.free.NativeResult;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * SQLエンジンのチE��チE
+ * SQLエンジンのチE��チE
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -44,7 +44,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	private AdvancedOrmQueryFactory ormQueryFactory;
 	
 	@Autowired
-	private EntityManagerAccessor per;
+	private EntityManagerProvider per;
 
 	
 	/**
@@ -85,8 +85,8 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	
 
 	/**
-	 * if斁E��索
-	 * 数値比輁E��not null、文字�E比輁E
+	 * if斁E��索
+	 * 数値比輁E��not null、文字�E比輁E
 	 */
 	@Test
 	public void selectIfAttr2(){
@@ -99,7 +99,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * 結果0件シスチE��エラー
+	 * 結果0件シスチE��エラー
 	 */
 	@Test
 	public void nodataError(){
@@ -152,7 +152,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * setFirstResult、E件目�E�E件目取征E
+	 * setFirstResult、E件目�E�E件目取征E
 	 */
 	@Test
 	public void setFirstResult(){
@@ -160,16 +160,16 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		per.persist(f);
+		per.getEntityManager().persist(f);
 		
 		TestEntity s = new TestEntity();
-		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
-		per.persist(s);
+		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
+		per.getEntityManager().persist(s);
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		per.persist(t);
-		per.flush();
+		per.getEntityManager().persist(t);
+		per.getEntityManager().flush();
 		
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);		
 		query.setFirstResult(1);
@@ -177,7 +177,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		List<TestEntity> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
+		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
 		assertEquals("900",result.get(1).getAttr());
 	}
 	
@@ -219,7 +219,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> eq = ormQueryFactory.createStrictQuery(TestEntity.class);
 		eq.eq(TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
-		per.flush();
+		per.getEntityManager().flush();
 		
 		SampleNativeQueryConst c = clientQueryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setArc(CachableConst.TARGET_INT);		
@@ -256,7 +256,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	}
 	
 	/**
-	 * ResultSetフェチE��取征E
+	 * ResultSetフェチE��取征E
 	 */
 	@Test
 	public void lazySelect(){

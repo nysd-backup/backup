@@ -116,20 +116,6 @@ public interface StrictQuery<T> extends AdvancedOrmQuery<T>{
 	public abstract StrictQuery<T> desc(Metadata<T, ?> column);
 
 	/**
-	 * Adds 'AND'.
-	 * 
-	 * @return self
-	 */
-	public abstract StrictQuery<T> and();
-	
-	/**
-	 * Adds 'OR'
-	 * 
-	 * @return self
-	 */
-	public abstract StrictQuery<T> or();
-	
-	/**
 	 * Finds by alter key.
 	 * Throw the error if the multiple result is found.
 	 * 

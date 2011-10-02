@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import framework.core.message.MessageBean;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.logics.builder.MessageAccessor;
-import framework.service.core.persistence.EntityManagerAccessor;
 import framework.service.test.entity.TestEntity;
 
 /**
@@ -30,7 +30,7 @@ public class RequireServiceImpl implements RequireService {
 	private MessageAccessor<MessageBean> accessor;
 	
 	@Autowired
-	private EntityManagerAccessor ema;
+	private EntityManagerProvider ema;
 	
 	/**
 	 * @see framework.service.test.RequireService#test()
@@ -47,8 +47,8 @@ public class RequireServiceImpl implements RequireService {
 	public int persist() {
 		TestEntity e = new TestEntity();
 		e.setTest("105").setAttr("aaa").setAttr2(2222);
-		ema.persist(e);
-		ema.flush();
+		ema.getEntityManager().persist(e);
+		ema.getEntityManager().flush();
 		return 1;
 	}
 	

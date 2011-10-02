@@ -11,7 +11,6 @@ import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.async.AsyncServiceFactory;
 import framework.service.core.messaging.MessageClientFactory;
-import framework.service.core.persistence.EntityManagerAccessor;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
@@ -68,9 +67,4 @@ public interface ComponentBuilder {
 	 */
 	public AdvancedOrmQueryFactory createOrmQueryFactory();
 	
-	/**
-	 * @return the <code>EntityManagerAccessor</code>
-	 */
-	public EntityManagerAccessor createEntityManagerAccessor();
-
 }

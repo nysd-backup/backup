@@ -11,7 +11,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import framework.service.core.persistence.EntityManagerAccessor;
+import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.core.transaction.ServiceContext;
 import framework.service.ext.transaction.ServiceContextImpl;
 import framework.service.test.entity.TestEntity;
@@ -28,7 +28,7 @@ import framework.service.test.entity.TestEntity;
 public class MockRequiresNewServiceImpl implements MockRequiresNewService{
 
 	@Autowired
-	private EntityManagerAccessor per;
+	private EntityManagerProvider per;
 	
 	@Autowired
 	private MockService2 s2;
@@ -41,7 +41,7 @@ public class MockRequiresNewServiceImpl implements MockRequiresNewService{
 		e.setTest("1");
 		e.setAttr("aaa");
 		e.setAttr2(2);
-		per.persist(e);
+		per.getEntityManager().persist(e);
 		if( v.equals("AA")){
 			((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().setRollbackOnly();
 		}
