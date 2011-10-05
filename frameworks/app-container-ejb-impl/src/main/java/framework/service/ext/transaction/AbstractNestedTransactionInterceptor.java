@@ -23,7 +23,7 @@ import framework.service.core.transaction.ServiceContext;
  * @version 2011/08/31 created.
  */
 @Deprecated
-public abstract class AbstractTransactionInterceptor extends DefaultInterceptor{
+public abstract class AbstractNestedTransactionInterceptor extends DefaultInterceptor{
 
 	/** the context */
 	@Resource
