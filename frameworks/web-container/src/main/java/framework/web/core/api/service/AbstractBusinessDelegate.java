@@ -6,11 +6,9 @@ package framework.web.core.api.service;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import framework.api.dto.ClientRequestBean;
-import framework.api.dto.ClientSessionBean;
 import framework.api.dto.ReplyDto;
+import framework.api.dto.ReplyMessage;
 import framework.api.dto.RequestDto;
-import framework.core.message.DefinedMessage;
 import framework.web.core.context.WebContext;
 
 /**
@@ -35,13 +33,8 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		WebContext context = WebContext.getCurrentInstance();
-		ClientSessionBean session = null;
-		ClientRequestBean request = null;
-		if( context != null){
-			session = context.getClientSessionBean();
-			request = context.getClientRequestBean();
-		}		
+		WebContext context = WebContext.getCurrentInstance();	
+		
 		Serializable[] serial = null;
 		if( args == null){
 			serial = new Serializable[0];
@@ -55,8 +48,6 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 		RequestDto dto  = new RequestDto();
 		dto.setAlias(alias);
 		dto.setTargetClass(method.getDeclaringClass());
-		dto.setClientRequestBean(request);
-		dto.setClientSessionBean(session);
 		dto.setMethodName(method.getName());
 		dto.setParameter(serial);
 		dto.setParameterTypes(method.getParameterTypes());
@@ -65,9 +56,9 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 		
 		//メッセージがある場合はメッセージを追加
 		if( context != null){
-			DefinedMessage[] messageList = reply.getMessageList();
+			ReplyMessage[] messageList = reply.getMessages();
 			if(messageList != null){
-				for(DefinedMessage message : messageList){	
+				for(ReplyMessage message : messageList){	
 					context.addMessage(message);
 				}
 			}

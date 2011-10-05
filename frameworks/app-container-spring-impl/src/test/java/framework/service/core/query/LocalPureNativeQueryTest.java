@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
-import framework.api.dto.ClientSessionBean;
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.core.exception.system.UnexpectedNoDataFoundException;
 import framework.jpqlclient.api.EntityManagerProvider;
-import framework.service.core.transaction.ServiceContext;
 import framework.service.test.CachableConst;
 import framework.service.test.SampleNativeQuery;
 import framework.service.test.SampleNativeQueryConst;
@@ -52,9 +50,6 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	 */
 	@Test
 	public void select(){
-		
-		ClientSessionBean bean = ServiceContext.getCurrentInstance().getClientSessionBean();
-		bean.setUserId("userId");
 		
 		setUpData("TEST.xls");
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);

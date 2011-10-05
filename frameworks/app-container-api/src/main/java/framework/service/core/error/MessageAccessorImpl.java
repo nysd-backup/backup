@@ -3,7 +3,9 @@
  */
 package framework.service.core.error;
 
-import framework.api.dto.ClientSessionBean;
+import java.util.Locale;
+
+import framework.api.dto.ReplyMessage;
 import framework.core.message.DefinedMessage;
 import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
@@ -41,10 +43,21 @@ public class MessageAccessorImpl implements MessageAccessor<MessageBean>{
 	 */
 	@Override
 	public MessageBean addMessage(MessageBean message) {
-		ServiceContext context = ServiceContext.getCurrentInstance();
-		ClientSessionBean bean = context.getClientSessionBean();		
-		DefinedMessage defined = builder.load(message, bean.getLocale());		
-		context.addMessage(defined);
+		return addMessage(message,Locale.getDefault());
+	}
+	
+	/**
+	 * @see framework.logics.builder.MessageAccessor#addMessage(framework.core.message.MessageBean)
+	 */
+	@Override
+	public MessageBean addMessage(MessageBean message,Locale locale) {
+		ServiceContext context = ServiceContext.getCurrentInstance();	
+		DefinedMessage defined = builder.load(message, locale);	
+		ReplyMessage reply = new ReplyMessage();
+		reply.setCode(message.getCode());
+		reply.setLevel(defined.getLevel().getLevel());
+		reply.setMessage(builder.build(defined.getMessage(),message.getDetail()));
+		context.addMessage(reply);
 		return message;
 	}
 

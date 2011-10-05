@@ -17,10 +17,16 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
+			
+	<!--  このように自分でtransactionAdvisorを指定する場合、tx:annotation-divenを使用するとAdviceが二つになってしまうため禁止 -->
+	<bean id="transactionAttributeSource" class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+	<bean id="txAdvice" class="framework.service.ext.transaction.ContextControllableTransactionInterceptor" >
+		<property name="transactionAttributeSource" ref="transactionAttributeSource"/>	
+	</bean>
+	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+		<property name="transactionInterceptor" ref="txAdvice"/>
+	</bean>
 
-	<!-- リクエストリスナー-->
-	<bean id="requestListener" class="framework.service.ext.listener.RequestListenerImpl" scope="prototype" />
-	
 	<!-- メッセージ作成-->
 	<bean id="messageBuilder" class="framework.logics.builder.impl.MessageBuilderImpl"/>
 	<bean id="messageAccessor" class="framework.service.core.error.MessageAccessorImpl">

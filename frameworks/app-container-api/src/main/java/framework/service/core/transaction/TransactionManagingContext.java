@@ -5,7 +5,7 @@ package framework.service.core.transaction;
 
 import java.util.LinkedList;
 
-import framework.core.message.DefinedMessage;
+import framework.api.dto.ReplyMessage;
 import framework.core.message.MessageLevel;
 
 /**
@@ -16,8 +16,26 @@ import framework.core.message.MessageLevel;
  */
 public class TransactionManagingContext extends ServiceContext{
 	
+	/** true:any transaction is failed. */
+	private boolean anyTransactionFailed = false;
+	
 	/** the stack of unit of work */
 	protected LinkedList<InternalUnitOfWork> unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
+	
+	/**
+	 * set anyTransactionFailed to true. 
+	 */
+	protected void setAnyTransactionFailed(){
+		anyTransactionFailed = true;
+	}
+	
+	/**
+	 * @return the anyTransactionFailed
+	 */
+	public boolean isAnyTransactionFailed(){
+		return anyTransactionFailed;
+	}
+	
 	
 	/**
 	 * start unit of work.
@@ -48,10 +66,11 @@ public class TransactionManagingContext extends ServiceContext{
 	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
 	 */
 	@Override
-	public void addMessage(DefinedMessage message){
+	public void addMessage(ReplyMessage message){
 		//エラーレベル以上のメッセージは現在トランザクションをロールバック状態にする
-		if( MessageLevel.Error.getLevel() <= message.getLevel().getLevel()){
-			getCurrentUnitOfWork().setRollbackOnly();			
+		if( MessageLevel.Error.getLevel() <= MessageLevel.find(message.getLevel()).getLevel()){
+			getCurrentUnitOfWork().setRollbackOnly();		
+			setAnyTransactionFailed();
 		}
 		super.addMessage(message);
 	}
@@ -71,6 +90,7 @@ public class TransactionManagingContext extends ServiceContext{
 	 * @see framework.core.context.AbstractGlobalContext#release()
 	 */
 	public void release(){
+		anyTransactionFailed = false;
 		try{
 			for(InternalUnitOfWork unit : unitOfWorkStack){
 				unit.terminate();

@@ -6,9 +6,7 @@ package framework.core.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import framework.api.dto.ClientRequestBean;
-import framework.api.dto.ClientSessionBean;
-import framework.core.message.DefinedMessage;
+import framework.api.dto.ReplyMessage;
 
 /**
  * The thread-local context
@@ -22,20 +20,14 @@ public abstract class AbstractGlobalContext {
 	protected int callStackLevel = 0;
 	
 	/** the list of the messages */
-	protected List<DefinedMessage> globalMessageList = new ArrayList<DefinedMessage>();
-	
-	/** the session */
-	protected ClientSessionBean clientSession = null;
-	
-	/** the request */
-	protected ClientRequestBean clientRequest = null;
-	
+	protected List<ReplyMessage> globalMessageList = new ArrayList<ReplyMessage>();
+
 	/**
 	 * Adds the message to reply to WEB container.
 	 * 
 	 * @param message the message
 	 */
-	public abstract void addMessage(DefinedMessage message);
+	public abstract void addMessage(ReplyMessage message);
 	
 	/**
 	 * push call stack.
@@ -58,24 +50,11 @@ public abstract class AbstractGlobalContext {
 		return callStackLevel;
 	}
 	
-	/**
-	 * @return the session
-	 */
-	public ClientSessionBean getClientSessionBean(){
-		return clientSession;
-	}
-	
-	/**
-	 * @return the request
-	 */
-	public ClientRequestBean getClientRequestBean(){
-		return clientRequest;
-	}
-	
+
 	/**
 	 * @return the list of the messages
 	 */
-	public List<DefinedMessage> getMessageList() {
+	public List<ReplyMessage> getMessageList() {
 		return globalMessageList;
 	}
 	
@@ -84,9 +63,7 @@ public abstract class AbstractGlobalContext {
 	 */
 	protected void release(){
 		callStackLevel = 0;
-		globalMessageList = new ArrayList<DefinedMessage>();
-		clientRequest = null;
-		clientSession = null;		
+		globalMessageList = new ArrayList<ReplyMessage>();			
 	}
 
 }

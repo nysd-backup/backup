@@ -61,8 +61,7 @@ public class MessageBuilderImplTest{
 	public void build() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
 		DefinedMessage defined = builder.load(new MessageBean(100,"TEST"), new Locale("en"));
-		builder.build(defined);
-		Assert.assertEquals(100,defined.getMessageBean().getCode());
+		builder.build(defined.getMessage(),100);
 		Assert.assertTrue(defined.isNotify());
 		Assert.assertEquals("Error",defined.getLevel().name());
 	}

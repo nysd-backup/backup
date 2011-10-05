@@ -24,15 +24,14 @@ import framework.sqlengine.builder.StatementProvider;
 public class StatementProviderImpl implements StatementProvider{
 	
 	/**
-	 * @see framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String, java.util.List, java.lang.String)
+	 * @see framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String)
 	 */
 	@Override
-	public PreparedStatement createStatement(Connection con ,String sql,List<Object> bindList,String queryId) throws SQLException{
-
+	public PreparedStatement createStatement(Connection con, String sql)
+			throws SQLException {
 		PreparedStatement statement = null;
 		try{
 			statement = configure(con.prepareStatement(sql));
-			setBindParameter(statement,bindList);
 		}catch(SQLException sqle){
 			if( statement != null){
 				try{
@@ -42,6 +41,17 @@ public class StatementProviderImpl implements StatementProvider{
 			}
 			throw sqle;
 		}
+		return statement;
+	}
+
+	
+	/**
+	 * @see framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String, java.util.List, java.lang.String)
+	 */
+	@Override
+	public PreparedStatement createStatement(Connection con ,String sql,List<Object> bindList,String queryId) throws SQLException{
+		PreparedStatement statement = createStatement(con,sql);		
+		setBindParameter(statement,bindList);
 		return statement;
 	}
 	

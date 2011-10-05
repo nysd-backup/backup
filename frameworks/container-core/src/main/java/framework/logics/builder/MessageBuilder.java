@@ -38,8 +38,9 @@ public interface MessageBuilder {
 	/**
 	 * Builds the message.
 	 * 
-	 * @param defined the message
+	 * @param message the message
+	 * @param arguments the arguments
 	 * @return the message
 	 */
-	public String build(DefinedMessage defined);
+	public String build(String message, Object... arguments);
 }

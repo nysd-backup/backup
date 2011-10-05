@@ -6,8 +6,8 @@ package framework.service.core.messaging;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+
 import framework.api.dto.RequestDto;
-import framework.service.core.transaction.ServiceContext;
 
 /**
  * the message producer.
@@ -33,8 +33,6 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
-		ServiceContext context = ServiceContext.getCurrentInstance();
-
 		Serializable[] serial = null;
 		if( args == null){
 			serial = new Serializable[0];
@@ -47,8 +45,6 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 		RequestDto dto = new RequestDto();
 		dto.setAlias(null);
 		dto.setTargetClass(method.getDeclaringClass());
-		dto.setClientRequestBean(context.getClientRequestBean());
-		dto.setClientSessionBean(context.getClientSessionBean());
 		dto.setMethodName(method.getName());
 		dto.setParameter(serial);
 		dto.setParameterTypes(method.getParameterTypes());

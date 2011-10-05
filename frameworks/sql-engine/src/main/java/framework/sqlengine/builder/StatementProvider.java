@@ -18,6 +18,17 @@ public interface StatementProvider {
 	
 	/**
 	 * Creates the statement.
+	 * For {@link PreparedStatement#executeBatch()}.
+	 * 
+	 * @param con the connection
+	 * @param sql the SQL
+	 * @return the statement
+	 */
+	public PreparedStatement createStatement(Connection con ,String sql) throws SQLException;
+
+	
+	/**
+	 * Creates the statement.
 	 * 
 	 * @param con the connection
 	 * @param sql the SQL

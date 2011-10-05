@@ -24,16 +24,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- 
 		this context is exclusive to 'jtaApplicationContext'
 	 -->
-	
-	<!--  このように自分でtransactionAdvisorを指定する場合、tx:annotation-divenを使用するとAdviceが二つになってしまうため禁止 -->
-	<bean id="transactionAttributeSource" class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
-	<bean id="txAdvice" class="framework.service.ext.transaction.ContextControllableTransactionInterceptor" >
-		<property name="transactionAttributeSource" ref="transactionAttributeSource"/>	
-	</bean>
-	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
-		<property name="transactionInterceptor" ref="txAdvice"/>
-	</bean>
-	
+
 	<!-- NON_JTA -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">     
         <property name="persistenceUnitName" value="default" />   

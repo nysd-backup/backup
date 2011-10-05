@@ -60,15 +60,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
-	<!-- トランザクションアドバイス、このようにするとtx:annotaiton-driven指定してしまうとadviceが二つになって怪しい動作になるためtx:annotaiton-driven禁止 -->
-	<bean id="transactionAttributeSource" class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
-	<bean id="txAdvice" class="framework.service.ext.transaction.ContextControllableTransactionInterceptor" >
-		<property name="transactionAttributeSource" ref="transactionAttributeSource"/>	
-	</bean>
-	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
-		<property name="transactionInterceptor" ref="txAdvice"/>
-	</bean>
-
   	<!-- WEB/帳票からのアクセス用（単体テストはJTA使用不可能なので）-->
 	<bean id="connectionProvider" class="framework.service.core.EntityManagerConnectionProviderImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>

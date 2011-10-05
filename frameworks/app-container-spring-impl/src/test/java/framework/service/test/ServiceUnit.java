@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -36,7 +35,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import framework.api.dto.ClientSessionBean;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.logics.log.LogWriter;
 import framework.logics.log.LogWriterFactory;
@@ -72,14 +70,12 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	@Resource
 	public void setApplicationContext(final ApplicationContext applicationContext){
+		
 		locator = createLocator(applicationContext);
 		locator.construct();	
 		
-		context = new ServiceTestContextImpl();
-		ClientSessionBean clientSessionBean = new ClientSessionBeanImpl();
-		clientSessionBean.setLocale(Locale.JAPAN);		
-		context.initialize();
-		context.setClientSessionBean(clientSessionBean);		
+		context = new ServiceTestContextImpl();	
+		context.initialize();		
 
 		try{
 			Class<?> clazz = Class.forName(CachableConst.class.getName());					

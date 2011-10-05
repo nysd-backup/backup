@@ -5,9 +5,10 @@ package framework.web.core.context;
 
 import javax.servlet.http.HttpServletRequest;
 
+import framework.api.dto.ClientRequestBean;
 import framework.api.dto.ClientSessionBean;
+import framework.api.dto.ReplyMessage;
 import framework.core.context.AbstractGlobalContext;
-import framework.core.message.DefinedMessage;
 import framework.core.message.MessageLevel;
 
 /**
@@ -20,6 +21,10 @@ public abstract class WebContext extends AbstractGlobalContext{
 
 	/** if ture request is failed */
 	protected boolean requestFailed = false;
+	
+	private ClientSessionBean clientSessionBean = null;
+	
+	private ClientRequestBean clientRequestBean = null;
 	
 	/** the ThreadLocal */
 	private static ThreadLocal<WebContext> instance = new ThreadLocal<WebContext>(){
@@ -47,10 +52,17 @@ public abstract class WebContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @param session the session between the client and the server
+	 * @param clientSession the clientSession to set
 	 */
-	public void setClientSessionBean(ClientSessionBean session){
-		super.clientSession = session;
+	public void setClientSessionBean(ClientSessionBean clientSessionBean) {
+		this.clientSessionBean = clientSessionBean;
+	}
+
+	/**
+	 * @return the clientSession
+	 */
+	public ClientSessionBean getClientSessionBean() {
+		return clientSessionBean;
 	}
 	
 	/**
@@ -68,13 +80,13 @@ public abstract class WebContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
+	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.api.dto.ReplyMessage)
 	 */
 	@Override
-	public void addMessage(DefinedMessage message){
+	public void addMessage(ReplyMessage message){
 		
 		//エラーレベル以上のメッセージはエラー扱い
-		if( MessageLevel.Error.getLevel() <= message.getLevel().getLevel()){
+		if( MessageLevel.Error.getLevel() <= MessageLevel.find(message.getLevel()).getLevel()){
 			setRequestFailed();
 		}
 		globalMessageList.add(message);
@@ -89,6 +101,8 @@ public abstract class WebContext extends AbstractGlobalContext{
 	public void release(){
 		super.release();
 		requestFailed = false;
+		clientSessionBean = null;
+		clientRequestBean = null;
 		setCurrentInstance(null);
 	}
 	
@@ -98,6 +112,22 @@ public abstract class WebContext extends AbstractGlobalContext{
 	 * @param request the request
 	 */
 	public abstract void initialize(HttpServletRequest request );
+
+	/**
+	 * @param clientRequestBean the clientRequestBean to set
+	 */
+	public void setClientRequestBean(ClientRequestBean clientRequestBean) {
+		this.clientRequestBean = clientRequestBean;
+	}
+
+	/**
+	 * @return the clientRequestBean
+	 */
+	public ClientRequestBean getClientRequestBean() {
+		return clientRequestBean;
+	}
+
+
 	
 
 }

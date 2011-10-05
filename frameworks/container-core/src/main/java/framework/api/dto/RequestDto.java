@@ -30,12 +30,6 @@ public class RequestDto implements Serializable{
 	/** the types of parameter */
 	private Class<?>[] parameterTypes;
 	
-	/** the session */
-	private ClientSessionBean clientSessionBean;
-	
-	/** the request */
-	private ClientRequestBean clientRequestBean;
-	
 	/**
 	 * @return the types
 	 */
@@ -65,31 +59,10 @@ public class RequestDto implements Serializable{
 	}
 
 	/**
-	 * @return the clientSessionBean
-	 */
-	public ClientSessionBean getClientSessionBean() {
-		return clientSessionBean;
-	}
-
-	/**
-	 * @return the clientRequestBean
-	 */
-	public ClientRequestBean getClientRequestBean() {
-		return clientRequestBean;
-	}
-
-	/**
 	 * @return the targetClass
 	 */
 	public Class<?> getTargetClass() {
 		return targetClass;
-	}
-
-	/**
-	 * @param clientRequestBean the clientRequestBean to set
-	 */
-	public void setClientRequestBean(ClientRequestBean clientRequestBean) {
-		this.clientRequestBean = clientRequestBean;
 	}
 
 	/**
@@ -127,10 +100,4 @@ public class RequestDto implements Serializable{
 		this.parameterTypes = parameterTypes;
 	}
 
-	/**
-	 * @param clientSessionBean the clientSessionBean to set
-	 */
-	public void setClientSessionBean(ClientSessionBean clientSessionBean) {
-		this.clientSessionBean = clientSessionBean;
-	}
 }

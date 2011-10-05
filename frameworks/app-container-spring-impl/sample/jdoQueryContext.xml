@@ -19,9 +19,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		this context is exclusive to any other context.
 	 -->
 	 
-	 <!-- リクエストリスナー-->
-	<bean id="requestListener" class="framework.service.ext.listener.RequestListenerImpl" scope="prototype" />
-	
 	<!-- メッセージ作成-->
 	<bean id="messageBuilder" class="framework.logics.builder.impl.MessageBuilderImpl"/>
 	<bean id="messageAccessor" class="framework.service.core.error.impl.MessageAccessorImpl">

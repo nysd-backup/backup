@@ -13,8 +13,6 @@ public class DefinedMessage{
 
 	private static final long serialVersionUID = 1L;
 
-	/** the message bean*/
-	private MessageBean messageBean;
 	/** the message */
 	private String message;
 	/** the level */
@@ -23,13 +21,12 @@ public class DefinedMessage{
 	private boolean notify;
 	
 	/**
-	 * @param bean the message bean
 	 * @param message the message
 	 * @param level the level
 	 * @param notify the notify
 	 */
-	public DefinedMessage(MessageBean bean ,String message ,MessageLevel level, boolean notify){
-		this.messageBean = bean;
+	public DefinedMessage(String message ,MessageLevel level, boolean notify){
+	
 		this.message = message;
 		this.level = level;
 		this.notify = notify;
@@ -56,18 +53,4 @@ public class DefinedMessage{
 		return notify;
 	}
 
-	/**
-	 * @param messageBean the messageBean to set
-	 */
-	public void setMessageBean(MessageBean messageBean) {
-		this.messageBean = messageBean;
-	}
-
-	/**
-	 * @return the messageBean
-	 */
-	public MessageBean getMessageBean() {
-		return messageBean;
-	}
-	
 }

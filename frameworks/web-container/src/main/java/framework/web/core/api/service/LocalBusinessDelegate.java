@@ -7,7 +7,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import framework.api.dto.ReplyDto;
 import framework.api.dto.RequestDto;
-import framework.api.service.RequestListener;
+import framework.api.service.DelegatingServiceInvoker;
 
 /**
  * The LocalBusinessDelegate.
@@ -19,12 +19,12 @@ import framework.api.service.RequestListener;
 public class LocalBusinessDelegate extends AbstractBusinessDelegate{
 
 	/** the listener */
-	private RequestListener listener;
+	private DelegatingServiceInvoker listener;
 
 	/**
 	 * @param listener the listener to set
 	 */
-	public void setRequestListener(RequestListener listener){		
+	public void setRequestListener(DelegatingServiceInvoker listener){		
 		this.listener = listener;
 	}
 

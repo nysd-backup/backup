@@ -19,23 +19,11 @@
 		    <artifactId>sql-client-api</artifactId>
 		    <version>${framework.sql.client.api.version}</version>
 		    <scope>compile</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>sql-engine</artifactId>
-		    <version>${framework.sql.engine.version}</version>
-		    <scope>compile</scope>
 		</dependency>				
 		<dependency>
 		    <groupId>framework</groupId>
 		    <artifactId>jpql-client-api</artifactId>
 		    <version>${framework.jpql.client.api.version}</version>
-		    <scope>compile</scope>
-		</dependency>	
-		<dependency>
-		    <groupId>framework</groupId>
-		    <artifactId>jpql-client-impl</artifactId>
-		    <version>${framework.jpql.client.impl.version}</version>
 		    <scope>compile</scope>
 		</dependency>			
 		<dependency>

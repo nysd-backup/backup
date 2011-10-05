@@ -8,7 +8,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import framework.api.dto.RequestDto;
-import framework.api.service.RequestListener;
+import framework.api.service.DelegatingServiceInvoker;
 
 /**
  * A listener for MDB and MDP.
@@ -30,12 +30,12 @@ public abstract class AbstractMessageListener implements MessageListener{
 		}catch(JMSException jmse){
 			throw new IllegalStateException(jmse);
 		}
-		RequestListener listener = createListener();
-		listener.processService(dto);
+		DelegatingServiceInvoker invoker = createListener();
+		invoker.processService(dto);
 	}
 	
 	/**
 	 * @return the listener
 	 */
-	protected abstract RequestListener createListener();
+	protected abstract DelegatingServiceInvoker createListener();
 }

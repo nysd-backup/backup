@@ -5,34 +5,34 @@ package framework.service.ext.transaction;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
-import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
 import framework.service.core.transaction.ServiceContext;
 
 /**
  * The intercepter for border of transaction.
+ * This is exclusive to AbstractDefaultInterceptor.
  * 
  * <pre>
  * The method of getting the transaction id depends of EJB container.
+ * Never to use nether you really need to add message in autonomous transaction.
+ * Glassfish v3 can be allowed to use this interceptor now. 
  * </pre>
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractTransactionInterceptor {
+@Deprecated
+public abstract class AbstractTransactionInterceptor extends DefaultInterceptor{
 
 	/** the context */
 	@Resource
 	private SessionContext context;
 	
 	/**
-	 * @param ic　the context
-	 * @return the result
-	 * @throws Throwable the exception
+	 * @see framework.service.ext.transaction.DefaultInterceptor#process(javax.interceptor.InvocationContext)
 	 */
-	@AroundInvoke
-	public Object invoke(InvocationContext ic) throws Throwable {
+	protected Object proceed(InvocationContext ic) throws Throwable {
 		
 		ServiceContextImpl sc = (ServiceContextImpl)ServiceContext.getCurrentInstance();
 		String currentTransactionId = getCurrentTransactionId(context);
@@ -61,11 +61,12 @@ public abstract class AbstractTransactionInterceptor {
 				sc.endUnitOfWork();
 			}
 		}
-		
 	}
+
 	
 	/**
 	 * Creates the transaction id from <code>SessionContext</code>
+	 * 
 	 * @param context the context
 	 * @return　the transaction id
 	 */

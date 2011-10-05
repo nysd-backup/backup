@@ -3,6 +3,8 @@
  */
 package framework.logics.builder;
 
+import java.util.Locale;
+
 import framework.core.message.MessageBean;
 
 
@@ -24,6 +26,14 @@ public interface MessageAccessor<T extends MessageBean> {
 	public T createMessage(int code , Object... args);
 	
 
+	/**
+	 * Adds the message to the context.
+	 * 
+	 * @param message the message
+	 * @param locale the locale
+	 */
+	public T addMessage(MessageBean message,Locale locale);
+	
 	/**
 	 * Adds the message to the context.
 	 * 

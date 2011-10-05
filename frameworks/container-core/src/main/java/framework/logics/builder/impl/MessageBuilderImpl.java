@@ -41,7 +41,7 @@ public class MessageBuilderImpl implements MessageBuilder{
 		String element = bundle.getString(String.valueOf(bean.getCode()));
 		String[] elm = element.split(",");
 		MessageLevel level = MessageLevel.find(elm[1]);
-		return new DefinedMessage(bean,elm[0],level, "Y".equals(elm[2]));
+		return new DefinedMessage(elm[0],level, "Y".equals(elm[2]));
 		
 	}
 
@@ -49,8 +49,8 @@ public class MessageBuilderImpl implements MessageBuilder{
 	 * @see framework.logics.builder.MessageBuilder#build(framework.core.message.DefinedMessage)
 	 */
 	@Override
-	public String build(DefinedMessage defined) {
-		return MessageFormat.format(defined.getMessage(),defined.getMessageBean().getDetail());
+	public String build(String message, Object... arguments) {
+		return MessageFormat.format(message,arguments);
 	}
 
 }

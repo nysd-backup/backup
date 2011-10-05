@@ -3,7 +3,6 @@
  */
 package framework.api.service;
 
-import framework.api.dto.ReplyDto;
 import framework.api.dto.RequestDto;
 
 /**
@@ -15,11 +14,11 @@ import framework.api.dto.RequestDto;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public interface RequestListener {
+public interface DelegatingServiceInvoker {
 
 	/**
 	 * @param dto the DTO
 	 */
-	public ReplyDto processService(RequestDto dto);
+	public Object processService(RequestDto dto);
 	
 }

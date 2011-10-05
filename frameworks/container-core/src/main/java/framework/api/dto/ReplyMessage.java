@@ -3,7 +3,6 @@
  */
 package framework.api.dto;
 
-import framework.core.message.MessageBean;
 
 /**
  * The reply message.
@@ -13,25 +12,15 @@ import framework.core.message.MessageBean;
  */
 public class ReplyMessage {
 
-	/** the message bean */
-	private MessageBean messageBean = null;
+	/** the message */
+	private String message = null;
+	
+	/** the code */
+	private int code = -1;
 	
 	/** the message level */
 	private int level = -1;
 
-	/**
-	 * @param messageBean the messageBean to set
-	 */
-	public void setMessageBean(MessageBean messageBean) {
-		this.messageBean = messageBean;
-	}
-
-	/**
-	 * @return the messageBean
-	 */
-	public MessageBean getMessageBean() {
-		return messageBean;
-	}
 
 	/**
 	 * @param level the level to set
@@ -45,5 +34,33 @@ public class ReplyMessage {
 	 */
 	public int getLevel() {
 		return level;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	/**
+	 * @return the code
+	 */
+	public int getCode() {
+		return code;
 	}
 }

@@ -5,7 +5,7 @@ package framework.core.exception.application;
 
 import java.io.Serializable;
 
-import framework.api.dto.ReplyDto;
+import framework.api.dto.ReplyMessage;
 
 /**
  * The business exception.
@@ -24,7 +24,10 @@ public class BusinessException extends RuntimeException{
 	private static final long serialVersionUID = 4928387597757529973L;
 
 	/** the data to reply to WEB container */
-	private ReplyDto reply;
+	private Serializable reply;
+	
+	/** the messages */
+	private ReplyMessage[] messageList;
 	
 	/**
 	 * @param message the message
@@ -47,8 +50,7 @@ public class BusinessException extends RuntimeException{
 	 */
 	public BusinessException(String message,Serializable reply){
 		super(message);
-		this.reply = new ReplyDto();
-		this.reply.setReply(reply);
+		this.reply = reply;
 	}
 	
 	/**
@@ -62,7 +64,21 @@ public class BusinessException extends RuntimeException{
 	 * @param <T> the type
 	 * @return the data
 	 */
-	public ReplyDto getReply(){
+	public Serializable getReply(){
 		return reply;
+	}
+
+	/**
+	 * @param message the messageList to set
+	 */
+	public void setMessageList(ReplyMessage[] messageList) {
+		this.messageList = messageList;
+	}
+
+	/**
+	 * @return the messageList
+	 */
+	public ReplyMessage[] getMessageList() {
+		return messageList;
 	}
 }

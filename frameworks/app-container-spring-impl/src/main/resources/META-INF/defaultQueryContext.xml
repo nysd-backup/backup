@@ -25,22 +25,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- Statement作成 -->
 	<bean id="statementProvider" class="framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
 
-	<!-- SQLエンジン -->
-	<bean id="sqlEngineFacade" class="framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
-		<property name="provider" ref="statementProvider"/>		
-		<property name="sqlBuilder" ref="sqlBuilder"/>	
-	</bean>		
 
 	<!--**************************************************	
 	サービス 
 	**************************************************-->	
 	<!-- エンティティマネージャの提供-->
 	<bean id="entityManagerProvider" class="framework.jpqlclient.internal.EntityManagerProviderImpl" scope="prototype" />
-		
-	<!-- 永続化処理-->
-	<bean id="entityManagerAccessor" class="framework.service.core.persistence.EntityManagerAccessorImpl" scope="prototype" >
-		<property name="entityManagerProvider" ref="entityManagerProvider"/>
-	</bean>	
 	
 	<!-- 例外処理 -->
 	<bean id="emptyHandler" class="framework.service.core.query.CustomEmptyHandlerImpl" scope="prototype" />

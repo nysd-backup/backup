@@ -14,7 +14,12 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
-
+	<aop:config>
+		<aop:aspect id="defaultAspect" ref="defaultInterceptor" order="1">	
+			<aop:pointcut expression="within(@org.springframework.stereotype.Service *)" id="defaultPointcut"/>	
+			<aop:around pointcut-ref="defaultPointcut" method="around"/>
+		</aop:aspect>			
+	</aop:config>
 	<aop:config>
 		<aop:aspect id="perfAspect" ref="perfInterceptor">	
 			<aop:pointcut expression="execution(* framework..*.*(..)) and not execution(* framework.service.core.advice.Advice.*(..))" id="pointcut"/>	
@@ -22,5 +27,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		</aop:aspect>			
 	</aop:config>
 	<bean id="perfInterceptor" class="framework.service.ext.advice.PerfInterceptor"/>
-	
+	<bean id="defaultInterceptor" class="framework.service.ext.transaction.DefaultInterceptor"/>
+
 </beans>

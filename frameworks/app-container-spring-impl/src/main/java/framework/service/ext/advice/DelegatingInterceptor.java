@@ -21,7 +21,7 @@ public class DelegatingInterceptor{
 	/**
 	 * @param advice the advice
 	 */
-	public void setAdvice(Advice advice){
+	public void setAdvice(Advice advice){		
 		this.advice = advice;
 	}
 

@@ -6,7 +6,7 @@ package framework.service.ext.define;
 import java.lang.reflect.InvocationHandler;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
-import framework.api.service.RequestListener;
+import framework.api.service.DelegatingServiceInvoker;
 import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.async.AsyncServiceFactory;
@@ -27,9 +27,9 @@ public interface ComponentBuilder {
 	public MessageClientFactory createMessagingClientFactory();
 	
 	/**
-	 * @return the <code>RequestListener</code>
+	 * @return the <code>DelegatingServiceInvokerImpl</code>
 	 */
-	public RequestListener createRequestListener();
+	public DelegatingServiceInvoker createRequestListener();
 	
 	/**
 	 * @return the JMS publisher

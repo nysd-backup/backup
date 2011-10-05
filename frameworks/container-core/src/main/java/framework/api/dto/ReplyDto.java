@@ -5,8 +5,6 @@ package framework.api.dto;
 
 import java.io.Serializable;
 
-import framework.core.message.DefinedMessage;
-
 /**
  * A reply data to WEB container
  *
@@ -17,25 +15,8 @@ public class ReplyDto implements Serializable{
 
 	private static final long serialVersionUID = -5671768150819629678L;
 	
-	/** the list of messages */
-	private DefinedMessage[] messageList = null;
-	
-	/** データ */
+	/** the data */
 	private Serializable reply;
-
-	/**
-	 * @param messageList the messageList to set
-	 */
-	public void setMessageList(DefinedMessage[] messageList) {
-		this.messageList = messageList;
-	}
-
-	/**
-	 * @return the messageList
-	 */	
-	public DefinedMessage[] getMessageList() {
-		return messageList;
-	}
 
 	/**
 	 * @param reply the reply to set
@@ -51,5 +32,4 @@ public class ReplyDto implements Serializable{
 		return reply;
 	}
 
-	
 }
