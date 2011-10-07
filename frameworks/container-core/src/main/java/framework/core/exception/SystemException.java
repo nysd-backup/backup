@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.core.exception.system;
+package framework.core.exception;
 
 /**
  * The system exception.

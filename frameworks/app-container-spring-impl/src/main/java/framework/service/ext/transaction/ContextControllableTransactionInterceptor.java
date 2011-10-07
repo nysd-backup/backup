@@ -18,7 +18,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.transaction.support.CallbackPreferringPlatformTransactionManager;
 import org.springframework.transaction.support.TransactionCallback;
 
-import framework.core.exception.application.BusinessException;
+import framework.core.exception.BusinessException;
 import framework.service.core.transaction.ServiceContext;
 import framework.service.core.transaction.TransactionManagingContext;
 

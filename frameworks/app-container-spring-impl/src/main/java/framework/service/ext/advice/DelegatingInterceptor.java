@@ -5,7 +5,7 @@ package framework.service.ext.advice;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 
-import framework.service.core.advice.Advice;
+import framework.service.core.advice.InternalInterceptor;
 
 /**
  * the intercepter to delegate.
@@ -16,12 +16,12 @@ import framework.service.core.advice.Advice;
 public class DelegatingInterceptor{
 	
 	/** the advice */
-	private Advice advice;
+	private InternalInterceptor advice;
 	
 	/**
 	 * @param advice the advice
 	 */
-	public void setAdvice(Advice advice){		
+	public void setInternal(InternalInterceptor advice){		
 		this.advice = advice;
 	}
 
@@ -30,14 +30,8 @@ public class DelegatingInterceptor{
 	 * @return the result
 	 * @throws Throwable the exception
 	 */
-	public Object invoke(ProceedingJoinPoint invocation) throws Throwable {
-		advice.before(invocation.getTarget(), invocation.getSignature().getName(),invocation.getArgs());
-		
-		Object value = invocation.proceed();
-		
-		advice.after(invocation.getThis(), invocation.getSignature().getName(),invocation.getArgs(),value);
-		
-		return value;
+	public Object around(ProceedingJoinPoint invocation) throws Throwable {
+		return advice.around(new ContextAdapterImpl(invocation));
 	}
 
 }

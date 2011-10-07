@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
-import framework.core.exception.application.BusinessException;
+import framework.core.exception.BusinessException;
 import framework.service.core.locator.ServiceLocator;
 import framework.service.core.transaction.InternalUnitOfWork;
 import framework.service.core.transaction.ServiceContext;

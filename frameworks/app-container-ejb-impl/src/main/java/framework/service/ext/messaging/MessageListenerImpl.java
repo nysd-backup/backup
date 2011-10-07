@@ -31,7 +31,7 @@ public class MessageListenerImpl extends AbstractMessageListener{
 	 */
 	@Override
 	protected DelegatingServiceInvoker createListener() {
-		return ServiceLocatorImpl.getComponentBuilder().createRequestListener();
+		return ServiceLocatorImpl.getComponentBuilder().createDelegatingServiceInvoker();
 	}
 
 }

@@ -9,7 +9,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import framework.service.core.locator.ServiceLocator;
-import framework.service.ext.define.ComponentBuilder;
 
 /**
  * A service locator.
@@ -77,7 +76,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 * @param prop the properties to look up
 	 * @return the service
 	 */
-	private Object lookup(String serviceName, Properties prop){
+	protected Object lookup(String serviceName, Properties prop){
 		
 		try{			
 			String format = String.format("%s/%s",PREFIX , serviceName);		

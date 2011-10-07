@@ -17,9 +17,9 @@ import framework.logics.log.LogWriterFactory;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SQLBuilderInterceptor implements Advice{
+public class InternalSQLBuilderInterceptor implements InternalInterceptor{
 
-	private static final LogWriter LOG = LogWriterFactory.getLog(SQLBuilderInterceptor.class);
+	private static final LogWriter LOG = LogWriterFactory.getLog(InternalSQLBuilderInterceptor.class);
 	
 	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();
@@ -33,14 +33,14 @@ public class SQLBuilderInterceptor implements Advice{
 	}
 
 	/**
-	 * @see framework.service.core.advice.Advice#before(java.lang.Object, java.lang.String, java.lang.Object[])
+	 * @see framework.service.core.advice.InternalInterceptor#around(framework.service.core.advice.ContextAdapter)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public void before(Object target, String method, Object[] argments) {				
-		if(LOG.isDebugEnabled() && !ignoreList.contains(argments[2])){
-			String previous = String.class.cast(argments[0]);			
-			Map<String, Object> parameter = (Map<String, Object>)argments[1];				
+	@SuppressWarnings("unchecked")
+	public Object around(ContextAdapter contextInvoker) throws Throwable {				
+		if(LOG.isDebugEnabled() && !ignoreList.contains(contextInvoker.getArgs()[2])){						
+			Map<String,Object> parameter = (Map<String,Object>)(contextInvoker.getArgs()[1]);
+			String previous = String.class.cast(contextInvoker.getArgs()[0]);
 			StringBuilder builder = new StringBuilder();
 			for(Map.Entry<String, Object> v : parameter.entrySet()){						
 				if(v.getValue() instanceof String){
@@ -49,19 +49,15 @@ public class SQLBuilderInterceptor implements Advice{
 					builder.append(v.getKey()).append("=").append(v.getValue()).append(" ");
 				}
 			}
-			LOG.debug(String.format("sql before prepared statement \r\n%s\r\n[%s]",previous,builder.toString()));			
-		}				
-	}
-
-	/**
-	 * @see framework.service.core.advice.Advice#after(java.lang.Object, java.lang.String, java.lang.Object[], java.lang.Object)
-	 */
-	@Override
-	public void after(Object target, String method, Object[] argments,Object result) {
-		String replaced = String.class.cast(result);	
-		if(!ignoreList.contains(argments[2])){
+			LOG.debug(String.format("sql before prepared statement \r\n%s\r\n[%s]",previous,builder.toString()));				
+		}
+		//変換後ログ
+		Object result = contextInvoker.proceed();
+		if(!ignoreList.contains(contextInvoker.getArgs()[2])){
+			String replaced = String.class.cast(result);	
 			LOG.info(String.format("sql after evaluate \r\n%s\r\n",replaced));				
 		}
+		return result;
 	}
 
 }

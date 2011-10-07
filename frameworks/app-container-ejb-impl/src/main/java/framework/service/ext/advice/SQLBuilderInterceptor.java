@@ -1,21 +1,20 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.service.ext.transaction;
+package framework.service.ext.advice;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import framework.service.ext.advice.ContextAdapterImpl;
-import framework.service.ext.advice.InternalDefaultInterceptor;
+import framework.service.core.advice.InternalSQLBuilderInterceptor;
 
 /**
- * The default interceptor.
+ * An advice for the SQL Builder.
  *
  * @author yoshida-n
  * @version	created.
  */
-public class DefaultInterceptor {
+public class SQLBuilderInterceptor {
 	
 	/**
 	 * @param ic the context
@@ -24,6 +23,7 @@ public class DefaultInterceptor {
 	 */
 	@AroundInvoke
 	public Object around(InvocationContext ic) throws Throwable {
-		return new InternalDefaultInterceptor().around(new ContextAdapterImpl(ic));
+		return new InternalSQLBuilderInterceptor().around(new ContextAdapterImpl(ic));
 	}
+
 }

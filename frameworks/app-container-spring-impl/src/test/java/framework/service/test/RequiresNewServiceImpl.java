@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
-import framework.core.exception.application.BusinessException;
+import framework.core.exception.BusinessException;
 import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.locator.ServiceLocator;

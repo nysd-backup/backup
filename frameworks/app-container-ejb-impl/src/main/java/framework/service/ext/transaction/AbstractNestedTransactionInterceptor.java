@@ -5,70 +5,42 @@ package framework.service.ext.transaction;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
+import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import framework.service.core.transaction.ServiceContext;
+import framework.service.ext.advice.ContextAdapterImpl;
+import framework.service.ext.advice.InternalNestedTransactionInterceptor;
 
 /**
  * The intercepter for border of transaction.
- * This is exclusive to AbstractDefaultInterceptor.
+ * This is exclusive to DefaultInterceptor.
  * 
- * <pre>
- * The method of getting the transaction id depends of EJB container.
- * Never to use nether you really need to add message in autonomous transaction.
- * Glassfish v3 can be allowed to use this interceptor now. 
- * </pre>
- *
+ * @see InternalNestedTransactionInterceptor
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	created.
  */
 @Deprecated
-public abstract class AbstractNestedTransactionInterceptor extends DefaultInterceptor{
-
-	/** the context */
+public abstract class AbstractNestedTransactionInterceptor {
+	
 	@Resource
 	private SessionContext context;
 	
 	/**
-	 * @see framework.service.ext.transaction.DefaultInterceptor#process(javax.interceptor.InvocationContext)
+	 * @param ic
+	 * @return
+	 * @throws Throwable
 	 */
-	protected Object proceed(InvocationContext ic) throws Throwable {
-		
-		ServiceContextImpl sc = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-		String currentTransactionId = getCurrentTransactionId(context);
-		NamedInternalUnitOfWork upperTransaction = (NamedInternalUnitOfWork)sc.getCurrentUnitOfWork();
-		boolean newTransaction = upperTransaction == null || !currentTransactionId.equals(upperTransaction.getTransactionId());
-
-		//トランザクション境界の場合新規作業単位に移行
-		if(newTransaction){
-			sc.startUnitOfWork();
-			NamedInternalUnitOfWork current = (NamedInternalUnitOfWork)sc.getCurrentUnitOfWork();
-			current.setTransactionId(currentTransactionId);
-		}
-		try{											
-			Object retVal = ic.proceed();			
-
-			//トランザクション境界の場合、コンテナにロールバック通知
-			if(newTransaction){				
-				if( sc.getCurrentUnitOfWork().isRollbackOnly()){
-					context.setRollbackOnly();
-				}				
-			}
-			return retVal;
-		}finally {
-			//トランザクション境界の場合、上位の作業単位に戻す
-			if(newTransaction){			
-				sc.endUnitOfWork();
-			}
-		}
+	@AroundInvoke
+	public Object around(InvocationContext ic) throws Throwable {
+		InternalNestedTransactionInterceptor internal = new InternalNestedTransactionInterceptor(createAdapter(context));
+		return internal.around(new ContextAdapterImpl(ic));
 	}
-
 	
 	/**
-	 * Creates the transaction id from <code>SessionContext</code>
+	 * Creates the adapter.
 	 * 
-	 * @param context the context
-	 * @return　the transaction id
+	 * @param context the SessionContext
+	 * @return the adapter
 	 */
-	protected abstract String getCurrentTransactionId(SessionContext context);
+	protected abstract SessionContextAdapter createAdapter(SessionContext context);
 }

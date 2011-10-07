@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.core.exception.application;
+package framework.core.exception;
 
 import java.io.Serializable;
 

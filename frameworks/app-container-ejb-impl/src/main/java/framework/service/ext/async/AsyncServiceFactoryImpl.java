@@ -3,7 +3,6 @@ package framework.service.ext.async;
 import java.lang.annotation.Annotation;
 
 import javax.ejb.Asynchronous;
-import javax.ejb.Stateless;
 
 import framework.service.core.async.AbstractAsyncServiceFactory;
 
@@ -13,7 +12,6 @@ import framework.service.core.async.AbstractAsyncServiceFactory;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@Stateless
 public class AsyncServiceFactoryImpl extends AbstractAsyncServiceFactory {
 
 	/**

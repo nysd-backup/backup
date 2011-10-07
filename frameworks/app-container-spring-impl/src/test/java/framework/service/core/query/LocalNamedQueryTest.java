@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
-import framework.core.exception.system.UnexpectedNoDataFoundException;
+import framework.core.exception.UnexpectedNoDataFoundException;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.test.CachableConst;
 import framework.service.test.SampleNamedQuery;

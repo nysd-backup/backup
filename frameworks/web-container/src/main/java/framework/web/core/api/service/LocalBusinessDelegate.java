@@ -5,7 +5,7 @@ package framework.web.core.api.service;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
-import framework.api.dto.ReplyDto;
+
 import framework.api.dto.RequestDto;
 import framework.api.service.DelegatingServiceInvoker;
 
@@ -32,7 +32,7 @@ public class LocalBusinessDelegate extends AbstractBusinessDelegate{
 	 * @see framework.web.core.api.service.AbstractBusinessDelegate#processService(framework.api.dto.RequestDto)
 	 */
 	@Override
-	protected ReplyDto processService(RequestDto dto) {
+	protected Object processService(RequestDto dto) {
 		return listener.processService(dto);
 	}
 

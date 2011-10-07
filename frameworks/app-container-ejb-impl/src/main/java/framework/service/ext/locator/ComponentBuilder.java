@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.service.ext.define;
+package framework.service.ext.locator;
 
 import java.lang.reflect.InvocationHandler;
 
@@ -29,7 +29,7 @@ public interface ComponentBuilder {
 	/**
 	 * @return the <code>DelegatingServiceInvokerImpl</code>
 	 */
-	public DelegatingServiceInvoker createRequestListener();
+	public DelegatingServiceInvoker createDelegatingServiceInvoker();
 	
 	/**
 	 * @return the JMS publisher

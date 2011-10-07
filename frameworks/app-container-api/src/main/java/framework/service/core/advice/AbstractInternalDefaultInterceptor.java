@@ -1,10 +1,12 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.service.core.transaction;
+package framework.service.core.advice;
 
 import framework.api.dto.ReplyMessage;
-import framework.core.exception.application.BusinessException;
+import framework.core.exception.BusinessException;
+import framework.service.core.transaction.ServiceContext;
+import framework.service.core.transaction.TransactionManagingContext;
 
 /**
  * The default interceptor.
@@ -16,16 +18,13 @@ import framework.core.exception.application.BusinessException;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class AbstractDefaultInterceptor<T> {
+public abstract class AbstractInternalDefaultInterceptor implements InternalInterceptor {
 
 	/**
-	 * Invoke service.
-	 * 
-	 * @param ic
-	 * @return
-	 * @throws Throwable
+	 * @see framework.service.core.advice.InternalInterceptor#around(framework.service.core.advice.ContextAdapter)
 	 */
-	public Object around(T ic) throws Throwable {
+	@Override
+	public Object around(ContextAdapter ic) throws Throwable {
 		
 		ServiceContext context = ServiceContext.getCurrentInstance();
 		if(context == null){
@@ -42,7 +41,7 @@ public abstract class AbstractDefaultInterceptor<T> {
 	 * @return the result
 	 * @throws Throwable
 	 */
-	protected Object invoke(T ic) throws Throwable {
+	protected Object invoke(ContextAdapter ic) throws Throwable {
 		return proceed(ic);
 	}
 	
@@ -53,7 +52,7 @@ public abstract class AbstractDefaultInterceptor<T> {
 	 * @return the result
 	 * @throws Throwable
 	 */
-	protected Object invokeAtTopLevel(T ic) throws Throwable {
+	protected Object invokeAtTopLevel(ContextAdapter ic) throws Throwable {
 		
 		TransactionManagingContext context = initializeContext();
 		long startTime = System.currentTimeMillis();
@@ -64,9 +63,7 @@ public abstract class AbstractDefaultInterceptor<T> {
 			
 			//いずれかのトランザクションで失敗していればエラーとする。
 			if(context.isAnyTransactionFailed()){
-				BusinessException e = createBusinessException();
-				e.setMessageList(context.getMessageList().toArray(new ReplyMessage[0]));				
-				throw e;
+				throw createBusinessException();			
 			}
 
 		}catch(Throwable e){		
@@ -97,9 +94,15 @@ public abstract class AbstractDefaultInterceptor<T> {
 	 * @param startTime the start time
 	 * @param cause the exception
 	 */
-	protected void terminate(long startTime,Throwable cause){
-		
+	protected void terminate(long startTime,Throwable cause) throws Throwable{
+		if(cause != null){
+			if(cause instanceof BusinessException){
+				BusinessException.class.cast(cause).setMessageList(ServiceContext.getCurrentInstance().getMessageList().toArray(new ReplyMessage[0]));
+			}			
+			throw cause;
+		}
 	}
+
 	
 	/**
 	 * Proceed service.
@@ -108,6 +111,8 @@ public abstract class AbstractDefaultInterceptor<T> {
 	 * @return the result
 	 * @throws Throwable
 	 */
-	protected abstract Object proceed(T ic) throws Throwable;
+	protected Object proceed(ContextAdapter ic) throws Throwable{
+		return ic.proceed();
+	}
 
 }

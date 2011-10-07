@@ -18,20 +18,20 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<aop:config>
 		<aop:aspect id="sqlBuilderAspect" ref="sqlBuilderAdvice">	
 			<aop:pointcut expression="execution(* framework.sqlengine.builder.SQLBuilder.evaluate(..))" id="sqlBuilderPtct"/>	
-			<aop:around pointcut-ref="sqlBuilderPtct" method="invoke"/>
+			<aop:around pointcut-ref="sqlBuilderPtct" method="around"/>
 		</aop:aspect>
 		<aop:aspect id="stmtBuilderAspect" ref="stmtBuilderAdvice">	
 			<aop:pointcut expression="execution(* framework.sqlengine.builder.StatementProvider.createStatement(..))" id="stmtBuilderPtct"/>	
-			<aop:around pointcut-ref="stmtBuilderPtct" method="invoke"/>
+			<aop:around pointcut-ref="stmtBuilderPtct" method="around"/>
 		</aop:aspect>
 	</aop:config>
 
-	<bean id="sqlBuilderLog" class="framework.service.core.advice.SQLBuilderInterceptor" />
-	<bean id="sqlBuilderAdvice" class="framework.service.ext.advice.DelegatingInterceptor" scope="singleton">
-		<property name="advice" ref="sqlBuilderLog"/>
+	<bean id="sqlBuilderLog" class="framework.service.core.advice.InternalSQLBuilderInterceptor" />
+	<bean id="sqlBuilderAdvice" class="framework.service.ext.advice.DelegatingInterceptor">
+		<property name="internal" ref="sqlBuilderLog"/>
 	</bean>	
-	<bean id="stmtBuilderLog" class="framework.service.core.advice.StatementBuilderInterceptor"/>
+	<bean id="stmtBuilderLog" class="framework.service.core.advice.InternalStatementBuilderInterceptor"/>
 	<bean id="stmtBuilderAdvice" class="framework.service.ext.advice.DelegatingInterceptor">
-		<property name="advice" ref="stmtBuilderLog"/>
+		<property name="internal" ref="stmtBuilderLog"/>
 	</bean>	
 </beans>

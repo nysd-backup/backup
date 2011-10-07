@@ -14,6 +14,8 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
+	<aop:aspectj-autoproxy/>
+	
 	<aop:config>
 		<aop:aspect id="defaultAspect" ref="defaultInterceptor" order="1">	
 			<aop:pointcut expression="within(@org.springframework.stereotype.Service *)" id="defaultPointcut"/>	
@@ -22,11 +24,17 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</aop:config>
 	<aop:config>
 		<aop:aspect id="perfAspect" ref="perfInterceptor">	
-			<aop:pointcut expression="execution(* framework..*.*(..)) and not execution(* framework.service.core.advice.Advice.*(..))" id="pointcut"/>	
+			<aop:pointcut expression="execution(* framework..*.*(..)) and not execution(* framework.service.core.advice.*.*(..))" id="pointcut"/>	
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>
-	<bean id="perfInterceptor" class="framework.service.ext.advice.PerfInterceptor"/>
-	<bean id="defaultInterceptor" class="framework.service.ext.transaction.DefaultInterceptor"/>
+	<bean id="internalPerfInterceptor" class="framework.service.core.advice.InternalPerfInterceptor"/>
+	<bean id="perfInterceptor" class="framework.service.ext.advice.DelegatingInterceptor">
+		<property name="internal" ref="internalPerfInterceptor"/>
+	</bean>
+	<bean id="internalDefaultInterceptor" class="framework.service.ext.advice.InternalDefaultInterceptor"/>
+	<bean id="defaultInterceptor" class="framework.service.ext.advice.DelegatingInterceptor">
+		<property name="internal" ref="internalDefaultInterceptor"/>
+	</bean>
 
 </beans>

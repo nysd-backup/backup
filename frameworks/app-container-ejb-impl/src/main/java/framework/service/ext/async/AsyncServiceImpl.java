@@ -5,7 +5,7 @@ import java.util.concurrent.Future;
 
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
 import framework.service.core.async.AsyncService;
 import framework.service.core.locator.ServiceLocator;
@@ -17,7 +17,7 @@ import framework.service.core.locator.ServiceLocator;
  * @version 2011/08/31 created.
  */
 @Asynchronous
-@Stateless
+@Singleton
 public class AsyncServiceImpl implements AsyncService{
 
 	/**

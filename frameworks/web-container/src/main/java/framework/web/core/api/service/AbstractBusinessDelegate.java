@@ -6,10 +6,7 @@ package framework.web.core.api.service;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import framework.api.dto.ReplyDto;
-import framework.api.dto.ReplyMessage;
 import framework.api.dto.RequestDto;
-import framework.web.core.context.WebContext;
 
 /**
  * The BusinessDelegate.
@@ -33,8 +30,7 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		WebContext context = WebContext.getCurrentInstance();	
-		
+	
 		Serializable[] serial = null;
 		if( args == null){
 			serial = new Serializable[0];
@@ -52,18 +48,8 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 		dto.setParameter(serial);
 		dto.setParameterTypes(method.getParameterTypes());
 		
-		ReplyDto reply = processService(dto);
+		return processService(dto);
 		
-		//メッセージがある場合はメッセージを追加
-		if( context != null){
-			ReplyMessage[] messageList = reply.getMessages();
-			if(messageList != null){
-				for(ReplyMessage message : messageList){	
-					context.addMessage(message);
-				}
-			}
-		}
-		return reply.getReply();
 	}
 	
 	/**
@@ -71,6 +57,6 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 	 * @param dto DTO
 	 * @return the reply
 	 */
-	protected abstract ReplyDto processService(RequestDto dto);
+	protected abstract Object processService(RequestDto dto);
 
 }

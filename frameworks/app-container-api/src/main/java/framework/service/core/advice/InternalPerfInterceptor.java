@@ -1,9 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.service.ext.advice;
-
-import org.aspectj.lang.ProceedingJoinPoint;
+package framework.service.core.advice;
 
 import framework.logics.log.LogWriterFactory;
 import framework.logics.log.NormalLogWriter;
@@ -15,17 +13,15 @@ import framework.service.core.transaction.ServiceContext;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public class PerfInterceptor{
+public class InternalPerfInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private static final NormalLogWriter LOG = LogWriterFactory.getPerfLog(PerfInterceptor.class);
+	private static final NormalLogWriter LOG = LogWriterFactory.getPerfLog(InternalPerfInterceptor.class);
 	
 	/**
-	 * @param ic the context
-	 * @return the result
-	 * @throws Throwable the exception
+	 * @see framework.service.core.advice.InternalInterceptor#around(framework.service.core.advice.ContextAdapter)
 	 */
-	public Object around(ProceedingJoinPoint ic) throws Throwable {
+	public Object around(ContextAdapter ic) throws Throwable {
 		
 		if(LOG.isDebugEnabled()){
 			ServiceContext context = ServiceContext.getCurrentInstance();
@@ -47,7 +43,7 @@ public class PerfInterceptor{
 					for (int i = 1; i < context.getCallStackLevel(); i++) {
 						builder.append("\t");
 					}
-					LOG.debug(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getSignature().getDeclaringTypeName(), ic.getSignature().getName()));
+					LOG.debug(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getDeclaringTypeName(), ic.getMethodName()));
 		
 					context.popCallStack();
 				}

@@ -3,7 +3,7 @@
  */
 package framework.service.core.query;
 
-import framework.core.exception.system.UnexpectedMultiResultException;
+import framework.core.exception.UnexpectedMultiResultException;
 import framework.sqlclient.api.MultiResultHandler;
 
 

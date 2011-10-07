@@ -3,7 +3,7 @@
  */
 package framework.service.core.query;
 
-import framework.core.exception.system.UnexpectedNoDataFoundException;
+import framework.core.exception.UnexpectedNoDataFoundException;
 import framework.sqlclient.api.EmptyHandler;
 
 /**

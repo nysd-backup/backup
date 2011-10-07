@@ -15,7 +15,7 @@ import framework.api.service.DelegatingServiceInvoker;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class DelegatingServiceInvokerImpl implements DelegatingServiceInvoker{
+public class DelegatingServiceInvokerImpl implements DelegatingServiceInvoker{
 
 	/**
 	 * @see framework.api.service.DelegatingServiceInvoker#processService(framework.api.dto.RequestDto)

@@ -4,10 +4,15 @@
 package framework.service.core.services;
 
 import java.util.List;
+
+import javax.persistence.CacheRetrieveMode;
+import javax.persistence.CacheStoreMode;
+
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.api.query.services.OrmQueryService;
 import framework.core.entity.AbstractEntity;
+import framework.jpqlclient.api.PersistenceHints;
 import framework.sqlclient.api.orm.OrmCondition;
 
 /**
@@ -94,7 +99,11 @@ public abstract class AbstractOrmQueryService<T extends AbstractEntity> implemen
 	 */
 	@SuppressWarnings("unchecked")
 	protected StrictQuery<T> createStrictQuery(OrmCondition<T> request) {
-		StrictQuery<T> query = getQueryFactory().createStrictQuery(request.getEntityClass());
-		return StrictQuery.class.cast(query.setCondition(request));
+		StrictQuery<T> query = getQueryFactory().createStrictQuery(request.getEntityClass());		
+		query = StrictQuery.class.cast(query.setCondition(request));
+		query.setHint(PersistenceHints.CACHE_STORE_MODE, CacheStoreMode.BYPASS);
+		query.setHint(PersistenceHints.CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS);
+		return query;
 	}
+	
 }

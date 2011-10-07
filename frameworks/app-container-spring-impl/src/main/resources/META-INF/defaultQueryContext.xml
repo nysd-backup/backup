@@ -25,6 +25,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- Statement作成 -->
 	<bean id="statementProvider" class="framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
 
+	<bean id="sqlEngineFacade" class="framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
+		<property name="sqlBuilder" ref="sqlBuilder"/>
+		<property name="provider" ref="statementProvider"/>
+	</bean>
 
 	<!--**************************************************	
 	サービス 
