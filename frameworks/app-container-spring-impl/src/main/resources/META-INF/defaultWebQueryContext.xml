@@ -15,22 +15,19 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 	
-	<!-- WEB層からの直接検索および帳票出力などのSQLエンジン経由のSQL実行専用 -->
-	
-	<!-- データソース取得サービス-->
+	<!-- 
 	<bean id="dataSourceManagerImpl" class="framework.service.ext.query.DataSourceManagerImpl" scope="prototype">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
-	<!-- SQLエンジン用コネクション(JTA専用、JTA以外で使用するとコネクションが不整合となる) -->
 	<bean id="connectionProvider" class="framework.service.core.query.DataSourceConnectionProviderImpl" />
+	-->
 	
 	<!-- WEB層からのクエリファクトリ -->
-	<bean id="clientQueryFactory" class="framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
-		<property name="sqlBuilder" ref="sqlBuilder"/>	
+	<bean id="clientQueryFactory" class="framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
+		<property name="entityManagerProvider" ref="entityManagerProvider"/>
+		<property name="sqlBuilder" ref="sqlBuilder"/>			
 		<property name="emptyHandler" ref="emptyHandler"/>	
-		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
-		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
  
 </beans>

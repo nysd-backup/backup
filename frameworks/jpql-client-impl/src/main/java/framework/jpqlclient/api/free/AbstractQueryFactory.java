@@ -21,6 +21,7 @@ import framework.sqlclient.api.free.FreeQuery;
 import framework.sqlclient.api.free.FreeUpdate;
 import framework.sqlclient.api.free.QueryAccessor;
 import framework.sqlclient.api.free.QueryFactory;
+import framework.sqlclient.internal.AbstractInternalQuery;
 import framework.sqlclient.internal.impl.DefaultEmptyHandlerImpl;
 import framework.sqlengine.builder.ConstAccessor;
 import framework.sqlengine.builder.SQLBuilder;
@@ -162,24 +163,39 @@ public abstract class AbstractQueryFactory  implements QueryFactory{
 		
 		javax.persistence.NamedQuery nq = clazz.getAnnotation(javax.persistence.NamedQuery.class);
 		InternalNamedQueryImpl query = null;
-		QueryHint[] hints = new QueryHint[0];
-		//標溁E
+		//標準
 		if(nq != null){
 			query = new InternalNamedQueryImpl(nq.name(),nq.query(), em,clazz.getSimpleName() ,false,builder,accessor);				
-			hints = nq.hints();
-		//拡張-if斁E��用	
+			for(QueryHint h: nq.hints()){
+				query.setHint(h.name(), h.value());
+			}
+		//拡張-if文用	
 		}else{
 			AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);
 			query = new InternalNamedQueryImpl(null,aq.query(), em, clazz.getSimpleName(),false,builder,accessor);				
-			Hint hint = clazz.getAnnotation(Hint.class);
-			if(hint != null){
-				hints = hint.hitns();
-			}
+			setHint(clazz, query);
+		}
+	
+		return query;
+	}
+	
+
+	/**
+	 * Set the query hints.
+	 * 
+	 * @param clazz the class
+	 * @param internal the internal
+	 * @return the internal query
+	 */
+	protected void setHint(Class<?> clazz , AbstractInternalQuery internal){
+		Hint hint = clazz.getAnnotation(Hint.class);
+		QueryHint[] hints = new QueryHint[0];
+		if(hint != null){
+			hints = hint.hitns();
 		}
 		for(QueryHint h: hints){
-			query.setHint(h.name(), h.value());
+			internal.setHint(h.name(), h.value());
 		}
-		return query;
 	}
 	
 	

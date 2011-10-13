@@ -15,7 +15,7 @@ import framework.sqlengine.executer.RecordFilter;
 public class DelegatingResultSetFilter<T> implements RecordFilter<T>{
 
 	/** the filter */
-	private ResultSetFilter<T> filter = null;
+	private final ResultSetFilter<T> filter;
 	
 	/**
 	 * @param delegate　the delegate to set
@@ -29,7 +29,11 @@ public class DelegatingResultSetFilter<T> implements RecordFilter<T>{
 	 */
 	@Override
 	public T edit(T data) {
-		return filter.edit(data);
+		if(filter != null){
+			return filter.edit(data);
+		}else{
+			return data;
+		}
 	}
 
 }

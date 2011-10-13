@@ -40,6 +40,10 @@ public abstract class AbstractInternalQuery{
 	/** if true dont analyze the template*/
 	protected final boolean useRowSql;
 	
+	/** the JPA hint */
+	protected Map<String,Object> hints = null;
+	
+	
 	/**
 	 * @param useRowSql　the useRowSql to set
 	 * @param sql the SQL to set
@@ -51,6 +55,16 @@ public abstract class AbstractInternalQuery{
 		this.param = new HashMap<String,Object>();
 		this.branchParam = new HashMap<String,Object>();		
 		this.sql = sql;		
+		this.hints = new HashMap<String,Object>();		
+	}
+	
+	/**
+	 * @param arg0 the hint of the key
+	 * @param arg1 the hint value
+	 * @return self
+	 */
+	public void setHint(String arg0, Object arg1) {
+		hints.put(arg0, arg1);
 	}
 	
 	/**
@@ -79,18 +93,16 @@ public abstract class AbstractInternalQuery{
 	 * @param arg0 the start position
 	 * @return self
 	 */
-	public AbstractInternalQuery setFirstResult(int arg0) {
+	public void setFirstResult(int arg0) {
 		this.firstResult = arg0;
-		return this;
 	}
 
 	/**
 	 * @param arg0 the max results
 	 * @return self
 	 */
-	public AbstractInternalQuery setMaxResults(int arg0) {
+	public void setMaxResults(int arg0) {
 		maxSize = arg0;
-		return this;
 	}
 
 	/**
@@ -98,9 +110,8 @@ public abstract class AbstractInternalQuery{
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public AbstractInternalQuery setParameter(String arg0, Object arg1) {
+	public void setParameter(String arg0, Object arg1) {
 		param.put(arg0, arg1);
-		return this;
 	}
 	
 	/**

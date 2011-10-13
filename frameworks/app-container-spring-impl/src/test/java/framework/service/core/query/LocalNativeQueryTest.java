@@ -24,6 +24,7 @@ import framework.service.test.SampleNativeUpdate;
 import framework.service.test.ServiceUnit;
 import framework.service.test.entity.ITestEntity;
 import framework.service.test.entity.TestEntity;
+import framework.sqlclient.api.free.NativeResult;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
@@ -278,21 +279,19 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * サポ�EトしなぁE��夁E
+	 * total result
 	 */
 	@Test
-	public void unsupported(){
+	public void getHitCount(){
+		
+		setUpData("TEST.xls");
 		
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-		try{
-			query.getFetchResult();
-		}catch(UnsupportedOperationException e){			
-		}	
-		try{
-			query.getTotalResult();
-			fail();
-		}catch(UnsupportedOperationException e){			
-		}		
+		query.setMaxResults(1);
+		NativeResult<TestEntity> result = query.getTotalResult();
+		assertEquals(2,result.getHitCount());
+		assertTrue(result.isLimited());
+		assertEquals(1,result.getResultList().size());
 	}
 	
 

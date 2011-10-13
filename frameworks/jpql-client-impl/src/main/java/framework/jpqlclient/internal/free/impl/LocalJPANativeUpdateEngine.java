@@ -3,6 +3,7 @@
  */
 package framework.jpqlclient.internal.free.impl;
 
+import framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl;
 import framework.sqlclient.api.free.FreeUpdate;
 import framework.sqlclient.api.free.NativeUpdate;
 import framework.sqlclient.internal.AbstractLocalUpdateEngine;
@@ -13,12 +14,12 @@ import framework.sqlclient.internal.AbstractLocalUpdateEngine;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class LocalJPANativeUpdateEngine extends AbstractLocalUpdateEngine<InternalNativeJPAQueryImpl> implements NativeUpdate{
+public class LocalJPANativeUpdateEngine extends AbstractLocalUpdateEngine<AbstractInternalJPANativeQueryImpl<?>> implements NativeUpdate{
 
 	/**
 	 * @param delegate the delegate to set
 	 */
-	public LocalJPANativeUpdateEngine(InternalNativeJPAQueryImpl delegate) {
+	public LocalJPANativeUpdateEngine(AbstractInternalJPANativeQueryImpl<?> delegate) {
 		super(delegate);		
 	}
 

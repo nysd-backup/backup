@@ -30,7 +30,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	protected final Class<T> resultType;
 	
 	/** the filter for <code>ResultSet</code> */
-	protected ResultSetFilter<T> filter;
+	protected ResultSetFilter<T> filter = null;
 	
 	/** the facade of SQLEngine */
 	protected final SQLEngineFacade facade;
@@ -54,15 +54,14 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	 * @param filter the filter to set
 	 * @return self
 	 */
-	public InternalQueryImpl<T> setFilter(ResultSetFilter<T> filter){
+	public void setFilter(ResultSetFilter<T> filter){
 		this.filter = filter;
-		return this;
 	}
 	
 	/**
 	 * @return the result
 	 */
-	public NativeResult<T> getNativeResult(){
+	public NativeResult<T> getTotalResult(){
 		QueryParameter<T> param = createQueryParameter();
 		QueryResult<T> result = facade.executeTotalQuery(param, cs.getConnection());
 		return new NativeResult<T>(result.isLimited(), result.getResultList(), result.getHitCount());

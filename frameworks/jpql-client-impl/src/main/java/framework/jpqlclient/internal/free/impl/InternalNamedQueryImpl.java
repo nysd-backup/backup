@@ -3,10 +3,13 @@
  */
 package framework.jpqlclient.internal.free.impl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
+import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
 import framework.jpqlclient.internal.free.AbstractInternalJPAQuery;
@@ -21,6 +24,13 @@ import framework.sqlengine.builder.SQLBuilder;
  */
 public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 
+	/** the flush mode */
+	protected FlushModeType flush = null;
+	
+	/** the lock mode */
+	protected LockModeType lock = null;
+	
+	
 	/** 
 	 * the name of the query. 
 	 * only <code>javax.persistence.NamedQuery</code> is required to use name. 
@@ -44,6 +54,40 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 		this.name = name;
 		this.builder = builder;
 		this.accessor = accessor;
+	}
+
+	/**
+	 * @param arg0 the arg0 to set
+	 * @return self
+	 */
+	public void setFlushMode(FlushModeType arg0) {
+		flush = arg0;
+	}
+
+	/**
+	 * @param arg0 the arg0 to set
+	 * @return self
+	 */
+	public void setLockMode(LockModeType arg0) {
+		lock = arg0;
+	}
+	
+	/**
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#getResultList()
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getResultList() {
+		return mapping( createQuery()).getResultList();
+	}
+	
+	/**
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#getSingleResult()
+	 */
+	@Override
+	public Object getSingleResult() {
+		setMaxResults(1);
+		return mapping(createQuery()).getSingleResult();
 	}
 
 	/**
@@ -103,6 +147,21 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 					query.setParameter(variableName, param.get(variableName));						
 				}
 			}
+		}
+		return query;
+	}
+	
+	/**
+	 * @see framework.jpqlclient.internal.free.AbstractInternalJPAQuery#mapping(javax.persistence.Query)
+	 */
+	@Override
+	protected Query mapping(Query query){
+		query = super.mapping(query);
+		if(lock != null){
+			query.setLockMode(lock);
+		}
+		if(flush != null){
+			query.setFlushMode(flush);
 		}
 		return query;
 	}

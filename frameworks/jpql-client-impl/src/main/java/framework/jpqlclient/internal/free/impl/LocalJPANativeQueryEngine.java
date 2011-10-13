@@ -5,6 +5,7 @@ package framework.jpqlclient.internal.free.impl;
 
 import java.util.List;
 
+import framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl;
 import framework.sqlclient.api.EmptyHandler;
 import framework.sqlclient.api.free.FreeQuery;
 import framework.sqlclient.api.free.NativeQuery;
@@ -19,7 +20,7 @@ import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<InternalNativeJPAQueryImpl> implements NativeQuery{
+public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<AbstractInternalJPANativeQueryImpl<?>> implements NativeQuery{
 
 	/** the <code>EmptyHandler</code> */
 	private final EmptyHandler emptyHandler;
@@ -28,7 +29,7 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<In
 	 * @param delegate the delegate to set
 	 * @param emptyHandler the emptyHandler to set
 	 */
-	public LocalJPANativeQueryEngine(InternalNativeJPAQueryImpl delegate , EmptyHandler emptyHandler){
+	public LocalJPANativeQueryEngine(AbstractInternalJPANativeQueryImpl<?> delegate , EmptyHandler emptyHandler){
 		super(delegate);
 		this.emptyHandler = emptyHandler;
 	}
@@ -68,7 +69,8 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<In
 	@SuppressWarnings("rawtypes")
 	@Override
 	public <T extends NativeQuery> T setFilter(ResultSetFilter filter) {
-		throw new UnsupportedOperationException();
+		delegate.setFilter(filter);
+		return (T)this;
 	}
 
 	/**
@@ -76,7 +78,7 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<In
 	 */
 	@Override
 	public <T> NativeResult<T> getTotalResult() {
-		throw new UnsupportedOperationException();
+		return (NativeResult<T>)delegate.getTotalResult();
 	}
 
 	/**
@@ -84,7 +86,7 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<In
 	 */
 	@Override
 	public <T> List<T> getFetchResult() {
-		throw new UnsupportedOperationException();
+		return delegate.getFetchResult();
 	}
 
 }

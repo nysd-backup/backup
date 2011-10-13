@@ -3,13 +3,9 @@
  */
 package framework.jpqlclient.internal.free;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
-import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
 import framework.sqlclient.internal.AbstractInternalQuery;
@@ -22,18 +18,9 @@ import framework.sqlclient.internal.AbstractInternalQuery;
  */
 public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	
-	/** the flush mode */
-	protected FlushModeType flush = null;
-	
-	/** the lock mode */
-	protected LockModeType lock = null;
-	
 	/** the EntityManager */
-	protected EntityManager em = null;
-	
-	/** the JPA hint */
-	private Map<String,Object> hints = null;
-	
+	protected final EntityManager em;
+
 	/**
 	 * @param sql the SQL
 	 * @param em the em
@@ -41,34 +28,13 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	 */
 	public AbstractInternalJPAQuery(boolean useRowSql,String sql, EntityManager em , String queryId){
 		super(useRowSql,sql,queryId);
-		this.em = em;
-		this.hints = new HashMap<String,Object>();		
+		this.em = em;		
 	}
-
 	
 	/**
 	 * @return the new query
 	 */
 	protected abstract Query createQuery();
-	
-	/**
-	 * @param arg0 the hint of the key
-	 * @param arg1 the hint value
-	 * @return self
-	 */
-	public AbstractInternalJPAQuery setHint(String arg0, Object arg1) {
-		hints.put(arg0, arg1);
-		return this;
-	}
-	
-	/**
-	 * @see framework.sqlclient.internal.AbstractInternalQuery#getResultList()
-	 */
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List getResultList() {
-		return mapping( createQuery()).getResultList();
-	}
 
 	/**
 	 * @see framework.sqlclient.internal.AbstractInternalQuery#count()
@@ -78,15 +44,6 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 		//TODO 
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * @see framework.sqlclient.internal.AbstractInternalQuery#getSingleResult()
-	 */
-	@Override
-	public Object getSingleResult() {
-		setMaxResults(1);
-		return mapping(createQuery()).getSingleResult();
-	}
 	
 	/**
 	 * @see framework.sqlclient.internal.AbstractInternalQuery#executeUpdate()
@@ -95,20 +52,6 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	public int executeUpdate() {
 		return mapping(createQuery()).executeUpdate();
 	}
-
-	/**
-	 * @return the flush mode
-	 */
-	public FlushModeType getFlushMode() {
-		return flush;
-	}
-
-	/**
-	 * @return the lock mode
-	 */
-	public LockModeType getLockMode() {
-		return lock;
-	}
 	
 	/**
 	 * Set the parameter to query.
@@ -116,17 +59,10 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 	 * @param query the query
 	 * @return the query
 	 */
-	private Query mapping(Query query){
+	protected Query mapping(Query query){
 				
 		for(Map.Entry<String, Object> h : hints.entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
-		}
-		
-		if( flush != null){
-			query.setFlushMode(flush);
-		}
-		if( lock != null){
-			query.setLockMode(lock);
 		}
 		if( maxSize > 0){
 			query.setMaxResults(maxSize);
@@ -137,22 +73,5 @@ public abstract class AbstractInternalJPAQuery extends AbstractInternalQuery{
 		return query;
 	}
 
-	/**
-	 * @param arg0 the arg0 to set
-	 * @return self
-	 */
-	public AbstractInternalJPAQuery setFlushMode(FlushModeType arg0) {
-		flush = arg0;
-		return this;
-	}
-
-	/**
-	 * @param arg0 the arg0 to set
-	 * @return self
-	 */
-	public AbstractInternalJPAQuery setLockMode(LockModeType arg0) {
-		lock = arg0;
-		return this;
-	}
 
 }

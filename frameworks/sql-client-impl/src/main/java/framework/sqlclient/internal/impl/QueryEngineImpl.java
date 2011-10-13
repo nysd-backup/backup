@@ -68,7 +68,7 @@ public class QueryEngineImpl extends AbstractLocalNativeQueryEngine<InternalQuer
 	 */
 	@Override
 	public <T> NativeResult<T> getTotalResult() {
-		return (NativeResult<T>)delegate.getNativeResult();		
+		return (NativeResult<T>)delegate.getTotalResult();		
 	}
 
 	/**

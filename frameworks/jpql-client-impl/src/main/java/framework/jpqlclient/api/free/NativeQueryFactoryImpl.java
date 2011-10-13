@@ -49,6 +49,7 @@ public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	protected FreeQuery createNativeQueryEngine(Class<?> queryClass) {
 		AnonymousQuery aq = getAnonymousQuery(queryClass);
 		InternalQueryImpl internalQuery = new InternalQueryImpl(false,aq.query(),queryClass.getSimpleName(),connectionProvider, aq.resultClass(),engineFacade);
+		setHint(queryClass,internalQuery);
 		FreeQuery engine = new QueryEngineImpl(internalQuery,emptyHandler);						
 		return engine;
 	}
@@ -61,6 +62,7 @@ public class NativeQueryFactoryImpl extends AbstractQueryFactory {
 	protected FreeUpdate createNativeUpdateEngine(Class<?> updateClass) {
 		AnonymousQuery aq = getAnonymousQuery(updateClass);
 		InternalQueryImpl internalQuery = new InternalQueryImpl(false,aq.query(),updateClass.getSimpleName(),connectionProvider, null,engineFacade);
+		setHint(updateClass,internalQuery);
 		FreeUpdate engine = new UpdateEngineImpl(internalQuery);						
 		return engine;
 	}

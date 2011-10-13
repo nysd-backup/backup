@@ -49,7 +49,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- クエリファクトリ -->
-	<bean id="queryFactory" class="framework.jpqlclient.api.free.JPAQueryFactoryImpl" scope="prototype" >
+	<bean id="queryFactory" class="framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>			
 		<property name="emptyHandler" ref="emptyHandler"/>	

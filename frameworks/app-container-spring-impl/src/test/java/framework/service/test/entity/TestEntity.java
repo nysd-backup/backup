@@ -18,7 +18,7 @@ import framework.core.entity.AbstractEntity;
  * @version 2011/08/31 created.
  */
 @Entity
-@Table(name="testA")
+@Table(name="testa")
 public class TestEntity extends AbstractEntity{
 	
 	@Id

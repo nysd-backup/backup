@@ -36,7 +36,6 @@ public interface ComponentBuilder {
 	 */
 	public InvocationHandler createPublisher();
 	
-	
 	/**
 	 * @return the JMS sender
 	 */
