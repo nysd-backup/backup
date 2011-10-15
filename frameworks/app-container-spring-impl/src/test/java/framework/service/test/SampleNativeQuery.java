@@ -3,7 +3,6 @@
  */
 package framework.service.test;
 
-import framework.service.test.entity.TestEntity;
 import framework.sqlclient.api.free.AbstractNativeQuery;
 import framework.sqlclient.api.free.AnonymousQuery;
 
@@ -13,7 +12,7 @@ import framework.sqlclient.api.free.AnonymousQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@AnonymousQuery(query="@/sql/SAMPLE_NATIVE_QUERY.sql",resultClass=TestEntity.class)
+@AnonymousQuery(query="@/sql/SAMPLE_NATIVE_QUERY.sql",resultClass=SampleNativeResult.class)
 public class SampleNativeQuery extends AbstractNativeQuery{
 
 	public enum Bind {

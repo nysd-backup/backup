@@ -15,12 +15,14 @@ import framework.sqlengine.exception.SQLEngineException;
 public class ExceptionHandlerImpl implements ExceptionHandler{
 
 	/**
-	 * @see framework.sqlengine.exception.ExceptionHandler#rethrow(java.lang.Exception)
+	 * @see framework.sqlengine.exception.ExceptionHandler#rethrow(java.lang.Throwable)
 	 */
 	@Override
-	public RuntimeException rethrow(Exception e) {
+	public RuntimeException rethrow(Throwable e) {
 		if(e instanceof RuntimeException){
 			return (RuntimeException)e;
+		}else if(e instanceof Error){
+			throw (Error)e;
 		}else{
 			return new SQLEngineException(e);
 		}

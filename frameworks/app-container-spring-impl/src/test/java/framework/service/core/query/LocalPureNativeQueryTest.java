@@ -272,7 +272,6 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 			}
 			cnt++;
 		}
-		assertFalse(e.isEmpty());
-		assertEquals(2,e.size());
+		assertEquals(2,cnt);
 	}
 }

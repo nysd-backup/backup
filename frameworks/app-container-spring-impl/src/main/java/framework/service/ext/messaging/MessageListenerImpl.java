@@ -3,7 +3,7 @@
  */
 package framework.service.ext.messaging;
 
-import framework.api.service.DelegatingServiceInvoker;
+import framework.api.service.ServiceActivator;
 import framework.service.core.locator.ServiceLocator;
 import framework.service.core.messaging.AbstractMessageListener;
 
@@ -19,8 +19,8 @@ public class MessageListenerImpl extends AbstractMessageListener{
 	 * @see framework.service.core.messaging.AbstractMessageListener#createListener()
 	 */
 	@Override
-	protected DelegatingServiceInvoker createListener() {
-		return ServiceLocator.lookupByInterface(DelegatingServiceInvoker.class);
+	protected ServiceActivator createListener() {
+		return ServiceLocator.lookupByInterface(ServiceActivator.class);
 	}
 
 }

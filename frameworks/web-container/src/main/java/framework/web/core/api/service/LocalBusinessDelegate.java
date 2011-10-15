@@ -7,7 +7,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 
 import framework.api.dto.RequestDto;
-import framework.api.service.DelegatingServiceInvoker;
+import framework.api.service.ServiceActivator;
 
 /**
  * The LocalBusinessDelegate.
@@ -18,14 +18,14 @@ import framework.api.service.DelegatingServiceInvoker;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class LocalBusinessDelegate extends AbstractBusinessDelegate{
 
-	/** the listener */
-	private DelegatingServiceInvoker listener;
+	/** the ServiceActivator */
+	private ServiceActivator activator;
 
 	/**
-	 * @param listener the listener to set
+	 * @param activator the activator to set
 	 */
-	public void setRequestListener(DelegatingServiceInvoker listener){		
-		this.listener = listener;
+	public void setServiceActivator(ServiceActivator activator){		
+		this.activator = activator;
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class LocalBusinessDelegate extends AbstractBusinessDelegate{
 	 */
 	@Override
 	protected Object processService(RequestDto dto) {
-		return listener.processService(dto);
+		return activator.activate(dto);
 	}
 
 	

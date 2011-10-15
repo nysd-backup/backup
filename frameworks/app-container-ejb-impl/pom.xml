@@ -95,6 +95,12 @@
 		</dependency>	
 		<dependency>
 		    <groupId>framework</groupId>
+		    <artifactId>jpql-client-eclipselink-plugin</artifactId>
+		    <version>${framework.jpql.client.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>framework</groupId>
 		    <artifactId>sql-engine</artifactId>
 		    <version>${framework.sql.engine.version}</version>
 		    <scope>test</scope>

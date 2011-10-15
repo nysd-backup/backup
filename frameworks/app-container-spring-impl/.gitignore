@@ -1,0 +1,7 @@
+target
+.settings
+.checkstyle
+.classpath
+*.jar
+logs
+*.log

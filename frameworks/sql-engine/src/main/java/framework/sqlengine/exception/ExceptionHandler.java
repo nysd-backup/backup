@@ -15,5 +15,5 @@ public interface ExceptionHandler {
 	 * @param t the exception
 	 * @return the exception
 	 */
-	public RuntimeException rethrow(Exception t);
+	public RuntimeException rethrow(Throwable t);
 }

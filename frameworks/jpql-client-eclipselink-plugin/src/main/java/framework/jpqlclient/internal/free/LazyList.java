@@ -1,10 +1,8 @@
 /**
  * Copyright 2011 the original author
  */
-package framework.jpqlclient.internal.free.impl;
+package framework.jpqlclient.internal.free;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.ListIterator;
 
 import org.eclipse.persistence.queries.ScrollableCursor;
 
+import framework.sqlengine.exception.ExceptionHandler;
 import framework.sqlengine.executer.RecordHandler;
 
 /**
@@ -28,13 +27,20 @@ public class LazyList<E> implements List<E>{
 	private final ResultSetIterator itr;
 
 	/**
-	 * @param statement the statement
+	 * @param cursor the cursor
 	 * @param rs the rs
-	 * @param maxSize the maxSize
 	 * @param handler the handler
 	 */
-	public LazyList(ScrollableCursor cursor ,RecordHandler<E> handler){
-		this.itr = new ResultSetIterator(cursor,handler);
+	public LazyList(ScrollableCursor cursor ,RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+		this.itr = new ResultSetIterator(cursor,handler,exceptionHandler);
+	}
+	
+	/**
+	 * @see java.lang.Object#finalize()
+	 */
+	@Override
+	public void finalize(){
+		itr.close();
 	}
 	
 	/**
@@ -146,7 +152,7 @@ public class LazyList<E> implements List<E>{
 	 */
 	@Override
 	public void clear() {
-		throw new UnsupportedOperationException();
+		itr.close();
 	}
 
 	/**
@@ -229,12 +235,12 @@ public class LazyList<E> implements List<E>{
  		
 		private final RecordHandler<E> handler;
 
-		private final ResultSet rs;
+		private final ExceptionHandler exceptionHandler;
 		
-		public ResultSetIterator(ScrollableCursor cursor,RecordHandler<E> handler){
+		public ResultSetIterator(ScrollableCursor cursor,RecordHandler<E> handler,ExceptionHandler exceptionHandler){
 			this.cursor = cursor;
 			this.handler = handler;
-			this.rs = cursor.getResultSet();
+			this.exceptionHandler = exceptionHandler;
 		}
 
 		/**
@@ -243,15 +249,15 @@ public class LazyList<E> implements List<E>{
 		@Override
 		public boolean hasNext() {
 			try{
-				boolean result = rs.next();
+				boolean result = cursor.getResultSet().next();
 				if(!result){					
 					close();					
 				}
 				return result;
-			} catch (SQLException e) {
+			}catch(Throwable t){
 				close();
-				throw new IllegalStateException(e);
-			}	
+				throw exceptionHandler.rethrow(t);
+			}
 		}
 
 		/**
@@ -259,7 +265,12 @@ public class LazyList<E> implements List<E>{
 		 */
 		@Override
 		public E next() {
-			return handler.getRecord(rs);
+			try{
+				return handler.getRecord(cursor.getResultSet());
+			}catch(Throwable t){
+				close();
+				throw exceptionHandler.rethrow(t);
+			}
 		}
 
 		/**
@@ -270,6 +281,9 @@ public class LazyList<E> implements List<E>{
 			throw new UnsupportedOperationException();			
 		}
 		
+		/**
+		 * Close the cursor
+		 */
 		public void close(){
 			cursor.close();
 		}

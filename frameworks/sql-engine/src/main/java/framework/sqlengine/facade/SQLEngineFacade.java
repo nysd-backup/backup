@@ -4,6 +4,7 @@
 package framework.sqlengine.facade;
 
 import java.sql.Connection;
+import java.util.List;
 
 /**
  * The facade of the SQLEngine
@@ -31,7 +32,7 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the result
 	 */
-	public <T> QueryResult<T> executeQuery(QueryParameter<T> param , Connection con);
+	public <T> List<T> executeQuery(QueryParameter<T> param , Connection con);
 	
 	/**
 	 * Executes the SELECT and fetch the result. 
@@ -41,7 +42,7 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the result
 	 */
-	public <T> QueryResult<T> executeFetch(QueryParameter<T> param , Connection con);
+	public <T> List<T> executeFetch(QueryParameter<T> param , Connection con);
 	
 	/**
 	 * Executes the SELECT and get the hit count.

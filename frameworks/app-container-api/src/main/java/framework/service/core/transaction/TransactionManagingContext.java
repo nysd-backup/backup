@@ -36,6 +36,13 @@ public class TransactionManagingContext extends ServiceContext{
 		return anyTransactionFailed;
 	}
 	
+	/**
+	 * Set the current transaction to rolling back.
+	 */
+	public void setRollbackOnlyToCurrentTransaction(){
+		getCurrentUnitOfWork().setRollbackOnly();
+		setAnyTransactionFailed();
+	}
 	
 	/**
 	 * start unit of work.
@@ -69,8 +76,7 @@ public class TransactionManagingContext extends ServiceContext{
 	public void addMessage(ReplyMessage message){
 		//エラーレベル以上のメッセージは現在トランザクションをロールバック状態にする
 		if( MessageLevel.Error.getLevel() <= MessageLevel.find(message.getLevel()).getLevel()){
-			getCurrentUnitOfWork().setRollbackOnly();		
-			setAnyTransactionFailed();
+			setRollbackOnlyToCurrentTransaction();
 		}
 		super.addMessage(message);
 	}

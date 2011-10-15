@@ -51,7 +51,7 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<Ab
 	 */
 	@Override
 	public int count(){
-		throw new UnsupportedOperationException();
+		return delegate.count();
 	}
 
 	/**

@@ -2,7 +2,6 @@
   <name>container-core</name>
   <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
-    <project>jdoql-client-api</project>
     <project>jpql-client-api</project>
     <project>sql-client-api</project>
   </projects>

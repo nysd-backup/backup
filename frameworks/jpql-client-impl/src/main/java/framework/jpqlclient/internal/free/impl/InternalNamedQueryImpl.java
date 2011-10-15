@@ -30,7 +30,6 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	/** the lock mode */
 	protected LockModeType lock = null;
 	
-	
 	/** 
 	 * the name of the query. 
 	 * only <code>javax.persistence.NamedQuery</code> is required to use name. 
@@ -73,12 +72,20 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	}
 	
 	/**
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#count()
+	 */
+	@Override
+	public int count(){
+		throw new UnsupportedOperationException();
+	}	
+	
+	/**
 	 * @see framework.sqlclient.internal.AbstractInternalQuery#getResultList()
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List getResultList() {
-		return mapping( createQuery()).getResultList();
+		return setRange(mapping( createQuery())).getResultList();
 	}
 	
 	/**
@@ -87,13 +94,22 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	@Override
 	public Object getSingleResult() {
 		setMaxResults(1);
-		return mapping(createQuery()).getSingleResult();
+		return setRange(mapping(createQuery())).getSingleResult();
+	}
+	
+	/**
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#executeUpdate()
+	 */
+	@Override
+	public int executeUpdate() {
+		return mapping(createQuery()).executeUpdate();
 	}
 
 	/**
-	 * @see framework.jpqlclient.internal.free.AbstractInternalJPAQuery#createQuery()
+	 * Creates the query.
+	 * 
+	 * @return the query
 	 */
-	@Override
 	protected Query createQuery() {
 		String str = sql;		
 		Query query = null;
@@ -152,16 +168,34 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	}
 	
 	/**
-	 * @see framework.jpqlclient.internal.free.AbstractInternalJPAQuery#mapping(javax.persistence.Query)
+	 * @param query　the query
+	 * @return the query
 	 */
-	@Override
 	protected Query mapping(Query query){
-		query = super.mapping(query);
+		for(Map.Entry<String, Object> h : hints.entrySet()){		
+			query.setHint(h.getKey(), h.getValue());
+		}
 		if(lock != null){
 			query.setLockMode(lock);
 		}
 		if(flush != null){
 			query.setFlushMode(flush);
+		}
+		return query;
+	}
+	
+	/**
+	 * Set the range.
+	 * 
+	 * @param query the query
+	 * @return the query
+	 */
+	protected Query setRange(Query query){
+		if( maxSize > 0){
+			query.setMaxResults(maxSize);
+		}
+		if( firstResult > 0){
+			query.setFirstResult(firstResult);
 		}
 		return query;
 	}

@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
 
 import framework.api.dto.RequestDto;
-import framework.api.service.DelegatingServiceInvoker;
+import framework.api.service.ServiceActivator;
 
 /**
  * The RemoteBusinessDelegate.
@@ -46,8 +46,8 @@ public class RemoteBusinessDelegate extends AbstractBusinessDelegate implements 
 	 */
 	@Override
 	protected Object processService(RequestDto dto) {
-		DelegatingServiceInvoker listener = DelegatingServiceInvoker.class.cast(context.getBean(remoteListenerName));
-		return listener.processService(dto);
+		ServiceActivator listener = ServiceActivator.class.cast(context.getBean(remoteListenerName));
+		return listener.activate(dto);
 	}
 	
 

@@ -119,24 +119,25 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = sqlBuilder.setCount(createQuery(param,bindList));
+		
+		//countの場合、範囲設定無効
+		
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 
 		try{
 			stmt = provider.createStatement(con, query, bindList,param.getSqlId());	
 			rs= selector.select(stmt);
-			QueryResult<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class, 1, false, param.getSqlId(), null);
-			Iterator itr = decimal.getResultList().get(0).values().iterator();
+			List<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class,null);
+			Iterator itr = decimal.get(0).values().iterator();
 			itr.hasNext();
 			Object value = itr.next();
 			if( Number.class.isAssignableFrom(value.getClass())){
 				return ((Number)value).intValue();
 			}
 			throw new IllegalStateException("Illegal type : type = " + value.getClass());
-		}catch(Exception sqle){
+		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);
-		}catch(Error e){
-			throw e;
 		}finally{
 			close(stmt);
 		}
@@ -146,17 +147,29 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @see framework.sqlengine.facade.SQLEngineFacade#executeQuery(framework.sqlengine.facade.QueryParameter, java.sql.Connection)
 	 */
 	@Override
-	public <T> QueryResult<T> executeQuery(QueryParameter<T> param , Connection con){	
+	public <T> List<T> executeQuery(QueryParameter<T> param , Connection con){	
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = createQuery(param,bindList);
-		return getResultList(false,param,con,query,bindList);
+		PreparedStatement stmt = null;		
+		ResultSet rs = null;
+		try{									
+			stmt = provider.createStatement(con, query, bindList,param.getSqlId());
+			rs = selector.select(stmt);
+
+			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter());
+			
+		}catch(Throwable sqle){
+			throw exceptionHandler.rethrow(sqle);
+		}finally{
+			close(rs,stmt);
+		}
 	}
 
 	/**
 	 * @see framework.sqlengine.facade.SQLEngineFacade#executeFetch(framework.sqlengine.facade.QueryParameter, java.sql.Connection)
 	 */
 	@Override
-	public <T> QueryResult<T> executeFetch(QueryParameter<T> param,	Connection con) {
+	public <T> List<T> executeFetch(QueryParameter<T> param,Connection con) {
 
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = createQuery(param,bindList);
@@ -169,15 +182,10 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			
 			//ResultFetch用オブジェクトに返却
 			RecordHandler<T> handler = recordHandlerFactory.create(param.getResultType(), rs);								
-			List<T> resultList = new LazyList<T>(stmt,rs, param.getMaxSize(),handler);
-			return new QueryResult<T>(false,resultList,-1);
+			return new LazyList<T>(stmt,rs,handler,exceptionHandler);
 			
-		}catch(Exception re){
-			close(rs,stmt);
-			throw exceptionHandler.rethrow(re);
-		}catch(Error e){
-			close(rs,stmt);
-			throw e;
+		}catch(Throwable sqle){
+			throw exceptionHandler.rethrow(sqle);
 		}
 	}
 
@@ -195,7 +203,18 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			query = commentAppender.setExternalString(param, query);
 		}
 		
-		return getResultList(true,param,con,query,bindList);
+		PreparedStatement stmt = null;		
+		ResultSet rs = null;
+		try{									
+			stmt = provider.createStatement(con, query, bindList,param.getSqlId());
+			rs = selector.select(stmt);
+			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter(), param.getMaxSize());
+		}catch(Throwable sqle){
+			throw exceptionHandler.rethrow(sqle);
+		}finally{
+			close(rs,stmt);
+		}
+
 	}
 
 	/**
@@ -218,10 +237,8 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		try{
 			stmt = provider.createStatement(con, executingSql, bindList,param.getSqlId());	
 			return updater.update(stmt);
-		}catch(Exception sqle){
+		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);
-		}catch(Error e){
-			throw e;
 		}finally{
 			close(stmt);
 		}
@@ -262,36 +279,6 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, param.getParameter(), bindList,param.getSqlId());				
 		return executingSql;
 	}
-
-	/**
-	 * Gets the result.
-	 * 
-	 * @param <T> the type
-	 * @param totalEnabled true get hit count
-	 * @param param the parameters
-	 * @param con the connection
-	 * @param executingSql the SQL
-	 * @param bindList the bindList
-	 * @return the result
-	 */
-	private <T> QueryResult<T> getResultList(boolean totalEnabled,QueryParameter<T> param,Connection con,String executingSql,List<Object> bindList){
-		PreparedStatement stmt = null;		
-		ResultSet rs = null;
-		try{									
-			stmt = provider.createStatement(con, executingSql, bindList,param.getSqlId());
-			rs = selector.select(stmt);
-
-			return resultSetHandler.getResultList(rs, param.getResultType(), param.getMaxSize(), totalEnabled, param.getSqlId(), param.getFilter());
-			
-		}catch(Exception sqle){
-			throw exceptionHandler.rethrow(sqle);
-		}catch(Error e){
-			throw e;
-		}finally{
-			close(rs,stmt);
-		}
-	}
-	
 	
 	/**
 	 * Close.

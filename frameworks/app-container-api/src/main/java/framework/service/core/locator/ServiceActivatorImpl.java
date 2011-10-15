@@ -7,21 +7,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import framework.api.dto.RequestDto;
-import framework.api.service.DelegatingServiceInvoker;
+import framework.api.service.ServiceActivator;
 
 /**
- * A 'BusinessDelegate' at the service layer.
+ * Activates the services.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DelegatingServiceInvokerImpl implements DelegatingServiceInvoker{
+public class ServiceActivatorImpl implements ServiceActivator{
 
 	/**
-	 * @see framework.api.service.DelegatingServiceInvoker#processService(framework.api.dto.RequestDto)
+	 * @see framework.api.service.ServiceActivator#activate(framework.api.dto.RequestDto)
 	 */
 	@Override
-	public Object processService(RequestDto dto){
+	public Object activate(RequestDto dto){
 	
 		Object service = getService(dto);
 		Method m;

@@ -19,13 +19,13 @@ public class InternalUnitOfWork {
 	/** the flag represent transaction is rolled back. Never to recover.*/
 	private boolean rollbackOnly = false;
 	
-	/** the connection for 'SQLEngine' */
+	/** the connection only for 'SQLEngine' */
 	private Connection currentConnection = null;
 
 	/**
 	 * set the rollbackOnly true
 	 */
-	public void setRollbackOnly() {
+	protected void setRollbackOnly() {
 		this.rollbackOnly = true;
 	}
 

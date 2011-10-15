@@ -12,6 +12,8 @@ import framework.jpqlclient.internal.free.impl.LocalJPANativeUpdateEngine;
 import framework.sqlclient.api.free.AnonymousQuery;
 import framework.sqlclient.api.free.FreeQuery;
 import framework.sqlclient.api.free.FreeUpdate;
+import framework.sqlengine.exception.ExceptionHandler;
+import framework.sqlengine.exception.impl.ExceptionHandlerImpl;
 import framework.sqlengine.executer.RecordHandlerFactory;
 import framework.sqlengine.executer.ResultSetHandler;
 import framework.sqlengine.executer.impl.RecordHandlerFactoryImpl;
@@ -30,6 +32,16 @@ public class EclipseLinkQueryFactoryImpl extends AbstractQueryFactory{
 	
 	/** the recordHandlerFactory */
 	private RecordHandlerFactory recordHandlerFactory = new RecordHandlerFactoryImpl();
+	
+	/** the ExceptionHandler */
+	private ExceptionHandler exceptionHandler = new ExceptionHandlerImpl();
+	
+	/**
+	 * @param exceptionHandler the exceptionHandler to set
+	 */
+	public void setExceptionHandler(ExceptionHandler exceptionHandler){
+		this.exceptionHandler = exceptionHandler;
+	}
 	
 	/**
 	 * @param handler the handler to set
@@ -71,14 +83,18 @@ public class EclipseLinkQueryFactoryImpl extends AbstractQueryFactory{
 	protected AbstractInternalJPANativeQueryImpl createInternalQuery(Class<?> targetClass){
 		javax.persistence.NamedNativeQuery nq = targetClass.getAnnotation(javax.persistence.NamedNativeQuery.class);
 		if(nq != null){
-			AbstractInternalJPANativeQueryImpl internal =new InternalEclipseLinkNativeQueryImpl(nq.name(),nq.query(), em,targetClass.getSimpleName() ,nq.resultClass(),false,builder,handler,recordHandlerFactory);
+			AbstractInternalJPANativeQueryImpl internal =
+				new InternalEclipseLinkNativeQueryImpl(nq.name(),nq.query(), em,targetClass.getSimpleName()
+						,nq.resultClass(),false,builder,handler,recordHandlerFactory,exceptionHandler);
 			for(QueryHint h: nq.hints()){
 				internal.setHint(h.name(), h.value());
 			}
 			return internal;
 		}else{
 			AnonymousQuery aq = targetClass.getAnnotation(AnonymousQuery.class);
-			AbstractInternalJPANativeQueryImpl internal = new InternalEclipseLinkNativeQueryImpl(null,aq.query(), em, targetClass.getSimpleName(),aq.resultClass(),false,builder,handler,recordHandlerFactory);
+			AbstractInternalJPANativeQueryImpl internal = 
+				new InternalEclipseLinkNativeQueryImpl(null,aq.query(), em, targetClass.getSimpleName()
+						,aq.resultClass(),false,builder,handler,recordHandlerFactory,exceptionHandler);
 			setHint(targetClass, internal);
 			return internal;						
 		}

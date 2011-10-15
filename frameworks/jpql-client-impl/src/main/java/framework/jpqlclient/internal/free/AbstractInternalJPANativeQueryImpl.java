@@ -5,6 +5,7 @@ package framework.jpqlclient.internal.free;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -68,7 +69,6 @@ public abstract class AbstractInternalJPANativeQueryImpl<T> extends AbstractInte
 	@SuppressWarnings("rawtypes")
 	public abstract List getFetchResult();
 
-	
 	/**
 	 * Gets the total result.
 	 * 
@@ -76,51 +76,100 @@ public abstract class AbstractInternalJPANativeQueryImpl<T> extends AbstractInte
 	 */
 	public abstract NativeResult<T> getTotalResult();
 	
+	
 	/**
-	 * @see framework.jpqlclient.internal.free.AbstractInternalJPAQuery#createQuery()
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#count()
 	 */
 	@Override
-	protected Query createQuery() {
-		
-		Query query = null;
+	public int count(){		
+
 		List<Object> bindList = new ArrayList<Object>();
-		//名前付き
-		if( name != null){
-			query = creatNamedNativeQuery(bindList);
-		//名前なし	
-		}else {			
-			String str = sql;	
-			if(!useRowSql){
-				str = builder.build(queryId, str);
-				str = builder.evaluate(str, branchParam,queryId);
-			}
-			str = builder.replaceToPreparedSql(str, param,bindList, queryId);
-			firingSql = str;			
-			query = creatNativeQuery(bindList);
+		firingSql = buildSql(bindList);
+		
+		//countの場合は範囲設定無効とする。
+		
+		firingSql = builder.setCount(firingSql);
+		Query query = name != null ? createNamedQuery() : em.createNativeQuery(firingSql);
+		query = bindParmaeterToQuery(query, bindList);	
+		
+		for(Map.Entry<String, Object> h : hints.entrySet()){		
+			query.setHint(h.getKey(), h.getValue());
 		}
+		Object value = query.getSingleResult();
+		return Integer.parseInt(value.toString());
+	}
+	
+	/**
+	 * @see framework.sqlclient.internal.AbstractInternalQuery#executeUpdate()
+	 */
+	@Override
+	public int executeUpdate() {
+		List<Object> bindList = new ArrayList<Object>();
+		Query query = null;
+		if(name != null){
+			query = em.createNamedQuery(firingSql);			
+		}else {
+			firingSql = buildSql(bindList);
+			query = em.createNativeQuery(firingSql);
+		}
+		query = bindParmaeterToQuery(query, bindList);			
+		
+		for(Map.Entry<String, Object> h : hints.entrySet()){		
+			query.setHint(h.getKey(), h.getValue());
+		}	
+
+		return query.executeUpdate();
+	}
+	
+
+	/**
+	 * Creates the named query.
+	 * 
+	 * @return the query
+	 */
+	protected Query createNamedQuery(){
+		Query query = em.createNamedQuery(firingSql);
+		for(Map.Entry<String, Object> h : hints.entrySet()){		
+			query.setHint(h.getKey(), h.getValue());
+		}		
+		if(firstResult > 0){
+			query.setFirstResult(firstResult);
+		}
+		if(maxSize > 0){
+			query.setMaxResults(maxSize);
+		}
+		return query;
+	}
+	
+	/**
+	 * Builds the SQL.
+	 * 
+	 * @param bindList the bind parameters
+	 * @return the SQL
+	 */
+	protected String buildSql(List<Object> bindList){
+		String str = sql;	
+		if(!useRowSql){
+			str = builder.build(queryId, str);
+			str = builder.evaluate(str, branchParam,queryId);
+		}			
+		str = builder.replaceToPreparedSql(str, param,bindList, queryId);			
+		return str;
+	}
+	
+	/**
+	 * Bind the parameter to query.
+	 * 
+	 * @param query the query
+	 * @param bindList the bind parameters
+	 * @return the query
+	 */
+	protected Query bindParmaeterToQuery(Query query,List<Object> bindList){
+		
 		for(int i=0; i < bindList.size(); i++){			
 			query.setParameter(i+1,bindList.get(i));			
 		}		
-		return query;		
-		
-	}
-	
-	/**
-	 * @return the native query;
-	 */
-	protected Query creatNativeQuery(List<Object> bindList){
-		return em.createNativeQuery(firingSql);		
-	}
-	
-	/**
-	 * @return the native query;
-	 */
-	protected Query creatNamedNativeQuery(List<Object> bindList){
-		if( resultType != null){
-			return em.createNamedQuery(firingSql, resultType);
-		}else{
-			return em.createNamedQuery(firingSql);
-		}		
+		return query;
 	}
 
 }

@@ -28,6 +28,6 @@ public class LatestPagingServiceImpl extends AbstractLatestPagingService impleme
 	 */
 	@Override
 	protected QueryFactory getQueryFactory() {
-		return ServiceLocatorImpl.getComponentBuilder().createWebQueryFactory();
+		return ServiceLocatorImpl.getComponentBuilder().createNativeQueryFactory();
 	}
 }

@@ -6,30 +6,27 @@ package framework.service.ext;
 import java.lang.reflect.InvocationHandler;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
-import framework.api.service.DelegatingServiceInvoker;
+import framework.api.service.ServiceActivator;
 import framework.core.message.MessageBean;
 import framework.jpqlclient.api.EntityManagerProvider;
-import framework.jpqlclient.api.free.JPAQueryFactoryImpl;
-import framework.jpqlclient.api.free.NativeQueryFactoryImpl;
+import framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
 import framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
 import framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl;
 import framework.logics.builder.MessageAccessor;
 import framework.logics.builder.impl.MessageBuilderImpl;
 import framework.service.core.async.AsyncServiceFactory;
 import framework.service.core.error.MessageAccessorImpl;
-import framework.service.core.locator.DelegatingServiceInvokerImpl;
+import framework.service.core.locator.ServiceActivatorImpl;
 import framework.service.core.locator.ServiceLocator;
 import framework.service.core.messaging.MessageClientFactory;
 import framework.service.core.query.AdvancedOrmQueryFactoryImpl;
 import framework.service.core.query.CustomEmptyHandlerImpl;
-import framework.service.core.query.DataSourceConnectionProviderImpl;
 import framework.service.ext.async.AsyncServiceFactoryImpl;
 import framework.service.ext.locator.ComponentBuilder;
 import framework.service.ext.messaging.MessageClientFactoryImpl;
 import framework.service.ext.messaging.QueueProducerDelegate;
 import framework.service.ext.messaging.TopicProducerDelegate;
 import framework.sqlclient.api.free.QueryFactory;
-import framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 /**
  * function.
@@ -54,7 +51,7 @@ public class DefaultComponentBuilder implements ComponentBuilder {
 	 */
 	@Override
 	public QueryFactory createQueryFactory() {
-		JPAQueryFactoryImpl factory = new JPAQueryFactoryImpl();
+		EclipseLinkQueryFactoryImpl factory = new EclipseLinkQueryFactoryImpl();
 		factory.setEmptyHandler( new CustomEmptyHandlerImpl());
 		factory.setEntityManagerProvider(createEntityManagerProvider());		
 		return factory;	
@@ -93,15 +90,11 @@ public class DefaultComponentBuilder implements ComponentBuilder {
 	}
 
 	/**
-	 * @see framework.service.ext.define.ComponentBuilder#createWebQueryFactory()
+	 * @see framework.service.ext.define.ComponentBuilder#createNativeQueryFactory()
 	 */
 	@Override
-	public QueryFactory createWebQueryFactory() {
-		NativeQueryFactoryImpl factory = new NativeQueryFactoryImpl();
-		factory.setEmptyHandler( new CustomEmptyHandlerImpl());
-		factory.setConnectionProvider(new DataSourceConnectionProviderImpl());
-		factory.setSqlEngineFacade(new SQLEngineFacadeImpl());
-		return factory;	
+	public QueryFactory createNativeQueryFactory() {
+		return createQueryFactory();
 	}
 
 	/**
@@ -129,8 +122,8 @@ public class DefaultComponentBuilder implements ComponentBuilder {
 	}
 
 	@Override
-	public DelegatingServiceInvoker createDelegatingServiceInvoker() {
-		return new DelegatingServiceInvokerImpl();
+	public ServiceActivator createDelegatingServiceInvoker() {
+		return new ServiceActivatorImpl();
 	}
 
 }

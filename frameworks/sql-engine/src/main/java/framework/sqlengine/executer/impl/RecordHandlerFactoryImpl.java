@@ -76,7 +76,6 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 		
 	}
 	
-	
 	/**
 	 * @param columnLabel カラムラベル
 	 * @return JavaString

@@ -43,7 +43,7 @@ public class MockRequiresNewServiceImpl implements MockRequiresNewService{
 		e.setAttr2(2);
 		per.getEntityManager().persist(e);
 		if( v.equals("AA")){
-			((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().setRollbackOnly();
+			((ServiceContextImpl)ServiceContext.getCurrentInstance()).setRollbackOnlyToCurrentTransaction();
 		}
 		return v;
 	}

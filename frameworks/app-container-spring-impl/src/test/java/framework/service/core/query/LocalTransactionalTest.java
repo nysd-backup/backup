@@ -84,7 +84,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 		
 		TransactionManagingContext context = getContext();
 		InternalUnitOfWork internal = context.getCurrentUnitOfWork();
-		internal.setRollbackOnly();
+		context.setRollbackOnlyToCurrentTransaction();
 		
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		service.test();

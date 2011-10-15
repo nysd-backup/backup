@@ -73,8 +73,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	@SuppressWarnings("rawtypes")
 	public List getFetchResult(){
 		QueryParameter<T> param = createQueryParameter();
-		QueryResult<T> result = facade.executeFetch(param, cs.getConnection());
-		return result.getResultList();
+		return facade.executeFetch(param, cs.getConnection());		
 	}
 	
 	/**
@@ -95,8 +94,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	@Override
 	public List getResultList() {
 		QueryParameter<T> param = createQueryParameter();
-		QueryResult<T> result = facade.executeQuery(param, cs.getConnection());
-		return result.getResultList();
+		return facade.executeQuery(param, cs.getConnection());		
 	}
 	
 	/**

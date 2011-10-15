@@ -6,7 +6,7 @@ package framework.service.ext.locator;
 import java.lang.reflect.InvocationHandler;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
-import framework.api.service.DelegatingServiceInvoker;
+import framework.api.service.ServiceActivator;
 import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.async.AsyncServiceFactory;
@@ -27,9 +27,9 @@ public interface ComponentBuilder {
 	public MessageClientFactory createMessagingClientFactory();
 	
 	/**
-	 * @return the <code>DelegatingServiceInvokerImpl</code>
+	 * @return the <code>ServiceActivatorImpl</code>
 	 */
-	public DelegatingServiceInvoker createDelegatingServiceInvoker();
+	public ServiceActivator createDelegatingServiceInvoker();
 	
 	/**
 	 * @return the JMS publisher
@@ -54,7 +54,7 @@ public interface ComponentBuilder {
 	/**
 	 * @return the <code>QueryFactory</code> only called from WEB 
 	 */
-	public QueryFactory createWebQueryFactory();
+	public QueryFactory createNativeQueryFactory();
 	
 	/**
 	 * @return the <code>AsyncServiceFactory</code>

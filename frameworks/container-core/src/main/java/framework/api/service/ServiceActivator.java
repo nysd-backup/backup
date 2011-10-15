@@ -6,19 +6,18 @@ package framework.api.service;
 import framework.api.dto.RequestDto;
 
 /**
- * A listener receives the request.
+ * Activates the services.
  * 
- * <pre>
- * Remote call and MDB call use this.
- * </pre>
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public interface DelegatingServiceInvoker {
+public interface ServiceActivator {
 
 	/**
+	 * Activates the services.
+	 * 
 	 * @param dto the DTO
 	 */
-	public Object processService(RequestDto dto);
+	public Object activate(RequestDto dto);
 	
 }

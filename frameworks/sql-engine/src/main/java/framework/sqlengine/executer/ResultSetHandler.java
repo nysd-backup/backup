@@ -5,6 +5,7 @@ package framework.sqlengine.executer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import framework.sqlengine.facade.QueryResult;
 
@@ -21,12 +22,21 @@ public interface ResultSetHandler {
 	 * @param rs the rs
 	 * @param resultType the resultType
 	 * @param maxSize the maxSize
-	 * @param totalEnabled if true get the total count hit
-	 * @param sqlId the sqlId
 	 * @param filter the filter for ResultSet
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	public <T> QueryResult<T> getResultList(ResultSet rs, Class<T> resultType,int maxSize, boolean totalEnabled, String sqlId,RecordFilter<T> filter)
+	public <T> QueryResult<T> getResultList(ResultSet rs, Class<T> resultType,RecordFilter<T> filter,int maxSize)
+	throws SQLException ;
+	
+	/**
+	 * @param <T>　the type
+	 * @param rs the rs
+	 * @param resultType the resultType
+	 * @param filter the filter for ResultSet
+	 * @return the result
+	 * @throws SQLException the exception
+	 */
+	public <T> List<T> getResultList(ResultSet rs, Class<T> resultType,RecordFilter<T> filter)
 	throws SQLException ;
 }

@@ -24,7 +24,7 @@ public class NativeQueryServiceImpl extends AbstractNativeQueryService implement
 	 */
 	@Override
 	protected QueryFactory getQueryFactory() {
-		return ServiceLocatorImpl.getComponentBuilder().createWebQueryFactory();
+		return ServiceLocatorImpl.getComponentBuilder().createNativeQueryFactory();
 	}
 	
 

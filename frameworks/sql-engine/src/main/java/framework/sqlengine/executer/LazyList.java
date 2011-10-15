@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import framework.sqlengine.exception.SQLEngineException;
+import framework.sqlengine.exception.ExceptionHandler;
 
 /**
  * The list holiding the <code>ResultSet</code> so as to get next record only when the get(i) is called.
@@ -23,50 +23,25 @@ public class LazyList<E> implements List<E>{
 
 	private static final long serialVersionUID = 1L;
 
-	/** the result set */
-	private final ResultSet rs;
-
-	/** the statement */
-	private final Statement statement;
-
-	/** the record handler */
-	private final RecordHandler<E> handler;
-
 	/** the iterator to fetch */
-	private final ResultSetIterator itr = new ResultSetIterator();
-	
-	/** the count */
-	private int size = 0;
-	
-	/** the max size */
-	private int maxSize = 0;
-	
-	/** if true over one rs.next is called */
-	private boolean firstExecuted = false;
-	
-	/** one record get */
-	private E created = null;
-	
+	private final ResultSetIterator itr;
 
 	/**
 	 * @see java.lang.Object#finalize()
 	 */
 	@Override
 	public void finalize(){
-		close();
+		itr.close();
 	}
 	
 	/**
 	 * @param statement the statement
 	 * @param rs the rs
-	 * @param maxSize the maxSize
 	 * @param handler the handler
+	 * @param exceptionHandler the exceptionHandler
 	 */
-	public LazyList(Statement statement ,ResultSet rs, int maxSize , RecordHandler<E> handler){
-		this.rs = rs;
-		this.statement = statement;
-		this.maxSize = maxSize;
-		this.handler = handler;
+	public LazyList(Statement statement ,ResultSet rs, RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+		this.itr = new ResultSetIterator(rs, statement, handler,exceptionHandler);
 	}
 	
 	/**
@@ -74,10 +49,7 @@ public class LazyList<E> implements List<E>{
 	 */
 	@Override
 	public int size() {
-		if(isClosed()){
-			return size;
-		}
-		throw new UnsupportedOperationException("cursor must be closed to invoke this method");	
+		throw new UnsupportedOperationException();	
 	}
 
 	/**
@@ -85,15 +57,7 @@ public class LazyList<E> implements List<E>{
 	 */
 	@Override
 	public boolean isEmpty() {
-		if(isClosed()){
-			return size == 0;
-		}else{
-			if(firstExecuted){
-				return size == 0; 
-			}else{
-				throw new UnsupportedOperationException("cursor must be closed to invoke this method");	
-			}
-		}
+		throw new UnsupportedOperationException();				
 	}
 
 	/**
@@ -189,7 +153,7 @@ public class LazyList<E> implements List<E>{
 	 */
 	@Override
 	public void clear() {
-		throw new UnsupportedOperationException();
+		itr.close();
 	}
 
 	/**
@@ -264,67 +228,64 @@ public class LazyList<E> implements List<E>{
 		throw new UnsupportedOperationException();
 	}
 	
-	/**
-	 * @return if true result set is closed
-	 */
-	private boolean isClosed(){
-		try{
-			return rs.isClosed();
-		}catch(Exception sqle){
-			close();
-			throw new SQLEngineException(sqle);
-		}
-	}
-
-	/**
-	 * Closes the statement and result set
-	 */
-	private void close(){
-
-		try{
-			if(rs != null && !rs.isClosed()){
-				rs.close();
-			}
-		} catch (SQLException e) {
-			throw new SQLEngineException(e);
-		}finally{
-			try{
-				if( statement != null && !statement.isClosed()){
-					statement.close();
-				}
-			}catch(SQLException ee){
-				throw new SQLEngineException(ee);
-			}
-		}
-	}
-	
 	private class ResultSetIterator implements Iterator<E>{
 
+		/** the result set */
+		private final ResultSet rs;
+
+		/** the statement */
+		private final Statement statement;
+
+		/** the record handler */
+		private final RecordHandler<E> handler;
+		
+		/** the ExceptionHandler */
+		private final ExceptionHandler exceptionHandler;
+		
+		public ResultSetIterator(ResultSet rs , Statement statement , RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+			this.rs = rs;
+			this.statement = statement;
+			this.handler = handler;
+			this.exceptionHandler = exceptionHandler;
+		}
+		
+		/**
+		 * Closes the statement and result set
+		 */
+		public void close(){
+
+			try{
+				if(rs != null && !rs.isClosed()){
+					rs.close();
+				}
+			} catch (SQLException e) {
+				
+			}finally{
+				try{
+					if( statement != null && !statement.isClosed()){
+						statement.close();
+					}
+				}catch(SQLException ee){
+					
+				}
+			}
+		}
+		
 		/**
 		 * @see java.util.Iterator#hasNext()
 		 */
 		@Override
-		public boolean hasNext() {
-			if(size > maxSize && maxSize > 0){
-				close();
-				return false;
-			}
+		public boolean hasNext() {			
+			
 			try{
 				boolean hasNext = rs.next();
-				if(hasNext){
-					firstExecuted = true;
-					size++;
-					created = handler.getRecord(rs);		
-				}else{
+				if(!hasNext){
 					close();
 				}
 				return hasNext;
-			}catch(Exception sqle){
+			}catch(Throwable t){
 				close();
-				throw new SQLEngineException(sqle);
-			}catch(Error e){
-				close();
-				throw e;
+				throw exceptionHandler.rethrow(t);
 			}
 		}
 
@@ -333,7 +294,12 @@ public class LazyList<E> implements List<E>{
 		 */
 		@Override
 		public E next() {
-			return created;
+			try{
+				return handler.getRecord(rs);
+			}catch(Throwable t){
+				close();
+				throw exceptionHandler.rethrow(t);
+			}
 		}
 
 		/**

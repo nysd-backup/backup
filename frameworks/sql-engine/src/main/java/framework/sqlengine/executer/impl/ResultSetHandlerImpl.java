@@ -33,11 +33,11 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	}
 	
 	/**
-	 * @see framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, int, boolean, java.lang.String, framework.sqlengine.executer.RecordFilter)
+	 * @see framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, framework.sqlengine.executer.RecordFilter, int)
 	 */
 	@Override
-	public <T> QueryResult<T> getResultList(ResultSet resultSet, Class<T> resultType,int maxSize, 
-			boolean totalEnabled, String sqlId,RecordFilter<T> filter) throws SQLException{ 
+	public <T> QueryResult<T> getResultList(ResultSet resultSet, Class<T> resultType,RecordFilter<T> filter,int maxSize) 
+	throws SQLException{ 
 
 		int hitCount = 0;
 		List<T> result = new ArrayList<T>();			
@@ -48,9 +48,6 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 			//最大件数超過していたら終了
 			if( hitCount > maxSize && maxSize > 0){
 				limitted = true;				
-				if(!totalEnabled){
-					break;
-				}
 			}
 			if(!limitted){
 				// 1行の情報カラム取得
@@ -65,6 +62,25 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 		}
 
 		return new QueryResult<T>(limitted, result, hitCount);
+	}
+
+	/**
+	 * @see framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, framework.sqlengine.executer.RecordFilter)
+	 */
+	@Override
+	public <T> List<T> getResultList(ResultSet rs, Class<T> resultType,RecordFilter<T> filter) throws SQLException {
+		List<T> result = new ArrayList<T>();				
+		RecordHandler<T> handler = factory.create(resultType, rs);
+		while (rs.next()) {			
+			// 1行の情報カラム取得
+			T row = handler.getRecord(rs);					
+			//必要に応じて加工
+			if( filter != null){
+				filter.edit(row);
+			}
+			result.add(row);
+		}
+		return result;
 	}
 	
 }
