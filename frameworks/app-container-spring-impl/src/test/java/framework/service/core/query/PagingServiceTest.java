@@ -17,6 +17,7 @@ import framework.api.query.services.PagingService;
 import framework.api.query.services.QueryRequest;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.test.SampleNativeQuery;
+import framework.service.test.SampleNativeResult;
 import framework.service.test.ServiceUnit;
 import framework.service.test.entity.TestEntity;
 
@@ -73,7 +74,7 @@ public class PagingServiceTest extends ServiceUnit{
 		assertEquals(6,result.getTotalCount());
 		assertEquals(1,result.getCurrentPageNo());
 		assertEquals(6,result.getCurrentPageData().size());
-		List<TestEntity> en = result.getCurrentPageData();
+		List<SampleNativeResult> en = result.getCurrentPageData();
 		assertEquals("2",en.get(0).getTest());
 		assertEquals("114",en.get(1).getTest());
 		assertEquals("113",en.get(2).getTest());
@@ -100,7 +101,7 @@ public class PagingServiceTest extends ServiceUnit{
 		assertEquals(6,result.getTotalCount());
 		assertEquals(2,result.getCurrentPageData().size());
 		assertEquals(1,result.getCurrentPageNo());
-		List<TestEntity> en = result.getCurrentPageData();
+		List<SampleNativeResult> en = result.getCurrentPageData();
 		assertEquals("2",en.get(0).getTest());
 		assertEquals("114",en.get(1).getTest());
 		

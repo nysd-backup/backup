@@ -4,6 +4,7 @@
 package framework.service.ext;
 
 import javax.ejb.Stateless;
+import javax.interceptor.ExcludeDefaultInterceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -17,10 +18,11 @@ import framework.jpqlclient.api.EntityManagerProvider;
  * @version 2011/08/31 created.
  */
 @Stateless
+@ExcludeDefaultInterceptors
 public class EntityManagerProviderImpl implements EntityManagerProvider{
 
 	/** the <code>EntityManager</code> */
-	@PersistenceContext
+	@PersistenceContext(unitName="default")
 	private EntityManager em;
 		
 	/**

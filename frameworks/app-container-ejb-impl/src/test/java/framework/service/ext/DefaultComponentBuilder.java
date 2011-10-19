@@ -21,6 +21,7 @@ import framework.service.core.locator.ServiceLocator;
 import framework.service.core.messaging.MessageClientFactory;
 import framework.service.core.query.AdvancedOrmQueryFactoryImpl;
 import framework.service.core.query.CustomEmptyHandlerImpl;
+import framework.service.core.query.CustomMultiResultHandlerImpl;
 import framework.service.ext.async.AsyncServiceFactoryImpl;
 import framework.service.ext.locator.ComponentBuilder;
 import framework.service.ext.messaging.MessageClientFactoryImpl;
@@ -64,12 +65,11 @@ public class DefaultComponentBuilder implements ComponentBuilder {
 	public AdvancedOrmQueryFactory createOrmQueryFactory() {
 		AdvancedOrmQueryFactoryImpl impl = new AdvancedOrmQueryFactoryImpl();
 		OrmQueryFactoryImpl internal = new OrmQueryFactoryImpl();
-		
 		GenericJPADaoImpl dao = new GenericJPADaoImpl();
-		dao.setEntityManagerProvider(createEntityManagerProvider());
-	
+		dao.setEntityManagerProvider(createEntityManagerProvider());	
+		dao.setEmptyHandler(new CustomEmptyHandlerImpl());
+		dao.setMultiResultHandler(new CustomMultiResultHandlerImpl());
 		internal.setGenericDao(dao);
-	
 		impl.setInternalFactory(internal);
 		return impl;
 	}

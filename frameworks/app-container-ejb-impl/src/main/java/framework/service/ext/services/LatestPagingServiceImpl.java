@@ -11,7 +11,7 @@ import framework.service.ext.locator.ServiceLocatorImpl;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * a paging service.
+ * A paging service.
  * 
  * <pre>
  * Always execute SQL to get latest data.

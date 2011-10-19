@@ -575,6 +575,20 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
+	 * トランザクション境界でaddMessage
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test
+	public void catchTransactionSystemException(){	
+		
+		//Transactionをrollback状態としても例外がすろーされなければ呼び出し元でも例外にならない。
+		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
+		service.addMessage();
+		
+	}
+	
+	/**
 	 * 読み取り専用の自律トランザクション先で例外にぎり潰した晁E
 	 * 結局トランザクションが開始されコミットしにぁE��のでreadOnly=falseとした場合とおなじ結果になる、E
 	 * 

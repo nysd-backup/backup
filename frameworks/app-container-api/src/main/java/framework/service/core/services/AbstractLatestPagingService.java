@@ -3,16 +3,15 @@
  */
 package framework.service.core.services;
 
-import java.util.ArrayList;
-import java.util.List;
 import framework.api.query.services.PagingRequest;
 import framework.api.query.services.PagingResult;
 import framework.api.query.services.PagingService;
+import framework.service.core.query.Pager;
 import framework.sqlclient.api.free.AbstractNativeQuery;
 import framework.sqlclient.api.free.QueryFactory;
 
 /**
- * a paging service.
+ * A paging service.
  * 
  * <pre>
  * Always execute SQL to get latest data.
@@ -33,22 +32,13 @@ public abstract class AbstractLatestPagingService implements PagingService{
 	 */
 	@Override
 	public PagingResult prepare(PagingRequest request) {
-
-		if( request.getStartPosition() != 0){
-			throw new IllegalArgumentException("'startPosition' must be 0 for first access");
-		}
-		if( request.getTotalCount() != 0){
-			throw new IllegalArgumentException("'totalCount' must be 0 for first access");
-		}
 		
 		//件数取得。件数制限なしを想定しているため大量件数の場合ResultSet#next()でインクリメントするとパフォーマンスが非常に悪い。そのためcountで件数のみ取得する
 		AbstractNativeQuery query = createQuery(request);	
-		int totalCount = query.count();		
 	
 		//ページング開始
-		return search(query,request.getStartPosition(),request.getPageSize(),totalCount);
+		return Pager.create().prepare(query,request.getStartPosition(),request.getPageSize());
 	}
-	
 	
 	/**
 	 * @see framework.api.query.services.PagingService#getPageData(framework.api.query.services.PagingRequest)
@@ -56,17 +46,10 @@ public abstract class AbstractLatestPagingService implements PagingService{
 	@Override
 	public PagingResult getPageData(PagingRequest request) {
 		
-		if( request.getStartPosition() == 0){
-			throw new IllegalArgumentException("'startPosition' must not be 0 ");
-		}
-		if( request.getTotalCount() == 0){
-			throw new IllegalArgumentException("'totalCount' must not be 0 ");
-		}
-		
 		AbstractNativeQuery query = createQuery(request);
 
 		//ページング開始
-		return search(query,request.getStartPosition(),request.getPageSize(),request.getTotalCount());
+		return Pager.create().paging(query,request.getStartPosition(), request.getPageSize(),request.getTotalCount());
 	
 	}
 	
@@ -90,38 +73,5 @@ public abstract class AbstractLatestPagingService implements PagingService{
 		
 		return ParameterConverter.setParameters(request.getInternal(), query);
 	}
-
-	/**
-	 * @param query the query
-	 * @param startPosition the start pointer
-	 * @param pageSize the size of one page
-	 * @param totalCount the total count
-	 * @return the result
-	 */
-	private PagingResult search(AbstractNativeQuery query, int startPosition, int pageSize,int totalCount){
-
-		//ページサイズ文のデータを取得する。
-		query.setMaxResults(pageSize);
-		
-		List<?> currentPageData = new ArrayList<Object>();		
-		int currentPageNo = 0;
-		
-		if(totalCount> 0){
-			query.setFirstResult(startPosition);
-			currentPageData = query.getResultList();						
-			if(currentPageData.size() > 0){
-				int pageCount = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
-				for(currentPageNo = 1 ; currentPageNo <= pageCount; currentPageNo++){			
-					// 現在ページの先頭  < 開始位置 <　現在ページのラスト
-					if( (currentPageNo -1) * pageSize -1 < startPosition 
-							&& (currentPageNo * pageSize) > startPosition ){
-							break;
-					}
-				}
-			}
-		}
-		return new PagingResult(currentPageData, currentPageNo, totalCount);
-	}
-	
 	
 }

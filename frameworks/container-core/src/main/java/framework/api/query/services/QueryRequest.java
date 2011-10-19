@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.TemporalType;
-
 import framework.sqlclient.api.Query;
 import framework.sqlclient.api.free.ResultSetFilter;
 
@@ -40,10 +38,7 @@ public class QueryRequest implements Serializable{
 	
 	/** the parameters for branch-statement */
 	private Map<String,Object> branchParam = new HashMap<String,Object>();
-	
-	/** the type of temporal */
-	private Map<String,TemporalType> temporal = new HashMap<String,TemporalType>();
-	
+
 	/** the hints */
 	private Map<String,Object> hint = new HashMap<String,Object>();
 		
@@ -172,28 +167,6 @@ public class QueryRequest implements Serializable{
 	 */
 	public Map<String,Object> getHint() {
 		return hint;
-	}
-
-	/**
-	 * @param temporal the temporal to set
-	 */
-	public void setTemporal(Map<String,TemporalType> temporal) {
-		this.temporal = temporal;
-	}
-
-	/**
-	 * @param key the key to set
-	 * @param value the value to set
-	 */
-	public void setTemporal(String key , TemporalType value) {
-		this.temporal.put(key, value);
-	}
-	
-	/**
-	 * @return the temporal
-	 */
-	public Map<String,TemporalType> getTemporal() {
-		return temporal;
 	}
 
 	/**

@@ -236,7 +236,7 @@ public class LazyList<E> implements List<E>{
 		private final RecordHandler<E> handler;
 
 		private final ExceptionHandler exceptionHandler;
-		
+				
 		public ResultSetIterator(ScrollableCursor cursor,RecordHandler<E> handler,ExceptionHandler exceptionHandler){
 			this.cursor = cursor;
 			this.handler = handler;

@@ -55,7 +55,6 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		setUpData("TEST.xls");
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);		
 		query.setTest("1");
-		
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals("3",result.get(0).getAttr());
 				

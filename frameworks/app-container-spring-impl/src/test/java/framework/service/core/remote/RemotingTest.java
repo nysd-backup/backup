@@ -3,6 +3,8 @@
  */
 package framework.service.core.remote;
 
+import org.junit.Ignore;
+
 import framework.service.test.ServiceUnit;
 
 /**
@@ -11,6 +13,7 @@ import framework.service.test.ServiceUnit;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
+@Ignore
 public class RemotingTest extends ServiceUnit{
 
 	/**

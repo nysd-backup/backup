@@ -20,6 +20,7 @@ import framework.jpqlclient.api.EntityManagerProvider;
 import framework.service.test.CachableConst;
 import framework.service.test.SampleNativeQuery;
 import framework.service.test.SampleNativeQueryConst;
+import framework.service.test.SampleNativeResult;
 import framework.service.test.ServiceUnit;
 import framework.service.test.entity.ITestEntity;
 import framework.service.test.entity.TestEntity;
@@ -55,12 +56,12 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);
 		query.setTest("1");
 		
-		List<TestEntity> result = query.getResultList();
+		List<SampleNativeResult> result = query.getResultList();
 		assertEquals("3",result.get(0).getAttr());
 		
 		result.get(0).setAttr("500");
 
-		TestEntity results = query.getSingleResult();
+		SampleNativeResult results = query.getSingleResult();
 		assertEquals("3",results.getAttr());		
 	}
 	
@@ -74,7 +75,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		query.setAttr("1000");
 		query.setTest("1");
 		
-		List<TestEntity> result = query.getResultList();
+		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(0,result.size());
 	}
 	
@@ -89,7 +90,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);
 		query.setAttr2(500).setTest("1").setArc("500");
 		
-		List<TestEntity> result = query.getResultList();
+		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(0,result.size());
 	}
 	
@@ -129,7 +130,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		setUpData("TEST.xls");
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);
 		query.setAttr2(500).setTest("1");
-		TestEntity e = query.getSingleResult();
+		SampleNativeResult e = query.getSingleResult();
 		assertEquals("1",e.getTest());
 	}
 	
@@ -142,7 +143,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		entity.setTest("1000").setAttr("aa").setAttr2(111);
 		setUpData("TEST.xls");
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class).setMaxResults(2);
-		List<TestEntity> e = query.getResultList();
+		List<SampleNativeResult> e = query.getResultList();
 		assertEquals(2,e.size());
 	}
 	
@@ -169,7 +170,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);		
 		query.setFirstResult(1);
 		query.setMaxResults(2);
-		List<TestEntity> result = query.getResultList();
+		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
 		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
@@ -185,7 +186,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		setUpData("TEST.xls");
 		SampleNativeQueryConst c = clientQueryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setTest("1");
-		List<TestEntity> e = c.getResultList();
+		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
 	}
 
@@ -201,7 +202,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		SampleNativeQueryConst c = clientQueryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setTest("2");
 		c.setAttr(CachableConst.TARGET_TEST_1_OK);
-		List<TestEntity> e = c.getResultList();
+		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
 	}
 	
@@ -218,7 +219,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		SampleNativeQueryConst c = clientQueryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setArc(CachableConst.TARGET_INT);		
-		List<TestEntity> e = c.getResultList();
+		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
 	}
 	
@@ -259,12 +260,12 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		setUpData("TEST.xls");
 		
 		SampleNativeQuery query = clientQueryFactory.createQuery(SampleNativeQuery.class);
-		List<TestEntity> e = query.getFetchResult();
+		List<SampleNativeResult> e = query.getFetchResult();
 		
-		Iterator<TestEntity> itr = e.iterator();
+		Iterator<SampleNativeResult> itr = e.iterator();
 		int cnt = 0;
 		while(itr.hasNext()){
-			TestEntity next = itr.next();
+			SampleNativeResult next = itr.next();
 			if(cnt == 0){
 				assertEquals("2",next.getTest());
 			}else {

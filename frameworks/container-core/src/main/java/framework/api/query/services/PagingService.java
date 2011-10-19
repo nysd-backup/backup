@@ -3,6 +3,7 @@
  */
 package framework.api.query.services;
 
+
 /**
  * The paging service.
  *
@@ -27,4 +28,5 @@ public interface PagingService {
 	 * @return the result
 	 */
 	public PagingResult getPageData(PagingRequest request);
+
 }

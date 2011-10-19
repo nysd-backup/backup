@@ -13,7 +13,7 @@ import framework.service.ext.advice.InternalNestedTransactionInterceptor;
 
 /**
  * The intercepter for border of transaction.
- * This is exclusive to DefaultInterceptor.
+ * This is exclusive to MockDefaultInterceptor.
  * 
  * @see InternalNestedTransactionInterceptor
  * @author yoshida-n

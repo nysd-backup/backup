@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.junit.Ignore;
+
 import framework.core.entity.AbstractEntity;
 
 /**
@@ -17,6 +19,7 @@ import framework.core.entity.AbstractEntity;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
+@Ignore
 @Entity
 @Table(name="testa")
 public class TestEntity extends AbstractEntity{

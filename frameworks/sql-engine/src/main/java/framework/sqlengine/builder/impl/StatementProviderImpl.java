@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.Date;
 import java.util.List;
 
 import framework.sqlengine.builder.StatementProvider;
@@ -94,18 +93,20 @@ public class StatementProviderImpl implements StatementProvider{
 					statement.setBytes(arg, byte[].class.cast(value));			
 				}else if ( value instanceof BigDecimal){
 					statement.setBigDecimal(arg, BigDecimal.class.cast(value));
-				}else if ( value instanceof Date ){
-					statement.setDate(arg, new java.sql.Date(((Date) value).getTime()));
-				}else if ( value instanceof Timestamp ){
-					statement.setTimestamp(arg, Timestamp.class.cast(value));
-				}else if ( value instanceof Time ){
+				}else if ( value instanceof java.sql.Date ){
+					statement.setDate(arg, java.sql.Date.class.cast(value));
+				}else if ( value instanceof Timestamp){
+					statement.setTimestamp(arg, Timestamp.class.cast(value));					
+				}else if ( value instanceof Time ){	
 					statement.setTime(arg, Time.class.cast(value));
+				}else if ( value instanceof java.util.Date){
+					statement.setTimestamp(arg, new Timestamp(java.util.Date.class.cast(value).getTime()));	
 				}else if ( value instanceof Boolean ){
 					statement.setBoolean(arg, Boolean.class.cast(value));
 				}else if ( value instanceof Double ){
 					statement.setDouble(arg, Double.class.cast(value));	
 				}else if ( value instanceof Float ){
-					statement.setDouble(arg, Float.class.cast(value));	
+					statement.setFloat(arg, Float.class.cast(value));	
 				}else {
 					statement.setObject(arg, value);
 				}
