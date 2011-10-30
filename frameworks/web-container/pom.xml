@@ -39,7 +39,7 @@
 		    <artifactId>javaee-api</artifactId>
 		    <version>${javaee.version}</version>
 		    <scope>provided</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 
 </project>

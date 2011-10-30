@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import framework.sqlengine.builder.ConstAccessor;
+import framework.sqlengine.builder.RangeBuilder;
 import framework.sqlengine.builder.SQLBuilder;
 import framework.sqlengine.builder.TemplateEngine;
 import framework.sqlengine.exception.SQLEngineException;
@@ -35,8 +36,18 @@ public class SQLBuilderImpl implements SQLBuilder{
 	/** the accessor */ 
 	private ConstAccessor accessor = new ConstAccessorImpl();
 	
+	/** the rangeBuilder */
+	private RangeBuilder rangeBuilder = new OracleRangeBuilderImpl();
+	
 	/** the root directory */
 	private String dirRoot = null;
+	
+	/**
+	 * @param rangeBuilder the rangeBuilder to set
+	 */
+	public void setRangeBuilder(RangeBuilder rangeBuilder){
+		this.rangeBuilder = rangeBuilder;
+	}
 	
 	/**
 	 * @param accessor the accessor to set
@@ -166,21 +177,7 @@ public class SQLBuilderImpl implements SQLBuilder{
 	 */
 	@Override
 	public String setRange(String sql , int firstResult , int getSize, List<Object> bindList){
-		
-		//JPQLから作成されるOracleの仕様に合わせる
-		String firingSql = sql;
-		if(firstResult > 0 && getSize > 0){
-			firingSql = String.format("SELECT * FROM (SELECT a.*,ROWNUM rnum FROM (%s) a WHERE ROWNUM <= ?) WHERE rnum > ? ",firingSql);
-			bindList.add(bindList.size(),firstResult+getSize);
-			bindList.add(bindList.size(),firstResult);			
-		}else if( firstResult > 0 ){
-			firingSql = String.format("SELECT * FROM (SELECT a.*,ROWNUM rnum FROM (%s) a) WHERE rnum > ? ",firingSql);
-			bindList.add(bindList.size(),firstResult);
-		}else if( getSize > 0){
-			firingSql = String.format("SELECT * FROM (SELECT a.*,ROWNUM rnum FROM (%s) a WHERE ROWNUM <= ?) ",firingSql);
-			bindList.add(bindList.size(),getSize); 
-		}
-		return firingSql;			
+		return rangeBuilder.setRange(sql, firstResult, getSize, bindList);
 	}
 
 }
