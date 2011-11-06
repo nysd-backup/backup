@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationHandler;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.service.ServiceActivator;
-import framework.core.message.MessageBean;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.async.AsyncServiceFactory;
 import framework.service.core.messaging.MessageClientFactory;
@@ -44,7 +43,7 @@ public interface ComponentBuilder {
 	/**
 	 * @return the <code>MessageAccessor</code>
 	 */
-	public MessageAccessor<MessageBean> createMessageAccessor();
+	public MessageAccessor createMessageAccessor();
 	
 	/**
 	 * @return the <code>QueryFactory</code>

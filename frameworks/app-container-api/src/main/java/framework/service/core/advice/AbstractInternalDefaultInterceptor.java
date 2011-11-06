@@ -59,9 +59,9 @@ public abstract class AbstractInternalDefaultInterceptor implements InternalInte
 		Throwable cause = null;
 		Object retValue = null;
 		try{
-			proceed(ic);	
+			retValue = proceed(ic);	
 			
-			//いずれかのトランザクションで失敗していればエラーとする。
+			//いずれかのトランザクションで失敗していれば例外をスローする。
 			if(context.isAnyTransactionFailed()){
 				throw createBusinessException();			
 			}
@@ -70,7 +70,7 @@ public abstract class AbstractInternalDefaultInterceptor implements InternalInte
 			cause = e;		
 		}finally{
 			try{
-				terminate(startTime,cause);
+				terminate(startTime,cause,retValue);
 			}finally{
 				context.release();
 			}
@@ -93,10 +93,12 @@ public abstract class AbstractInternalDefaultInterceptor implements InternalInte
 	 * 
 	 * @param startTime the start time
 	 * @param cause the exception
+	 * @param retValue the value to return
 	 */
-	protected void terminate(long startTime,Throwable cause) throws Throwable{
+	protected void terminate(long startTime,Throwable cause,Object retValue) throws Throwable{
 		if(cause != null){
 			if(cause instanceof BusinessException){
+				//エラーレベル以上のメッセージのみ設定
 				BusinessException.class.cast(cause).setMessageList(ServiceContext.getCurrentInstance().getMessageList().toArray(new ReplyMessage[0]));
 			}			
 			throw cause;

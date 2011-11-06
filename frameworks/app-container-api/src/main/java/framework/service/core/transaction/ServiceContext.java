@@ -5,6 +5,7 @@ package framework.service.core.transaction;
 
 import framework.api.dto.ReplyMessage;
 import framework.core.context.AbstractGlobalContext;
+import framework.core.message.ErrorMessage;
 
 /**
  * The thread-local context.
@@ -49,11 +50,15 @@ public abstract class ServiceContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
+	 * @see framework.core.context.AbstractGlobalContext#addError(framework.core.message.ErrorMessage, java.lang.String)
 	 */
 	@Override
-	public void addMessage(ReplyMessage message){
-		globalMessageList.add(message);
+	public void addError(ErrorMessage define , String message){
+		ReplyMessage reply = new ReplyMessage();
+		reply.setCode(define.getCode());
+		reply.setLevel(define.getLevel());
+		reply.setMessage(message);
+		globalMessageList.add(reply);
 	}
 	
 	/**

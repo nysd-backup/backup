@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import framework.api.dto.ReplyMessage;
+import framework.core.message.ErrorMessage;
 
 /**
  * The thread-local context
@@ -26,8 +27,9 @@ public abstract class AbstractGlobalContext {
 	 * Adds the message to reply to WEB container.
 	 * 
 	 * @param message the message
+	 * @param define the define
 	 */
-	public abstract void addMessage(ReplyMessage message);
+	public abstract void addError(ErrorMessage define, String message);
 	
 	/**
 	 * push call stack.

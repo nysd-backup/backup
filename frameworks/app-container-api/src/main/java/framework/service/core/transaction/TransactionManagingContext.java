@@ -5,8 +5,7 @@ package framework.service.core.transaction;
 
 import java.util.LinkedList;
 
-import framework.api.dto.ReplyMessage;
-import framework.core.message.MessageLevel;
+import framework.core.message.ErrorMessage;
 
 /**
  * エラーメッセージによるトランザクション管理を行うためのコンテキスト.
@@ -70,15 +69,12 @@ public class TransactionManagingContext extends ServiceContext{
 	}
 	
 	/**
-	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.core.message.BuildedMessage)
+	 * @see framework.service.core.transaction.ServiceContext#addError(framework.core.message.ErrorMessage, java.lang.String)
 	 */
 	@Override
-	public void addMessage(ReplyMessage message){
-		//エラーレベル以上のメッセージは現在トランザクションをロールバック状態にする
-		if( MessageLevel.Error.getLevel() <= MessageLevel.find(message.getLevel()).getLevel()){
-			setRollbackOnlyToCurrentTransaction();
-		}
-		super.addMessage(message);
+	public void addError(ErrorMessage define,String message){
+		setRollbackOnlyToCurrentTransaction();		
+		super.addError(define,message);
 	}
 	
 

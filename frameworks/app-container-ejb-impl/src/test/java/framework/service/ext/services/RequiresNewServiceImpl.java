@@ -15,7 +15,7 @@ import org.eclipse.persistence.config.QueryHints;
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.core.exception.BusinessException;
-import framework.core.message.MessageBean;
+import framework.core.message.ErrorMessage;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.locator.ServiceLocator;
@@ -60,8 +60,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageAccessor<MessageBean> accessor = ServiceLocatorImpl.getComponentBuilder().createMessageAccessor();
-		accessor.addMessage(accessor.createMessage(1));	
+		MessageAccessor accessor = ServiceLocatorImpl.getComponentBuilder().createMessageAccessor();
+		accessor.addMessage(new ErrorMessage(1));	
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}
 

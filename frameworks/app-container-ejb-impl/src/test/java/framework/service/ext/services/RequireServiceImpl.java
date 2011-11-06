@@ -6,7 +6,7 @@ package framework.service.ext.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import framework.core.message.MessageBean;
+import framework.core.message.ErrorMessage;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.logics.builder.MessageAccessor;
 import framework.service.ext.entity.TestEntity;
@@ -30,8 +30,8 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		MessageAccessor<MessageBean> accessor = ServiceLocatorImpl.getComponentBuilder().createMessageAccessor();
-		accessor.addMessage(accessor.createMessage(1));
+		MessageAccessor accessor = ServiceLocatorImpl.getComponentBuilder().createMessageAccessor();
+		accessor.addMessage(new ErrorMessage(100));
 	}
 
 	/**

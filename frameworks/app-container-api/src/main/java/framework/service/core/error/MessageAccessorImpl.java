@@ -5,9 +5,7 @@ package framework.service.core.error;
 
 import java.util.Locale;
 
-import framework.api.dto.ReplyMessage;
-import framework.core.message.DefinedMessage;
-import framework.core.message.MessageBean;
+import framework.core.message.ErrorMessage;
 import framework.logics.builder.MessageAccessor;
 import framework.logics.builder.MessageBuilder;
 import framework.service.core.transaction.ServiceContext;
@@ -18,7 +16,7 @@ import framework.service.core.transaction.ServiceContext;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public class MessageAccessorImpl implements MessageAccessor<MessageBean>{
+public class MessageAccessorImpl implements MessageAccessor{
 	
 	/** the builder for message */
 	private MessageBuilder builder;
@@ -29,35 +27,23 @@ public class MessageAccessorImpl implements MessageAccessor<MessageBean>{
 	public void setMessageBuilder(MessageBuilder builder){
 		this.builder = builder;
 	}
-	
-	/**
-	 * @see framework.logics.builder.MessageAccessor#createMessage(int, java.lang.Object[])
-	 */
-	@Override
-	public MessageBean createMessage(int code, Object... args) {
-		return new MessageBean(code, args);
-	}
 
 	/**
-	 * @see framework.logics.builder.MessageAccessor#addMessage(framework.core.message.MessageBean)
+	 * @see framework.logics.builder.MessageAccessor#addMessage(framework.core.message.AbstractMessage)
 	 */
 	@Override
-	public MessageBean addMessage(MessageBean message) {
-		return addMessage(message,Locale.getDefault());
+	public <T extends ErrorMessage> T addMessage(T message,Object... args) {
+		return addMessage(Locale.getDefault(),message,args);
 	}
 	
 	/**
-	 * @see framework.logics.builder.MessageAccessor#addMessage(framework.core.message.MessageBean)
+	 * @see framework.logics.builder.MessageAccessor#addMessage(framework.core.message.AbstractMessage)
 	 */
 	@Override
-	public MessageBean addMessage(MessageBean message,Locale locale) {
+	public <T extends ErrorMessage> T addMessage(Locale locale,T message,Object... args) {
 		ServiceContext context = ServiceContext.getCurrentInstance();	
-		DefinedMessage defined = builder.load(message, locale);	
-		ReplyMessage reply = new ReplyMessage();
-		reply.setCode(message.getCode());
-		reply.setLevel(defined.getLevel().getLevel());
-		reply.setMessage(builder.build(defined.getMessage(),message.getDetail()));
-		context.addMessage(reply);
+		String defined = builder.load(message, locale);	
+		context.addError(message,builder.build(defined,args));
 		return message;
 	}
 

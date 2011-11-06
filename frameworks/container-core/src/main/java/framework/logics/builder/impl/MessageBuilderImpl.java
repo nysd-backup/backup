@@ -7,9 +7,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import framework.core.message.DefinedMessage;
-import framework.core.message.MessageBean;
-import framework.core.message.MessageLevel;
+import framework.core.message.AbstractMessage;
 import framework.logics.builder.MessageBuilder;
 
 /**
@@ -21,27 +19,24 @@ import framework.logics.builder.MessageBuilder;
 public class MessageBuilderImpl implements MessageBuilder{
 	
 	/**
-	 * @see framework.logics.builder.MessageBuilder#load(framework.core.message.MessageBean, java.util.Locale)
+	 * @see framework.logics.builder.MessageBuilder#load(framework.core.message.AbstractMessage, java.util.Locale)
 	 */
 	@Override
-	public DefinedMessage load(MessageBean bean, Locale locale){
+	public String load(AbstractMessage bean, Locale locale){
 		return load(bean,locale,"META-INF/message");
 	}
 	
 	/**
-	 * @see framework.logics.builder.MessageBuilder#load(framework.core.message.MessageBean, java.util.Locale, java.lang.String)
+	 * @see framework.logics.builder.MessageBuilder#load(framework.core.message.AbstractMessage, java.util.Locale, java.lang.String)
 	 */
 	@Override
-	public DefinedMessage load(MessageBean bean, Locale locale, String base){
+	public String load(AbstractMessage bean, Locale locale, String base){
 		Locale loc = locale;
 		if( locale == null){
 			loc = Locale.getDefault();
 		}
 		ResourceBundle bundle = ResourceBundle.getBundle(base, loc);
-		String element = bundle.getString(String.valueOf(bean.getCode()));
-		String[] elm = element.split(",");
-		MessageLevel level = MessageLevel.find(elm[1]);
-		return new DefinedMessage(elm[0],level, "Y".equals(elm[2]));
+		return bundle.getString(String.valueOf(bean.getCode()));
 		
 	}
 

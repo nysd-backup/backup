@@ -9,7 +9,8 @@ import framework.api.dto.ClientRequestBean;
 import framework.api.dto.ClientSessionBean;
 import framework.api.dto.ReplyMessage;
 import framework.core.context.AbstractGlobalContext;
-import framework.core.message.MessageLevel;
+import framework.core.message.AbstractMessage;
+import framework.core.message.ErrorMessage;
 
 /**
  * The context of WEB.
@@ -80,17 +81,36 @@ public abstract class WebContext extends AbstractGlobalContext{
 	}
 	
 	/**
-	 * @see framework.core.context.AbstractGlobalContext#addMessage(framework.api.dto.ReplyMessage)
+	 * @see framework.core.context.AbstractGlobalContext#addError(framework.core.message.ErrorMessage, java.lang.String)
 	 */
 	@Override
-	public void addMessage(ReplyMessage message){
-		
+	public void addError(ErrorMessage define,String message){
 		//エラーレベル以上のメッセージはエラー扱い
-		if( MessageLevel.Error.getLevel() <= MessageLevel.find(message.getLevel()).getLevel()){
-			setRequestFailed();
+		setRequestFailed();
+		ReplyMessage reply = new ReplyMessage();
+		reply.setCode(define.getCode());
+		reply.setLevel(define.getLevel());
+		reply.setMessage(message);
+		globalMessageList.add(reply);
+	}
+	
+
+	/**
+	 * Adds the error to the context.
+	 * 
+	 * @param define the defined message
+	 * @param message the message
+	 */
+	public void addMessage(AbstractMessage define,String message){
+		if(define.getLevel() >= ErrorMessage.LEVEL){
+			addError((ErrorMessage)define,message);
+		}else{
+			ReplyMessage reply = new ReplyMessage();
+			reply.setCode(define.getCode());
+			reply.setLevel(define.getLevel());
+			reply.setMessage(message);
+			globalMessageList.add(reply);
 		}
-		globalMessageList.add(message);
-		
 	}
 
 

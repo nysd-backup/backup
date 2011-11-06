@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.query.orm.StrictQuery;
 import framework.core.exception.BusinessException;
-import framework.core.message.MessageBean;
+import framework.core.message.ErrorMessage;
 import framework.logics.builder.MessageAccessor;
 import framework.service.core.locator.ServiceLocator;
 import framework.service.core.transaction.ServiceContext;
@@ -40,7 +40,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	private AdvancedOrmQueryFactory ormQueryFactory;
 	
 	@Autowired
-	private MessageAccessor<MessageBean> accessor;
+	private MessageAccessor accessor;
 	
 	public String test() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
@@ -66,7 +66,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		accessor.addMessage(accessor.createMessage(1));	
+		accessor.addMessage(new ErrorMessage(1));	
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}
 

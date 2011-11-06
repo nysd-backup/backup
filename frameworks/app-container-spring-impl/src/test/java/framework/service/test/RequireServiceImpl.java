@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import framework.core.message.MessageBean;
+import framework.core.message.ErrorMessage;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.logics.builder.MessageAccessor;
 import framework.service.test.entity.TestEntity;
@@ -27,7 +27,7 @@ import framework.service.test.entity.TestEntity;
 public class RequireServiceImpl implements RequireService {
 
 	@Autowired
-	private MessageAccessor<MessageBean> accessor;
+	private MessageAccessor accessor;
 	
 	@Autowired
 	private EntityManagerProvider ema;
@@ -37,7 +37,7 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		accessor.addMessage(accessor.createMessage(1));
+		accessor.addMessage(new ErrorMessage(1));
 	}
 
 	/**

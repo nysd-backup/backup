@@ -5,8 +5,7 @@ package framework.logics.builder;
 
 import java.util.Locale;
 
-import framework.core.message.DefinedMessage;
-import framework.core.message.MessageBean;
+import framework.core.message.AbstractMessage;
 
 /**
  * A builder to create the message.
@@ -23,7 +22,7 @@ public interface MessageBuilder {
 	 * @param locale the locale
 	 * @return the message
 	 */
-	public DefinedMessage load(MessageBean bean, Locale locale);
+	public String load(AbstractMessage bean, Locale locale);
 	
 	/**
 	 * Reads the message definition from the file.
@@ -33,7 +32,7 @@ public interface MessageBuilder {
 	 * @param baseFileName the name of message file
 	 * @return the message
 	 */
-	public DefinedMessage load(MessageBean bean, Locale locale, String baseFileName);
+	public String load(AbstractMessage bean, Locale locale, String baseFileName);
 
 	/**
 	 * Builds the message.

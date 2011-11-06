@@ -41,7 +41,7 @@ public abstract class AbstractBusinessDelegate implements BusinessDelegate{
 			}
 		}
 			
-		RequestDto dto  = new RequestDto();
+		RequestDto dto = new RequestDto();
 		dto.setAlias(alias);
 		dto.setTargetClass(method.getDeclaringClass());
 		dto.setMethodName(method.getName());

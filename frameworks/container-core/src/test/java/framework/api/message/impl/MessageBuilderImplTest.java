@@ -11,8 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
-import framework.core.message.DefinedMessage;
-import framework.core.message.MessageBean;
+import framework.core.message.ErrorMessage;
 import framework.logics.builder.MessageBuilder;
 import framework.logics.builder.impl.MessageBuilderImpl;
 
@@ -33,10 +32,8 @@ public class MessageBuilderImplTest{
 	public void load() throws Exception{
 		
 		MessageBuilder builder = new MessageBuilderImpl();
-		DefinedMessage defined = builder.load(new MessageBean(100),null);
-		Assert.assertEquals("TEST{0}",defined.getMessage());
-		Assert.assertEquals("Warn",defined.getLevel().name());
-		Assert.assertFalse(defined.isNotify());
+		String defined = builder.load(new ErrorMessage(100),null);
+		Assert.assertEquals("TEST{0}",defined);
 		
 	}
 	
@@ -47,10 +44,8 @@ public class MessageBuilderImplTest{
 	@Test
 	public void loadWithLocale() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
-		DefinedMessage defined = builder.load(new MessageBean(100), new Locale("en"));
-		Assert.assertEquals("LOCALE_TEST{0}",defined.getMessage());
-		Assert.assertEquals("Error",defined.getLevel().name());
-		Assert.assertTrue(defined.isNotify());
+		String defined = builder.load(new ErrorMessage(100), new Locale("en"));
+		Assert.assertEquals("LOCALE_TEST{0}",defined);
 	}
 	
 	/**
@@ -60,10 +55,9 @@ public class MessageBuilderImplTest{
 	@Test
 	public void build() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
-		DefinedMessage defined = builder.load(new MessageBean(100,"TEST"), new Locale("en"));
-		builder.build(defined.getMessage(),100);
-		Assert.assertTrue(defined.isNotify());
-		Assert.assertEquals("Error",defined.getLevel().name());
+		String defined = builder.load(new ErrorMessage(100), new Locale("en"));
+		String builded = builder.build(defined,100);
+		Assert.assertEquals("LOCALE_TEST100",builded);
 	}
 
 }

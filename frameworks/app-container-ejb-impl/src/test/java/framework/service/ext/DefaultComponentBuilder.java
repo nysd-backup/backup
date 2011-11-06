@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationHandler;
 
 import framework.api.query.orm.AdvancedOrmQueryFactory;
 import framework.api.service.ServiceActivator;
-import framework.core.message.MessageBean;
 import framework.jpqlclient.api.EntityManagerProvider;
 import framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
 import framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
@@ -41,7 +40,7 @@ public class DefaultComponentBuilder implements ComponentBuilder {
 	 * @see framework.service.ext.define.ComponentBuilder#createMessageAccessor()
 	 */
 	@Override
-	public MessageAccessor<MessageBean> createMessageAccessor() {
+	public MessageAccessor createMessageAccessor() {
 		MessageAccessorImpl accessor = new MessageAccessorImpl();
 		accessor.setMessageBuilder(new MessageBuilderImpl());
 		return accessor;
