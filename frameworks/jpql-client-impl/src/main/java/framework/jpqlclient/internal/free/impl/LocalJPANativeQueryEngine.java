@@ -5,7 +5,7 @@ package framework.jpqlclient.internal.free.impl;
 
 import java.util.List;
 
-import framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl;
+import framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery;
 import framework.sqlclient.api.EmptyHandler;
 import framework.sqlclient.api.free.FreeQuery;
 import framework.sqlclient.api.free.NativeQuery;
@@ -20,7 +20,7 @@ import framework.sqlclient.internal.AbstractLocalNativeQueryEngine;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<AbstractInternalJPANativeQueryImpl<?>> implements NativeQuery{
+public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<AbstractInternalJPANativeQuery<?>> implements NativeQuery{
 
 	/** the <code>EmptyHandler</code> */
 	private final EmptyHandler emptyHandler;
@@ -29,7 +29,7 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<Ab
 	 * @param delegate the delegate to set
 	 * @param emptyHandler the emptyHandler to set
 	 */
-	public LocalJPANativeQueryEngine(AbstractInternalJPANativeQueryImpl<?> delegate , EmptyHandler emptyHandler){
+	public LocalJPANativeQueryEngine(AbstractInternalJPANativeQuery<?> delegate , EmptyHandler emptyHandler){
 		super(delegate);
 		this.emptyHandler = emptyHandler;
 	}

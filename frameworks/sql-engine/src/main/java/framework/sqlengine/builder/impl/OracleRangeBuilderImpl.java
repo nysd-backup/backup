@@ -8,7 +8,7 @@ import java.util.List;
 import framework.sqlengine.builder.RangeBuilder;
 
 /**
- * Sets the range of query.
+ * Sets the range of query only for ORACLE.
  *
  * @author yoshida-n
  * @version	created.

@@ -15,7 +15,7 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
-import framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl;
+import framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery;
 import framework.jpqlclient.internal.free.LazyList;
 import framework.sqlclient.api.free.NativeResult;
 import framework.sqlclient.internal.impl.DelegatingResultSetFilter;
@@ -35,7 +35,7 @@ import framework.sqlengine.facade.QueryResult;
  * @author yoshida-n
  * @version	created.
  */
-public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANativeQueryImpl<T>{
+public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANativeQuery<T>{
 
 	/** the ResultSetHandler */
 	private final ResultSetHandler handler;
@@ -107,7 +107,7 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	}
 	
 	/**
-	 * @see framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl#getTotalResult()
+	 * @see framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery#getTotalResult()
 	 */
 	@Override
 	public NativeResult<T> getTotalResult(){
@@ -129,7 +129,7 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	}
 	
 	/**
-	 * @see framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl#getFetchResult()
+	 * @see framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery#getFetchResult()
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override

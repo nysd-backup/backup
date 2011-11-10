@@ -5,7 +5,7 @@ package framework.jpqlclient.api.free;
 
 import javax.persistence.QueryHint;
 
-import framework.jpqlclient.internal.free.AbstractInternalJPANativeQueryImpl;
+import framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery;
 import framework.jpqlclient.internal.free.impl.InternalEclipseLinkNativeQueryImpl;
 import framework.jpqlclient.internal.free.impl.LocalJPANativeQueryEngine;
 import framework.jpqlclient.internal.free.impl.LocalJPANativeUpdateEngine;
@@ -80,10 +80,10 @@ public class EclipseLinkQueryFactoryImpl extends AbstractQueryFactory{
 	 * @return the internal query
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected AbstractInternalJPANativeQueryImpl createInternalQuery(Class<?> targetClass){
+	protected AbstractInternalJPANativeQuery createInternalQuery(Class<?> targetClass){
 		javax.persistence.NamedNativeQuery nq = targetClass.getAnnotation(javax.persistence.NamedNativeQuery.class);
 		if(nq != null){
-			AbstractInternalJPANativeQueryImpl internal =
+			AbstractInternalJPANativeQuery internal =
 				new InternalEclipseLinkNativeQueryImpl(nq.name(),nq.query(), em,targetClass.getSimpleName()
 						,nq.resultClass(),false,builder,handler,recordHandlerFactory,exceptionHandler);
 			for(QueryHint h: nq.hints()){
@@ -92,7 +92,7 @@ public class EclipseLinkQueryFactoryImpl extends AbstractQueryFactory{
 			return internal;
 		}else{
 			AnonymousQuery aq = targetClass.getAnnotation(AnonymousQuery.class);
-			AbstractInternalJPANativeQueryImpl internal = 
+			AbstractInternalJPANativeQuery internal = 
 				new InternalEclipseLinkNativeQueryImpl(null,aq.query(), em, targetClass.getSimpleName()
 						,aq.resultClass(),false,builder,handler,recordHandlerFactory,exceptionHandler);
 			setHint(targetClass, internal);

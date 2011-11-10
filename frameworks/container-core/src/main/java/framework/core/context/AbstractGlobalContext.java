@@ -24,7 +24,7 @@ public abstract class AbstractGlobalContext {
 	protected List<ReplyMessage> globalMessageList = new ArrayList<ReplyMessage>();
 
 	/**
-	 * Adds the message to reply to WEB container.
+	 * Adds the message to reply to container.
 	 * 
 	 * @param message the message
 	 * @param define the define

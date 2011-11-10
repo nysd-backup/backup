@@ -20,7 +20,7 @@ import framework.sqlengine.builder.SQLBuilder;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractInternalJPANativeQueryImpl<T> extends AbstractInternalJPAQuery {
+public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternalJPAQuery {
 
 	/** the type of the result */
 	protected final Class<T> resultType;
@@ -46,7 +46,7 @@ public abstract class AbstractInternalJPANativeQueryImpl<T> extends AbstractInte
 	 * @param useRowSql the useRowSql
 	 * @param builder the builder
 	 */
-	public AbstractInternalJPANativeQueryImpl(String name ,String sql,EntityManager em, String queryId, Class<T> resultType,boolean useRowSql,SQLBuilder builder) {
+	public AbstractInternalJPANativeQuery(String name ,String sql,EntityManager em, String queryId, Class<T> resultType,boolean useRowSql,SQLBuilder builder) {
 		super(useRowSql,sql, em, queryId);		
 		this.name = name;
 		this.resultType = resultType;
