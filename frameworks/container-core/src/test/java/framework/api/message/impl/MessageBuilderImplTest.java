@@ -6,14 +6,14 @@ package framework.api.message.impl;
 import java.util.Locale;
 
 import junit.framework.Assert;
+import kosmos.framework.core.message.ErrorMessage;
+import kosmos.framework.logics.builder.MessageBuilder;
+import kosmos.framework.logics.builder.impl.MessageBuilderImpl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
-import framework.core.message.ErrorMessage;
-import framework.logics.builder.MessageBuilder;
-import framework.logics.builder.impl.MessageBuilderImpl;
 
 /**
  * function.
