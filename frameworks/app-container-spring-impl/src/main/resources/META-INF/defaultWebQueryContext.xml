@@ -16,15 +16,15 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 	
 	<!-- 
-	<bean id="dataSourceManagerImpl" class="framework.service.ext.query.DataSourceManagerImpl" scope="prototype">
+	<bean id="dataSourceManagerImpl" class="kosmos.framework.service.core.query.DataSourceManagerImpl" scope="prototype">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
-	<bean id="connectionProvider" class="framework.service.core.query.DataSourceConnectionProviderImpl" />
+	<bean id="connectionProvider" class="kosmos.framework.service.core.query.DataSourceConnectionProviderImpl" />
 	-->
 	
 	<!-- WEB層からのクエリファクトリ -->
-	<bean id="clientQueryFactory" class="framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
+	<bean id="clientQueryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>			
 		<property name="emptyHandler" ref="emptyHandler"/>	

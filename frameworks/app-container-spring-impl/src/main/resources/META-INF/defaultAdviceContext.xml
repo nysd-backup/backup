@@ -24,7 +24,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</aop:config>
 	<aop:config>
 		<aop:aspect id="perfAspect" ref="perfInterceptor">	
-			<aop:pointcut expression="execution(* framework..*.*(..)) and not execution(* framework.service.core.advice.*.*(..))" id="pointcut"/>	
+			<aop:pointcut expression="execution(* kosmos.framework..*.*(..)) and not execution(* kosmos.framework.service.core.advice.*.*(..))" id="pointcut"/>	
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>

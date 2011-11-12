@@ -20,7 +20,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			
 	<!--  このように自分でtransactionAdvisorを指定する場合、tx:annotation-divenを使用するとAdviceが二つになってしまうため禁止 -->
 	<bean id="transactionAttributeSource" class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
-	<bean id="txAdvice" class="framework.service.ext.transaction.ContextControllableTransactionInterceptor" >
+	<bean id="txAdvice" class="kosmos.framework.service.core.transaction.ContextControllableTransactionInterceptor" >
 		<property name="transactionAttributeSource" ref="transactionAttributeSource"/>	
 	</bean>
 	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
@@ -28,12 +28,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- メッセージ作成-->
-	<bean id="messageBuilder" class="framework.logics.builder.impl.MessageBuilderImpl"/>
-	<bean id="messageAccessor" class="framework.service.core.error.MessageAccessorImpl">
+	<bean id="messageBuilder" class="kosmos.framework.logics.builder.impl.MessageBuilderImpl"/>
+	<bean id="messageAccessor" class="kosmos.framework.service.core.error.MessageAccessorImpl">
 		<property name="messageBuilder" ref="messageBuilder"/>
 	</bean>
 
 	<!-- メッセージングサービス-->
-	<bean id="messageClientFactory" class="framework.service.ext.messaging.MessageClientFactoryImpl" />
+	<bean id="messageClientFactory" class="kosmos.framework.service.core.messaging.MessageClientFactoryImpl" />
 	
 </beans>

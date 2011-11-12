@@ -47,10 +47,10 @@ http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
     </bean>     
   
   	<!-- 配信先セレクタ -->
-    <bean id="destinationSelecter" class=" framework.service.core.messaging.DestinationSelecterImpl" />
+    <bean id="destinationSelecter" class="kosmos.framework.service.core.messaging.DestinationSelectorImpl" />
 
 	<!-- Queue配信者 -->
-	<bean id="queueProducer" class="framework.service.ext.messaging.MessageProducerImpl" scope="prototype">
+	<bean id="queueProducer" class="kosmos.framework.service.core.messaging.MessageProducerImpl" scope="prototype">
 		<!-- ><property name="destinationSelecter" ref="destinationSelecter"/> -->
 		<property name="jmsTemplate" ref="jmsQueueTemplate"/>		
 	</bean>

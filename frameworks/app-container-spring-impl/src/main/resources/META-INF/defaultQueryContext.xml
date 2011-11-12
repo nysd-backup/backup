@@ -20,12 +20,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	SQLエンジン 
 	**************************************************-->	
 	<!-- SQL作成 -->
-  	<bean id="sqlBuilder" class="framework.sqlengine.builder.impl.SQLBuilderProxyImpl" />	
+  	<bean id="sqlBuilder" class="kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl" />	
 
 	<!-- Statement作成 -->
-	<bean id="statementProvider" class="framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
+	<bean id="statementProvider" class="kosmos.framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
 
-	<bean id="sqlEngineFacade" class="framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
+	<bean id="sqlEngineFacade" class="kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
 		<property name="sqlBuilder" ref="sqlBuilder"/>
 		<property name="provider" ref="statementProvider"/>
 	</bean>
@@ -34,14 +34,14 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	サービス 
 	**************************************************-->	
 	<!-- エンティティマネージャの提供-->
-	<bean id="entityManagerProvider" class="framework.jpqlclient.internal.EntityManagerProviderImpl" scope="prototype" />
+	<bean id="entityManagerProvider" class="kosmos.framework.jpqlclient.internal.EntityManagerProviderImpl" scope="prototype" />
 	
 	<!-- 例外処理 -->
-	<bean id="emptyHandler" class="framework.service.core.query.CustomEmptyHandlerImpl" scope="prototype" />
-	<bean id="multiResultHandler" class="framework.service.core.query.CustomMultiResultHandlerImpl" scope="prototype" />
+	<bean id="emptyHandler" class="kosmos.framework.service.core.query.CustomEmptyHandlerImpl" scope="prototype" />
+	<bean id="multiResultHandler" class="kosmos.framework.service.core.query.CustomMultiResultHandlerImpl" scope="prototype" />
 	
 	<!-- DAO -->
-	<bean id="genericJPADao" class="framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl" scope="prototype" >
+	<bean id="genericJPADao" class="kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>	
 		<property name="emptyHandler" ref="emptyHandler"/>	
@@ -49,19 +49,19 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- クエリファクトリ -->
-	<bean id="queryFactory" class="framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
+	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>			
 		<property name="emptyHandler" ref="emptyHandler"/>	
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="internalQueryFactory" class="framework.jpqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+	<bean id="internalQueryFactory" class="kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
 		<property name="genericDao" ref="genericJPADao" />
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="framework.service.core.query.AdvancedOrmQueryFactoryImpl" scope="prototype">	
+	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl" scope="prototype">	
 		<property name="internalFactory" ref="internalQueryFactory" />
 	</bean>
  
