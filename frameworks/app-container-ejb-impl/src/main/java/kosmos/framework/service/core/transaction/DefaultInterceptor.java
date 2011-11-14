@@ -3,10 +3,15 @@
  */
 package kosmos.framework.service.core.transaction;
 
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
+import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.service.core.advice.InternalDefaultInterceptor;
 import kosmos.framework.service.core.advice.InvocationAdapterImpl;
+import kosmos.framework.service.core.exception.ApplicationException;
 
 
 /**
@@ -17,6 +22,9 @@ import kosmos.framework.service.core.advice.InvocationAdapterImpl;
  */
 public class DefaultInterceptor {
 	
+	@Resource
+	private SessionContext context;
+	
 	/**
 	 * @param ic the context
 	 * @return the result
@@ -24,6 +32,13 @@ public class DefaultInterceptor {
 	 */
 	@AroundInvoke
 	public Object around(InvocationContext ic) throws Throwable {
-		return new InternalDefaultInterceptor().around(new InvocationAdapterImpl(ic));
+		InternalDefaultInterceptor internal =  new InternalDefaultInterceptor(){
+			@Override
+			protected BusinessException afterError(Object retValue){
+				context.setRollbackOnly();
+				return new ApplicationException(null);
+			}
+		};
+		return internal.around(new InvocationAdapterImpl(ic));
 	}
 }

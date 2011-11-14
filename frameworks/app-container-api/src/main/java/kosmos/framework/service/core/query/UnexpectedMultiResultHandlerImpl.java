@@ -13,7 +13,7 @@ import kosmos.framework.sqlclient.api.MultiResultHandler;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class CustomMultiResultHandlerImpl implements MultiResultHandler{
+public class UnexpectedMultiResultHandlerImpl implements MultiResultHandler{
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.MultiResultHandler#handleResult(java.lang.Object)

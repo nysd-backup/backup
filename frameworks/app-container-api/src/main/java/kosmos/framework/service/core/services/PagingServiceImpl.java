@@ -21,7 +21,7 @@ import kosmos.framework.sqlclient.api.free.QueryFactory;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class LatestPagingServiceImpl implements PagingService{
+public class PagingServiceImpl implements PagingService{
 
 	/**
 	 * @return the factory to create the query

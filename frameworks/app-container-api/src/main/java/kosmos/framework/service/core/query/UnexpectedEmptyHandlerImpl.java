@@ -12,7 +12,7 @@ import kosmos.framework.sqlclient.api.EmptyHandler;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class CustomEmptyHandlerImpl implements EmptyHandler{
+public class UnexpectedEmptyHandlerImpl implements EmptyHandler{
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.EmptyHandler#handleEmptyResult(java.lang.Object)

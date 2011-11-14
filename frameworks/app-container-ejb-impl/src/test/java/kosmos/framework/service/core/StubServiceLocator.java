@@ -15,8 +15,8 @@ import kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
 import kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl;
 import kosmos.framework.service.core.locator.AbstractServiceLocator;
 import kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl;
-import kosmos.framework.service.core.query.CustomEmptyHandlerImpl;
-import kosmos.framework.service.core.query.CustomMultiResultHandlerImpl;
+import kosmos.framework.service.core.query.UnexpectedEmptyHandlerImpl;
+import kosmos.framework.service.core.query.UnexpectedMultiResultHandlerImpl;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 
@@ -81,7 +81,7 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	@Override
 	public QueryFactory createQueryFactory() {
 		EclipseLinkQueryFactoryImpl factory = new EclipseLinkQueryFactoryImpl();
-		factory.setEmptyHandler( new CustomEmptyHandlerImpl());
+		factory.setEmptyHandler( new UnexpectedEmptyHandlerImpl());
 		factory.setEntityManagerProvider(createEntityManagerProvider());		
 		return factory;	
 	}
@@ -95,8 +95,8 @@ public class StubServiceLocator extends AbstractServiceLocator{
 		OrmQueryFactoryImpl internal = new OrmQueryFactoryImpl();
 		GenericJPADaoImpl dao = new GenericJPADaoImpl();
 		dao.setEntityManagerProvider(createEntityManagerProvider());	
-		dao.setEmptyHandler(new CustomEmptyHandlerImpl());
-		dao.setMultiResultHandler(new CustomMultiResultHandlerImpl());
+		dao.setEmptyHandler(new UnexpectedEmptyHandlerImpl());
+		dao.setMultiResultHandler(new UnexpectedMultiResultHandlerImpl());
 		internal.setGenericDao(dao);
 		impl.setInternalFactory(internal);
 		return impl;
