@@ -28,12 +28,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>
-	<bean id="internalPerfInterceptor" class="framework.service.core.advice.InternalPerfInterceptor"/>
-	<bean id="perfInterceptor" class="framework.service.ext.advice.DelegatingInterceptor">
+	<bean id="internalPerfInterceptor" class="kosmos.framework.service.core.advice.InternalPerfInterceptor"/>
+	<bean id="perfInterceptor" class="kosmos.framework.service.core.advice.DelegatingInterceptor">
 		<property name="internal" ref="internalPerfInterceptor"/>
 	</bean>
-	<bean id="internalDefaultInterceptor" class="framework.service.ext.advice.InternalDefaultInterceptor"/>
-	<bean id="defaultInterceptor" class="framework.service.ext.advice.DelegatingInterceptor">
+	<bean id="internalDefaultInterceptor" class="kosmos.framework.service.core.advice.InternalDefaultInterceptor"/>
+	<bean id="defaultInterceptor" class="kosmos.framework.service.core.advice.DelegatingInterceptor">
 		<property name="internal" ref="internalDefaultInterceptor"/>
 	</bean>
 

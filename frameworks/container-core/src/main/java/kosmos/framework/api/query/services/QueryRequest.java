@@ -28,6 +28,9 @@ public class QueryRequest implements Serializable{
 	/** the start position */
 	private int firstResult = 0;
 	
+	/** the timeout seconds */
+	private int timeoutSeconds = 0;
+	
 	/** true:exception is thrown if the no result is found */
 	private boolean noDataError = false;
 	
@@ -182,6 +185,20 @@ public class QueryRequest implements Serializable{
 	 */
 	public boolean isNoDataError() {
 		return noDataError;
+	}
+
+	/**
+	 * @param timeoutSeconds the timeoutSeconds to set
+	 */
+	public void setTimeoutSeconds(int timeoutSeconds) {
+		this.timeoutSeconds = timeoutSeconds;
+	}
+
+	/**
+	 * @return the timeoutSeconds
+	 */
+	public int getTimeoutSeconds() {
+		return timeoutSeconds;
 	}
 
 }

@@ -20,33 +20,26 @@ import kosmos.framework.logics.builder.MessageBuilder;
 public class MessageBuilderImpl implements MessageBuilder{
 	
 	/**
-	 * @see kosmos.framework.logics.builder.MessageBuilder#load(kosmos.framework.core.message.AbstractMessage, java.util.Locale)
+	 * @see kosmos.framework.logics.builder.MessageBuilder#load(kosmos.framework.core.message.AbstractMessage, java.util.Locale, java.lang.Object[])
 	 */
 	@Override
-	public String load(AbstractMessage bean, Locale locale){
-		return load(bean,locale,"META-INF/message");
+	public String load(AbstractMessage bean, Locale locale, Object... args){
+		return load(bean,locale,"META-INF/message", args);
 	}
 	
 	/**
-	 * @see kosmos.framework.logics.builder.MessageBuilder#load(kosmos.framework.core.message.AbstractMessage, java.util.Locale, java.lang.String)
+	 * @see kosmos.framework.logics.builder.MessageBuilder#load(kosmos.framework.core.message.AbstractMessage, java.util.Locale, java.lang.String, java.lang.Object[])
 	 */
 	@Override
-	public String load(AbstractMessage bean, Locale locale, String base){
+	public String load(AbstractMessage bean, Locale locale, String base, Object... args){
 		Locale loc = locale;
 		if( locale == null){
 			loc = Locale.getDefault();
 		}
 		ResourceBundle bundle = ResourceBundle.getBundle(base, loc);
-		return bundle.getString(String.valueOf(bean.getCode()));
+		String message = bundle.getString(String.valueOf(bean.getCode()));
+		return MessageFormat.format(message, args);
 		
-	}
-
-	/**
-	 * @see kosmos.framework.logics.builder.MessageBuilder#build(kosmos.framework.core.message.DefinedMessage)
-	 */
-	@Override
-	public String build(String message, Object... arguments) {
-		return MessageFormat.format(message,arguments);
 	}
 
 }

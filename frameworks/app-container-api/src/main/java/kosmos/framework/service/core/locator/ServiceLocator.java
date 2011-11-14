@@ -3,7 +3,15 @@
  */
 package kosmos.framework.service.core.locator;
 
+import java.lang.reflect.InvocationHandler;
+
+import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
+import kosmos.framework.api.service.ServiceActivator;
+import kosmos.framework.logics.builder.MessageBuilder;
+import kosmos.framework.service.core.async.AsyncServiceFactory;
+import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
+import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 
 /**
@@ -17,6 +25,51 @@ public abstract class ServiceLocator {
 	/** the delegating locator */
 	protected static ServiceLocator delegate = null;
 	
+	/**
+	 * @return the <code>MessageClientFactory</code>
+	 */
+	public abstract MessageClientFactory createMessageClientFactory();
+	
+	/**
+	 * @return the <code>ServiceActivator</code>
+	 */
+	public abstract ServiceActivator createServiceActivator();
+	
+	/**
+	 * @return the JMS publisher
+	 */
+	public abstract InvocationHandler createPublisher();
+	
+	/**
+	 * @return the JMS sender
+	 */
+	public abstract InvocationHandler createSender();
+	
+	/**
+	 * @return the <code>QueryFactory</code>
+	 */
+	public abstract QueryFactory createQueryFactory();
+	
+	/**
+	 * @return the <code>QueryFactory</code> only called from WEB 
+	 */
+	public abstract QueryFactory createClientQueryFactory();
+	
+	/**
+	 * @return the <code>AsyncServiceFactory</code>
+	 */
+	public abstract AsyncServiceFactory createAsyncServiceFactory();
+	
+	/**
+	 * @return the <code>AdvancedOrmQueryFactory</code>
+	 */
+	public abstract AdvancedOrmQueryFactory createOrmQueryFactory();
+	
+	/**
+	 * @return the message builder
+	 */
+	public abstract MessageBuilder createMessageBuilder();
+
 	/**
 	 * Creates the context.
 	 * 
@@ -85,6 +138,69 @@ public abstract class ServiceLocator {
 	 */
 	public static <T> T lookupRemote(Class<T> clazz){
 		return delegate.lookupRemoteService(clazz);
+	}
+	
+	/**
+	 * @return the MessageBuilder
+	 */
+	public static MessageBuilder createDefaultMessageBuilder(){
+		return delegate.createMessageBuilder();
+	}
+	
+	/**
+	 * @return the MessageClientFactory
+	 */
+	public static MessageClientFactory createDefaultMessageClientFactory(){
+		return delegate.createMessageClientFactory();
+	}
+	
+	/**
+	 * @return the ServiceActivator
+	 */
+	public static ServiceActivator createDefaultServiceActivator(){
+		return delegate.createServiceActivator();
+	}
+	
+	/**
+	 * @return the InvocationHandler
+	 */
+	public static InvocationHandler createDefaultPublisher(){
+		return delegate.createPublisher();
+	}
+	
+	/**
+	 * @return the InvocationHandler
+	 */
+	public static InvocationHandler createDefaultSender(){
+		return delegate.createSender();
+	}
+	
+	/**
+	 * @return the QueryFactory
+	 */
+	public static QueryFactory createDefaultQueryFactory(){
+		return delegate.createQueryFactory();
+	}
+	
+	/**
+	 * @return the QueryFactory
+	 */
+	public static QueryFactory createDefaultClientQueryFactory(){
+		return delegate.createClientQueryFactory();
+	}
+	
+	/**
+	 * @return the AdvancedOrmQueryFactory
+	 */
+	public static AdvancedOrmQueryFactory createDefaultOrmQueryFactory(){
+		return delegate.createOrmQueryFactory();
+	}
+	
+	/**
+	 * @return the AsyncServiceFactory
+	 */
+	public static AsyncServiceFactory createDefaultAsyncServiceFactory(){
+		return delegate.createAsyncServiceFactory();
 	}
 	
 }

@@ -3,6 +3,8 @@
  */
 package kosmos.framework.service.core.advice;
 
+import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.TransactionManagingContext;
 
@@ -16,7 +18,7 @@ import kosmos.framework.service.core.transaction.TransactionManagingContext;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class InternalDefaultInterceptor implements InternalInterceptor {
+public class InternalDefaultInterceptor implements InternalInterceptor {
 
 	/**
 	 * @see kosmos.framework.service.core.advice.InternalInterceptor#around(kosmos.framework.service.core.advice.InvocationAdapter)
@@ -25,7 +27,7 @@ public abstract class InternalDefaultInterceptor implements InternalInterceptor 
 	public Object around(InvocationAdapter ic) throws Throwable {
 		
 		ServiceContext context = ServiceContext.getCurrentInstance();
-		if(context.getCallStackLevel() <= 0){
+		if(context == null){
 			return invokeAtTopLevel(ic);
 		}else {
 			return invoke(ic);
@@ -52,15 +54,23 @@ public abstract class InternalDefaultInterceptor implements InternalInterceptor 
 	 */
 	protected Object invokeAtTopLevel(InvocationAdapter ic) throws Throwable {
 	
-		Object retValue = null;
-	
-		retValue = proceed(ic);	
-	
-		TransactionManagingContext context = TransactionManagingContext.class.cast(ServiceContext.getCurrentInstance());
-		if(context.isAnyTransactionFailed()){
-			afterError(retValue);	
+		TransactionManagingContext context = ServiceLocator.createContainerContext();
+		context.initialize();
+		try{
+			Object retValue = proceed(ic);	
+			if(context.isAnyTransactionFailed()){
+				throw afterError(retValue);	
+			}
+			return retValue;
+		}catch(Throwable t){
+			if ( t instanceof BusinessException ){
+				BusinessException be = (BusinessException)t;
+				be.setMessageList(context.getMessageArray());
+			}
+			throw t;
+		}finally {
+			context.release();
 		}
-		return retValue;
 	}
 	
 	/**
@@ -68,8 +78,8 @@ public abstract class InternalDefaultInterceptor implements InternalInterceptor 
 	 * 
 	 * @param retValue the value to return.
 	 */
-	protected void afterError(Object retValue){
-		
+	protected BusinessException afterError(Object retValue){
+		return new BusinessException(null);
 	}
 
 	/**

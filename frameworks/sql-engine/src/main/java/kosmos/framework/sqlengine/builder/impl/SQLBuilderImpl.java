@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kosmos.framework.sqlengine.builder.ConstAccessor;
-import kosmos.framework.sqlengine.builder.RangeBuilder;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 import kosmos.framework.sqlengine.builder.TemplateEngine;
 import kosmos.framework.sqlengine.exception.SQLEngineException;
@@ -37,18 +36,8 @@ public class SQLBuilderImpl implements SQLBuilder{
 	/** the accessor */ 
 	private ConstAccessor accessor = new ConstAccessorImpl();
 	
-	/** the rangeBuilder */
-	private RangeBuilder rangeBuilder = new OracleRangeBuilderImpl();
-	
 	/** the root directory */
 	private String dirRoot = null;
-	
-	/**
-	 * @param rangeBuilder the rangeBuilder to set
-	 */
-	public void setRangeBuilder(RangeBuilder rangeBuilder){
-		this.rangeBuilder = rangeBuilder;
-	}
 	
 	/**
 	 * @param accessor the accessor to set
@@ -171,14 +160,6 @@ public class SQLBuilderImpl implements SQLBuilder{
 		String firingSql = buff.toString();
 
 		return firingSql;
-	}
-	
-	/**
-	 * @see kosmos.framework.sqlengine.builder.SQLBuilder#setRange(java.lang.String, int, int, java.util.List)
-	 */
-	@Override
-	public String setRange(String sql , int firstResult , int getSize, List<Object> bindList){
-		return rangeBuilder.setRange(sql, firstResult, getSize, bindList);
 	}
 
 }

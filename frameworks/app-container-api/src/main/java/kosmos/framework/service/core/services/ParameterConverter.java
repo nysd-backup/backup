@@ -36,6 +36,7 @@ abstract class ParameterConverter {
 		}
 		query.setFirstResult(request.getFirstResult());
 		query.setMaxResults(request.getMaxSize());
+		query.setQueryTimeout(request.getTimeoutSeconds());
 	
 		if(request.isNoDataError()){
 			query.enableNoDataError();

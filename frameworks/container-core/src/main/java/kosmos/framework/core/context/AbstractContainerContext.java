@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kosmos.framework.api.dto.ReplyMessage;
-import kosmos.framework.core.message.AbstractMessage;
 
 
 /**
@@ -23,15 +22,6 @@ public abstract class AbstractContainerContext {
 	
 	/** the list of the messages */
 	protected List<ReplyMessage> globalMessageList = new ArrayList<ReplyMessage>();
-	
-	
-	/**
-	 * Adds the message to reply to container.
-	 * 
-	 * @param message the message
-	 * @param define the define
-	 */
-	public abstract void addMessage(AbstractMessage define, String message);
 	
 	/**
 	 * push call stack.

@@ -40,14 +40,15 @@ public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 	@Override
 	public Object around(InvocationAdapter contextInvoker) throws Throwable {
 		
-		if(ignoreList.contains(contextInvoker.getArgs()[3])){
+		if(ignoreList.contains(contextInvoker.getArgs()[0])){
 			return contextInvoker.proceed();
 		}else{
-			String sql = String.class.cast(contextInvoker.getArgs()[1]); 		
-			List<Object> bindList = (List<Object>)contextInvoker.getArgs()[2];
-			String converted = QueryUtils.applyValues(bindList, sql);
-			LOG.info(String.format("sql for prepared statement %s%s","\r\n",converted));	
-			
+			if(contextInvoker.getArgs().length > 3 ){
+				String sql = String.class.cast(contextInvoker.getArgs()[2]); 		
+				List<Object> bindList = (List<Object>)contextInvoker.getArgs()[3];
+				String converted = QueryUtils.applyValues(bindList, sql);
+				LOG.info(String.format("sql for prepared statement %s%s","\r\n",converted));	
+			}
 			return contextInvoker.proceed();
 		}
 	}

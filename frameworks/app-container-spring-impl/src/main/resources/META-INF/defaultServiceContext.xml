@@ -29,9 +29,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<!-- メッセージ作成-->
 	<bean id="messageBuilder" class="kosmos.framework.logics.builder.impl.MessageBuilderImpl"/>
-	<bean id="messageAccessor" class="kosmos.framework.service.core.error.MessageAccessorImpl">
-		<property name="messageBuilder" ref="messageBuilder"/>
-	</bean>
 
 	<!-- メッセージングサービス-->
 	<bean id="messageClientFactory" class="kosmos.framework.service.core.messaging.MessageClientFactoryImpl" />

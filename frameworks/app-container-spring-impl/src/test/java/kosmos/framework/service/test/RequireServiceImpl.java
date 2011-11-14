@@ -3,9 +3,12 @@
  */
 package kosmos.framework.service.test;
 
+import java.util.Locale;
+
 import kosmos.framework.core.message.ErrorMessage;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.logics.builder.MessageAccessor;
+import kosmos.framework.logics.builder.MessageBuilder;
+import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.entity.TestEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RequireServiceImpl implements RequireService {
 
 	@Autowired
-	private MessageAccessor accessor;
+	private MessageBuilder builder;
 	
 	@Autowired
 	private EntityManagerProvider ema;
@@ -38,7 +41,8 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		accessor.addMessage(new ErrorMessage(1));
+		String message = builder.load(new ErrorMessage(1), Locale.getDefault());
+		ServiceContext.getCurrentInstance().addError(new ErrorMessage(1), message);
 	}
 
 	/**

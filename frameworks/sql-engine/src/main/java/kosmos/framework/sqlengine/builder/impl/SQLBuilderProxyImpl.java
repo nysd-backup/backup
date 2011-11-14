@@ -81,15 +81,6 @@ public class SQLBuilderProxyImpl implements SQLBuilder{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlengine.builder.SQLBuilder#setRange(java.lang.String, int, int, java.util.List)
-	 */
-	@Override
-	public String setRange(String sql, int firstResult, int getSize,
-			List<Object> bindList) {
-		return delegate.setRange(sql, firstResult, getSize, bindList);
-	}
-
-	/**
 	 * @see kosmos.framework.sqlengine.builder.SQLBuilder#setCount(java.lang.String)
 	 */
 	@Override

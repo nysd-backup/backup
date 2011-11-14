@@ -119,16 +119,16 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	public int executeCount(QueryParameter<?> param,Connection con) {
 		
 		List<Object> bindList = new ArrayList<Object>();	
-		String query = sqlBuilder.setCount(createQuery(param,bindList));
-		
-		//countの場合、範囲設定無効
+		String query = sqlBuilder.setCount(createSQL(param,bindList));
 		
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 
 		try{
-			stmt = provider.createStatement(con, query, bindList,param.getSqlId());	
+
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList, param.getTimeoutSeconds(),0);			
 			rs= selector.select(stmt);
+			
 			List<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class,null);
 			Iterator itr = decimal.get(0).values().iterator();
 			itr.hasNext();
@@ -150,13 +150,14 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	@Override
 	public <T> List<T> executeQuery(QueryParameter<T> param , Connection con){	
 		List<Object> bindList = new ArrayList<Object>();	
-		String query = createQuery(param,bindList);
+		String query = createSQL(param,bindList);
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
-			stmt = provider.createStatement(con, query, bindList,param.getSqlId());
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult()+param.getMaxSize());
 			rs = selector.select(stmt);
-
+			resultSetHandler.skip(rs,param.getFirstResult());
+			
 			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter());
 			
 		}catch(Throwable sqle){
@@ -173,17 +174,18 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	public <T> List<T> executeFetch(QueryParameter<T> param,Connection con) {
 
 		List<Object> bindList = new ArrayList<Object>();	
-		String query = createQuery(param,bindList);
+		String query = createSQL(param,bindList);
 
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
 		try{							
-			stmt = provider.createStatement(con, query, bindList,param.getSqlId());	
-			rs = selector.select(stmt);				
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult() + param.getMaxSize());	
+			rs = selector.select(stmt);
+			resultSetHandler.skip(rs,param.getFirstResult());			
 			
 			//ResultFetch用オブジェクトに返却
 			RecordHandler<T> handler = recordHandlerFactory.create(param.getResultType(), rs);								
-			return new LazyList<T>(stmt,rs,handler,exceptionHandler);
+			return new LazyList<T>(rs,handler,exceptionHandler);
 			
 		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);
@@ -195,21 +197,17 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 */
 	@Override
 	public <T> QueryResult<T> executeTotalQuery(QueryParameter<T> param,Connection con) {
-		List<Object> bindList = new ArrayList<Object>();	
-		
-		String query = createSql(param,bindList);
-		//最大件数はresultSetを回しながら取得するため取得件数のrange設定しない
-		query = sqlBuilder.setRange(query, param.getFirstResult() , 0 ,bindList);
-		if( commentAppender != null){
-			query = commentAppender.setExternalString(param, query);
-		}
-		
+		List<Object> bindList = new ArrayList<Object>();			
+		String query = createSQL(param,bindList);
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
-			stmt = provider.createStatement(con, query, bindList,param.getSqlId());
+			
+			stmt = provider.createStatement(param.getSqlId() ,con, query, bindList,param.getTimeoutSeconds(),0);
 			rs = selector.select(stmt);
-			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter(), param.getMaxSize());
+			resultSetHandler.skip(rs,param.getFirstResult());
+			
+			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter(), param.getMaxSize(),param.getFirstResult());
 		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
@@ -226,40 +224,17 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		
 		//SQL生成
 		List<Object> bindList = new ArrayList<Object>();			
-		String executingSql = createSql(param,bindList);
-		
-		//コメント追加
-		if( commentAppender != null){
-			executingSql = commentAppender.setExternalString(param, executingSql);
-		}
-		
+		String executingSql = createSQL(param,bindList);
 		PreparedStatement stmt = null;
 		
 		try{
-			stmt = provider.createStatement(con, executingSql, bindList,param.getSqlId());	
+			stmt = provider.createStatement(param.getSqlId(),con, executingSql, bindList,param.getTimeoutSeconds(),0);	
 			return updater.update(stmt);
 		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
 			close(stmt);
 		}
-	}
-	
-	/**
-	 * Creates the query.
-	 * 
-	 * @param <T>　the type
-	 * @param param the paraemeter
-	 * @param bindList the bindList
-	 * @return the query
-	 */
-	private <T> String createQuery(QueryParameter<T> param, List<Object> bindList){
-		String executingSql = createSql(param,bindList);
-		executingSql = sqlBuilder.setRange(executingSql, param.getFirstResult() , param.getMaxSize(),bindList);
-		if( commentAppender != null){
-			executingSql = commentAppender.setExternalString(param, executingSql);
-		}
-		return executingSql;	
 	}
 	
 	/**
@@ -270,7 +245,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @param bindList the bindList
 	 * @return the query
 	 */
-	private String createSql(SQLParameter param, List<Object> bindList){
+	private String createSQL(SQLParameter param, List<Object> bindList){
 		String executingSql = param.getSql();
 		
 		if(!param.isUseRowSql()){
@@ -278,9 +253,12 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			executingSql = sqlBuilder.evaluate(executingSql, param.getBranchParameter(),param.getSqlId());
 		}				
 		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, param.getParameter(), bindList,param.getSqlId());				
-		return executingSql;
+		if( commentAppender != null){
+			executingSql = commentAppender.setExternalString(param, executingSql);
+		}
+		return executingSql;	
 	}
-	
+
 	/**
 	 * Close.
 	 * 
@@ -292,7 +270,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			if(rs != null){
 				rs.close();
 			}
-		}catch(SQLException sqlee){			
+		}catch(SQLException sqle){			
 		}finally{
 			close(stmt);
 		}
@@ -308,7 +286,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			if( stmt != null){
 				stmt.close();
 			}
-		}catch(SQLException sqlee){				
+		}catch(SQLException sqle){				
 		}
 	}
 

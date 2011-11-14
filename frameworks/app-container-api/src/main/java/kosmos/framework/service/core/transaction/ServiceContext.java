@@ -5,7 +5,7 @@ package kosmos.framework.service.core.transaction;
 
 import kosmos.framework.api.dto.ReplyMessage;
 import kosmos.framework.core.context.AbstractContainerContext;
-import kosmos.framework.core.message.AbstractMessage;
+import kosmos.framework.core.message.ErrorMessage;
 
 /**
  * The thread-local context.
@@ -42,7 +42,7 @@ public abstract class ServiceContext extends AbstractContainerContext{
 	}
 	
 	/**
-	 * initialize the context
+	 * Initializes the context.
 	 */
 	public void initialize(){
 		release();
@@ -50,10 +50,12 @@ public abstract class ServiceContext extends AbstractContainerContext{
 	}
 	
 	/**
-	 * @see kosmos.framework.core.context.AbstractContainerContext#addMessage(kosmos.framework.core.message.AbstractMessage, java.lang.String)
+	 * Adds the error message.
+	 * 
+	 * @param define the define 
+	 * @param message the message
 	 */
-	@Override
-	public void addMessage(AbstractMessage define , String message){
+	public void addError(ErrorMessage define , String message){
 		ReplyMessage reply = new ReplyMessage();
 		reply.setCode(define.getCode());
 		reply.setLevel(define.getLevel());

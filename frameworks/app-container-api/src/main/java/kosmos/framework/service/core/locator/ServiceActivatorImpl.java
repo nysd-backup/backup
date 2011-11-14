@@ -6,10 +6,8 @@ package kosmos.framework.service.core.locator;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import kosmos.framework.api.dto.ReplyDto;
 import kosmos.framework.api.dto.RequestDto;
 import kosmos.framework.api.service.ServiceActivator;
-import kosmos.framework.service.core.advice.InvocationAdapter;
 
 
 /**
@@ -21,16 +19,19 @@ import kosmos.framework.service.core.advice.InvocationAdapter;
 public class ServiceActivatorImpl implements ServiceActivator{
 
 	/**
-	 * @see kosmos.framework.api.service.ServiceActivator#activate(kosmos.framework.api.dto.RequestDto)
+	 * @see kosmos.framework.api.service.ServiceActivator#activateAndInvoke(kosmos.framework.api.dto.RequestDto)
 	 */
 	@Override
-	public ReplyDto activate(RequestDto dto){
-	
+	public Object activateAndInvoke(RequestDto dto){
 		
-		ReplyDto reply = new ReplyDto();
-		try {
-			reply.setRetValue(proceed(dto));	
-		} catch (Throwable t) {
+		Object service = getService(dto);
+		
+		try{
+			
+			Method m = dto.getTargetClass().getMethod(dto.getMethodName(), dto.getParameterTypes());
+			return m.invoke(service, (Object[])dto.getParameter());
+			
+		}catch(Throwable t){
 			if(t instanceof RuntimeException ){
 				throw (RuntimeException)t;
 			}else if(t instanceof InvocationTargetException){
@@ -46,49 +47,7 @@ public class ServiceActivatorImpl implements ServiceActivator{
 			}else {
 				throw new IllegalStateException(t);
 			}
-		}		
-		return reply;
-		
-	}
-	
-	/**
-	 * Proceed the service.
-	 * 
-	 * @param dto the dto
-	 * @return the adapter
-	 */
-	private Object proceed(final RequestDto dto) throws Throwable{
-		InvocationAdapter adapter = new InvocationAdapter() {
-			
-			@Override
-			public Object proceed() throws Throwable {			
-				Object service = getThis();
-				Method m = dto.getTargetClass().getMethod(dto.getMethodName(), dto.getParameterTypes());
-				return m.invoke(service, (Object[])dto.getParameter());
-			}
-			
-			@Override
-			public Object getThis() {
-				return getService(dto);
-			}
-			
-			@Override
-			public String getMethodName() {
-				return dto.getMethodName();
-			}
-			
-			@Override
-			public String getDeclaringTypeName() {
-				return dto.getTargetClass().getName();
-			}
-			
-			@Override
-			public Object[] getArgs() {
-				return dto.getParameter();
-			}
-		};
-		
-		return new ServiceFrontEnd().invoke(adapter);
+		}
 	}
 	
 	/**

@@ -61,23 +61,25 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
   	<!-- WEB/帳票からのアクセス用（単体テストはJTA使用不可能なので）-->
-	<bean id="connectionProvider" class="framework.service.core.EntityManagerConnectionProviderImpl" scope="prototype" >
+	<bean id="connectionProvider" class="kosmos.framework.service.core.EntityManagerConnectionProviderImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 	</bean>	
-	<bean id="clientQueryFactory" class="framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
+	<bean id="clientQueryFactory" class="kosmos.framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>	
 		<property name="emptyHandler" ref="emptyHandler"/>	
 		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
+	
+	<bean id="pagingService" class="kosmos.framework.service.core.services.LatestPagingServiceImpl" />
 		
-	<context:component-scan base-package="framework.service.test">
+	<context:component-scan base-package="kosmos.framework.service.test">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />		
 	</context:component-scan>
 	
-	<context:component-scan base-package="framework.service.ext.services">
+	<context:component-scan base-package="kosmos.framework.service.core.services">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />		
 	</context:component-scan>

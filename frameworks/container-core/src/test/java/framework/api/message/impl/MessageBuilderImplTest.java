@@ -55,8 +55,7 @@ public class MessageBuilderImplTest{
 	@Test
 	public void build() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
-		String defined = builder.load(new ErrorMessage(100), new Locale("en"));
-		String builded = builder.build(defined,100);
+		String builded = builder.load(new ErrorMessage(100), new Locale("en") , 100);
 		Assert.assertEquals("LOCALE_TEST100",builded);
 	}
 

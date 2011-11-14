@@ -63,6 +63,11 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 	}
 	
 	/**
+	 * @param seconds the JDBC timeout
+	 */
+	public abstract void setQueryTimeout(int seconds);
+	
+	/**
 	 * Fetch the result.
 	 * 
 	 * @return the result

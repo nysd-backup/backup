@@ -44,17 +44,6 @@ public interface SQLBuilder {
 	public String replaceToPreparedSql(String originalSql,Map<String,Object> parameter,List<Object> bindList, String queryId);
 	
 	/**
-	 * Set the range.
-	 * 
-	 * @param sql the SQL
-	 * @param firstResult the firstResult
-	 * @param getSize the getting size
-	 * @param bindList the binding target
-	 * @return the SQL
-	 */
-	public String setRange(String sql , int firstResult , int getSize , List<Object> bindList);
-	
-	/**
 	 * Convert the SQL to get count.
 	 * 
 	 * @param sql the SQL

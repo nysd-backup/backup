@@ -13,6 +13,7 @@ import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.api.query.services.OrmQueryService;
 import kosmos.framework.core.entity.AbstractEntity;
 import kosmos.framework.jpqlclient.api.PersistenceHints;
+import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.sqlclient.api.orm.OrmCondition;
 
 
@@ -22,12 +23,14 @@ import kosmos.framework.sqlclient.api.orm.OrmCondition;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractOrmQueryService<T extends AbstractEntity> implements OrmQueryService<T>{
+public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQueryService<T>{
 	
 	/**
 	 * @return the factory to create the query
 	 */
-	protected abstract AdvancedOrmQueryFactory getQueryFactory();
+	protected AdvancedOrmQueryFactory getQueryFactory(){
+		return ServiceLocator.createDefaultOrmQueryFactory();
+	}
 
 	/**
 	 * @see kosmos.framework.api.query.services.OrmQueryService#find(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])

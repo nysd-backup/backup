@@ -36,13 +36,12 @@ public class LazyList<E> implements List<E>{
 	}
 	
 	/**
-	 * @param statement the statement
 	 * @param rs the rs
 	 * @param handler the handler
 	 * @param exceptionHandler the exceptionHandler
 	 */
-	public LazyList(Statement statement ,ResultSet rs, RecordHandler<E> handler,ExceptionHandler exceptionHandler){
-		this.itr = new ResultSetIterator(rs, statement, handler,exceptionHandler);
+	public LazyList(ResultSet rs, RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+		this.itr = new ResultSetIterator(rs, handler,exceptionHandler);
 	}
 	
 	/**
@@ -233,19 +232,15 @@ public class LazyList<E> implements List<E>{
 
 		/** the result set */
 		private final ResultSet rs;
-
-		/** the statement */
-		private final Statement statement;
-
+		
 		/** the record handler */
 		private final RecordHandler<E> handler;
 		
 		/** the ExceptionHandler */
 		private final ExceptionHandler exceptionHandler;
 		
-		public ResultSetIterator(ResultSet rs , Statement statement , RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+		public ResultSetIterator(ResultSet rs ,RecordHandler<E> handler,ExceptionHandler exceptionHandler){
 			this.rs = rs;
-			this.statement = statement;
 			this.handler = handler;
 			this.exceptionHandler = exceptionHandler;
 		}
@@ -254,22 +249,28 @@ public class LazyList<E> implements List<E>{
 		 * Closes the statement and result set
 		 */
 		public void close(){
-
-			try{
-				if(rs != null && !rs.isClosed()){
-					rs.close();
-				}
-			} catch (SQLException e) {
-				
-			}finally{
+	
+			if(rs != null){
+				Statement stmt = null;
 				try{
-					if( statement != null && !statement.isClosed()){
-						statement.close();
+					stmt = rs.getStatement();
+				} catch (SQLException e) {
+				}
+				try{
+					if(!rs.isClosed()){
+						rs.close();
 					}
-				}catch(SQLException ee){
-					
+				} catch (SQLException e) {
+				}finally{
+					try{
+						if(stmt != null && !stmt.isClosed()){
+							stmt.close();
+						}
+					}catch(SQLException sqle){
+					}					
 				}
 			}
+			
 		}
 		
 		/**

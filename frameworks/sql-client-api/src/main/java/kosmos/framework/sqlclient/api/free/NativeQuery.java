@@ -25,6 +25,13 @@ public interface NativeQuery extends FreeQuery{
 	public <T> List<T> getFetchResult();
 	
 	/**
+	 * @param <T> type
+	 * @param seconds the timeout seconds
+	 * @return self
+	 */
+	public <T extends NativeQuery> T setQueryTimeout(int seconds);
+	
+	/**
 	 * @param <T> the type
 	 * @param filter the filter for <code>ResultSet</code>
 	 * @return self

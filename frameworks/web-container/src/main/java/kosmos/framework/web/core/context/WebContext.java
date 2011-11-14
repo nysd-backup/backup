@@ -80,11 +80,14 @@ public abstract class WebContext extends AbstractContainerContext{
 	public boolean isRequestFailed(){
 		return requestFailed;
 	}
+
 	
 	/**
-	 * @see kosmos.framework.core.context.AbstractContainerContext#addMessage(kosmos.framework.core.message.AbstractMessage, java.lang.String)
+	 * Adds the message.
+	 * 
+	 * @param define the define
+	 * @param message the message
 	 */
-	@Override
 	public void addMessage(AbstractMessage define,String message){
 		//エラーレベル以上のメッセージはエラー扱い
 		if(define.getLevel() >= ErrorMessage.LEVEL){

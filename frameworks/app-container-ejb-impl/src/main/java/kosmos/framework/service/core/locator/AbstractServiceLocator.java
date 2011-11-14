@@ -3,14 +3,24 @@
  */
 package kosmos.framework.service.core.locator;
 
+import java.lang.reflect.InvocationHandler;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.api.service.ServiceActivator;
+import kosmos.framework.logics.builder.MessageBuilder;
+import kosmos.framework.logics.builder.impl.MessageBuilderImpl;
+import kosmos.framework.service.core.async.AsyncServiceFactory;
+import kosmos.framework.service.core.async.AsyncServiceFactoryImpl;
+import kosmos.framework.service.core.messaging.MessageClientFactory;
+import kosmos.framework.service.core.messaging.MessageClientFactoryImpl;
+import kosmos.framework.service.core.messaging.QueueProducerDelegate;
+import kosmos.framework.service.core.messaging.TopicProducerDelegate;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
+import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 
 /**
@@ -19,13 +29,10 @@ import kosmos.framework.service.core.transaction.ServiceContextImpl;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServiceLocatorImpl extends ServiceLocator{
+public abstract class AbstractServiceLocator extends ServiceLocator{
 
 	/** the JNDI prefix */
 	private static final String PREFIX = "java:module";
-	
-	/** the <code>ComponentBuilder</code> */
-	private final ComponentBuilder builder;
 	
 	/** the remoting properties */
 	private final Properties remotingProperties;
@@ -34,19 +41,11 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 * @param componentBuilder the componentBuilder to set
 	 * @param remotingProperties the remotingProperties to set
 	 */
-	public ServiceLocatorImpl(ComponentBuilder componentBuilder,Properties remotingProperties){
-		this.builder = componentBuilder;
+	public AbstractServiceLocator(Properties remotingProperties){
 		this.remotingProperties = remotingProperties;
 		delegate = this;
 	}
 	
-	/**
-	 * @return　the component builder
-	 */
-	public static ComponentBuilder getComponentBuilder(){
-		return ((ServiceLocatorImpl)delegate).builder;
-	}
-
 	/**
 	 * @see kosmos.framework.service.core.locator.ServiceLocator#lookupServiceByInterface(java.lang.Class)
 	 */
@@ -99,4 +98,63 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	public ServiceContext createContext() {
 		return new ServiceContextImpl();
 	}
+	
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createAsyncServiceFactory()
+	 */
+	@Override
+	public AsyncServiceFactory createAsyncServiceFactory() {
+		return new AsyncServiceFactoryImpl();
+	}
+
+
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createClientQueryFactory()
+	 */
+	@Override
+	public QueryFactory createClientQueryFactory() {
+		return createQueryFactory();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createPublisher()
+	 */
+	@Override
+	public InvocationHandler createPublisher() {
+		return new TopicProducerDelegate();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createSender()
+	 */
+	@Override
+	public InvocationHandler createSender() {
+		return new QueueProducerDelegate();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createMessagingClientFactory()
+	 */
+	@Override
+	public MessageClientFactory createMessageClientFactory() {
+		return new MessageClientFactoryImpl();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createServiceActivator()
+	 */
+	@Override
+	public ServiceActivator createServiceActivator() {
+		return new ServiceActivatorImpl();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createMessageBuilder()
+	 */
+	@Override
+	public MessageBuilder createMessageBuilder() {
+		return new MessageBuilderImpl();
+	}
+	
 }
+

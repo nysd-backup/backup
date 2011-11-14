@@ -21,9 +21,10 @@ public interface MessageBuilder {
 	 * 
 	 * @param bean the message bean
 	 * @param locale the locale
+	 * @param args the args
 	 * @return the message
 	 */
-	public String load(AbstractMessage bean, Locale locale);
+	public String load(AbstractMessage bean, Locale locale, Object... args);
 	
 	/**
 	 * Reads the message definition from the file.
@@ -31,16 +32,9 @@ public interface MessageBuilder {
 	 * @param bean the message bean
 	 * @param locale the locale
 	 * @param baseFileName the name of message file
+	 * @param args the args
 	 * @return the message
 	 */
-	public String load(AbstractMessage bean, Locale locale, String baseFileName);
+	public String load(AbstractMessage bean, Locale locale, String baseFileName , Object... args);
 
-	/**
-	 * Builds the message.
-	 * 
-	 * @param message the message
-	 * @param arguments the arguments
-	 * @return the message
-	 */
-	public String build(String message, Object... arguments);
 }

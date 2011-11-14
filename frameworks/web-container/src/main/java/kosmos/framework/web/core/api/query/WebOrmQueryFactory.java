@@ -12,7 +12,6 @@ import kosmos.framework.api.query.orm.impl.DefaultEasyQuery;
 import kosmos.framework.api.query.orm.impl.DefaultStrictQuery;
 import kosmos.framework.api.query.services.OrmQueryService;
 import kosmos.framework.core.entity.AbstractEntity;
-import kosmos.framework.logics.builder.MessageAccessor;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 import kosmos.framework.web.core.api.service.ServiceCallable;
 import kosmos.framework.web.core.api.service.ServiceFacade;
@@ -31,9 +30,6 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	@ServiceFacade
 	protected OrmQueryService service;
 	
-	/** メチE��ージ */
-	protected MessageAccessor accessor;
-
 	/**
 	 * @see kosmos.framework.api.query.orm.AdvancedOrmQueryFactory#createStrictQuery(java.lang.Class)
 	 */

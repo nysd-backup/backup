@@ -12,7 +12,8 @@ import javax.persistence.PessimisticLockException;
 import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
 import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.service.core.locator.ServiceLocatorImpl;
+import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.locator.AbstractServiceLocator;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -28,7 +29,7 @@ import org.eclipse.persistence.config.QueryHints;
 public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyService{
 
 	public String test() {
-		AdvancedOrmQueryFactory ormQueryFactory = ServiceLocatorImpl.getComponentBuilder().createOrmQueryFactory();
+		AdvancedOrmQueryFactory ormQueryFactory = ServiceLocator.createDefaultOrmQueryFactory();
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
 		query.find("1");
@@ -37,7 +38,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 
 	@Override
 	public String crushException() {
-		AdvancedOrmQueryFactory ormQueryFactory = ServiceLocatorImpl.getComponentBuilder().createOrmQueryFactory();
+		AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE

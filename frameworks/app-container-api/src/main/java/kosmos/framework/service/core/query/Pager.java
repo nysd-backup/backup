@@ -65,7 +65,7 @@ public class Pager {
 		List<?> currentPageData = new ArrayList<Object>();		
 		int currentPageNo = 0;
 		
-		if(totalCount> 0){
+		if(totalCount > 0){
 			query.setFirstResult(startPosition);
 			currentPageData = query.getResultList();						
 			if(currentPageData.size() > 0){

@@ -3,6 +3,8 @@
  */
 package kosmos.framework.core.exception;
 
+import kosmos.framework.api.dto.ReplyMessage;
+
 
 /**
  * The business exception.
@@ -20,6 +22,7 @@ public class BusinessException extends RuntimeException{
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;
 
+	private ReplyMessage[] messageList = null;
 	
 	/**
 	 * @param message the message
@@ -35,5 +38,21 @@ public class BusinessException extends RuntimeException{
 	public BusinessException(String message){
 		super(message);
 	}
+
+	/**
+	 * @param messageList the messageList to set
+	 */
+	public void setMessageList(ReplyMessage[] messageList) {
+		this.messageList = messageList;
+	}
+
+	/**
+	 * @return the messageList
+	 */
+	public ReplyMessage[] getMessageList() {
+		return messageList;
+	}
+	
+	
 
 }

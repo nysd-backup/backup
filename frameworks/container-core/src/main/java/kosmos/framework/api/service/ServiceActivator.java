@@ -3,7 +3,6 @@
  */
 package kosmos.framework.api.service;
 
-import kosmos.framework.api.dto.ReplyDto;
 import kosmos.framework.api.dto.RequestDto;
 
 /**
@@ -20,6 +19,6 @@ public interface ServiceActivator {
 	 * @param dto the DTO
 	 * @return the reply
 	 */
-	public ReplyDto activate(RequestDto dto);
+	public Object activateAndInvoke(RequestDto dto);
 	
 }

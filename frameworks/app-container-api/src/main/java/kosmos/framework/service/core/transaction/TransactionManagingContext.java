@@ -5,7 +5,6 @@ package kosmos.framework.service.core.transaction;
 
 import java.util.LinkedList;
 
-import kosmos.framework.core.message.AbstractMessage;
 import kosmos.framework.core.message.ErrorMessage;
 
 
@@ -69,18 +68,16 @@ public class TransactionManagingContext extends ServiceContext{
 	public InternalUnitOfWork getCurrentUnitOfWork(){
 		return unitOfWorkStack.peek();
 	}
+
 	
 	/**
-	 * @see kosmos.framework.service.core.transaction.ServiceContext#addMessage(kosmos.framework.core.message.AbstractMessage, java.lang.String)
+	 * @see kosmos.framework.service.core.transaction.ServiceContext#addError(kosmos.framework.core.message.ErrorMessage, java.lang.String)
 	 */
 	@Override
-	public void addMessage(AbstractMessage define,String message){
-		if(define.getLevel() >= ErrorMessage.LEVEL){
-			setRollbackOnlyToCurrentTransaction();		
-		}
-		super.addMessage(define,message);
+	public void addError(ErrorMessage define,String message){		
+		setRollbackOnlyToCurrentTransaction();				
+		super.addError(define,message);
 	}
-	
 
 	/**
 	 * @see kosmos.framework.service.core.transaction.ServiceContext#initialize()

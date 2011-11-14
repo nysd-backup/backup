@@ -36,6 +36,9 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	/** the facade of SQLEngine */
 	protected final SQLEngineFacade facade;
 	
+	/** the timeout seconds */
+	protected int timeoutSeconds = -1;
+	
 	/**
 	 * @param useRowSql if true dont analyze the template
 	 * @param sql the SQL
@@ -57,6 +60,14 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	 */
 	public void setFilter(ResultSetFilter<T> filter){
 		this.filter = filter;
+	}
+	
+
+	/**
+	 * @param seconds the JDBC timeout
+	 */
+	public void setQueryTimeout(int seconds) {
+		this.timeoutSeconds = seconds;		
 	}
 	
 	/**
@@ -144,6 +155,7 @@ public class InternalQueryImpl<T> extends AbstractInternalQuery{
 	private <S extends SQLParameter> S createParameter(S parameter){
 		parameter.setSqlId(queryId);
 		parameter.setSql(sql);		
+		parameter.setTimeoutSeconds(timeoutSeconds);
 		parameter.setAllParameter(param);
 		parameter.setAllBranchParameter(branchParam);
 		parameter.setUseRowSql(useRowSql);

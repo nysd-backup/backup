@@ -38,7 +38,7 @@ public class ServiceUnit extends Assert{
     public static void setUpClass() throws Exception {
 		Map<String,Object> prop = new HashMap<String,Object>();
 		prop.put(EJBContainer.APP_NAME, "test");
-		prop.put("org.glassfish.ejb.embedded.glassfish.instance.root", "C:/Env/Personal/glassfishv3/glassfish/domains/domain1");
+		prop.put("org.glassfish.ejb.embedded.glassfish.instance.root", "C:/Project/Personal/glassfishv3/glassfish/domains/domain1");
 		container = EJBContainer.createEJBContainer(prop);
 		
 		Properties properties = new Properties();
@@ -48,7 +48,7 @@ public class ServiceUnit extends Assert{
 	     properties.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
 	     properties.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
 		
-		new StubServiceLocator(new DefaultComponentBuilder(),properties);
+		new StubServiceLocator(properties);
 		
 		try{
 			Class<?> clazz = Class.forName(CachableConst.class.getName());					

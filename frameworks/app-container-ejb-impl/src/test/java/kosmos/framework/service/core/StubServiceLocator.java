@@ -8,9 +8,17 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import kosmos.framework.service.core.locator.ComponentBuilder;
-import kosmos.framework.service.core.locator.ServiceLocatorImpl;
+import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
+import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
+import kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
+import kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl;
+import kosmos.framework.service.core.locator.AbstractServiceLocator;
+import kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl;
+import kosmos.framework.service.core.query.CustomEmptyHandlerImpl;
+import kosmos.framework.service.core.query.CustomMultiResultHandlerImpl;
 import kosmos.framework.service.core.transaction.ServiceContext;
+import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 
 /**
@@ -19,11 +27,10 @@ import kosmos.framework.service.core.transaction.ServiceContext;
  * @author yoshida-n
  * @version	created.
  */
-public class StubServiceLocator extends ServiceLocatorImpl{
+public class StubServiceLocator extends AbstractServiceLocator{
 
-	public StubServiceLocator(ComponentBuilder componentBuilder,
-			Properties remotingProperties) {
-		super(componentBuilder, remotingProperties);	
+	public StubServiceLocator(Properties remotingProperties) {
+		super(remotingProperties);	
 	}
 	
 	/**
@@ -35,7 +42,7 @@ public class StubServiceLocator extends ServiceLocatorImpl{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.locator.ServiceLocatorImpl#lookup(java.lang.String, java.util.Properties)
+	 * @see kosmos.framework.service.core.locator.AbstractServiceLocator#lookup(java.lang.String, java.util.Properties)
 	 */
 	@Override
 	protected Object lookup(String serviceName, Properties prop){
@@ -65,6 +72,41 @@ public class StubServiceLocator extends ServiceLocatorImpl{
 		}catch(NamingException ne){
 			throw new IllegalArgumentException("Failed to load service ", ne);
 		}
+	}
+	
+	
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createQueryFactory()
+	 */
+	@Override
+	public QueryFactory createQueryFactory() {
+		EclipseLinkQueryFactoryImpl factory = new EclipseLinkQueryFactoryImpl();
+		factory.setEmptyHandler( new CustomEmptyHandlerImpl());
+		factory.setEntityManagerProvider(createEntityManagerProvider());		
+		return factory;	
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createOrmQueryFactory()
+	 */
+	@Override
+	public AdvancedOrmQueryFactory createOrmQueryFactory() {
+		AdvancedOrmQueryFactoryImpl impl = new AdvancedOrmQueryFactoryImpl();
+		OrmQueryFactoryImpl internal = new OrmQueryFactoryImpl();
+		GenericJPADaoImpl dao = new GenericJPADaoImpl();
+		dao.setEntityManagerProvider(createEntityManagerProvider());	
+		dao.setEmptyHandler(new CustomEmptyHandlerImpl());
+		dao.setMultiResultHandler(new CustomMultiResultHandlerImpl());
+		internal.setGenericDao(dao);
+		impl.setInternalFactory(internal);
+		return impl;
+	}
+	
+	/**
+	 * @return EntityManagerProvider
+	 */
+	protected EntityManagerProvider createEntityManagerProvider() {
+		return lookupByInterface(EntityManagerProvider.class);
 	}
 	
 }

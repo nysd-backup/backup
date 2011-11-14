@@ -15,7 +15,7 @@ import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.service.core.CachableConst;
 import kosmos.framework.service.core.entity.ITestEntity;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.service.core.locator.ServiceLocatorImpl;
+import kosmos.framework.service.core.locator.AbstractServiceLocator;
 import kosmos.framework.service.core.query.SampleNativeQuery;
 import kosmos.framework.service.core.query.SampleNativeQueryConst;
 import kosmos.framework.service.core.query.SampleNativeResult;
@@ -43,8 +43,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	
 	@PostConstruct
 	public void construct(){
-		queryFactory = ServiceLocatorImpl.getComponentBuilder().createQueryFactory();
-		ormQueryFactory = ServiceLocatorImpl.getComponentBuilder().createOrmQueryFactory();
+		queryFactory = AbstractServiceLocator.createDefaultQueryFactory();
+		ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
 	}
 	/**
 	 * 通常検索

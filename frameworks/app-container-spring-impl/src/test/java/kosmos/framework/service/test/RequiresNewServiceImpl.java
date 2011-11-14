@@ -3,6 +3,8 @@
  */
 package kosmos.framework.service.test;
 
+import java.util.Locale;
+
 import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
@@ -11,7 +13,7 @@ import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
 import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.message.ErrorMessage;
-import kosmos.framework.logics.builder.MessageAccessor;
+import kosmos.framework.logics.builder.MessageBuilder;
 import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
@@ -41,7 +43,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	private AdvancedOrmQueryFactory ormQueryFactory;
 	
 	@Autowired
-	private MessageAccessor accessor;
+	private MessageBuilder builder;
 	
 	public String test() {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
@@ -67,7 +69,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		accessor.addMessage(new ErrorMessage(1));	
+		String message = builder.load(new ErrorMessage(1), Locale.getDefault());
+		ServiceContext.getCurrentInstance().addError(new ErrorMessage(1), message);
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}
 

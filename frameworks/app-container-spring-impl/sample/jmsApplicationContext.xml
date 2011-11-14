@@ -56,7 +56,7 @@ http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
 	</bean>
 	
 	<!-- リスナー定義 -->
-	<bean id="messageListener" class="framework.service.ext.messaging.MessageListenerImpl" />
+	<bean id="messageListener" class="kosmos.framework.service.core.messaging.MessageListenerImpl" />
 	
 	<!-- 
 		MQを別サーバにする場合、送信時と同じコネクションファクトリを使用すると同じMDPはこのサーバで動作する可能性がある。

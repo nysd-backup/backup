@@ -135,7 +135,6 @@ public abstract class AbstractInternalQuery{
 	 */
 	public abstract Object getSingleResult();
 	
-
 	/**
 	 * Updates the data.
 	 * 

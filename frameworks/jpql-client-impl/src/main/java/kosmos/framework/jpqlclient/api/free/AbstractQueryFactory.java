@@ -38,7 +38,7 @@ import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractQueryFactory  implements QueryFactory{
+public abstract class AbstractQueryFactory implements QueryFactory{
 	
 	/** the <code>EntityManager</code> */
 	protected EntityManager em;

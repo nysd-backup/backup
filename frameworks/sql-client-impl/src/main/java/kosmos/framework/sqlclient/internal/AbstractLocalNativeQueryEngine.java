@@ -19,5 +19,5 @@ public abstract class AbstractLocalNativeQueryEngine<T extends AbstractInternalQ
 	public AbstractLocalNativeQueryEngine(T delegate){
 		super(delegate);
 	}
-	
+
 }

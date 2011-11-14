@@ -147,4 +147,13 @@ public class WebNativeQueryEngine implements NativeQuery{
 		return (T)this;
 	}
 
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#setQueryTimeout(int)
+	 */
+	@Override
+	public <T extends NativeQuery> T setQueryTimeout(int seconds) {
+		request.setTimeoutSeconds(seconds);
+		return (T)this;
+	}
+
 }

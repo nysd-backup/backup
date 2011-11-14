@@ -3,14 +3,16 @@
  */
 package kosmos.framework.service.core.services;
 
+import java.util.Locale;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import kosmos.framework.core.message.ErrorMessage;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.logics.builder.MessageAccessor;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.service.core.locator.ServiceLocatorImpl;
+import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.transaction.ServiceContext;
 
 
 /**
@@ -21,8 +23,7 @@ import kosmos.framework.service.core.locator.ServiceLocatorImpl;
  */
 @Stateless
 public class RequireServiceImpl implements RequireService {
-
-
+	
 	@EJB
 	private EntityManagerProvider ema;
 	
@@ -31,8 +32,8 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		MessageAccessor accessor = ServiceLocatorImpl.getComponentBuilder().createMessageAccessor();
-		accessor.addMessage(new ErrorMessage(100));
+		String message = ServiceLocator.createDefaultMessageBuilder().load(new ErrorMessage(100), Locale.getDefault());
+		ServiceContext.getCurrentInstance().addError(new ErrorMessage(100),message);
 	}
 
 	/**

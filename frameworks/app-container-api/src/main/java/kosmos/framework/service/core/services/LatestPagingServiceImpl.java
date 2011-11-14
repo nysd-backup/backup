@@ -6,6 +6,7 @@ package kosmos.framework.service.core.services;
 import kosmos.framework.api.query.services.PagingRequest;
 import kosmos.framework.api.query.services.PagingResult;
 import kosmos.framework.api.query.services.PagingService;
+import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.service.core.query.Pager;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
@@ -20,12 +21,14 @@ import kosmos.framework.sqlclient.api.free.QueryFactory;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractLatestPagingService implements PagingService{
+public class LatestPagingServiceImpl implements PagingService{
 
 	/**
 	 * @return the factory to create the query
 	 */
-	protected abstract QueryFactory getQueryFactory();
+	protected QueryFactory getQueryFactory(){
+		return ServiceLocator.createDefaultClientQueryFactory();
+	}
 
 	/**
 	 * @see kosmos.framework.api.query.services.PagingService#prepare(kosmos.framework.api.query.services.PagingRequest)

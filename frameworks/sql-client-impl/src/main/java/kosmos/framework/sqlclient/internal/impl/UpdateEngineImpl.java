@@ -40,4 +40,14 @@ public class UpdateEngineImpl extends AbstractLocalUpdateEngine<InternalQueryImp
 		return delegate.executeUpdate();
 	}
 
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.NativeUpdate#setQueryTimeout(int)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends NativeUpdate> T setQueryTimeout(int seconds) {
+		delegate.setQueryTimeout(seconds);
+		return (T)this;
+	}
+
 }

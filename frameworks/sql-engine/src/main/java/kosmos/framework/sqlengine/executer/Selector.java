@@ -16,7 +16,8 @@ import java.sql.SQLException;
 public interface Selector {
 	
 	/**
-	 * @param stmt　the statement that is binded the parameter.
+	 * @param stmt　the statement that is binded the parameter
+	 * @param startPosition the position to start
 	 * @return the result
 	 * @throws SQLException the exception
 	 */

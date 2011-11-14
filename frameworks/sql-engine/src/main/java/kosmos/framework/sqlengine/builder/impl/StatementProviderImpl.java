@@ -6,6 +6,7 @@ package kosmos.framework.sqlengine.builder.impl;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -23,15 +24,46 @@ import kosmos.framework.sqlengine.builder.StatementProvider;
  */
 public class StatementProviderImpl implements StatementProvider{
 	
+	/** the resultSetType */
+	private int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;
+	
+	/** the resultSetConcurrency */
+	private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
+	
+	/** the default fetch size */
+	private int fetchSize = 100;
+	
+	/**
+	 * @param fetchSize the fetch size to set
+	 */
+	public void setFetchSize(int fetchSize ){
+		this.fetchSize = fetchSize;
+	}
+	
+	/**
+	 * @param resultSetType the resultSetType to set
+	 */
+	public void setResultSetType(int resultSetType){
+		this.resultSetType = resultSetType;
+	}
+	
+	/**
+	 * @param resultSetConcurrency the resultSetConcurrency to set
+	 */
+	public void setResultSetConcurrency(int resultSetConcurrency){
+		this.resultSetConcurrency = resultSetConcurrency;
+	}
+	
 	/**
 	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String)
 	 */
 	@Override
-	public PreparedStatement createStatement(Connection con, String sql)
+	public PreparedStatement createStatement(String sqlId ,Connection con, String sql, int timeout , int maxRows)
 			throws SQLException {
 		PreparedStatement statement = null;
 		try{
-			statement = configure(con.prepareStatement(sql));
+			statement = con.prepareStatement(sql,resultSetType,resultSetConcurrency);
+			configure(statement,timeout,maxRows);
 		}catch(SQLException sqle){
 			if( statement != null){
 				try{
@@ -44,25 +76,34 @@ public class StatementProviderImpl implements StatementProvider{
 		return statement;
 	}
 
-	
 	/**
-	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String, java.util.List, java.lang.String)
+	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String, java.util.List)
 	 */
 	@Override
-	public PreparedStatement createStatement(Connection con ,String sql,List<Object> bindList,String queryId) throws SQLException{
-		PreparedStatement statement = createStatement(con,sql);		
+	public PreparedStatement createStatement(String sqlId ,Connection con ,String sql,List<Object> bindList,int timeout , int maxRows) throws SQLException{
+		PreparedStatement statement = createStatement(sqlId,con,sql,timeout,maxRows);		
 		setBindParameter(statement,bindList);
 		return statement;
 	}
 	
 	/**
-	 * Configures the JDBC parameters including the vendor-depending-parameters.
+	 * Configures the statement.
 	 * 
 	 * @param stmt the statement
-	 * @return the statement
+	 * @param timeoutSeconds the timeout seconds
+	 * @param maxRows the max rows
+	 * @throws SQLException the exception
 	 */
-	protected PreparedStatement configure(PreparedStatement stmt) throws SQLException{
-		return stmt;
+	protected void configure(PreparedStatement stmt, int timeoutSeconds, int maxRows) throws SQLException{
+		if(timeoutSeconds > 0 ){
+			stmt.setQueryTimeout(timeoutSeconds);
+		}
+		if(maxRows > 0 ){
+			stmt.setMaxRows(maxRows);
+		}
+		if(fetchSize > 0){
+			stmt.setFetchSize(fetchSize);
+		}
 	}
 	
 	/**

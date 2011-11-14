@@ -9,8 +9,6 @@ import java.lang.reflect.Proxy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kosmos.framework.api.service.Remote;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
@@ -29,9 +27,6 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	/** the name of the LocalBusinessDelegate */
 	private String handlerBeanName = null;
 	
-	/** the name of the RemoteBusinessDelegate */
-	private String remoteHandlerBeanName = null;	
-	
 	/** the list of the serviceName to inject to */
 	private Pattern whiteList = null;
 	
@@ -46,13 +41,6 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 	 */
 	public void setHandlerBeanName(String handlerBeanName){
 		this.handlerBeanName = handlerBeanName;
-	}
-	
-	/**
-	 * @param remoteHandlerBeanName the remoteHandlerBeanName to set
-	 */
-	public void setRemoteHandlerBeanName(String remoteHandlerBeanName){
-		this.remoteHandlerBeanName = remoteHandlerBeanName;
 	}
 	
 	/**
@@ -122,12 +110,8 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 				f.setAccessible(true);
 				
 				//プロキシの設定
-				BusinessDelegate handler = null;
-				if( f.getType().getAnnotation(Remote.class) != null){
-					handler = BusinessDelegate.class.cast(context.getBean(remoteHandlerBeanName));
-				}else{
-					handler = BusinessDelegate.class.cast(context.getBean(handlerBeanName));				
-				}
+				BusinessDelegate handler = BusinessDelegate.class.cast(context.getBean(handlerBeanName));				
+				
 				try {
 				
 					if( !a.alias().isEmpty()){

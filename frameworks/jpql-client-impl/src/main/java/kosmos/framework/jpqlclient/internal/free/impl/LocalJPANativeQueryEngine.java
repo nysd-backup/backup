@@ -90,4 +90,13 @@ public class LocalJPANativeQueryEngine extends AbstractLocalNativeQueryEngine<Ab
 		return delegate.getFetchResult();
 	}
 
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#setQueryTimeout(int)
+	 */
+	@Override
+	public <T extends NativeQuery> T setQueryTimeout(int seconds) {
+		delegate.setQueryTimeout(seconds);
+		return (T)this;
+	}
+
 }

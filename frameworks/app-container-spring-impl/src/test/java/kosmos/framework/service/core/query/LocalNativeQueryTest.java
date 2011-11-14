@@ -228,6 +228,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);		
 		query.setFirstResult(1);
 		query.setMaxResults(2);
+		
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());

@@ -77,6 +77,14 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 		this.recordHandlerFactory = recordHandlerFactory;
 		this.exceptionHandler = exceptionHandler;
 	}
+
+	/**
+	 * @see kosmos.framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery#setQueryTimeout(int)
+	 */
+	@Override
+	public void setQueryTimeout(int seconds) {
+		hints.put(QueryHints.JDBC_TIMEOUT, seconds);		
+	}
 	
 	/**
 	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#getResultList()
@@ -87,6 +95,7 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 		Query query = mapping(createQuery());	
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		ResultSet rs = cursor.getResultSet();
+		
 		try {
 			return handler.getResultList(rs, resultType, new DelegatingResultSetFilter<T>(filter));
 		}catch (Throwable e) {
@@ -112,14 +121,15 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	 */
 	@Override
 	public NativeResult<T> getTotalResult(){
-		int saved = getMaxResults();
-		setMaxResults(-1);
+
 		Query query = mapping(createQuery());
+		query.setMaxResults(0);
+		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		ResultSet rs = cursor.getResultSet();
 		QueryResult<T> result;
 		try {
-			result = handler.getResultList(rs, resultType, new DelegatingResultSetFilter<T>(filter),saved);
+			result = handler.getResultList(rs, resultType, new DelegatingResultSetFilter<T>(filter),getMaxResults(),getFirstResult());
 		}catch (Throwable e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
@@ -152,8 +162,7 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	 */
 	protected Query createQuery() {
 		List<Object> bindList = new ArrayList<Object>();
-		firingSql = buildSql(bindList);
-		firingSql = builder.setRange(firingSql, getFirstResult(), getMaxResults(), bindList);		
+		firingSql = buildSql(bindList);		
 		Query query = name != null ? createNamedQuery() : em.createNativeQuery(firingSql);
 		return bindParmaeterToQuery(query, bindList);			
 	}
@@ -169,7 +178,12 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 		for(Map.Entry<String, Object> h : hints.entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}		
-		//自分で範囲設定するためfirstResultとmaxResultのqueryへの設定を実施しない。
+		if(firstResult > 0){
+			query.setFirstResult(firstResult);
+		}
+		if(maxSize > 0){
+			query.setMaxResults(maxSize);
+		}
 		
 		//ResultSetの取得を可能とする。
 		query.setHint(QueryHints.SCROLLABLE_CURSOR, HintValues.TRUE);

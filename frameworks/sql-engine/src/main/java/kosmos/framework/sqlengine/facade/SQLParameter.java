@@ -31,6 +31,9 @@ public abstract class SQLParameter {
 	
 	/** the use row sql */
 	private boolean useRowSql = false;
+	
+	/** the timeout */
+	private int timeoutSeconds = 0;
 
 	/**
 	 * @param comment the comment to set
@@ -131,6 +134,20 @@ public abstract class SQLParameter {
 	 */
 	public boolean isUseRowSql() {
 		return useRowSql;
+	}
+
+	/**
+	 * @param timeoutSeconds the timeoutSeconds to set
+	 */
+	public void setTimeoutSeconds(int timeoutSeconds) {
+		this.timeoutSeconds = timeoutSeconds;
+	}
+
+	/**
+	 * @return the timeoutSeconds
+	 */
+	public int getTimeoutSeconds() {
+		return timeoutSeconds;
 	}
 	
 }

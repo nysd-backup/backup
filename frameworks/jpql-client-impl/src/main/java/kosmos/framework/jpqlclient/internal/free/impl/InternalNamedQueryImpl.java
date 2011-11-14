@@ -200,4 +200,5 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 		}
 		return query;
 	}
+
 }

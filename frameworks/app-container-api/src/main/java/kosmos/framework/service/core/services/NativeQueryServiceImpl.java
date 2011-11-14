@@ -7,6 +7,7 @@ import java.util.List;
 
 import kosmos.framework.api.query.services.NativeQueryService;
 import kosmos.framework.api.query.services.QueryRequest;
+import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 
@@ -16,10 +17,14 @@ import kosmos.framework.sqlclient.api.free.QueryFactory;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractNativeQueryService implements NativeQueryService{
+public class NativeQueryServiceImpl implements NativeQueryService{
 
-	/** the factory to create the query */
-	protected abstract QueryFactory getQueryFactory();
+	/**
+	 * @return the QueryFactory
+	 */
+	protected QueryFactory getQueryFactory(){
+		return ServiceLocator.createDefaultClientQueryFactory();
+	}
 	
 	/**
 	 * @see kosmos.framework.api.query.services.NativeQueryService#count(kosmos.framework.api.query.services.QueryRequest)

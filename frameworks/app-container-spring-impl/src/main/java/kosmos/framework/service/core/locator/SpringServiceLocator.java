@@ -3,9 +3,16 @@
  */
 package kosmos.framework.service.core.locator;
 
-import kosmos.framework.service.core.locator.ServiceLocator;
+import java.lang.reflect.InvocationHandler;
+
+import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
+import kosmos.framework.api.service.ServiceActivator;
+import kosmos.framework.logics.builder.MessageBuilder;
+import kosmos.framework.service.core.async.AsyncServiceFactory;
+import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
+import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -83,6 +90,78 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	@Override
 	public ServiceContext createContext() {
 		return new ServiceContextImpl();
+	}
+	
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#getMessageBuilder()
+	 */
+	@Override
+	public MessageBuilder createMessageBuilder(){
+		return lookupByInterface(MessageBuilder.class);
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createMessageClientFactory()
+	 */
+	@Override
+	public MessageClientFactory createMessageClientFactory() {
+		return lookupByInterface(MessageClientFactory.class);
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createServiceActivator()
+	 */
+	@Override
+	public ServiceActivator createServiceActivator() {
+		return new ServiceActivatorImpl();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createPublisher()
+	 */
+	@Override
+	public InvocationHandler createPublisher() {
+		return lookup("topicProducer");
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createSender()
+	 */
+	@Override
+	public InvocationHandler createSender() {
+		return lookup("queueProducer");
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createQueryFactory()
+	 */
+	@Override
+	public QueryFactory createQueryFactory() {
+		return lookupByInterface(QueryFactory.class);
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createClientQueryFactory()
+	 */
+	@Override
+	public QueryFactory createClientQueryFactory() {
+		return lookup("clientQueryFactory");
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createAsyncServiceFactory()
+	 */
+	@Override
+	public AsyncServiceFactory createAsyncServiceFactory() {
+		return lookupByInterface(AsyncServiceFactory.class);
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createOrmQueryFactory()
+	 */
+	@Override
+	public AdvancedOrmQueryFactory createOrmQueryFactory() {
+		return lookupByInterface(AdvancedOrmQueryFactory.class);
 	}
 	
 }

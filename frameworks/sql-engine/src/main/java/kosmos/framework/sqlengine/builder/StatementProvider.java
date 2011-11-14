@@ -20,22 +20,24 @@ public interface StatementProvider {
 	 * Creates the statement.
 	 * For {@link PreparedStatement#executeBatch()}.
 	 * 
+	 * @param sqlId the queryId
 	 * @param con the connection
 	 * @param sql the SQL
 	 * @return the statement
 	 */
-	public PreparedStatement createStatement(Connection con ,String sql) throws SQLException;
+	public PreparedStatement createStatement(String sqlId,Connection con ,String sql ,int timeout , int maxRows) throws SQLException;
 
 	
 	/**
 	 * Creates the statement.
 	 * 
+	 * @param sqlId the queryId
 	 * @param con the connection
 	 * @param sql the SQL
 	 * @param parameter the parameter
-	 * @param queryId the queryId
+
 	 * @return the statement
 	 */
-	public PreparedStatement createStatement(Connection con ,String sql , List<Object> parameter, String queryId) throws SQLException;
+	public PreparedStatement createStatement(String sqlId ,Connection con ,String sql , List<Object> parameter,int timeout , int maxRows) throws SQLException;
 
 }

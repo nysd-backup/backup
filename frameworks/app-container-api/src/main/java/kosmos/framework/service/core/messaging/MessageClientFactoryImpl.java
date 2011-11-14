@@ -6,13 +6,12 @@ package kosmos.framework.service.core.messaging;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-import kosmos.framework.service.core.locator.ServiceLocatorImpl;
+import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 
 
-
 /**
- * The factory to create JMS producer.
+ * The factory to create the JMS producer.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -24,7 +23,7 @@ public class MessageClientFactoryImpl implements MessageClientFactory{
 	 */
 	@Override
 	public <T> T createPublisher(Class<T> service) {
-		InvocationHandler handler = ServiceLocatorImpl.getComponentBuilder().createPublisher();
+		InvocationHandler handler = ServiceLocator.createDefaultPublisher();
 		return service.cast(Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, handler));
 	}
 	
@@ -33,7 +32,7 @@ public class MessageClientFactoryImpl implements MessageClientFactory{
 	 */
 	@Override
 	public <T> T createSender(Class<T> service) {
-		InvocationHandler handler = ServiceLocatorImpl.getComponentBuilder().createSender();
+		InvocationHandler handler = ServiceLocator.createDefaultSender();
 		return service.cast(Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, handler));
 	}
 
