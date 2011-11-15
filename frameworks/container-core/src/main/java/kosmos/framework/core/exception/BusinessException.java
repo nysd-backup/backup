@@ -38,6 +38,13 @@ public class BusinessException extends RuntimeException{
 	public BusinessException(String message){
 		super(message);
 	}
+	
+	/**
+	 * Constructor
+	 */
+	public BusinessException(){
+		super();
+	}
 
 	/**
 	 * @param messageList the messageList to set

@@ -19,6 +19,8 @@ import kosmos.framework.service.core.transaction.TransactionManagingContext;
  * @version	created.
  */
 public class InternalDefaultInterceptor implements InternalInterceptor {
+	
+	public static final String ANY_TRANSACTION_FAILED = "Any transaction is failed";
 
 	/**
 	 * @see kosmos.framework.service.core.advice.InternalInterceptor#around(kosmos.framework.service.core.advice.InvocationAdapter)
@@ -79,7 +81,7 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 	 * @param retValue the value to return.
 	 */
 	protected BusinessException afterError(Object retValue){
-		return new BusinessException(null);
+		return new BusinessException(ANY_TRANSACTION_FAILED);
 	}
 
 	/**

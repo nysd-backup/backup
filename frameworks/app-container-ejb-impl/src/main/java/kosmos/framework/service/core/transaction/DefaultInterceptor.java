@@ -32,11 +32,11 @@ public class DefaultInterceptor {
 	 */
 	@AroundInvoke
 	public Object around(InvocationContext ic) throws Throwable {
-		InternalDefaultInterceptor internal =  new InternalDefaultInterceptor(){
+		InternalDefaultInterceptor internal = new InternalDefaultInterceptor(){
 			@Override
 			protected BusinessException afterError(Object retValue){
 				context.setRollbackOnly();
-				return new ApplicationException(null);
+				return new ApplicationException(ANY_TRANSACTION_FAILED);
 			}
 		};
 		return internal.around(new InvocationAdapterImpl(ic));
