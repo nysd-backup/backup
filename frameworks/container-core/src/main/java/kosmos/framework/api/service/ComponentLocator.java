@@ -4,10 +4,8 @@
 package kosmos.framework.api.service;
 
 
-
-
 /**
- * function.
+ * Creates the components.
  *
  * @author yoshida-n
  * @version	created.

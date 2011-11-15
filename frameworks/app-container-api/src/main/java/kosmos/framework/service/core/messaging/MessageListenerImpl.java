@@ -43,14 +43,8 @@ public class MessageListenerImpl implements MessageListener{
 		}catch(JMSException jmse){
 			throw new IllegalStateException(jmse);
 		}
-		ServiceActivator activator = createListener();
+		ServiceActivator activator = ServiceLocator.createDefaultServiceActivator();
 		activator.activateAndInvoke(dto);
 	}
 	
-	/**
-	 * @return the ServiceActivator
-	 */
-	protected ServiceActivator createListener(){
-		return ServiceLocator.createDefaultServiceActivator();
-	}
 }
