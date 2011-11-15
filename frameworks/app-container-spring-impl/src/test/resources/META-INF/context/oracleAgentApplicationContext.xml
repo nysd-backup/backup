@@ -72,7 +72,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
-	<bean id="pagingService" class="kosmos.framework.service.core.services.LatestPagingServiceImpl" />
+	<bean id="pagingService" class="kosmos.framework.service.core.services.PagingServiceImpl" />
 		
 	<context:component-scan base-package="kosmos.framework.service.test">
 		<context:include-filter type="annotation"

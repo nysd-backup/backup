@@ -56,7 +56,7 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 	 */
 	protected Object invokeAtTopLevel(InvocationAdapter ic) throws Throwable {
 	
-		TransactionManagingContext context = ServiceLocator.createContainerContext();
+		TransactionManagingContext context = ServiceLocator.createDefaultServiceContext();
 		context.initialize();
 		try{
 			Object retValue = proceed(ic);	

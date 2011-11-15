@@ -3,7 +3,6 @@
  */
 package kosmos.framework.api.service;
 
-import kosmos.framework.core.context.AbstractContainerContext;
 
 
 
@@ -40,23 +39,7 @@ public abstract class ComponentLocator {
 	 * @return the service
 	 */
 	public abstract <T> T lookupRemoteService(Class<T> clazz);
-	
 
-	/**
-	 * Creates the context.
-	 * 
-	 * @return the context
-	 */
-	public abstract <T extends AbstractContainerContext> T createContext();
-	
-	/**
-	 * Creates the context.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends AbstractContainerContext> T createContainerContext(){
-		return (T)delegate.createContext();
-	}
-		
 	/**
 	 * Look up service using interface.
 	 * @param <T> the type

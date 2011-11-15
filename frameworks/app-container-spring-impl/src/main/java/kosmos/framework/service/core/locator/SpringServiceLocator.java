@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
 import kosmos.framework.api.service.ServiceActivator;
-import kosmos.framework.api.service.ServiceActivatorImpl;
+import kosmos.framework.api.service.impl.ServiceActivatorImpl;
 import kosmos.framework.logics.builder.MessageBuilder;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
@@ -86,11 +86,10 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	}
 	
 	/**
-	 * @see kosmos.framework.service.core.locator.ServiceLocator#createContext()
+	 * @see kosmos.framework.service.core.locator.ServiceLocator#createServiceContext()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public ServiceContext createContext() {
+	public ServiceContext createServiceContext() {
 		return new ServiceContextImpl();
 	}
 	

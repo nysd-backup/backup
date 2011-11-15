@@ -38,7 +38,7 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	 * @see kosmos.framework.service.core.locator.ServiceLocator#createContext()
 	 */
 	@Override
-	public ServiceContext createContext() {
+	public ServiceContext createServiceContext() {
 		return new ServiceTestContextImpl();
 	}
 

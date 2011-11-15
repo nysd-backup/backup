@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import kosmos.framework.api.dto.RequestDto;
 import kosmos.framework.api.service.ServiceActivator;
-import kosmos.framework.api.service.ServiceActivatorImpl;
+import kosmos.framework.api.service.impl.ServiceActivatorImpl;
 
 
 /**

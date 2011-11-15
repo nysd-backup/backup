@@ -11,6 +11,7 @@ import kosmos.framework.api.service.ServiceActivator;
 import kosmos.framework.logics.builder.MessageBuilder;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
+import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 
@@ -66,6 +67,11 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 * @return the message builder
 	 */
 	public abstract MessageBuilder createMessageBuilder();	
+	
+	/**
+	 * @return the ServiceContext
+	 */
+	public abstract ServiceContext createServiceContext();	
 
 	/**
 	 * @return the MessageBuilder
@@ -129,5 +135,14 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public static AsyncServiceFactory createDefaultAsyncServiceFactory(){
 		return ((ServiceLocator)delegate).createAsyncServiceFactory();
 	}
+	
+	/**
+	 * @return the ServiceContext
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends ServiceContext> T createDefaultServiceContext(){
+		return (T)((ServiceLocator)delegate).createServiceContext();
+	}
+		
 	
 }

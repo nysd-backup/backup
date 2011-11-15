@@ -37,8 +37,8 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<bean id="entityManagerProvider" class="kosmos.framework.jpqlclient.internal.EntityManagerProviderImpl" scope="prototype" />
 	
 	<!-- 例外処理 -->
-	<bean id="emptyHandler" class="kosmos.framework.service.core.query.CustomEmptyHandlerImpl" scope="prototype" />
-	<bean id="multiResultHandler" class="kosmos.framework.service.core.query.CustomMultiResultHandlerImpl" scope="prototype" />
+	<bean id="emptyHandler" class="kosmos.framework.service.core.query.UnexpectedEmptyHandlerImpl" scope="prototype" />
+	<bean id="multiResultHandler" class="kosmos.framework.service.core.query.UnexpectedMultiResultHandlerImpl" scope="prototype" />
 	
 	<!-- DAO -->
 	<bean id="genericJPADao" class="kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl" scope="prototype" >

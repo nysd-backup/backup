@@ -3,6 +3,8 @@
  */
 package kosmos.framework.web.core.loader;
 
+import kosmos.framework.api.service.ComponentLocator;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -49,5 +51,11 @@ public class ComponentLocatorImpl extends ComponentLocator{
 	public <T> T lookupService(String name) {
 		return (T)context.getBean(name);
 	}
+
+	@Override
+	public <T> T lookupRemoteService(Class<T> clazz) {
+		throw new UnsupportedOperationException();
+	}
+
 
 }

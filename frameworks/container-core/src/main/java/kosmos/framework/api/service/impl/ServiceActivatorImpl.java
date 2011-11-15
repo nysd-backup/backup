@@ -1,12 +1,14 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.api.service;
+package kosmos.framework.api.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import kosmos.framework.api.dto.RequestDto;
+import kosmos.framework.api.service.ComponentLocator;
+import kosmos.framework.api.service.ServiceActivator;
 
 
 /**
