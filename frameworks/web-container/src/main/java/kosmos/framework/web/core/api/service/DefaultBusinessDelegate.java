@@ -8,10 +8,7 @@ import java.lang.reflect.Method;
 
 import kosmos.framework.api.dto.RequestDto;
 import kosmos.framework.api.service.ServiceActivator;
-
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import kosmos.framework.api.service.ServiceActivatorImpl;
 
 
 /**
@@ -20,17 +17,24 @@ import org.springframework.context.ApplicationContextAware;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DefaultBusinessDelegate implements BusinessDelegate,ApplicationContextAware{
+public class DefaultBusinessDelegate implements BusinessDelegate{
 
 	private String alias = null;
 	
-	private ApplicationContext context = null;
+	private ServiceActivator serviceActivator = new ServiceActivatorImpl();
 	
 	/**
 	 * @see kosmos.framework.web.core.api.service.BusinessDelegate#setAlias(java.lang.String)
 	 */
 	public void setAlias(String alias){
 		this.alias = alias;
+	}
+	
+	/**
+	 * @param serviceActivator the serviceActivator to set
+	 */
+	public void setServiceActivator(ServiceActivator serviceActivator){
+		this.serviceActivator = serviceActivator;
 	}
 
 	/**
@@ -66,16 +70,8 @@ public class DefaultBusinessDelegate implements BusinessDelegate,ApplicationCont
 	 * @return the reply
 	 */
 	protected Object processService(RequestDto dto){
-		return context.getBean(ServiceActivator.class).activateAndInvoke(dto);
+		return serviceActivator.activateAndInvoke(dto);
 	}
 
-	/**
-	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
-	 */
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		this.context = applicationContext;
-	}
 
 }

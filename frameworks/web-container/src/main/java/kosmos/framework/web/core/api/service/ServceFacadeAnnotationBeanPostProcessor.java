@@ -110,8 +110,7 @@ public class ServceFacadeAnnotationBeanPostProcessor implements BeanPostProcesso
 				f.setAccessible(true);
 				
 				//プロキシの設定
-				BusinessDelegate handler = BusinessDelegate.class.cast(context.getBean(handlerBeanName));				
-				
+				BusinessDelegate handler = BusinessDelegate.class.cast(context.getBean(handlerBeanName));								
 				try {
 				
 					if( !a.alias().isEmpty()){

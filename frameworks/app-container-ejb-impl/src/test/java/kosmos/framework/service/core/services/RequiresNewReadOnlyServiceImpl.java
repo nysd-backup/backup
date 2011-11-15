@@ -12,8 +12,8 @@ import javax.persistence.PessimisticLockException;
 import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
 import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.service.core.locator.AbstractServiceLocator;
+import kosmos.framework.service.core.locator.ServiceLocator;
 
 import org.eclipse.persistence.config.QueryHints;
 

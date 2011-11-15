@@ -31,6 +31,7 @@ public class StubServiceLocator extends AbstractServiceLocator{
 
 	public StubServiceLocator(Properties remotingProperties) {
 		super(remotingProperties);	
+		delegate = this;
 	}
 	
 	/**

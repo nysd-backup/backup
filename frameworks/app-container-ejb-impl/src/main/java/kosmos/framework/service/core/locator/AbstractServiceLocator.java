@@ -10,6 +10,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import kosmos.framework.api.service.ServiceActivator;
+import kosmos.framework.api.service.ServiceActivatorImpl;
 import kosmos.framework.logics.builder.MessageBuilder;
 import kosmos.framework.logics.builder.impl.MessageBuilderImpl;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
@@ -94,6 +95,7 @@ public abstract class AbstractServiceLocator extends ServiceLocator{
 	/**
 	 * @see kosmos.framework.service.core.locator.ServiceLocator#createContext()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public ServiceContext createContext() {
 		return new ServiceContextImpl();

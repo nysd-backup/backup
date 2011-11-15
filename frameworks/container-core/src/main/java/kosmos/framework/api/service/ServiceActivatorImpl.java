@@ -1,13 +1,12 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.service.core.locator;
+package kosmos.framework.api.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import kosmos.framework.api.dto.RequestDto;
-import kosmos.framework.api.service.ServiceActivator;
 
 
 /**
@@ -58,9 +57,9 @@ public class ServiceActivatorImpl implements ServiceActivator{
 	 */
 	protected Object getService(RequestDto dto){
 		if(dto.getAlias() != null){
-			return ServiceLocator.lookup(dto.getAlias());
+			return ComponentLocator.lookup(dto.getAlias());
 		}else{
-			return ServiceLocator.lookupByInterface(dto.getTargetClass());
+			return ComponentLocator.lookupByInterface(dto.getTargetClass());
 		}
 	}
 
