@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import kosmos.framework.api.dto.RequestDto;
+import kosmos.framework.core.dto.RequestDto;
 
 
 /**

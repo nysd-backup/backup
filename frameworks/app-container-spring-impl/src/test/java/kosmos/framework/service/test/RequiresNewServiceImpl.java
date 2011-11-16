@@ -9,12 +9,12 @@ import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
-import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.ErrorMessage;
-import kosmos.framework.logics.builder.MessageBuilder;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.core.query.AdvancedOrmQueryFactory;
+import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
 import kosmos.framework.service.test.entity.TestEntity;

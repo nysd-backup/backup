@@ -5,7 +5,7 @@ package kosmos.framework.service.core.services;
 
 import java.util.Map;
 
-import kosmos.framework.api.query.services.QueryRequest;
+import kosmos.framework.core.services.QueryRequest;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 
 

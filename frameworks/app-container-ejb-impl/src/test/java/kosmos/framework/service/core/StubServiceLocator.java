@@ -8,12 +8,12 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
+import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
 import kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
 import kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl;
-import kosmos.framework.service.core.locator.AbstractServiceLocator;
+import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl;
 import kosmos.framework.service.core.query.UnexpectedEmptyHandlerImpl;
 import kosmos.framework.service.core.query.UnexpectedMultiResultHandlerImpl;
@@ -35,7 +35,7 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	}
 	
 	/**
-	 * @see kosmos.framework.service.core.locator.ServiceLocator#createContext()
+	 * @see kosmos.framework.service.core.activation.ServiceLocator#createContext()
 	 */
 	@Override
 	public ServiceContext createServiceContext() {
@@ -43,7 +43,7 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.locator.AbstractServiceLocator#lookup(java.lang.String, java.util.Properties)
+	 * @see kosmos.framework.service.core.activation.AbstractServiceLocator#lookup(java.lang.String, java.util.Properties)
 	 */
 	@Override
 	protected Object lookup(String serviceName, Properties prop){

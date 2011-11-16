@@ -7,8 +7,8 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.async.AsyncService;
-import kosmos.framework.service.core.locator.ServiceLocator;
 
 
 /**

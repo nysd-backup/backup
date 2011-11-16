@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.Future;
 
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 
 /**
  * An interface of asynchronous proxy service.

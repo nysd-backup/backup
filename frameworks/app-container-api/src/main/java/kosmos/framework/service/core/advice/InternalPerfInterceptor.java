@@ -3,8 +3,8 @@
  */
 package kosmos.framework.service.core.advice;
 
-import kosmos.framework.logics.log.LogWriterFactory;
-import kosmos.framework.logics.log.NormalLogWriter;
+import kosmos.framework.core.logics.log.LogWriterFactory;
+import kosmos.framework.core.logics.log.NormalLogWriter;
 import kosmos.framework.service.core.transaction.ServiceContext;
 
 /**

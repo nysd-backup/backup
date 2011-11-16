@@ -8,9 +8,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
-import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
+import kosmos.framework.core.query.AdvancedOrmQueryFactory;
+import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.CachableConst;
 import kosmos.framework.service.test.SampleNativeQuery;

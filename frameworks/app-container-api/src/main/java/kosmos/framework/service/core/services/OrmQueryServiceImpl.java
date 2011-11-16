@@ -8,12 +8,12 @@ import java.util.List;
 import javax.persistence.CacheRetrieveMode;
 import javax.persistence.CacheStoreMode;
 
-import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
-import kosmos.framework.api.query.orm.StrictQuery;
-import kosmos.framework.api.query.services.OrmQueryService;
 import kosmos.framework.core.entity.AbstractEntity;
+import kosmos.framework.core.query.AdvancedOrmQueryFactory;
+import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.services.OrmQueryService;
 import kosmos.framework.jpqlclient.api.PersistenceHints;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.sqlclient.api.orm.OrmCondition;
 
 
@@ -33,7 +33,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#find(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
+	 * @see kosmos.framework.core.services.OrmQueryService#find(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
 	 */
 	@Override
 	public T find(OrmCondition<T> request, Object[] pks) {
@@ -42,7 +42,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#findAny(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#findAny(kosmos.framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public T findAny(OrmCondition<T> request) {
@@ -51,7 +51,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#getResultList(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#getResultList(kosmos.framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public List<T> getResultList(OrmCondition<T> request) {		
@@ -60,7 +60,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#getSingleResult(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#getSingleResult(kosmos.framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public T getSingleResult(OrmCondition<T> request) {
@@ -69,7 +69,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public boolean exists(OrmCondition<T> request) {
@@ -78,7 +78,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
+	 * @see kosmos.framework.core.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
 	 */
 	@Override
 	public boolean exists(OrmCondition<T> request, Object[] pks) {
@@ -87,7 +87,7 @@ public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQuerySe
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.OrmQueryService#existsByAny(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#existsByAny(kosmos.framework.sqlclient.api.orm.OrmCondition)
 	 */
 	@Override
 	public boolean existsByAny(OrmCondition<T> request) {

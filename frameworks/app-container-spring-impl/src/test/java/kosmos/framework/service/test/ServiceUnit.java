@@ -13,11 +13,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
+import kosmos.framework.core.logics.log.LogWriter;
+import kosmos.framework.core.logics.log.LogWriterFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.logics.log.LogWriter;
-import kosmos.framework.logics.log.LogWriterFactory;
-import kosmos.framework.service.core.locator.ServiceLocator;
-import kosmos.framework.service.core.locator.SpringServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
+import kosmos.framework.service.core.activation.SpringServiceLocator;
 import kosmos.framework.sqlengine.builder.ConstCache;
 
 import org.dbunit.database.DatabaseConnection;

@@ -7,10 +7,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.api.query.services.PagingRequest;
-import kosmos.framework.api.query.services.PagingResult;
-import kosmos.framework.api.query.services.PagingService;
-import kosmos.framework.api.query.services.QueryRequest;
+import kosmos.framework.core.services.PagingRequest;
+import kosmos.framework.core.services.PagingResult;
+import kosmos.framework.core.services.PagingService;
+import kosmos.framework.core.services.QueryRequest;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.SampleNativeQuery;
 import kosmos.framework.service.test.SampleNativeResult;

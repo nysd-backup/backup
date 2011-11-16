@@ -3,8 +3,8 @@
  */
 package kosmos.framework.service.core.transaction;
 
-import kosmos.framework.api.dto.ReplyMessage;
 import kosmos.framework.core.context.AbstractContainerContext;
+import kosmos.framework.core.dto.ReplyMessage;
 import kosmos.framework.core.message.ErrorMessage;
 
 /**

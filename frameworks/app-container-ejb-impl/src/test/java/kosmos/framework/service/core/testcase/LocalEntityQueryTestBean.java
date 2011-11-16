@@ -16,22 +16,22 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
-import kosmos.framework.api.query.orm.EasyQuery;
-import kosmos.framework.api.query.orm.EasyUpdate;
-import kosmos.framework.api.query.orm.StrictQuery;
-import kosmos.framework.api.query.orm.StrictUpdate;
 import kosmos.framework.core.exception.UnexpectedMultiResultException;
 import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
+import kosmos.framework.core.query.AdvancedOrmQueryFactory;
+import kosmos.framework.core.query.EasyQuery;
+import kosmos.framework.core.query.EasyUpdate;
+import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.query.StrictUpdate;
 import kosmos.framework.service.core.ServiceTestContextImpl;
+import kosmos.framework.service.core.activation.AbstractServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.ChildEntity;
 import kosmos.framework.service.core.entity.DateEntity;
 import kosmos.framework.service.core.entity.IDateEntity;
 import kosmos.framework.service.core.entity.ITestEntity;
 import kosmos.framework.service.core.entity.ParentEntity;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.service.core.locator.AbstractServiceLocator;
-import kosmos.framework.service.core.locator.ServiceLocator;
 import kosmos.framework.service.core.services.RequiresNewService;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
@@ -851,4 +851,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		return query.getResultList();
 	}
 	
+	
+	public void remote() {
+		
+	}
 }

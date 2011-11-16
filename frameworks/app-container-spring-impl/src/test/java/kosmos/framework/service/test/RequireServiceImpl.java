@@ -5,9 +5,9 @@ package kosmos.framework.service.test;
 
 import java.util.Locale;
 
+import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.ErrorMessage;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.logics.builder.MessageBuilder;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.entity.TestEntity;
 

@@ -9,13 +9,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
-import kosmos.framework.api.query.orm.AdvancedOrmQueryFactory;
-import kosmos.framework.api.query.orm.StrictQuery;
 import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
+import kosmos.framework.core.query.AdvancedOrmQueryFactory;
+import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.service.core.CachableConst;
+import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.entity.ITestEntity;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.service.core.locator.AbstractServiceLocator;
 import kosmos.framework.service.core.query.SampleNativeQuery;
 import kosmos.framework.service.core.query.SampleNativeQueryConst;
 import kosmos.framework.service.core.query.SampleNativeResult;

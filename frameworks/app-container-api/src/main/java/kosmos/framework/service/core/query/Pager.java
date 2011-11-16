@@ -6,7 +6,7 @@ package kosmos.framework.service.core.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import kosmos.framework.api.query.services.PagingResult;
+import kosmos.framework.core.services.PagingResult;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 
 

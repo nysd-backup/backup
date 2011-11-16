@@ -6,7 +6,7 @@ package kosmos.framework.core.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import kosmos.framework.api.dto.ReplyMessage;
+import kosmos.framework.core.dto.ReplyMessage;
 
 
 /**

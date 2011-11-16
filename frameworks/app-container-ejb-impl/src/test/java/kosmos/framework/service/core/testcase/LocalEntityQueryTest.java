@@ -6,8 +6,8 @@ package kosmos.framework.service.core.testcase;
 import java.sql.SQLException;
 
 import kosmos.framework.service.core.ServiceUnit;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.ITestEntity;
-import kosmos.framework.service.core.locator.ServiceLocator;
 
 import org.junit.Test;
 
@@ -342,5 +342,10 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void cascade(){
 		bean().cascade();
+	}
+	
+	@Test
+	public void remote(){
+		bean().remote();
 	}
 }

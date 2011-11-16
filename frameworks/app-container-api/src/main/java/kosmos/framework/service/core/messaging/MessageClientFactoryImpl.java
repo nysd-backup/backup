@@ -6,7 +6,7 @@ package kosmos.framework.service.core.messaging;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 
 

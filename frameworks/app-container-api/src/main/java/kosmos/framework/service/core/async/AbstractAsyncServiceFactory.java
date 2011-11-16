@@ -6,7 +6,7 @@ package kosmos.framework.service.core.async;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
 
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 
 
 /**

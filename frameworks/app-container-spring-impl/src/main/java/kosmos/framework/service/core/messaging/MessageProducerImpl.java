@@ -7,7 +7,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import kosmos.framework.api.dto.RequestDto;
+import kosmos.framework.core.dto.RequestDto;
 import kosmos.framework.service.core.messaging.AbstractMessageProducer;
 
 import org.springframework.jms.core.JmsTemplate;
@@ -45,7 +45,7 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	}
 	
 	/**
-	 * @see kosmos.framework.service.core.messaging.AbstractMessageProducer#invoke(kosmos.framework.api.dto.RequestDto, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.AbstractMessageProducer#invoke(kosmos.framework.core.dto.RequestDto, java.lang.String)
 	 */
 	@Override
 	protected Object invoke(RequestDto dto, String destinationName)

@@ -3,7 +3,7 @@
  */
 package kosmos.framework.core.exception;
 
-import kosmos.framework.api.dto.ReplyMessage;
+import kosmos.framework.core.dto.ReplyMessage;
 
 
 /**

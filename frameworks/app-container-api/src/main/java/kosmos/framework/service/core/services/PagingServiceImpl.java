@@ -3,10 +3,10 @@
  */
 package kosmos.framework.service.core.services;
 
-import kosmos.framework.api.query.services.PagingRequest;
-import kosmos.framework.api.query.services.PagingResult;
-import kosmos.framework.api.query.services.PagingService;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.core.services.PagingRequest;
+import kosmos.framework.core.services.PagingResult;
+import kosmos.framework.core.services.PagingService;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.query.Pager;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
@@ -31,7 +31,7 @@ public class PagingServiceImpl implements PagingService{
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.PagingService#prepare(kosmos.framework.api.query.services.PagingRequest)
+	 * @see kosmos.framework.core.services.PagingService#prepare(kosmos.framework.core.services.PagingRequest)
 	 */
 	@Override
 	public PagingResult prepare(PagingRequest request) {
@@ -44,7 +44,7 @@ public class PagingServiceImpl implements PagingService{
 	}
 	
 	/**
-	 * @see kosmos.framework.api.query.services.PagingService#getPageData(kosmos.framework.api.query.services.PagingRequest)
+	 * @see kosmos.framework.core.services.PagingService#getPageData(kosmos.framework.core.services.PagingRequest)
 	 */
 	@Override
 	public PagingResult getPageData(PagingRequest request) {

@@ -4,7 +4,7 @@
 package kosmos.framework.service.core.query;
 
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.InternalUnitOfWork;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;

@@ -8,9 +8,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import kosmos.framework.api.dto.RequestDto;
-import kosmos.framework.api.service.ServiceActivator;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.core.activation.ServiceActivator;
+import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.service.core.activation.ServiceLocator;
 
 /**
  * A listener for MDB and MDP.
@@ -44,7 +44,16 @@ public class MessageListenerImpl implements MessageListener{
 			throw new IllegalStateException(jmse);
 		}
 		ServiceActivator activator = ServiceLocator.createDefaultServiceActivator();
-		activator.activateAndInvoke(dto);
+		try {
+			activator.activateAndInvoke(dto);
+		} catch (Throwable e) {
+			if(e instanceof Error){
+				throw Error.class.cast(e);
+			}else if(e instanceof RuntimeException){
+				throw RuntimeException.class.cast(e);
+			}
+			throw new IllegalStateException(e);
+		}
 	}
 	
 }

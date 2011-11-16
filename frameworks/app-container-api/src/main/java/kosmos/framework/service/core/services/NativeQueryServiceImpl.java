@@ -5,9 +5,9 @@ package kosmos.framework.service.core.services;
 
 import java.util.List;
 
-import kosmos.framework.api.query.services.NativeQueryService;
-import kosmos.framework.api.query.services.QueryRequest;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.core.services.NativeQueryService;
+import kosmos.framework.core.services.QueryRequest;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 
@@ -27,7 +27,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	}
 	
 	/**
-	 * @see kosmos.framework.api.query.services.NativeQueryService#count(kosmos.framework.api.query.services.QueryRequest)
+	 * @see kosmos.framework.core.services.NativeQueryService#count(kosmos.framework.core.services.QueryRequest)
 	 */
 	public int count(QueryRequest request) {
 		AbstractNativeQuery query = setParameters(request,createQuery(request));
@@ -35,7 +35,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	}
 	
 	/**
-	 * @see kosmos.framework.api.query.services.NativeQueryService#getResultList(kosmos.framework.api.query.services.QueryRequest)
+	 * @see kosmos.framework.core.services.NativeQueryService#getResultList(kosmos.framework.core.services.QueryRequest)
 	 */
 	public <T> List<T> getResultList(QueryRequest request) {
 		AbstractNativeQuery query = setParameters(request,createQuery(request));
@@ -43,7 +43,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.NativeQueryService#getTotalResult(kosmos.framework.api.query.services.QueryRequest)
+	 * @see kosmos.framework.core.services.NativeQueryService#getTotalResult(kosmos.framework.core.services.QueryRequest)
 	 */
 	public <T> kosmos.framework.sqlclient.api.free.NativeResult<T> getTotalResult(QueryRequest request) {
 		AbstractNativeQuery query = setParameters(request,createQuery(request));
@@ -51,7 +51,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.NativeQueryService#getSingleResult(kosmos.framework.api.query.services.QueryRequest)
+	 * @see kosmos.framework.core.services.NativeQueryService#getSingleResult(kosmos.framework.core.services.QueryRequest)
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getSingleResult(QueryRequest request) {
@@ -60,7 +60,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	}
 
 	/**
-	 * @see kosmos.framework.api.query.services.NativeQueryService#exists(kosmos.framework.api.query.services.QueryRequest)
+	 * @see kosmos.framework.core.services.NativeQueryService#exists(kosmos.framework.core.services.QueryRequest)
 	 */
 	public boolean exists(QueryRequest request) {
 		AbstractNativeQuery query = setParameters(request,createQuery(request));

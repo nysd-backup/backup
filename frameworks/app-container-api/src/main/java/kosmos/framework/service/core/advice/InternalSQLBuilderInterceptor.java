@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import kosmos.framework.logics.log.LogWriter;
-import kosmos.framework.logics.log.LogWriterFactory;
+import kosmos.framework.core.logics.log.LogWriter;
+import kosmos.framework.core.logics.log.LogWriterFactory;
 
 
 /**

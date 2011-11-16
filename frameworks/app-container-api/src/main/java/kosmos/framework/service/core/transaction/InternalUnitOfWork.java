@@ -6,7 +6,7 @@ package kosmos.framework.service.core.transaction;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.query.DataSourceManager;
 
 /**

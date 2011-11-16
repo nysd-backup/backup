@@ -6,9 +6,9 @@ package framework.api.message.impl;
 import java.util.Locale;
 
 import junit.framework.Assert;
+import kosmos.framework.core.logics.message.MessageBuilder;
+import kosmos.framework.core.logics.message.impl.MessageBuilderImpl;
 import kosmos.framework.core.message.ErrorMessage;
-import kosmos.framework.logics.builder.MessageBuilder;
-import kosmos.framework.logics.builder.impl.MessageBuilderImpl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

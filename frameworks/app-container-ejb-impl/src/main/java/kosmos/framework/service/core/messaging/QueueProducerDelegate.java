@@ -3,8 +3,8 @@
  */
 package kosmos.framework.service.core.messaging;
 
-import kosmos.framework.api.dto.RequestDto;
-import kosmos.framework.service.core.locator.ServiceLocator;
+import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.messaging.AbstractMessageProducer;
 
 /**
@@ -16,7 +16,7 @@ import kosmos.framework.service.core.messaging.AbstractMessageProducer;
 public class QueueProducerDelegate extends AbstractMessageProducer{
 
 	/**
-	 * @see kosmos.framework.service.core.messaging.AbstractMessageProducer#invoke(kosmos.framework.api.dto.RequestDto, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.AbstractMessageProducer#invoke(kosmos.framework.core.dto.RequestDto, java.lang.String)
 	 */
 	@Override
 	protected Object invoke(RequestDto dto, String destinationName)

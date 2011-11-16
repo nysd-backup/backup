@@ -72,6 +72,9 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
+		<!-- エンティティマネージャの提供-->
+	<bean id="entityManagerProvider" class="kosmos.framework.service.core.EntityManagerProviderImpl" scope="prototype" />
+	
 	<bean id="pagingService" class="kosmos.framework.service.core.services.PagingServiceImpl" />
 		
 	<context:component-scan base-package="kosmos.framework.service.test">
