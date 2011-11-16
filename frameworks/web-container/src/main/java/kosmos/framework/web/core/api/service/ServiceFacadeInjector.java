@@ -13,7 +13,7 @@ import java.lang.reflect.Proxy;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServceFacadeInjector {
+public class ServiceFacadeInjector {
 	
 	/**
 	 * Initialize the bean.
