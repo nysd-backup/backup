@@ -18,13 +18,11 @@ public class PoorImplementationException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String DEFAULT_MESSAGE = "Poor Implementation : ";
-	
 	/**
 	 * @param mes the message
 	 */
 	public PoorImplementationException(String mes){
-		super(DEFAULT_MESSAGE+mes);
+		super(mes);
 	}
 	
 	/**
@@ -32,7 +30,7 @@ public class PoorImplementationException extends RuntimeException{
 	 * @param t the exception
 	 */
 	public PoorImplementationException(String mes , Throwable t){
-		super(DEFAULT_MESSAGE+mes,t);
+		super(mes,t);
 	}
 	
 }

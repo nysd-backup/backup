@@ -5,7 +5,6 @@ package kosmos.framework.web.core.api.query;
 
 import java.util.List;
 
-import kosmos.framework.core.entity.AbstractEntity;
 import kosmos.framework.core.services.OrmQueryService;
 import kosmos.framework.jpqlclient.api.orm.JPAOrmCondition;
 import kosmos.framework.sqlclient.api.Query;
@@ -22,7 +21,7 @@ import kosmos.framework.sqlclient.api.orm.WhereOperand;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class WebOrmQueryEngine<E extends AbstractEntity> implements OrmQuery<E>{
+public class WebOrmQueryEngine<E> implements OrmQuery<E>{
 	
 	/** the service */
 	private OrmQueryService<E> service;

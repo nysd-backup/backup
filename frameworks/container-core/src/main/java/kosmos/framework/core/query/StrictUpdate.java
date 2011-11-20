@@ -3,7 +3,6 @@
  */
 package kosmos.framework.core.query;
 
-import kosmos.framework.core.entity.Metadata;
 
 /**
  * The ORM updater.

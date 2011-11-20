@@ -3,7 +3,7 @@
  */
 package kosmos.framework.core.query.impl;
 
-import kosmos.framework.core.entity.Metadata;
+import kosmos.framework.core.query.Metadata;
 import kosmos.framework.core.query.StrictUpdate;
 import kosmos.framework.sqlclient.api.orm.OrmUpdate;
 
@@ -23,7 +23,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#eq(kosmos.framework.core.entity.Metadata, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#eq(kosmos.framework.core.query.Metadata, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> eq(Metadata<T,V> column , V value ){
@@ -32,7 +32,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#gt(kosmos.framework.core.entity.Metadata, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#gt(kosmos.framework.core.query.Metadata, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> gt(Metadata<T,V> column , V value ){
@@ -41,7 +41,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#lt(kosmos.framework.core.entity.Metadata, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#lt(kosmos.framework.core.query.Metadata, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> lt(Metadata<T,V> column , V value ){
@@ -50,7 +50,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#gtEq(kosmos.framework.core.entity.Metadata, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#gtEq(kosmos.framework.core.query.Metadata, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> gtEq(Metadata<T,V> column , V value ){
@@ -59,7 +59,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#ltEq(kosmos.framework.core.entity.Metadata, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#ltEq(kosmos.framework.core.query.Metadata, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> ltEq(Metadata<T,V> column , V value ){
@@ -68,7 +68,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#between(kosmos.framework.core.entity.Metadata, java.lang.Object, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#between(kosmos.framework.core.query.Metadata, java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> between(Metadata<T,V> column , V from , V to ){
@@ -77,7 +77,7 @@ public class DefaultStrictUpdate<T> extends AbstractAdvancedOrmUpdate<T> impleme
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.StrictUpdate#set(kosmos.framework.core.entity.Metadata, java.lang.Object)
+	 * @see kosmos.framework.core.query.StrictUpdate#set(kosmos.framework.core.query.Metadata, java.lang.Object)
 	 */
 	@Override
 	public <V> StrictUpdate<T> set(Metadata<T,V> column , V value ){

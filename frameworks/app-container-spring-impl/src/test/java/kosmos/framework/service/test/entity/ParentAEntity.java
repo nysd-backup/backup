@@ -14,8 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import kosmos.framework.core.entity.AbstractEntity;
-
 
 /**
  * function.
@@ -25,7 +23,7 @@ import kosmos.framework.core.entity.AbstractEntity;
  */
 @Entity
 @Table(name="PARENT_A")
-public class ParentAEntity extends AbstractEntity{
+public class ParentAEntity{
 	
 	@Id
 	@Column

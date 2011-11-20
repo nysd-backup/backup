@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import kosmos.framework.core.entity.AbstractEntity;
-
 import org.junit.Ignore;
 
 
@@ -23,7 +21,7 @@ import org.junit.Ignore;
 @Ignore
 @Entity
 @Table(name="testa")
-public class TestEntity extends AbstractEntity{
+public class TestEntity {
 	
 	@Id
 	@Column

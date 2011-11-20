@@ -12,8 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import kosmos.framework.core.entity.AbstractEntity;
-
 
 /**
  * function.
@@ -23,7 +21,7 @@ import kosmos.framework.core.entity.AbstractEntity;
  */
 @Entity
 @Table(name="testB")
-public class DateEntity extends AbstractEntity{
+public class DateEntity{
 	
 	@Id
 	@Column

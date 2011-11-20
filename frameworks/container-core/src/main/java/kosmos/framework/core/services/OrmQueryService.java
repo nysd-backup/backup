@@ -5,7 +5,6 @@ package kosmos.framework.core.services;
 
 import java.util.List;
 
-import kosmos.framework.core.entity.AbstractEntity;
 import kosmos.framework.sqlclient.api.orm.OrmCondition;
 
 
@@ -15,7 +14,7 @@ import kosmos.framework.sqlclient.api.orm.OrmCondition;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface OrmQueryService<T extends AbstractEntity> {
+public interface OrmQueryService<T> {
 
 	/**
 	 * Finds by primary keys.

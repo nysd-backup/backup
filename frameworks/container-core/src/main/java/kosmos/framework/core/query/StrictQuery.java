@@ -5,7 +5,6 @@ package kosmos.framework.core.query;
 
 import java.util.List;
 
-import kosmos.framework.core.entity.Metadata;
 
 
 /**

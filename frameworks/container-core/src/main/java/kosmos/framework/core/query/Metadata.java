@@ -2,7 +2,7 @@
 
  * Copyright 2011 the original author
  */
-package kosmos.framework.core.entity;
+package kosmos.framework.core.query;
 
 /**
  * A meta data of the column.

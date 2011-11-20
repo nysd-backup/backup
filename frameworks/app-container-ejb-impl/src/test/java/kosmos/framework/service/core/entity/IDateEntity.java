@@ -5,7 +5,7 @@ package kosmos.framework.service.core.entity;
 
 import java.util.Date;
 
-import kosmos.framework.core.entity.Metadata;
+import kosmos.framework.core.query.Metadata;
 
 
 /**

@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CacheRetrieveMode;
 import javax.persistence.CacheStoreMode;
 
-import kosmos.framework.core.entity.AbstractEntity;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.core.services.OrmQueryService;
@@ -23,7 +22,7 @@ import kosmos.framework.sqlclient.api.orm.OrmCondition;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class OrmQueryServiceImpl<T extends AbstractEntity> implements OrmQueryService<T>{
+public class OrmQueryServiceImpl<T> implements OrmQueryService<T>{
 	
 	/**
 	 * @return the factory to create the query

@@ -3,7 +3,6 @@
  */
 package kosmos.framework.web.core.api.query;
 
-import kosmos.framework.core.entity.AbstractEntity;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.core.query.EasyUpdate;
@@ -37,7 +36,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createStrictQuery(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> StrictQuery<T> createStrictQuery(Class<T> entityClass) {
+	public <T> StrictQuery<T> createStrictQuery(Class<T> entityClass) {
 		OrmQuery<T> delegate = new WebOrmQueryEngine<T>(service,entityClass);
 		StrictQuery<T> query = new DefaultStrictQuery<T>(delegate);
 		return query;
@@ -47,7 +46,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createEasyQuery(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> EasyQuery<T> createEasyQuery(Class<T> entityClass) {
+	public <T> EasyQuery<T> createEasyQuery(Class<T> entityClass) {
 		OrmQuery<T> delegate = new WebOrmQueryEngine<T>(service,entityClass);
 		EasyQuery<T> query = new DefaultEasyQuery<T>(delegate);
 		return query;
@@ -57,7 +56,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createStrictUpdate(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> StrictUpdate<T> createStrictUpdate(Class<T> entityClass) {
+	public <T> StrictUpdate<T> createStrictUpdate(Class<T> entityClass) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -65,7 +64,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createEasyUpdate(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> EasyUpdate<T> createEasyUpdate(Class<T> entityClass) {
+	public <T> EasyUpdate<T> createEasyUpdate(Class<T> entityClass) {
 		throw new UnsupportedOperationException();
 	}
 	

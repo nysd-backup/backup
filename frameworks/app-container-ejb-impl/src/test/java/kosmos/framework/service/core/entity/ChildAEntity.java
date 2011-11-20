@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import kosmos.framework.core.entity.AbstractEntity;
-
 
 /**
  * function.
@@ -20,7 +18,7 @@ import kosmos.framework.core.entity.AbstractEntity;
  */
 @Entity
 @Table(name="CHILD_A")
-public class ChildAEntity extends AbstractEntity{
+public class ChildAEntity{
 	
 	@Id
 	@Column

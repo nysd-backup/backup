@@ -3,7 +3,6 @@
  */
 package kosmos.framework.core.query;
 
-import kosmos.framework.core.entity.AbstractEntity;
 
 /**
  * The factory to create ORM query.
@@ -20,7 +19,7 @@ public interface AdvancedOrmQueryFactory {
 	 * @param <Q> 　the type
 	 * @param entityClass the class of target entity
 	 */
-	public <T extends AbstractEntity> StrictQuery<T> createStrictQuery(Class<T> entityClass);
+	public <T> StrictQuery<T> createStrictQuery(Class<T> entityClass);
 	
 	/**
 	 * Creates the <code>EasyQuery</code>.
@@ -29,7 +28,7 @@ public interface AdvancedOrmQueryFactory {
 	 * @param <Q> 　the type
 	 * @param entityClass the class of target entity
 	 */
-	public <T extends AbstractEntity> EasyQuery<T> createEasyQuery(Class<T> entityClass);
+	public <T> EasyQuery<T> createEasyQuery(Class<T> entityClass);
 	
 	/**
 	 * Creates the <code>StrictUpdate</code>.
@@ -38,7 +37,7 @@ public interface AdvancedOrmQueryFactory {
 	 * @param <Q> 　the type
 	 * @param entityClass the class of target entity
 	 */
-	public <T extends AbstractEntity> StrictUpdate<T> createStrictUpdate(Class<T> entityClass);
+	public <T> StrictUpdate<T> createStrictUpdate(Class<T> entityClass);
 
 	/**
 	 * Creates the <code>EasyUpdate</code>.
@@ -47,6 +46,6 @@ public interface AdvancedOrmQueryFactory {
 	 * @param <Q> 　the type
 	 * @param entityClass the class of target entity
 	 */
-	public <T extends AbstractEntity> EasyUpdate<T> createEasyUpdate(Class<T> entityClass);
+	public <T> EasyUpdate<T> createEasyUpdate(Class<T> entityClass);
 
 }

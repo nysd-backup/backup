@@ -4,6 +4,7 @@
 package kosmos.framework.service.core.advice;
 
 import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.exception.ExceptionHandler;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.TransactionManagingContext;
@@ -56,23 +57,33 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 	 */
 	protected Object invokeAtTopLevel(InvocationAdapter ic) throws Throwable {
 	
-		TransactionManagingContext context = ServiceLocator.createDefaultServiceContext();
+		final TransactionManagingContext context = ServiceLocator.createDefaultServiceContext();
 		context.initialize();
+		Object retValue = null;
 		try{
-			Object retValue = proceed(ic);	
+			retValue = proceed(ic);	
 			if(context.isAnyTransactionFailed()){
 				throw afterError(retValue);	
-			}
-			return retValue;
+			}			
 		}catch(Throwable t){
-			if ( t instanceof BusinessException ){
-				BusinessException be = (BusinessException)t;
-				be.setMessageList(context.getMessageArray());
+			ExceptionHandler handler = new ExceptionHandler(){
+				@Override
+				public Throwable handle(Throwable t) {
+					if ( t instanceof BusinessException ){
+						BusinessException be = (BusinessException)t;
+						be.setMessageList(context.getMessageArray());
+					}
+					return t;
+				}				
+			};
+			Throwable rethrowTarget =  handler.handle(t);
+			if(rethrowTarget != null){
+				throw rethrowTarget;
 			}
-			throw t;
 		}finally {
 			context.release();
 		}
+		return retValue;
 	}
 	
 	/**

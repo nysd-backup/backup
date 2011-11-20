@@ -3,7 +3,6 @@
  */
 package kosmos.framework.service.test;
 
-import kosmos.framework.core.entity.AbstractEntity;
 
 /**
  * function.
@@ -11,7 +10,7 @@ import kosmos.framework.core.entity.AbstractEntity;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SampleNativeResult extends AbstractEntity{
+public class SampleNativeResult{
 	
 	private String test;
 

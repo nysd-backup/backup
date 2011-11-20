@@ -3,7 +3,6 @@
  */
 package kosmos.framework.service.core.query;
 
-import kosmos.framework.core.entity.AbstractEntity;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.core.query.EasyUpdate;
@@ -39,7 +38,7 @@ public class AdvancedOrmQueryFactoryImpl implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createStrictQuery(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> StrictQuery<T> createStrictQuery(Class<T> entityClass) {		
+	public <T> StrictQuery<T> createStrictQuery(Class<T> entityClass) {		
 		OrmQuery<T> internalQuery = internalFactory.createQuery(entityClass);
 		StrictQuery<T> query = new DefaultStrictQuery<T>(internalQuery);
 		return query;
@@ -49,7 +48,7 @@ public class AdvancedOrmQueryFactoryImpl implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createEasyQuery(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> EasyQuery<T> createEasyQuery(Class<T> entityClass) {		
+	public <T> EasyQuery<T> createEasyQuery(Class<T> entityClass) {		
 		OrmQuery<T> internalQuery = internalFactory.createQuery(entityClass);
 		EasyQuery<T> query = new DefaultEasyQuery<T>(internalQuery);
 		return query;
@@ -59,7 +58,7 @@ public class AdvancedOrmQueryFactoryImpl implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createStrictUpdate(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> StrictUpdate<T> createStrictUpdate(Class<T> entityClass) {		
+	public <T> StrictUpdate<T> createStrictUpdate(Class<T> entityClass) {		
 		OrmUpdate<T> internalQuery = internalFactory.createUpdate(entityClass);
 		StrictUpdate<T> query = new DefaultStrictUpdate<T>(internalQuery);
 		return query;
@@ -69,7 +68,7 @@ public class AdvancedOrmQueryFactoryImpl implements AdvancedOrmQueryFactory{
 	 * @see kosmos.framework.core.query.AdvancedOrmQueryFactory#createEasyUpdate(java.lang.Class)
 	 */
 	@Override
-	public <T extends AbstractEntity> EasyUpdate<T> createEasyUpdate(Class<T> entityClass) {
+	public <T> EasyUpdate<T> createEasyUpdate(Class<T> entityClass) {
 		OrmUpdate<T> internalQuery = internalFactory.createUpdate(entityClass);
 		EasyUpdate<T> query = new DefaultEasyUpdate<T>(internalQuery);
 		return query;
