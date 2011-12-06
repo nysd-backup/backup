@@ -55,6 +55,8 @@
 		<framework.jdoql.client.api.version>1.0.0-SNAPSHOT</framework.jdoql.client.api.version>	
 		<framework.jdoql.client.impl.version>1.0.0-SNAPSHOT</framework.jdoql.client.impl.version>	
 		<framework.web.container.version>1.0.0-SNAPSHOT</framework.web.container.version>		
+		<framework.utility.version>1.0.0-SNAPSHOT</framework.utility.version>		
+
 		<javaee.version>6.0</javaee.version>
 		<jersey.version>1.5</jersey.version>			
 		<aspectj.version>1.5.4</aspectj.version>
@@ -80,20 +82,26 @@
 		
 	</properties>
 
-	<modules>	
-		<module>sql-engine</module>
-		<module>sql-client-api</module>
-		<module>sql-client-impl</module>
-		<module>jpql-client-api</module>
-		<module>jpql-client-impl</module>	
-		<module>jpql-client-eclipselink-plugin</module>	
-		<module>jdoql-client-api</module>	
-		<module>jdoql-client-impl</module>			
-		<module>container-core</module>
-		<module>app-container-api</module>
-		<module>app-container-spring-impl</module>	
-		<module>app-container-ejb-impl</module>		
-		<module>web-container</module>			
-	</modules>
+	<profiles>
+		<profile>
+			<id>all</id>
+			<modules>	
+				<module>sql-engine</module>
+				<module>sql-client-api</module>
+				<module>sql-client-impl</module>
+				<module>jpql-client-api</module>
+				<module>jpql-client-impl</module>	
+				<module>jpql-client-eclipselink-plugin</module>	
+				<module>jdoql-client-api</module>	
+				<module>jdoql-client-impl</module>			
+				<module>container-core</module>
+				<module>app-container-api</module>
+				<module>app-container-spring-impl</module>	
+				<module>app-container-ejb-impl</module>		
+				<module>web-container</module>			
+			</modules>
+		</profile>
+	</profiles>
+
 
 </project>

@@ -25,7 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class QueueTest extends ServiceUnit{
 	
 	@Autowired
-	private MessageClientFactory msf;
+	private MessageClientFactory messageClientFactory;
 
 	/**
 	 * Queue
@@ -33,8 +33,12 @@ public class QueueTest extends ServiceUnit{
 	@Test
 	@Rollback(false)
 	public void queueSend(){
-		MockService service = msf.createSender(MockService.class);
-		service.exec("TEST");		
+		
+		MockService service = 
+			messageClientFactory.createSender(MockService.class);
+		
+		service.exec("arg2");	
+		
 	}
 	
 
@@ -44,7 +48,7 @@ public class QueueTest extends ServiceUnit{
 	@Test
 	@Rollback(false)
 	public void topicSend(){
-		MockService service = msf.createPublisher(MockService.class);
+		MockService service = messageClientFactory.createPublisher(MockService.class);
 		service.exec("TEST");		
 	}
 }

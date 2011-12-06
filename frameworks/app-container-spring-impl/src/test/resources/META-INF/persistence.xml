@@ -53,6 +53,25 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
      </properties>
   </persistence-unit> 
   
+    <!-- 単体テスト用Oracle -->
+  <persistence-unit name="readOnlyOracle" transaction-type="RESOURCE_LOCAL">
+   	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>  	
+   	<class>framework.service.test.entity.TestEntity</class>	   
+    <properties>
+	    	<property name="eclipselink.exception-handler" value="kosmos.framework.service.test.DumyExceptionHandler"/>      	 
+    	 	<property name="eclipselink.target-database" value="ORACLE" />         	 	      
+         	<property name="eclipselink.logging.level" value="ALL" />
+         	 <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+        	<property name="javax.persistence.jdbc.user" value="yoshida" />
+        	<property name="javax.persistence.jdbc.password" value="yoshida" />       
+        	<property name="eclipselink.jdbc.connections.min" value="10"/>
+			<property name="eclipselink.jdbc.connections.max" value="10"/>
+        	<property name="eclipselink.ddl-generation.output-mode" value="database"/>         
+			<property name="eclipselink.persistence-context.flush-mode" value="AUTO" /> 
+     </properties>
+  </persistence-unit> 
+  
   <!-- ローカルリソース使用Oracle -->
  <!--  <persistence-unit name="oracleAspectJ" transaction-type="RESOURCE_LOCAL">
    	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>  	

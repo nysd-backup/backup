@@ -22,8 +22,6 @@ import kosmos.framework.sqlengine.exception.ExceptionHandler;
  */
 public class LazyList<E> implements List<E>{
 
-	private static final long serialVersionUID = 1L;
-
 	/** the iterator to fetch */
 	private final ResultSetIterator itr;
 

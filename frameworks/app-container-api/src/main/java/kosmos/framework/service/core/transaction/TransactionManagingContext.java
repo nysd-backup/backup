@@ -19,6 +19,12 @@ public class TransactionManagingContext extends ServiceContext{
 	/** true:any transaction is failed. */
 	private boolean anyTransactionFailed = false;
 	
+	/** true:ignore pessimistic/optimistic lock error */
+	private boolean suppressConcurencyError = false;
+	
+	/** true:ignore SQLcode 0001 */
+	private boolean suppressExisitanceError = false;
+	
 	/** the stack of unit of work */
 	protected LinkedList<InternalUnitOfWork> unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
 	
@@ -94,6 +100,8 @@ public class TransactionManagingContext extends ServiceContext{
 	 */
 	public void release(){
 		anyTransactionFailed = false;
+		suppressConcurencyError = false;
+		suppressExisitanceError = false;
 		try{
 			for(InternalUnitOfWork unit : unitOfWorkStack){
 				unit.terminate();
@@ -110,5 +118,33 @@ public class TransactionManagingContext extends ServiceContext{
 	 */
 	protected InternalUnitOfWork createInternalUnitOfWork(){
 		return new InternalUnitOfWork();
+	}
+
+	/**
+	 * @return the suppressExisitanceError
+	 */
+	public boolean isSuppressExisitanceError() {
+		return suppressExisitanceError;
+	}
+
+	/**
+	 * @param suppressExisitanceError the suppressExisitanceError to set
+	 */
+	public void setSuppressExisitanceError(boolean suppressExisitanceError) {
+		this.suppressExisitanceError = suppressExisitanceError;
+	}
+
+	/**
+	 * @return the suppressConcurencyError
+	 */
+	public boolean isSuppressConcurencyError() {
+		return suppressConcurencyError;
+	}
+
+	/**
+	 * @param suppressConcurencyError the suppressConcurencyError to set
+	 */
+	public void setSuppressConcurencyError(boolean suppressConcurencyError) {
+		this.suppressConcurencyError = suppressConcurencyError;
 	}
 }

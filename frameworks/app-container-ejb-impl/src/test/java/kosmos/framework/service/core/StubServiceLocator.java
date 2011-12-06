@@ -8,12 +8,16 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.exception.ConcurrentBusinessException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
 import kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
 import kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
+import kosmos.framework.service.core.exception.ApplicationException;
+import kosmos.framework.service.core.exception.ConcurrentApplicationException;
 import kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl;
 import kosmos.framework.service.core.query.UnexpectedEmptyHandlerImpl;
 import kosmos.framework.service.core.query.UnexpectedMultiResultHandlerImpl;
@@ -108,6 +112,22 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	 */
 	protected EntityManagerProvider createEntityManagerProvider() {
 		return lookupByInterface(EntityManagerProvider.class);
+	}
+
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createBusinessException()
+	 */
+	@Override
+	public BusinessException createBusinessException() {
+		return new ApplicationException();
+	}
+
+	/**
+	 * @see kosmos.framework.service.core.activation.ServiceLocator#createConcurrentBusinessException()
+	 */
+	@Override
+	public ConcurrentBusinessException createConcurrentBusinessException(Throwable cause) {
+		return new ConcurrentApplicationException(null,cause);
 	}
 	
 }

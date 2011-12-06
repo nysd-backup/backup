@@ -17,7 +17,7 @@ import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 public class EntityManagerProviderImpl implements EntityManagerProvider{
 
 	/** the EntityManager */
-	@PersistenceContext
+	@PersistenceContext(unitName="oracle")
 	private EntityManager em;
 		
 	/**

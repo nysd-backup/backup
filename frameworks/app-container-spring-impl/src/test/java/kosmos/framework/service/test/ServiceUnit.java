@@ -119,7 +119,7 @@ public abstract class ServiceUnit extends Assert{
 	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpData(String dataPath){
-		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
+		EntityManager em = ((EntityManagerProvider)(ServiceLocator.lookup("entityManagerProvider"))).getEntityManager();
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
 		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
@@ -140,7 +140,7 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	protected void setUpDataForceCommit(String dataPath){
 	
-		EntityManager em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();		
+		EntityManager em =  ((EntityManagerProvider)(ServiceLocator.lookup("entityManagerProvider"))).getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
 		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();

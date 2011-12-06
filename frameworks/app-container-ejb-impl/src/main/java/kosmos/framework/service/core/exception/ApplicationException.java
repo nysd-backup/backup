@@ -36,4 +36,11 @@ public class ApplicationException extends BusinessException{
 		super(message);
 	}
 	
+	/**
+	 * Constructor
+	 */
+	public ApplicationException(){
+		super();
+	}
+	
 }

@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ComponentLocator;
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.logics.message.MessageBuilder;
+import kosmos.framework.core.exception.ConcurrentBusinessException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
@@ -22,10 +22,7 @@ import kosmos.framework.sqlclient.api.free.QueryFactory;
  * @version 2011/08/31 created.
  */
 public abstract class ServiceLocator extends ComponentLocator{
-	
-	/** the ServiceLocator */
-	protected static ServiceLocator delegate;
-	
+
 	/**
 	 * @return the <code>MessageClientFactory</code>
 	 */
@@ -67,108 +64,76 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public abstract AdvancedOrmQueryFactory createOrmQueryFactory();
 	
 	/**
-	 * @return the message builder
-	 */
-	public abstract MessageBuilder createMessageBuilder();	
-	
-	/**
 	 * @return the ServiceContext
 	 */
-	public abstract ServiceContext createServiceContext();	
-
-	/**
-	 * Look up service using interface.
-	 * @param <T> the type
-	 * @param ifType the interface of target service
-	 * @return the service
-	 */
-	public static <T> T lookupByInterface(Class<T> ifType){
-		return delegate.lookupComponentByInterface(ifType);
-	}
+	public abstract ServiceContext createServiceContext();
 	
 	/**
-	 * Look up service using name.
-	 * @param <T> the type
-	 * @param name the name of target service
-	 * @return the service
+	 * @return the ConcurrentBusinessException
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T lookup(String name){
-		return (T)delegate.lookupComponent(name);
-	}
-	
+	public abstract ConcurrentBusinessException createConcurrentBusinessException(Throwable cause);
 	
 	/**
-	 * Look up remote service using interface.
-	 * @param <T> the type
-	 * @param clazz the interface of target service
-	 * @return the service
+	 * @return the MessageClientFactory
 	 */
-	public static <T> T lookupRemote(Class<T> clazz){
-		return delegate.lookupRemoteComponent(clazz);
-	}
-	
-	/**
-	 * @return the MessageBuilder
-	 */
-	public static MessageBuilder createDefaultMessageBuilder(){
-		return delegate.createMessageBuilder();
+	public static ConcurrentBusinessException createDefaultConcurrentBusinessException(Throwable cause){
+		return getDelegate().createConcurrentBusinessException(cause);
 	}
 	
 	/**
 	 * @return the MessageClientFactory
 	 */
 	public static MessageClientFactory createDefaultMessageClientFactory(){
-		return delegate.createMessageClientFactory();
+		return getDelegate().createMessageClientFactory();
 	}
 	
 	/**
 	 * @return the ServiceActivator
 	 */
 	public static ServiceActivator createDefaultServiceActivator(){
-		return delegate.createServiceActivator();
+		return getDelegate().createServiceActivator();
 	}
 	
 	/**
 	 * @return the InvocationHandler
 	 */
 	public static InvocationHandler createDefaultPublisher(){
-		return delegate.createPublisher();
+		return getDelegate().createPublisher();
 	}
 	
 	/**
 	 * @return the InvocationHandler
 	 */
 	public static InvocationHandler createDefaultSender(){
-		return delegate.createSender();
+		return getDelegate().createSender();
 	}
 	
 	/**
 	 * @return the QueryFactory
 	 */
 	public static QueryFactory createDefaultQueryFactory(){
-		return delegate.createQueryFactory();
+		return getDelegate().createQueryFactory();
 	}
 	
 	/**
 	 * @return the QueryFactory
 	 */
 	public static QueryFactory createDefaultClientQueryFactory(){
-		return delegate.createClientQueryFactory();
+		return getDelegate().createClientQueryFactory();
 	}
 	
 	/**
 	 * @return the AdvancedOrmQueryFactory
 	 */
 	public static AdvancedOrmQueryFactory createDefaultOrmQueryFactory(){
-		return delegate.createOrmQueryFactory();
+		return getDelegate().createOrmQueryFactory();
 	}
 	
 	/**
 	 * @return the AsyncServiceFactory
 	 */
 	public static AsyncServiceFactory createDefaultAsyncServiceFactory(){
-		return delegate.createAsyncServiceFactory();
+		return getDelegate().createAsyncServiceFactory();
 	}
 	
 	/**
@@ -176,7 +141,14 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends ServiceContext> T createDefaultServiceContext(){
-		return (T)delegate.createServiceContext();
+		return (T)getDelegate().createServiceContext();
 	}		
+	
+	/**
+	 * @return
+	 */
+	private static ServiceLocator getDelegate(){
+		return (ServiceLocator)delegate;
+	}
 	
 }

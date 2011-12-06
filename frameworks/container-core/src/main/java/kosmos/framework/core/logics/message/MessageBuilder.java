@@ -3,9 +3,7 @@
  */
 package kosmos.framework.core.logics.message;
 
-import java.util.Locale;
-
-import kosmos.framework.core.message.AbstractMessage;
+import kosmos.framework.core.message.MessageBean;
 
 
 /**
@@ -20,21 +18,17 @@ public interface MessageBuilder {
 	 * Reads the message definition from the file.
 	 * 
 	 * @param bean the message bean
-	 * @param locale the locale
-	 * @param args the args
 	 * @return the message
 	 */
-	public String load(AbstractMessage bean, Locale locale, Object... args);
+	public String load(MessageBean bean);
 	
 	/**
 	 * Reads the message definition from the file.
 	 * 
 	 * @param bean the message bean
-	 * @param locale the locale
 	 * @param baseFileName the name of message file
-	 * @param args the args
 	 * @return the message
 	 */
-	public String load(AbstractMessage bean, Locale locale, String baseFileName , Object... args);
+	public String load(MessageBean bean, String baseFileName);
 
 }

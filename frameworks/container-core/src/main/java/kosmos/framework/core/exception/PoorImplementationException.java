@@ -24,6 +24,13 @@ public class PoorImplementationException extends RuntimeException{
 	public PoorImplementationException(String mes){
 		super(mes);
 	}
+
+	/**
+	 * Constructor
+	 */
+	public PoorImplementationException(){
+		super();
+	}
 	
 	/**
 	 * @param mes the message

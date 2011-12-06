@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.logics.message.impl.MessageBuilderImpl;
 import kosmos.framework.core.message.ErrorMessage;
+import kosmos.framework.core.message.MessageBean;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,8 @@ public class MessageBuilderImplTest{
 	public void load() throws Exception{
 		
 		MessageBuilder builder = new MessageBuilderImpl();
-		String defined = builder.load(new ErrorMessage(100),null);
+		MessageBean bean = new MessageBean(new ErrorMessage(0),new Locale("en"));
+		String defined = builder.load(bean);
 		Assert.assertEquals("TEST{0}",defined);
 		
 	}
@@ -44,7 +46,8 @@ public class MessageBuilderImplTest{
 	@Test
 	public void loadWithLocale() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
-		String defined = builder.load(new ErrorMessage(100), new Locale("en"));
+		MessageBean bean = new MessageBean(new ErrorMessage(100),new Locale("en"));
+		String defined = builder.load(bean);
 		Assert.assertEquals("LOCALE_TEST{0}",defined);
 	}
 	
@@ -55,7 +58,8 @@ public class MessageBuilderImplTest{
 	@Test
 	public void build() throws Exception{
 		MessageBuilder builder = new MessageBuilderImpl();
-		String builded = builder.load(new ErrorMessage(100), new Locale("en") , 100);
+		MessageBean bean = new MessageBean(new ErrorMessage(100),new Locale("en"),100);
+		String builded = builder.load(bean);
 		Assert.assertEquals("LOCALE_TEST100",builded);
 	}
 

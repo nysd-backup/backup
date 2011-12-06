@@ -3,8 +3,6 @@
  */
 package kosmos.framework.service.core.services;
 
-import java.util.Locale;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -14,6 +12,7 @@ import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.message.ErrorMessage;
+import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
@@ -62,7 +61,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		String message = ServiceLocator.createDefaultMessageBuilder().load(new ErrorMessage(100), Locale.getDefault());
+		MessageBean bean = new MessageBean(new ErrorMessage(100));
+		String message = ServiceLocator.createDefaultMessageBuilder().load(bean);
 		ServiceContext.getCurrentInstance().addError(new ErrorMessage(1),message);	
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}

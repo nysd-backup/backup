@@ -3,12 +3,11 @@
  */
 package kosmos.framework.service.core.services;
 
-import java.util.Locale;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import kosmos.framework.core.message.ErrorMessage;
+import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
@@ -32,7 +31,8 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		String message = ServiceLocator.createDefaultMessageBuilder().load(new ErrorMessage(100), Locale.getDefault());
+		MessageBean bean = new MessageBean(new ErrorMessage(100));
+		String message = ServiceLocator.createDefaultMessageBuilder().load(bean);
 		ServiceContext.getCurrentInstance().addError(new ErrorMessage(100),message);
 	}
 

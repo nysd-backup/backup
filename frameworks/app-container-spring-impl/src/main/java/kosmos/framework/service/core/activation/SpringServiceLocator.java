@@ -6,10 +6,10 @@ package kosmos.framework.service.core.activation;
 import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ServiceActivator;
+import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.exception.ConcurrentBusinessException;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
-import kosmos.framework.service.core.activation.ServiceActivatorImpl;
-import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
@@ -164,6 +164,22 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	@Override
 	public AdvancedOrmQueryFactory createOrmQueryFactory() {
 		return lookupByInterface(AdvancedOrmQueryFactory.class);
+	}
+	
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createBusinessException()
+	 */
+	@Override
+	public BusinessException createBusinessException(){
+		return new BusinessException();
+	}
+	
+	/**
+	 * @see kosmos.framework.service.core.activation.ServiceLocator#createConcurrentBusinessException()
+	 */
+	@Override
+	public ConcurrentBusinessException createConcurrentBusinessException(Throwable cause){
+		return new ConcurrentBusinessException(null,cause);
 	}
 	
 }
