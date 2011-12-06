@@ -1,6 +1,5 @@
 /**
- * Copyright (C) 2010 by Future Architect, Inc. Japan
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package kosmos.framework.core.logics;
 

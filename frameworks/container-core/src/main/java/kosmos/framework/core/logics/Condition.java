@@ -1,6 +1,5 @@
 /**
- * Copyright (C) 2010 by Future Architect, Inc. Japan
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package kosmos.framework.core.logics;
 
@@ -16,7 +15,7 @@ import kosmos.framework.utility.Utils;
 /**
  * 条件判断クラス
  *
- * @author hoshi-k
+ * @author yoshida-n
  * @version 2010/10/13
  */
 public class Condition implements Utils.DateScope {

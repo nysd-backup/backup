@@ -1,6 +1,5 @@
 /**
- * Copyright (C) 2010 by Future Architect, Inc. Japan
- * Use is subject to license terms.
+ * Copyright 2011 the original author
  */
 package kosmos.framework.core.logics;
 
@@ -27,7 +26,7 @@ import kosmos.framework.utility.Utils;
 /**
  * コンバータ.
  * 
- * @author hoshi-k
+ * @author yoshida-n
  * @version 2010/10/30 新規作成
  */
 public class Converter {
