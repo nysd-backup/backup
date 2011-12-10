@@ -36,7 +36,12 @@
 		    <artifactId>jpql-client-api</artifactId>
 		    <version>${framework.jpql.client.api.version}</version>
 		    <scope>compile</scope>
-		</dependency>	
+		</dependency>
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>utility</artifactId>
+		    <version>${framework.utility.version}</version>
+		</dependency>		
 		<dependency>
 		    <groupId>kosmos.framework</groupId>
 		    <artifactId>container-core</artifactId>

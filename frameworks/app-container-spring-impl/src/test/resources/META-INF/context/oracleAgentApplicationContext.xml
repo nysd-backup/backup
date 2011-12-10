@@ -64,7 +64,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<bean id="connectionProvider" class="kosmos.framework.service.core.EntityManagerConnectionProviderImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 	</bean>	
-	<bean id="clientQueryFactory" class="kosmos.framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
+	<bean id="engineQueryFactory" class="kosmos.framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>	
 		<property name="emptyHandler" ref="emptyHandler"/>	
@@ -72,10 +72,14 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
+	<bean id="clientQueryFactory" parent="queryFactory" scope="prototype" />
+	
 		<!-- エンティティマネージャの提供-->
 	<bean id="entityManagerProvider" class="kosmos.framework.service.core.EntityManagerProviderImpl" scope="prototype" />
 	
-	<bean id="pagingService" class="kosmos.framework.service.core.services.PagingServiceImpl" />
+	<bean id="nativeQueryService" class="kosmos.framework.service.core.services.NativeQueryServiceImpl" />
+	<bean id="ormQueryService" class="kosmos.framework.service.core.services.OrmQueryServiceImpl" />
+	<bean id="consecutiveQueryService" class="kosmos.framework.service.core.services.ConsecutiveQueryServiceImpl" />
 		
 	<context:component-scan base-package="kosmos.framework.service.test">
 		<context:include-filter type="annotation"

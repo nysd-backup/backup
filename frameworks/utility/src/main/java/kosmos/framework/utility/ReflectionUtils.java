@@ -29,7 +29,52 @@ public final class ReflectionUtils {
 	 */
 	private ReflectionUtils() {
 	}
+	
+	/**
+	 * @param m
+	 * @return
+	 */
+	public static boolean isSetter(Method m){
+		if( Modifier.isPublic(m.getModifiers()) ){
+			return m.getName().startsWith("set");			
+		}
+		return false;
+	}
+	
+	/**
+	 * @param m
+	 * @return
+	 */
+	public static String getPropertyNameFromGetter(Method m){
+		if(!isGetter(m)){
+			throw new IllegalArgumentException();
+		}
+		String name = m.getName();
+		int position = name.startsWith("is") ? 2 : 3; 
+		return StringUtils.uncapitalize(name.substring(position));
+	}
+	
 
+	/**
+	 * @param m
+	 * @return
+	 */
+	public static boolean isGetter(Method m){
+		if( !Modifier.isPublic(m.getModifiers()) ){
+			return false;
+		}
+		String name = m.getName();
+		if( name.startsWith("get")){
+			return true;
+		}
+		if( m.getReturnType().getSimpleName().equals("boolean") || m.getReturnType().getSimpleName().equals("Boolean")){
+			if(name.startsWith("is")){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * @param <T> 型
 	 * @param target Object

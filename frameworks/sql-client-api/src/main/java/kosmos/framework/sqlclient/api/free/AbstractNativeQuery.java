@@ -13,7 +13,7 @@ import java.util.List;
  * @version 2011/08/31 created.
  */
 public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery> implements NativeQuery{
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.free.AbstractFreeQuery#count()
 	 */

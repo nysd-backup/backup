@@ -33,6 +33,11 @@
 		</dependency>
 		<dependency>
 		    <groupId>kosmos.framework</groupId>
+		    <artifactId>utility</artifactId>
+		    <version>${framework.utility.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
 		    <artifactId>app-container-api</artifactId>
 		    <version>${framework.app.container.api.version}</version>
 		</dependency>	

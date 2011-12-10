@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>kosmos.framework</groupId>
-	<artifactId>web-container</artifactId>
+	<artifactId>app-container-client</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>WEBコンテナ</name>
+	<name>APクライアント</name>
 	
 	<parent>
 		<groupId>kosmos.framework</groupId>
@@ -19,6 +19,11 @@
 		    <artifactId>container-core</artifactId>
 		    <version>${framework.core.version}</version>
 		</dependency>
+			<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>utility</artifactId>
+		    <version>${framework.utility.version}</version>
+		</dependency>
 		<dependency>
 		    <groupId>kosmos.framework</groupId>
 		    <artifactId>sql-client-api</artifactId>
@@ -30,11 +35,11 @@
 		    <version>${framework.jpql.client.api.version}</version>
 		</dependency>	
 		<dependency>
-		    <groupId>javax</groupId>
-		    <artifactId>javaee-api</artifactId>
-		    <version>${javaee.version}</version>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>javax.persistence</artifactId>
+		    <version>${jpa.version}</version>
 		    <scope>provided</scope>
-		</dependency>
+		</dependency>	
 	</dependencies>
 
 </project>

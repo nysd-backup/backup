@@ -1,7 +1,17 @@
 <projectDescription>
   <name>app-container-spring-impl</name>
   <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects/>
+  <projects>
+    <project>app-container-api</project>
+    <project>container-core</project>
+    <project>jpql-client-api</project>
+    <project>jpql-client-eclipselink-plugin</project>
+    <project>jpql-client-impl</project>
+    <project>sql-client-api</project>
+    <project>sql-client-impl</project>
+    <project>sql-engine</project>
+    <project>utility</project>
+  </projects>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>

@@ -98,7 +98,7 @@
 				<module>app-container-api</module>
 				<module>app-container-spring-impl</module>	
 				<module>app-container-ejb-impl</module>		
-				<module>web-container</module>			
+				<module>app-container-client</module>			
 			</modules>
 		</profile>
 	</profiles>

@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.service.core.utils;
+package kosmos.framework.service.core.logics;
 
 import java.util.List;
 

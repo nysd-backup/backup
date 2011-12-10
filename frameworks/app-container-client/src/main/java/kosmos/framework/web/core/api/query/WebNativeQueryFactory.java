@@ -5,7 +5,7 @@ package kosmos.framework.web.core.api.query;
 
 import kosmos.framework.core.exception.PoorImplementationException;
 import kosmos.framework.core.services.NativeQueryService;
-import kosmos.framework.core.utils.ClassUtils;
+import kosmos.framework.utility.ClassUtils;
 import kosmos.framework.sqlclient.api.free.AbstractFreeQuery;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.free.AbstractUpdate;
