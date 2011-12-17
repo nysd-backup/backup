@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.query;
+package kosmos.framework.client.query;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import kosmos.framework.sqlclient.api.free.ResultSetFilter;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class WebNativeQueryEngine implements NativeQuery{
+public class ClientNativeQueryEngine implements NativeQuery{
 	
 	/** the service */
 	private NativeQueryService service;
@@ -32,7 +32,7 @@ public class WebNativeQueryEngine implements NativeQuery{
 	 * @param queryClass the queryClass to set
 	 * @param service the service
 	 */
-	WebNativeQueryEngine(Class<? extends Query> queryClass,NativeQueryService service){
+	ClientNativeQueryEngine(Class<? extends Query> queryClass,NativeQueryService service){
 		request = new QueryRequest(queryClass);
 		this.service = service;
 	}

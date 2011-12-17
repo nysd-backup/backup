@@ -32,7 +32,7 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	/**
 	 * @return the delegate
 	 */
-	protected D getDelegate(){
+	public D getDelegate(){
 		return delegate;
 	}
 	

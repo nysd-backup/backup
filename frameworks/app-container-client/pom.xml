@@ -39,7 +39,81 @@
 		    <artifactId>javax.persistence</artifactId>
 		    <version>${jpa.version}</version>
 		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- for test -->
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>eclipselink</artifactId>
+		    <version>${eclipselink.version}</version>
+		    <scope>test</scope>
 		</dependency>	
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunit.version}</version>
+			<scope>test</scope>		
+			<exclusions>
+				<exclusion>
+					<groupId>poi</groupId>
+					<artifactId>poi</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>com.oracle</groupId>
+		    <artifactId>ojdbc6</artifactId>
+		    <version>${oracle.jdbc.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>sql-client-impl</artifactId>
+		    <version>${framework.sql.client.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>jpql-client-impl</artifactId>
+		    <version>${framework.jpql.client.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>jpql-client-eclipselink-plugin</artifactId>
+		    <version>${framework.jpql.client.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>sql-engine</artifactId>
+		    <version>${framework.sql.engine.version}</version>
+		    <scope>test</scope>
+		</dependency>			
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>app-container-api</artifactId>
+		    <version>${framework.app.container.api.version}</version>
+		    <scope>test</scope>
+		</dependency>			
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>app-container-spring-impl</artifactId>
+		    <version>${framework.app.container.spring.impl.version}</version>
+		    <scope>test</scope>
+		</dependency>			
 	</dependencies>
 
 </project>

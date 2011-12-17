@@ -16,12 +16,18 @@ import java.util.List;
 public interface ConsecutiveQueryService {
 
 	/**
-	 * @param queries the sql command
+	 * Gets the chained result.
+	 * 
+	 * the condition includes the result of previous query.
+	 * 
+	 * @param queries the SQL
 	 */
 	public List<List<Object>> getChainedResultLists(QueryRequest... request);
 	
 	/**
-	 * @param queries the sql command
+	 * Gets the result lists.
+	 * 
+	 * @param queries the SQL/ORM query
 	 */
 	public List<List<Object>> getResultLists(Serializable... request);
 		

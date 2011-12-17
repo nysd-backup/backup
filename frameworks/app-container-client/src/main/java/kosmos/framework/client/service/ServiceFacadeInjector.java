@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.service;
+package kosmos.framework.client.service;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -19,10 +19,9 @@ public class ServiceFacadeInjector {
 	 * Initialize the bean.
 	 * 
 	 * @param bean the created bean
-	 * @param beanName the name of bean
 	 * @return bean
 	 */
-	public Object inject(Object bean, String beanName) {
+	public Object inject(Object bean) {
 		
 		if(bean == null){
 			return bean;

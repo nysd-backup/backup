@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.service;
+package kosmos.framework.client.service;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -23,7 +23,7 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 	private ServiceActivator serviceActivator = null;
 	
 	/**
-	 * @see kosmos.framework.web.core.api.service.BusinessDelegate#setAlias(java.lang.String)
+	 * @see kosmos.framework.client.service.BusinessDelegate#setAlias(java.lang.String)
 	 */
 	public void setAlias(String alias){
 		this.alias = alias;

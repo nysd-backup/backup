@@ -3,6 +3,7 @@
  */
 package kosmos.framework.core.message;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -11,7 +12,9 @@ import java.util.Locale;
  * @author yoshida-n
  * @version	created.
  */
-public class MessageBean {
+public class MessageBean implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/** the message */
 	private final AbstractMessage message;

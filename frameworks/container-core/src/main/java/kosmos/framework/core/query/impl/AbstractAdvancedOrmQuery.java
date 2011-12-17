@@ -33,6 +33,13 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	}
 	
 	/**
+	 * @return the delegate
+	 */
+	public OrmQuery<T> getDelegate(){
+		return this.delegate;
+	}
+	
+	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#enableNoDataError()
 	 */		
 	@Override

@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.query;
+package kosmos.framework.client.query;
 
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.EasyQuery;
@@ -20,7 +20,7 @@ import kosmos.framework.sqlclient.api.orm.OrmQuery;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
+public class ClientOrmQueryFactory implements AdvancedOrmQueryFactory{
 	
 	/** the Facade */
 	protected OrmQueryService service;
@@ -37,7 +37,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	 */
 	@Override
 	public <T> StrictQuery<T> createStrictQuery(Class<T> entityClass) {
-		OrmQuery<T> delegate = new WebOrmQueryEngine<T>(service,entityClass);
+		OrmQuery<T> delegate = new ClientOrmQueryEngine<T>(service,entityClass);
 		StrictQuery<T> query = new DefaultStrictQuery<T>(delegate);
 		return query;
 	}
@@ -47,7 +47,7 @@ public class WebOrmQueryFactory implements AdvancedOrmQueryFactory{
 	 */
 	@Override
 	public <T> EasyQuery<T> createEasyQuery(Class<T> entityClass) {
-		OrmQuery<T> delegate = new WebOrmQueryEngine<T>(service,entityClass);
+		OrmQuery<T> delegate = new ClientOrmQueryEngine<T>(service,entityClass);
 		EasyQuery<T> query = new DefaultEasyQuery<T>(delegate);
 		return query;
 	}

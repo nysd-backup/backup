@@ -3,6 +3,8 @@
  */
 package kosmos.framework.core.exception;
 
+import java.io.Serializable;
+
 import kosmos.framework.core.dto.ReplyMessage;
 
 
@@ -21,7 +23,11 @@ public class BusinessException extends AbstractBusinessException{
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;
+	
+	/** the data to reply to client */
+	private Serializable replyData = null;
 
+	/** the messageList */
 	private ReplyMessage[] messageList = null;
 	
 	/**
@@ -45,6 +51,21 @@ public class BusinessException extends AbstractBusinessException{
 	public BusinessException(){
 		super();
 	}
+	
+	/**
+	 * @param replyData the replyData to set
+	 * @param message the message
+	 */
+	public BusinessException(String message,Serializable replyData){
+		this(message);
+	}
+	
+	/**
+	 * @param replyData the replyData to set
+	 */
+	public BusinessException(Serializable replyData){
+		this(null,replyData);
+	}
 
 	/**
 	 * @param messageList the messageList to set
@@ -60,6 +81,12 @@ public class BusinessException extends AbstractBusinessException{
 		return messageList;
 	}
 	
-	
+	/**
+	 * @return　the reply data
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Serializable> T getReplyData(){
+		return (T)replyData;
+	}
 
 }

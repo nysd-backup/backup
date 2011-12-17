@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.query;
+package kosmos.framework.client.query;
 
 import kosmos.framework.core.exception.PoorImplementationException;
 import kosmos.framework.core.services.NativeQueryService;
@@ -20,7 +20,7 @@ import kosmos.framework.sqlclient.api.free.QueryFactory;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class WebNativeQueryFactory implements QueryFactory{
+public class ClientNativeQueryFactory implements QueryFactory{
 	
 	private NativeQueryService service;
 	
@@ -40,7 +40,7 @@ public class WebNativeQueryFactory implements QueryFactory{
 		K delegate = null;
 		
 		if(AbstractNativeQuery.class.isAssignableFrom(queryClass)){			
-			delegate = (K)new WebNativeQueryEngine(queryClass,service);
+			delegate = (K)new ClientNativeQueryEngine(queryClass,service);
 		}else{
 			throw new PoorImplementationException("unsupporetd query type : type = " + queryClass);
 		}

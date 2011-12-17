@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.service;
+package kosmos.framework.client.service;
 
 import java.lang.reflect.InvocationHandler;
 

@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.web.core.api.query;
+package kosmos.framework.client.query;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import kosmos.framework.sqlclient.api.orm.WhereOperand;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class WebOrmQueryEngine<E> implements OrmQuery<E>{
+public class ClientOrmQueryEngine<E> implements OrmQuery<E>{
 	
 	/** the service */
 	private OrmQueryService<E> service;
@@ -33,9 +33,16 @@ public class WebOrmQueryEngine<E> implements OrmQuery<E>{
 	 * @param service the service
 	 * @param entityClass the entityClass
 	 */
-	WebOrmQueryEngine(OrmQueryService<E> service,Class<E> entityClass){
+	ClientOrmQueryEngine(OrmQueryService<E> service,Class<E> entityClass){
 		this.service = service;
 		this.request = new JPAOrmCondition<E>(entityClass);
+	}
+	
+	/**
+	 * @return the request
+	 */
+	public OrmCondition<E> getRequest(){
+		return this.request;
 	}
 
 	/**
