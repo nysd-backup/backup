@@ -66,16 +66,7 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 				throw afterError(retValue);	
 			}			
 		}catch(Throwable t){
-			ExceptionHandler handler = new ExceptionHandler(){
-				@Override
-				public Throwable handle(Throwable t) {
-					if ( t instanceof BusinessException ){
-						BusinessException be = (BusinessException)t;
-						be.setMessageList(context.getMessageArray());
-					}
-					return t;
-				}				
-			};
+			ExceptionHandler handler = createExceptionHandler(context);
 			Throwable rethrowTarget =  handler.handle(t);
 			if(rethrowTarget != null){
 				throw rethrowTarget;
@@ -95,6 +86,26 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 		return new BusinessException(ANY_TRANSACTION_FAILED);
 	}
 
+	/**
+	 * Creates the exceptionHandler.
+	 * 
+	 * @param context the context
+	 * @return the ExceptionHandler
+	 */
+	protected ExceptionHandler createExceptionHandler(final ServiceContext context){
+		ExceptionHandler handler = new ExceptionHandler(){
+			@Override
+			public Throwable handle(Throwable t) {
+				if ( t instanceof BusinessException ){
+					BusinessException be = (BusinessException)t;
+					be.setMessageList(context.getMessageArray());
+				}
+				return t;
+			}				
+		};
+		return handler;
+	}
+	
 	/**
 	 * Proceed service.
 	 * 
