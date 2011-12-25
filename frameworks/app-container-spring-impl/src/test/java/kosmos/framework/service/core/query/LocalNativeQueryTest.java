@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
@@ -90,33 +89,33 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(0,result.size());
 	}
 	
-	/**
-	 * 結果0件シスチE��エラー
-	 */
-	@Test
-	public void nodataError(){
-		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class).enableNoDataError();
-		query.setAttr2(500).setTest("1").setArc("500");
-		
-		try{
-			query.getResultList();
-			fail();
-		}catch(UnexpectedNoDataFoundException e){
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * exists
-	 */
-	@Test
-	public void exists(){
-		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-		query.setAttr2(500).setTest("1");
-		assertTrue(query.exists());
-	}
+//	/**
+//	 * 結果0件シスチE��エラー
+//	 */
+//	@Test
+//	public void nodataError(){
+//		setUpData("TEST.xls");
+//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class).enableNoDataError();
+//		query.setAttr2(500).setTest("1").setArc("500");
+//		
+//		try{
+//			query.getResultList();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException e){
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	/**
+//	 * exists
+//	 */
+//	@Test
+//	public void exists(){
+//		setUpData("TEST.xls");
+//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
+//		query.setAttr2(500).setTest("1");
+//		assertTrue(query.exists());
+//	}
 
 //	/**
 //	 * exists
@@ -304,7 +303,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setMaxResults(1);
-		NativeResult<SampleNativeResult> result = query.getTotalResult();
+		NativeResult result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertTrue(result.isLimited());
 		assertEquals(1,result.getResultList().size());

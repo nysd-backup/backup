@@ -3,6 +3,8 @@
  */
 package kosmos.framework.sqlclient.api.free;
 
+import kosmos.framework.sqlclient.api.Update;
+
 
 /**
  * The base of the updater.
@@ -39,6 +41,15 @@ public abstract class AbstractUpdate<D extends FreeUpdate> implements FreeUpdate
 	@Override
 	public <T extends FreeUpdate> T setBranchParameter(String arg0, Object arg1) {
 		delegate.setBranchParameter(arg0, arg1);
+		return (T)this;
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#setHint(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public <T extends Update> T setHint(String arg0, Object arg1) {
+		delegate.setHint(arg0,arg1);
 		return (T)this;
 	}
 

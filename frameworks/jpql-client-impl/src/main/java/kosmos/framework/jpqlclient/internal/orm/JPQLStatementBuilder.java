@@ -5,7 +5,8 @@ package kosmos.framework.jpqlclient.internal.orm;
 
 import java.util.Collection;
 
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.orm.OrmContext;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 
 /**
@@ -22,8 +23,7 @@ public interface JPQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createSelect(OrmCondition<?> condition);
-	
+	public String createSelect(OrmQueryContext<?> condition);
 	
 	/**
 	 * Creates the DELETE statement.
@@ -31,7 +31,7 @@ public interface JPQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createDelete(OrmCondition<?> condition);
+	public String createDelete(OrmContext<?> condition);
 	
 	/**
 	 * Creates the UPDATE statement.
@@ -40,6 +40,6 @@ public interface JPQLStatementBuilder {
 	 * @param set the updating target
 	 * @return　the statement
 	 */
-	public String createUpdate(OrmCondition<?> condition, Collection<String> set) ;
+	public String createUpdate(OrmContext<?> condition, Collection<String> set) ;
 	
 }

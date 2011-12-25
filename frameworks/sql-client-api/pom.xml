@@ -13,4 +13,13 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	
+	<dependencies>
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>javax.persistence</artifactId>
+		    <version>${jpa.version}</version>
+		    <scope>provided</scope>
+		</dependency>	
+	</dependencies>	
+	
 </project>

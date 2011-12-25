@@ -64,7 +64,7 @@ public class DefaultEasyQuery<T> extends AbstractAdvancedOrmQuery<T> implements 
 	 */
 	@Override
 	public T findAny(Object... params) {
-		return delegate.findAny(params);
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -81,6 +81,14 @@ public class DefaultEasyQuery<T> extends AbstractAdvancedOrmQuery<T> implements 
 	@Override
 	public boolean existsByList(Object... params) {
 		return !delegate.list(params).isEmpty();
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.AdvancedOrmQuery#exists(java.lang.Object[])
+	 */
+	@Override
+	public boolean exists(Object... pks) {
+		return find(pks) != null;
 	}	
 
 }

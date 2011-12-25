@@ -9,6 +9,7 @@ import javax.jdo.Extent;
 
 import kosmos.framework.jdoclient.api.orm.JDOOrmQuery;
 import kosmos.framework.sqlclient.api.Query;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 
 
@@ -121,39 +122,6 @@ public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findAny()
-	 */
-	@Override
-	public T findAny() {
-		return delegate.findAny();
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#exists(java.lang.Object[])
-	 */
-	@Override
-	public boolean exists(Object... pks) {
-		return delegate.exists(pks);
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#existsByAny()
-	 */
-	@Override
-	public boolean existsByAny() {
-		return delegate.existsByAny();
-	}
-	
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#enableNoDataError()
-	 */
-	@Override
-	public <Q extends Query> Q enableNoDataError() {
-		delegate.enableNoDataError();
-		return (Q)this;
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.Query#setMaxResults(int)
 	 */
 	@Override
@@ -193,14 +161,6 @@ public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
 	@Override
 	public int count() {
 		return delegate.count();
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#exists()
-	 */
-	@Override
-	public boolean exists() {
-		return delegate.exists();
 	}
 
 	/**
@@ -260,11 +220,20 @@ public class DefaultOrmQueryImpl<T> implements JDOOrmQuery<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findAny(java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
 	 */
 	@Override
-	public T findAny(Object... params) {
-		return delegate.findAny(params);
+	public OrmQuery<T> setCondition(OrmQueryContext<T> condition) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setHint(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> setHint(String key, Object value) {
+		delegate.setHint(key, value);
+		return this;
 	}
 
 

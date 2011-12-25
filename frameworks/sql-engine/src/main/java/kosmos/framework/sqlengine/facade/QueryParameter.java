@@ -11,7 +11,8 @@ import kosmos.framework.sqlengine.executer.RecordFilter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class QueryParameter<T> extends SQLParameter{
+@SuppressWarnings("rawtypes")
+public class QueryParameter extends SQLParameter{
 	
 	/** マックス件数 */
 	private int maxSize = 0;
@@ -20,10 +21,13 @@ public class QueryParameter<T> extends SQLParameter{
 	private int firstResult = 0;
 	
 	/** the result type */
-	private Class<T> resultType = null;
+	private Class resultType = null;
 	
 	/** the filter for one record */
-	private RecordFilter<T> filter;	
+	private RecordFilter filter;	
+	
+	/** the fetchSize */
+	private int fetchSize;
 	
 	/**
 	 * @param maxSize the maxSize to set
@@ -42,28 +46,28 @@ public class QueryParameter<T> extends SQLParameter{
 	/**
 	 * @param filter the filter to set
 	 */
-	public void setFilter(RecordFilter<T> filter) {
+	public void setFilter(RecordFilter filter) {
 		this.filter = filter;
 	}
 
 	/**
 	 * @return the filter
 	 */
-	public RecordFilter<T> getFilter() {
+	public RecordFilter getFilter() {
 		return filter;
 	}
 
 	/**
 	 * @param resultType the resultType to set
 	 */
-	public void setResultType(Class<T> resultType) {
+	public void setResultType(Class resultType) {
 		this.resultType = resultType;
 	}
 
 	/**
 	 * @return the resultType
 	 */
-	public Class<T> getResultType() {
+	public Class getResultType() {
 		return resultType;
 	}
 
@@ -79,6 +83,20 @@ public class QueryParameter<T> extends SQLParameter{
 	 */
 	public int getFirstResult() {
 		return firstResult;
+	}
+
+	/**
+	 * @return the fetchSize
+	 */
+	public int getFetchSize() {
+		return fetchSize;
+	}
+
+	/**
+	 * @param fetchSize the fetchSize to set
+	 */
+	public void setFetchSize(int fetchSize) {
+		this.fetchSize = fetchSize;
 	}
 
 	

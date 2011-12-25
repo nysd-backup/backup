@@ -4,6 +4,7 @@
 package kosmos.framework.core.logics.message;
 
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageResult;
 
 
 /**
@@ -20,7 +21,7 @@ public interface MessageBuilder {
 	 * @param bean the message bean
 	 * @return the message
 	 */
-	public String load(MessageBean bean);
+	public MessageResult load(MessageBean bean);
 	
 	/**
 	 * Reads the message definition from the file.
@@ -29,6 +30,6 @@ public interface MessageBuilder {
 	 * @param baseFileName the name of message file
 	 * @return the message
 	 */
-	public String load(MessageBean bean, String baseFileName);
+	public MessageResult load(MessageBean bean, String baseFileName);
 
 }

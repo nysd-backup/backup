@@ -13,6 +13,7 @@ import kosmos.framework.service.core.transaction.ServiceContextImpl;
  */
 public class ServiceTestContextImpl extends ServiceContextImpl{
 
+	//JPA専用、JPA以外の場合はこれを使用せずヒントを使用する
 	private boolean suppressOptimisticLockError = false;
 	
 	public void refleshTransactionScope(){

@@ -18,10 +18,10 @@ import kosmos.framework.sqlengine.executer.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class BeanRecordHandlerImpl<T> implements RecordHandler<T> {
+public class BeanRecordHandlerImpl implements RecordHandler {
 
 	/** the type*/
-	private final Class<T> type;
+	private final Class<?> type;
 	
 	/** the cache of the setter methods */
 	private final Map<String,Method> methodMap;
@@ -38,7 +38,7 @@ public class BeanRecordHandlerImpl<T> implements RecordHandler<T> {
 	 * @param methodMap the setter methods
 	 * @param converter the converter
 	 */
-	public BeanRecordHandlerImpl(Class<T> type, String[] labels, Map<String,Method> methodMap,TypeConverter converter){
+	public BeanRecordHandlerImpl(Class<?> type, String[] labels, Map<String,Method> methodMap,TypeConverter converter){
 		this.type = type;
 		this.methodMap = methodMap;
 		this.labels = labels;
@@ -48,11 +48,12 @@ public class BeanRecordHandlerImpl<T> implements RecordHandler<T> {
 	/**
 	 * @see kosmos.framework.sqlengine.executer.RecordHandler#getRecord(java.sql.ResultSet)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public T getRecord(ResultSet resultSet) {
+	public <T> T getRecord(ResultSet resultSet) {
 		T row = null;
 		try{
-			row = type.newInstance();
+			row = (T)type.newInstance();
 		}catch(Exception e){
 			throw new SQLEngineException(e);
 		}

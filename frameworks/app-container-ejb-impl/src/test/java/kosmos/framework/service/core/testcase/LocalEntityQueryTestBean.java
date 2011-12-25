@@ -16,8 +16,6 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.core.exception.UnexpectedMultiResultException;
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.core.query.EasyUpdate;
@@ -34,7 +32,6 @@ import kosmos.framework.service.core.entity.ParentEntity;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.services.RequiresNewService;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -219,24 +216,24 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	}
 	
 	/**
-	 * 0件シスチE��エラー
-	 */
-
-	public void nodataError(){
-		try{	
-			AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).enableNoDataError();
-			query.eq(ITestEntity.TEST, "AGA").getSingleResult();
-			context.setRollbackOnly();
-			fail();
-		}catch(UnexpectedNoDataFoundException une){
-			une.printStackTrace();
-			context.setRollbackOnly();
-		}catch(Throwable t){
-			t.printStackTrace();
-			fail();
-		}
-	}
+//	 * 0件シスチE��エラー
+//	 */
+//
+//	public void nodataError(){
+//		try{	
+//			AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+//			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).enableNoDataError();
+//			query.eq(ITestEntity.TEST, "AGA").getSingleResult();
+//			context.setRollbackOnly();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException une){
+//			une.printStackTrace();
+//			context.setRollbackOnly();
+//		}catch(Throwable t){
+//			t.printStackTrace();
+//			fail();
+//		}
+//	}
 	
 	/**
 	 * PK検索
@@ -274,96 +271,43 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		context.setRollbackOnly();
 	}
 
+//	/**
+//	 * 0件シスチE��エラー
+//	 */
+//
+//	public void findNodataError(){
+//		try{	AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+//
+//			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+//			query.enableNoDataError();
+//			query.find("AA");
+//			fail();
+//		}catch(UnexpectedNoDataFoundException une){
+//			une.printStackTrace();
+//		}
+//		context.setRollbackOnly();
+//	}
 	/**
-	 * 0件シスチE��エラー
-	 */
-
-	public void findNodataError(){
-		try{	AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.enableNoDataError();
-			query.find("AA");
-			fail();
-		}catch(UnexpectedNoDataFoundException une){
-			une.printStackTrace();
-		}
-		context.setRollbackOnly();
-	}
-	/**
-	 * 条件追加
-	 */
-
-	public void findAny(){
-		setUpData("TEST.xls");
-		AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).eq(ITestEntity.TEST,"1");
-		TestEntity result = query.findAny();
-		per.getEntityManager().detach(result);
-		result.setAttr("test");
-		result = query.findAny();
-		assertEquals("3",result.getAttr());
-		context.setRollbackOnly();
-	}
 	
-	/**
-	 * 条件追加 更新
-	 */
-
-	public void findAnyDisableDetach(){
-		setUpData("TEST.xls");
-		AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).eq(ITestEntity.TEST,"1");
-		TestEntity result = query.findAny();
-		result.setAttr("test");
-		result = query.findAny();
-		assertEquals("test",result.getAttr());
-		context.setRollbackOnly();
-	}
-	
-	/**
-	 * 0件シスチE��エラー
-	 */
-
-	public void findAnyNodataError(){
-		try{	AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.enableNoDataError();
-			query.eq(ITestEntity.TEST, "aaa");
-			query.findAny();
-			fail();
-		}catch(UnexpectedNoDataFoundException une){
-			une.printStackTrace();
-		}catch(Throwable t){
-			fail();
-		}
-		context.setRollbackOnly();
-	}
-	
-
-	/**
-	 * ANY褁E��件存在
-	 */
-
-	public void findAnyMultiResultError(){
-		setUpData("TEST.xls");
-		try{	AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.findAny();
-			fail();
-		}catch(UnexpectedMultiResultException umre){
-			umre.printStackTrace();
-		}catch(Throwable t){
-			t.printStackTrace();
-			fail();
-		}
-		context.setRollbackOnly();
-	}
-
+//	/**
+//	 * 0件シスチE��エラー
+//	 */
+//
+//	public void findAnyNodataError(){
+//		try{	AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+//
+//			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+//			query.enableNoDataError();
+//			query.eq(ITestEntity.TEST, "aaa");
+//			query.findAny();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException une){
+//			une.printStackTrace();
+//		}catch(Throwable t){
+//			fail();
+//		}
+//		context.setRollbackOnly();
+//	}
 	
 	/**
 	 *  存在チェチE�� not 
@@ -401,35 +345,6 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		assertTrue(query.exists("1"));
 		context.setRollbackOnly();
-	}
-	
-	/**
-	 * ANY存在チェチE�� 
-	 */
-
-	public void existsByAny(){
-		setUpData("TEST.xls");	
-			AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);		
-		query.eq(ITestEntity.TEST, "1");
-		assertTrue(query.existsByAny());
-	}
-	
-	/**
-	 * ANY褁E��件存在チェチE��
-	 */
-
-	public void existsByAnyMultiResultError(){
-		setUpData("TEST.xls");
-		try{	AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.existsByAny();
-			fail();
-		}catch(UnexpectedMultiResultException umre){
-			umre.printStackTrace();
-		}
 	}
 	
 	/**
@@ -676,22 +591,6 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	/**
 	 * メチE��ージ持E��E
 	 */
-
-	public void existsMesasgeByAnyTrue(){
-		AdvancedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-
-		TestEntity e = new TestEntity();
-		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.getEntityManager().persist(e);
-		
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
-		
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-		assertTrue(query.eq(ITestEntity.TEST, "200").existsByAny());
-		
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
-		context.setRollbackOnly();
-	}
 	
 	/**
 	 * メチE��ージ持E��E
@@ -705,8 +604,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		per.getEntityManager().persist(entity);
 		
 		StrictQuery<DateEntity> query = ormQueryFactory.createStrictQuery(DateEntity.class);
-		DateEntity result = query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").findAny();
-		assertNull(result);
+		assertFalse(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").exists());
 		context.setRollbackOnly();
 	}
 	

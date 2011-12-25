@@ -2,6 +2,8 @@ package kosmos.framework.sqlclient.api.orm;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
+
 import kosmos.framework.sqlclient.api.Query;
 
 
@@ -12,7 +14,7 @@ import kosmos.framework.sqlclient.api.Query;
  * @version 2011/08/31 created.
  */
 public interface OrmQuery<T> extends Query{
-
+	
 	/**
 	 * Adds '='.
 	 * 
@@ -124,15 +126,6 @@ public interface OrmQuery<T> extends Query{
 	public List<T> list(Object... params);
 	
 	/**
-	 * Finds the result by alter keys.
-	 * Throws the error if the multiple result is found.
-	 * 
-	 * @param params the alter keys
-	 * @return the result
-	 */
-	public T findAny(Object... params);
-	
-	/**
 	 * Finds the result by primary keys.
 	 * Throws the error if the multiple result is found.
 	 * 
@@ -142,26 +135,16 @@ public interface OrmQuery<T> extends Query{
 	public T find(Object... pks);
 
 	/**
-	 * Finds the result by alter keys.
-	 * Throws the error if the multiple result is found.
+	 * Sets the condition.
 	 * 
-	 * @return the result
+	 * @param condition the condition
 	 */
-	public T findAny();
-
+	public OrmQuery<T> setCondition(OrmQueryContext<T> condition);
+	
 	/**
-	 * Determines the result searched by primary keys is found.
-	 * 
-	 * @param poks the primary keys
-	 * @return true:exists
+	 * @param type the lock mode
+	 * @return self
 	 */
-	public boolean exists(Object... pks);
-
-	/**
-	 * Determines the result searched by alter keys is found.
-	 * 
-	 * @return true:exists
-	 */
-	public boolean existsByAny();
-
+	public OrmQuery<T> setLockMode(LockModeType type);
+	
 }

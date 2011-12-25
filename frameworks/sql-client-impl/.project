@@ -4,6 +4,7 @@
   <projects>
     <project>sql-client-api</project>
     <project>sql-engine</project>
+    <project>utility</project>
   </projects>
   <buildSpec>
     <buildCommand>

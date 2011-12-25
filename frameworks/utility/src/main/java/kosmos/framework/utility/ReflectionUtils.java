@@ -54,13 +54,25 @@ public final class ReflectionUtils {
 		return StringUtils.uncapitalize(name.substring(position));
 	}
 	
+	/**
+	 * @param m
+	 * @return
+	 */
+	public static String getPropertyNameFromSetter(Method m){
+		if(!isSetter(m)){
+			throw new IllegalArgumentException();
+		}
+		String name = m.getName();
+		return StringUtils.uncapitalize(name.substring(3));
+	}
+	
 
 	/**
 	 * @param m
 	 * @return
 	 */
 	public static boolean isGetter(Method m){
-		if( !Modifier.isPublic(m.getModifiers()) ){
+		if( !Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())){
 			return false;
 		}
 		String name = m.getName();

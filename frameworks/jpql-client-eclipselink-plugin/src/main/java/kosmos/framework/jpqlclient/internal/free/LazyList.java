@@ -30,7 +30,7 @@ public class LazyList<E> implements List<E>{
 	 * @param rs the rs
 	 * @param handler the handler
 	 */
-	public LazyList(ScrollableCursor cursor ,RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+	public LazyList(ScrollableCursor cursor ,RecordHandler handler,ExceptionHandler exceptionHandler){
 		this.itr = new ResultSetIterator(cursor,handler,exceptionHandler);
 	}
 	
@@ -232,11 +232,11 @@ public class LazyList<E> implements List<E>{
 		/** the cursor */
 		private final ScrollableCursor cursor;
  		
-		private final RecordHandler<E> handler;
+		private final RecordHandler handler;
 
 		private final ExceptionHandler exceptionHandler;
 				
-		public ResultSetIterator(ScrollableCursor cursor,RecordHandler<E> handler,ExceptionHandler exceptionHandler){
+		public ResultSetIterator(ScrollableCursor cursor,RecordHandler handler,ExceptionHandler exceptionHandler){
 			this.cursor = cursor;
 			this.handler = handler;
 			this.exceptionHandler = exceptionHandler;

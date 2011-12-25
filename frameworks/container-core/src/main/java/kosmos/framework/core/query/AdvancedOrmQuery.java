@@ -5,7 +5,7 @@ package kosmos.framework.core.query;
 
 import javax.persistence.LockModeType;
 
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 
 
@@ -41,7 +41,7 @@ public interface AdvancedOrmQuery<T> {
 	/**
 	 * @param condition the condition to set
 	 */
-	public <Q extends AdvancedOrmQuery<T>> Q setCondition(OrmCondition<T> condition);
+	public <Q extends AdvancedOrmQuery<T>> Q setCondition(OrmQueryContext<T> condition);
 	
 	/**
 	 * Finds by primary key.
@@ -56,12 +56,6 @@ public interface AdvancedOrmQuery<T> {
 	 * @return true:exists
 	 */
 	public boolean exists(Object... pks);
-
-	/**
-	 * Throws error if no result is found.
-	 * @return self
-	 */
-	public <Q extends AdvancedOrmQuery<T>> Q enableNoDataError();
 
 	/**
 	 * @param arg0 the max results

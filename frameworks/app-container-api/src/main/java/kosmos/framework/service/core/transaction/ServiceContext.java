@@ -4,8 +4,9 @@
 package kosmos.framework.service.core.transaction;
 
 import kosmos.framework.core.context.AbstractContainerContext;
-import kosmos.framework.core.dto.ReplyMessage;
-import kosmos.framework.core.message.ErrorMessage;
+import kosmos.framework.core.exception.PoorImplementationException;
+import kosmos.framework.core.message.MessageResult;
+import kosmos.framework.core.message.Messages;
 
 /**
  * The thread-local context.
@@ -15,30 +16,11 @@ import kosmos.framework.core.message.ErrorMessage;
  */
 public abstract class ServiceContext extends AbstractContainerContext{
 	
-
-	/** the thread local instance*/
-	private static ThreadLocal<ServiceContext> instance = new ThreadLocal<ServiceContext>(){
-		protected ServiceContext initialValue() {
-			return null;
-		}
-	};
-
-	/**
-	 * @param context the context to set
-	 */
-	protected static void setCurrentInstance(ServiceContext context){
-		if (context == null) {
-			instance.remove();
-		} else {
-			instance.set(context);
-		}
-	}
-	
 	/**
 	 * @return the current context
 	 */
 	public static ServiceContext getCurrentInstance(){
-		return instance.get();
+		return (ServiceContext)AbstractContainerContext.getCurrentInstance();
 	}
 	
 	/**
@@ -52,15 +34,15 @@ public abstract class ServiceContext extends AbstractContainerContext{
 	/**
 	 * Adds the error message.
 	 * 
-	 * @param define the define 
+	 * @param level the message level
+	 * @param code the message code 
 	 * @param message the message
 	 */
-	public void addError(ErrorMessage define , String message){
-		ReplyMessage reply = new ReplyMessage();
-		reply.setCode(define.getCode());
-		reply.setLevel(define.getLevel());
-		reply.setMessage(message);
-		globalMessageList.add(reply);
+	public void addError(MessageResult message){
+		if(message.getLevel() < Messages.Level.E.ordinal()){
+			throw new PoorImplementationException("invalid message level : level = " + message.getLevel() + " code = " + message.getCode() + " only over error level message is required");
+		}		
+		globalMessageList.add(message);
 	}
 	
 	/**

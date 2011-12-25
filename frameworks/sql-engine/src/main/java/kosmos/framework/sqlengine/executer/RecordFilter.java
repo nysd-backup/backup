@@ -9,10 +9,10 @@ package kosmos.framework.sqlengine.executer;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface RecordFilter<T> {
+public interface RecordFilter {
 
 	/**
 	 * @param data the data of one record
 	 */
-	public T edit(T data);
+	public <T> T edit(T data);
 }

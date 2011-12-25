@@ -14,7 +14,7 @@ import kosmos.framework.core.services.NativeQueryService;
 import kosmos.framework.core.services.OrmQueryService;
 import kosmos.framework.core.services.QueryRequest;
 import kosmos.framework.service.core.activation.ServiceLocator;
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 import kosmos.framework.utility.ReflectionUtils;
 
 /**
@@ -38,8 +38,8 @@ public class ConsecutiveQueryServiceImpl implements ConsecutiveQueryService{
 		List<List<Object>> results = new ArrayList<List<Object>>();	
 		for(Serializable q : request){		
 			
-			if (q instanceof OrmCondition<?>){
-				results.add(ormQueryService.getResultList((OrmCondition<?>)q));
+			if (q instanceof OrmQueryContext<?>){
+				results.add(ormQueryService.getResultList((OrmQueryContext<?>)q));
 			}else if(q instanceof QueryRequest){
 				results.add(nativeQueryService.getResultList((QueryRequest)q));
 			}else {

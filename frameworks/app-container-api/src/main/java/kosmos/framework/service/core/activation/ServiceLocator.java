@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ComponentLocator;
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.exception.ConcurrentBusinessException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
@@ -67,18 +66,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 * @return the ServiceContext
 	 */
 	public abstract ServiceContext createServiceContext();
-	
-	/**
-	 * @return the ConcurrentBusinessException
-	 */
-	public abstract ConcurrentBusinessException createConcurrentBusinessException(Throwable cause);
-	
-	/**
-	 * @return the MessageClientFactory
-	 */
-	public static ConcurrentBusinessException createDefaultConcurrentBusinessException(Throwable cause){
-		return getDelegate().createConcurrentBusinessException(cause);
-	}
 	
 	/**
 	 * @return the MessageClientFactory

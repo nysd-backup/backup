@@ -6,9 +6,9 @@ package kosmos.framework.client.query;
 import java.util.List;
 
 import kosmos.framework.core.services.OrmQueryService;
-import kosmos.framework.jpqlclient.api.orm.JPAOrmCondition;
+import kosmos.framework.jpqlclient.api.orm.JPAOrmQueryCondition;
 import kosmos.framework.sqlclient.api.Query;
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 import kosmos.framework.sqlclient.api.orm.SortKey;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
@@ -27,7 +27,7 @@ public class ClientOrmQueryEngine<E> implements OrmQuery<E>{
 	private OrmQueryService<E> service;
 	
 	/**　DTO */
-	private final OrmCondition<E> request;
+	private final OrmQueryContext<E> request;
 	
 	/**
 	 * @param service the service
@@ -35,13 +35,13 @@ public class ClientOrmQueryEngine<E> implements OrmQuery<E>{
 	 */
 	ClientOrmQueryEngine(OrmQueryService<E> service,Class<E> entityClass){
 		this.service = service;
-		this.request = new JPAOrmCondition<E>(entityClass);
+		this.request = new JPAOrmQueryCondition<E>(entityClass);
 	}
 	
 	/**
 	 * @return the request
 	 */
-	public OrmCondition<E> getRequest(){
+	public OrmQueryContext<E> getRequest(){
 		return this.request;
 	}
 
@@ -264,6 +264,12 @@ public class ClientOrmQueryEngine<E> implements OrmQuery<E>{
 	 */
 	@Override
 	public E findAny(Object... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OrmQuery<E> setCondition(OrmQueryContext<E> condition) {
 		// TODO Auto-generated method stub
 		return null;
 	}

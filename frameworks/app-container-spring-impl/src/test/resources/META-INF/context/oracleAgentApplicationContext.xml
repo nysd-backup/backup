@@ -63,11 +63,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
   	<!-- WEB/帳票からのアクセス用（単体テストはJTA使用不可能なので）-->
 	<bean id="connectionProvider" class="kosmos.framework.service.core.EntityManagerConnectionProviderImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
-	</bean>	
-	<bean id="engineQueryFactory" class="kosmos.framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
+	</bean>	 
+	<bean id="engineQueryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>	
-		<property name="emptyHandler" ref="emptyHandler"/>	
 		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>

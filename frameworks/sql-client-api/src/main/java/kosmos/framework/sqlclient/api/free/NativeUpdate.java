@@ -11,10 +11,4 @@ package kosmos.framework.sqlclient.api.free;
  */
 public interface NativeUpdate extends FreeUpdate{
 	
-	/**
-	 * @param <T> type
-	 * @param seconds the timeout seconds
-	 * @return self
-	 */
-	public <T extends NativeUpdate> T setQueryTimeout(int seconds);
 }

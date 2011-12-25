@@ -11,8 +11,9 @@ import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.message.ErrorMessage;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageResult;
+import kosmos.framework.core.message.Messages;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
@@ -61,9 +62,9 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(new ErrorMessage(100));
-		String message = ServiceLocator.createDefaultMessageBuilder().load(bean);
-		ServiceContext.getCurrentInstance().addError(new ErrorMessage(1),message);	
+		MessageBean bean = new MessageBean(Messages.MSG_SYS_UNEXPECTED_DATA_FOUND);
+		MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean);
+		ServiceContext.getCurrentInstance().addError(message);	
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}
 

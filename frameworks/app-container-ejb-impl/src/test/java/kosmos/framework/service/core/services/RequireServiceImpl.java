@@ -6,8 +6,9 @@ package kosmos.framework.service.core.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import kosmos.framework.core.message.ErrorMessage;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageResult;
+import kosmos.framework.core.message.Messages;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
@@ -31,9 +32,9 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(new ErrorMessage(100));
-		String message = ServiceLocator.createDefaultMessageBuilder().load(bean);
-		ServiceContext.getCurrentInstance().addError(new ErrorMessage(100),message);
+		MessageBean bean = new MessageBean(Messages.MSG_SYS_UNEXPECTED_DATA_FOUND);
+		MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean);
+		ServiceContext.getCurrentInstance().addError(message);
 	}
 
 	/**

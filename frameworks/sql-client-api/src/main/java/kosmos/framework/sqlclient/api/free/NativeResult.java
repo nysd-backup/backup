@@ -12,7 +12,8 @@ import java.util.List;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class NativeResult<T> implements Serializable {
+@SuppressWarnings("rawtypes")
+public class NativeResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +21,7 @@ public class NativeResult<T> implements Serializable {
 	private final boolean limitedOver;
 	
 	/** the result */
-	private final List<T> resultList;
+	private final List resultList;
 	
 	/** the hit count */
 	private final int hitCount;
@@ -30,7 +31,7 @@ public class NativeResult<T> implements Serializable {
 	 * @param result the result to set
 	 * @param hitCount the hitCount to set
 	 */
-	public NativeResult(boolean limitedOver , List<T> result , int hitCount){
+	public NativeResult(boolean limitedOver , List result , int hitCount){
 		this.limitedOver = limitedOver;
 		this.resultList = result;
 		this.hitCount = hitCount;
@@ -46,8 +47,9 @@ public class NativeResult<T> implements Serializable {
 	/**
 	 * @return the result
 	 */
-	public List<T> getResultList(){
-		return this.resultList;
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getResultList(){
+		return (List<T>)this.resultList;
 	}
 	
 	/**

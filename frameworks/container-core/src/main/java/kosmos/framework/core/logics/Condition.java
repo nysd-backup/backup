@@ -483,7 +483,6 @@ public class Condition implements Utils.DateScope {
 		return val1.compareTo(val2) == 0;
 	}
 
-	
 	/**
 	 * @param collection
 	 * @return

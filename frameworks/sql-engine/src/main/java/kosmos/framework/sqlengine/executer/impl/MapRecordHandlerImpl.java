@@ -17,7 +17,7 @@ import kosmos.framework.sqlengine.executer.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class MapRecordHandlerImpl<T> implements RecordHandler<T>{
+public class MapRecordHandlerImpl implements RecordHandler{
 	
 	/** the names of the column */
 	private final String[] labels;
@@ -26,7 +26,7 @@ public class MapRecordHandlerImpl<T> implements RecordHandler<T>{
 	private final int[] types;
 	
 	/** the result type */
-	private final Class<T> resultType;
+	private final Class<?> resultType;
 	
 	/** the engine */
 	private TypeConverter converter;
@@ -37,7 +37,7 @@ public class MapRecordHandlerImpl<T> implements RecordHandler<T>{
 	 * @param types the types
 	 * @param converter the converter
 	 */
-	public MapRecordHandlerImpl(Class<T> resultType , String[] labels, int[] types ,TypeConverter converter){
+	public MapRecordHandlerImpl(Class<?> resultType , String[] labels, int[] types ,TypeConverter converter){
 		this.labels = labels;
 		this.types = types;
 		this.resultType = resultType;
@@ -49,10 +49,10 @@ public class MapRecordHandlerImpl<T> implements RecordHandler<T>{
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public T getRecord(ResultSet resultSet) {
+	public <T> T getRecord(ResultSet resultSet) {
 		T row = null;
 		try{
-			row = resultType.newInstance();
+			row = (T)resultType.newInstance();
 		}catch(Exception e){
 			throw new SQLEngineException(e);
 		}

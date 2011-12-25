@@ -16,8 +16,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 import javax.persistence.RollbackException;
 
-import kosmos.framework.core.exception.UnexpectedMultiResultException;
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.core.query.EasyUpdate;
@@ -26,7 +24,6 @@ import kosmos.framework.core.query.StrictUpdate;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
 import kosmos.framework.service.test.RequiresNewReadOnlyService;
 import kosmos.framework.service.test.RequiresNewService;
 import kosmos.framework.service.test.ServiceTestContextImpl;
@@ -60,7 +57,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@Autowired
 	private EntityManagerProvider per;
-	
+
 	/**
 	 * 条件追加
 	 * @throws SQLException 
@@ -74,7 +71,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		List<TestEntity> result = getOneRecord(query);
 	
 		assertEquals(1,result.size());
-		
+	
 		TestEntity first = result.get(0);
 		per.getEntityManager().detach(first);
 		first.setAttr("100");
@@ -214,18 +211,18 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	/**
 	 * 0件シスチE��エラー
 	 */
-	@Test
-	public void nodataError(){
-		try{
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).enableNoDataError();
-			query.eq(TEST, "AGA").getSingleResult();
-			fail();
-		}catch(UnexpectedNoDataFoundException une){
-			une.printStackTrace();
-		}catch(Throwable t){
-			fail();
-		}
-	}
+//	@Test
+//	public void nodataError(){
+//		try{
+//			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).enableNoDataError();
+//			query.eq(TEST, "AGA").getSingleResult();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException une){
+//			une.printStackTrace();
+//		}catch(Throwable t){
+//			fail();
+//		}
+//	}
 	
 	/**
 	 * PK検索
@@ -260,84 +257,39 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals("1100",result.getAttr());
 	}
 
-	/**
-	 * 0件シスチE��エラー
-	 */
-	@Test
-	public void findNodataError(){
-		try{
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.enableNoDataError();
-			query.find("AA");
-			fail();
-		}catch(UnexpectedNoDataFoundException une){
-			une.printStackTrace();
-		}
-	}
-	/**
-	 * 条件追加
-	 */
-	@Test
-	public void findAny(){
-		setUpData("TEST.xls");
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).eq(TEST,"1");
-		TestEntity result = query.findAny();
-		per.getEntityManager().detach(result);
-		result.setAttr("test");
-		result = query.findAny();
-		assertEquals("3",result.getAttr());
-	}
-	
-	/**
-	 * 条件追加 更新
-	 */
-	@Test
-	public void findAnyDisableDetach(){
-		setUpData("TEST.xls");
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).eq(TEST,"1");
-		TestEntity result = query.findAny();
-		result.setAttr("test");
-		result = query.findAny();
-		assertEquals("test",result.getAttr());
-	}
-	
-	/**
-	 * 0件シスチE��エラー
-	 */
-	@Test
-	public void findAnyNodataError(){
-		try{
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.enableNoDataError();
-			query.eq(TEST, "aaa");
-			query.findAny();
-			fail();
-		}catch(UnexpectedNoDataFoundException une){
-			une.printStackTrace();
-		}catch(Throwable t){
-			fail();
-		}
-	}
-	
+//	/**
+//	 * 0件シスチE��エラー
+//	 */
+//	@Test
+//	public void findNodataError(){
+//		try{
+//			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+//			query.enableNoDataError();
+//			query.find("AA");
+//			fail();
+//		}catch(UnexpectedNoDataFoundException une){
+//			une.printStackTrace();
+//		}
+//	}
 
-	/**
-	 * ANY褁E��件存在
-	 */
-	@Test
-	public void findAnyMultiResultError(){
-		setUpData("TEST.xls");
-		try{
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.findAny();
-			fail();
-		}catch(UnexpectedMultiResultException umre){
-			umre.printStackTrace();
-		}catch(Throwable t){
-			t.printStackTrace();
-			fail();
-		}
-	}
-
+	
+//	/**
+//	 * 0件シスチE��エラー
+//	 */
+//	@Test
+//	public void findAnyNodataError(){
+//		try{
+//			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+//			query.enableNoDataError();
+//			query.eq(TEST, "aaa");
+//			query.findAny();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException une){
+//			une.printStackTrace();
+//		}catch(Throwable t){
+//			fail();
+//		}
+//	}
 	
 	/**
 	 *  存在チェチE�� not 
@@ -367,32 +319,6 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		assertTrue(query.exists("1"));
-	}
-	
-	/**
-	 * ANY存在チェチE�� 
-	 */
-	@Test
-	public void existsByAny(){
-		setUpData("TEST.xls");
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);		
-		query.eq(TEST, "1");
-		assertTrue(query.existsByAny());
-	}
-	
-	/**
-	 * ANY褁E��件存在チェチE��
-	 */
-	@Test
-	public void existsByAnyMultiResultError(){
-		setUpData("TEST.xls");
-		try{
-			StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-			query.existsByAny();
-			fail();
-		}catch(UnexpectedMultiResultException umre){
-			umre.printStackTrace();
-		}
 	}
 	
 	/**
@@ -663,25 +589,6 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 			
 	}
 	
-	
-	/**
-	 * メチE��ージ持E��E
-	 */
-	@Test
-	public void existsMesasgeByAnyTrue(){
-		
-		TestEntity e = new TestEntity();
-		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.getEntityManager().persist(e);
-		
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
-		
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
-		assertTrue(query.eq(TEST, "200").existsByAny());
-		
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
-	}
-	
 	/**
 	 * メチE��ージ持E��E
 	 */
@@ -693,8 +600,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		per.getEntityManager().persist(entity);
 		
 		StrictQuery<DateEntity> query = ormQueryFactory.createStrictQuery(DateEntity.class);
-		DateEntity result = query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").findAny();
-		assertNull(result);
+		assertFalse(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").exists());
 	}
 	
 	/**

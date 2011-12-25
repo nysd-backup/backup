@@ -26,7 +26,7 @@ public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery>
 	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#getTotalResult()
 	 */
 	@Override
-	public <T> NativeResult<T> getTotalResult() {
+	public NativeResult getTotalResult() {
 		return delegate.getTotalResult();
 	}
 	
@@ -40,20 +40,11 @@ public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery>
 	/**
 	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#setFilter(kosmos.framework.sqlclient.api.free.ResultSetFilter)
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends NativeQuery> T setFilter(ResultSetFilter filter) {
 		delegate.setFilter(filter);
 		return (T)this;
 	}
 	
-	/**
-	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#setQueryTimeout(int)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends NativeQuery> T setQueryTimeout(int seconds) {
-		delegate.setQueryTimeout(seconds);
-		return (T)this;
-	}
 }

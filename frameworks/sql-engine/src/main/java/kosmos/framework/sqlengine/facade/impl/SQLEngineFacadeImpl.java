@@ -116,7 +116,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public int executeCount(QueryParameter<?> param,Connection con) {
+	public int executeCount(QueryParameter param,Connection con) {
 		
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = sqlBuilder.setCount(createSQL(param,bindList));
@@ -126,7 +126,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 
 		try{
 
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList, param.getTimeoutSeconds(),0);			
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList, param.getTimeoutSeconds(),0,param.getFetchSize());			
 			rs= selector.select(stmt);
 			
 			List<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class,null);
@@ -148,13 +148,13 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @see kosmos.framework.sqlengine.facade.SQLEngineFacade#executeQuery(kosmos.framework.sqlengine.facade.QueryParameter, java.sql.Connection)
 	 */
 	@Override
-	public <T> List<T> executeQuery(QueryParameter<T> param , Connection con){	
+	public <T> List<T> executeQuery(QueryParameter param , Connection con){	
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = createSQL(param,bindList);
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult()+param.getMaxSize());
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult()+param.getMaxSize(),param.getFetchSize());
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());
 			
@@ -171,7 +171,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @see kosmos.framework.sqlengine.facade.SQLEngineFacade#executeFetch(kosmos.framework.sqlengine.facade.QueryParameter, java.sql.Connection)
 	 */
 	@Override
-	public <T> List<T> executeFetch(QueryParameter<T> param,Connection con) {
+	public <T> List<T> executeFetch(QueryParameter param,Connection con) {
 
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = createSQL(param,bindList);
@@ -179,12 +179,12 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
 		try{							
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult() + param.getMaxSize());	
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult() + param.getMaxSize(),param.getFetchSize());	
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());			
 			
 			//ResultFetch用オブジェクトに返却
-			RecordHandler<T> handler = recordHandlerFactory.create(param.getResultType(), rs);								
+			RecordHandler handler = recordHandlerFactory.create(param.getResultType(), rs);								
 			return new LazyList<T>(rs,handler,exceptionHandler);
 			
 		}catch(Throwable sqle){
@@ -196,14 +196,14 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @see kosmos.framework.sqlengine.facade.SQLEngineFacade#executeTotalQuery(kosmos.framework.sqlengine.facade.QueryParameter, java.sql.Connection)
 	 */
 	@Override
-	public <T> QueryResult<T> executeTotalQuery(QueryParameter<T> param,Connection con) {
+	public QueryResult executeTotalQuery(QueryParameter param,Connection con) {
 		List<Object> bindList = new ArrayList<Object>();			
 		String query = createSQL(param,bindList);
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
 			
-			stmt = provider.createStatement(param.getSqlId() ,con, query, bindList,param.getTimeoutSeconds(),0);
+			stmt = provider.createStatement(param.getSqlId() ,con, query, bindList,param.getTimeoutSeconds(),0,param.getFetchSize());
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());
 			
@@ -228,7 +228,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		PreparedStatement stmt = null;
 		
 		try{
-			stmt = provider.createStatement(param.getSqlId(),con, executingSql, bindList,param.getTimeoutSeconds(),0);	
+			stmt = provider.createStatement(param.getSqlId(),con, executingSql, bindList,param.getTimeoutSeconds(),0,0);	
 			return updater.update(stmt);
 		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);

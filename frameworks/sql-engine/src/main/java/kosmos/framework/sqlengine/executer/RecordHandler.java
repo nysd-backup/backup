@@ -11,11 +11,11 @@ import java.sql.ResultSet;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface RecordHandler<T> {
+public interface RecordHandler {
 	
 	/**
 	 * @param rs the rs
 	 * @return the result 
 	 */
-	public T getRecord(ResultSet rs);
+	public <T> T getRecord(ResultSet rs);
 }

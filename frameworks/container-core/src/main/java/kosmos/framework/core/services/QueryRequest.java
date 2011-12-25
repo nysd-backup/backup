@@ -17,7 +17,6 @@ import kosmos.framework.sqlclient.api.free.ResultSetFilter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@SuppressWarnings("rawtypes")
 public class QueryRequest implements Serializable{
 
 	private static final long serialVersionUID = 1L;

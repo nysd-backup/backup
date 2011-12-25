@@ -3,11 +3,15 @@
  */
 package kosmos.framework.service.core.logics;
 
+import java.util.Collection;
 import java.util.List;
 
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.message.ErrorMessage;
+import kosmos.framework.core.exception.UnexpectedDataFoundException;
+import kosmos.framework.core.exception.UnexpectedMultiResultException;
+import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.TransactionManagingContext;
@@ -22,14 +26,62 @@ import kosmos.framework.service.core.transaction.TransactionManagingContext;
 public class Assertion {
 	
 	/**
+	 * Tests the data is single result.
+	 * 
+	 * @param collection the collection
+	 */
+	public Assertion assertSingleResult(Collection<?> collection){
+		if(collection != null && !collection.isEmpty() && collection.size() > 1){
+			throw new UnexpectedMultiResultException("result size is " + collection.size());
+		}
+		return this;
+	}
+	
+	/**
+	 * Tests the data exists.
+	 * 
+	 * @param collection the collection
+	 */
+	public Assertion assertEmpty(Collection<?> collection){
+		if(collection != null && ! collection.isEmpty()){
+			throw new UnexpectedDataFoundException();
+		}
+		return this;
+	}
+	
+	/**
+	 * Tests the data exists.
+	 * 
+	 * @param collection the collection
+	 */
+	public Assertion assertExists(Collection<?> collection){
+		if(collection == null || collection.isEmpty()){
+			throw new UnexpectedNoDataFoundException();
+		}
+		return this;
+	}
+	
+	/**
+	 * Tests the data exists.
+	 * 
+	 * @param collection the collection
+	 */
+	public Assertion assertExists(Object value){
+		if(value == null ){
+			throw new UnexpectedNoDataFoundException();
+		}
+		return this;
+	}
+	
+	/**
 	 * Fails the service.
 	 * 
 	 * @param bean the MessageBean
 	 * @throws BusinessException the exception
 	 */
-	public void fail(MessageBean bean) {
+	public void bizError(MessageBean bean) {
 		addError(bean);
-		fail();
+		bizError();
 	}
 		
 	/**
@@ -37,7 +89,7 @@ public class Assertion {
 	 * 
 	 * @throws BusinessException the exception
 	 */
-	public void fail() {
+	public void bizError() {
 		throw ServiceLocator.createDefaultBusinessException();
 	}
 		
@@ -46,12 +98,13 @@ public class Assertion {
 	 * 
 	 * @throws BusinessException the exception
 	 */
-	public void assertSuccess() {	
+	public Assertion probablySuccess() {	
 		TransactionManagingContext context = (TransactionManagingContext)ServiceContext.getCurrentInstance();
 		boolean isRollbackOnly = context.getCurrentUnitOfWork().isRollbackOnly();
 		if(isRollbackOnly){
-			fail();
+			bizError();
 		}
+		return this;
 	}
 	
 	/**
@@ -61,13 +114,14 @@ public class Assertion {
 	 * @param result the result
 	 * @throws BusinessException the exception
 	 */
-	public void assertLessMax(MessageBean bean ,List<?> result , int maxSize){
+	public Assertion probablyLessThanLimit(MessageBean bean ,List<?> result , int limit){
 		if(result == null || result.isEmpty()){
-			return;
+			return this;
 		}
-		if( result.size() > maxSize ){
-			fail(bean);
+		if( result.size() > limit ){
+			bizError(bean);
 		}
+		return this;
 	}
 		
 	/**
@@ -77,10 +131,11 @@ public class Assertion {
 	 * @param result the result
 	 * @throws BusinessException the exception
 	 */
-	public void assertExists(MessageBean bean ,List<?> result){
+	public Assertion probablyExists(MessageBean bean ,Collection<?> result){
 		if( result == null || result.isEmpty() ){
-			fail(bean);
+			bizError(bean);
 		}
+		return this;
 	}
 	
 	/**
@@ -90,10 +145,11 @@ public class Assertion {
 	 * @param result the result
 	 * @throws BusinessException the exception
 	 */
-	public void assertEmpty(MessageBean bean ,List<?> result){
+	public Assertion probablyEmpty(MessageBean bean ,Collection<?> result){
 		if( result != null && ! result.isEmpty() ){
-			fail(bean);
+			bizError(bean);
 		}
+		return this;
 	}
 	
 	/**
@@ -102,10 +158,11 @@ public class Assertion {
 	 * @param result the result
 	 * @throws BusinessException the exception
 	 */
-	public void assertExists(MessageBean bean ,Object value){
+	public Assertion probablyExists(MessageBean bean ,Object value){
 		if( value == null){
-			fail(bean);
+			bizError(bean);
 		}
+		return this;
 	}
 	
 	/**
@@ -115,17 +172,18 @@ public class Assertion {
 	 * @param result the result
 	 * @throws BusinessException the exception
 	 */
-	public void assertNull(MessageBean bean ,Object value){
+	public Assertion probablyEmpty(MessageBean bean ,Object value){
 		if( value != null){
-			fail(bean);
+			bizError(bean);
 		}
+		return this;
 	}
 	
 	/**
 	 * @param bean the MessageBean
 	 */
 	private void addError(MessageBean bean) {
-		String message = ServiceLocator.createDefaultMessageBuilder().load(bean);
-		ServiceContext.getCurrentInstance().addError((ErrorMessage)bean.getMessage(), message);
+		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean);
+		ServiceContext.getCurrentInstance().addError(result);
 	}
 }

@@ -3,6 +3,8 @@
  */
 package kosmos.framework.core.exception;
 
+import kosmos.framework.core.message.Messages;
+
 
 /**
  * The unexpected exception thrown if the multiple result is found.
@@ -18,15 +20,9 @@ public class UnexpectedMultiResultException extends SystemException{
 	 * @param message the message
 	 * @param cause the cause
 	 */
-	public UnexpectedMultiResultException(String message, Throwable cause) {
-		super(message, cause);
+	public UnexpectedMultiResultException(String message) {
+		super(message,Messages.MSG_SYS_UNEXPECTED_MULTI_DATA_FOUND);
 	}
 	
-	/**
-	 * @param message the message
-	 */
-	public UnexpectedMultiResultException(String message) {
-		super(message);
-	}
 
 }

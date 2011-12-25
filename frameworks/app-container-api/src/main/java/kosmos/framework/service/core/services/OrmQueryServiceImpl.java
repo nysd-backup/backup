@@ -11,9 +11,9 @@ import javax.persistence.CacheStoreMode;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.core.services.OrmQueryService;
-import kosmos.framework.jpqlclient.api.PersistenceHints;
 import kosmos.framework.service.core.activation.ServiceLocator;
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.PersistenceHints;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 
 /**
@@ -32,68 +32,49 @@ public class OrmQueryServiceImpl<T> implements OrmQueryService<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#find(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
+	 * @see kosmos.framework.core.services.OrmQueryService#find(kosmos.framework.sqlclient.api.orm.OrmQueryContext, java.lang.Object[])
 	 */
 	@Override
-	public T find(OrmCondition<T> request, Object[] pks) {
+	public T find(OrmQueryContext<T> request, Object[] pks) {
 		StrictQuery<T> query = createStrictQuery(request);
 		return query.find(pks);
 	}
 
 	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#findAny(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#getResultList(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
 	 */
 	@Override
-	public T findAny(OrmCondition<T> request) {
-		StrictQuery<T> query = createStrictQuery(request);
-		return query.findAny();
-	}
-
-	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#getResultList(kosmos.framework.sqlclient.api.orm.OrmCondition)
-	 */
-	@Override
-	public List<T> getResultList(OrmCondition<T> request) {		
+	public List<T> getResultList(OrmQueryContext<T> request) {		
 		StrictQuery<T> query = createStrictQuery(request);
 		return query.getResultList();
 	}
 
 	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#getSingleResult(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#getSingleResult(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
 	 */
 	@Override
-	public T getSingleResult(OrmCondition<T> request) {
+	public T getSingleResult(OrmQueryContext<T> request) {
 		StrictQuery<T> query = createStrictQuery(request);
 		return query.getSingleResult();
 	}
 
 	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmCondition)
+	 * @see kosmos.framework.core.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
 	 */
 	@Override
-	public boolean exists(OrmCondition<T> request) {
+	public boolean exists(OrmQueryContext<T> request) {
 		StrictQuery<T> query = createStrictQuery(request);
 		return query.exists();
 	}
 
 	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmCondition, java.lang.Object[])
+	 * @see kosmos.framework.core.services.OrmQueryService#exists(kosmos.framework.sqlclient.api.orm.OrmQueryContext, java.lang.Object[])
 	 */
 	@Override
-	public boolean exists(OrmCondition<T> request, Object[] pks) {
+	public boolean exists(OrmQueryContext<T> request, Object[] pks) {
 		StrictQuery<T> query = createStrictQuery(request);
 		return query.exists(pks);
 	}
-
-	/**
-	 * @see kosmos.framework.core.services.OrmQueryService#existsByAny(kosmos.framework.sqlclient.api.orm.OrmCondition)
-	 */
-	@Override
-	public boolean existsByAny(OrmCondition<T> request) {
-		StrictQuery<T> query = createStrictQuery(request);
-		return query.existsByAny();
-	}
-
 	
 	/**
 	 * Creates the query.
@@ -101,7 +82,7 @@ public class OrmQueryServiceImpl<T> implements OrmQueryService<T>{
 	 * @return the query
 	 */
 	@SuppressWarnings("unchecked")
-	protected StrictQuery<T> createStrictQuery(OrmCondition<T> request) {
+	protected StrictQuery<T> createStrictQuery(OrmQueryContext<T> request) {
 		StrictQuery<T> query = getQueryFactory().createStrictQuery(request.getEntityClass());		
 		query = StrictQuery.class.cast(query.setCondition(request));
 		query.setHint(PersistenceHints.CACHE_STORE_MODE, CacheStoreMode.BYPASS);

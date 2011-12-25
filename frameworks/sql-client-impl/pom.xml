@@ -26,5 +26,16 @@
 		    <version>${framework.sql.client.api.version}</version>
 		    <scope>compile</scope>
 		</dependency>					
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>javax.persistence</artifactId>
+		    <version>${jpa.version}</version>
+		    <scope>provided</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>kosmos.framework</groupId>
+		    <artifactId>utility</artifactId>
+		    <version>${framework.utility.version}</version>		  
+		</dependency>	
 	</dependencies>
 </project>

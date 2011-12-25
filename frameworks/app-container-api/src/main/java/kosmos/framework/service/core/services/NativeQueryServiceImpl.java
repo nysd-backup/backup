@@ -4,6 +4,7 @@
 package kosmos.framework.service.core.services;
 
 import java.util.List;
+import java.util.Map;
 
 import kosmos.framework.core.services.NativeQueryService;
 import kosmos.framework.core.services.QueryRequest;
@@ -45,7 +46,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	/**
 	 * @see kosmos.framework.core.services.NativeQueryService#getTotalResult(kosmos.framework.core.services.QueryRequest)
 	 */
-	public <T> kosmos.framework.sqlclient.api.free.NativeResult<T> getTotalResult(QueryRequest request) {
+	public kosmos.framework.sqlclient.api.free.NativeResult getTotalResult(QueryRequest request) {
 		AbstractNativeQuery query = setParameters(request,createQuery(request));
 		return query.getTotalResult();
 	}
@@ -63,8 +64,7 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	 * @see kosmos.framework.core.services.NativeQueryService#exists(kosmos.framework.core.services.QueryRequest)
 	 */
 	public boolean exists(QueryRequest request) {
-		AbstractNativeQuery query = setParameters(request,createQuery(request));
-		return query.exists();
+		return getSingleResult(request) != null;
 	}
 
 	/**
@@ -73,7 +73,23 @@ public class NativeQueryServiceImpl implements NativeQueryService{
 	 * @return クエリ
 	 */
 	private AbstractNativeQuery setParameters(QueryRequest request,AbstractNativeQuery query){
-		return ParameterConverter.setParameters(request, query);		
+		//Branch
+		for(Map.Entry<String, Object> e : request.getBranchParam().entrySet()){
+			query.setBranchParameter(e.getKey(), e.getValue());
+		}
+
+		//Param
+		for(Map.Entry<String, Object> e : request.getParam().entrySet()){
+			String key = e.getKey();
+			query.setParameter(key, e.getValue());
+		}
+		query.setFirstResult(request.getFirstResult());
+		query.setMaxResults(request.getMaxSize());
+		Map<String,Object> hint = request.getHint();
+		for(Map.Entry<String, Object> h : hint.entrySet()){
+			query.setHint(h.getKey(),h.getValue());
+		}
+		return query;	
 	}
 
 	/**

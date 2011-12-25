@@ -40,7 +40,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 	/**
 	 * @see kosmos.framework.sqlengine.executer.RecordHandlerFactory#create(java.lang.Class, java.sql.ResultSet)
 	 */
-	public <T> RecordHandler<T> create(Class<T> type , ResultSet rs)throws SQLException {
+	public RecordHandler create(Class<?> type , ResultSet rs)throws SQLException {
 
 		ResultSetMetaData metaData = rs.getMetaData();
 		int columnCount = metaData.getColumnCount();
@@ -54,7 +54,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 				columnLabels[i] = metaData.getColumnLabel(i + 1);		
 				columnType[i] = metaData.getColumnType(i + 1);
 			}
-			return new MapRecordHandlerImpl<T>(type, columnLabels, columnType,converter);
+			return new MapRecordHandlerImpl(type, columnLabels, columnType,converter);
 						
 		//Bean	
 		}else{
@@ -72,7 +72,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 			for (int i = 0; i < columnCount; i++) {
 				columnLabels[i] = toJavaString(metaData.getColumnLabel(i + 1));		
 			}
-			return new BeanRecordHandlerImpl<T>(type, columnLabels, methodMap,converter);
+			return new BeanRecordHandlerImpl(type, columnLabels, methodMap,converter);
 		}
 		
 	}

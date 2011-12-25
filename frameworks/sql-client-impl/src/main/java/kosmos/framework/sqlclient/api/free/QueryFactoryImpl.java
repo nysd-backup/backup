@@ -3,17 +3,13 @@
  */
 package kosmos.framework.sqlclient.api.free;
 
+import javax.persistence.QueryHint;
+
 import kosmos.framework.sqlclient.api.ConnectionProvider;
-import kosmos.framework.sqlclient.api.EmptyHandler;
-import kosmos.framework.sqlclient.api.free.AbstractFreeQuery;
-import kosmos.framework.sqlclient.api.free.AbstractUpdate;
-import kosmos.framework.sqlclient.api.free.AnonymousQuery;
-import kosmos.framework.sqlclient.api.free.FreeQuery;
-import kosmos.framework.sqlclient.api.free.FreeUpdate;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
-import kosmos.framework.sqlclient.internal.impl.InternalQueryImpl;
-import kosmos.framework.sqlclient.internal.impl.QueryEngineImpl;
-import kosmos.framework.sqlclient.internal.impl.UpdateEngineImpl;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
+import kosmos.framework.sqlclient.internal.free.impl.InternalQueryImpl;
+import kosmos.framework.sqlclient.internal.free.impl.LocalQueryEngineImpl;
+import kosmos.framework.sqlclient.internal.free.impl.LocalUpdateEngineImpl;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
 import kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
@@ -28,9 +24,6 @@ public class QueryFactoryImpl implements QueryFactory{
 	/** The ConnectionProvider */
 	private ConnectionProvider connectionProvider;
 	
-	/** the EmptyHandler */
-	private EmptyHandler emptyHandler;
-	
 	/** the SQLEngineFacade */
 	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
 
@@ -39,13 +32,6 @@ public class QueryFactoryImpl implements QueryFactory{
 	 */
 	public void setSqlEngineFacade(SQLEngineFacade facade){
 		this.engineFacade = facade;
-	}
-	
-	/**
-	 * @param emptyHandler the emptyHandler to set
-	 */
-	public void setEmptyHandler(EmptyHandler emptyHandler){
-		this.emptyHandler = emptyHandler;
 	}
 	
 	/**
@@ -58,13 +44,16 @@ public class QueryFactoryImpl implements QueryFactory{
 	/**
 	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createQuery(java.lang.Class)
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public <K extends FreeQuery, T extends AbstractFreeQuery<K>> T createQuery(Class<T> queryClass) {
 		AnonymousQuery aq = queryClass.getAnnotation(AnonymousQuery.class);		
 
-		InternalQueryImpl query = new InternalQueryImpl(false,aq.query(),queryClass.getSimpleName(),connectionProvider, aq.resultClass(),engineFacade);
-		K engine = (K)new QueryEngineImpl(query,emptyHandler);
+		InternalQuery query = new InternalQueryImpl(false,aq.query(),queryClass.getSimpleName(),connectionProvider, aq.resultClass(),engineFacade);
+		K engine = (K)new LocalQueryEngineImpl(query);
+		for(QueryHint hint : aq.hints()){
+			engine.setHint(hint.name(), hint.value());
+		}
 		T q;
 		try {
 			q = queryClass.newInstance();
@@ -78,13 +67,16 @@ public class QueryFactoryImpl implements QueryFactory{
 	/**
 	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createUpdate(java.lang.Class)
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public <K extends FreeUpdate, T extends AbstractUpdate<K>> T createUpdate(Class<T> updateClass) {
 		AnonymousQuery aq = updateClass.getAnnotation(AnonymousQuery.class);		
 
-		InternalQueryImpl query = new InternalQueryImpl(false,aq.query(),updateClass.getSimpleName(),connectionProvider, null,engineFacade);
-		K engine = (K)new UpdateEngineImpl(query);
+		InternalQuery query = new InternalQueryImpl(false,aq.query(),updateClass.getSimpleName(),connectionProvider, null,engineFacade);
+		K engine = (K)new LocalUpdateEngineImpl(query);
+		for(QueryHint hint : aq.hints()){
+			engine.setHint(hint.name(), hint.value());
+		}
 		T q;
 		try {
 			q = updateClass.newInstance();

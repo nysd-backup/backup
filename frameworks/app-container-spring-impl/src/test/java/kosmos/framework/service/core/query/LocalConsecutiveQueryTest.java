@@ -7,10 +7,10 @@ import java.util.List;
 
 import kosmos.framework.core.services.ConsecutiveQueryService;
 import kosmos.framework.core.services.QueryRequest;
-import kosmos.framework.jpqlclient.api.orm.JPAOrmCondition;
 import kosmos.framework.service.test.SampleNativeQuery;
 import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.TestEntity;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class LocalConsecutiveQueryTest extends ServiceUnit{
 		r2.setParam("test",45);
 		r2.setBranchParam("test",45);		
 		
-		JPAOrmCondition<TestEntity> c = new JPAOrmCondition<TestEntity>(TestEntity.class);
+		OrmQueryContext<TestEntity> c = new OrmQueryContext<TestEntity>(TestEntity.class);
 		
 		List<List<Object>> results = service.getResultLists(r1,r2,c);
 		List<Object> e1 = results.get(0);

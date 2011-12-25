@@ -9,7 +9,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.service.core.CachableConst;
@@ -87,35 +86,35 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		context.setRollbackOnly();	
 	}
 	
-	/**
-	 * 結果0件シスチE��エラー
-	 */
+//	/**
+//	 * 結果0件シスチE��エラー
+//	 */
+//	
+//	public void nodataError(){
+//		setUpData("TEST.xls");
+//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class).enableNoDataError();
+//		query.setAttr2(500).setTest("1").setArc("500");
+//		
+//		try{
+//			query.getResultList();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException e){
+//			e.printStackTrace();
+//		}
+//		context.setRollbackOnly();	
+//	}
 	
-	public void nodataError(){
-		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class).enableNoDataError();
-		query.setAttr2(500).setTest("1").setArc("500");
-		
-		try{
-			query.getResultList();
-			fail();
-		}catch(UnexpectedNoDataFoundException e){
-			e.printStackTrace();
-		}
-		context.setRollbackOnly();	
-	}
-	
-	/**
-	 * exists
-	 */
-	
-	public void exists(){
-		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-		query.setAttr2(500).setTest("1");
-		assertTrue(query.exists());
-		context.setRollbackOnly();	
-	}
+//	/**
+//	 * exists
+//	 */
+//	
+//	public void exists(){
+//		setUpData("TEST.xls");
+//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
+//		query.setAttr2(500).setTest("1");
+//		assertTrue(query.exists());
+//		context.setRollbackOnly();	
+//	}
 
 	/**
 	 * getSingleResult
@@ -248,7 +247,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setMaxResults(1);
-		NativeResult<SampleNativeResult> result = query.getTotalResult();
+		NativeResult result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertTrue(result.isLimited());
 		assertEquals(1,result.getResultList().size());

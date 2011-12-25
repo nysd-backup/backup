@@ -3,7 +3,6 @@
  */
 package kosmos.framework.service.core.transaction;
 
-import kosmos.framework.service.core.transaction.TransactionManagingContext;
 
 /**
  * A context.
@@ -12,6 +11,5 @@ import kosmos.framework.service.core.transaction.TransactionManagingContext;
  * @version 2011/08/31 created.
  */
 public class ServiceContextImpl extends TransactionManagingContext{
-	
 	
 }

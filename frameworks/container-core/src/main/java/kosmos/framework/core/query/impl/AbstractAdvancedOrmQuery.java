@@ -6,11 +6,9 @@ package kosmos.framework.core.query.impl;
 import javax.persistence.LockModeType;
 
 import kosmos.framework.core.query.AdvancedOrmQuery;
-import kosmos.framework.jpqlclient.api.PersistenceHints;
-import kosmos.framework.jpqlclient.api.orm.JPAOrmCondition;
-import kosmos.framework.jpqlclient.api.orm.JPAOrmQuery;
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 
 /**
@@ -40,15 +38,6 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#enableNoDataError()
-	 */		
-	@Override
-	public <Q extends AdvancedOrmQuery<T>> Q enableNoDataError() {
-		delegate.enableNoDataError();
-		return (Q)this;
-	}
-	
-	/**
 	 * @see kosmos.framework.core.query.AdvancedOrmQuery#setPessimisticReadNoWait()
 	 */
 	@Override
@@ -63,11 +52,7 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	 */
 	@Override
 	public <Q extends AdvancedOrmQuery<T>> Q setHint(String key, Object value){
-		if(delegate instanceof JPAOrmQuery){
-			((JPAOrmQuery<T>)delegate).setHint(key, value);
-		}else{
-			throw new UnsupportedOperationException();
-		}
+		delegate.setHint(key, value);
 		return (Q)this;
 	}
 	
@@ -76,11 +61,7 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	 */
 	@Override
 	public <Q extends AdvancedOrmQuery<T>> Q setLockMode(LockModeType lockModeType) {
-		if(delegate instanceof JPAOrmQuery){
-			((JPAOrmQuery<T>)delegate).setLockMode(lockModeType);
-		}else{
-			throw new UnsupportedOperationException();
-		}
+		delegate.setLockMode(lockModeType);
 		return (Q)this;
 	}
 	
@@ -111,23 +92,11 @@ public abstract class AbstractAdvancedOrmQuery<T> implements AdvancedOrmQuery<T>
 	}
 
 	/**
-	 * @see kosmos.framework.core.query.AdvancedOrmQuery#exists(java.lang.Object[])
+	 * @see kosmos.framework.core.query.AdvancedOrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
 	 */
 	@Override
-	public boolean exists(Object... pks){
-		return delegate.exists(pks);
-	}
-
-	/**
-	 * @see kosmos.framework.core.query.AdvancedOrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmCondition)
-	 */
-	@Override
-	public <Q extends AdvancedOrmQuery<T>> Q setCondition(OrmCondition<T> condition) {
-		if(condition instanceof JPAOrmCondition){
-			((JPAOrmQuery<T>)delegate).setCondition((JPAOrmCondition<T>)condition);
-		}else{
-			throw new UnsupportedOperationException();
-		}
+	public <Q extends AdvancedOrmQuery<T>> Q setCondition(OrmQueryContext<T> condition) {
+		delegate.setCondition(condition);
 		return (Q)this;
 	}
 

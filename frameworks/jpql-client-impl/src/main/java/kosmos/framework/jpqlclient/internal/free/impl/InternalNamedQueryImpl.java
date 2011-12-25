@@ -12,7 +12,10 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
-import kosmos.framework.jpqlclient.internal.free.AbstractInternalJPAQuery;
+import kosmos.framework.sqlclient.api.free.NativeResult;
+import kosmos.framework.sqlclient.api.free.ResultSetFilter;
+import kosmos.framework.sqlclient.internal.free.AbstractInternalQuery;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
 import kosmos.framework.sqlengine.builder.ConstAccessor;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 
@@ -23,7 +26,10 @@ import kosmos.framework.sqlengine.builder.SQLBuilder;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
+public class InternalNamedQueryImpl extends AbstractInternalQuery implements InternalQuery{
+	
+	/** the EntityManager */
+	protected final EntityManager em;
 
 	/** the flush mode */
 	protected FlushModeType flush = null;
@@ -50,10 +56,11 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	 * @param useRowSql true:dont analyze template 
 	 */
 	public InternalNamedQueryImpl(String name ,String sql, EntityManager em,String queryId,boolean useRowSql,SQLBuilder builder,ConstAccessor accessor) {
-		super(useRowSql,sql, em, queryId);		
+		super(useRowSql,sql,queryId);		
 		this.name = name;
 		this.builder = builder;
 		this.accessor = accessor;
+		this.em = em;
 	}
 
 	/**
@@ -73,7 +80,7 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#count()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#count()
 	 */
 	@Override
 	public int count(){
@@ -81,25 +88,26 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	}	
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#getResultList()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getResultList()
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@Override
-	public List getResultList() {
+	public <T> List<T> getResultList() {
 		return setRange(mapping( createQuery())).getResultList();
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#getSingleResult()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getSingleResult()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object getSingleResult() {
+	public <T> T getSingleResult() {
 		setMaxResults(1);
-		return setRange(mapping(createQuery())).getSingleResult();
+		return (T)setRange(mapping(createQuery())).getSingleResult();
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#executeUpdate()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#executeUpdate()
 	 */
 	@Override
 	public int executeUpdate() {
@@ -173,7 +181,7 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 	 * @return the query
 	 */
 	protected Query mapping(Query query){
-		for(Map.Entry<String, Object> h : hints.entrySet()){		
+		for(Map.Entry<String, Object> h : getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}
 		if(lock != null){
@@ -199,6 +207,30 @@ public class InternalNamedQueryImpl extends AbstractInternalJPAQuery {
 			query.setFirstResult(firstResult);
 		}
 		return query;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setFilter(kosmos.framework.sqlclient.api.free.ResultSetFilter)
+	 */
+	@Override
+	public void setFilter(ResultSetFilter filter) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getTotalResult()
+	 */
+	@Override
+	public NativeResult getTotalResult() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getFetchResult()
+	 */
+	@Override
+	public <T> List<T> getFetchResult() {
+		throw new UnsupportedOperationException();
 	}
 
 }

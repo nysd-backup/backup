@@ -3,7 +3,7 @@
  */
 package kosmos.framework.core.query;
 
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 /**
  * The ORM updater.
@@ -18,7 +18,7 @@ public interface AdvancedOrmUpdate<T> {
 	 * @param <Q> the type
 	 * @param condition the condition to set
 	 */
-	public <Q extends AdvancedOrmUpdate<T>> Q setCondition(OrmCondition<T> condition);
+	public <Q extends AdvancedOrmUpdate<T>> Q setCondition(OrmQueryContext<T> condition);
 	
 	/**
 	 * @param <T> the type

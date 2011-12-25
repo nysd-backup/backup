@@ -22,7 +22,7 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the hit count
 	 */
-	public int executeCount(QueryParameter<?> param , Connection con);
+	public int executeCount(QueryParameter param , Connection con);
 	
 	/**
 	 * Executes the SELECT.
@@ -32,7 +32,7 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the result
 	 */
-	public <T> List<T> executeQuery(QueryParameter<T> param , Connection con);
+	public <T> List<T> executeQuery(QueryParameter param , Connection con);
 	
 	/**
 	 * Executes the SELECT and fetch the result. 
@@ -42,7 +42,7 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the result
 	 */
-	public <T> List<T> executeFetch(QueryParameter<T> param , Connection con);
+	public <T> List<T> executeFetch(QueryParameter param , Connection con);
 	
 	/**
 	 * Executes the SELECT and get the hit count.
@@ -52,7 +52,7 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the result
 	 */
-	public <T> QueryResult<T> executeTotalQuery(QueryParameter<T> param , Connection con);
+	public QueryResult executeTotalQuery(QueryParameter param , Connection con);
 	
 	/**
 	 * Executes the UPDATE/DELETE/INSERT.

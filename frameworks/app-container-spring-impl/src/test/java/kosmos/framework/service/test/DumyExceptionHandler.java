@@ -22,7 +22,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 
 	protected Object handleOptimisticLockException(OptimisticLockException e){
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-
+		
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
 		}else{
@@ -44,7 +44,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 	
 	protected Object handlePessimisticLockException(PessimisticLockException e){
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-
+		
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
 		}else{

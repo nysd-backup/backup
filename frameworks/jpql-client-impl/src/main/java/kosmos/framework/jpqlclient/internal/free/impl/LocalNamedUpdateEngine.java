@@ -4,8 +4,9 @@
 package kosmos.framework.jpqlclient.internal.free.impl;
 
 import kosmos.framework.jpqlclient.api.free.NamedUpdate;
+import kosmos.framework.sqlclient.api.Update;
 import kosmos.framework.sqlclient.api.free.FreeUpdate;
-import kosmos.framework.sqlclient.internal.AbstractLocalUpdateEngine;
+import kosmos.framework.sqlclient.internal.free.AbstractLocalUpdateEngine;
 
 /**
  * The named update engine.
@@ -32,20 +33,20 @@ public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNa
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.api.free.NamedUpdate#setHint(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public <T extends NamedUpdate> T setHint(String arg0, Object arg1) {
-		delegate.setHint(arg0,arg1);
-		return (T)this;
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.free.FreeUpdate#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeUpdate> T setBranchParameter(String arg0, Object arg1) {
 		delegate.setBranchParameter(arg0, arg1);
+		return (T)this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#setHint(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public <T extends Update> T setHint(String arg0, Object arg1) {
+		delegate.setHint(arg0,arg1);
 		return (T)this;
 	}
 }

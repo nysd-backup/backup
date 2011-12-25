@@ -53,16 +53,16 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void nodataError(){
-		bean().nodataError();
+		//bean().nodataError();
 	}
-	
-	/**
-	 * exists
-	 */
-	@Test
-	public void exists(){
-		bean().exists();
-	}
+//	
+//	/**
+//	 * exists
+//	 */
+//	@Test
+//	public void exists(){
+//		bean().exists();
+//	}
 	
 	/**
 	 * getSingleResult

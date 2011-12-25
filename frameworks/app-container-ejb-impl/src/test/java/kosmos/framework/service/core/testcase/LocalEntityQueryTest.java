@@ -102,7 +102,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void nodataError(){
-		bean().nodataError();
+		//bean().nodataError();
 	}
 	
 	/**
@@ -131,39 +131,11 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * 条件追加
-	 */
-	@Test
-	public void findAny(){
-		
-		bean().findAny();
-	}
-	
-	/**
-	 * 条件追加 更新
-	 */
-	@Test
-	public void findAnyDisableDetach(){
-		
-		bean().findAnyDisableDetach();
-	}
-	
-	/**
 	 * 0件シスチE��エラー
 	 */
 	@Test
 	public void findAnyNodataError(){
-		bean().findAnyNodataError();
-	}
-	
-
-	/**
-	 * ANY褁E��件存在
-	 */
-	@Test
-	public void findAnyMultiResultError(){
-		
-		bean().findAnyMultiResultError();
+		//bean().findAnyNodataError();
 	}
 
 	/**
@@ -191,24 +163,6 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void existsPK(){
 		
 		bean().existsPK();
-	}
-	
-	/**
-	 * ANY存在チェチE�� 
-	 */
-	@Test
-	public void existsByAny(){
-	
-		bean().existsByAny();
-	}
-	
-	/**
-	 * ANY褁E��件存在チェチE��
-	 */
-	@Test
-	public void existsByAnyMultiResultError(){
-		
-		bean().existsByAnyMultiResultError();
 	}
 	
 	/**
@@ -293,15 +247,6 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void invalidQueryPessimisticLockError(){	
 		bean().invalidQueryPessimisticLockError();
-	}
-	
-	
-	/**
-	 * メチE��ージ持E��E
-	 */
-	@Test
-	public void existsMesasgeByAnyTrue(){
-		bean().existsMesasgeByAnyTrue();
 	}
 	
 	/**

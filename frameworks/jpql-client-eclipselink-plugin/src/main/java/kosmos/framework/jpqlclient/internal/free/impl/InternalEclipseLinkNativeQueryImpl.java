@@ -11,10 +11,10 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import kosmos.framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery;
+import kosmos.framework.jpqlclient.internal.free.AbstractInternalJpaNativeQuery;
 import kosmos.framework.jpqlclient.internal.free.LazyList;
 import kosmos.framework.sqlclient.api.free.NativeResult;
-import kosmos.framework.sqlclient.internal.impl.DelegatingResultSetFilter;
+import kosmos.framework.sqlclient.internal.free.impl.DelegatingResultSetFilter;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
 import kosmos.framework.sqlengine.executer.RecordHandlerFactory;
@@ -36,7 +36,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * @author yoshida-n
  * @version	created.
  */
-public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANativeQuery<T>{
+public class InternalEclipseLinkNativeQueryImpl extends AbstractInternalJpaNativeQuery{
 
 	/** the ResultSetHandler */
 	private final ResultSetHandler handler;
@@ -64,7 +64,7 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 			String sql,
 			EntityManager em, 
 			String queryId, 
-			Class<T> resultType,
+			Class<?> resultType,
 			boolean useRowSql, 
 			SQLBuilder builder,
 			ResultSetHandler handler,
@@ -79,25 +79,16 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery#setQueryTimeout(int)
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getResultList()
 	 */
 	@Override
-	public void setQueryTimeout(int seconds) {
-		hints.put(QueryHints.JDBC_TIMEOUT, seconds);		
-	}
-	
-	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#getResultList()
-	 */
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List getResultList() {
+	public <T> List<T> getResultList() {
 		Query query = mapping(createQuery());	
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		ResultSet rs = cursor.getResultSet();
 		
 		try {
-			return handler.getResultList(rs, resultType, new DelegatingResultSetFilter<T>(filter));
+			return handler.getResultList(rs, resultType, new DelegatingResultSetFilter(filter));
 		}catch (Throwable e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
@@ -106,49 +97,48 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#getSingleResult()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getSingleResult()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public T getSingleResult() {
+	public <T> T getSingleResult() {
 		setMaxResults(1);
 		List<T> result = getResultList();
 		return result.isEmpty() ? null : result.get(0);
 	}
 	
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery#getTotalResult()
+	 * @see kosmos.framework.jpqlclient.internal.free.AbstractInternalJpaNativeQuery#getTotalResult()
 	 */
 	@Override
-	public NativeResult<T> getTotalResult(){
+	public NativeResult getTotalResult(){
 
 		Query query = mapping(createQuery());
 		query.setMaxResults(0);
 		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		ResultSet rs = cursor.getResultSet();
-		QueryResult<T> result;
+		QueryResult result;
 		try {
-			result = handler.getResultList(rs, resultType, new DelegatingResultSetFilter<T>(filter),getMaxResults(),getFirstResult());
+			result = handler.getResultList(rs, resultType, new DelegatingResultSetFilter(filter),getMaxResults(),getFirstResult());
 		}catch (Throwable e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
 			cursor.close();
 		}
-		return new NativeResult<T>(result.isLimited(),result.getResultList(),result.getHitCount());
+		return new NativeResult(result.isLimited(),result.getResultList(),result.getHitCount());
 		
 	}
 	
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.free.AbstractInternalJPANativeQuery#getFetchResult()
+	 * @see kosmos.framework.jpqlclient.internal.free.AbstractInternalJpaNativeQuery#getFetchResult()
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List getFetchResult(){
 		Query query = mapping(createQuery());		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
-			return new LazyList<T>(cursor, recordHandlerFactory.create(resultType, cursor.getResultSet()),exceptionHandler);
+			return new LazyList(cursor, recordHandlerFactory.create(resultType, cursor.getResultSet()),exceptionHandler);
 		} catch (Throwable e) {
 			cursor.close();
 			throw exceptionHandler.rethrow(e);
@@ -175,7 +165,7 @@ public class InternalEclipseLinkNativeQueryImpl<T> extends AbstractInternalJPANa
 	 */
 	protected Query mapping(Query query){
 				
-		for(Map.Entry<String, Object> h : hints.entrySet()){		
+		for(Map.Entry<String, Object> h : getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}		
 		if(firstResult > 0){

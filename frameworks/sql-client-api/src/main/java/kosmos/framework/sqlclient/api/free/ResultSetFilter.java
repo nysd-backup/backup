@@ -11,10 +11,10 @@ import java.io.Serializable;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface ResultSetFilter<T> extends Serializable{
+public interface ResultSetFilter extends Serializable{
 
 	/**
 	 * @param data the data of the one record
 	 */
-	public T edit(T data);
+	public <T> T edit(T data);
 }

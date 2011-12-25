@@ -8,9 +8,9 @@ import java.util.List;
 import javax.persistence.LockModeType;
 
 import kosmos.framework.jpqlclient.api.free.NamedQuery;
-import kosmos.framework.sqlclient.api.EmptyHandler;
+import kosmos.framework.sqlclient.api.Query;
 import kosmos.framework.sqlclient.api.free.FreeQuery;
-import kosmos.framework.sqlclient.internal.AbstractLocalQueryEngine;
+import kosmos.framework.sqlclient.internal.free.AbstractLocalQueryEngine;
 
 
 /**
@@ -22,20 +22,16 @@ import kosmos.framework.sqlclient.internal.AbstractLocalQueryEngine;
 @SuppressWarnings("unchecked")
 public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalNamedQueryImpl> implements NamedQuery{
 	
-	/** the EmptyHandler */
-	private final EmptyHandler emptyHandler;
-	
 	/**
 	 * @param delegate the delegate to set
 	 * @param handler the handler to set
 	 */
-	public LocalNamedQueryEngine(InternalNamedQueryImpl delegate , EmptyHandler handler){
+	public LocalNamedQueryEngine(InternalNamedQueryImpl delegate){
 		super(delegate);	
-		this.emptyHandler = handler;
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractLocalQueryEngine#setBranchParameter(java.lang.String, java.lang.Object)
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractLocalQueryEngine#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends FreeQuery> T setBranchParameter(String arg0, Object arg1){
@@ -58,11 +54,6 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	@Override
 	public <T> List<T> getResultList() {
 		List<T> result = delegate.getResultList();
-		if(result.isEmpty()){
-			if(nodataError){
-				emptyHandler.handleEmptyResult(delegate);
-			}
-		}
 		return result;
 	}
 
@@ -70,7 +61,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	 * @see kosmos.framework.jpqlclient.api.free.NamedQuery#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public <T extends FreeQuery> T setHint(String arg0, Object arg1) {
+	public <T extends Query> T setHint(String arg0, Object arg1) {
 		delegate.setHint(arg0, arg1);
 		return (T)this;
 	}

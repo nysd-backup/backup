@@ -37,7 +37,7 @@ public interface ResultSetHandler {
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	public <T> QueryResult<T> getResultList(ResultSet rs, Class<T> resultType,RecordFilter<T> filter,int maxSize,int firstResult)
+	public QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize,int firstResult)
 	throws SQLException ;
 	
 	/**
@@ -48,6 +48,6 @@ public interface ResultSetHandler {
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	public <T> List<T> getResultList(ResultSet rs, Class<T> resultType,RecordFilter<T> filter)
+	public <T> List<T> getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter)
 	throws SQLException ;
 }

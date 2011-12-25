@@ -10,8 +10,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.ResultSetFilter;
+import kosmos.framework.sqlclient.internal.free.AbstractInternalQuery;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 
 
@@ -21,10 +21,13 @@ import kosmos.framework.sqlengine.builder.SQLBuilder;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternalJPAQuery {
-
+public abstract class AbstractInternalJpaNativeQuery extends AbstractInternalQuery{
+	
 	/** the type of the result */
-	protected final Class<T> resultType;
+	protected final Class<?> resultType;
+	
+	/** the EntityManager */
+	protected final EntityManager em;
 	
 	/** 
 	 * the name of the query. 
@@ -36,7 +39,7 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 	protected final SQLBuilder builder;
 	
 	/** the filter for <code>ResultSet</code> */
-	protected ResultSetFilter<T> filter;
+	protected ResultSetFilter filter;
 	
 	/**
 	 * @param name the name
@@ -47,44 +50,24 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 	 * @param useRowSql the useRowSql
 	 * @param builder the builder
 	 */
-	public AbstractInternalJPANativeQuery(String name ,String sql,EntityManager em, String queryId, Class<T> resultType,boolean useRowSql,SQLBuilder builder) {
-		super(useRowSql,sql, em, queryId);		
+	public AbstractInternalJpaNativeQuery(String name ,String sql,EntityManager em, String queryId, Class<?> resultType,boolean useRowSql,SQLBuilder builder) {
+		super(useRowSql,sql,queryId);		
 		this.name = name;
 		this.resultType = resultType;
 		this.builder = builder;
+		this.em = em;
 	}
 	
 	/**
 	 * @param filter the filter to set
 	 * @return self
 	 */
-	public void setFilter(ResultSetFilter<T> filter){
+	public void setFilter(ResultSetFilter filter){
 		this.filter = filter;
 	}
 	
 	/**
-	 * @param seconds the JDBC timeout
-	 */
-	public abstract void setQueryTimeout(int seconds);
-	
-	/**
-	 * Fetch the result.
-	 * 
-	 * @return the result
-	 */
-	@SuppressWarnings("rawtypes")
-	public abstract List getFetchResult();
-
-	/**
-	 * Gets the total result.
-	 * 
-	 * @return the result
-	 */
-	public abstract NativeResult<T> getTotalResult();
-	
-	
-	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#count()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#count()
 	 */
 	@Override
 	public int count(){		
@@ -98,7 +81,7 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 		Query query = name != null ? createNamedQuery() : em.createNativeQuery(firingSql);
 		query = bindParmaeterToQuery(query, bindList);	
 		
-		for(Map.Entry<String, Object> h : hints.entrySet()){		
+		for(Map.Entry<String, Object> h : getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}
 		Object value = query.getSingleResult();
@@ -106,7 +89,7 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.AbstractInternalQuery#executeUpdate()
+	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#executeUpdate()
 	 */
 	@Override
 	public int executeUpdate() {
@@ -120,7 +103,7 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 		}
 		query = bindParmaeterToQuery(query, bindList);			
 		
-		for(Map.Entry<String, Object> h : hints.entrySet()){		
+		for(Map.Entry<String, Object> h : getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}	
 
@@ -135,7 +118,7 @@ public abstract class AbstractInternalJPANativeQuery<T> extends AbstractInternal
 	 */
 	protected Query createNamedQuery(){
 		Query query = em.createNamedQuery(firingSql);
-		for(Map.Entry<String, Object> h : hints.entrySet()){		
+		for(Map.Entry<String, Object> h : getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}		
 		if(firstResult > 0){

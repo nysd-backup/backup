@@ -3,6 +3,7 @@
  */
 package kosmos.framework.core.exception;
 
+
 /**
  * The system exception.
  *
@@ -15,7 +16,7 @@ public class SystemException extends RuntimeException{
 	private static final long serialVersionUID = 4928387597757529973L;
 	
 	/** the message code */
-	private int messageCode = -1;
+	private String messageId = null;
 	
 	/** the binding arguments */
 	private Object[] args;
@@ -24,8 +25,8 @@ public class SystemException extends RuntimeException{
 	 * @param messageCode the message code
 	 * @param args the arguments
 	 */
-	public SystemException(int messageCode , Object... args){
-		this.messageCode = messageCode;
+	public SystemException(String messageId , Object... args){
+		this.messageId = messageId;
 		this.args = args;
 	}
 	
@@ -35,9 +36,9 @@ public class SystemException extends RuntimeException{
 	 * @param messageCode the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String message , Throwable cause , int messageCode , Object... args){
+	public SystemException(String message , Throwable cause , String messageId , Object... args){
 		super(message,cause);
-		this.messageCode = messageCode;
+		this.messageId = messageId;
 		this.args = args;
 	}
 	/**
@@ -45,32 +46,17 @@ public class SystemException extends RuntimeException{
 	 * @param messageCode the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String message , int messageCode , Object... args){
+	public SystemException(String message , String messageId , Object... args){
 		super(message);
-		this.messageCode = messageCode;
+		this.messageId = messageId;
 		this.args = args;
-	}
-
-	/**
-	 * @param message the message
-	 * @param cause the cause
-	 */
-	public SystemException(String message , Throwable cause){
-		super(message,cause);
-	}
-	
-	/**
-	 * @param message the message
-	 */
-	public SystemException(String message){
-		super(message);
 	}
 	
 	/**
 	 * @return the message code
 	 */
-	public int getMessageCode(){
-		return this.messageCode;
+	public String getMessageId(){
+		return this.messageId;
 	}
 	
 	/**

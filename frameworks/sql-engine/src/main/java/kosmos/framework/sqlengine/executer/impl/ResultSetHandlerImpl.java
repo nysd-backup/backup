@@ -37,13 +37,13 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	 * @see kosmos.framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, kosmos.framework.sqlengine.executer.RecordFilter, int, int)
 	 */
 	@Override
-	public <T> QueryResult<T> getResultList(ResultSet resultSet, Class<T> resultType,RecordFilter<T> filter, int maxSize,int firstResult)
+	public QueryResult getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize,int firstResult)
 	throws SQLException{ 
 
 		int hitCount = 0;
-		List<T> result = new ArrayList<T>();			
+		List<Object> result = new ArrayList<Object>();			
 		boolean limitted = false;
-		RecordHandler<T> handler = factory.create(resultType, resultSet);
+		RecordHandler handler = factory.create(resultType, resultSet);
 		while (resultSet.next()) {
 			hitCount++;			
 			//最大件数超過していたら終了
@@ -59,7 +59,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 					}
 				}
 				// 1行の情報カラム取得
-				T row = handler.getRecord(resultSet);		
+				Object row = handler.getRecord(resultSet);		
 			
 				//必要に応じて加工
 				if( filter != null){
@@ -69,17 +69,17 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 			}			
 		}
 
-		return new QueryResult<T>(limitted, result, hitCount);
+		return new QueryResult(limitted, result, hitCount);
 	}
 
 	/**
 	 * @see kosmos.framework.sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, kosmos.framework.sqlengine.executer.RecordFilter)
 	 */
 	@Override
-	public <T> List<T> getResultList(ResultSet rs, Class<T> resultType,RecordFilter<T> filter) throws SQLException {
+	public <T> List<T> getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter) throws SQLException {
 		
 		List<T> result = new ArrayList<T>();				
-		RecordHandler<T> handler = factory.create(resultType, rs);
+		RecordHandler handler = factory.create(resultType, rs);
 		while (rs.next()) {			
 			// 1行の情報カラム取得
 			T row = handler.getRecord(rs);					

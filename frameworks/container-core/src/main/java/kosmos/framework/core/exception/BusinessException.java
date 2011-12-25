@@ -5,7 +5,7 @@ package kosmos.framework.core.exception;
 
 import java.io.Serializable;
 
-import kosmos.framework.core.dto.ReplyMessage;
+import kosmos.framework.core.message.MessageResult;
 
 
 /**
@@ -28,7 +28,7 @@ public class BusinessException extends AbstractBusinessException{
 	private Serializable replyData = null;
 
 	/** the messageList */
-	private ReplyMessage[] messageList = null;
+	private MessageResult[] messageList = null;
 	
 	/**
 	 * @param message the message
@@ -70,14 +70,14 @@ public class BusinessException extends AbstractBusinessException{
 	/**
 	 * @param messageList the messageList to set
 	 */
-	public void setMessageList(ReplyMessage[] messageList) {
+	public void setMessageList(MessageResult[] messageList) {
 		this.messageList = messageList;
 	}
 
 	/**
 	 * @return the messageList
 	 */
-	public ReplyMessage[] getMessageList() {
+	public MessageResult[] getMessageList() {
 		return messageList;
 	}
 	

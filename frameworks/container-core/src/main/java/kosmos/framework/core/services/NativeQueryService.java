@@ -38,7 +38,7 @@ public interface NativeQueryService {
 	 * @param request the request
 	 * @return the result
 	 */
-	public <T> NativeResult<T> getTotalResult(QueryRequest request);
+	public NativeResult getTotalResult(QueryRequest request);
 	
 	/**
 	 * Searches the first result.

@@ -4,7 +4,9 @@
 package kosmos.framework.jdoclient.internal.orm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
@@ -12,9 +14,8 @@ import javax.jdo.PersistenceManager;
 import kosmos.framework.jdoclient.api.orm.JDOOrmQuery;
 import kosmos.framework.jdoclient.internal.ClosableExtent;
 import kosmos.framework.jdoclient.internal.JdoWhereOperand;
-import kosmos.framework.sqlclient.api.EmptyHandler;
-import kosmos.framework.sqlclient.api.MultiResultHandler;
 import kosmos.framework.sqlclient.api.Query;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 
 
@@ -32,12 +33,6 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	
 	/** the persistence manager */
 	private final PersistenceManager pm;
-
-	/** the MultiResultHandler */
-	private final MultiResultHandler mrh;
-
-	/** the EmptyHandler*/
-	private final EmptyHandler eh;
 	
 	/** the parameter count */
 	private int parameterCount = 0;
@@ -51,26 +46,22 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	/** the parameters */
 	private List<Object> params = new ArrayList<Object>();
 	
-	/** if true raise the exception */
-	private boolean noDataErrorEnabled = false;
-	
 	/** the max size to search */
 	private int maxResults = 0;
 	
 	/** the start position */
 	private int firstResult = 0;
+	
+	/** the hint */
+	private Map<String,Object> hints = new HashMap<String,Object>();
 		
 	/**
 	 * @param entityClass the entityClass
 	 * @param pm the pm
-	 * @param mrh the mrh
-	 * @param eh the eh
 	 */
-	public LocalOrmQueryEngine(Class<T> entityClass,PersistenceManager pm,MultiResultHandler mrh , EmptyHandler eh){
+	public LocalOrmQueryEngine(Class<T> entityClass,PersistenceManager pm){
 		this.resultClass = entityClass;
 		this.pm = pm;
-		this.mrh = mrh;
-		this.eh = eh;
 	}
 	
 	/**
@@ -162,44 +153,6 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findAny()
-	 */
-	@Override
-	public T findAny() {
-		List<T> result = getResultList();
-		if(result.size() > 2){
-			mrh.handleResult(resultClass);
-		}
-		return result.get(0);
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#exists(java.lang.Object[])
-	 */
-	@Override
-	public boolean exists(Object... pks) {
-		return find(pks) != null;			
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#existsByAny()
-	 */
-	@Override
-	public boolean existsByAny() {
-		return findAny() != null;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#enableNoDataError()
-	 */
-	
-	@Override
-	public <Q extends Query> Q enableNoDataError() {
-		this.noDataErrorEnabled = true;
-		return (Q)this;
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.Query#setMaxResults(int)
 	 */
 	@Override
@@ -239,14 +192,6 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 	@Override
 	public int count() {
 		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#exists()
-	 */
-	@Override
-	public boolean exists() {
-		return getSingleResult() != null;
 	}
 
 	/**
@@ -316,28 +261,8 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 		}else{
 			result = (List<T>)query.executeWithArray(params);
 		}
-		if(result.isEmpty()){
-			if(noDataErrorEnabled){
-				eh.handleEmptyResult(resultClass);
-			}
-			return new ArrayList<T>();
-		}
 		return result;
 	}
-	
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findAny(java.lang.Object[])
-	 */
-	@Override
-	public T findAny(Object... params) {
-		List<T> list = list(params);
-		if(list.size() > 2){
-			mrh.handleResult(resultClass);
-		}
-		return list.get(0);
-	}
-
 	
 	/**
 	 * @param column the column
@@ -370,6 +295,23 @@ public class LocalOrmQueryEngine<T> implements JDOOrmQuery<T>{
 			query.setRange(firstResult,maxResults);
 		}
 		return query;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 */
+	@Override
+	public OrmQuery<T> setCondition(OrmQueryContext<T> condition) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setHint(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> setHint(String key, Object value) {
+		hints.put(key, value);
+		return this;
 	}
 
 }

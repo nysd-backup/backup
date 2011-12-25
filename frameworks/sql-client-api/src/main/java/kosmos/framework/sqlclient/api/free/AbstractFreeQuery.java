@@ -47,15 +47,6 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.Query#enableNoDataError()
-	 */
-	@Override
-	public <T extends Query> T enableNoDataError() {
-		delegate.enableNoDataError();
-		return (T)this;
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.Query#getResultList()
 	 */
 	@Override
@@ -107,11 +98,12 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.Query#exists()
+	 * @see kosmos.framework.sqlclient.api.Query#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public boolean exists() {
-		return delegate.exists();
+	public <T extends Query> T setHint(String arg0, Object arg1) {
+		delegate.setHint(arg0,arg1);
+		return (T)this;
 	}
 
 }

@@ -29,17 +29,7 @@ public class StatementProviderImpl implements StatementProvider{
 	
 	/** the resultSetConcurrency */
 	private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
-	
-	/** the default fetch size */
-	private int fetchSize = 100;
-	
-	/**
-	 * @param fetchSize the fetch size to set
-	 */
-	public void setFetchSize(int fetchSize ){
-		this.fetchSize = fetchSize;
-	}
-	
+
 	/**
 	 * @param resultSetType the resultSetType to set
 	 */
@@ -55,15 +45,15 @@ public class StatementProviderImpl implements StatementProvider{
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String)
+	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.lang.String, java.sql.Connection, java.lang.String, int, int, int)
 	 */
 	@Override
-	public PreparedStatement createStatement(String sqlId ,Connection con, String sql, int timeout , int maxRows)
+	public PreparedStatement createStatement(String sqlId ,Connection con, String sql, int timeout , int maxRows , int fetchSize)
 			throws SQLException {
 		PreparedStatement statement = null;
 		try{
 			statement = con.prepareStatement(sql,resultSetType,resultSetConcurrency);
-			configure(statement,timeout,maxRows);
+			configure(statement,timeout,maxRows,fetchSize);
 		}catch(SQLException sqle){
 			if( statement != null){
 				try{
@@ -77,11 +67,11 @@ public class StatementProviderImpl implements StatementProvider{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.sql.Connection, java.lang.String, java.util.List)
+	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.lang.String, java.sql.Connection, java.lang.String, java.util.List, int, int, int)
 	 */
 	@Override
-	public PreparedStatement createStatement(String sqlId ,Connection con ,String sql,List<Object> bindList,int timeout , int maxRows) throws SQLException{
-		PreparedStatement statement = createStatement(sqlId,con,sql,timeout,maxRows);		
+	public PreparedStatement createStatement(String sqlId ,Connection con ,String sql,List<Object> bindList,int timeout , int maxRows,int fetchSize) throws SQLException{
+		PreparedStatement statement = createStatement(sqlId,con,sql,timeout,maxRows,fetchSize);		
 		setBindParameter(statement,bindList);
 		return statement;
 	}
@@ -92,9 +82,10 @@ public class StatementProviderImpl implements StatementProvider{
 	 * @param stmt the statement
 	 * @param timeoutSeconds the timeout seconds
 	 * @param maxRows the max rows
+	 * @param fetchSize the fetchSize
 	 * @throws SQLException the exception
 	 */
-	protected void configure(PreparedStatement stmt, int timeoutSeconds, int maxRows) throws SQLException{
+	protected void configure(PreparedStatement stmt, int timeoutSeconds, int maxRows , int fetchSize) throws SQLException{
 		if(timeoutSeconds > 0 ){
 			stmt.setQueryTimeout(timeoutSeconds);
 		}

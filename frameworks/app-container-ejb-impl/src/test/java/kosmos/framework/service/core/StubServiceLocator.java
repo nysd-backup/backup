@@ -9,20 +9,16 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.exception.ConcurrentBusinessException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
-import kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl;
-import kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl;
+import kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.exception.ApplicationException;
-import kosmos.framework.service.core.exception.ConcurrentApplicationException;
 import kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl;
-import kosmos.framework.service.core.query.UnexpectedEmptyHandlerImpl;
-import kosmos.framework.service.core.query.UnexpectedMultiResultHandlerImpl;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl;
 
 
 /**
@@ -86,7 +82,6 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	@Override
 	public QueryFactory createQueryFactory() {
 		EclipseLinkQueryFactoryImpl factory = new EclipseLinkQueryFactoryImpl();
-		factory.setEmptyHandler( new UnexpectedEmptyHandlerImpl());
 		factory.setEntityManagerProvider(createEntityManagerProvider());		
 		return factory;	
 	}
@@ -98,11 +93,9 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	public AdvancedOrmQueryFactory createOrmQueryFactory() {
 		AdvancedOrmQueryFactoryImpl impl = new AdvancedOrmQueryFactoryImpl();
 		OrmQueryFactoryImpl internal = new OrmQueryFactoryImpl();
-		GenericJPADaoImpl dao = new GenericJPADaoImpl();
+		InternalOrmJpaQueryImpl dao = new InternalOrmJpaQueryImpl();
 		dao.setEntityManagerProvider(createEntityManagerProvider());	
-		dao.setEmptyHandler(new UnexpectedEmptyHandlerImpl());
-		dao.setMultiResultHandler(new UnexpectedMultiResultHandlerImpl());
-		internal.setGenericDao(dao);
+		internal.setInternalOrmQuery(dao);
 		impl.setInternalFactory(internal);
 		return impl;
 	}
@@ -122,12 +115,4 @@ public class StubServiceLocator extends AbstractServiceLocator{
 		return new ApplicationException();
 	}
 
-	/**
-	 * @see kosmos.framework.service.core.activation.ServiceLocator#createConcurrentBusinessException()
-	 */
-	@Override
-	public ConcurrentBusinessException createConcurrentBusinessException(Throwable cause) {
-		return new ConcurrentApplicationException(null,cause);
-	}
-	
 }

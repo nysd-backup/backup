@@ -5,7 +5,7 @@ package kosmos.framework.core.services;
 
 import java.util.List;
 
-import kosmos.framework.sqlclient.api.orm.OrmCondition;
+import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
 
 
 /**
@@ -23,16 +23,7 @@ public interface OrmQueryService<T> {
 	 * @param pks　the primary keys
 	 * @return the result
 	 */
-	public T find(OrmCondition<T> request,Object[] pks);
-
-	/**
-	 * Finds by alter keys.
-	 * Throws the error if the multiple records is found.
-	 * 
-	 * @param request the request
-	 * @return　the result
-	 */
-	public T findAny(OrmCondition<T> request);
+	public T find(OrmQueryContext<T> request,Object[] pks);
 
 	/**
 	 * Searches the records.
@@ -40,7 +31,7 @@ public interface OrmQueryService<T> {
 	 * @param request the request
 	 * @return the result
 	 */
-	public List<T> getResultList(OrmCondition<T> request);
+	public List<T> getResultList(OrmQueryContext<T> request);
 	
 	/**
 	 * Searches the first record.
@@ -48,7 +39,7 @@ public interface OrmQueryService<T> {
  	 * @param request the request
 	 * @return the result
 	 */
-	public T getSingleResult(OrmCondition<T> request);
+	public T getSingleResult(OrmQueryContext<T> request);
 	
 	/**
 	 * Determines whether the result is found.
@@ -56,7 +47,7 @@ public interface OrmQueryService<T> {
 	 * @param request the request
 	 * @return true:exists
 	 */
-	public boolean exists(OrmCondition<T> request);
+	public boolean exists(OrmQueryContext<T> request);
 	
 	/**
 	 * Determines whether the result searched by primary keys is found.
@@ -65,15 +56,6 @@ public interface OrmQueryService<T> {
 	 * @param pks the primary keys
 	 * @return true:exsists
 	 */
-	public boolean exists(OrmCondition<T> request,Object[] pks);
-	
-	/**
-	 * Determines whether the result is found.
-	 * Throws the error if the multiple records is found. 
-	 * 
-	 * @param request the request
-	 * @return true:exsists
-	 */
-	public boolean existsByAny(OrmCondition<T> request);	
+	public boolean exists(OrmQueryContext<T> request,Object[] pks);
 
 }

@@ -12,15 +12,17 @@ import java.util.List;
  * @version 2011/08/31 created.
  */
 public interface Query {
-
+	
 	/**
-	 * Marks that exception is thrown if no data is found.
+	 * Adds the JPA hint.
 	 * 
 	 * @param <T> the type
+	 * @param arg0 the key of the hint
+	 * @param arg1 the hint value
 	 * @return self
 	 */
-	public <T extends Query> T enableNoDataError();
-	
+	public <T extends Query> T setHint(String arg0 , Object arg1);
+
 	/**
 	 * @param <T> the type
 	 * @param arg0 the max result
@@ -51,12 +53,5 @@ public interface Query {
 	 * @return the count
 	 */
 	public int count();
-	
-	/**
-	 * Determines whether the result is found.
-	 * 
-	 * @return true:exists
-	 */
-	public boolean exists();
 
 }

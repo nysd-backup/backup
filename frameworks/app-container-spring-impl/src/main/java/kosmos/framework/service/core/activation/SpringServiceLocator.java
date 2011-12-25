@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.exception.ConcurrentBusinessException;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
@@ -172,14 +171,6 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	@Override
 	public BusinessException createBusinessException(){
 		return new BusinessException();
-	}
-	
-	/**
-	 * @see kosmos.framework.service.core.activation.ServiceLocator#createConcurrentBusinessException()
-	 */
-	@Override
-	public ConcurrentBusinessException createConcurrentBusinessException(Throwable cause){
-		return new ConcurrentBusinessException(null,cause);
 	}
 	
 }

@@ -116,14 +116,6 @@ public class DefaultStrictQuery<T> extends AbstractAdvancedOrmQuery<T> implement
 	}	
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findAny()
-	 */
-	@Override
-	public T findAny(){
-		return delegate.findAny();
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getResultList()
 	 */
 	@Override
@@ -141,19 +133,19 @@ public class DefaultStrictQuery<T> extends AbstractAdvancedOrmQuery<T> implement
 	}	
 	
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#existsByAny()
-	 */
-	@Override
-	public boolean existsByAny(){
-		return delegate.existsByAny();
-	}
-	
-	/**
 	 * @see kosmos.framework.core.query.StrictQuery#exists()
 	 */
 	@Override
 	public boolean exists() {
-		return delegate.exists();
+		return getSingleResult() != null;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.AdvancedOrmQuery#exists(java.lang.Object[])
+	 */
+	@Override
+	public boolean exists(Object... pks) {
+		return find(pks) != null;
 	}
 
 }

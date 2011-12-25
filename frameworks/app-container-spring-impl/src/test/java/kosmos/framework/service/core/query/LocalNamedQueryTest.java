@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
@@ -97,33 +96,33 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(0,result.size());
 	}
 	
-	/**
-	 * 結果0件シスチE��エラー
-	 */
-	@Test
-	public void nodataError(){
-		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createQuery(SampleNamedQuery.class).enableNoDataError();
-		query.setAttr2(500).setTest("1").setArc("500");
-		
-		try{
-			query.getResultList();
-			fail();
-		}catch(UnexpectedNoDataFoundException e){
-			e.printStackTrace();
-		}
-	}
+//	/**
+//	 * 結果0件シスチE��エラー
+//	 */
+//	@Test
+//	public void nodataError(){
+//		setUpData("TEST.xls");
+//		SampleNamedQuery query = queryFactory.createQuery(SampleNamedQuery.class).enableNoDataError();
+//		query.setAttr2(500).setTest("1").setArc("500");
+//		
+//		try{
+//			query.getResultList();
+//			fail();
+//		}catch(UnexpectedNoDataFoundException e){
+//			e.printStackTrace();
+//		}
+//	}
 	
-	/**
-	 * exists
-	 */
-	@Test
-	public void exists(){
-		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createQuery(SampleNamedQuery.class);
-		query.setAttr2(500).setTest("1");
-		assertTrue(query.exists());
-	}
+//	/**
+//	 * exists
+//	 */
+//	@Test
+//	public void exists(){
+//		setUpData("TEST.xls");
+//		SampleNamedQuery query = queryFactory.createQuery(SampleNamedQuery.class);
+//		query.setAttr2(500).setTest("1");
+//		assertTrue(query.exists());
+//	}
 
 //	/**
 //	 * exists

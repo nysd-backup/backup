@@ -33,29 +33,21 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!--**************************************************	
 	サービス 
 	**************************************************-->	
-
-	<!-- 例外処理 -->
-	<bean id="emptyHandler" class="kosmos.framework.service.core.query.UnexpectedEmptyHandlerImpl" scope="prototype" />
-	<bean id="multiResultHandler" class="kosmos.framework.service.core.query.UnexpectedMultiResultHandlerImpl" scope="prototype" />
-	
-	<!-- DAO -->
-	<bean id="genericJPADao" class="kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl" scope="prototype" >
+	<!-- 内部クエリ -->
+	<bean id="internalOrmQuery" class="kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>	
-		<property name="emptyHandler" ref="emptyHandler"/>	
-		<property name="multiResultHandler" ref="multiResultHandler"/>	
 	</bean>
 	
 	<!-- クエリファクトリ -->
 	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>			
-		<property name="emptyHandler" ref="emptyHandler"/>	
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="internalQueryFactory" class="kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
-		<property name="genericDao" ref="genericJPADao" />
+	<bean id="internalQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="internalOrmQuery" />
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->

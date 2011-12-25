@@ -12,7 +12,7 @@ import kosmos.framework.sqlclient.api.Update;
  * @version 2011/08/31 created.
  */
 public interface OrmUpdate<T> extends Update{
-
+	
 	/**
 	 * Adds '='.
 	 * 
@@ -111,7 +111,11 @@ public interface OrmUpdate<T> extends Update{
 	 */
 	public int execute(List<Object> set , Object... params);
 	
-	
-	
+	/**
+	 * Sets the condition.
+	 * 
+	 * @param condition the condition
+	 */
+	public OrmUpdate<T> setCondition(OrmContext<T> condition);
 
 }

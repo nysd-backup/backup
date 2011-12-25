@@ -14,14 +14,4 @@ import kosmos.framework.sqlclient.api.free.FreeUpdate;
  */
 public interface NamedUpdate extends FreeUpdate{
 	
-	/**
-	 * Adds the JPA hint.
-	 * 
-	 * @param <T> the type
-	 * @param arg0 the key of the hint
-	 * @param arg1 the hint value
-	 * @return self
-	 */
-	public <T extends NamedUpdate> T setHint(String arg0 , Object arg1);
-
 }

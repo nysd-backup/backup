@@ -3,6 +3,8 @@
  */
 package kosmos.framework.core.exception;
 
+import kosmos.framework.core.message.Messages;
+
 
 /**
  * The unexpected exception thrown if no result is found.
@@ -18,14 +20,8 @@ public class UnexpectedNoDataFoundException extends SystemException{
 	 * @param message the message
 	 * @param cause the cause
 	 */
-	public UnexpectedNoDataFoundException(String message, Throwable cause) {
-		super(message, cause);
+	public UnexpectedNoDataFoundException() {
+		super(Messages.MSG_SYS_UNEXPECTED_NO_DATA_FOUND);
 	}
 	
-	/**
-	 * @param message the message
-	 */
-	public UnexpectedNoDataFoundException(String message) {
-		super(message);
-	}
 }

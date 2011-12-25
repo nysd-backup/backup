@@ -116,14 +116,6 @@ public interface StrictQuery<T> extends AdvancedOrmQuery<T>{
 	public abstract StrictQuery<T> desc(Metadata<T, ?> column);
 
 	/**
-	 * Finds by alter key.
-	 * Throw the error if the multiple result is found.
-	 * 
-	 * @return　the result
-	 */
-	public abstract T findAny();
-
-	/**
 	 * Searches the result.
 	 * 
 	 * @return the result
@@ -136,13 +128,6 @@ public interface StrictQuery<T> extends AdvancedOrmQuery<T>{
 	 * @return the result
 	 */
 	public abstract T getSingleResult();
-
-	/**
-	 * Determines whether the result searched by alter keys is found.
-	 * 
-	 * @return true:exsists
-	 */
-	public abstract boolean existsByAny();	
 
 	/**
 	 * Determines whether the result searched by primary keys is found.

@@ -44,38 +44,36 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     </bean>
 
   	<!-- WEB/帳票からのアクセス用（単体テストはJTA使用不可能なので）-->
+	<!-- 
 	<bean id="readOnlyConnectionProvider" class="kosmos.framework.service.core.EntityManagerConnectionProviderImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="readOnlyEntityManagerProvider"/>
 	</bean>	
-	<bean id="readOnlyClientQueryFactory" class="kosmos.framework.jpqlclient.api.free.NativeQueryFactoryImpl" scope="prototype" >
+	<bean id="readOnlyClientQueryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="readOnlyEntityManagerProvider"/>
-		<property name="sqlBuilder" ref="sqlBuilder"/>	
-		<property name="emptyHandler" ref="emptyHandler"/>	
+		<property name="sqlBuilder" ref="sqlBuilder"/>		
 		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
 		<property name="connectionProvider" ref="readOnlyConnectionProvider"/>
 	</bean>
-	
+	 -->
+	 
 	<!-- エンティティマネージャの提供-->
 	<bean id="readOnlyEntityManagerProvider" class="kosmos.framework.service.core.ReadOnlyEntityManagerProviderImpl" scope="prototype" />
 
-	<!-- DAO -->
-	<bean id="readOnlyGenericJPADao" class="kosmos.framework.jpqlclient.internal.orm.impl.GenericJPADaoImpl" scope="prototype" >
-		<property name="entityManagerProvider" ref="readOnlyEntityManagerProvider"/>
-		<property name="sqlBuilder" ref="sqlBuilder"/>	
-		<property name="emptyHandler" ref="emptyHandler"/>	
-		<property name="multiResultHandler" ref="multiResultHandler"/>	
-	</bean>
-	
 	<!-- クエリファクトリ -->
 	<bean id="readOnlyQueryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
 		<property name="entityManagerProvider" ref="readOnlyEntityManagerProvider"/>
-		<property name="sqlBuilder" ref="sqlBuilder"/>			
-		<property name="emptyHandler" ref="emptyHandler"/>	
+		<property name="sqlBuilder" ref="sqlBuilder"/>				
+	</bean>
+
+	<!-- DAO -->
+	<bean id="readOnlyInternalOrmQuery" class="kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl" scope="prototype" >
+		<property name="entityManagerProvider" ref="readOnlyEntityManagerProvider"/>
+		<property name="sqlBuilder" ref="sqlBuilder"/>	
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="readOnlyInternalQueryFactory" class="kosmos.framework.jpqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
-		<property name="genericDao" ref="readOnlyGenericJPADao" />
+	<bean id="readOnlyInternalQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="readOnlyInternalOrmQuery" />
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
