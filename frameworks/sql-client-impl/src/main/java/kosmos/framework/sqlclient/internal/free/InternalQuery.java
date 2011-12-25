@@ -1,3 +1,6 @@
+/**
+ * Copyright 2011 the original author
+ */
 package kosmos.framework.sqlclient.internal.free;
 
 import java.util.List;
@@ -6,88 +9,102 @@ import java.util.Map;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.ResultSetFilter;
 
+/**
+ * The internal query.
+ *
+ * @author yoshida-n
+ * @version 2011/08/31 created.
+ */
 public interface InternalQuery {
 
 	/**
+	 * Set the filter.
+	 * 
 	 * @param filter the filter to set
 	 * @return self
 	 */ 
-	public abstract void setFilter(ResultSetFilter filter);
+	void setFilter(ResultSetFilter filter);
 
 	/**
-	 * @return the result
+	 * @return the total result
 	 */
-	public abstract NativeResult getTotalResult();
+	NativeResult getTotalResult();
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>
 	 */
-	public abstract <T> List<T> getFetchResult();
+	<T> List<T> getFetchResult();
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#count()
+	 * @return the hit count.
 	 */
-	public abstract int count();
+	int count();
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getResultList()
+	 * Selects the table.
+	 * 
+	 * @return the found data.
 	 */
-	public abstract <T> List<T> getResultList();
+	<T> List<T> getResultList();
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getSingleResult()
+	 * Selects the table.
+	 * 
+	 * @return the found one record.
 	 */
-	public abstract <T> T getSingleResult();
+	<T> T getSingleResult();
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#executeUpdate()
+	 * Updates the table.
+	 * 
+	 * @return the updated count
 	 */
-	public abstract int executeUpdate();
+	int executeUpdate();
 
 	/**
 	 * @param arg0 the key 
 	 * @param arg1 the value
 	 */
-	public void setBranchParameter(String arg0 , Object arg1);
+	void setBranchParameter(String arg0 , Object arg1);
 
 	/**
 	 * @return the firstResult
 	 */
-	public int getFirstResult() ;
+	int getFirstResult() ;
 
 	/**
 	 * @return the maxResults
 	 */
-	public int getMaxResults(); 
+	int getMaxResults(); 
 
 	/**
 	 * @param arg0 the start position
 	 * @return self
 	 */
-	public void setFirstResult(int arg0) ;
+	void setFirstResult(int arg0) ;
 
 	/**
 	 * @param arg0 the max results
 	 * @return self
 	 */
-	public void setMaxResults(int arg0);
+	void setMaxResults(int arg0);
 
 	/**
 	 * @param arg0 the key
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public void setParameter(String arg0, Object arg1) ;
+	void setParameter(String arg0, Object arg1) ;
 	
 	/**
 	 * @return the hints
 	 */
-	public Map<String,Object> getHints();
+	Map<String,Object> getHints();
 
 	/**
 	 * @param hints the hints to set
 	 */
-	public void setHint(String key , Object value) ;
+	void setHint(String key , Object value) ;
 
 
 }

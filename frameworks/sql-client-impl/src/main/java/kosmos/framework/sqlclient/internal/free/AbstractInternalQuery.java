@@ -57,62 +57,65 @@ public abstract class AbstractInternalQuery implements InternalQuery{
 	}
 	
 	/**
-	 * @param arg0 the key 
-	 * @param arg1 the value
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setBranchParameter(String arg0 , Object arg1){
 		this.branchParam.put(arg0,arg1);
 	}
 
 	/**
-	 * @return the firstResult
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getFirstResult()
 	 */
+	@Override
 	public int getFirstResult() {
 		return this.firstResult;
 	}
 
 	/**
-	 * @return the maxResults
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getMaxResults()
 	 */
+	@Override
 	public int getMaxResults() {
 		return maxSize;
 	}
 
 	/**
-	 * @param arg0 the start position
-	 * @return self
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setFirstResult(int)
 	 */
+	@Override
 	public void setFirstResult(int arg0) {
 		this.firstResult = arg0;
 	}
 
 	/**
-	 * @param arg0 the max results
-	 * @return self
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setMaxResults(int)
 	 */
+	@Override
 	public void setMaxResults(int arg0) {
 		maxSize = arg0;
 	}
 
 	/**
-	 * @param arg0 the key
-	 * @param arg1 the value
-	 * @return self
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setParameter(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setParameter(String arg0, Object arg1) {
 		param.put(arg0, arg1);
 	}
 	
 	/**
-	 * @return the hints
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getHints()
 	 */
+	@Override
 	public Map<String,Object> getHints() {
 		return hints;
 	}
 
 	/**
-	 * @param hints the hints to set
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setHint(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setHint(String key , Object value) {
 		this.hints.put(key, value);
 	}

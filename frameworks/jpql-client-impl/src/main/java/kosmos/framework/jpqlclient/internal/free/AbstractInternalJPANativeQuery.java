@@ -67,7 +67,7 @@ public abstract class AbstractInternalJpaNativeQuery extends AbstractInternalQue
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#count()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#count()
 	 */
 	@Override
 	public int count(){		
@@ -89,7 +89,7 @@ public abstract class AbstractInternalJpaNativeQuery extends AbstractInternalQue
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#executeUpdate()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#executeUpdate()
 	 */
 	@Override
 	public int executeUpdate() {

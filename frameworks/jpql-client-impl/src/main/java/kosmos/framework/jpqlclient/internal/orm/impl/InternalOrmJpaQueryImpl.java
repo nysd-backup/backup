@@ -64,8 +64,17 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 		em = provider.getEntityManager();		
 	}	
 	
+
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.orm.InternalJPAOrmQuery#updateAny(kosmos.framework.jpqlclient.api.orm.OrmQueryCondition, java.util.Map)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(kosmos.framework.sqlclient.api.orm.OrmContext, java.util.Map)
+	 */
+	@Override
+	public int insert(OrmContext<?> entity, Map<String, Object> values) {
+		throw new UnsupportedOperationException("Dont' use this method. Use 'EntityManager#persist' instead");
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#update(kosmos.framework.sqlclient.api.orm.OrmContext, java.util.Map)
 	 */
 	@Override
 	public int update(OrmContext<?> condition , Map<String,Object> set){
@@ -91,7 +100,7 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.orm.InternalJPAOrmQuery#deleteAny(kosmos.framework.jpqlclient.api.orm.JPAOrmQueryCondition)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#delete(kosmos.framework.sqlclient.api.orm.OrmContext)
 	 */
 	@Override
 	public  int delete(OrmContext<?> condition){		
@@ -113,7 +122,7 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.orm.InternalJPAOrmQuery#find(kosmos.framework.jpqlclient.api.orm.JPAOrmQueryCondition, java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#find(kosmos.framework.sqlclient.api.orm.OrmQueryContext, java.lang.Object[])
 	 */
 	@Override
 	public <E> E find(OrmQueryContext<E> query,Object... pks) {
@@ -131,7 +140,7 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.orm.InternalJPAOrmQuery#getResultList(kosmos.framework.jpqlclient.api.orm.JPAOrmQueryCondition)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
 	 */
 	@Override
 	public <E> List<E> getResultList(OrmQueryContext<E> entityQuery){	
@@ -255,12 +264,5 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 		public void setParameter(String key , Object value);
 	}
 
-	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(java.lang.Object, java.util.Map)
-	 */
-	@Override
-	public int insert(Object entity, Map<String, Object> hints) {
-		throw new UnsupportedOperationException("Dont' use this method. Use 'EntityManager#persist' instead");
-	}
 
 }

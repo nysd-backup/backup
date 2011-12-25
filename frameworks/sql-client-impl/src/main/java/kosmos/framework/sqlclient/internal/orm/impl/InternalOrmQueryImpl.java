@@ -4,7 +4,6 @@
 package kosmos.framework.sqlclient.internal.orm.impl;
 
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ import kosmos.framework.sqlengine.facade.SQLEngineFacade;
 import kosmos.framework.utility.ReflectionUtils;
 
 /**
- * function.
+ * The internal ORM query.
  *
  * @author yoshida-n
  * @version	created.
@@ -63,21 +62,21 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 			throw new IllegalArgumentException("invalid primary key count");
 		}
 		
-		OrmQueryContext<E> condition = new OrmQueryContext<E>(context.getEntityClass());
-		condition.setMaxSize(2);
+		OrmQueryContext<E> newContext = new OrmQueryContext<E>(context.getEntityClass());
+		newContext.setMaxSize(2);
 		
 		for(Map.Entry<String, Object> h : context.getHints().entrySet()){
-			condition.setHint(h.getKey(), h.getValue());
+			context.setHint(h.getKey(), h.getValue());
 		}
 		
 		for(int i = 0 ; i < fs.length; i++){
 			Object pk = pks[i];
 			Field f = fs[i];
 			Column col = f.getAnnotation(Column.class);
-			condition.getConditions().add(new WhereCondition(col.name(),i,WhereOperand.Equal,pk));
+			newContext.getConditions().add(new WhereCondition(col.name(),i,WhereOperand.Equal,pk));
 		}
 		
-		List<E> resultList = getResultList(condition);
+		List<E> resultList = getResultList(newContext);
 		if(resultList.isEmpty()){
 			return null;
 		}else if(resultList.size() > 1){
@@ -121,16 +120,11 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(java.lang.Object)
 	 */
 	@Override
-	public int insert(Object entity,Map<String,Object> hints) {
-		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);
-		Map<String,Object> values = new LinkedHashMap<String,Object>();
-		for(Field f : fs){
-			Column column = f.getAnnotation(Column.class);
-			values.put(column.name(), ReflectionUtils.get(f, entity));
-		}
-		String sql = sb.createInsert(entity.getClass(),values.keySet());
-		NativeUpdate engine = createUpdateEngine(sql, entity.getClass().getName()+".insert");
-		setUpdatingHint(hints,engine);
+	public int insert(OrmContext<?> context,Map<String,Object> values) {
+		
+		String sql = sb.createInsert(context.getEntityClass(),values.keySet());
+		NativeUpdate engine = createUpdateEngine(sql, context.getEntityClass().getName()+".insert");
+		setUpdatingHint(context.getHints(),engine);
 		return engine.update();
 	}
 

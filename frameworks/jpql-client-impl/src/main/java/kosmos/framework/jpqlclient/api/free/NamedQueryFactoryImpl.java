@@ -27,12 +27,12 @@ import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
 
 
 /**
- * The factory to create the query.
+ * The factory to create the named query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractJpaQueryFactory implements QueryFactory{
+public class NamedQueryFactoryImpl implements QueryFactory{
 	
 	/** the <code>EntityManager</code> */
 	protected EntityManager em;
@@ -116,13 +116,17 @@ public abstract class AbstractJpaQueryFactory implements QueryFactory{
 	 * @param queryClass　the class of the query 
 	 * @return the query
 	 */
-	protected abstract FreeQuery createNativeQueryEngine(Class<?> queryClass);
+	protected FreeQuery createNativeQueryEngine(Class<?> queryClass){
+		throw new UnsupportedOperationException();
+	}
 	
 	/**
 	 * @param updateClass　the class of the updater
 	 * @return the updater
 	 */
-	protected abstract FreeUpdate createNativeUpdateEngine(Class<?> updateClass);
+	protected FreeUpdate createNativeUpdateEngine(Class<?> updateClass){
+		throw new UnsupportedOperationException();
+	}
 	
 	/**
 	 * @param queryClass　the class of the query

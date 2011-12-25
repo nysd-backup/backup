@@ -92,8 +92,10 @@
 				<module>jpql-client-api</module>
 				<module>jpql-client-impl</module>	
 				<module>jpql-client-eclipselink-plugin</module>	
+				<!--
 				<module>jdoql-client-api</module>	
 				<module>jdoql-client-impl</module>			
+				-->
 				<module>container-core</module>
 				<module>app-container-api</module>
 				<module>app-container-spring-impl</module>	

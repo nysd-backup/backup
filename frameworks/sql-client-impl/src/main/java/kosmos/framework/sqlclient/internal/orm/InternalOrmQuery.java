@@ -25,7 +25,7 @@ public interface InternalOrmQuery {
 	 * @param hints the hints
 	 * @return the inserted count
 	 */
-	public int insert(Object entity , Map<String,Object> hints);
+	public int insert(OrmContext<?> context , Map<String,Object> values);
 	
 	/**
 	 *　Updates the table.
@@ -34,14 +34,14 @@ public interface InternalOrmQuery {
 	 * @param set the updating target
 	 * @return the updated count
 	 */
-	public int update(OrmContext<?> condition , Map<String,Object> set);
+	public int update(OrmContext<?> context , Map<String,Object> set);
 	
 	/** 
 	 * Deletes the table.
 	 * 
 	 * @param condition the condition
 	 */
-	public int delete(OrmContext<?> condition);
+	public int delete(OrmContext<?> context);
 	
 	/**
 	 * Finds by primary keys.
@@ -51,7 +51,7 @@ public interface InternalOrmQuery {
 	 * @param pks the primary keys
 	 * @return the result
  	 */
-	public <E> E find(OrmQueryContext<E> entity,Object... pks);
+	public <E> E find(OrmQueryContext<E> context,Object... pks);
 	
 	/**
 	 * Searches the records.
@@ -60,6 +60,6 @@ public interface InternalOrmQuery {
 	 * @param entity the condition
 	 * @return the result
 	 */
- 	public <E> List<E> getResultList(OrmQueryContext<E> entity);
+ 	public <E> List<E> getResultList(OrmQueryContext<E> context);
  
 }

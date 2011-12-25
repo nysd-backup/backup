@@ -27,7 +27,7 @@ import kosmos.framework.sqlengine.executer.impl.ResultSetHandlerImpl;
  * @author yoshida-n
  * @version	created.
  */
-public class EclipseLinkQueryFactoryImpl extends AbstractJpaQueryFactory{
+public class EclipseLinkQueryFactoryImpl extends NamedQueryFactoryImpl{
 	
 	/** the handler */
 	private ResultSetHandler handler = new ResultSetHandlerImpl();
@@ -60,7 +60,7 @@ public class EclipseLinkQueryFactoryImpl extends AbstractJpaQueryFactory{
 	}
 	
 	/**
-	 * @see kosmos.framework.jpqlclient.api.free.AbstractJpaQueryFactory#createNativeQueryEngine(java.lang.Class)
+	 * @see kosmos.framework.jpqlclient.api.free.NamedQueryFactoryImpl#createNativeQueryEngine(java.lang.Class)
 	 */
 	@Override
 	protected FreeQuery createNativeQueryEngine(Class<?> queryClass) {
@@ -68,7 +68,7 @@ public class EclipseLinkQueryFactoryImpl extends AbstractJpaQueryFactory{
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.api.free.AbstractJpaQueryFactory#createNativeUpdateEngine(java.lang.Class)
+	 * @see kosmos.framework.jpqlclient.api.free.NamedQueryFactoryImpl#createNativeUpdateEngine(java.lang.Class)
 	 */
 	@Override
 	protected FreeUpdate createNativeUpdateEngine(Class<?> updateClass) {

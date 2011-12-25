@@ -26,13 +26,13 @@ import kosmos.framework.utility.ReflectionUtils;
  */
 public class PersistenceManagerImpl implements PersistenceManager{
 
-	private InternalOrmQuery internalQuery;
+	private InternalOrmQuery internaOrmlQuery;
 	
 	/**
-	 * @param dao the dao to set
+	 * @param internaOrmlQuery the internaOrmlQuery to set
 	 */
-	public void setGenericDao(InternalOrmQuery internalQuery){
-		this.internalQuery = internalQuery;
+	public void setInternalOrmQuery(InternalOrmQuery internaOrmlQuery){
+		this.internaOrmlQuery = internaOrmlQuery;
 	}
 	
 	/**
@@ -48,7 +48,21 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 */
 	@Override
 	public int insert(Object entity, PersistenceHints hints) {
-		return internalQuery.insert(entity, hints);
+		//エンティティから登録対象項目追加
+		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);
+		Map<String,Object> values = new LinkedHashMap<String,Object>();
+		for(Field f : fs){
+			Column column = f.getAnnotation(Column.class);
+			values.put(column.name(), ReflectionUtils.get(f, entity));
+		}
+		
+		//ヒント句設定
+		@SuppressWarnings("unchecked")
+		OrmContext<Object> context = new OrmContext<Object>((Class<Object>)entity.getClass());
+		for(Map.Entry<String, Object> e : hints.entrySet()){
+			context.setHint(e.getKey(),e.getValue());
+		}
+		return internaOrmlQuery.insert(context, values);
 	}
 
 	/**
@@ -94,8 +108,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 		}
 		
 		//主キーを検索条件に設定する。
-		
-		return internalQuery.update(condition, set);
+		return internaOrmlQuery.update(condition, set);
 	}
 
 	/**
@@ -117,7 +130,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 		for(Map.Entry<String, Object> h : hints.entrySet()){
 			condition.setHint(h.getKey(),h.getValue());
 		}
-		return internalQuery.delete(condition);
+		return internaOrmlQuery.delete(condition);
 	}
 	
 	/**

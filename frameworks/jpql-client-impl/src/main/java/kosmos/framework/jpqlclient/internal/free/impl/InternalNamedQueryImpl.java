@@ -80,7 +80,7 @@ public class InternalNamedQueryImpl extends AbstractInternalQuery implements Int
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#count()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#count()
 	 */
 	@Override
 	public int count(){
@@ -88,7 +88,7 @@ public class InternalNamedQueryImpl extends AbstractInternalQuery implements Int
 	}	
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getResultList()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getResultList()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -97,7 +97,7 @@ public class InternalNamedQueryImpl extends AbstractInternalQuery implements Int
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getSingleResult()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getSingleResult()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -107,7 +107,7 @@ public class InternalNamedQueryImpl extends AbstractInternalQuery implements Int
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#executeUpdate()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#executeUpdate()
 	 */
 	@Override
 	public int executeUpdate() {

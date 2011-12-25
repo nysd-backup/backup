@@ -58,7 +58,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.api.free.NamedQuery#setHint(java.lang.String, java.lang.Object)
+	 * @see kosmos.framework.sqlclient.api.Query#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T extends Query> T setHint(String arg0, Object arg1) {
