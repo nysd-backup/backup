@@ -59,9 +59,9 @@ public abstract class ServiceUnit extends Assert{
 	/** サービスロケータ */
 	protected static SpringServiceLocator locator = null;
 	
-	private IDatabaseConnection connection = null;
+	protected IDatabaseConnection connection = null;
 
-	private ServiceTestContextImpl context = null;
+	protected ServiceTestContextImpl context = null;
 
 	/**
 	 * コンチE��ストロード、個別チE��トケースで使用するServiceLocatorめEontextConfigurationを使用できるようにする
@@ -176,7 +176,7 @@ public abstract class ServiceUnit extends Assert{
 	 * @param replace
 	 * @return
 	 */
-	private IDataSet loadDataSet(String dataFileName, Map<Object, Object> replace) {
+	protected IDataSet loadDataSet(String dataFileName, Map<Object, Object> replace) {
 
 		AbstractDataSet dataset = null;
 

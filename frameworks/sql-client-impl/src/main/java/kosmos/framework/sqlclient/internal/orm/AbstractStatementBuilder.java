@@ -74,10 +74,10 @@ public abstract class AbstractStatementBuilder {
 		boolean first=true;
 		for(String name :set){	
 			if( first ){
-				builder.append("set e.").append(name).append(" = :").append(name);
+				builder.append("\n set e.").append(name).append(" = :").append(name);
 				first = false;
 			}else{
-				builder.append(", e.").append(name).append(" = :").append(name);
+				builder.append("\n , e.").append(name).append(" = :").append(name);
 			}
 		}
 		return builder.toString();
@@ -91,7 +91,7 @@ public abstract class AbstractStatementBuilder {
 	 */
 	protected String generateWhere(OrmContext<?> condition){
 		if(condition.getFilterString() != null){
-			return " where " + condition.getFilterString();
+			return "\n where " + condition.getFilterString();
 		}
 		List<WhereCondition> wheres = condition.getConditions();
 		if( wheres == null || wheres.isEmpty()){
@@ -103,10 +103,10 @@ public abstract class AbstractStatementBuilder {
 		for(WhereCondition where :wheres){	
 			WhereOperand operand = where.getOperand();
 			if( first ){
-				builder.append(" where ");
+				builder.append("\n where ");
 				first = false;
 			}else {
-				builder.append("and ");
+				builder.append("\n and ");
 			}
 
 			// BETWEEN
@@ -141,7 +141,7 @@ public abstract class AbstractStatementBuilder {
 	 */
 	protected String generateOrderBy(OrmQueryContext<?> condition){
 		if(condition.getOrderString() != null){
-			return " order by " +condition.getOrderString();
+			return "\n order by " +condition.getOrderString();
 		}
 		List<SortKey> orderby = condition.getSortKeys();
 		if( orderby == null || orderby.isEmpty()){
@@ -153,9 +153,9 @@ public abstract class AbstractStatementBuilder {
 		
 		for(SortKey sort :orderby){				
 			if( first ){
-				builder.append(" order by ");
+				builder.append("\n order by ");
 			}else {
-				builder.append(" , ");
+				builder.append("\n , ");
 			}
 			String colName = sort.getColumn();
 			String ascending = sort.isAscending()?" asc ":" desc ";			

@@ -26,6 +26,7 @@ import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
 import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
 import kosmos.framework.utility.ReflectionUtils;
+import kosmos.framework.utility.StringUtils;
 
 /**
  * The internal ORM query.
@@ -36,13 +37,27 @@ import kosmos.framework.utility.ReflectionUtils;
 public class InternalOrmQueryImpl implements InternalOrmQuery{
 	
 	/** the SQLStatementBuilder */
-	private SQLStatementBuilder sb = null;
+	private SQLStatementBuilder sb = new SQLStatementBuilderImpl();
 	
 	/** the queryFactory */
 	private SQLEngineFacade sqlEngineFacade;
 	
 	/** the ConnectionProvider */
 	private ConnectionProvider cs;
+	
+	/**
+	 * @param engineFacade the engineFacade to set
+	 */
+	public void setSqlEngineFacade(SQLEngineFacade engineFacade){
+		this.sqlEngineFacade = engineFacade;
+	}
+	
+	/**
+	 * @param provider the provider to set
+	 */
+	public void setConnectionProvider(ConnectionProvider provider){
+		this.cs = provider;
+	}
 	
 	/**
 	 * @param sb the sb to set
@@ -63,17 +78,22 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		}
 		
 		OrmQueryContext<E> newContext = new OrmQueryContext<E>(context.getEntityClass());
+		newContext.setFirstResult(context.getFirstResult());
 		newContext.setMaxSize(2);
-		
+		newContext.setLockModeType(context.getLockModeType());
 		for(Map.Entry<String, Object> h : context.getHints().entrySet()){
-			context.setHint(h.getKey(), h.getValue());
+			newContext.setHint(h.getKey(), h.getValue());
 		}
 		
 		for(int i = 0 ; i < fs.length; i++){
 			Object pk = pks[i];
 			Field f = fs[i];
 			Column col = f.getAnnotation(Column.class);
-			newContext.getConditions().add(new WhereCondition(col.name(),i,WhereOperand.Equal,pk));
+			String name = col.name();
+			if(StringUtils.isEmpty(name)){
+				name = f.getName();
+			}
+			newContext.getConditions().add(new WhereCondition(name,i,WhereOperand.Equal,pk));
 		}
 		
 		List<E> resultList = getResultList(newContext);
@@ -92,7 +112,8 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	public <E> List<E> getResultList(OrmQueryContext<E> condition) {
 		
 		String sql = sb.createSelect(condition);
-		InternalQueryImpl query = new InternalQueryImpl(true, sql, condition.getEntityClass().getName()+".select", cs, null, sqlEngineFacade);
+		InternalQueryImpl query = new InternalQueryImpl(true, sql, condition.getEntityClass().getName()+".select", cs,
+				condition.getEntityClass(), sqlEngineFacade);
 		final NativeQuery engine = new LocalQueryEngineImpl(query);
 
 		setConditionParameters(condition,new Bindable(){
@@ -105,15 +126,9 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 			engine.setHint(e.getKey(), e.getValue());
 		}
 		
-		int first = condition.getFirstResult();
-		if( first > 0){
-			query.setFirstResult(first);
-		}
-		int max = condition.getMaxSize();
-		if(max > 0){			
-			query.setMaxResults(max);
-		}
-		return query.getResultList();
+		engine.setFirstResult( condition.getFirstResult());			
+		engine.setMaxResults(condition.getMaxSize());
+		return engine.getResultList();
 	}
 
 	/**
@@ -124,6 +139,12 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		
 		String sql = sb.createInsert(context.getEntityClass(),values.keySet());
 		NativeUpdate engine = createUpdateEngine(sql, context.getEntityClass().getName()+".insert");
+
+		//更新値設定
+		for(Map.Entry<String, Object> e: values.entrySet()){
+			engine.setParameter(e.getKey(), e.getValue());
+		}
+		
 		setUpdatingHint(context.getHints(),engine);
 		return engine.update();
 	}

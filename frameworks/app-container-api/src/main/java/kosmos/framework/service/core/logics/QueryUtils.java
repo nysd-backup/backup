@@ -37,15 +37,24 @@ public class QueryUtils {
 				throw new IllegalStateException("count of ? is different from parameter count");
 			}
 			Object v = ite.next();
-			if( v instanceof String ){
-				converted = StringUtils.replaceOnce(converted, "?", "\'" + v.toString() + "\'");
-			} else if (v instanceof Date) {
-				converted = StringUtils.replaceOnce(converted, "?", format.format((Date) v));			
-			}else{
-				converted = StringUtils.replaceOnce(converted, "?", String.valueOf(v));
-			}	
+			converted = StringUtils.replaceOnce(converted, "?", getDisplayValue(v));		
 		}	
 		return converted;
+	}
+	
+	/**
+	 * Gets the displaying value.
+	 * @param o the object
+	 * @return the value
+	 */
+	public static String getDisplayValue(Object o){
+		if( o instanceof String ){
+			return "\'" + o.toString() + "\'";
+		} else if (o instanceof Date) {
+			return format.format((Date) o);			
+		}else{
+			return String.valueOf(o);
+		}	
 	}
 	
 }

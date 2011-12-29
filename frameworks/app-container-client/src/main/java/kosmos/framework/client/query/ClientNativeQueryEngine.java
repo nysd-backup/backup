@@ -48,8 +48,8 @@ public class ClientNativeQueryEngine implements NativeQuery{
 	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#getTotalResult()
 	 */
 	@Override
-	public <T> NativeResult<T> getTotalResult() {
-		return (NativeResult<T>)service.getTotalResult(request);
+	public NativeResult getTotalResult() {
+		return service.getTotalResult(request);
 	}
 
 	/**
@@ -95,15 +95,6 @@ public class ClientNativeQueryEngine implements NativeQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.Query#enableNoDataError()
-	 */
-	@Override
-	public <T extends Query> T enableNoDataError() {
-		request.setNoDataError(true);
-		return (T)this;
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.Query#setMaxResults(int)
 	 */
 	@Override
@@ -119,14 +110,6 @@ public class ClientNativeQueryEngine implements NativeQuery{
 	public <T extends Query> T setFirstResult(int arg0) {
 		request.setFirstResult(arg0);
 		return (T)this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#exists()
-	 */
-	@Override
-	public boolean exists() {
-		return service.exists(request);
 	}
 
 	/**
@@ -147,13 +130,10 @@ public class ClientNativeQueryEngine implements NativeQuery{
 		return (T)this;
 	}
 
-	/**
-	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#setQueryTimeout(int)
-	 */
 	@Override
-	public <T extends NativeQuery> T setQueryTimeout(int seconds) {
-		request.setTimeoutSeconds(seconds);
-		return (T)this;
+	public <T extends Query> T setHint(String arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

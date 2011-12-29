@@ -21,7 +21,7 @@ import org.junit.Ignore;
 @Ignore
 @Entity
 @Table(name="testa")
-public class TestEntity{
+public class TestEntity implements Cloneable{
 	
 	@Id
 	@Column
@@ -95,5 +95,17 @@ public class TestEntity{
 	 */
 	public int getVersion() {
 		return version;
+	}
+	
+	/**
+	 * @see java.lang.Object#clone()
+	 */
+	public TestEntity clone(){
+		
+		try{
+			return (TestEntity)super.clone();
+		}catch(CloneNotSupportedException cnse){
+			throw new IllegalStateException(cnse);
+		}
 	}
 }

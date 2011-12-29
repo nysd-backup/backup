@@ -61,11 +61,7 @@ public class TransactionManagingContext extends ServiceContext{
 	 * end unit of work.
 	 */
 	public void endUnitOfWork(){
-		try{
-			getCurrentUnitOfWork().terminate();
-		}finally{
-			unitOfWorkStack.pop();
-		}
+		unitOfWorkStack.pop();
 	}
 	
 	/**
@@ -101,15 +97,8 @@ public class TransactionManagingContext extends ServiceContext{
 		anyTransactionFailed = false;
 		suppressConcurencyError = false;
 		suppressExisitanceError = false;
-		try{
-			for(InternalUnitOfWork unit : unitOfWorkStack){
-				unit.terminate();
-			}
-		}finally{
-			unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
-			super.release();		
-		}
-	
+		unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
+		super.release();		
 	}
 	
 	/** 

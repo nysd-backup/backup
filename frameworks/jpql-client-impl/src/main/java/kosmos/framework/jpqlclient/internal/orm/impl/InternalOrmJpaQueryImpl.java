@@ -149,10 +149,8 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 		if( first > 0){
 			query.setFirstResult(first);
 		}
-		int max = entityQuery.getMaxSize();
-		if(max > 0){			
-			query.setMaxResults(max);
-		}
+		
+		query.setMaxResults(entityQuery.getMaxSize());		
 		return query.getResultList();
 	}
 	

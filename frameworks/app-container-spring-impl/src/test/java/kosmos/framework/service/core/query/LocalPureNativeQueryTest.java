@@ -3,6 +3,7 @@
  */
 package kosmos.framework.service.core.query;
 
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import javax.annotation.Resource;
 
 import kosmos.framework.core.query.AdvancedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.CachableConst;
 import kosmos.framework.service.test.SampleNativeQuery;
 import kosmos.framework.service.test.SampleNativeQueryConst;
@@ -18,12 +18,16 @@ import kosmos.framework.service.test.SampleNativeResult;
 import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
+import kosmos.framework.sqlclient.api.ConnectionProvider;
+import kosmos.framework.sqlclient.api.PersistenceManager;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 
@@ -33,17 +37,38 @@ import org.springframework.test.context.ContextConfiguration;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@ContextConfiguration(locations = "/META-INF/context/oracleAgentApplicationContext.xml")
+@ContextConfiguration(locations = "/META-INF/context/oracleAgentNativeApplicationContext.xml")
 public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity{
 	
 	@Resource
-	private QueryFactory engineQueryFactory;
+	private QueryFactory queryFactory;
 	
 	@Resource
 	private AdvancedOrmQueryFactory ormQueryFactory;
+
+	@Autowired
+	private ConnectionProvider provider;
 	
 	@Autowired
-	private EntityManagerProvider per;
+	private PersistenceManager pm;
+	
+	/**
+	 * @see kosmos.framework.service.test.ServiceUnit#setUpData(java.lang.String)
+	 */
+	@Override
+	protected void setUpData(String dataPath){
+		
+		try{
+			Connection con = provider.getConnection();
+			String userName = con.getMetaData().getUserName();
+			connection = new DatabaseConnection(con,userName);
+			IDataSet dataSet = loadDataSet(String.format("/testdata/%s",dataPath), null);
+			DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	
 	/**
@@ -53,7 +78,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void select(){
 		
 		setUpData("TEST.xls");
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setTest("1");
 		
 		List<SampleNativeResult> result = query.getResultList();
@@ -71,7 +96,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test
 	public void selectIfAttr(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setAttr("1000");
 		query.setTest("1");
 		
@@ -87,93 +112,39 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test
 	public void selectIfAttr2(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setAttr2(500).setTest("1").setArc("500");
 		
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(0,result.size());
 	}
-	
-//	/**
-//	 * 結果0件シスチE��エラー
-//	 */
-//	@Test
-//	public void nodataError(){
-//		setUpData("TEST.xls");
-//		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class).enableNoDataError();
-//		query.setAttr2(500).setTest("1").setArc("500");
-//		
-//		try{
-//			query.getResultList();
-//			fail();
-//		}catch(UnexpectedNoDataFoundException e){
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	/**
-//	 * exists
-//	 */
-//	@Test
-//	public void exists(){
-//		setUpData("TEST.xls");
-//		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
-//		query.setAttr2(500).setTest("1");
-//		assertTrue(query.exists());
-//	}
 
 	/**
-	 * getSingleResult
+	 * setFirstResult 
 	 */
 	@Test
-	public void getSingleResult(){
-		setUpData("TEST.xls");
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
-		query.setAttr2(500).setTest("1");
-		SampleNativeResult e = query.getSingleResult();
-		assertEquals("1",e.getTest());
-	}
-	
-	/**
-	 * setMaxSize
-	 */
-	@Test
-	public void setMaxSize(){
-		TestEntity entity = new TestEntity();
-		entity.setTest("1000").setAttr("aa").setAttr2(111);
-		setUpData("TEST.xls");
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class).setMaxResults(2);
-		List<SampleNativeResult> e = query.getResultList();
-		assertEquals(2,e.size());
-	}
-	
-	/**
-	 * setFirstResult、E件目�E�E件目取征E
-	 */
-	@Test
-	public void setFirstResult(){
+	public void setFirstResultAndMaxResult(){
 		setUpData("TEST.xls");
 		
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		per.getEntityManager().persist(f);
+		pm.insert(f);
 		
 		TestEntity s = new TestEntity();
-		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
-		per.getEntityManager().persist(s);
+		s.setTest("901").setAttr("901").setAttr2(900).setVersion(1);
+		pm.insert(s);
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		per.getEntityManager().persist(t);
-		per.getEntityManager().flush();
+		pm.insert(t);
 		
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);		
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);		
 		query.setFirstResult(1);
 		query.setMaxResults(2);
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
+		assertEquals(1,result.get(0).getVersion());
 		assertEquals("900",result.get(1).getAttr());
 	}
 	
@@ -184,7 +155,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void constTest(){
 	
 		setUpData("TEST.xls");
-		SampleNativeQueryConst c = engineQueryFactory.createQuery(SampleNativeQueryConst.class);
+		SampleNativeQueryConst c = queryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setTest("1");
 		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
@@ -195,11 +166,10 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	 * $attr = c_TARGET_CONST_1_OK
 	 */
 	@Test
-	@Rollback(false)
 	public void constAttr(){
 	
 		setUpData("TEST.xls");
-		SampleNativeQueryConst c = engineQueryFactory.createQuery(SampleNativeQueryConst.class);
+		SampleNativeQueryConst c = queryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setTest("2");
 		c.setAttr(CachableConst.TARGET_TEST_1_OK);
 		List<SampleNativeResult> e = c.getResultList();
@@ -214,10 +184,12 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> eq = ormQueryFactory.createStrictQuery(TestEntity.class);
-		eq.eq(TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
-		per.getEntityManager().flush();
+		TestEntity entity = eq.eq(TEST, "1").getSingleResult();
+		TestEntity updatable = entity.clone();
+		updatable.setAttr2(CachableConst.TARGET_INT);
+		pm.update(updatable, entity);	
 		
-		SampleNativeQueryConst c = engineQueryFactory.createQuery(SampleNativeQueryConst.class);
+		SampleNativeQueryConst c = queryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setArc(CachableConst.TARGET_INT);		
 		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
@@ -231,7 +203,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		assertEquals(2,query.count());
 	}
 	
@@ -243,7 +215,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setMaxResults(1);
 		NativeResult result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
@@ -259,7 +231,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = engineQueryFactory.createQuery(SampleNativeQuery.class);
+		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		List<SampleNativeResult> e = query.getFetchResult();
 		
 		Iterator<SampleNativeResult> itr = e.iterator();

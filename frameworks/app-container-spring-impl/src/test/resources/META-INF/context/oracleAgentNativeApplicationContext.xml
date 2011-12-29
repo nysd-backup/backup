@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+	
+	<!-- コネクションが別セッションにならないのでこちらを単体テストで使用する。javaagentの設定をテストクラス毎に実行するのはしんどい ので[java]→[Installed JREs]でデフォルトVM引数を変更する-->
+	
+	<import resource="classpath:META-INF/defaultServiceContext.xml"/>
+	<import resource="classpath:META-INF/defaultQueryAdviceContext.xml"/>
+	<import resource="classpath:META-INF/defaultAdviceContext.xml"/>
+
+	<context:load-time-weaver aspectj-weaving="autodetect" />	
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+	    <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
+	    <property name="username" value="yoshida" />
+	    <property name="password" value="yoshida" />
+	</bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
+
+	<!--************************************************** 	
+	SQLエンジン 
+	**************************************************-->	
+	<!-- SQL作成 -->
+  	<bean id="sqlBuilder" class="kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl" />	
+
+	<!-- Statement作成 -->
+	<bean id="statementProvider" class="kosmos.framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
+
+	<bean id="sqlExceptionHandler" class="kosmos.framework.sqlclient.internal.SQLExceptionHandlerImpl"/>
+
+	<bean id="sqlEngineFacade" class="kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
+		<property name="sqlBuilder" ref="sqlBuilder"/>
+		<property name="provider" ref="statementProvider"/>
+		<property name="exceptionHandler" ref="sqlExceptionHandler" />
+	</bean>
+
+	<!-- 内部クエリ -->
+	<bean id="internalOrmQuery" class="kosmos.framework.sqlclient.internal.orm.impl.InternalOrmQueryImpl" scope="prototype" >
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
+		<property name="connectionProvider" ref="txConnectionProvider"/>
+	</bean>
+	
+	<!-- クエリファクトリ -->
+	<bean id="queryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
+		<property name="connectionProvider" ref="txConnectionProvider"/>	
+	</bean>
+	
+	<!-- ORMクエリファクトリ -->
+	<bean id="internalQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="internalOrmQuery" />
+	</bean>
+
+	<!-- ORMクエリファクトリ開発者API -->
+	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.AdvancedOrmQueryFactoryImpl" scope="prototype">	
+		<property name="internalFactory" ref="internalQueryFactory" />
+	</bean>
+	<bean id="txConnectionProvider" class="kosmos.framework.service.core.query.TxDataSourceConnectionProviderImpl" scope="prototype" >
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="internalOrmQuery" />
+	</bean>
+	
+	<bean id="clientQueryFactory" parent="queryFactory" scope="prototype" />
+	
+	<bean id="nativeQueryService" class="kosmos.framework.service.core.services.NativeQueryServiceImpl" />
+	<bean id="ormQueryService" class="kosmos.framework.service.core.services.OrmQueryServiceImpl" />
+	<bean id="consecutiveQueryService" class="kosmos.framework.service.core.services.ConsecutiveQueryServiceImpl" />
+
+	<context:component-scan base-package="kosmos.framework.service.core.services">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />		
+	</context:component-scan>
+	
+	<bean class="kosmos.framework.service.test.RequiresNewServiceImpl" scope="prototype" />
+		<bean class="kosmos.framework.service.test.RequiresNewReadOnlyServiceImpl" scope="prototype" />
+	
+</beans>

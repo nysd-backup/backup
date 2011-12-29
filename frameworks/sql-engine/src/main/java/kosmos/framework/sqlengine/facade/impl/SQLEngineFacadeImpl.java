@@ -70,6 +70,13 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	private Updater updater = new UpdaterImpl();
 	
 	/**
+	 * @param exceptionHandler the exceptionHandler to set
+	 */
+	public void setExceptionHandler(ExceptionHandler exceptionHandler){
+		this.exceptionHandler = exceptionHandler;
+	}
+	
+	/**
 	 * @param recordHandlerFactory the recordHandlerFactory to set
 	 */
 	public void setRecordHandlerFactory(RecordHandlerFactory recordHandlerFactory){
@@ -149,12 +156,14 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 */
 	@Override
 	public <T> List<T> executeQuery(QueryParameter param , Connection con){	
+	
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = createSQL(param,bindList);
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult()+param.getMaxSize(),param.getFetchSize());
+			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),maxRows,param.getFetchSize());
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());
 			
@@ -179,7 +188,8 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
 		try{							
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),param.getFirstResult() + param.getMaxSize(),param.getFetchSize());	
+			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;
+			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),maxRows,param.getFetchSize());	
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());			
 			

@@ -56,7 +56,7 @@ public class InternalSQLBuilderInterceptor implements InternalInterceptor{
 		Object result = contextInvoker.proceed();
 		if(!ignoreList.contains(contextInvoker.getArgs()[2])){
 			String replaced = String.class.cast(result);	
-			LOG.info(String.format("sql after evaluate \r\n%s\r\n",replaced));				
+			LOG.debug(String.format("sql after evaluate \r\n%s\r\n",replaced));				
 		}
 		return result;
 	}

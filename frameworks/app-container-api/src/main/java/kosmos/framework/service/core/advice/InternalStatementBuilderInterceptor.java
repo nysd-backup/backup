@@ -43,11 +43,26 @@ public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 		if(ignoreList.contains(contextInvoker.getArgs()[0])){
 			return contextInvoker.proceed();
 		}else{
-			if(contextInvoker.getArgs().length > 3 ){
-				String sql = String.class.cast(contextInvoker.getArgs()[2]); 		
+			if(contextInvoker.getArgs().length > 3 ){			
+				String sql = String.class.cast(contextInvoker.getArgs()[2]); 	
 				List<Object> bindList = (List<Object>)contextInvoker.getArgs()[3];
-				String converted = QueryUtils.applyValues(bindList, sql);
-				LOG.info(String.format("sql for prepared statement %s%s","\r\n",converted));	
+				StringBuilder builder = new StringBuilder("[");
+				boolean first = true;
+				for(Object o : bindList){
+					if(first){
+						first = false;
+					}else{
+						builder.append(",");
+					}
+					builder.append(QueryUtils.getDisplayValue(o));
+				}
+				builder.append("]");
+				LOG.info(String.format("executing sql = \r\n%s\r\n%s",sql,builder.toString()));				
+				
+				if(LOG.isDebugEnabled()){
+					String converted = QueryUtils.applyValues(bindList, sql);
+					LOG.debug(String.format("complete sql = \r\n%s",converted));	
+				}
 			}
 			return contextInvoker.proceed();
 		}

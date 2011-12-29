@@ -6,6 +6,9 @@ package kosmos.framework.sqlengine.facade;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * The base of the parameter
  *
@@ -148,6 +151,14 @@ public abstract class SQLParameter {
 	 */
 	public int getTimeoutSeconds() {
 		return timeoutSeconds;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 	
 }
