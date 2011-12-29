@@ -15,8 +15,8 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
  * A connection provider only for 'SQLEngine'.
  * 
  * <pre>
- * Needless to use this in Non JTA environment.
- * Only use in DataSourceTransactionManager is active.
+ * Needless to use this in JTA environment.
+ * Only use this when the DataSourceTransactionManager is active.
  * </pre>
  * 
  * @author yoshida-n
