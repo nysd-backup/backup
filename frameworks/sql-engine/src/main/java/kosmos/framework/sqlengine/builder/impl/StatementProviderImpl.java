@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.List;
 
 import kosmos.framework.sqlengine.builder.StatementProvider;
@@ -44,6 +43,28 @@ public class StatementProviderImpl implements StatementProvider{
 		this.resultSetConcurrency = resultSetConcurrency;
 	}
 	
+
+	/**
+	 * @param sqlId
+	 * @param con
+	 * @param sql
+	 * @param bindList
+	 * @param timeout
+	 * @param maxRows
+	 * @param fetchSize
+	 * @return
+	 * @throws SQLException
+	 */
+	@Override
+	public PreparedStatement buildStatement(String sqlId, Connection con,
+			String sql, List<Object> bindList, int timeout, int maxRows,
+			int fetchSize) throws SQLException {
+		PreparedStatement stmt = createStatement(sqlId, con, sql, timeout, maxRows, fetchSize);
+		setBindParameter(stmt, bindList);
+		return stmt;
+	}
+
+	
 	/**
 	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.lang.String, java.sql.Connection, java.lang.String, int, int, int)
 	 */
@@ -67,16 +88,6 @@ public class StatementProviderImpl implements StatementProvider{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.lang.String, java.sql.Connection, java.lang.String, java.util.List, int, int, int)
-	 */
-	@Override
-	public PreparedStatement createStatement(String sqlId ,Connection con ,String sql,List<Object> bindList,int timeout , int maxRows,int fetchSize) throws SQLException{
-		PreparedStatement statement = createStatement(sqlId,con,sql,timeout,maxRows,fetchSize);		
-		setBindParameter(statement,bindList);
-		return statement;
-	}
-	
-	/**
 	 * Configures the statement.
 	 * 
 	 * @param stmt the statement
@@ -96,23 +107,18 @@ public class StatementProviderImpl implements StatementProvider{
 			stmt.setFetchSize(fetchSize);
 		}
 	}
-	
+
 	/**
-	 * Binds the parameter to statement.
-	 * 
-	 * @param statement the statement
-	 * @param bind the binding value
+	 * @see kosmos.framework.sqlengine.builder.StatementProvider#setBindParameter(java.sql.PreparedStatement, java.util.List)
 	 */
-	protected void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException{
+	@Override
+	public void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException{
 		
 		for(int i = 0 ; i < bind.size() ; i++){
-			
 			try{
 				Object value = bind.get(i);				
 				int arg = i+1;
-				if( value == null){
-					statement.setNull(arg, Types.OTHER);
-				}else if ( value instanceof String){
+				if ( value instanceof String){
 					statement.setString(arg, String.class.cast(value));
 				}else if ( value instanceof Integer ){
 					statement.setInt(arg, Integer.class.cast(value));

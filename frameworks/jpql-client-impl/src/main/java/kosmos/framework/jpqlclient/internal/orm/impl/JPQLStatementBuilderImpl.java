@@ -3,9 +3,10 @@
  */
 package kosmos.framework.jpqlclient.internal.orm.impl;
 
-import kosmos.framework.jpqlclient.internal.orm.JPQLStatementBuilder;
-import kosmos.framework.sqlclient.api.orm.OrmContext;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
+import java.util.Collection;
+import java.util.List;
+
+import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder;
 
 
@@ -15,34 +16,41 @@ import kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-class JPQLStatementBuilderImpl extends AbstractStatementBuilder implements JPQLStatementBuilder{
+public class JPQLStatementBuilderImpl extends AbstractStatementBuilder{
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createPrefix(framework.api.query.OrmCondition)
+	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createPrefix(java.lang.Class)
 	 */
 	@Override
-	protected StringBuilder createPrefix(OrmQueryContext<?> condition) {
-		return new StringBuilder(String.format("select e from %s e",condition.getEntityClass().getSimpleName()));
+	protected StringBuilder createPrefix(Class<?> entityClass) {
+		return new StringBuilder(String.format("select e from %s e",entityClass.getSimpleName()));
 	}
 
 	/**
-	 * @see kosmos.framework.jpqlclient.internal.orm.JPQLStatementBuilder#createDelete(framework.api.query.OrmCondition)
+	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createDelete(java.lang.Class, java.lang.String, java.util.List)
 	 */
 	@Override
-	public String createDelete(OrmContext<?> condition) {
+	public String createDelete(Class<?> entityClass,String filterString, List<WhereCondition> where){
 		StringBuilder builder = new StringBuilder("delete e from ");
-		builder.append(condition.getEntityClass().getSimpleName()).append(" e ");
-		builder.append(generateWhere(condition));
+		builder.append(entityClass.getSimpleName()).append(" e ");
+		builder.append(generateWhere(filterString,where));
 		return builder.toString();
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createUpdatePrefix(kosmos.framework.sqlclient.api.orm.OrmContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createUpdatePrefix(java.lang.Class)
 	 */
 	@Override
-	protected StringBuilder createUpdatePrefix(OrmContext<?> condition) {
-		return new StringBuilder(String.format("update %s e ",condition.getEntityClass().getSimpleName()));
+	protected StringBuilder createUpdatePrefix(Class<?> entityClass) {
+		return new StringBuilder(String.format("update %s e ",entityClass.getSimpleName()));
 	}
-	
+
+	/**
+	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createInsert(java.lang.Class, java.util.Collection)
+	 */
+	@Override
+	public String createInsert(Class<?> entityClass, Collection<String> values) {
+		throw new UnsupportedOperationException();
+	}
 
 }

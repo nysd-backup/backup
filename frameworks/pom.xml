@@ -43,10 +43,10 @@
 	</dependencies>
 	
 	<properties>
-		<framework.core.version>1.0.0-SNAPSHOT</framework.core.version>	
-		<framework.app.container.api.version>1.0.0-SNAPSHOT</framework.app.container.api.version>
-		<framework.app.container.spring.impl.version>1.0.0-SNAPSHOT</framework.app.container.spring.impl.version>
-		<framework.app.container.ejb.impl.version>1.0.0-SNAPSHOT</framework.app.container.ejb.impl.version>
+		<framework.kosmos.core.version>1.0.0-SNAPSHOT</framework.kosmos.core.version>	
+		<framework.kosmos.platform.api.version>1.0.0-SNAPSHOT</framework.kosmos.platform.api.version>
+		<framework.kosmos.spring.impl.version>1.0.0-SNAPSHOT</framework.kosmos.spring.impl.version>
+		<framework.kosmos.ejb.impl.version>1.0.0-SNAPSHOT</framework.kosmos.ejb.impl.version>
 		<framework.sql.engine.version>1.0.0-SNAPSHOT</framework.sql.engine.version>	
 		<framework.sql.client.api.version>1.0.0-SNAPSHOT</framework.sql.client.api.version>	
 		<framework.sql.client.impl.version>1.0.0-SNAPSHOT</framework.sql.client.impl.version>			
@@ -92,15 +92,11 @@
 				<module>jpql-client-api</module>
 				<module>jpql-client-impl</module>	
 				<module>jpql-client-eclipselink-plugin</module>	
-				<!--
-				<module>jdoql-client-api</module>	
-				<module>jdoql-client-impl</module>			
-				-->
-				<module>container-core</module>
-				<module>app-container-api</module>
-				<module>app-container-spring-impl</module>	
-				<module>app-container-ejb-impl</module>		
-				<module>app-container-client</module>			
+				<module>kosmos-core</module>
+				<module>kosmos-platform-api</module>
+				<module>kosmos-spring-impl</module>	
+				<module>kosmos-ejb-impl</module>		
+				<module>kosmos-client</module>			
 			</modules>
 		</profile>
 	</profiles>

@@ -111,10 +111,10 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public OrmUpdate<T> setCondition(OrmContext<T> condition) {
+	public OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition) {
 		delegate.setCondition(condition);
 		return this;
 	}
@@ -141,8 +141,8 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#execute(java.util.List, java.lang.Object[])
 	 */
 	@Override
-	public int execute(List<Object> set, Object... params) {
-		return delegate.execute(set, params);
+	public int update(List<Object> set, Object... params) {
+		return delegate.update(set, params);
 	}
 
 	/**
@@ -153,6 +153,40 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	public OrmUpdate<T> setHint(String key, Object value) {
 		delegate.setHint(key, value);
 		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#addBatch()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public OrmUpdate<T> addBatch() {
+		delegate.addBatch();
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#batchUpdate()
+	 */
+	@Override
+	public int[] batchUpdate() {
+		return delegate.batchUpdate();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#delete()
+	 */
+	@Override
+	public int delete() {
+		return delegate.delete();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#getCurrentParams()
+	 */
+	@Override
+	public OrmUpdateParameter<T> getCurrentParams() {
+		return delegate.getCurrentParams();
 	}
 
 

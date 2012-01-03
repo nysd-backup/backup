@@ -4,10 +4,9 @@
 package kosmos.framework.sqlclient.internal.orm;
 
 import java.util.List;
-import java.util.Map;
 
-import kosmos.framework.sqlclient.api.orm.OrmContext;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
+import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 
 /**
  * function.
@@ -17,49 +16,64 @@ import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
  */
 public interface InternalOrmQuery {
 	
+	/**
+	 * Updates the batch.
+	 * 
+	 * @param parameter the parameter to set
+	 * @return the inserted count
+	 */
+	public int[] batchUpdate(OrmUpdateParameter<?> parameter);
+	
+	/**
+	 * Updates the batch.
+	 * 
+	 * @param parameter the parameter to set
+	 * @return the inserted count
+	 */
+	public int[] batchInsert(OrmUpdateParameter<?> parameter);
 	
 	/**
 	 * Insert the record.
 	 * 
-	 * @param entity the entity
+	 * @param parameter the parameter
 	 * @param hints the hints
 	 * @return the inserted count
 	 */
-	public int insert(OrmContext<?> context , Map<String,Object> values);
+	public int insert(OrmUpdateParameter<?> parameter);
 	
 	/**
 	 *　Updates the table.
 	 *
-	 * @param condition the condition
+	 * @param parameter the parameter
 	 * @param set the updating target
 	 * @return the updated count
 	 */
-	public int update(OrmContext<?> context , Map<String,Object> set);
+	public int update(OrmUpdateParameter<?> parameter);
 	
 	/** 
 	 * Deletes the table.
 	 * 
 	 * @param condition the condition
 	 */
-	public int delete(OrmContext<?> context);
+	public int delete(OrmUpdateParameter<?> parameter);
 	
 	/**
 	 * Finds by primary keys.
 	 * 
 	 * @param <E> the type
-	 * @param entity the condition
+	 * @param parameter the parameter
 	 * @param pks the primary keys
 	 * @return the result
  	 */
-	public <E> E find(OrmQueryContext<E> context,Object... pks);
+	public <E> E find(OrmQueryParameter<E> parameter,Object... pks);
 	
 	/**
 	 * Searches the records.
 	 * 
 	 * @param <E> the type
-	 * @param entity the condition
+	 * @param parameter the parameter
 	 * @return the result
 	 */
- 	public <E> List<E> getResultList(OrmQueryContext<E> context);
+ 	public <E> List<E> getResultList(OrmQueryParameter<E> parameter);
  
 }

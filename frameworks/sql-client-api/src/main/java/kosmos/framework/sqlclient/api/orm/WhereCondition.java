@@ -3,6 +3,9 @@
  */
 package kosmos.framework.sqlclient.api.orm;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * The condition.
  *
@@ -84,5 +87,13 @@ public class WhereCondition {
 	 */
 	public int getBindCount() {
 		return bindCount;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
 	}
 }

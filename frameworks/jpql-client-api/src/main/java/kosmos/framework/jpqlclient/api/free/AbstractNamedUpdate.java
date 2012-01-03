@@ -3,7 +3,7 @@
  */
 package kosmos.framework.jpqlclient.api.free;
 
-import kosmos.framework.sqlclient.api.free.AbstractUpdate;
+import kosmos.framework.sqlclient.api.free.AbstractFreeUpdate;
 
 /**
  * NamedUpdate.
@@ -11,7 +11,7 @@ import kosmos.framework.sqlclient.api.free.AbstractUpdate;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractNamedUpdate extends AbstractUpdate<NamedUpdate> implements NamedUpdate{
+public abstract class AbstractNamedUpdate extends AbstractFreeUpdate<NamedUpdate> implements NamedUpdate{
 	
 
 

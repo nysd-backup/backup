@@ -4,12 +4,10 @@
 package kosmos.framework.sqlclient.internal.orm.impl;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import kosmos.framework.sqlclient.api.orm.OrmContext;
 import kosmos.framework.sqlclient.api.orm.OrmUpdate;
+import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.api.orm.WhereOperand;
 import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
@@ -27,25 +25,21 @@ public class LocalOrmUpdateEngine<T> implements OrmUpdate<T>{
 	private final InternalOrmQuery dao;
 	
 	/** the condition */
-	protected OrmContext<T> condition;
-	
-	/** the set statement */
-	protected final Map<String,Object> set;
+	protected OrmUpdateParameter<T> condition;
 	
 	/**
 	 * @param entityClass the entityClass to set
 	 */
 	public LocalOrmUpdateEngine(Class<T> entityClass,InternalOrmQuery dao){
-		condition = new OrmContext<T>(entityClass);
-		set = new LinkedHashMap<String, Object>();	
+		condition = new OrmUpdateParameter<T>(entityClass);
 		this.dao = dao;
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmContext)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmParameter)
 	 */
 	@Override
-	public OrmUpdate<T> setCondition(OrmContext<T> condition) {
+	public OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition) {
 		this.condition = condition;
 		return this;
 	}
@@ -128,7 +122,7 @@ public class LocalOrmUpdateEngine<T> implements OrmUpdate<T>{
 	 */
 	@Override
 	public OrmUpdate<T> set(String column, Object value) {
-		set.put(column, value);
+		condition.set(column, value);
 		return this;
 	}
 
@@ -137,20 +131,20 @@ public class LocalOrmUpdateEngine<T> implements OrmUpdate<T>{
 	 */
 	@Override
 	public int update() {
-		return dao.update(condition, set);
+		return dao.update(condition);
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#execute(java.util.List, java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#update(java.util.List, java.lang.Object[])
 	 */
 	@Override
-	public int execute(List<Object> sets,Object... value){
-		List<String> a = new ArrayList<String>(set.keySet());
+	public int update(List<Object> sets,Object... value){
+		List<String> a = new ArrayList<String>(condition.getCurrentValues().keySet());
 		for(int i = 0 ; i < sets.size(); i++){
-			set.put(a.get(i),sets.get(i));
+			condition.getCurrentValues().put(a.get(i),sets.get(i));
 		}
 		condition.setEasyParams(value);
-		return dao.update(condition, set);
+		return dao.update(condition);
 	}
 
 	/**
@@ -159,7 +153,7 @@ public class LocalOrmUpdateEngine<T> implements OrmUpdate<T>{
 	@Override
 	public OrmUpdate<T> set(String... setColumn) {
 		for(String s : setColumn){
-			set.put(s, null);
+			condition.getCurrentValues().put(s, null);
 		}
 		return this;
 	}
@@ -171,6 +165,40 @@ public class LocalOrmUpdateEngine<T> implements OrmUpdate<T>{
 	public OrmUpdate<T> filter(String filterString) {
 		condition.setFilterString(filterString);
 		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#addBatch()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public OrmUpdate<T> addBatch() {
+		condition.addBatch();
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#batchUpdate()
+	 */
+	@Override
+	public int[] batchUpdate() {
+		return dao.batchUpdate(condition);
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#delete()
+	 */
+	@Override
+	public int delete() {
+		return dao.delete(condition);
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#getCurrentParams()
+	 */
+	@Override
+	public OrmUpdateParameter<T> getCurrentParams() {
+		return this.condition;
 	}
 
 }

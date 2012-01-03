@@ -14,6 +14,16 @@ import kosmos.framework.sqlclient.api.Update;
 public interface FreeUpdate extends Update{
 	
 	/**
+	 * @return the current parameter
+	 */
+	public FreeUpdateParameter getCurrentParams();
+	
+	/**
+	 * @param parameter the parameter to set
+	 */
+	public void setCondition(FreeUpdateParameter parameter) ;
+	
+	/**
 	 * Set the binding parameter.
 	 * 
 	 * @param <T> the type

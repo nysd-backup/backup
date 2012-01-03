@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+
+	<!-- 
+		以下のbeanの定義が別コンテキストに必要
+			・txConnectionProvider → ConnectionProviderを実装したクラス
+			・　
+	 -->
+	<!-- SQL作成 -->
+  	<bean id="sqlBuilder" class="kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl" />	
+
+	<!-- Statement作成 -->
+	<bean id="statementProvider" class="kosmos.framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
+
+	<bean id="sqlExceptionHandler" class="kosmos.framework.sqlclient.internal.SQLExceptionHandlerImpl"/>
+
+	<bean id="sqlEngineFacade" class="kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
+		<property name="sqlBuilder" ref="sqlBuilder"/>
+		<property name="provider" ref="statementProvider"/>
+		<property name="exceptionHandler" ref="sqlExceptionHandler" />
+	</bean>
+	
+	<!-- 内部クエリ -->
+	<bean id="internalQuery" class="kosmos.framework.sqlclient.internal.free.impl.InternalQueryImpl" scope="prototype" >
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
+		<property name="connectionProvider" ref="txConnectionProvider"/>	
+	</bean>
+	
+	<!-- クエリファクトリ -->
+	<bean id="queryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalQuery"/>			
+	</bean>
+	
+	<!-- ORM内部クエリ -->
+	<bean id="internalOrmQuery" class="kosmos.framework.sqlclient.internal.orm.impl.InternalOrmQueryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalQuery"/>			
+	</bean>
+	
+	<!-- ORM内部クエリファクトリ -->
+	<bean id="internalOrmQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="internalOrmQuery" />
+	</bean>
+
+	<!-- ORMクエリファクトリ開発者API -->
+	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.LimitedOrmQueryFactoryImpl" scope="prototype">	
+		<property name="internalFactory" ref="internalOrmQueryFactory" />
+	</bean>
+	
+	<!-- 永続化エンジン -->
+	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="internalOrmQuery" />
+	</bean>
+ 
+</beans>

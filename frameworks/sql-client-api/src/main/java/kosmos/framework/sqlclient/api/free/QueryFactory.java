@@ -29,6 +29,6 @@ public interface QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <K extends FreeUpdate,T extends AbstractUpdate<K>> T createUpdate(Class<T> query);
+	public <K extends FreeUpdate,T extends AbstractFreeUpdate<K>> T createUpdate(Class<T> query);
 	
 }

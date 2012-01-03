@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +31,8 @@ import kosmos.framework.sqlengine.executer.impl.RecordHandlerFactoryImpl;
 import kosmos.framework.sqlengine.executer.impl.ResultSetHandlerImpl;
 import kosmos.framework.sqlengine.executer.impl.SelectorImpl;
 import kosmos.framework.sqlengine.executer.impl.UpdaterImpl;
+import kosmos.framework.sqlengine.facade.BaseSQLParameter;
+import kosmos.framework.sqlengine.facade.BatchParameter;
 import kosmos.framework.sqlengine.facade.QueryParameter;
 import kosmos.framework.sqlengine.facade.QueryResult;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
@@ -133,7 +136,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 
 		try{
 
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList, param.getTimeoutSeconds(),0,param.getFetchSize());			
+			stmt = provider.buildStatement(param.getSqlId(),con, query, bindList, param.getTimeoutSeconds(),0,param.getFetchSize());			
 			rs= selector.select(stmt);
 			
 			List<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class,null);
@@ -163,7 +166,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		ResultSet rs = null;
 		try{									
 			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),maxRows,param.getFetchSize());
+			stmt = provider.buildStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),maxRows,param.getFetchSize());		
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());
 			
@@ -189,7 +192,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		PreparedStatement stmt = null;
 		try{							
 			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;
-			stmt = provider.createStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),maxRows,param.getFetchSize());	
+			stmt = provider.buildStatement(param.getSqlId(),con, query, bindList,param.getTimeoutSeconds(),maxRows,param.getFetchSize());	
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());			
 			
@@ -213,7 +216,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		ResultSet rs = null;
 		try{									
 			
-			stmt = provider.createStatement(param.getSqlId() ,con, query, bindList,param.getTimeoutSeconds(),0,param.getFetchSize());
+			stmt = provider.buildStatement(param.getSqlId() ,con, query, bindList,param.getTimeoutSeconds(),0,param.getFetchSize());
 			rs = selector.select(stmt);
 			resultSetHandler.skip(rs,param.getFirstResult());
 			
@@ -238,7 +241,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		PreparedStatement stmt = null;
 		
 		try{
-			stmt = provider.createStatement(param.getSqlId(),con, executingSql, bindList,param.getTimeoutSeconds(),0,0);	
+			stmt = provider.buildStatement(param.getSqlId(),con, executingSql, bindList,param.getTimeoutSeconds(),0,0);	
 			return updater.update(stmt);
 		}catch(Throwable sqle){
 			throw exceptionHandler.rethrow(sqle);
@@ -248,6 +251,43 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	}
 	
 	/**
+	 * @see kosmos.framework.sqlengine.facade.SQLEngineFacade#executeBatch(kosmos.framework.sqlengine.facade.BatchParameter, java.sql.Connection)
+	 */
+	@Override
+	public int[] executeBatch(BatchParameter param, Connection con) {
+
+		//SQL生成
+		List<List<Object>> bindList = new ArrayList<List<Object>>();
+		for(int i = 0 ; i < param.getParameters().size(); i++){
+			bindList.add(new ArrayList<Object>());
+		}
+		String executingSql = buildSql(param);
+		
+		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, param.getParameters(),bindList,param.getSqlId());						
+		PreparedStatement stmt = null;
+		
+		try{
+			//ステートメント
+			stmt = provider.createStatement(param.getSqlId(),con, executingSql, param.getTimeoutSeconds(),0,0);	
+			
+			//バインド変数追加、バッチ実行
+			for(int i = 0 ; i < bindList.size(); i++){
+				List<Object> bind = bindList.get(i);
+				provider.setBindParameter(stmt, bind);
+				stmt.addBatch();
+			}
+			return updater.batchUpdate(stmt);
+	
+		}catch(Throwable sqle){
+			throw exceptionHandler.rethrow(sqle);
+		}finally{
+			close(stmt);
+		}
+	}
+
+
+	
+	/**
 	 * Creates the SQL.
 	 * 
 	 * @param <T>　the type
@@ -255,18 +295,28 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @param bindList the bindList
 	 * @return the query
 	 */
+	@SuppressWarnings("unchecked")
 	private String createSQL(SQLParameter param, List<Object> bindList){
-		String executingSql = param.getSql();
-		
+		String executingSql = buildSql(param);
+		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, Arrays.asList(param.getParameter()), Arrays.asList(bindList),param.getSqlId());				
+		return executingSql;	
+	}
+	
+	/**
+	 * Builds the SQL.
+	 * @param param the parameter
+	 * @return the SQL
+	 */
+	private String buildSql(BaseSQLParameter param){
+		String executingSql  = param.getSql();
 		if(!param.isUseRowSql()){
 			executingSql = sqlBuilder.build(param.getSqlId(), executingSql);		
 			executingSql = sqlBuilder.evaluate(executingSql, param.getBranchParameter(),param.getSqlId());
 		}				
-		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, param.getParameter(), bindList,param.getSqlId());				
 		if( commentAppender != null){
 			executingSql = commentAppender.setExternalString(param, executingSql);
 		}
-		return executingSql;	
+		return executingSql;
 	}
 
 	/**
@@ -299,6 +349,5 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		}catch(SQLException sqle){				
 		}
 	}
-
 
 }

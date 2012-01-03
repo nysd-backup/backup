@@ -26,4 +26,14 @@ public class UpdaterImpl implements Updater{
 		return stmt.executeUpdate();
 	}
 
+	/**
+	 * @see kosmos.framework.sqlengine.executer.Updater#batchUpdate(java.sql.PreparedStatement)
+	 */
+	@Override
+	public int[] batchUpdate(PreparedStatement stmt) throws SQLException {
+		int[] result = stmt.executeBatch();
+		stmt.clearParameters();
+		return result;
+	}
+
 }

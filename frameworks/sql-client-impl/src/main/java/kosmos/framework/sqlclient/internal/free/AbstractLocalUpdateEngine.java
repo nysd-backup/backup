@@ -4,6 +4,7 @@
 package kosmos.framework.sqlclient.internal.free;
 
 import kosmos.framework.sqlclient.api.free.FreeUpdate;
+import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 
 /**
  * The updating engine.
@@ -12,16 +13,21 @@ import kosmos.framework.sqlclient.api.free.FreeUpdate;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractLocalUpdateEngine<D extends InternalQuery> implements FreeUpdate{
+public abstract class AbstractLocalUpdateEngine implements FreeUpdate{
 
 	/** the query */
-	protected final D delegate;
+	protected FreeUpdateParameter parameter;
+	
+	/** the internal query */
+	protected final InternalQuery internalQuery;
 	
 	/**
-	 * @param delegate the query to delegate
+	 * @param internalQuery the internalQuery to set
+	 * @param parameter the parameter to set
 	 */
-	public AbstractLocalUpdateEngine(D delegate){
-		this.delegate = delegate;		
+	public AbstractLocalUpdateEngine(InternalQuery internalQuery, FreeUpdateParameter parameter){
+		this.parameter = parameter;		
+		this.internalQuery = internalQuery;
 	}
 	
 	/**
@@ -29,8 +35,24 @@ public abstract class AbstractLocalUpdateEngine<D extends InternalQuery> impleme
 	 */
 	@Override
 	public <T extends FreeUpdate> T setParameter(String arg0 , Object arg1){
-		delegate.setParameter(arg0, arg1);
+		parameter.getParam().put(arg0, arg1);
 		return (T)this;
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.FreeUpdate#getCurrentParams()
+	 */
+	@Override
+	public FreeUpdateParameter getCurrentParams() {
+		return parameter;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.FreeUpdate#setCondition(kosmos.framework.sqlclient.api.free.FreeUpdateParameter)
+	 */
+	@Override
+	public void setCondition(FreeUpdateParameter parameter) {
+		this.parameter = parameter;
 	}
 
 }

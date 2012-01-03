@@ -41,7 +41,7 @@ public class QueryAccessor {
 	 * @param query the query
 	 * @param delegate the delegate 
 	 */
-	public static <D extends FreeUpdate> void setDelegate(AbstractUpdate<D> query , D delegate){
+	public static <D extends FreeUpdate> void setDelegate(AbstractFreeUpdate<D> query , D delegate){
 		query.setDelegate(delegate);
 	}
 		

@@ -7,10 +7,13 @@ import java.util.List;
 
 import kosmos.framework.sqlclient.api.ConnectionProvider;
 import kosmos.framework.sqlclient.api.PersistenceHints;
+import kosmos.framework.sqlclient.api.free.FreeParameter;
+import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.api.free.NativeResult;
-import kosmos.framework.sqlclient.api.free.ResultSetFilter;
-import kosmos.framework.sqlclient.internal.free.AbstractInternalQuery;
 import kosmos.framework.sqlclient.internal.free.InternalQuery;
+import kosmos.framework.sqlengine.facade.BaseSQLParameter;
+import kosmos.framework.sqlengine.facade.BatchParameter;
 import kosmos.framework.sqlengine.facade.QueryParameter;
 import kosmos.framework.sqlengine.facade.QueryResult;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
@@ -24,91 +27,68 @@ import kosmos.framework.sqlengine.facade.UpdateParameter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class InternalQueryImpl extends AbstractInternalQuery implements InternalQuery{
+public class InternalQueryImpl implements InternalQuery{
 	
 	/** the ConnectionProvider */
-	protected final ConnectionProvider cs;
-	
-	/** the resultType */
-	@SuppressWarnings("rawtypes")
-	protected final Class resultType;
-	
-	/** the filter for <code>ResultSet</code> */
-	protected ResultSetFilter filter = null;
+	private ConnectionProvider cs;
 	
 	/** the facade of SQLEngine */
-	protected final SQLEngineFacade facade;
+	private SQLEngineFacade facade;
 	
 	/**
-	 * @param useRowSql if true dont analyze the template
-	 * @param sql the SQL
-	 * @param queryId the queryId
-	 * @param cs the cs
-	 * @param resultType the result type
-	 * @param facade the facade
+	 * @param cs the cs to set
 	 */
-	@SuppressWarnings("rawtypes")
-	public InternalQueryImpl(boolean useRowSql ,String sql , String queryId, ConnectionProvider cs , Class resultType,SQLEngineFacade facade){
-		super(useRowSql,sql,queryId);
-		this.resultType = resultType;		
+	public void setConnectionProvider(ConnectionProvider cs){
 		this.cs = cs;
+	}
+	
+	/**
+	 * @param facade the facade to set
+	 */
+	public void setSqlEngineFacade(SQLEngineFacade facade){
 		this.facade = facade;
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#setFilter(kosmos.framework.sqlclient.api.free.ResultSetFilter)
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getTotalResult(kosmos.framework.sqlclient.api.free.FreeQueryParameter)
 	 */
 	@Override
-	public void setFilter(ResultSetFilter filter){
-		this.filter = filter;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getTotalResult()
-	 */
-	@Override
-	public NativeResult getTotalResult(){
-		QueryParameter param = createQueryParameter();
-		QueryResult result = facade.executeTotalQuery(param, cs.getConnection());
+	public NativeResult getTotalResult(FreeQueryParameter param){
+		QueryResult result = facade.executeTotalQuery(createQueryParameter(param), cs.getConnection());
 		return new NativeResult(result.isLimited(), result.getResultList(), result.getHitCount());
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getFetchResult()
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getFetchResult(kosmos.framework.sqlclient.api.free.FreeQueryParameter)
 	 */
 	@Override
-	public <T> List<T> getFetchResult(){
-		QueryParameter param = createQueryParameter();
-		return facade.executeFetch(param, cs.getConnection());		
+	public <T> List<T> getFetchResult(FreeQueryParameter param){
+		return facade.executeFetch(createQueryParameter(param), cs.getConnection());		
 	}
 	
 	/**
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#count()
 	 */
 	@Override
-	public int count(){
-		QueryParameter parameter = createParameter(new QueryParameter());
-		parameter.setFirstResult(firstResult);
-		parameter.setMaxSize(maxSize);
-		return facade.executeCount(parameter, cs.getConnection());
+	public int count(FreeQueryParameter param){
+		return facade.executeCount(createParameter(new QueryParameter(),param), cs.getConnection());
 	}
 
 	/**
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getResultList()
 	 */
 	@Override
-	public <T> List<T> getResultList() {
-		QueryParameter param = createQueryParameter();
-		return facade.executeQuery(param, cs.getConnection());		
+	public <T> List<T> getResultList(FreeQueryParameter param){
+		return facade.executeQuery(createQueryParameter(param), cs.getConnection());		
 	}
 	
 	/**
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#getSingleResult()
 	 */
 	@Override
-	public <T> T getSingleResult() {
-		setMaxResults(1);
-		List<T> result = getResultList();
+	public <T> T getSingleResult(FreeQueryParameter param){
+		param.setMaxSize(1);
+		List<T> result = getResultList(param);
 		if(result.isEmpty()){
 			return null;
 		}else{
@@ -120,26 +100,36 @@ public class InternalQueryImpl extends AbstractInternalQuery implements Internal
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#executeUpdate()
 	 */
 	@Override
-	public int executeUpdate() {
-		UpdateParameter parameter = createParameter(new UpdateParameter());
-		return facade.executeUpdate(parameter, cs.getConnection());
+	public int executeUpdate(FreeUpdateParameter param){
+		return facade.executeUpdate(createParameter(new UpdateParameter(),param), cs.getConnection());
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#batchUpdate()
+	 */
+	@Override
+	public int[] batchUpdate(FreeUpdateParameter param){
+		BatchParameter batch = new BatchParameter();
+		batch = createBaseParameter(batch,param);
+		batch.setParameters(param.getBatchParam());
+		return facade.executeBatch(batch, cs.getConnection());
 	}
 	
 	/**
 	 * @return the parameter
 	 */
-	private QueryParameter createQueryParameter(){
-		QueryParameter parameter = createParameter(new QueryParameter());		
-		parameter.setMaxSize(maxSize);
-		parameter.setFirstResult(firstResult);
-		parameter.setResultType(resultType);
+	private QueryParameter createQueryParameter(FreeQueryParameter param){
+		QueryParameter parameter = createParameter(new QueryParameter(),param);		
+		parameter.setMaxSize(param.getMaxSize());
+		parameter.setFirstResult(param.getFirstResult());
+		parameter.setResultType(param.getResultType());
 		
-		if(hints.containsKey(PersistenceHints.SQLENGINE_JDBC_FETCHSIZE)){
-			parameter.setFetchSize((Integer)hints.get(PersistenceHints.SQLENGINE_JDBC_FETCHSIZE));
+		if(param.getHints().containsKey(PersistenceHints.SQLENGINE_JDBC_FETCHSIZE)){
+			parameter.setFetchSize((Integer)param.getHints().get(PersistenceHints.SQLENGINE_JDBC_FETCHSIZE));
 		}
 		
-		if(filter != null){
-			parameter.setFilter(new DelegatingResultSetFilter(filter));
+		if(param.getFilter() != null){
+			parameter.setFilter(new DelegatingResultSetFilter(param.getFilter()));
 		}
 		return parameter;
 	}
@@ -149,17 +139,26 @@ public class InternalQueryImpl extends AbstractInternalQuery implements Internal
 	 * @param parameter the parameter
 	 * @return the parameter
 	 */
-	private <S extends SQLParameter> S createParameter(S parameter){
-		parameter.setSqlId(queryId);
-		parameter.setSql(sql);		
+	private <S extends SQLParameter> S createParameter(S parameter,FreeParameter param){
+		S sqlParam = createBaseParameter(parameter,param);
+		sqlParam.setAllParameter(param.getParam());
+		return sqlParam;
+	}
+	
+	/**
+	 * Creates the baseParameter.
+	 * @param parameter the parameter
+	 * @return the result
+	 */
+	private <S extends BaseSQLParameter> S createBaseParameter(S parameter,FreeParameter param){
+		parameter.setSqlId(param.getQueryId());
+		parameter.setSql(param.getSql());		
 
-		if(hints.containsKey(PersistenceHints.SQLENGINE_JDBC_TIMEOUT)){
-			parameter.setTimeoutSeconds((Integer)hints.get(PersistenceHints.SQLENGINE_JDBC_TIMEOUT));
+		if(param.getHints().containsKey(PersistenceHints.SQLENGINE_JDBC_TIMEOUT)){
+			parameter.setTimeoutSeconds((Integer)param.getHints().get(PersistenceHints.SQLENGINE_JDBC_TIMEOUT));
 		}
-		
-		parameter.setAllParameter(param);
-		parameter.setAllBranchParameter(branchParam);
-		parameter.setUseRowSql(useRowSql);
+		parameter.setAllBranchParameter(param.getBranchParam());
+		parameter.setUseRowSql(param.isUseRowSql());
 		return parameter;
 	}
 

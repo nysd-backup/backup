@@ -6,8 +6,7 @@ package kosmos.framework.sqlclient.internal.orm;
 import java.util.Collection;
 import java.util.List;
 
-import kosmos.framework.sqlclient.api.orm.OrmContext;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
+import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.SortKey;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.api.orm.WhereOperand;
@@ -19,30 +18,35 @@ import kosmos.framework.sqlclient.api.orm.WhereOperand;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractStatementBuilder {
+public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	
 	/**
-	 * Creates the SELECT statement.
-	 * 
-	 * @param condition the condition
-	 * @return the statement
+	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createSelect(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
-	public String createSelect(OrmQueryContext<?> condition){
-		StringBuilder builder = createPrefix(condition);		
-		builder.append(generateWhere(condition)).append(generateOrderBy(condition));
-		return builder.toString();
+	@Override
+	public String createSelect(OrmQueryParameter<?> condition){
+		StringBuilder builder = createPrefix(condition.getEntityClass());		
+		builder.append(generateWhere(condition.getFilterString(),condition.getConditions())).append(generateOrderBy(condition.getOrderString(),condition.getSortKeys()));
+		return afterCreateSelect(builder,condition).toString();
 	}
 	
 	/**
-	 * Creates the UPDATE statement.
-	 * 
+	 * Process after creating select statement.
 	 * @param condition the condition
-	 * @return the statement
+	 * @return query;
 	 */
-	public String createUpdate(OrmContext<?> condition, Collection<String> set) {
-		StringBuilder builder = createUpdatePrefix(condition);
+	protected StringBuilder afterCreateSelect(StringBuilder query, OrmQueryParameter<?> condition){
+		return query;
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createUpdate(java.lang.Class, java.lang.String, java.lang.String, java.util.List, java.util.Collection)
+	 */
+	@Override
+	public String createUpdate(Class<?> entityClass,String filterString,List<WhereCondition> where, Collection<String> set) {
+		StringBuilder builder = createUpdatePrefix(entityClass);
 		builder.append(generateSet(set));
-		builder.append(generateWhere(condition));
+		builder.append(generateWhere(filterString,where));
 		return builder.toString();
 	}
 	
@@ -52,7 +56,7 @@ public abstract class AbstractStatementBuilder {
 	 * @param condition　the codition
 	 * @return the prefix
 	 */
-	protected abstract StringBuilder createPrefix(OrmQueryContext<?> condition);
+	protected abstract StringBuilder createPrefix(Class<?> entityClass);
 	
 	/**
 	 * Creates the prefix.
@@ -60,7 +64,7 @@ public abstract class AbstractStatementBuilder {
 	 * @param condition　the codition
 	 * @return the prefix
 	 */
-	protected abstract StringBuilder createUpdatePrefix(OrmContext<?> condition);
+	protected abstract StringBuilder createUpdatePrefix(Class<?> entityClass);
 	
 	/**
 	 * @param condition the condition
@@ -89,11 +93,10 @@ public abstract class AbstractStatementBuilder {
 	 * @param condition　the condition
 	 * @return the statement
 	 */
-	protected String generateWhere(OrmContext<?> condition){
-		if(condition.getFilterString() != null){
-			return "\n where " + condition.getFilterString();
+	protected String generateWhere(String filterString, List<WhereCondition> wheres){
+		if(filterString != null){
+			return "\n where " + filterString;
 		}
-		List<WhereCondition> wheres = condition.getConditions();
 		if( wheres == null || wheres.isEmpty()){
 			return "";
 		}
@@ -139,11 +142,10 @@ public abstract class AbstractStatementBuilder {
 	 * @param condition the condition
 	 * @return the statement
 	 */
-	protected String generateOrderBy(OrmQueryContext<?> condition){
-		if(condition.getOrderString() != null){
-			return "\n order by " +condition.getOrderString();
+	protected String generateOrderBy(String orderString, List<SortKey> orderby ){
+		if(orderString != null){
+			return "\n order by " + orderString;
 		}
-		List<SortKey> orderby = condition.getSortKeys();
 		if( orderby == null || orderby.isEmpty()){
 			return "";
 		}
@@ -164,5 +166,38 @@ public abstract class AbstractStatementBuilder {
 		return builder.toString();
 	}
 
+	/**
+	 * Set the parameter to delegate.
+	 * 
+	 * @param condition the condition
+	 * @param delegate the delegate
+	 */
+	public void setConditionParameters(String filterString ,Object[] easyParams, List<WhereCondition> baseCondition ,Bindable delegate){
+		//簡易フィルターが設定されている場合、実行時に設定されたパラメータを使用する
+		if(filterString != null){
+			if(easyParams != null){
+				for(int i = 0; i < easyParams.length; i++){
+					delegate.setParameter(String.format("p%d", i+1),easyParams[i]);
+				}
+			}
+			return ;
+		}
 
+		for(WhereCondition cond : baseCondition){
+			if(WhereOperand.IN == cond.getOperand()){
+				List<?> val = List.class.cast(cond.getValue());
+				int cnt = -1;
+				for(Object v : val){
+					cnt++;
+					delegate.setParameter(String.format("%s_%d_%d", cond.getColName(),cond.getBindCount(),cnt),v);
+				}
+			}else{	
+				delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
+				if( WhereOperand.Between == cond.getOperand()){
+					delegate.setParameter(String.format( "%s%d_to",cond.getColName(),cond.getBindCount()), cond.getToValue());
+				}
+			}
+		}
+	}
+	
 }

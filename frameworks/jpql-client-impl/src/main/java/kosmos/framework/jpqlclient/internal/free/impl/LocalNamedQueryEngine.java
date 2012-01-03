@@ -10,7 +10,9 @@ import javax.persistence.LockModeType;
 import kosmos.framework.jpqlclient.api.free.NamedQuery;
 import kosmos.framework.sqlclient.api.Query;
 import kosmos.framework.sqlclient.api.free.FreeQuery;
+import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.internal.free.AbstractLocalQueryEngine;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
 
 
 /**
@@ -20,14 +22,14 @@ import kosmos.framework.sqlclient.internal.free.AbstractLocalQueryEngine;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalNamedQueryImpl> implements NamedQuery{
+public class LocalNamedQueryEngine extends AbstractLocalQueryEngine implements NamedQuery{
 	
 	/**
 	 * @param delegate the delegate to set
 	 * @param handler the handler to set
 	 */
-	public LocalNamedQueryEngine(InternalNamedQueryImpl delegate){
-		super(delegate);	
+	public LocalNamedQueryEngine(InternalQuery internalQuery, FreeQueryParameter param){
+		super(internalQuery,param);	
 	}
 	
 	/**
@@ -35,7 +37,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	 */
 	@Override
 	public <T extends FreeQuery> T setBranchParameter(String arg0, Object arg1){
-		delegate.setBranchParameter(arg0, arg1);
+		condition.getBranchParam().put(arg0, arg1);
 		return (T)this;
 	}
 
@@ -44,8 +46,8 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	 */
 	@Override
 	public <T extends NamedQuery> T setLockMode(LockModeType arg0) {
-		 delegate.setLockMode(arg0);
-		 return (T)this;
+		condition.setLockMode(arg0);
+		return (T)this;
 	}
 
 	/**
@@ -53,7 +55,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	 */
 	@Override
 	public <T> List<T> getResultList() {
-		List<T> result = delegate.getResultList();
+		List<T> result = internalQuery.getResultList(condition);
 		return result;
 	}
 
@@ -62,7 +64,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	 */
 	@Override
 	public <T extends Query> T setHint(String arg0, Object arg1) {
-		delegate.setHint(arg0, arg1);
+		condition.getHints().put(arg0, arg1);
 		return (T)this;
 	}
 
@@ -71,7 +73,9 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine<InternalName
 	 */
 	@Override
 	public int count() {
-		return delegate.count();
+		return internalQuery.count(condition);
 	}
+
+	
 
 }

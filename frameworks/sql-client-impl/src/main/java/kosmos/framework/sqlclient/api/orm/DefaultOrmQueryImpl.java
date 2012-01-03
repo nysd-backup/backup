@@ -159,10 +159,10 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public OrmQuery<T> setCondition(OrmQueryContext<T> condition) {
+	public OrmQuery<T> setCondition(OrmQueryParameter<T> condition) {
 		delegate.setCondition(condition);
 		return this;
 	}
@@ -226,6 +226,14 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	public OrmQuery<T> setLockMode(LockModeType type) {
 		delegate.setLockMode(type);
 		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getCurrentParams()
+	 */
+	@Override
+	public OrmQueryParameter<T> getCurrentParams() {
+		return delegate.getCurrentParams();
 	}
 
 

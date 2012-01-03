@@ -4,15 +4,15 @@
 package kosmos.framework.sqlclient.internal.orm.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.LockModeType;
 import javax.persistence.Table;
 
 import kosmos.framework.sqlclient.api.PersistenceHints;
-import kosmos.framework.sqlclient.api.orm.OrmContext;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
+import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder;
-import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder;
 
 
 /**
@@ -21,49 +21,46 @@ import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-class SQLStatementBuilderImpl extends AbstractStatementBuilder implements SQLStatementBuilder{
-	
+public class SQLStatementBuilderImpl extends AbstractStatementBuilder{
+
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createSelect(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#afterCreateSelect(java.lang.StringBuilder, kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public String createSelect(OrmQueryContext<?> condition){
-		String sql = super.createSelect(condition);
+	protected StringBuilder afterCreateSelect(StringBuilder query,OrmQueryParameter<?> condition){
 		//悲観ロックの追加
 		LockModeType lockModeType = condition.getLockModeType();
-		if(LockModeType.PESSIMISTIC_READ == lockModeType){
-			StringBuilder builder = new StringBuilder(sql);
-			builder.append(" FOR UPDATE ");
+		if(LockModeType.PESSIMISTIC_READ == lockModeType){			
+			query.append(" FOR UPDATE ");
 			int timeout = 0;
 			if(condition.getHints().containsKey(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT)){
 				timeout = (Integer)condition.getHints().get(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT);				
 			}
 			if( timeout <= 0){
-				builder.append("NOWAIT");
+				query.append("NOWAIT");
 			}else {
-				builder.append("WAIT ").append(timeout);
+				query.append("WAIT ").append(timeout);
 			}
-			return builder.toString();
 		}
-		return sql;
+		return query;
 		
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createPrefix(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createPrefix(java.lang.Class)
 	 */
 	@Override
-	protected StringBuilder createPrefix(OrmQueryContext<?> condition) {
+	protected StringBuilder createPrefix(Class<?> entityClass) {
 		StringBuilder builder = new StringBuilder("select * from ");
-		return builder.append(condition.getEntityClass().getAnnotation(Table.class).name()).append(" e ");	
+		return builder.append(entityClass.getAnnotation(Table.class).name()).append(" e ");	
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createUpdatePrefix(kosmos.framework.sqlclient.api.orm.OrmContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder#createUpdatePrefix(java.lang.Class)
 	 */
 	@Override
-	protected StringBuilder createUpdatePrefix(OrmContext<?> condition) {
-		return new StringBuilder(String.format("update %s e ",condition.getEntityClass().getAnnotation(Table.class).name()));
+	protected StringBuilder createUpdatePrefix(Class<?> entityClass) {
+		return new StringBuilder(String.format("update %s e ",entityClass.getAnnotation(Table.class).name()));
 	}
 
 	/**
@@ -102,15 +99,14 @@ class SQLStatementBuilderImpl extends AbstractStatementBuilder implements SQLSta
 		
 	}
 
-
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createDelete(kosmos.framework.sqlclient.api.orm.OrmContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createDelete(java.lang.Class, java.lang.String, java.util.List)
 	 */
 	@Override
-	public String createDelete(OrmContext<?> condition) {
+	public String createDelete(Class<?> entityClass,String filterString,List<WhereCondition> where){
 		StringBuilder builder = new StringBuilder("delete from ");
-		builder.append(condition.getEntityClass().getAnnotation(Table.class).name()).append(" ");
-		return builder.append(generateWhere(condition)).toString();
+		builder.append(entityClass.getAnnotation(Table.class).name()).append(" ");
+		return builder.append(generateWhere(filterString,where)).toString();
 	}
 
 

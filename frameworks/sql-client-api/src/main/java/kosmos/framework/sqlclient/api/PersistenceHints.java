@@ -59,5 +59,8 @@ public class PersistenceHints extends HashMap<String,Object>{
 
 	/** the jdbc fetch size for 'SQLEngine' */
 	public static final String SQLENGINE_JDBC_FETCHSIZE = "kosmos.framework.sqlengine.jdbc.fetchsize";
+	
+	/** the batch size for 'SQLEngine' */
+	public static final String SQLENGINE_BATCH_SIZE = "kosmos.framework.sqlengine.batch.size";
   
 }

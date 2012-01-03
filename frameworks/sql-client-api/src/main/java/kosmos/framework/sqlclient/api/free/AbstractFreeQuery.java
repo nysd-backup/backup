@@ -37,6 +37,22 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	}
 	
 	/**
+	 * @see kosmos.framework.sqlclient.api.free.FreeQuery#getCurrentParams()
+	 */
+	@Override
+	public FreeQueryParameter getCurrentParams() {
+		return delegate.getCurrentParams();
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.FreeQuery#setCondition(kosmos.framework.sqlclient.api.free.FreeQueryParameter)
+	 */
+	@Override
+	public void setCondition(FreeQueryParameter parameter) {
+		delegate.setCondition(parameter);
+	}
+	
+	/**
 	 * @see kosmos.framework.sqlclient.api.free.FreeQuery#setBranchParameter(java.lang.String, java.lang.Object)
 	 */
 

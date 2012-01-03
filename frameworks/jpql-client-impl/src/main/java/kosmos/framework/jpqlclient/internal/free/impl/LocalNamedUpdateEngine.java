@@ -6,7 +6,9 @@ package kosmos.framework.jpqlclient.internal.free.impl;
 import kosmos.framework.jpqlclient.api.free.NamedUpdate;
 import kosmos.framework.sqlclient.api.Update;
 import kosmos.framework.sqlclient.api.free.FreeUpdate;
+import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.internal.free.AbstractLocalUpdateEngine;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
 
 /**
  * The named update engine.
@@ -15,13 +17,13 @@ import kosmos.framework.sqlclient.internal.free.AbstractLocalUpdateEngine;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNamedQueryImpl> implements NamedUpdate{
+public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine implements NamedUpdate{
 
 	/**
 	 * @param delegate the delegate to set.
 	 */
-	public LocalNamedUpdateEngine(InternalNamedQueryImpl delegate) {
-		super(delegate);		
+	public LocalNamedUpdateEngine(InternalQuery internalQuery, FreeUpdateParameter param) {
+		super(internalQuery,param);		
 	}
 
 	/**
@@ -29,7 +31,7 @@ public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNa
 	 */
 	@Override
 	public int update() {
-		return delegate.executeUpdate();
+		return internalQuery.executeUpdate(parameter);
 	}
 
 	/**
@@ -37,7 +39,7 @@ public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNa
 	 */
 	@Override
 	public <T extends FreeUpdate> T setBranchParameter(String arg0, Object arg1) {
-		delegate.setBranchParameter(arg0, arg1);
+		parameter.getBranchParam().put(arg0, arg1);
 		return (T)this;
 	}
 
@@ -46,7 +48,27 @@ public class LocalNamedUpdateEngine extends AbstractLocalUpdateEngine<InternalNa
 	 */
 	@Override
 	public <T extends Update> T setHint(String arg0, Object arg1) {
-		delegate.setHint(arg0,arg1);
+		parameter.getHints().put(arg0,arg1);
 		return (T)this;
 	}
+
+	/**
+	 * @return 
+	 * @see kosmos.framework.sqlclient.api.Update#addBatch()
+	 */
+	@Override
+	public <T extends Update> T addBatch() {
+		parameter.addBatch();
+		return (T)this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Update#batchUpdate()
+	 */
+	@Override
+	public int[] batchUpdate() {
+		return internalQuery.batchUpdate(parameter);
+	}
+
+
 }

@@ -5,7 +5,6 @@ package kosmos.framework.sqlclient.api;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.Version;
 
-import kosmos.framework.sqlclient.api.orm.OrmContext;
+import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.api.orm.WhereOperand;
 import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
@@ -47,31 +46,76 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	public int insert(Object entity){
 		return insert(entity,new PersistenceHints());
 	}
+	
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[])
+	 */
+	@Override
+	public int[] insert(Object[] entity) {
+		return insert(entity,new PersistenceHints());
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[], kosmos.framework.sqlclient.api.PersistenceHints)
+	 */
+	@Override
+	public int[] insert(Object[] entity, PersistenceHints hints) {
+		
+		@SuppressWarnings("unchecked")
+		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity[0].getClass());
+		
+		//エンティティから登録対象項目追加
+		Field[] fs = ReflectionUtils.getAllAnotatedField(entity[0].getClass(), Column.class);
+		for(Object e : entity){
+			setInsertValue(fs,e,context);
+			context.addBatch();
+		}
+		
+		//ヒント句設定
+		for(Map.Entry<String, Object> e : hints.entrySet()){
+			context.setHint(e.getKey(),e.getValue());
+		}
+		
+		return internaOrmlQuery.batchInsert(context);
+	}
+
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#persist(java.lang.Object, java.util.Map)
 	 */
 	@Override
 	public int insert(Object entity, PersistenceHints hints) {
+		
+		@SuppressWarnings("unchecked")
+		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.getClass());
+		
 		//エンティティから登録対象項目追加
 		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);
-		Map<String,Object> values = new LinkedHashMap<String,Object>();
+		setInsertValue(fs,entity,context);
+		
+		//ヒント句設定
+		for(Map.Entry<String, Object> e : hints.entrySet()){
+			context.setHint(e.getKey(),e.getValue());
+		}
+		return internaOrmlQuery.insert(context);
+	}
+	
+	/**
+	 * Sets the inserting value.
+	 * @param fs the field
+	 * @param entity the entity
+	 * @param context the context
+	 */
+	private void setInsertValue(Field[] fs , Object entity, OrmUpdateParameter<Object> context){
 		for(Field f : fs){
 			Column column = f.getAnnotation(Column.class);
 			String name = column.name();
 			if(StringUtils.isEmpty(name)){
 				name = f.getName();
 			}
-			values.put(name, ReflectionUtils.get(f, entity));
+			context.set(name, ReflectionUtils.get(f, entity));
 		}
-		
-		//ヒント句設定
-		@SuppressWarnings("unchecked")
-		OrmContext<Object> context = new OrmContext<Object>((Class<Object>)entity.getClass());
-		for(Map.Entry<String, Object> e : hints.entrySet()){
-			context.setHint(e.getKey(),e.getValue());
-		}
-		return internaOrmlQuery.insert(context, values);
 	}
 
 	/**
@@ -88,17 +132,15 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> int update(T entity, T findedEntity,PersistenceHints hints){
-		OrmContext<?> condition = new OrmContext(entity.getClass());
+		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());
 		for(Map.Entry<String, Object> h : hints.entrySet()){
 			condition.setHint(h.getKey(),h.getValue());
 		}
 		
 		//比較対象エンティティと比較して結果が変更されていればset句への比較対象に含める
-		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);
-		
+		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);		
 		List<Field> pk = new ArrayList<Field>();
-		
-		Map<String,Object> set = new LinkedHashMap<String,Object>();
+
 		for(Field f : fs){
 			Column column = f.getAnnotation(Column.class);
 			Object src = ReflectionUtils.get(f, findedEntity);
@@ -127,7 +169,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 				if(StringUtils.isEmpty(name)){
 					name = f.getName();
 				}
-				set.put(name, dst);
+				condition.set(name, dst);
 			}
 		}
 		
@@ -136,7 +178,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 			condition.getConditions().add(w);
 		}
 
-		return internaOrmlQuery.update(condition, set);
+		return internaOrmlQuery.update(condition);
 	}
 
 	/**
@@ -154,7 +196,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public int delete(Object entity, PersistenceHints hints) {
 		
-		OrmContext<?> condition = new OrmContext(entity.getClass());
+		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());
 		for(Map.Entry<String, Object> h : hints.entrySet()){
 			condition.setHint(h.getKey(),h.getValue());
 		}

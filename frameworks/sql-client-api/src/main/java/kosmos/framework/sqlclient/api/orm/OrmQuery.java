@@ -16,6 +16,11 @@ import kosmos.framework.sqlclient.api.Query;
 public interface OrmQuery<T> extends Query{
 	
 	/**
+	 * @return
+	 */
+	public OrmQueryParameter<T> getCurrentParams();
+	
+	/**
 	 * Adds '='.
 	 * 
 	 * @param column the column to add to
@@ -139,7 +144,7 @@ public interface OrmQuery<T> extends Query{
 	 * 
 	 * @param condition the condition
 	 */
-	public OrmQuery<T> setCondition(OrmQueryContext<T> condition);
+	public OrmQuery<T> setCondition(OrmQueryParameter<T> condition);
 	
 	/**
 	 * @param type the lock mode

@@ -3,7 +3,6 @@
  */
 package kosmos.framework.sqlclient.api.free;
 
-import kosmos.framework.sqlclient.api.Update;
 
 
 /**
@@ -12,7 +11,7 @@ import kosmos.framework.sqlclient.api.Update;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractNativeUpdate extends AbstractUpdate<NativeUpdate> implements Update{
+public abstract class AbstractNativeUpdate extends AbstractFreeUpdate<NativeUpdate> implements NativeUpdate{
 	
 }
 

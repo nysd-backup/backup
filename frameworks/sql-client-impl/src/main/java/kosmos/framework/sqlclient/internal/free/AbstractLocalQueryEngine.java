@@ -5,6 +5,7 @@ package kosmos.framework.sqlclient.internal.free;
 
 import kosmos.framework.sqlclient.api.Query;
 import kosmos.framework.sqlclient.api.free.FreeQuery;
+import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 
 /**
  * The local query engine.
@@ -13,16 +14,20 @@ import kosmos.framework.sqlclient.api.free.FreeQuery;
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractLocalQueryEngine<D extends InternalQuery> implements FreeQuery{
+public abstract class AbstractLocalQueryEngine implements FreeQuery{
 
 	/** the delegate */
-	protected final D delegate;
+	protected FreeQueryParameter condition = null;
 
+	/** the internal query */
+	protected final InternalQuery internalQuery;
+	
 	/**
 	 * @param delegate the query
 	 */
-	public AbstractLocalQueryEngine(D delegate){
-		this.delegate = delegate;		
+	public AbstractLocalQueryEngine(InternalQuery internalQuery,FreeQueryParameter condition){
+		this.condition = condition;		
+		this.internalQuery = internalQuery;
 	}
 	
 	/**
@@ -30,7 +35,7 @@ public abstract class AbstractLocalQueryEngine<D extends InternalQuery> implemen
 	 */
 	@Override
 	public <T> T getSingleResult() {
-		return (T)delegate.getSingleResult();
+		return (T)internalQuery.getSingleResult(condition);
 	}
 
 	/**
@@ -38,7 +43,7 @@ public abstract class AbstractLocalQueryEngine<D extends InternalQuery> implemen
 	 */
 	@Override
 	public <T extends Query> T setFirstResult(int arg0) {
-		delegate.setFirstResult(arg0);
+		condition.setFirstResult(arg0);
 		return (T)this;
 	}
 
@@ -47,7 +52,7 @@ public abstract class AbstractLocalQueryEngine<D extends InternalQuery> implemen
 	 */
 	@Override
 	public <T extends Query> T setMaxResults(int arg0) {
-		delegate.setMaxResults(arg0);
+		condition.setMaxSize(arg0);
 		return (T)this;
 	}
 
@@ -56,7 +61,7 @@ public abstract class AbstractLocalQueryEngine<D extends InternalQuery> implemen
 	 */
 	@Override
 	public <T extends FreeQuery> T setParameter(String arg0 , Object arg1){
-		delegate.setParameter(arg0, arg1);
+		condition.getParam().put(arg0, arg1);
 		return (T)this;
 	}
 	
@@ -65,8 +70,24 @@ public abstract class AbstractLocalQueryEngine<D extends InternalQuery> implemen
 	 */
 	@Override
 	public <T extends FreeQuery> T setBranchParameter(String arg0, Object arg1) {
-		delegate.setBranchParameter(arg0, arg1);
+		condition.getBranchParam().put(arg0, arg1);
 		return (T)this;
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.FreeQuery#getCurrentParams()
+	 */
+	@Override
+	public FreeQueryParameter getCurrentParams() {
+		return condition;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.FreeQuery#setCondition(kosmos.framework.sqlclient.api.free.FreeQueryParameter)
+	 */
+	@Override
+	public void setCondition(FreeQueryParameter parameter) {
+		this.condition = parameter;
 	}
 
 }

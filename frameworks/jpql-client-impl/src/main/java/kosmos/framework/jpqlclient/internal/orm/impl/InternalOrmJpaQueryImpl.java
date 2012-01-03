@@ -9,21 +9,16 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.jpqlclient.api.free.NamedQuery;
-import kosmos.framework.jpqlclient.api.free.NamedUpdate;
-import kosmos.framework.jpqlclient.internal.free.impl.InternalNamedQueryImpl;
-import kosmos.framework.jpqlclient.internal.free.impl.LocalNamedQueryEngine;
-import kosmos.framework.jpqlclient.internal.free.impl.LocalNamedUpdateEngine;
-import kosmos.framework.jpqlclient.internal.orm.JPQLStatementBuilder;
-import kosmos.framework.sqlclient.api.orm.OrmContext;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
-import kosmos.framework.sqlclient.api.orm.WhereCondition;
-import kosmos.framework.sqlclient.api.orm.WhereOperand;
+import kosmos.framework.sqlclient.api.free.FreeParameter;
+import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
+import kosmos.framework.sqlclient.api.orm.OrmParameter;
+import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
 import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
-import kosmos.framework.sqlengine.builder.ConstAccessor;
-import kosmos.framework.sqlengine.builder.SQLBuilder;
-import kosmos.framework.sqlengine.builder.impl.ConstAccessorImpl;
-import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
+import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder;
+import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder.Bindable;
 
 
 /**
@@ -33,30 +28,16 @@ import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
  * @version 2011/08/31 created.
  */
 public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
+	
+	/** the SQLStatementBuilder */
+	private SQLStatementBuilder sb = new JPQLStatementBuilderImpl();
 
 	/** the EntityManager */
 	private EntityManager em = null;
 	
-	/** the ConstAccessor */
-	private ConstAccessor accessor = new ConstAccessorImpl();
-	
-	/** the SQLBuilder */
-	private SQLBuilder builder = new SQLBuilderProxyImpl();
+	/** the internal query */
+	private InternalQuery internalNamedQuery;
 
-	/**
-	 * @param builder the builder to set
-	 */
-	public void setSqlBuilder(SQLBuilder builder){
-		this.builder = builder;
-	}
-	
-	/**
-	 * @param accessor the accessor to set
-	 */
-	public void setConstAccessor(ConstAccessor accessor){
-		this.accessor = accessor;
-	}
-	
 	/**
 	 * @param provider the provider to set
 	 */
@@ -64,68 +45,64 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 		em = provider.getEntityManager();		
 	}	
 	
+	/**
+	 * @param internalNamedQuery the internalNamedQuery to set
+	 */
+	public void setInternalNamedQuery(InternalQuery internalNamedQuery){
+		this.internalNamedQuery = internalNamedQuery;
+	}
+	
+	/**
+	 * @param sb the sb to set
+	 */
+	public void setSqlStatementBuilder(SQLStatementBuilder sb){
+		this.sb = sb;
+	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(kosmos.framework.sqlclient.api.orm.OrmContext, java.util.Map)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(kosmos.framework.sqlclient.api.orm.OrmParameter, java.util.Map)
 	 */
 	@Override
-	public int insert(OrmContext<?> entity, Map<String, Object> values) {
+	public int insert(OrmUpdateParameter<?> entity) {
 		throw new UnsupportedOperationException("Dont' use this method. Use 'EntityManager#persist' instead");
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#update(kosmos.framework.sqlclient.api.orm.OrmContext, java.util.Map)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#update(kosmos.framework.sqlclient.api.orm.OrmParameter, java.util.Map)
 	 */
 	@Override
-	public int update(OrmContext<?> condition , Map<String,Object> set){
+	public int update(OrmUpdateParameter<?> condition){
 
-		JPQLStatementBuilder stmt = createStatementBuilder();
-		String updateJpql = stmt.createUpdate(condition, set.keySet());
-		InternalNamedQueryImpl delegate = new InternalNamedQueryImpl(null,updateJpql, em, String.format("Update.%s",condition.getEntityClass().getSimpleName()), true,builder,accessor);
-		final NamedUpdate engine = createNamedUpdateEngine(delegate);
+		String updateJpql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues().keySet());
+		final FreeUpdateParameter parameter = new FreeUpdateParameter(false, condition.getEntityClass().getSimpleName() + ".update", updateJpql);
+	
+		setParameterAndHint(condition,parameter);
 
-		setConditionParameters(condition, new Bindable(){
-			public void setParameter(String key , Object value){
-				engine.setParameter(key, value);
-			}
-		});
-		for(Map.Entry<String, Object> s : set.entrySet()){
-			engine.setParameter(s.getKey(),s.getValue());			
+		for(Map.Entry<String, Object> s : condition.getCurrentValues().entrySet()){
+			parameter.getParam().put(s.getKey(),s.getValue());			
 		}		
-		Map<String,Object> hints = condition.getHints();
-		for(Map.Entry<String, Object> e : hints.entrySet()){
-			engine.setHint(e.getKey(), e.getValue());
-		}
-		return engine.update();
+		
+		return internalNamedQuery.executeUpdate(parameter);
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#delete(kosmos.framework.sqlclient.api.orm.OrmContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#delete(kosmos.framework.sqlclient.api.orm.OrmParameter)
 	 */
 	@Override
-	public  int delete(OrmContext<?> condition){		
-		JPQLStatementBuilder stmt = createStatementBuilder();
-		String updateJpql = stmt.createDelete(condition);
-		InternalNamedQueryImpl delegate = new InternalNamedQueryImpl(null,updateJpql, em, String.format("Update.%s",condition.getEntityClass().getSimpleName()), true,builder,accessor);
-		final NamedUpdate engine = createNamedUpdateEngine(delegate);
+	public  int delete(OrmUpdateParameter<?> condition){		
+	
+		String updateJpql = sb.createDelete(condition.getEntityClass(),condition.getFilterString(),condition.getConditions());
+		final FreeUpdateParameter parameter = new FreeUpdateParameter(false, condition.getEntityClass().getSimpleName() + ".delete", updateJpql);
+		setParameterAndHint(condition,parameter);
 
-		setConditionParameters(condition, new Bindable(){
-			public void setParameter(String key , Object value){
-				engine.setParameter(key, value);
-			}
-		});
-		Map<String,Object> hints = condition.getHints();
-		for(Map.Entry<String, Object> e : hints.entrySet()){
-			engine.setHint(e.getKey(), e.getValue());
-		}
-		return engine.update();
+		return internalNamedQuery.executeUpdate(parameter);
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#find(kosmos.framework.sqlclient.api.orm.OrmQueryContext, java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#find(kosmos.framework.sqlclient.api.orm.OrmQueryParameter, java.lang.Object[])
 	 */
 	@Override
-	public <E> E find(OrmQueryContext<E> query,Object... pks) {
+	public <E> E find(OrmQueryParameter<E> query,Object... pks) {
 		Object v = pks;
 		if( pks.length == 1){
 			v = pks[0];
@@ -140,127 +117,56 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public <E> List<E> getResultList(OrmQueryContext<E> entityQuery){	
-		NamedQuery query = createJPAQuery(entityQuery);
-		int first = entityQuery.getFirstResult();
-		if( first > 0){
-			query.setFirstResult(first);
-		}
+	public <E> List<E> getResultList(OrmQueryParameter<E> condition){	
+
+		String jpql = sb.createSelect(condition);
 		
-		query.setMaxResults(entityQuery.getMaxSize());		
-		return query.getResultList();
+		final FreeQueryParameter parameter = new FreeQueryParameter(condition.getEntityClass(), false, condition.getEntityClass().getSimpleName() + ".select", jpql);
+		setParameterAndHint(condition,parameter);
+		
+		parameter.setFirstResult(condition.getFirstResult());
+		parameter.setMaxSize(condition.getMaxSize());		
+		parameter.setLockMode(condition.getLockModeType());
+		
+		return internalNamedQuery.getResultList(parameter);
 	}
-	
+
 	/**
-	 * Creates the named query.
+	 * Set the parameter and hint.
 	 * 
-	 * @param <E> the type
-	 * @param entityQuery　the entityQuery
-	 * @return the named query
+	 * @param condition
+	 * @param parameter
 	 */
-	protected <E> NamedQuery createJPAQuery(OrmQueryContext<E> entityQuery){
-		
-		//クエリ作�E
-		final NamedQuery delegate = createEngine(entityQuery);
-
-		if(entityQuery.getLockModeType() != null){
-			delegate.setLockMode(entityQuery.getLockModeType());
+	private void setParameterAndHint(OrmParameter<?> condition,final FreeParameter parameter ){
+		for(Map.Entry<String, Object> e : condition.getHints().entrySet()){
+			parameter.getHints().put(e.getKey(), e.getValue());
 		}
-
-		setConditionParameters(entityQuery,new Bindable(){
+		
+		sb.setConditionParameters(condition.getFilterString(),condition.getEasyParams(),condition.getConditions(), new Bindable(){
 			public void setParameter(String key , Object value){
-				delegate.setParameter(key, value);
+				parameter.getParam().put(key, value);
 			}
 		});
 		
-		Map<String,Object> hints = entityQuery.getHints();
-		for(Map.Entry<String, Object> e : hints.entrySet()){
-			delegate.setHint(e.getKey(), e.getValue());
-		}
-		return delegate;
 	}
 	
 	/**
-	 * Creates the named query.
-	 * 
-	 * @param <E>　the type
-	 * @param entityQuery the entityQuery
-	 * @return the query
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#batchUpdate(kosmos.framework.sqlclient.api.orm.OrmUpdateParameter)
 	 */
-	protected <E> NamedQuery createEngine(OrmQueryContext<E> entityQuery){
-		String statement = createStatementBuilder().createSelect(entityQuery);
-		InternalNamedQueryImpl impl = new InternalNamedQueryImpl(null,statement, em, String.format("Select.%s",entityQuery.getEntityClass().getSimpleName()),true,builder,accessor);
-		LocalNamedQueryEngine delegate = new LocalNamedQueryEngine(impl);
-		return delegate;
-	}
-	
-	/**
-	 * Creates the statement builder.
-	 * 
-	 * @return the statement builder
-	 */
-	protected JPQLStatementBuilder createStatementBuilder(){
-		return new JPQLStatementBuilderImpl();
-	}
-	
-	/**
-	 * Creates the named updater.
-	 * 
-	 * @param delegate the delegate
-	 * @return the engine
-	 */
-	protected NamedUpdate createNamedUpdateEngine(InternalNamedQueryImpl delegate){
-		return new LocalNamedUpdateEngine(delegate);
-	}
-	
-	/**
-	 * Set the parameter to delegate.
-	 * 
-	 * @param condition the condition
-	 * @param delegate the delegate
-	 */
-	protected <E> void setConditionParameters(OrmContext<E> condition, Bindable delegate){
-		//簡易フィルターが設定されている場合、実行時に設定されたパラメータを使用する
-		if(condition.getFilterString() != null){
-			Object[] params = condition.getEasyParams();
-			if(params != null){
-				for(int i = 0; i < params.length; i++){
-					delegate.setParameter(String.format("p%d", i+1),params[i]);
-				}
-			}
-			return ;
-		}
-		//検索条件
-		List<WhereCondition> conds = condition.getConditions();
-	
-		for(WhereCondition cond : conds){
-			if(WhereOperand.IN == cond.getOperand()){
-				List<?> val = List.class.cast(cond.getValue());
-				int cnt = -1;
-				for(Object v : val){
-					cnt++;
-					delegate.setParameter(String.format("%s_%d_%d", cond.getColName(),cond.getBindCount(),cnt),v);
-				}
-			}else{	
-				delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
-				if( WhereOperand.Between == cond.getOperand()){
-					delegate.setParameter(String.format( "%s%d_to",cond.getColName(),cond.getBindCount()), cond.getToValue());
-				}
-			}
-		}
-	}
-	
-	private static interface Bindable {
-		
-		/**
-		 * @param key
-		 * @param value
-		 */
-		public void setParameter(String key , Object value);
+	@Override
+	public int[] batchUpdate(OrmUpdateParameter<?> parameter) {
+		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#batchInsert(kosmos.framework.sqlclient.api.orm.OrmUpdateParameter)
+	 */
+	@Override
+	public int[] batchInsert(OrmUpdateParameter<?> parameter) {
+		throw new UnsupportedOperationException();
+	}
 
 }

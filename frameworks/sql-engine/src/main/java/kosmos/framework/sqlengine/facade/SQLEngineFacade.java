@@ -63,4 +63,14 @@ public interface SQLEngineFacade {
 	 * @return the updated count
 	 */
 	public int executeUpdate(UpdateParameter parameter ,Connection con);
+	
+	/**
+	 * Executes the batch UPDATE/DELETE/INSERT.
+	 * 
+	 * @param <T> the type
+	 * @param param the parameters
+	 * @param con the connection
+	 * @return the updated count
+	 */
+	public int[] executeBatch(BatchParameter parameter ,Connection con);
 }

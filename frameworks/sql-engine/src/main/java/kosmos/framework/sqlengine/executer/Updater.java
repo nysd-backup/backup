@@ -20,4 +20,11 @@ public interface Updater {
 	 * @throws SQLException the exception
 	 */
 	public int update(PreparedStatement stmt) throws SQLException;
+
+	/**
+	 * @param stmt　the statement that is binded the parameter.
+	 * @return the updated count
+	 * @throws SQLException the exception
+	 */
+	public int[] batchUpdate(PreparedStatement stmt) throws SQLException;
 }

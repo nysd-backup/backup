@@ -14,6 +14,11 @@ import kosmos.framework.sqlclient.api.Update;
 public interface OrmUpdate<T> extends Update{
 	
 	/**
+	 * @return the parameter
+	 */
+	public OrmUpdateParameter<T> getCurrentParams();
+	
+	/**
 	 * Adds '='.
 	 * 
 	 * @param column the column to add to
@@ -109,13 +114,20 @@ public interface OrmUpdate<T> extends Update{
 	 * @param params the parameters
 	 * @return the updated count
 	 */
-	public int execute(List<Object> set , Object... params);
+	public int update(List<Object> set , Object... params);
 	
 	/**
 	 * Sets the condition.
 	 * 
 	 * @param condition the condition
 	 */
-	public OrmUpdate<T> setCondition(OrmContext<T> condition);
+	public OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition);
+	
+	/**
+	 * Deletes the data.
+	 * 
+	 * @return the updated count
+	 */
+	public int delete();
 
 }

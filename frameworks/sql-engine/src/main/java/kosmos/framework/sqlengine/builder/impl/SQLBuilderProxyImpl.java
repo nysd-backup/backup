@@ -75,8 +75,8 @@ public class SQLBuilderProxyImpl implements SQLBuilder{
 	 * @see kosmos.framework.sqlengine.builder.SQLBuilder#replaceToPreparedSql(java.lang.String, java.util.Map, java.util.List, java.lang.String)
 	 */
 	@Override
-	public String replaceToPreparedSql(String originalSql, Map<String, Object> parameter,
-			List<Object> bindList, String queryId) {
+	public String replaceToPreparedSql(String originalSql, List<Map<String, Object>> parameter,
+			List<List<Object>> bindList, String queryId) {
 		return delegate.replaceToPreparedSql(originalSql, parameter, bindList, queryId);
 	}
 

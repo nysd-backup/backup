@@ -5,13 +5,9 @@ package kosmos.framework.sqlclient.api.free;
 
 import javax.persistence.QueryHint;
 
-import kosmos.framework.sqlclient.api.ConnectionProvider;
 import kosmos.framework.sqlclient.internal.free.InternalQuery;
-import kosmos.framework.sqlclient.internal.free.impl.InternalQueryImpl;
-import kosmos.framework.sqlclient.internal.free.impl.LocalQueryEngineImpl;
-import kosmos.framework.sqlclient.internal.free.impl.LocalUpdateEngineImpl;
-import kosmos.framework.sqlengine.facade.SQLEngineFacade;
-import kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
+import kosmos.framework.sqlclient.internal.free.impl.LocalQueryEngine;
+import kosmos.framework.sqlclient.internal.free.impl.LocalUpdateEngine;
 
 /**
  * The factory to create the free writable query.
@@ -21,24 +17,14 @@ import kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
  */
 public class QueryFactoryImpl implements QueryFactory{
 	
-	/** The ConnectionProvider */
-	private ConnectionProvider connectionProvider;
-	
-	/** the SQLEngineFacade */
-	private SQLEngineFacade engineFacade = new SQLEngineFacadeImpl();
-
-	/**
-	 * @param facade the facade to set
-	 */
-	public void setSqlEngineFacade(SQLEngineFacade facade){
-		this.engineFacade = facade;
-	}
+	/** the internal query */
+	private InternalQuery internalQuery;
 	
 	/**
-	 * @param connectionProvider the connectionProvider to set
+	 * @param internalQuery the internalQuery to set
 	 */
-	public void setConnectionProvider(ConnectionProvider connectionProvider){
-		this.connectionProvider = connectionProvider;
+	public void setInternalQuery(InternalQuery internalQuery){
+		this.internalQuery = internalQuery;
 	}
 
 	/**
@@ -49,8 +35,9 @@ public class QueryFactoryImpl implements QueryFactory{
 	public <K extends FreeQuery, T extends AbstractFreeQuery<K>> T createQuery(Class<T> queryClass) {
 		AnonymousQuery aq = queryClass.getAnnotation(AnonymousQuery.class);		
 
-		InternalQuery query = new InternalQueryImpl(false,aq.query(),queryClass.getSimpleName(),connectionProvider, aq.resultClass(),engineFacade);
-		K engine = (K)new LocalQueryEngineImpl(query);
+		FreeQueryParameter parameter = new FreeQueryParameter(aq.resultClass(), false, queryClass.getSimpleName(), aq.query());
+		
+		K engine = (K)new LocalQueryEngine(internalQuery,parameter);
 		for(QueryHint hint : aq.hints()){
 			engine.setHint(hint.name(), hint.value());
 		}
@@ -69,11 +56,12 @@ public class QueryFactoryImpl implements QueryFactory{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends FreeUpdate, T extends AbstractUpdate<K>> T createUpdate(Class<T> updateClass) {
+	public <K extends FreeUpdate, T extends AbstractFreeUpdate<K>> T createUpdate(Class<T> updateClass) {
+		
 		AnonymousQuery aq = updateClass.getAnnotation(AnonymousQuery.class);		
+		FreeUpdateParameter parameter = new FreeUpdateParameter(false, updateClass.getSimpleName(), aq.query());
 
-		InternalQuery query = new InternalQueryImpl(false,aq.query(),updateClass.getSimpleName(),connectionProvider, null,engineFacade);
-		K engine = (K)new LocalUpdateEngineImpl(query);
+		K engine = (K)new LocalUpdateEngine(internalQuery,parameter);
 		for(QueryHint hint : aq.hints()){
 			engine.setHint(hint.name(), hint.value());
 		}

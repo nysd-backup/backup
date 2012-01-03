@@ -26,6 +26,19 @@ public interface PersistenceManager {
 	
 	/**
 	 * @param entity
+	 * @return
+	 */
+	public int[] insert(Object[] entity) ;
+	
+	/**
+	 * @param entity
+	 * @param hints
+	 * @return
+	 */
+	public int[] insert(Object[] entity,PersistenceHints hints);
+	
+	/**
+	 * @param entity
 	 * @param hints
 	 * @return
 	 */

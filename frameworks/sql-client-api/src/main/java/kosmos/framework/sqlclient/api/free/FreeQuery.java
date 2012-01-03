@@ -14,6 +14,16 @@ import kosmos.framework.sqlclient.api.Query;
 public interface FreeQuery extends Query{
 	
 	/**
+	 * @return the current parameter
+	 */
+	public FreeQueryParameter getCurrentParams(); 
+	
+	/**
+	 * @param parameter the parameter to set
+	 */
+	public void setCondition(FreeQueryParameter parameter); 
+	
+	/**
 	 * Set the branch parameter.
 	 * 
 	 * @param <T> the type

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+
+	<!-- 
+		以下のbeanの定義が別コンテキストに必要
+			・entityManagerProvider	→ EntityManagerProviderを実装したクラス
+	 -->
+
+	<!-- SQL作成 -->
+  	<bean id="sqlBuilder" class="kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl" />
+  	
+  	<!-- 内部Namedクエリ -->
+	<bean id="internalNamedQuery" class="kosmos.framework.jpqlclient.internal.free.impl.InternalNamedQueryImpl" scope="prototype" >
+		<property name="entityManagerProvider" ref="entityManagerProvider"/>
+		<property name="sqlBuilder" ref="sqlBuilder"/>			
+	</bean>	
+	
+	<!-- 内部クエリ -->
+	<bean id="internalQuery" class="kosmos.framework.jpqlclient.internal.free.impl.InternalEclipseLinkNativeQueryImpl" scope="prototype" >
+		<property name="entityManagerProvider" ref="entityManagerProvider"/>
+		<property name="sqlBuilder" ref="sqlBuilder"/>			
+	</bean>
+	
+	<!-- クエリファクトリ -->
+	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalQuery"/>	
+		<property name="internalNamedQuery" ref="internalNamedQuery"/>			
+	</bean>
+	
+	<!-- ORM内部クエリ -->
+	<bean id="internalOrmQuery" class="kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl" scope="prototype" >
+		<property name="entityManagerProvider" ref="entityManagerProvider"/>
+		<property name="internalNamedQuery" ref="internalNamedQuery"/>		
+	</bean>
+	
+	<!-- ORMクエリファクトリ -->
+	<bean id="internalQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+		<property name="internalOrmQuery" ref="internalOrmQuery" />
+	</bean>
+
+	<!-- ORMクエリファクトリ開発者API -->
+	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.LimitedOrmQueryFactoryImpl" scope="prototype">	
+		<property name="internalFactory" ref="internalQueryFactory" />
+	</bean>
+ 
+</beans>

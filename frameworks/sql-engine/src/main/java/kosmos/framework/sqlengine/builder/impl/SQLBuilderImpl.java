@@ -109,8 +109,12 @@ public class SQLBuilderImpl implements SQLBuilder{
 	 * @see kosmos.framework.sqlengine.builder.SQLBuilder#replaceToPreparedSql(java.lang.String, java.util.Map, java.util.List, java.lang.String)
 	 */
 	@Override
-	public String replaceToPreparedSql(String sql , Map<String,Object> params ,List<Object> bindList,String sqlId){
+	public String replaceToPreparedSql(String sql , List<Map<String,Object>> params ,List<List<Object>> bindList,String sqlId){
 
+		if(params.isEmpty() || bindList.isEmpty()){
+			throw new IllegalArgumentException("parameter is required");
+		}
+		
 		final StringBuffer buff = new StringBuffer(sql.length());
 
 		// バインド変数を検索
@@ -120,41 +124,70 @@ public class SQLBuilderImpl implements SQLBuilder{
 		while (match.find()) {
 			// マッチしたバインド変数名を取得後、空白、最初のコロンを除去する
 			String variableName = match.group(2);
-			Object variable = params.get(variableName);		
-			if(variable == null ){
-				Object[] value = accessor.getConstTarget(variableName);
-				if( value.length > 0){
-					variable = value[0];
-				}
-			}			
-
-			String question = match.group(1) + "?";
-
-			// List型へのバインドの場合はサイズ文?を追加する
-			if (variable != null){
-				Object val = variable;
-				if( val.getClass().isArray()){
-					val = Arrays.asList((Object[])val);
-				}
-				if(val instanceof List<?>) {
-					final List<?> list = (List<?>) val;
-					if (!list.isEmpty()) {
-						// リストの1番目の追加
-						StringBuilder questions = new StringBuilder(question);
-						bindList.add(list.get(0));
-						// リストの番目以降に追加
-						for (int i = 1; i < list.size(); i++) {
-							questions.append(",?");
-							bindList.add(list.get(i));
-						}
-						question = questions.toString();
+			String question = null;
+			
+			for(int i = 0 ; i < params.size(); i ++){
+				Map<String,Object> map = params.get(i);
+				List<Object> binds = bindList.get(i);
+				
+				Object variable = null;
+				//パラメータがなければ定数キャッシュから取得する
+				if(!map.containsKey(variableName) ){
+					Object[] value = accessor.getConstTarget(variableName);		
+					if( value.length < 1){
+						throw new IllegalArgumentException("invalid parameter : name=" + variableName + " : batchIndex=" + i);
 					}
-				}else {
-					bindList.add(variable);
-				}				
-			}			
-			match.appendReplacement(buff, question);
+					variable = value[0];				
+				}else{
+					variable =  map.get(variableName);	
+				}
+	
+				//?は最初のリストで判定する
+				if(i == 0){
+					question = match.group(1) + "?";
+				}
+				
+				// List型へのバインドの場合はサイズ文?を追加する
+				if (variable != null){
+					Object val = variable.getClass().isArray() ? Arrays.asList((Object[])variable) : variable;				
+					if((val instanceof List<?>) && !((List<?>)val).isEmpty()) {
+						final List<?> list = (List<?>) val;
+						//?は最初のリストで判定する
+						if(i == 0 ){
+							// リストの1番目の追加
+							StringBuilder questions = new StringBuilder(question);
+							binds.add(list.get(0));
+							// リストの番目以降に追加
+							for (int j = 1; j < list.size(); i++) {
+								questions.append(",?");
+								binds.add(list.get(j));
+							}
+							question = questions.toString();
+						}else{
+							binds.add(list.get(0));
+							for (int j = 1; j < list.size(); i++) {
+								binds.add(list.get(j));
+							}
+						}						
+					
+					}else {
+						binds.add(variable);
+					}				
+				}
+
+			}
+			match.appendReplacement(buff, question);			
 		}
+		
+		int parameterCount = -1;
+		for(int i = 0 ; i < bindList.size(); i ++){
+			if(parameterCount == -1 ){
+				parameterCount = bindList.get(i).size();
+			}else if(bindList.get(i).size() != parameterCount){
+				throw new IllegalArgumentException("batch parameter count must be same : current=" + bindList.get(i).size() + " : previous=" + parameterCount + " : batchIndex=" + i);				
+			}
+		}
+		
 		match.appendTail(buff);
 		
 		String firingSql = buff.toString();

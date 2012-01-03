@@ -3,27 +3,24 @@
  */
 package kosmos.framework.jpqlclient.api.free;
 
-import javax.persistence.EntityManager;
 import javax.persistence.QueryHint;
 
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.jpqlclient.internal.free.impl.InternalNamedQueryImpl;
 import kosmos.framework.jpqlclient.internal.free.impl.LocalNamedQueryEngine;
 import kosmos.framework.jpqlclient.internal.free.impl.LocalNamedUpdateEngine;
 import kosmos.framework.sqlclient.api.Update;
 import kosmos.framework.sqlclient.api.free.AbstractFreeQuery;
 import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.free.AbstractNativeUpdate;
-import kosmos.framework.sqlclient.api.free.AbstractUpdate;
+import kosmos.framework.sqlclient.api.free.AbstractFreeUpdate;
 import kosmos.framework.sqlclient.api.free.AnonymousQuery;
+import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQuery;
+import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdate;
+import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.api.free.QueryAccessor;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
-import kosmos.framework.sqlengine.builder.ConstAccessor;
-import kosmos.framework.sqlengine.builder.SQLBuilder;
-import kosmos.framework.sqlengine.builder.impl.ConstAccessorImpl;
-import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
 
 
 /**
@@ -33,44 +30,23 @@ import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
  * @version 2011/08/31 created.
  */
 public class NamedQueryFactoryImpl implements QueryFactory{
-	
-	/** the <code>EntityManager</code> */
-	protected EntityManager em;
-	
-	/** the <code>ConstAccessor</code> */
-	protected ConstAccessor accessor = new ConstAccessorImpl();
-	
-	/** the <code>SQLBuilder</code> */
-	protected SQLBuilder builder = new SQLBuilderProxyImpl();
 
-
-	/**
-	 * @param builder the builder to set
-	 */
-	public void setSqlBuilder(SQLBuilder builder){
-		this.builder = builder;
-	}
+	/** the internal query */
+	private InternalQuery internalNamedQuery;
 	
 	/**
-	 * @param accessor the accessor to set
+	 * @param internalQuery the internalQuery to set
 	 */
-	public void setConstAccessor(ConstAccessor accessor){
-		this.accessor = accessor;
+	public void setInternalNamedQuery(InternalQuery internalNamedQuery) {
+		this.internalNamedQuery = internalNamedQuery;
 	}
 	
-	/**
-	 * @param provider the provider to set
-	 */
-	public void setEntityManagerProvider(EntityManagerProvider provider){
-		em = provider.getEntityManager();
-	}
-
 	/**
 	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createUpdate(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends FreeUpdate,T extends AbstractUpdate<K>> T createUpdate(Class<T> updateClass) {
+	public <K extends FreeUpdate,T extends AbstractFreeUpdate<K>> T createUpdate(Class<T> updateClass) {
 		K delegate = null;
 		
 		if( AbstractNamedUpdate.class.isAssignableFrom(updateClass)){			
@@ -133,7 +109,8 @@ public class NamedQueryFactoryImpl implements QueryFactory{
 	 * @return the query
 	 */
 	protected FreeQuery createNamedQueryEngine(Class<?> queryClass){
-		return new LocalNamedQueryEngine(getNamedQuery(queryClass));
+		FreeQueryParameter parameter = FreeQueryParameter.class.cast( getParameter(queryClass, false));
+		return new LocalNamedQueryEngine(internalNamedQuery,parameter);
 	}
 	
 	/**
@@ -141,7 +118,8 @@ public class NamedQueryFactoryImpl implements QueryFactory{
 	 * @return the updater
 	 */
 	protected Update createNamedUpdateEngine(Class<?> updateClass){
-		return new LocalNamedUpdateEngine(getNamedQuery(updateClass));
+		FreeUpdateParameter parameter = FreeUpdateParameter.class.cast( getParameter(updateClass, true));
+		return new LocalNamedUpdateEngine(internalNamedQuery,parameter);
 	}
 	
 
@@ -151,29 +129,35 @@ public class NamedQueryFactoryImpl implements QueryFactory{
 	 * @param clazz the class 
 	 * @return the query
 	 */
-	protected InternalNamedQueryImpl getNamedQuery(Class<?> clazz){
+	protected FreeParameter getParameter(Class<?> clazz,boolean update){
 		
 		javax.persistence.NamedQuery nq = clazz.getAnnotation(javax.persistence.NamedQuery.class);
-		InternalNamedQueryImpl query = null;
+		FreeParameter parameter = null;
 		QueryHint[] hints = null;
 		//標準
 		if(nq != null){
-			query = new InternalNamedQueryImpl(nq.name(),nq.query(), em,clazz.getSimpleName() ,false,builder,accessor);				
+			if(update){
+				parameter = new FreeUpdateParameter(false,clazz.getSimpleName(),nq.query());				
+			}else{
+				parameter = new FreeQueryParameter(null, false,clazz.getSimpleName(),nq.query());	
+			}
+			parameter.setName(nq.name());
 			hints = nq.hints();
 		
 		//拡張-if文用	
 		}else{
 			AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);
-			query = new InternalNamedQueryImpl(null,aq.query(), em, clazz.getSimpleName(),false,builder,accessor);
+			if(update){
+				parameter = new FreeUpdateParameter(false,clazz.getSimpleName(),aq.query());				
+			}else{
+				parameter = new FreeQueryParameter(aq.resultClass(), false ,clazz.getSimpleName(), aq.query());	
+			}
 			hints = aq.hints();
 		}
-		if( hints == null){
-			hints = new QueryHint[0];
-		}
 		for(QueryHint h: hints){
-			query.setHint(h.name(), h.value());
+			parameter.getHints().put(h.name(), h.value());
 		}
-		return query;
+		return parameter;
 	}
 	
 	/**
@@ -188,5 +172,5 @@ public class NamedQueryFactoryImpl implements QueryFactory{
 			throw new IllegalStateException(e);
 		}
 	}
-	
+
 }

@@ -9,7 +9,7 @@ import javax.persistence.LockModeType;
 
 import kosmos.framework.sqlclient.api.Query;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
+import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.SortKey;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.api.orm.WhereOperand;
@@ -29,22 +29,22 @@ public class LocalOrmQueryEngine<T> implements OrmQuery<T>{
 	private final InternalOrmQuery dao;
 	
 	/** the condition */
-	protected OrmQueryContext<T> condition;
+	protected OrmQueryParameter<T> condition;
 	
 	/**
 	 * @param entityClass the entityClass to set
 	 */
 	public LocalOrmQueryEngine(Class<T> entityClass,InternalOrmQuery dao){
-		condition = new OrmQueryContext<T>(entityClass);		
+		condition = new OrmQueryParameter<T>(entityClass);		
 		this.dao = dao;
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryContext)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public OrmQuery<T> setCondition(OrmQueryContext<T> condition) {
-		this.condition = (OrmQueryContext<T>)condition;
+	public OrmQuery<T> setCondition(OrmQueryParameter<T> condition) {
+		this.condition = (OrmQueryParameter<T>)condition;
 		return this;
 	}
 
@@ -247,6 +247,15 @@ public class LocalOrmQueryEngine<T> implements OrmQuery<T>{
 	public OrmQuery<T> setLockMode(LockModeType type) {
 		condition.setLockModeType(type);
 		return this;
+	}
+
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getCurrentParams()
+	 */
+	@Override
+	public OrmQueryParameter<T> getCurrentParams() {
+		return this.condition;
 	}
 
 }

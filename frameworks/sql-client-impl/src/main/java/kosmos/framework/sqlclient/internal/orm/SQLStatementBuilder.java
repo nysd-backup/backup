@@ -4,9 +4,10 @@
 package kosmos.framework.sqlclient.internal.orm;
 
 import java.util.Collection;
+import java.util.List;
 
-import kosmos.framework.sqlclient.api.orm.OrmContext;
-import kosmos.framework.sqlclient.api.orm.OrmQueryContext;
+import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.api.orm.WhereCondition;
 
 
 /**
@@ -23,7 +24,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createSelect(OrmQueryContext<?> condition);
+	public String createSelect(OrmQueryParameter<?> condition);
 	
 	/**
 	 * Creates the SQL statement.
@@ -39,7 +40,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createUpdate(OrmContext<?> condition, Collection<String> set);
+	public String createUpdate(Class<?> entityClass,String filterString, List<WhereCondition> where, Collection<String> set);
 	
 	/**
 	 * Creates the SQL statement.
@@ -47,6 +48,22 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createDelete(OrmContext<?> condition);
+	public String createDelete(Class<?> entityClass,String filterString, List<WhereCondition> where);
 	
+	/**
+	 * 
+	 * @param filterString
+	 * @param easyParams
+	 */
+	public void setConditionParameters(String filterString, Object[] easyParams, List<WhereCondition> condition , Bindable bindable);
+	
+	public static interface Bindable {
+		
+		/**
+		 * @param key
+		 * @param value
+		 */
+		public void setParameter(String key , Object value);
+	}
+
 }

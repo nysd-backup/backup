@@ -14,6 +14,20 @@ package kosmos.framework.sqlclient.api;
 public interface Update {
 	
 	/**
+	 * Adds the batch parameter.
+	 * 
+	 * @return self
+	 */
+	public <T extends Update> T addBatch();
+	
+	/**
+	 * Updates the data.
+	 * 
+	 * @return result
+	 */
+	public int[] batchUpdate();
+	
+	/**
 	 * Adds the JPA hint.
 	 * 
 	 * @param <T> the type
@@ -29,5 +43,7 @@ public interface Update {
 	 * @return the updated count
 	 */
 	public int update();
+	
+	
 	
 }
