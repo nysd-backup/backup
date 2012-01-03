@@ -38,6 +38,10 @@ import org.eclipse.persistence.sessions.server.ClientSession;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 /**

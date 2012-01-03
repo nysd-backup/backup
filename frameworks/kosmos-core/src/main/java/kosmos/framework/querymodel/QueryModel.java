@@ -41,8 +41,9 @@ public abstract class QueryModel{
 	/**
 	 * @param child the child 
 	 */
-	public void setChild(QueryModel child){
+	public QueryModel setChild(QueryModel child){
 		this.child = child;
+		return this;
 	}
 	
 	/**
@@ -63,29 +64,33 @@ public abstract class QueryModel{
 	/**
 	 * @param result the result to set
 	 */
-	public <T> void setValue(T result) {
+	public <T> QueryModel setValue(T result) {
 		this.result = result;
+		return this;
 	}
 
 	/**
 	 * @param checker the checker to add
 	 */
-	public void addChecker(Checker<?> checker) {
+	public QueryModel addChecker(Checker<?> checker) {
 		checkerList.add(checker);
+		return this;
 	}
 
 	/**
 	 * Sets stopIfFail to true;
 	 */
-	public void setStopIfFail() {
+	public QueryModel setStopIfFail() {
 		this.stopIfFail = true;
+		return this;
 	}
 
 	/**
 	 * Sets throwIfFail to true;
 	 */
-	public void setThrowIfFail() {
+	public QueryModel setThrowIfFail() {
 		this.throwIfFail = true;
+		return this;
 	}
 
 	/**

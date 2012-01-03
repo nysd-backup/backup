@@ -58,7 +58,7 @@ public class DebugLogWriterImpl implements LogWriter {
 	 */
 	@Override
 	public void trace(String message) {
-		if( isTraceEnabled())logger.trace(fook()+message);
+		if( isTraceEnabled())logger.trace(message);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class DebugLogWriterImpl implements LogWriter {
 	 */
 	@Override
 	public void debug(String message) {
-		if(isDebugEnabled())logger.debug(fook()+message);
+		if(isDebugEnabled())logger.debug(message);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class DebugLogWriterImpl implements LogWriter {
 	 */
 	@Override
 	public void info(String message) {
-		if(isInfoEnabled())logger.info(fook()+message);
+		if(isInfoEnabled())logger.info(message);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class DebugLogWriterImpl implements LogWriter {
 	 */
 	@Override
 	public void warn(String message) {
-		logger.warn(fook()+message);
+		logger.warn(message);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class DebugLogWriterImpl implements LogWriter {
 	 */
 	@Override
 	public void warn(String message, Throwable t) {
-		logger.warn(fook()+message, t);
+		logger.warn(message, t);
 	}
 
 	/**
