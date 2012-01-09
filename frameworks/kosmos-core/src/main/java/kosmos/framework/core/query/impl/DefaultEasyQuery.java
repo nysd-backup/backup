@@ -6,7 +6,6 @@ package kosmos.framework.core.query.impl;
 import java.util.List;
 
 import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.impl.AbstractLimitedOrmQuery;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 
 
@@ -89,6 +88,14 @@ public class DefaultEasyQuery<T> extends AbstractLimitedOrmQuery<T> implements E
 	@Override
 	public boolean exists(Object... pks) {
 		return find(pks) != null;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.LimitedOrmQuery#optimisticLockingFind(java.lang.Object[])
+	 */
+	@Override
+	public T findForUpdate(Object... pks) {
+		return delegate.findForUpdate(pks);
 	}	
 
 }

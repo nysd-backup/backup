@@ -5,7 +5,6 @@ package kosmos.framework.service.core.advice;
 
 import javax.interceptor.InvocationContext;
 
-import kosmos.framework.service.core.advice.InvocationAdapter;
 
 
 /**
@@ -26,7 +25,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.advice.InvocationAdapter#getMethodName()
+	 * @see kosmos.framework.core.activation.InvocationAdapter#getMethodName()
 	 */
 	@Override
 	public String getMethodName() {
@@ -34,7 +33,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.advice.InvocationAdapter#getArgs()
+	 * @see kosmos.framework.core.activation.InvocationAdapter#getArgs()
 	 */
 	@Override
 	public Object[] getArgs() {
@@ -42,7 +41,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.advice.InvocationAdapter#getThis()
+	 * @see kosmos.framework.core.activation.InvocationAdapter#getThis()
 	 */
 	@Override
 	public Object getThis() {
@@ -50,7 +49,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.advice.InvocationAdapter#proceed()
+	 * @see kosmos.framework.core.activation.InvocationAdapter#proceed()
 	 */
 	@Override
 	public Object proceed() throws Throwable {
@@ -58,7 +57,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.advice.InvocationAdapter#getDeclaringTypeName()
+	 * @see kosmos.framework.core.activation.InvocationAdapter#getDeclaringTypeName()
 	 */
 	@Override
 	public String getDeclaringTypeName() {

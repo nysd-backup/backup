@@ -7,7 +7,11 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.core.context.AbstractContainerContext;
+import kosmos.framework.core.dto.CompositeReply;
+import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.message.MessageResult;
 
 
 /**
@@ -52,14 +56,27 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 			}
 		}
 			
-		RequestDto dto = new RequestDto();
+		CompositeRequest dto = new CompositeRequest();
 		dto.setAlias(alias);
 		dto.setTargetClass(method.getDeclaringClass());
 		dto.setMethodName(method.getName());
 		dto.setParameter(serial);
 		dto.setParameterTypes(method.getParameterTypes());
 		
-		return processService(dto);
+		CompositeReply reply = null;
+		try{
+			reply = processService(dto);
+			//メッセージをクライアントコンテキストに追加
+			for(MessageResult message: reply.getMessageList()){
+				AbstractContainerContext.getCurrentInstance().addMessage(message);
+			}
+		}catch(BusinessException be){
+			//メッセージをクライアントコンテキストに追加
+			for(MessageResult message: be.getMessageList()){
+				AbstractContainerContext.getCurrentInstance().addMessage(message);
+			}
+		}
+		return reply.getData();
 		
 	}
 	
@@ -68,8 +85,8 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 	 * @param dto DTO
 	 * @return the reply
 	 */
-	protected Object processService(RequestDto dto) throws Throwable{
-		return serviceActivator.activateAndInvoke(dto);
+	protected CompositeReply processService(CompositeRequest dto) throws Throwable{
+		return serviceActivator.activate(dto);
 	}
 
 }

@@ -4,6 +4,7 @@
 package kosmos.framework.core.activation;
 
 import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.logics.message.MessageBuilder;
 
 
@@ -42,12 +43,15 @@ public abstract class ComponentLocator {
 	 */
 	public abstract <T> T lookupRemoteComponent(Class<T> clazz);
 
-	
 	/**
 	 * @return the message builder
 	 */
 	public abstract MessageBuilder createMessageBuilder();	
 	
+	/**
+	 * @return the fault notifier
+	 */
+	public abstract FaultNotifier createFaultNotifier();	
 	
 	/**
 	 * @return the BusinessException
@@ -99,6 +103,11 @@ public abstract class ComponentLocator {
 		return delegate.createBusinessException();
 	}
 	
-	
+	/**
+	 * @return the fault error
+	 */
+	public static FaultNotifier createDefaultFaultNotifier(){
+		return delegate.createFaultNotifier();
+	}
 	
 }

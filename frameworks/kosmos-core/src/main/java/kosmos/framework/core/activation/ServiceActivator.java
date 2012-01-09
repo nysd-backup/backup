@@ -3,22 +3,22 @@
  */
 package kosmos.framework.core.activation;
 
-import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.core.dto.CompositeReply;
+import kosmos.framework.core.dto.CompositeRequest;
+
 
 /**
- * Activates the services.
- * 
- * @author	yoshida-n
- * @version 2011/08/31 created.
+ * The internal interceptor.
+ *
+ * @author yoshida-n
+ * @version	created.
  */
 public interface ServiceActivator {
 
 	/**
-	 * Activates the services.
-	 * 
-	 * @param dto the DTO
-	 * @return the reply
+	 * @param contextInvoker the invoker
+	 * @return the result
+	 * @throws Throwable the exception
 	 */
-	public Object activateAndInvoke(RequestDto dto) throws Throwable;
-	
+	public CompositeReply activate(CompositeRequest contextInvoker) throws Throwable;
 }

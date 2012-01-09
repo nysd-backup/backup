@@ -42,7 +42,4 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			expression="org.springframework.stereotype.Service" />		
 	</context:component-scan>
 	
-	<bean class="kosmos.framework.service.test.RequiresNewServiceImpl" scope="prototype" />
-	<bean class="kosmos.framework.service.test.RequiresNewReadOnlyServiceImpl" scope="prototype" />
-	
 </beans>

@@ -48,11 +48,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public abstract QueryFactory createQueryFactory();
 	
 	/**
-	 * @return the <code>QueryFactory</code> only called from WEB 
-	 */
-	public abstract QueryFactory createClientQueryFactory();
-	
-	/**
 	 * @return the <code>AsyncServiceFactory</code>
 	 */
 	public abstract AsyncServiceFactory createAsyncServiceFactory();
@@ -100,13 +95,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 */
 	public static QueryFactory createDefaultQueryFactory(){
 		return getDelegate().createQueryFactory();
-	}
-	
-	/**
-	 * @return the QueryFactory
-	 */
-	public static QueryFactory createDefaultClientQueryFactory(){
-		return getDelegate().createClientQueryFactory();
 	}
 	
 	/**

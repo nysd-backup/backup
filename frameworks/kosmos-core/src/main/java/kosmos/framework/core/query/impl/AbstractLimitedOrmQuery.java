@@ -6,7 +6,6 @@ package kosmos.framework.core.query.impl;
 import javax.persistence.LockModeType;
 
 import kosmos.framework.core.query.LimitedOrmQuery;
-import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 
@@ -46,16 +45,6 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmQuery#setPessimisticNoWait()
-	 */
-	@Override
-	public <Q extends LimitedOrmQuery<T>> Q setPessimisticNoWait(){
-		setLockMode(LockModeType.PESSIMISTIC_READ);
-		setHint(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT,0);
-		return (Q)this;
-	}
-	
-	/**
 	 * @see kosmos.framework.core.query.LimitedOrmQuery#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -69,7 +58,7 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	 */
 	@Override
 	public <Q extends LimitedOrmQuery<T>> Q setLockMode(LockModeType lockModeType) {
-		delegate.setLockMode(lockModeType);
+		delegate.setLockMode(lockModeType);		
 		return (Q)this;
 	}
 	

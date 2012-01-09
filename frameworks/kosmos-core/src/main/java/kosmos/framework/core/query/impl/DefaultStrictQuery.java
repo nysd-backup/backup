@@ -148,5 +148,12 @@ public class DefaultStrictQuery<T> extends AbstractLimitedOrmQuery<T> implements
 		return find(pks) != null;
 	}
 
+	/**
+	 * @see kosmos.framework.core.query.LimitedOrmQuery#optimisticLockingFind(java.lang.Object[])
+	 */
+	@Override
+	public T findForUpdate(Object... pks) {
+		return delegate.findForUpdate(pks);
+	}	
 }
 

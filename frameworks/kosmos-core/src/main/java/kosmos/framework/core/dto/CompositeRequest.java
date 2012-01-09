@@ -5,13 +5,14 @@ package kosmos.framework.core.dto;
 
 import java.io.Serializable;
 
+
 /**
  * A request data from WEB container
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class RequestDto implements Serializable{
+public class CompositeRequest implements Serializable{
 
 	private static final long serialVersionUID = -5671768150819629678L;
 	

@@ -3,8 +3,13 @@
  */
 package kosmos.framework.service.core.advice;
 
-import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.exception.ExceptionHandler;
+import kosmos.framework.core.exception.PoorImplementationException;
+import kosmos.framework.core.exception.SystemException;
+import kosmos.framework.core.logics.log.FaultNotifier;
+import kosmos.framework.core.logics.log.LogWriter;
+import kosmos.framework.core.logics.log.LogWriterFactory;
+import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.TransactionManagingContext;
@@ -21,16 +26,21 @@ import kosmos.framework.service.core.transaction.TransactionManagingContext;
  */
 public class InternalDefaultInterceptor implements InternalInterceptor {
 	
-	public static final String ANY_TRANSACTION_FAILED = "Any transaction is failed";
+	private static final LogWriter LOG = LogWriterFactory.getLog(InternalDefaultInterceptor.class);
 
 	/**
-	 * @see kosmos.framework.service.core.advice.InternalInterceptor#around(kosmos.framework.service.core.advice.InvocationAdapter)
+	 * @see kosmos.framework.service.core.advice.InternalInterceptor#around(kosmos.framework.core.activation.InvocationAdapter)
 	 */
 	@Override
 	public Object around(InvocationAdapter ic) throws Throwable {
 		
 		ServiceContext context = ServiceContext.getCurrentInstance();
 		if(context == null){
+			throw new PoorImplementationException("context is required");
+		}
+		
+		if(context.isTopLevel()){
+			context.setTopLevel(false);
 			return invokeAtTopLevel(ic);
 		}else {
 			return invoke(ic);
@@ -57,53 +67,56 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 	 */
 	protected Object invokeAtTopLevel(InvocationAdapter ic) throws Throwable {
 	
-		final TransactionManagingContext context = ServiceLocator.createDefaultServiceContext();
-		context.initialize();
-		Object retValue = null;
+		TransactionManagingContext context = (TransactionManagingContext)TransactionManagingContext.getCurrentInstance();
+	
+		Throwable throwable = null;
+		Object returnValue = null;
+		
 		try{
-			retValue = proceed(ic);	
-			if(context.isAnyTransactionFailed()){
-				throw afterError(retValue);	
-			}			
+			returnValue = proceed(ic);	
 		}catch(Throwable t){
-			ExceptionHandler handler = createExceptionHandler(context);
-			Throwable rethrowTarget =  handler.handle(t);
-			if(rethrowTarget != null){
-				throw rethrowTarget;
-			}
-		}finally {
-			context.release();
+			LOG.error(t.getMessage(),t);
+			throwable = t;
 		}
-		return retValue;
+		if(throwable != null){		
+			afterThrowable(throwable,context);
+			throw throwable;
+		}else{			
+			afterProceed(context);
+			return returnValue;
+		}
+	
 	}
 	
 	/**
-	 * Handles the business error.
-	 * 
-	 * @param retValue the value to return.
+	 * After success.
+	 * @param context　the context
 	 */
-	protected BusinessException afterError(Object retValue){
-		return new BusinessException(ANY_TRANSACTION_FAILED);
+	protected void afterProceed(TransactionManagingContext context){
+		//Springの場合はTransactionInterceptorでトランザクション境界毎にロールバックフラグを立てるのでここの処理は必要なし
+		//EJBの場合にはSessionContext#setRollbakOnlyが必要
 	}
-
+	
 	/**
-	 * Creates the exceptionHandler.
-	 * 
-	 * @param context the context
-	 * @return the ExceptionHandler
+	 * After error.
+	 * @param context　the context
 	 */
-	protected ExceptionHandler createExceptionHandler(final ServiceContext context){
-		ExceptionHandler handler = new ExceptionHandler(){
-			@Override
-			public Throwable handle(Throwable t) {
-				if ( t instanceof BusinessException ){
-					BusinessException be = (BusinessException)t;
-					be.setMessageList(context.getMessageArray());
-				}
-				return t;
-			}				
-		};
-		return handler;
+	protected void afterThrowable(Throwable throwable,TransactionManagingContext context){
+		
+		try{
+			FaultNotifier faultNotifier = ServiceLocator.createDefaultFaultNotifier();
+			//障害通知
+			if(throwable instanceof SystemException){
+				SystemException se = SystemException.class.cast(throwable);
+				MessageBean bean = new MessageBean(se.getMessageId(),se.getArgs());
+				MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean);
+			//TODO	if(message.isNotifyTarget()){
+					faultNotifier.notify(message.getCode(), message.getMessage(), message.getLevel());
+			//	}
+			}
+		}catch(Throwable t){
+			LOG.error(t.getMessage(),t);
+		}
 	}
 	
 	/**
@@ -114,7 +127,13 @@ public class InternalDefaultInterceptor implements InternalInterceptor {
 	 * @throws Throwable
 	 */
 	protected Object proceed(InvocationAdapter ic) throws Throwable{
-		return ic.proceed();
+		TransactionManagingContext context = (TransactionManagingContext)TransactionManagingContext.getCurrentInstance();
+		context.pushCallStack();
+		try{
+			return ic.proceed();
+		}finally{
+			context.popCallStack();
+		}
 	}
 
 }

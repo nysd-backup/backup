@@ -71,7 +71,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	public void addMessage() {
 		MessageBean bean = new MessageBean(Messages.MSG_SYS_UNEXPECTED_DATA_FOUND);
 		MessageResult message = builder.load(bean);
-		ServiceContext.getCurrentInstance().addError(message);
+		ServiceContext.getCurrentInstance().addMessage(message);
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}
 

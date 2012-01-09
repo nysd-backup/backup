@@ -6,6 +6,7 @@ package kosmos.framework.service.core.transaction;
 import java.util.LinkedList;
 
 import kosmos.framework.core.message.MessageResult;
+import kosmos.framework.core.message.Messages;
 
 
 /**
@@ -18,12 +19,6 @@ public class TransactionManagingContext extends ServiceContext{
 	
 	/** true:any transaction is failed. */
 	private boolean anyTransactionFailed = false;
-	
-	/** true:ignore pessimistic/optimistic lock error */
-	private boolean suppressConcurencyError = false;
-	
-	/** true:ignore SQLcode 0001 */
-	private boolean suppressExisitanceError = false;
 	
 	/** the stack of unit of work */
 	protected LinkedList<InternalUnitOfWork> unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
@@ -71,13 +66,16 @@ public class TransactionManagingContext extends ServiceContext{
 		return unitOfWorkStack.peek();
 	}
 
+	
 	/**
-	 * @see kosmos.framework.service.core.transaction.ServiceContext#addError(kosmos.framework.core.message.MessageResult)
+	 * @see kosmos.framework.core.context.AbstractContainerContext#addMessage(kosmos.framework.core.message.MessageResult)
 	 */
 	@Override
-	public void addError(MessageResult message){
-		setRollbackOnlyToCurrentTransaction();				
-		super.addError(message);
+	public void addMessage(MessageResult message){
+		if(message.getLevel() >= Messages.Level.E.ordinal()){
+			setRollbackOnlyToCurrentTransaction();
+		}		
+		super.addMessage(message);
 	}
 
 	/**
@@ -95,8 +93,6 @@ public class TransactionManagingContext extends ServiceContext{
 	 */
 	public void release(){
 		anyTransactionFailed = false;
-		suppressConcurencyError = false;
-		suppressExisitanceError = false;
 		unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
 		super.release();		
 	}
@@ -108,31 +104,4 @@ public class TransactionManagingContext extends ServiceContext{
 		return new InternalUnitOfWork();
 	}
 
-	/**
-	 * @return the suppressExisitanceError
-	 */
-	public boolean isSuppressExisitanceError() {
-		return suppressExisitanceError;
-	}
-
-	/**
-	 * @param suppressExisitanceError the suppressExisitanceError to set
-	 */
-	public void setSuppressExisitanceError(boolean suppressExisitanceError) {
-		this.suppressExisitanceError = suppressExisitanceError;
-	}
-
-	/**
-	 * @return the suppressConcurencyError
-	 */
-	public boolean isSuppressConcurencyError() {
-		return suppressConcurencyError;
-	}
-
-	/**
-	 * @param suppressConcurencyError the suppressConcurencyError to set
-	 */
-	public void setSuppressConcurencyError(boolean suppressConcurencyError) {
-		this.suppressConcurencyError = suppressConcurencyError;
-	}
 }

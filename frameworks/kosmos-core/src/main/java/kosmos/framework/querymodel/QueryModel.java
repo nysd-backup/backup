@@ -6,13 +6,16 @@ package kosmos.framework.querymodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import kosmos.framework.core.dto.MessageReplyable;
+import kosmos.framework.core.message.MessageResult;
+
 /**
  * QueryModel.
  *
  * @author yoshida-n
  * @version	created.
  */
-public abstract class QueryModel{
+public abstract class QueryModel implements MessageReplyable{
 
 	/** the updating target */
 	private Object result = null;
@@ -30,12 +33,12 @@ public abstract class QueryModel{
 	private QueryModel child = null;	
 
 	/**
-	 * Accepts the QueryProcessor.
+	 * Accepts the VisitableQueryProcessor.
 	 * 
 	 * @param updater the updater to execute
 	 * @return result of update
 	 */
-	public abstract void accept(QueryProcessor updater);
+	public abstract void accept(VisitableQueryProcessor updater);
 
 	
 	/**
@@ -112,6 +115,19 @@ public abstract class QueryModel{
 	 */
 	public boolean isThrowIfFail() {
 		return this.throwIfFail;
+	}
+	
+
+	@Override
+	public void setMessageList(MessageResult[] messageList) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public MessageResult[] getMessageList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

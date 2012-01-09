@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityExistsException;
+import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 import javax.sql.DataSource;
@@ -399,7 +400,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait().find("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -424,7 +425,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait().find("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -455,7 +456,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait().find("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
 
 		RequiresNewReadOnlyService service = ServiceLocator.lookupByInterface(RequiresNewReadOnlyService.class);
 		
@@ -472,7 +473,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void queryPessimisticLockError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait();
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		
 		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ

@@ -184,6 +184,6 @@ public class Assertion {
 	 */
 	private void addError(MessageBean bean) {
 		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean);
-		ServiceContext.getCurrentInstance().addError(result);
+		ServiceContext.getCurrentInstance().addMessage(result);
 	}
 }

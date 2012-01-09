@@ -8,7 +8,7 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.query.LimitedOrmQueryFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
@@ -16,7 +16,6 @@ import kosmos.framework.jpqlclient.internal.free.impl.InternalEclipseLinkNativeQ
 import kosmos.framework.jpqlclient.internal.free.impl.InternalNamedQueryImpl;
 import kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
-import kosmos.framework.service.core.exception.ApplicationException;
 import kosmos.framework.service.core.query.LimitedOrmQueryFactoryImpl;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
@@ -117,13 +116,14 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	protected EntityManagerProvider createEntityManagerProvider() {
 		return lookupByInterface(EntityManagerProvider.class);
 	}
+	
 
 	/**
-	 * @see kosmos.framework.core.activation.ComponentLocator#createBusinessException()
+	 * @see kosmos.framework.core.activation.ComponentLocator#createFaultNotifier()
 	 */
 	@Override
-	public BusinessException createBusinessException() {
-		return new ApplicationException();
+	public FaultNotifier createFaultNotifier(){
+		return null;
 	}
 
 }

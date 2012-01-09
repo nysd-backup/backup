@@ -5,7 +5,7 @@ package kosmos.framework.service.core.messaging;
 
 import javax.jms.JMSException;
 
-import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.core.dto.CompositeRequest;
 
 
 /**
@@ -22,7 +22,7 @@ public interface JmsProducer {
 	 * @param destinationName the name of destination
 	 * @throws JMSException the exception
 	 */
-	public void send(RequestDto dto ,String destinationName) throws JMSException;
+	public void send(CompositeRequest dto ,String destinationName) throws JMSException;
 	
 	
 	/**
@@ -31,5 +31,5 @@ public interface JmsProducer {
 	 * @param destinationName the name of destination
 	 * @throws JMSException the exception
 	 */
-	public void publish(RequestDto dto ,String destinationName) throws JMSException;
+	public void publish(CompositeRequest dto ,String destinationName) throws JMSException;
 }

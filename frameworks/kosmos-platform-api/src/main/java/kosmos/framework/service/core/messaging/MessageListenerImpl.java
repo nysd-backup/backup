@@ -9,7 +9,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.core.dto.CompositeRequest;
 import kosmos.framework.service.core.activation.ServiceLocator;
 
 /**
@@ -37,15 +37,15 @@ public class MessageListenerImpl implements MessageListener{
 	public void onMessage(Message arg0) {
 
 		ObjectMessage message = ObjectMessage.class.cast(arg0);
-		RequestDto dto  = null;
+		CompositeRequest dto  = null;
 		try{
-			dto = RequestDto.class.cast( message.getObject());
+			dto = CompositeRequest.class.cast( message.getObject());
 		}catch(JMSException jmse){
 			throw new IllegalStateException(jmse);
 		}
 		ServiceActivator activator = ServiceLocator.createDefaultServiceActivator();
 		try {
-			activator.activateAndInvoke(dto);
+			activator.activate(dto);
 		} catch (Throwable e) {
 			if(e instanceof Error){
 				throw Error.class.cast(e);

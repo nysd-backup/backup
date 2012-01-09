@@ -10,19 +10,18 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import kosmos.framework.core.activation.ServiceActivator;
+import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.logics.message.impl.MessageBuilderImpl;
-import kosmos.framework.service.core.activation.ServiceActivatorImpl;
-import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactoryImpl;
+import kosmos.framework.service.core.exception.ApplicationException;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactoryImpl;
 import kosmos.framework.service.core.messaging.QueueProducerDelegate;
 import kosmos.framework.service.core.messaging.TopicProducerDelegate;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 
 /**
@@ -109,15 +108,6 @@ public abstract class AbstractServiceLocator extends ServiceLocator{
 		return new AsyncServiceFactoryImpl();
 	}
 
-
-	/**
-	 * @see kosmos.framework.service.core.define.ComponentBuilder#createClientQueryFactory()
-	 */
-	@Override
-	public QueryFactory createClientQueryFactory() {
-		return createQueryFactory();
-	}
-
 	/**
 	 * @see kosmos.framework.service.core.define.ComponentBuilder#createPublisher()
 	 */
@@ -158,5 +148,13 @@ public abstract class AbstractServiceLocator extends ServiceLocator{
 		return new MessageBuilderImpl();
 	}
 	
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createBusinessException()
+	 */
+	@Override
+	public BusinessException createBusinessException() {
+		return new ApplicationException();
+	}
+
 }
 

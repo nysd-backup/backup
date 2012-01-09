@@ -6,6 +6,8 @@ package kosmos.framework.sqlclient.internal.orm.impl;
 import java.util.List;
 
 import javax.persistence.LockModeType;
+import javax.persistence.OptimisticLockException;
+import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.sqlclient.api.Query;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
@@ -256,6 +258,19 @@ public class LocalOrmQueryEngine<T> implements OrmQuery<T>{
 	@Override
 	public OrmQueryParameter<T> getCurrentParams() {
 		return this.condition;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findForUpdate(java.lang.Object[])
+	 */
+	@Override
+	public T findForUpdate(Object... pks) {
+		setLockMode(LockModeType.PESSIMISTIC_READ);
+		try{
+			return find(pks);
+		}catch(PessimisticLockException ple){
+			throw new OptimisticLockException(ple);
+		}
 	}
 
 }

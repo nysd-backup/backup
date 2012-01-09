@@ -10,7 +10,7 @@ package kosmos.framework.querymodel;
  * @author yoshida-n
  * @version	created.
  */
-public interface QueryProcessor {
+public interface VisitableQueryProcessor {
 
 	/**
 	 * Updates the StrictQueryModel.

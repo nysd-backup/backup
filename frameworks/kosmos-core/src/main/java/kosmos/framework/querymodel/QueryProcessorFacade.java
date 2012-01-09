@@ -10,11 +10,12 @@ package kosmos.framework.querymodel;
  * @author yoshida-n
  * @version	created.
  */
-public interface ProcessorFacade {
+public interface QueryProcessorFacade {
 
 	/**
-	 * @param models
+	 * @param model the model
+	 * @return
 	 */
-	public void execute(QueryModel model);
+	public QueryModel execute(QueryModel model);
 
 }

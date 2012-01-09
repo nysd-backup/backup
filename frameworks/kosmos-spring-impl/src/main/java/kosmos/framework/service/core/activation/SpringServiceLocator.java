@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.query.LimitedOrmQueryFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
@@ -142,14 +143,6 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.activation.ServiceLocator#createClientQueryFactory()
-	 */
-	@Override
-	public QueryFactory createClientQueryFactory() {
-		return lookup("clientQueryFactory");
-	}
-
-	/**
 	 * @see kosmos.framework.service.core.activation.ServiceLocator#createAsyncServiceFactory()
 	 */
 	@Override
@@ -171,6 +164,14 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	@Override
 	public BusinessException createBusinessException(){
 		return new BusinessException();
+	}
+	
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createFaultNotifier()
+	 */
+	@Override
+	public FaultNotifier createFaultNotifier(){
+		return lookupByInterface(FaultNotifier.class);
 	}
 	
 }

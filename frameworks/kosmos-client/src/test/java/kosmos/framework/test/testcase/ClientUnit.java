@@ -51,7 +51,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @version 2011/08/31 created.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-public abstract class ServiceUnit extends Assert{
+public abstract class ClientUnit extends Assert{
 	
 	/** ログ */
 	protected static final LogWriter LOG = LogWriterFactory.getLog(LogWriter.class);

@@ -12,13 +12,14 @@ import java.util.List;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
 import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.core.query.EasyUpdate;
+import kosmos.framework.core.query.LimitedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.core.query.StrictUpdate;
 import kosmos.framework.service.core.ServiceTestContextImpl;
@@ -474,7 +475,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		impl.setSuppressOptimisticLockError();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait().find("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
 	
 		assertEquals("OK",service.test());	
 		
@@ -490,7 +491,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait().find("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
 
 		try{
 			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
@@ -523,7 +524,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();		
-		ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait().find("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
 
 		//Springと異なり、自律トランザクション先のEntityManagerがrollbackOnlyでもExceptionはスローされない。
 		assertEquals("NG",service.crushException());
@@ -543,7 +544,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();		
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait();
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		
 		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
@@ -578,7 +579,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();		
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setPessimisticNoWait();
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		query.setHint(QueryHints.HINT, "/* TEST */");
 		

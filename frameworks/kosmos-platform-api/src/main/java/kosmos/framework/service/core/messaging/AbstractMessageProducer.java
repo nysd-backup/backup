@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import kosmos.framework.core.dto.RequestDto;
+import kosmos.framework.core.dto.CompositeRequest;
 
 
 /**
@@ -43,7 +43,7 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 				serial[i] = Serializable.class.cast(args[i]);
 			}
 		}
-		RequestDto dto = new RequestDto();
+		CompositeRequest dto = new CompositeRequest();
 		dto.setAlias(null);
 		dto.setTargetClass(method.getDeclaringClass());
 		dto.setMethodName(method.getName());
@@ -67,5 +67,5 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	 * @return the result
 	 * @throws Throwable　any error
 	 */
-	protected abstract Object invoke(RequestDto dto ,String destinationName) throws Throwable;
+	protected abstract Object invoke(CompositeRequest dto ,String destinationName) throws Throwable;
 }

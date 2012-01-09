@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.persistence.LockModeType;
 
+import kosmos.framework.sqlclient.api.PersistenceHints;
+
 
 /**
  * The condition to execute SQL.
@@ -39,6 +41,12 @@ public class OrmQueryParameter<T> extends OrmParameter<T>{
 	 */
 	public void setLockModeType(LockModeType lockModeType) {
 		this.lockModeType = lockModeType;
+		//ロック指定の場合はタイムアウト設定、先にタイムアウト設定されていた場合は何もしない
+		if(!getHints().containsKey(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT)){
+			if(LockModeType.OPTIMISTIC == lockModeType){
+				setHint(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
+			}
+		}
 	}
 
 	/**

@@ -15,6 +15,15 @@ public interface Messages {
 	public static enum Level {
 		I,W,E,F
 	}
+	
+	/** 悲観ロックチェック異常 */
+	public static final String MSG_BIZ_PESSIMITIC_LOCK	 			= "MSG_BIZ_001";
+	
+	/** 楽観ロックチェック異常 */
+	public static final String MSG_BIZ_OPTIMISTIC_LOCK 				= "MSG_BIZ_002";
+	
+	/** データ存在 */
+	public static final String MSG_BIZ_ENTITY_EXISTS	 			= "MSG_BIZ_003";
 
 	/** データ未存在 */
 	public static final String MSG_SYS_UNEXPECTED_NO_DATA_FOUND 	= "MSG_SYS_001";

@@ -53,6 +53,13 @@ public abstract class AbstractContainerContext {
 	}
 	
 	/**
+	 * @param message the message to be added to
+	 */
+	public void addMessage(MessageResult message){
+		globalMessageList.add(message);
+	}
+	
+	/**
 	 * push call stack.
 	 */
 	public void pushCallStack(){

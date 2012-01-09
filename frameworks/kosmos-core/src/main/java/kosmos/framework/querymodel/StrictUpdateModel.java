@@ -24,10 +24,10 @@ public class StrictUpdateModel extends QueryModel {
 	}
 	
 	/**
-	 * @see kosmos.framework.querymodel.QueryModel#accept(kosmos.framework.querymodel.QueryProcessor)
+	 * @see kosmos.framework.querymodel.QueryModel#accept(kosmos.framework.querymodel.VisitableQueryProcessor)
 	 */
 	@Override
-	public void accept(QueryProcessor updater){
+	public void accept(VisitableQueryProcessor updater){
 		updater.update(this);
 	}
 

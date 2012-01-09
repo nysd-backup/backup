@@ -21,7 +21,7 @@ import kosmos.framework.querymodel.Checker;
 import kosmos.framework.querymodel.NativeQueryModel;
 import kosmos.framework.querymodel.NativeUpdateModel;
 import kosmos.framework.querymodel.QueryModel;
-import kosmos.framework.querymodel.QueryProcessor;
+import kosmos.framework.querymodel.VisitableQueryProcessor;
 import kosmos.framework.querymodel.StrictQueryModel;
 import kosmos.framework.querymodel.StrictUpdateModel;
 import kosmos.framework.service.core.activation.ServiceLocator;
@@ -32,18 +32,18 @@ import kosmos.framework.utility.ReflectionUtils;
 
 
 /**
- * DefaultQueryProcessorImpl.
+ * DefaultVisitableQueryProcessorImpl.
  *
  * @author yoshida-n
  * @version	created.
  */
-public class DefaultQueryProcessorImpl implements QueryProcessor{
+public class DefaultVisitableQueryProcessorImpl implements VisitableQueryProcessor{
 
 	/** previous result */
 	private Object previousResult = null;
 
 	/**
-	 * @see kosmos.framework.querymodel.QueryProcessor#getResultList(kosmos.framework.querymodel.StrictQueryModel)
+	 * @see kosmos.framework.querymodel.VisitableQueryProcessor#getResultList(kosmos.framework.querymodel.StrictQueryModel)
 	 */
 	@Override
 	public void getResultList(StrictQueryModel model) {
@@ -59,7 +59,7 @@ public class DefaultQueryProcessorImpl implements QueryProcessor{
 	}
 
 	/**
-	 * @see kosmos.framework.querymodel.QueryProcessor#update(kosmos.framework.querymodel.StrictUpdateModel)
+	 * @see kosmos.framework.querymodel.VisitableQueryProcessor#update(kosmos.framework.querymodel.StrictUpdateModel)
 	 */
 	@Override
 	public void update(StrictUpdateModel model) {
@@ -75,7 +75,7 @@ public class DefaultQueryProcessorImpl implements QueryProcessor{
 		
 	}
 	/**
-	 * @see kosmos.framework.querymodel.QueryProcessor#update(kosmos.framework.querymodel.NativeUpdateModel)
+	 * @see kosmos.framework.querymodel.VisitableQueryProcessor#update(kosmos.framework.querymodel.NativeUpdateModel)
 	 */
 	@Override
 	public void update(NativeUpdateModel model) {
@@ -109,7 +109,7 @@ public class DefaultQueryProcessorImpl implements QueryProcessor{
 	}
 
 	/**
-	 * @see kosmos.framework.querymodel.QueryProcessor#getResultList(kosmos.framework.querymodel.NativeQueryModel)
+	 * @see kosmos.framework.querymodel.VisitableQueryProcessor#getResultList(kosmos.framework.querymodel.NativeQueryModel)
 	 */
 	@Override
 	public void getResultList(NativeQueryModel model) {
@@ -202,7 +202,7 @@ public class DefaultQueryProcessorImpl implements QueryProcessor{
 				//メッセージ追加
 				MessageBean bean = chk.getMessageBean();
 				MessageResult messageResult = builder.load(bean);
-				context.addError(messageResult);
+				context.addMessage(messageResult);
 				
 				//チェック終了
 				success = false;
