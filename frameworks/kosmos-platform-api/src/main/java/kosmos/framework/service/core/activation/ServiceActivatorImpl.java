@@ -29,7 +29,17 @@ public class ServiceActivatorImpl implements ServiceActivator{
 	public CompositeReply activate(CompositeRequest dto) throws Throwable{
 		
 		Object service = getService(dto);	
-		Method m = dto.getTargetClass().getMethod(dto.getMethodName(), dto.getParameterTypes());
+		
+		Method m = null;
+		if(dto.getParameterTypeNames() == null){
+			m = service.getClass().getMethod(dto.getMethodName());
+		}else {
+			Class<?>[] clss = new Class[dto.getParameterTypeNames().length];
+			for(int i = 0 ; i< clss.length; i++){
+				clss[i] = Class.forName(dto.getParameterTypeNames()[i]);
+			}
+			m = service.getClass().getMethod(dto.getMethodName(),clss);
+		}
 		TransactionManagingContext context = ServiceLocator.createDefaultServiceContext();
 		context.initialize();
 		try{
@@ -50,6 +60,7 @@ public class ServiceActivatorImpl implements ServiceActivator{
 			context.release();
 		}
 	}
+
 	
 	/**
 	 * Set the message to the exception.
@@ -70,11 +81,7 @@ public class ServiceActivatorImpl implements ServiceActivator{
 	 * @return the service
 	 */
 	protected Object getService(CompositeRequest dto){
-		if(dto.getAlias() != null){
-			return ServiceLocator.lookup(dto.getAlias());
-		}else{
-			return ServiceLocator.lookupByInterface(dto.getTargetClass());
-		}
+		return ServiceLocator.lookup(dto.getServiceName());
 	}
 
 }

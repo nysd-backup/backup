@@ -47,13 +47,6 @@ public interface LimitedOrmQuery<T> {
 	 * @return the result
 	 */
 	public T find(Object... pks);
-	
-	/**
-	 * Finds by primary key for update.
-	 * @param pks　the primary keys
-	 * @return the result
-	 */
-	public T findForUpdate(Object... pks);
 
 	/**
 	 * Determines whether the result searched by primary keys is found.

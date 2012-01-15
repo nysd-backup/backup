@@ -6,15 +6,16 @@ package kosmos.framework.service.core.logics;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.NonUniqueResultException;
+
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.exception.UnexpectedDataFoundException;
-import kosmos.framework.core.exception.UnexpectedMultiResultException;
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.TransactionManagingContext;
+import kosmos.framework.sqlclient.api.exception.UnexpectedDataFoundException;
+import kosmos.framework.sqlclient.api.exception.UnexpectedNoDataFoundException;
 
 
 /**
@@ -32,7 +33,7 @@ public class Assertion {
 	 */
 	public Assertion assertSingleResult(Collection<?> collection){
 		if(collection != null && !collection.isEmpty() && collection.size() > 1){
-			throw new UnexpectedMultiResultException("result size is " + collection.size());
+			throw new NonUniqueResultException("result size is " + collection.size());
 		}
 		return this;
 	}

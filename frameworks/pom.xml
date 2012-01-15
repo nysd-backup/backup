@@ -86,6 +86,7 @@
 		<profile>
 			<id>all</id>
 			<modules>	
+				<module>utility</module>
 				<module>sql-engine</module>
 				<module>sql-client-api</module>
 				<module>sql-client-impl</module>
@@ -93,10 +94,10 @@
 				<module>jpql-client-impl</module>	
 				<module>jpql-client-eclipselink-plugin</module>	
 				<module>kosmos-core</module>
+				<module>kosmos-client</module>	
 				<module>kosmos-platform-api</module>
 				<module>kosmos-spring-impl</module>	
-				<module>kosmos-ejb-impl</module>		
-				<module>kosmos-client</module>			
+				<module>kosmos-ejb-impl</module>							
 			</modules>
 		</profile>
 	</profiles>

@@ -8,7 +8,6 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import kosmos.framework.core.dto.CompositeRequest;
-import kosmos.framework.service.core.messaging.AbstractMessageProducer;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;

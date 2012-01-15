@@ -16,7 +16,7 @@ public class MessageBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** the message */
-	private final String messageId;
+	private final int messageId;
 	
 	/** the arguments of the message */
 	private final Object[] arguments;
@@ -25,7 +25,7 @@ public class MessageBean implements Serializable {
 	 * @param message
 	 * @param arguments
 	 */
-	public MessageBean(String messageId ,Object... arguments){
+	public MessageBean(int messageId ,Object... arguments){
 		this.messageId = messageId;
 		this.arguments = arguments;
 	}
@@ -33,7 +33,7 @@ public class MessageBean implements Serializable {
 	/**
 	 * @return the message
 	 */
-	public String getMessageId() {
+	public int getMessageId() {
 		return messageId;
 	}
 

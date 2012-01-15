@@ -18,38 +18,21 @@ public class CompositeRequest implements Serializable{
 	
 	/** the parameter */
 	private Serializable[] parameter;
-
-	/** the class of target service */
-	private Class<?> targetClass;
 	
 	/** the alias of target service */
-	private String alias;
+	private String serviceName;
 	
 	/** the method name */
 	private String methodName;
 	
-	/** the types of parameter */
-	private Class<?>[] parameterTypes;
-	
-	/**
-	 * @return the types
-	 */
-	public Class<?>[] getParameterTypes(){
-		return parameterTypes;
-	}
+	/** the names of parameter class */
+	private String[] parameterTypeNames;
 	
 	/**
 	 * @return the methodName
 	 */
 	public String getMethodName() {
 		return methodName;
-	}
-
-	/**
-	 * @return the serviceName
-	 */
-	public String getAlias() {
-		return alias;
 	}
 
 	/**
@@ -60,32 +43,12 @@ public class CompositeRequest implements Serializable{
 	}
 
 	/**
-	 * @return the targetClass
-	 */
-	public Class<?> getTargetClass() {
-		return targetClass;
-	}
-
-	/**
 	 * @param parameter the parameter to set
 	 */
 	public void setParameter(Serializable[] parameter) {
 		this.parameter = parameter;
 	}
 
-	/**
-	 * @param targetClass the targetClass to set
-	 */
-	public void setTargetClass(Class<?> targetClass) {
-		this.targetClass = targetClass;
-	}
-
-	/**
-	 * @param alias the alias to set
-	 */
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
 
 	/**
 	 * @param methodName the methodName to set
@@ -95,10 +58,31 @@ public class CompositeRequest implements Serializable{
 	}
 
 	/**
-	 * @param parameterTypes the parameterType to set
+	 * @return the serviceName
 	 */
-	public void setParameterTypes(Class<?>[] parameterTypes) {
-		this.parameterTypes = parameterTypes;
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	/**
+	 * @param serviceName the serviceName to set
+	 */
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	/**
+	 * @return the parameterTypeNames
+	 */
+	public String[] getParameterTypeNames() {
+		return parameterTypeNames;
+	}
+
+	/**
+	 * @param parameterTypeNames the parameterTypeNames to set
+	 */
+	public void setParameterTypeNames(String[] parameterTypeNames) {
+		this.parameterTypeNames = parameterTypeNames;
 	}
 
 }

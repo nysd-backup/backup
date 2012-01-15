@@ -27,8 +27,8 @@ import org.springframework.transaction.support.TransactionCallback;
  * Synchronize the context's rolling back flag to <code>TransactionManager</code>
  * 
  * <pre>
- * Set rolled back to <code>TransactionManager</code> if the error level messages are found in <code>MessageContext</code>.
- * Refresh the <code>MessageContext</code> so as not to influent another transaction at the border of transaction.
+ * Set rolled back to <code>TransactionManager</code> if the error level messages are found in <code>MessageLevel</code>.
+ * Refresh the <code>MessageLevel</code> so as not to influent another transaction at the border of transaction.
  * </pre>
  *
  * @author yoshida-n

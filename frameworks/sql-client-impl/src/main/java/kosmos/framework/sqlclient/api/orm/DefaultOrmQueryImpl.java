@@ -236,14 +236,5 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 		return delegate.getCurrentParams();
 	}
 
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#findForUpdate(java.lang.Object[])
-	 */
-	@Override
-	public T findForUpdate(Object... pks) {
-		return delegate.findForUpdate(pks);
-	}
-
-
 	
 }

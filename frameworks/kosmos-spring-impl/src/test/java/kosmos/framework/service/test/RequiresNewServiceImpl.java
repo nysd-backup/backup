@@ -11,7 +11,6 @@ import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.message.Messages;
 import kosmos.framework.core.query.LimitedOrmQueryFactory;
 import kosmos.framework.core.query.StrictQuery;
 import kosmos.framework.service.core.activation.ServiceLocator;
@@ -69,7 +68,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(Messages.MSG_SYS_UNEXPECTED_DATA_FOUND);
+		MessageBean bean = new MessageBean(100);
 		MessageResult message = builder.load(bean);
 		ServiceContext.getCurrentInstance().addMessage(message);
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();

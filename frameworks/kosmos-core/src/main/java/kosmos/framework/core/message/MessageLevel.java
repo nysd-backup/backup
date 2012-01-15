@@ -9,6 +9,6 @@ package kosmos.framework.core.message;
  * @author yoshida-n
  * @version	created.
  */
-public class MessageContext {
-
+public enum MessageLevel {
+	I,W,E,F
 }

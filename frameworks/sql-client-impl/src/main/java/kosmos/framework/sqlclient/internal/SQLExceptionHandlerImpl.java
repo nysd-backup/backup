@@ -5,11 +5,12 @@ package kosmos.framework.sqlclient.internal;
 
 import java.sql.SQLException;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.LockTimeoutException;
+import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 import javax.persistence.QueryTimeoutException;
 
+import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
 import kosmos.framework.sqlengine.exception.SQLEngineException;
 
@@ -43,7 +44,7 @@ public class SQLExceptionHandlerImpl implements ExceptionHandler{
 			int code = sqle.getErrorCode();
 			//一意制約エラー
 			if(code == uniqueErrorCode){
-				throw new EntityExistsException(sqle);
+				throw new UniqueConstraintException(sqle);
 			//リソースビジー	
 			}else if(code == pessimisticErrorCode){
 				throw new PessimisticLockException(sqle);
@@ -54,7 +55,7 @@ public class SQLExceptionHandlerImpl implements ExceptionHandler{
 			}else if(code == lockTimeoutErrorCode){
 				throw new LockTimeoutException(sqle);
 			}
-			throw new SQLEngineException(sqle);
+			throw new PersistenceException(sqle);
 		}else if(t instanceof Error){
 			throw (Error)t;
 		}else if(t instanceof RuntimeException){

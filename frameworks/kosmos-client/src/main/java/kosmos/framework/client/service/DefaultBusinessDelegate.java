@@ -57,12 +57,21 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 		}
 			
 		CompositeRequest dto = new CompositeRequest();
-		dto.setAlias(alias);
-		dto.setTargetClass(method.getDeclaringClass());
+		if(alias != null){	
+			dto.setServiceName(alias);
+		}else{
+			dto.setServiceName(method.getDeclaringClass().getName());
+		}
 		dto.setMethodName(method.getName());
 		dto.setParameter(serial);
-		dto.setParameterTypes(method.getParameterTypes());
-		
+		Class<?>[] clss = method.getParameterTypes();
+		if( clss != null){			
+			String[] names = new String[clss.length];
+			for(int i = 0 ; i < names.length; i++){
+				names[i] = clss[i].getName();
+			}
+			dto.setParameterTypeNames(names);
+		}
 		CompositeReply reply = null;
 		try{
 			reply = processService(dto);

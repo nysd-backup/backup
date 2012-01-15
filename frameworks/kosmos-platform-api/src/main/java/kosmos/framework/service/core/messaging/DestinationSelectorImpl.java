@@ -3,6 +3,7 @@
  */
 package kosmos.framework.service.core.messaging;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,10 +31,10 @@ public class DestinationSelectorImpl implements DestinationSelector{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.messaging.DestinationSelector#createDestinationName(java.lang.reflect.Method)
+	 * @see kosmos.framework.service.core.messaging.DestinationSelector#createDestinationName(java.lang.reflect.Method, java.io.Serializable[])
 	 */
 	@Override
-	public String createDestinationName(Method target) {
+	public String createDestinationName(Method target,Serializable[] parameter) {
 		
 		//正規表現指定の場合
 		String dst = target.getDeclaringClass().getPackage().getName().replace('.', '/');
@@ -47,9 +48,9 @@ public class DestinationSelectorImpl implements DestinationSelector{
 		//プリフィクス指定の場合
 		Prefix prefix = target.getAnnotation(Prefix.class);
 		if( prefix != null){
-			return String.format("jms/%s/%s",prefix,dst);
+			return String.format("jms/%s/%s/%s/%s",prefix,dst,target.getDeclaringClass().getSimpleName(),target.getName());
 		}else{
-			return String.format("jms/%s",dst);
+			return String.format("jms/%s/%s/%s",dst,target.getDeclaringClass().getSimpleName(),target.getName());
 		}
 	}
 

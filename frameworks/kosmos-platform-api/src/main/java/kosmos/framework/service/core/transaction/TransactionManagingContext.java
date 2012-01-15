@@ -5,8 +5,8 @@ package kosmos.framework.service.core.transaction;
 
 import java.util.LinkedList;
 
+import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.message.Messages;
 
 
 /**
@@ -72,7 +72,7 @@ public class TransactionManagingContext extends ServiceContext{
 	 */
 	@Override
 	public void addMessage(MessageResult message){
-		if(message.getLevel() >= Messages.Level.E.ordinal()){
+		if(message.getLevel() >= MessageLevel.E.ordinal()){
 			setRollbackOnlyToCurrentTransaction();
 		}		
 		super.addMessage(message);

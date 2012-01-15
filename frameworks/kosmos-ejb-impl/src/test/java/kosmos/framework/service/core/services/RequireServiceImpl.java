@@ -8,7 +8,6 @@ import javax.ejb.Stateless;
 
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.message.Messages;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
@@ -32,7 +31,7 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(Messages.MSG_SYS_UNEXPECTED_DATA_FOUND);
+		MessageBean bean = new MessageBean(100);
 		MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean);
 		ServiceContext.getCurrentInstance().addMessage(message);
 	}

@@ -8,8 +8,7 @@ import javax.ejb.SessionContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import kosmos.framework.service.core.advice.InternalDefaultInterceptor;
-import kosmos.framework.service.core.advice.InvocationAdapterImpl;
+import kosmos.framework.core.exception.PoorImplementationException;
 
 
 /**
@@ -30,19 +29,59 @@ public class DefaultInterceptor {
 	 */
 	@AroundInvoke
 	public Object around(InvocationContext ic) throws Throwable {
-		InternalDefaultInterceptor internal = new InternalDefaultInterceptor(){
-			
-			//現在トランザクションが異常であればロールバックフラグを立てる。
-			//エラーメッセージ追加時などにSessionContext.setRollbackOnly()とすると以降でSessionBeanが生成できないのでこのタイミングでのみ実施する。
-			//ただし自律トランザクションに関してはTransactionManagingContextのロールバックフラグを使用しないこと。
-			
-			@Override
-			protected void afterProceed(TransactionManagingContext context){
-				if(context.getCurrentUnitOfWork().isRollbackOnly()){
-					sessionContext.setRollbackOnly();
-				}				
-			}
-		};
-		return internal.around(new InvocationAdapterImpl(ic));
+	
+		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
+		if(context == null){
+			throw new PoorImplementationException("context is required");
+		}
+		
+		if(context.isTopLevel()){
+			context.setTopLevel(false);
+			return invokeAtTopLevel(ic);
+		}else {
+			return invoke(ic);
+		}
+
+	}
+	
+	/**
+	* Process at the except top level.
+	 * 
+	 * @param ic the context
+	 * @return the result
+	 * @throws Throwable
+	 */
+	protected Object invoke(InvocationContext ic) throws Throwable {
+		return proceed(ic);
+	}
+	
+	/**
+	 * Process at the top level.
+	 * 
+	 * @param ic the context
+	 * @return the result
+	 * @throws Throwable
+	 */
+	protected Object invokeAtTopLevel(InvocationContext ic) throws Throwable {
+	
+		TransactionManagingContext context = (TransactionManagingContext)TransactionManagingContext.getCurrentInstance();
+		Object returnValue = proceed(ic);	
+		if(context.getCurrentUnitOfWork().isRollbackOnly()){
+			sessionContext.setRollbackOnly();
+		}	
+		return returnValue;
+
+	}
+	
+	/**
+	 * Proceed service.
+	 * 
+	 * @param ic the context
+	 * @return the result
+	 * @throws Throwable
+	 */
+	protected Object proceed(InvocationContext ic) throws Throwable{		
+		return ic.proceed();
+		
 	}
 }

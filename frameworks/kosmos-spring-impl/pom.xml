@@ -55,36 +55,6 @@
 			
 		<!-- other -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-expression</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>${cglib.version}</version>
@@ -93,12 +63,7 @@
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 			<version>${asm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -109,6 +74,7 @@
 	   		<artifactId>spring-context-support</artifactId>
 	   		<version>${org.springframework.version}</version>
 	 	</dependency>
+	 	
 	 	<dependency>
 	   		<groupId>org.springframework</groupId>
 	   		<artifactId>spring-tx</artifactId>
@@ -128,7 +94,7 @@
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jms</artifactId>
 		    <version>${org.springframework.version}</version>
-		</dependency>
+		</dependency>		
 		<dependency>
 		    <groupId>aspectj</groupId>
 		    <artifactId>aspectjweaver</artifactId>
@@ -146,8 +112,20 @@
 			<version>${jpa.version}</version>
 		    <scope>provided</scope>
 		</dependency>	
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jms</artifactId>
+		    <version>${org.springframework.version}</version>
+		    <scope>compile</scope>
+		</dependency>
 		
 		<!-- for test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 		    <groupId>org.eclipse.persistence</groupId>
 		    <artifactId>eclipselink</artifactId>

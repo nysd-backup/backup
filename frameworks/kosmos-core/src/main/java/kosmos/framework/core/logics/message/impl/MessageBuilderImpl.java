@@ -9,8 +9,8 @@ import java.util.ResourceBundle;
 import kosmos.framework.core.context.AbstractContainerContext;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.message.Messages;
 
 
 /**
@@ -39,9 +39,9 @@ public class MessageBuilderImpl implements MessageBuilder{
 		String message = bundle.getString(String.valueOf(bean.getMessageId()));
 		String[] splited = message.split(",");
 		MessageResult result = new MessageResult();
-		result.setCode(Integer.parseInt(splited[0]));
-		result.setMessage(MessageFormat.format(splited[1], bean.getArguments()));
-		result.setLevel(Messages.Level.valueOf(splited[2]).ordinal());
+		result.setCode(bean.getMessageId());
+		result.setMessage(MessageFormat.format(splited[0], bean.getArguments()));
+		result.setLevel(MessageLevel.valueOf(splited[1]).ordinal());
 		return result;
 	}
 

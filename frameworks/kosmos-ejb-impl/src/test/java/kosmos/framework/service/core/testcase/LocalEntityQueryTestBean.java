@@ -475,7 +475,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		impl.setSuppressOptimisticLockError();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 	
 		assertEquals("OK",service.test());	
 		
@@ -491,7 +491,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		try{
 			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
@@ -524,7 +524,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		LimitedOrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();		
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		//Springと異なり、自律トランザクション先のEntityManagerがrollbackOnlyでもExceptionはスローされない。
 		assertEquals("NG",service.crushException());

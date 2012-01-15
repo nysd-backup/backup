@@ -3,6 +3,7 @@
  */
 package kosmos.framework.service.core.messaging;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**
@@ -17,5 +18,5 @@ public interface DestinationSelector {
 	 * @param target the method to invoke
 	 * @return　the destination name
 	 */
-	public String createDestinationName(Method target);
+	public String createDestinationName(Method target,Serializable[] paramete);
 }

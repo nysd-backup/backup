@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityExistsException;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
@@ -33,6 +32,7 @@ import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
 import kosmos.framework.sqlclient.api.ConnectionProvider;
 import kosmos.framework.sqlclient.api.PersistenceManager;
+import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -323,7 +323,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		try{
 			per.insert(entity);
 			fail();
-		}catch(EntityExistsException sqle){
+		}catch(UniqueConstraintException sqle){
 			SQLIntegrityConstraintViolationException bi = (SQLIntegrityConstraintViolationException)sqle.getCause();
 			assertEquals("1",String.valueOf(bi.getErrorCode()));
 		}
@@ -400,7 +400,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -425,7 +425,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -456,7 +456,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewReadOnlyService service = ServiceLocator.lookupByInterface(RequiresNewReadOnlyService.class);
 		

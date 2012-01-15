@@ -446,7 +446,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		setUpDataForceCommit("TEST.xls");
 		
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 		
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -462,7 +462,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -487,7 +487,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -526,7 +526,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createStrictQuery(TestEntity.class).findForUpdate("1");
+		ormQueryFactory.createStrictQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewReadOnlyService service = ServiceLocator.lookupByInterface(RequiresNewReadOnlyService.class);
 		

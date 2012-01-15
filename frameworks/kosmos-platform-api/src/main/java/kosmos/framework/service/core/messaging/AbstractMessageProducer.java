@@ -44,17 +44,22 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 			}
 		}
 		CompositeRequest dto = new CompositeRequest();
-		dto.setAlias(null);
-		dto.setTargetClass(method.getDeclaringClass());
+		dto.setServiceName(method.getDeclaringClass().getName());		
 		dto.setMethodName(method.getName());
 		dto.setParameter(serial);
-		dto.setParameterTypes(method.getParameterTypes());
-		
+		Class<?>[] clss = method.getParameterTypes();
+		if( clss != null){			
+			String[] names = new String[clss.length];
+			for(int i = 0 ; i < names.length; i++){
+				names[i] = clss[i].getName();
+			}
+			dto.setParameterTypeNames(names);
+		}
 		
 		//宛先生成
-		String dst = null;
+		String dst = String.format("%s.%s", method.getDeclaringClass().getName(),method.getName());
 		if(destinationSelector != null){
-			dst = destinationSelector.createDestinationName(method);
+			dst = destinationSelector.createDestinationName(method,serial);
 		}
 	
 		return invoke(dto,dst);

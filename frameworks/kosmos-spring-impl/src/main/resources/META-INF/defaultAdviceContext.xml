@@ -32,9 +32,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<bean id="perfInterceptor" class="kosmos.framework.service.core.advice.DelegatingInterceptor">
 		<property name="internal" ref="internalPerfInterceptor"/>
 	</bean>
-	<bean id="internalDefaultInterceptor" class="kosmos.framework.service.core.advice.InternalDefaultInterceptor"/>
-	<bean id="defaultInterceptor" class="kosmos.framework.service.core.advice.DelegatingInterceptor">
-		<property name="internal" ref="internalDefaultInterceptor"/>
-	</bean>
+	<bean id="internalDefaultInterceptor" class="kosmos.framework.service.core.advice.ContextInitializingInterceptor"/>
+	<bean id="defaultInterceptor" class="kosmos.framework.service.core.advice.ContextInitializingInterceptor"/>		
 
 </beans>

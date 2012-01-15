@@ -123,14 +123,14 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void existsMessage(){
 //		
-//		assertFalse(MessageContext.getCurrentInstance().isRollbackOnly());
+//		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
 //		
 //		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 //		query.setTest("200");
 //		assertFalse(query.exists(mh.createMessage(1,"test")));
 //		
-//		assertTrue(MessageContext.getCurrentInstance().isRollbackOnly());
-//		assertEquals(1,MessageContext.getCurrentInstance().getMessageList().size());		
+//		assertTrue(MessageLevel.getCurrentInstance().isRollbackOnly());
+//		assertEquals(1,MessageLevel.getCurrentInstance().getMessageList().size());		
 //		
 //	}
 //	
@@ -140,7 +140,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void throwIfEmpty(){
 //		
-//		assertFalse(MessageContext.getCurrentInstance().isRollbackOnly());
+//		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
 //
 //		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 //		query.setAttr2(500).setTest("200");
@@ -149,9 +149,9 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 //		try{
 //			query.throwIfEmpty(mh.createMessage(1, "test"));
 //			fail();
-//		}catch(NoDataFoundException se){		
-//			assertTrue(MessageContext.getCurrentInstance().isRollbackOnly());
-//			assertEquals(1,MessageContext.getCurrentInstance().getMessageList().size());
+//		}catch(UnexpectedNoDataFoundException se){		
+//			assertTrue(MessageLevel.getCurrentInstance().isRollbackOnly());
+//			assertEquals(1,MessageLevel.getCurrentInstance().getMessageList().size());
 //		}
 //	}
 //	
@@ -162,7 +162,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 //	public void throwIfExists(){
 //		
 //		setUpData("TEST.xls");
-//		assertFalse(MessageContext.getCurrentInstance().isRollbackOnly());
+//		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
 //
 //		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 //		query.setAttr2(500).setTest("1");
@@ -172,8 +172,8 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 //			query.throwIfExists(mh.createMessage(1, "test"));
 //			fail();
 //		}catch(DuplicateDataFoundException se){		
-//			assertTrue(MessageContext.getCurrentInstance().isRollbackOnly());
-//			assertEquals(1,MessageContext.getCurrentInstance().getMessageList().size());
+//			assertTrue(MessageLevel.getCurrentInstance().isRollbackOnly());
+//			assertEquals(1,MessageLevel.getCurrentInstance().getMessageList().size());
 //		}
 //	}
 	

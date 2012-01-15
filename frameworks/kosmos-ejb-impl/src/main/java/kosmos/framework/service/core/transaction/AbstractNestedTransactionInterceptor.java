@@ -5,12 +5,7 @@ package kosmos.framework.service.core.transaction;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
-import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
-
-import kosmos.framework.service.core.advice.InternalDefaultInterceptor;
-import kosmos.framework.service.core.advice.InvocationAdapter;
-import kosmos.framework.service.core.advice.InvocationAdapterImpl;
 
 
 /**
@@ -22,7 +17,7 @@ import kosmos.framework.service.core.advice.InvocationAdapterImpl;
  * @version	created.
  */
 @Deprecated
-public abstract class AbstractNestedTransactionInterceptor {
+public abstract class AbstractNestedTransactionInterceptor extends DefaultInterceptor{
 	
 	@Resource
 	private SessionContext context;
@@ -32,46 +27,38 @@ public abstract class AbstractNestedTransactionInterceptor {
 	 * @return
 	 * @throws Throwable
 	 */
-	@AroundInvoke
-	public Object around(InvocationContext ic) throws Throwable {
+	@Override
+	protected Object proceed(InvocationContext ic) throws Throwable {
 		
-		InternalDefaultInterceptor internal = new InternalDefaultInterceptor(){
-			
-			@Override
-			protected Object proceed(InvocationAdapter ic) throws Throwable {
-				
-				ServiceContextImpl sc = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-				String currentTransactionId = getCurrentTransactionId(context);
-				NamedInternalUnitOfWork upperTransaction = (NamedInternalUnitOfWork)sc.getCurrentUnitOfWork();
-				boolean newTransaction = upperTransaction == null || !currentTransactionId.equals(upperTransaction.getTransactionId());
+		ServiceContextImpl sc = (ServiceContextImpl)ServiceContext.getCurrentInstance();
+		String currentTransactionId = getCurrentTransactionId(context);
+		NamedInternalUnitOfWork upperTransaction = (NamedInternalUnitOfWork)sc.getCurrentUnitOfWork();
+		boolean newTransaction = upperTransaction == null || !currentTransactionId.equals(upperTransaction.getTransactionId());
 
-				//トランザクション境界の場合新規作業単位に移行
-				if(newTransaction){
-					sc.startUnitOfWork();
-					NamedInternalUnitOfWork current = (NamedInternalUnitOfWork)sc.getCurrentUnitOfWork();
-					current.setTransactionId(currentTransactionId);
-				}
-				try{											
-					Object retVal = ic.proceed();			
+		//トランザクション境界の場合新規作業単位に移行
+		if(newTransaction){
+			sc.startUnitOfWork();
+			NamedInternalUnitOfWork current = (NamedInternalUnitOfWork)sc.getCurrentUnitOfWork();
+			current.setTransactionId(currentTransactionId);
+		}
+		try{											
+			Object retVal = ic.proceed();			
 
-					//トランザクション境界の場合、コンテナにロールバック通知
-					if(newTransaction){				
-						if( sc.getCurrentUnitOfWork().isRollbackOnly()){
-							context.setRollbackOnly();
-						}				
-					}
-					return retVal;
-				}finally {
-					//トランザクション境界の場合、上位の作業単位に戻す
-					if(newTransaction){			
-						sc.endUnitOfWork();
-					}
-				}
+			//トランザクション境界の場合、コンテナにロールバック通知
+			if(newTransaction){				
+				if( sc.getCurrentUnitOfWork().isRollbackOnly()){
+					context.setRollbackOnly();
+				}				
 			}
-		};
-		
-		return internal.around(new InvocationAdapterImpl(ic));
+			return retVal;
+		}finally {
+			//トランザクション境界の場合、上位の作業単位に戻す
+			if(newTransaction){			
+				sc.endUnitOfWork();
+			}
+		}
 	}
+
 	
 	/**
 	 * Creates the transactionId.

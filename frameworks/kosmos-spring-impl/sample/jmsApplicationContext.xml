@@ -43,7 +43,7 @@ http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
         <property name="destinationResolver" ref="jmsDestinationResolver"/>
         <property name="defaultDestination" ref="defaultQueueDestination"/>
         <property name="receiveTimeout" value="20000"/>
-        <property name="sessionTransacted" value="true"/>
+        <property name="sessionTransacted" value="false"/>
     </bean>     
   
   	<!-- 配信先セレクタ -->
