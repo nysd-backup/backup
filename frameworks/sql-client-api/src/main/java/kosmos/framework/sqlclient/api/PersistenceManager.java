@@ -3,6 +3,10 @@
  */
 package kosmos.framework.sqlclient.api;
 
+import java.util.List;
+
+import javax.persistence.OptimisticLockException;
+
 
 /**
  * function.
@@ -28,14 +32,14 @@ public interface PersistenceManager {
 	 * @param entity
 	 * @return
 	 */
-	public int[] insert(Object[] entity) ;
+	public int[] insert(List<Object> entity) ;
 	
 	/**
 	 * @param entity
 	 * @param hints
 	 * @return
 	 */
-	public int[] insert(Object[] entity,PersistenceHints hints);
+	public int[] insert(List<Object> entity,PersistenceHints hints);
 	
 	/**
 	 * @param entity

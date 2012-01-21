@@ -206,6 +206,8 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		assertEquals("AAA",entity.getAttr());
 	}
 	
+	
+	
 
 	/**
 	 * 更新後検索
@@ -453,6 +455,22 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		updatable.setVersion(2);
 		try{
 			per.update(updatable, new PersistenceHints().setFoundEntity(result));
+			fail();
+		}catch(OptimisticLockException e){
+			return;
+		}
+	}
+	
+	/**
+	 * ロチE��連番チェチE��エラー
+	 */
+	@Test	
+	public void versionNoError2(){
+		setUpData("TEST.xls");
+		TestEntity updatable = new TestEntity();
+		updatable.setVersion(2).setTest("1");
+		try{
+			per.update(updatable);
 			fail();
 		}catch(OptimisticLockException e){
 			return;

@@ -127,7 +127,7 @@ public final class ObjectUtils implements Utils.ObjectScope {
 		}else if( obj instanceof Map){
 			return !isNull(obj) && !((Map)obj).isEmpty();
 		}
-		return isNull(obj);
+		return !isNull(obj);
 	}
 
 	/**

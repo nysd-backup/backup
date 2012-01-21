@@ -51,26 +51,25 @@ public class PersistenceManagerImpl implements PersistenceManager{
 		return insert(entity,new PersistenceHints());
 	}
 	
-
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List)
 	 */
 	@Override
-	public int[] insert(Object[] entity) {
+	public int[] insert(List<Object>  entity) {
 		return insert(entity,new PersistenceHints());
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[], kosmos.framework.sqlclient.api.PersistenceHints)
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List, kosmos.framework.sqlclient.api.PersistenceHints)
 	 */
 	@Override
-	public int[] insert(Object[] entity, PersistenceHints hints) {
+	public int[] insert(List<Object>  entity, PersistenceHints hints) {
 		
 		@SuppressWarnings("unchecked")
-		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity[0].getClass());
+		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.get(0).getClass());
 		
 		//エンティティから登録対象項目追加
-		Field[] fs = ReflectionUtils.getAllAnotatedField(entity[0].getClass(), Column.class);
+		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.get(0).getClass(), Column.class);
 		for(Object e : entity){
 			setInsertValue(fs,e,context);
 			context.addBatch();
@@ -161,8 +160,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 				condition.set(name,new FixString(name + " + 1"));
 				where.add(new Pair<Field>(f,dst));
 			//主キー	
-			}else if(f.getAnnotation(Id.class) != null){
-				if( dst == null )throw new IllegalArgumentException("primary key must not be empty");
+			}else if(f.getAnnotation(Id.class) != null){				
 				where.add(new Pair<Field>(f,dst));
 				
 			//その他(空項目はupdateしない)
@@ -284,7 +282,10 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	private List<WhereCondition> createPkWhere(List<Pair<Field>> where){
 		List<WhereCondition> pkWhere = new ArrayList<WhereCondition>();
 		for(int i=0; i < where.size();i++){
-			Pair<Field> p = where.get(i);					
+			Pair<Field> p = where.get(i);	
+			if( !ObjectUtils.isNotEmpty(p.getValue()) ){
+				throw new IllegalArgumentException("primary key must not be empty");
+			}
 			String name = getColumnName(p.getKey());
 			pkWhere.add(new WhereCondition(name,i, WhereOperand.Equal, p.getValue()));
 		}

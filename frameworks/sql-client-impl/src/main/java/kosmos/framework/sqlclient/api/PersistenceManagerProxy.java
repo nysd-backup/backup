@@ -3,6 +3,8 @@
  */
 package kosmos.framework.sqlclient.api;
 
+import java.util.List;
+
 import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
 
 /**
@@ -48,19 +50,19 @@ public class PersistenceManagerProxy implements PersistenceManager{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List)
 	 */
 	@Override
-	public int[] insert(Object[] entity) {
+	public int[] insert(List<Object> entity) {
 		return insert(entity,new PersistenceHints());
 	}
-
+	
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[], kosmos.framework.sqlclient.api.PersistenceHints)
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List, kosmos.framework.sqlclient.api.PersistenceHints)
 	 */
 	@Override
-	public int[] insert(Object[] entity, PersistenceHints hints) {
-		return entity[0] instanceof FastEntity ? fastManager.insert(entity,hints) : defaultManager.insert(entity,hints);
+	public int[] insert(List<Object> entity, PersistenceHints hints) {
+		return entity.get(0) instanceof FastEntity ? fastManager.insert(entity,hints) : defaultManager.insert(entity,hints);
 	}
 
 	/**

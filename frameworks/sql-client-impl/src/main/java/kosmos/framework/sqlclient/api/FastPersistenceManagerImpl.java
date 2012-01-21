@@ -45,23 +45,22 @@ public class FastPersistenceManagerImpl implements PersistenceManager{
 		return insert(entity,new PersistenceHints());
 	}
 	
-
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List)
 	 */
 	@Override
-	public int[] insert(Object[] entity) {
+	public int[] insert(List<Object> entity) {
 		return insert(entity,new PersistenceHints());
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object[], kosmos.framework.sqlclient.api.PersistenceHints)
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List, kosmos.framework.sqlclient.api.PersistenceHints)
 	 */
 	@Override
-	public int[] insert(Object[] entity, PersistenceHints hints) {
+	public int[] insert(List<Object> entity, PersistenceHints hints) {
 		
 		@SuppressWarnings("unchecked")
-		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity[0].getClass());	
+		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.get(0).getClass());	
 		for(Object e : entity){
 			context.getCurrentValues().putAll(FastEntity.class.cast(e).getPrimaryKeys());
 			context.getCurrentValues().putAll(FastEntity.class.cast(e).getAttributes());
@@ -234,6 +233,7 @@ public class FastPersistenceManagerImpl implements PersistenceManager{
 		List<WhereCondition> c = new ArrayList<WhereCondition>();
 		int i = 0;
 		for(Map.Entry<String, Object> e : keys.entrySet() ){
+			if( !ObjectUtils.isNotEmpty(e.getValue()) )throw new IllegalArgumentException("primary key must not be empty");
 			c.add(new WhereCondition(e.getKey(), i++, WhereOperand.Equal, e.getValue()));
 		}
 		return c;
