@@ -3,6 +3,7 @@
  */
 package kosmos.framework.jpqlclient.internal.free;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -253,9 +254,15 @@ public class LazyList<E> implements List<E>{
 					close();					
 				}
 				return result;
-			}catch(Throwable t){
+			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
+			}catch(RuntimeException re){
+				close();
+				throw re;
+			}catch(Error re){
+				close();
+				throw re;
 			}
 		}
 
@@ -266,9 +273,15 @@ public class LazyList<E> implements List<E>{
 		public E next() {
 			try{
 				return handler.getRecord(cursor.getResultSet());
-			}catch(Throwable t){
+			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
+			}catch(RuntimeException re){
+				close();
+				throw re;
+			}catch(Error re){
+				close();
+				throw re;
 			}
 		}
 

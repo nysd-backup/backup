@@ -3,13 +3,14 @@
  */
 package kosmos.framework.sqlclient.internal.orm.impl;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.LockModeType;
 import javax.persistence.Table;
 
 import kosmos.framework.sqlclient.api.PersistenceHints;
+import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder;
@@ -67,13 +68,13 @@ public class SQLStatementBuilderImpl extends AbstractStatementBuilder{
 	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createInsert(java.lang.Class, java.util.Collection)
 	 */
 	@Override
-	public String createInsert(Class<?> entityClass, Collection<String> keys) {
+	public String createInsert(Class<?> entityClass, Map<String,Object> keys) {
 		
 		StringBuilder builder = new StringBuilder("insert into ");
 		String tableName = entityClass.getAnnotation(Table.class).name();
 		builder.append(tableName).append(" ( ");
 		boolean first = true;
-		for(String key : keys){
+		for(String key : keys.keySet()){
 			if(first){
 				builder.append(key);
 				first = !first;
@@ -85,12 +86,21 @@ public class SQLStatementBuilderImpl extends AbstractStatementBuilder{
 		
 		builder.append(" ) values ( ");
 		first = true;
-		for(String key : keys){
+		for(Map.Entry<String, Object> e : keys.entrySet()){
+			Object value = e.getValue();
 			if(first){
-				builder.append(":").append(key);
+				if(value instanceof FixString){
+					builder.append(value.toString());
+				}else{
+					builder.append(":").append(e.getKey());
+				}
 				first = !first;
 			}else{
-				builder.append(",:").append(key);
+				if(value instanceof FixString){
+					builder.append(",").append(value.toString());
+				}else{
+					builder.append(",:").append(e.getKey());
+				}
 			}
 			builder.append("\n");
 		}

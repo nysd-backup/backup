@@ -46,20 +46,18 @@ public interface PersistenceManager {
 	
 	/**
 	 * @param entity
-	 * @param findedEntity
 	 * @throws OptimisticLockException 
 	 * @return
 	 */
-	public <T> int update(T entity, T findedEntity) ;
+	public int update(Object entity) ;
 	
 	/**
 	 * @param entity
-	 * @param findedEntity
 	 * @param hints
 	 * @throws OptimisticLockException 
 	 * @return
 	 */
-	public <T> int update(T entity,T findedEntity,PersistenceHints hints);
+	public int update(Object entity,PersistenceHints hints);
 	
 	/**
 	 * @param entity

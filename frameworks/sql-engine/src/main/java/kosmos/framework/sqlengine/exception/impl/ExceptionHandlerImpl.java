@@ -3,6 +3,8 @@
  */
 package kosmos.framework.sqlengine.exception.impl;
 
+import java.sql.SQLException;
+
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
 import kosmos.framework.sqlengine.exception.SQLEngineException;
 
@@ -15,17 +17,11 @@ import kosmos.framework.sqlengine.exception.SQLEngineException;
 public class ExceptionHandlerImpl implements ExceptionHandler{
 
 	/**
-	 * @see kosmos.framework.sqlengine.exception.ExceptionHandler#rethrow(java.lang.Throwable)
+	 * @see kosmos.framework.sqlengine.exception.ExceptionHandler#rethrow(java.sql.SQLException)
 	 */
 	@Override
-	public RuntimeException rethrow(Throwable e) {
-		if(e instanceof RuntimeException){
-			return (RuntimeException)e;
-		}else if(e instanceof Error){
-			throw (Error)e;
-		}else{
-			return new SQLEngineException(e);
-		}
+	public RuntimeException rethrow(SQLException e) {
+		return new SQLEngineException(e);
 	}
 
 }

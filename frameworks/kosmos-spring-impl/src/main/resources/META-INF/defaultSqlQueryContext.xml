@@ -61,7 +61,8 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- 永続化エンジン -->
-	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerImpl" scope="prototype">
+	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerProxy" scope="prototype" 
+		init-method="defaultInit">
 		<property name="internalOrmQuery" ref="internalOrmQuery" />
 	</bean>
  

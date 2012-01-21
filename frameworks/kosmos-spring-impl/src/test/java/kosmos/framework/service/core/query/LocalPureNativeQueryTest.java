@@ -20,6 +20,7 @@ import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
 import kosmos.framework.sqlclient.api.ConnectionProvider;
+import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.PersistenceManager;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
@@ -188,7 +189,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		TestEntity entity = eq.eq(TEST, "1").getSingleResult();
 		TestEntity updatable = entity.clone();
 		updatable.setAttr2(CachableConst.TARGET_INT);
-		pm.update(updatable, entity);	
+		pm.update(updatable,  new PersistenceHints().setFoundEntity(entity));
 		
 		SampleNativeQueryConst c = queryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setArc(CachableConst.TARGET_INT);		
@@ -280,7 +281,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		TestEntity finded = eq.eq(TEST, "1").getSingleResult();
 		TestEntity entity = finded.clone();
 		entity.setAttr2(CachableConst.TARGET_INT);
-		pm.update(entity, finded);	
+		pm.update(entity, new PersistenceHints().setFoundEntity(finded));
 		
 		SampleNativeUpdate update = queryFactory.createUpdate(SampleNativeUpdate.class);
 		update.setArc(CachableConst.TARGET_INT);		

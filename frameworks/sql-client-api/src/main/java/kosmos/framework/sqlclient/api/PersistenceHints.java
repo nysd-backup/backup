@@ -61,6 +61,57 @@ public class PersistenceHints extends HashMap<String,Object>{
 	public static final String SQLENGINE_JDBC_FETCHSIZE = "kosmos.framework.sqlengine.jdbc.fetchsize";
 	
 	/** the batch size for 'SQLEngine' */
-	public static final String SQLENGINE_BATCH_SIZE = "kosmos.framework.sqlengine.batch.size";
+	public static final String COMPARE_FOUND_ENTITY = "kosmos.framework.sqlclient.compare.entity";
+	
+	/**
+	 * Sets the found entity.
+	 * @param foundEntity
+	 * @return self
+	 */
+	public PersistenceHints setFoundEntity(Object foundEntity) {
+		put(COMPARE_FOUND_ENTITY,foundEntity);
+		return this;
+	}
+	
+	/**
+	 * @return the found entity.
+	 */
+	public Object getFoundEntity() {
+		return get(COMPARE_FOUND_ENTITY);
+	}
+	
+	/**
+	 * Sets the jdbc timeout.
+	 * @param timeout 
+	 * @return self
+	 */
+	public PersistenceHints setJdbcTimeout(int timeout) {
+		put(SQLENGINE_JDBC_TIMEOUT,timeout);
+		return this;
+	}
+	
+	/**
+	 * @return the time out
+	 */
+	public int getJdbcTimeout() {
+		return (Integer)get(SQLENGINE_JDBC_TIMEOUT);
+	}
+	
+	/**
+	 * Sets the fetch size.
+	 * @param fetchSize
+	 * @return self
+	 */
+	public PersistenceHints setJdbcFetchsize(int fetchSize) {
+		put(SQLENGINE_JDBC_FETCHSIZE,fetchSize);
+		return this;
+	}
+	
+	/**
+	 * @return the fetching size.
+	 */
+	public int getJdbcFetchsize() {
+		return (Integer)get(SQLENGINE_JDBC_FETCHSIZE);
+	}
   
 }

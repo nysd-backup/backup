@@ -12,7 +12,6 @@ import javax.persistence.QueryTimeoutException;
 
 import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
-import kosmos.framework.sqlengine.exception.SQLEngineException;
 
 /**
  * Handles the SQLException.
@@ -38,30 +37,24 @@ public class SQLExceptionHandlerImpl implements ExceptionHandler{
 	 * @see kosmos.framework.sqlengine.exception.ExceptionHandler#rethrow(java.lang.Throwable)
 	 */
 	@Override
-	public RuntimeException rethrow(Throwable t) {
-		if(t instanceof SQLException){
-			SQLException sqle = (SQLException)t;
-			int code = sqle.getErrorCode();
-			//一意制約エラー
-			if(code == uniqueErrorCode){
-				throw new UniqueConstraintException(sqle);
-			//リソースビジー	
-			}else if(code == pessimisticErrorCode){
-				throw new PessimisticLockException(sqle);
-			//タイムアウト	
-			}else if(code == timeoutErrorCode){
-				throw new QueryTimeoutException(sqle);
-			//悲観ロックタイムアウト
-			}else if(code == lockTimeoutErrorCode){
-				throw new LockTimeoutException(sqle);
-			}
-			throw new PersistenceException(sqle);
-		}else if(t instanceof Error){
-			throw (Error)t;
-		}else if(t instanceof RuntimeException){
-			throw (RuntimeException)t;
+	public RuntimeException rethrow(SQLException sqle) {
+		
+		int code = sqle.getErrorCode();
+		//一意制約エラー
+		if(code == uniqueErrorCode){
+			throw new UniqueConstraintException(sqle);
+		//リソースビジー	
+		}else if(code == pessimisticErrorCode){
+			throw new PessimisticLockException(sqle);
+		//タイムアウト	
+		}else if(code == timeoutErrorCode){
+			throw new QueryTimeoutException(sqle);
+		//悲観ロックタイムアウト
+		}else if(code == lockTimeoutErrorCode){
+			throw new LockTimeoutException(sqle);
 		}
-		throw new SQLEngineException(t);
+		throw new PersistenceException(sqle);
+	
 	}
 
 	/**

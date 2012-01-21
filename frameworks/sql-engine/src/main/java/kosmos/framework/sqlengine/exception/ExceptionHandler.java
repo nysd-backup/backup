@@ -3,6 +3,8 @@
  */
 package kosmos.framework.sqlengine.exception;
 
+import java.sql.SQLException;
+
 /**
  * Handles the <code>SQLException</code>.
  *
@@ -15,5 +17,5 @@ public interface ExceptionHandler {
 	 * @param t the exception
 	 * @return the exception
 	 */
-	public RuntimeException rethrow(Throwable t);
+	public RuntimeException rethrow(SQLException t);
 }

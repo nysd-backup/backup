@@ -8,6 +8,7 @@ import java.util.List;
 
 import kosmos.framework.core.query.Metadata;
 import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 
 
@@ -146,6 +147,51 @@ public class DefaultStrictQuery<T> extends AbstractLimitedOrmQuery<T> implements
 	@Override
 	public boolean exists(Object... pks) {
 		return find(pks) != null;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.StrictQuery#eqFix(kosmos.framework.core.query.Metadata, java.lang.String)
+	 */
+	@Override
+	public <V> StrictQuery<T> eqFix(Metadata<T, V> column, String value) {
+		delegate.eq(column.name(), new FixString(value));
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.StrictQuery#gtFix(kosmos.framework.core.query.Metadata, java.lang.String)
+	 */
+	@Override
+	public <V> StrictQuery<T> gtFix(Metadata<T, V> column, String value) {
+		delegate.gt(column.name(), new FixString(value));
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.StrictQuery#ltFix(kosmos.framework.core.query.Metadata, java.lang.String)
+	 */
+	@Override
+	public <V> StrictQuery<T> ltFix(Metadata<T, V> column, String value) {
+		delegate.lt(column.name(), new FixString(value));
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.StrictQuery#gtEqFix(kosmos.framework.core.query.Metadata, java.lang.String)
+	 */
+	@Override
+	public <V> StrictQuery<T> gtEqFix(Metadata<T, V> column, String value) {
+		delegate.gtEq(column.name(), new FixString(value));
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.core.query.StrictQuery#ltEqFix(kosmos.framework.core.query.Metadata, java.lang.String)
+	 */
+	@Override
+	public <V> StrictQuery<T> ltEqFix(Metadata<T, V> column, String value) {
+		delegate.ltEq(column.name(), new FixString(value));
+		return this;
 	}
 
 }

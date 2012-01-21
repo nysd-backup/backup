@@ -3,8 +3,8 @@
  */
 package kosmos.framework.sqlclient.internal.orm;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
@@ -32,7 +32,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createInsert(Class<?> entityClass, Collection<String> values);
+	public String createInsert(Class<?> entityClass, Map<String,Object> values);
 	
 	/**
 	 * Creates the SQL statement.
@@ -40,7 +40,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createUpdate(Class<?> entityClass,String filterString, List<WhereCondition> where, Collection<String> set);
+	public String createUpdate(Class<?> entityClass,String filterString, List<WhereCondition> where, Map<String,Object> set);
 	
 	/**
 	 * Creates the SQL statement.

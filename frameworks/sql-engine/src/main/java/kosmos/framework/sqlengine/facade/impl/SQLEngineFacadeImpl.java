@@ -147,7 +147,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 				return ((Number)value).intValue();
 			}
 			throw new IllegalStateException("Illegal type : type = " + value.getClass());
-		}catch(Throwable sqle){
+		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
 			close(stmt);
@@ -172,7 +172,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			
 			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter());
 			
-		}catch(Throwable sqle){
+		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
 			close(rs,stmt);
@@ -200,7 +200,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			RecordHandler handler = recordHandlerFactory.create(param.getResultType(), rs);								
 			return new LazyList<T>(rs,handler,exceptionHandler);
 			
-		}catch(Throwable sqle){
+		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}
 	}
@@ -221,7 +221,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			resultSetHandler.skip(rs,param.getFirstResult());
 			
 			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter(), param.getMaxSize(),param.getFirstResult());
-		}catch(Throwable sqle){
+		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
 			close(rs,stmt);
@@ -243,7 +243,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 		try{
 			stmt = provider.buildStatement(param.getSqlId(),con, executingSql, bindList,param.getTimeoutSeconds(),0,0);	
 			return updater.update(stmt);
-		}catch(Throwable sqle){
+		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
 			close(stmt);
@@ -278,7 +278,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			}
 			return updater.batchUpdate(stmt);
 	
-		}catch(Throwable sqle){
+		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
 			close(stmt);

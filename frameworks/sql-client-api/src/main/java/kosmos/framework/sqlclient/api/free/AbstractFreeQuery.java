@@ -5,6 +5,9 @@ package kosmos.framework.sqlclient.api.free;
 
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import kosmos.framework.sqlclient.api.Query;
 
 
@@ -120,6 +123,14 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	public <T extends Query> T setHint(String arg0, Object arg1) {
 		delegate.setHint(arg0,arg1);
 		return (T)this;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

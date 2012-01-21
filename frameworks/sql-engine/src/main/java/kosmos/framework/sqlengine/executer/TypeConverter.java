@@ -22,4 +22,5 @@ public interface TypeConverter {
 	 * @throws SQLException the exception
 	 */
 	public Object getParameter(Class<?> cast , ResultSet resultSet , String columnLabel)throws SQLException ;
+	
 }

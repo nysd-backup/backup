@@ -37,7 +37,6 @@ public abstract class OrmParameter<T> implements Serializable{
 	
 	/** the parameter only for easy query */
 	private Object[] easyParams = new Object[0];
-
 	
 	/**
 	 * @param entityClass the entityClass

@@ -4,6 +4,7 @@
 package kosmos.framework.core.query;
 
 
+
 /**
  * The ORM updater.
  *
@@ -42,6 +43,16 @@ public interface StrictUpdate<T> extends LimitedOrmUpdate<T>{
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> eq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> StrictUpdate<T> eqFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '>'.
@@ -52,6 +63,16 @@ public interface StrictUpdate<T> extends LimitedOrmUpdate<T>{
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> gt(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '>'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> StrictUpdate<T> gtFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '<'.
@@ -64,6 +85,16 @@ public interface StrictUpdate<T> extends LimitedOrmUpdate<T>{
 	public <V> StrictUpdate<T> lt(Metadata<T, V> column, V value);
 
 	/**
+	 * Adds '<'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> StrictUpdate<T> ltFix(Metadata<T, V> column, String value);
+	
+	/**
 	 * Adds '>='.
 	 * 
 	 * @param <V> the type
@@ -72,6 +103,16 @@ public interface StrictUpdate<T> extends LimitedOrmUpdate<T>{
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> gtEq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '>='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> StrictUpdate<T> gtEqFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '<='.
@@ -82,6 +123,16 @@ public interface StrictUpdate<T> extends LimitedOrmUpdate<T>{
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> ltEq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '<='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> StrictUpdate<T> ltEqFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds 'between'.
@@ -103,6 +154,16 @@ public interface StrictUpdate<T> extends LimitedOrmUpdate<T>{
 	 * @return self
 	 */
 	public <V> StrictUpdate<T> set(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds value to update.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> StrictUpdate<T> setFix(Metadata<T, V> column, String value);
 
 	
 	/**

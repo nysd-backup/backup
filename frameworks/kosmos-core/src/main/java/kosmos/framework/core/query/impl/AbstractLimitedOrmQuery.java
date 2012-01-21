@@ -5,6 +5,9 @@ package kosmos.framework.core.query.impl;
 
 import javax.persistence.LockModeType;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import kosmos.framework.core.query.LimitedOrmQuery;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
@@ -97,4 +100,11 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 		return (Q)this;
 	}
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
 }

@@ -11,9 +11,11 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.NonUniqueResultException;
 
+import kosmos.framework.sqlclient.api.FastEntity;
 import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
+import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmParameter;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
@@ -23,6 +25,7 @@ import kosmos.framework.sqlclient.internal.free.InternalQuery;
 import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
 import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder;
 import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder.Bindable;
+import kosmos.framework.utility.ClassUtils;
 import kosmos.framework.utility.ReflectionUtils;
 import kosmos.framework.utility.StringUtils;
 
@@ -60,29 +63,39 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	@Override
 	public <E> E find(OrmQueryParameter<E> context,Object... pks) {
 		
-		Field[] fs = ReflectionUtils.getAllAnotatedField(context.getEntityClass(), Id.class);
-		if(fs.length != pks.length){
-			throw new IllegalArgumentException("invalid primary key count");
-		}
-		
 		OrmQueryParameter<E> newContext = new OrmQueryParameter<E>(context.getEntityClass());
+
+		//高速エンティティ
+		if(FastEntity.class.isAssignableFrom(context.getEntityClass())){
+			FastEntity entity = (FastEntity)ClassUtils.newInstance(context.getEntityClass());
+			int i = 0;
+			for(Map.Entry<String, Object> e: entity.getPrimaryKeys().entrySet()){
+				newContext.getConditions().add(new WhereCondition(e.getKey(),i++,WhereOperand.Equal,e.getValue()));				
+			}
+		//通常エンティティ	
+		}else{
+			Field[] fs = ReflectionUtils.getAllAnotatedField(context.getEntityClass(), Id.class);
+			if(fs.length != pks.length){
+				throw new IllegalArgumentException("invalid primary key count");
+			}		
+			for(int i = 0 ; i < fs.length; i++){
+				Object pk = pks[i];
+				Field f = fs[i];
+				Column col = f.getAnnotation(Column.class);
+				String name = col.name();
+				if(StringUtils.isEmpty(name)){
+					name = f.getName();
+				}
+				newContext.getConditions().add(new WhereCondition(name,i,WhereOperand.Equal,pk));
+			}
+		}
+
 		newContext.setFirstResult(context.getFirstResult());
 		newContext.setMaxSize(2);
 		newContext.setLockModeType(context.getLockModeType());
 		for(Map.Entry<String, Object> h : context.getHints().entrySet()){
 			newContext.setHint(h.getKey(), h.getValue());
-		}
-		
-		for(int i = 0 ; i < fs.length; i++){
-			Object pk = pks[i];
-			Field f = fs[i];
-			Column col = f.getAnnotation(Column.class);
-			String name = col.name();
-			if(StringUtils.isEmpty(name)){
-				name = f.getName();
-			}
-			newContext.getConditions().add(new WhereCondition(name,i,WhereOperand.Equal,pk));
-		}
+		}		
 		
 		List<E> resultList = getResultList(newContext);
 		if(resultList.isEmpty()){
@@ -120,14 +133,12 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	@Override
 	public int insert(OrmUpdateParameter<?> context) {
 		
-		String sql = sb.createInsert(context.getEntityClass(),context.getCurrentValues().keySet());
+		String sql = sb.createInsert(context.getEntityClass(),context.getCurrentValues());
 		
 		FreeUpdateParameter parameter = new FreeUpdateParameter(true, context.getEntityClass().getName()+".insert", sql);
 
-		//更新値設定
-		for(Map.Entry<String, Object> e: context.getCurrentValues().entrySet()){
-			parameter.getParam().put(e.getKey(), e.getValue());
-		}
+		//set statement
+		setUpdateValule(parameter,context.getCurrentValues());
 		
 		setHint(context.getHints(),parameter);
 		return internalQuery.executeUpdate(parameter);
@@ -139,14 +150,13 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 */
 	@Override
 	public int[] batchInsert(OrmUpdateParameter<?> condition) {
-		String sql = sb.createInsert(condition.getEntityClass(),condition.getBatchValues().get(0).keySet());
+		String sql = sb.createInsert(condition.getEntityClass(),condition.getBatchValues().get(0));
 		FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".insert", sql);
 
 		//更新値設定
 		for(Map<String,Object> v: condition.getBatchValues()){
-			for(Map.Entry<String, Object> e: v.entrySet()){
-				parameter.getParam().put(e.getKey(), e.getValue());
-			}
+			//set statement
+			setUpdateValule(parameter,v);
 			parameter.addBatch();
 		}
 		setHint(parameter.getHints(),parameter);
@@ -160,14 +170,12 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	@Override
 	public int update(OrmUpdateParameter<?> condition) {
 		
-		String sql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues().keySet());		
+		String sql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues());		
 		final FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".update", sql);		
 		setCondition(condition,parameter);
 		
 		//set statement
-		for(Map.Entry<String, Object> v: condition.getCurrentValues().entrySet()){
-			parameter.getParam().put(v.getKey(),v.getValue());
-		}
+		setUpdateValule(parameter,condition.getCurrentValues());
 		
 		setHint(condition.getHints(),parameter);
 		
@@ -179,7 +187,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 */
 	@Override
 	public int[] batchUpdate(OrmUpdateParameter<?> condition) {
-		String sql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getBatchCondition().get(0), condition.getBatchValues().get(0).keySet());		
+		String sql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getBatchCondition().get(0), condition.getBatchValues().get(0));		
 		final FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".batchUpdate", sql);
 	
 		for(int i = 0 ; i < condition.getBatchCondition().size(); i++){
@@ -191,9 +199,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 					parameter.getParam().put(key, value);
 				}
 			});
-			for(Map.Entry<String, Object> v: set.entrySet()){
-				parameter.getParam().put(v.getKey(),v.getValue());
-			}
+			setUpdateValule(parameter,set);
 			
 			parameter.addBatch();
 			
@@ -213,6 +219,19 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		setCondition(condition,parameter);
 		setHint(condition.getHints(),parameter);
 		return internalQuery.executeUpdate(parameter);
+	}
+	
+	/**
+	 * 更新値設定
+	 * @param parameter
+	 * @param bind
+	 */
+	private void setUpdateValule(FreeUpdateParameter parameter, Map<String,Object> bind){
+		for(Map.Entry<String, Object> v: bind.entrySet()){
+			if(!(v.getValue() instanceof FixString)){
+				parameter.getParam().put(v.getKey(),v.getValue());
+			}
+		}
 	}
 	
 	/**

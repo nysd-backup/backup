@@ -4,6 +4,7 @@
 package kosmos.framework.jpqlclient.internal.free.impl;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,7 @@ public class InternalEclipseLinkNativeQueryImpl extends AbstractInternalNativeQu
 		
 		try {
 			return handler.getResultList(rs, parameter.getResultType(), new DelegatingResultSetFilter(parameter.getFilter()));
-		}catch (Throwable e) {
+		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
 			cursor.close();
@@ -114,7 +115,7 @@ public class InternalEclipseLinkNativeQueryImpl extends AbstractInternalNativeQu
 		try {
 			result = handler.getResultList(rs, parameter.getResultType(), new DelegatingResultSetFilter(parameter.getFilter()),
 					parameter.getMaxSize(),parameter.getFirstResult());
-		}catch (Throwable e) {
+		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
 			cursor.close();
@@ -133,7 +134,7 @@ public class InternalEclipseLinkNativeQueryImpl extends AbstractInternalNativeQu
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
 			return new LazyList(cursor, recordHandlerFactory.create(parameter.getResultType(), cursor.getResultSet()),exceptionHandler);
-		} catch (Throwable e) {
+		} catch (SQLException e) {
 			cursor.close();
 			throw exceptionHandler.rethrow(e);
 		}	

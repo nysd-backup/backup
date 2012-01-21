@@ -3,9 +3,10 @@
  */
 package kosmos.framework.sqlclient.internal.orm;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.SortKey;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
@@ -43,7 +44,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createUpdate(java.lang.Class, java.lang.String, java.lang.String, java.util.List, java.util.Collection)
 	 */
 	@Override
-	public String createUpdate(Class<?> entityClass,String filterString,List<WhereCondition> where, Collection<String> set) {
+	public String createUpdate(Class<?> entityClass,String filterString,List<WhereCondition> where, Map<String,Object> set) {
 		StringBuilder builder = createUpdatePrefix(entityClass);
 		builder.append(generateSet(set));
 		builder.append(generateWhere(filterString,where));
@@ -70,18 +71,27 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition the condition
 	 * @return the statement
 	 */
-	protected String generateSet(Collection<String> set){
+	protected String generateSet(Map<String,Object> set){
 		if( set == null || set.isEmpty()){
 			throw new IllegalArgumentException("set parameter is required");
 		}
 		StringBuilder builder = new StringBuilder();
 		boolean first=true;
-		for(String name :set){	
-			if( first ){
-				builder.append("\n set e.").append(name).append(" = :").append(name);
+		for(Map.Entry<String, Object> e :set.entrySet()){	
+			Object value = e.getValue();
+			if( first ){			
+				if( value instanceof FixString){
+					builder.append("\n set e.").append(e.getKey()).append(" = ").append(value.toString());
+				}else{
+					builder.append("\n set e.").append(e.getKey()).append(" = :").append(e.getKey());
+				}
 				first = false;
 			}else{
-				builder.append("\n , e.").append(name).append(" = :").append(name);
+				if( value instanceof FixString){
+					builder.append("\n , e.").append(e.getKey()).append(" = ").append(value.toString());
+				}else{
+					builder.append("\n , e.").append(e.getKey()).append(" = :").append(e.getKey());
+				}			
 			}
 		}
 		return builder.toString();
@@ -114,23 +124,48 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 
 			// BETWEEN
 			if(operand == WhereOperand.Between) {
-				String from = String.format("e.%s%s:%s%d", where.getColName(),	operand.getOperand(),where.getColName(),where.getBindCount());
-				String to = String.format(":%s%d_to ",where.getColName(),where.getBindCount());
-				builder.append(String.format(" %s and %s ",from,to));
+				Object toValue = where.getToValue();
+				String to = null;
+				if(toValue instanceof FixString){
+					to = toValue.toString();
+				}else{
+					to = String.format(":%s%d_to ",where.getColName(),where.getBindCount());	
+				}
+				Object fromValue = where.getValue();
+				String from = null;
+				if(fromValue instanceof FixString){
+					from = fromValue.toString();	
+				}else{
+					from = String.format(":%s%d",where.getColName(),where.getBindCount());					
+				}				
+				builder.append(String.format("e.%s%s %s and %s ",where.getColName(),operand.getOperand(),from,to));
 				
 			// IN句	
 			}else if (operand == WhereOperand.IN){
 				StringBuilder in = new StringBuilder();
-				List<?> val = List.class.cast(where.getValue());
-				for(int i = 0 ; i <val.size(); i++){
-					in.append(":").append(where.getColName()).append("_").append(where.getBindCount()).append("_").append(i).append(",");
+				Object value = where.getValue();
+				if(value instanceof List){
+					List<?> val = List.class.cast(where.getValue());
+					for(int i = 0 ; i <val.size(); i++){
+						in.append(":").append(where.getColName()).append("_").append(where.getBindCount()).append("_").append(i).append(",");
+					}
+					if(in.length() > 0){
+						in = new StringBuilder(in.substring(0,in.length()-1));
+					}				
+				}else if( value instanceof FixString){
+					in.append(value.toString());
+				}else{
+					in.append(":").append(where.getColName());
 				}
-				if(in.length() > 0){
-					in = new StringBuilder(in.substring(0,in.length()-1));
-				}
-				builder.append(String.format("e.%s IN(%s) ",where.getColName(),in));								
+				
+				builder.append(String.format("e.%s IN(%s) ",where.getColName(),in));
 			}else {
-				builder.append(String.format("e.%s%s:%s%d ",where.getColName(),operand.getOperand(),where.getColName(),where.getBindCount()));								
+				Object value = where.getValue();
+				if(value instanceof FixString){
+					builder.append(String.format("e.%s%s%s",where.getColName(),operand.getOperand(),value.toString()));
+				}else{
+					builder.append(String.format("e.%s%s:%s%d ",where.getColName(),operand.getOperand(),where.getColName(),where.getBindCount()));								
+				}
 			}
 		}
 		return builder.toString();
@@ -185,18 +220,35 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 
 		for(WhereCondition cond : baseCondition){
 			if(WhereOperand.IN == cond.getOperand()){
-				List<?> val = List.class.cast(cond.getValue());
-				int cnt = -1;
-				for(Object v : val){
-					cnt++;
-					delegate.setParameter(String.format("%s_%d_%d", cond.getColName(),cond.getBindCount(),cnt),v);
+				Object value = cond.getValue();
+				if( value instanceof List ){
+					List<?> val = List.class.cast(value);
+					int cnt = -1;
+					for(Object v : val){
+						cnt++;
+						delegate.setParameter(String.format("%s_%d_%d", cond.getColName(),cond.getBindCount(),cnt),v);
+					}
+				}else if( value instanceof FixString){
+					continue;
+				}else {
+					delegate.setParameter(String.format("%s_%d", cond.getColName(),cond.getBindCount()),value);
 				}
-			}else{	
-				delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
-				if( WhereOperand.Between == cond.getOperand()){
-					delegate.setParameter(String.format( "%s%d_to",cond.getColName(),cond.getBindCount()), cond.getToValue());
+			}else if( WhereOperand.Between == cond.getOperand()){
+				Object toValue = cond.getToValue();
+				Object fromValue = cond.getValue();
+				if(!(toValue instanceof FixString)){
+					delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
 				}
-			}
+				if(!(fromValue instanceof FixString)){
+					delegate.setParameter(String.format( "%s%d_to",cond.getColName(),cond.getBindCount()), cond.getToValue());	
+				}				
+				
+			}else{
+				Object value = cond.getValue();
+				if(!(value instanceof FixString)){
+					delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
+				}
+			}			
 		}
 	}
 	

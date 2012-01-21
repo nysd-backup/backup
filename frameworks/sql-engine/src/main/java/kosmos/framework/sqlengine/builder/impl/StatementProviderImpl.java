@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import kosmos.framework.sqlengine.builder.StatementProvider;
+import kosmos.framework.sqlengine.exception.SQLEngineException;
 
 
 /**
@@ -69,8 +70,7 @@ public class StatementProviderImpl implements StatementProvider{
 	 * @see kosmos.framework.sqlengine.builder.StatementProvider#createStatement(java.lang.String, java.sql.Connection, java.lang.String, int, int, int)
 	 */
 	@Override
-	public PreparedStatement createStatement(String sqlId ,Connection con, String sql, int timeout , int maxRows , int fetchSize)
-			throws SQLException {
+	public PreparedStatement createStatement(String sqlId ,Connection con, String sql, int timeout , int maxRows , int fetchSize){
 		PreparedStatement statement = null;
 		try{
 			statement = con.prepareStatement(sql,resultSetType,resultSetConcurrency);
@@ -82,7 +82,7 @@ public class StatementProviderImpl implements StatementProvider{
 				}catch(SQLException s){					
 				}
 			}
-			throw sqle;
+			throw new SQLEngineException(sqle);
 		}
 		return statement;
 	}

@@ -25,7 +25,7 @@ public interface StatementProvider {
 	 * @param sql the SQL
 	 * @return the statement
 	 */
-	public PreparedStatement createStatement(String sqlId,Connection con ,String sql ,int timeout , int maxRows,int fetchSize) throws SQLException;
+	public PreparedStatement createStatement(String sqlId,Connection con ,String sql ,int timeout , int maxRows,int fetchSize);
 	
 	/**
 	 * Creates the statement.

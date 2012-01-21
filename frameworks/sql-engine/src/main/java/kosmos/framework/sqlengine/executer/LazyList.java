@@ -283,9 +283,15 @@ public class LazyList<E> implements List<E>{
 					close();
 				}
 				return hasNext;
-			}catch(Throwable t){
+			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
+			}catch(RuntimeException re){
+				close();
+				throw re;
+			}catch(Error re){
+				close();
+				throw re;
 			}
 		}
 
@@ -296,9 +302,15 @@ public class LazyList<E> implements List<E>{
 		public E next() {
 			try{
 				return handler.getRecord(rs);
-			}catch(Throwable t){
+			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
+			}catch(RuntimeException re){
+				close();
+				throw re;
+			}catch(Error re){
+				close();
+				throw re;
 			}
 		}
 

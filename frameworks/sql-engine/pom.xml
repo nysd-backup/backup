@@ -20,6 +20,11 @@
 		  <artifactId>velocity</artifactId>
 		  <version>${velocity.version}</version>		
 		</dependency>
+		<dependency>
+		  <groupId>kosmos.framework</groupId>
+		  <artifactId>utility</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>		
+		</dependency>
 	</dependencies>
 
 </project>

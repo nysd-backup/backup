@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.PropertyUtilsBean;
@@ -98,6 +100,34 @@ public final class ObjectUtils implements Utils.ObjectScope {
 	 */
 	public static boolean isNotNull(Object obj) {
 		return !isNull(obj);
+	}
+	
+	/**
+	 * NULLチェックを行う
+	 * <p>
+	 * Example:
+	 * 
+	 * <pre>
+	 * ObjectUtils.isNotNull(null)	-&gt; false
+	 * ObjectUtils.isNotNull(&quot;abc&quot;)	-&gt; true
+	 * ObjectUtils.isNotNull(&quot;&quot;)	-&gt; true
+	 * </pre>
+	 * 
+	 * </p>
+	 * 
+	 * @param obj オブジェクト
+	 * @return <code>true</code>:<code>nullでないの場合</code>,<code>false</code>:<code>null</code>の場合
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean isNotEmpty(Object obj) {
+		if(obj instanceof String){
+			return !isNull(obj) && !((String)obj).isEmpty();
+		}else if( obj instanceof Collection ){
+			return !isNull(obj) && !((Collection)obj).isEmpty();
+		}else if( obj instanceof Map){
+			return !isNull(obj) && !((Map)obj).isEmpty();
+		}
+		return isNull(obj);
 	}
 
 	/**

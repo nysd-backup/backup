@@ -26,11 +26,7 @@ public class ServiceFacadeInjector {
 		if(bean == null){
 			return bean;
 		}
-		
-		if(bean.getClass().getAnnotation(ServiceCallable.class) == null){
-			return bean;
-		}
-		
+
 		for (Class<?> cls = bean.getClass(); cls != Object.class; cls = cls.getSuperclass()) {
 
 			Field[] fs = cls.getDeclaredFields();

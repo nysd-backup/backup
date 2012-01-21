@@ -65,6 +65,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void allCondition() throws SQLException{	
+		
 		setUpData("TEST.xls");
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");

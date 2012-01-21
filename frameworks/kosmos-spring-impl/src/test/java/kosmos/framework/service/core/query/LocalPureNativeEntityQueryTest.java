@@ -27,10 +27,13 @@ import kosmos.framework.service.test.RequiresNewReadOnlyService;
 import kosmos.framework.service.test.RequiresNewService;
 import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.DateEntity;
+import kosmos.framework.service.test.entity.FastEntity;
 import kosmos.framework.service.test.entity.IDateEntity;
+import kosmos.framework.service.test.entity.IFastEntity;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
 import kosmos.framework.sqlclient.api.ConnectionProvider;
+import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.PersistenceManager;
 import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
 
@@ -120,6 +123,49 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	}
 	
 	/**
+	 * 条件追加
+	 * @throws SQLException 
+	 */
+	@Test
+	public void allConditionFast() throws SQLException, Exception{	
+		FastEntity e = new FastEntity();
+		e.setTest("1").setAttr("2").setAttr2(2).setVersion(0);
+		per.insert(e);
+		per.insert(e.clone().setTest("2"));
+		
+		StrictQuery<FastEntity> query = ormQueryFactory.createStrictQuery(FastEntity.class);	
+		query.setHint(QueryHints.HINT,"/*+ HINT */");		
+		query.between(IFastEntity.TEST, "0", "30").eq(IFastEntity.TEST,"2").gtEq(IFastEntity.TEST, "0").ltEq(IFastEntity.TEST, "30").lt(IFastEntity.TEST, "30").gt(IFastEntity.TEST, "0");		
+		query.between(IFastEntity.ATTR, "0", "20").eq(IFastEntity.ATTR,"2").gtEq(IFastEntity.ATTR, "0").ltEq(IFastEntity.ATTR, "20").lt(IFastEntity.ATTR, "20").gt(IFastEntity.ATTR, "0");
+		query.between(IFastEntity.ATTR2, 0, 100).eq(IFastEntity.ATTR2,2).gtEq(IFastEntity.ATTR2, 0).ltEq(IFastEntity.ATTR2, 100).lt(IFastEntity.ATTR2, 100).gt(IFastEntity.ATTR2, 0);		
+		query.contains(IFastEntity.TEST, "2","2","2");
+		List<FastEntity> result = query.getResultList();
+		assertEquals(1,result.size());
+		
+		FastEntity updatable = result.get(0).clone().setAttr("1111");
+		per.update(updatable, new PersistenceHints().setFoundEntity(result.get(0)));
+	}
+	
+	/**
+	 * 条件追加
+	 * @throws SQLException 
+	 */
+	@Test
+	public void allConditionFixValue() throws SQLException{	
+		setUpData("TEST.xls");
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);	
+		query.setHint(QueryHints.HINT,"/*+ HINT */");
+		
+		List<TestEntity> result = getFixOneRecord(query);
+	
+		assertEquals(1,result.size());
+		
+		StrictQuery<TestEntity> forres = ormQueryFactory.createStrictQuery(TestEntity.class);
+		List<TestEntity> updated = getFixOneRecord(forres);	
+		assertEquals("2",updated.get(0).getAttr());
+	}
+	
+	/**
 	 * チE��タチE��
 	 */
 	@Test
@@ -132,7 +178,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		//更新
 		TestEntity first = result.get(0);
-		per.update( first.clone().setAttr("100"), first);
+		per.update( first.clone().setAttr("100"), new PersistenceHints().setFoundEntity(first));
 	
 		//更新結果
 		StrictQuery<TestEntity> forres = ormQueryFactory.createStrictQuery(TestEntity.class);
@@ -151,6 +197,27 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		//更新
 		StrictUpdate<TestEntity> update = ormQueryFactory.createStrictUpdate(TestEntity.class);
 		update.eq(TEST, "2").set(ATTR, "AAA").update();
+		
+		//検索
+		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);		
+		
+		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
+		TestEntity entity = query.eq(TEST, "2").getSingleResult();
+		assertEquals("AAA",entity.getAttr());
+	}
+	
+
+	/**
+	 * 更新後検索
+	 */
+	@Test
+	public void updateAnyFix(){
+		
+		setUpData("TEST.xls");
+		
+		//更新
+		StrictUpdate<TestEntity> update = ormQueryFactory.createStrictUpdate(TestEntity.class);
+		update.eqFix(TEST, "'2'").setFix(ATTR, "'AAA'").update();
 		
 		//検索
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);		
@@ -239,7 +306,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		//更新
 		TestEntity findedEntity = result.get(0);
-		per.update(findedEntity.clone().setAttr("AAA"), findedEntity);
+		per.update(findedEntity.clone().setAttr("AAA"), new PersistenceHints().setFoundEntity(result.get(0)));
 		
 		//楽観ロチE��番号インクリメント確誁E
 		result = query.getResultList();		
@@ -271,7 +338,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
 		TestEntity result = query.find("1");
 		TestEntity updatable = result.clone();
-		per.update(updatable.setAttr("1100"),result);
+		per.update(updatable.setAttr("1100"), new PersistenceHints().setFoundEntity(result));
 		
 		StrictQuery<TestEntity> query2 = ormQueryFactory.createStrictQuery(TestEntity.class);
 		result = query2.find("1");
@@ -385,7 +452,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		TestEntity updatable = result.clone();
 		updatable.setVersion(2);
 		try{
-			per.update(updatable, result);
+			per.update(updatable, new PersistenceHints().setFoundEntity(result));
 			fail();
 		}catch(OptimisticLockException e){
 			return;
@@ -583,6 +650,17 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		query.between(TEST, "0", "30").eq(TEST,"2").gtEq(TEST, "0").ltEq(TEST, "30").lt(TEST, "30").gt(TEST, "0");		
 		query.between(ATTR, "0", "20").eq(ATTR,"2").gtEq(ATTR, "0").ltEq(ATTR, "20").lt(ATTR, "20").gt(ATTR, "0");
 		query.between(ATTR2, 0, 100).eq(ATTR2,2).gtEq(ATTR2, 0).ltEq(ATTR2, 100).lt(ATTR2, 100).gt(ATTR2, 0);		
+		query.contains(TEST, "2","2","2");
+		return query.getResultList();
+	}
+	
+	/**
+	 * @return
+	 */
+	private List<TestEntity> getFixOneRecord(StrictQuery<TestEntity> query ){	
+		query.between(TEST, "0", "30").eqFix(TEST,"2").gtEqFix(TEST, "0").ltEqFix(TEST, "30").ltFix(TEST, "30").gtFix(TEST, "0");		
+		query.between(ATTR, "0", "20").eqFix(ATTR,"2").gtEqFix(ATTR, "0").ltEqFix(ATTR, "20").ltFix(ATTR, "20").gtFix(ATTR, "0");
+		query.between(ATTR2, 0, 100).eqFix(ATTR2,"2").gtEqFix(ATTR2, "0").ltEqFix(ATTR2, "100").ltFix(ATTR2, "100").gtFix(ATTR2, "0");		
 		query.contains(TEST, "2","2","2");
 		return query.getResultList();
 	}

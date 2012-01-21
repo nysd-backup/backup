@@ -3,8 +3,8 @@
  */
 package kosmos.framework.jpqlclient.internal.orm.impl;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder;
@@ -49,7 +49,7 @@ public class JPQLStatementBuilderImpl extends AbstractStatementBuilder{
 	 * @see kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder#createInsert(java.lang.Class, java.util.Collection)
 	 */
 	@Override
-	public String createInsert(Class<?> entityClass, Collection<String> values) {
+	public String createInsert(Class<?> entityClass, Map<String,Object> values) {
 		throw new UnsupportedOperationException();
 	}
 

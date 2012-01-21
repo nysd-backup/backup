@@ -3,7 +3,6 @@
  */
 package kosmos.framework.test.testcase;
 
-import kosmos.framework.client.service.ServiceCallable;
 import kosmos.framework.client.service.ServiceFacade;
 import kosmos.framework.client.service.ServiceFacadeInjector;
 import kosmos.framework.test.service.TestService;
@@ -18,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
  * @author yoshida-n
  * @version	created.
  */
-@ServiceCallable
 @ContextConfiguration("/META-INF/oracleAgentNativeApplicationContext.xml")
 public class InvokeTest extends ClientUnit{
 

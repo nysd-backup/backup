@@ -11,8 +11,12 @@ import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.OptimisticLockException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Version;
 
+import kosmos.framework.bean.Pair;
+import kosmos.framework.sqlclient.api.orm.FixString;
+import kosmos.framework.sqlclient.api.orm.OrmParameter;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.api.orm.WhereOperand;
@@ -72,10 +76,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 			context.addBatch();
 		}
 		
-		//ヒント句設定
-		for(Map.Entry<String, Object> e : hints.entrySet()){
-			context.setHint(e.getKey(),e.getValue());
-		}
+		setHint(context,hints);
 		
 		return internaOrmlQuery.batchInsert(context);
 	}
@@ -88,16 +89,12 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	public int insert(Object entity, PersistenceHints hints) {
 		
 		@SuppressWarnings("unchecked")
-		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.getClass());
-		
-		//エンティティから登録対象項目追加
+		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.getClass());		
 		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);
-		setInsertValue(fs,entity,context);
+		setInsertValue(fs,entity,context);			
+
+		setHint(context,hints);
 		
-		//ヒント句設定
-		for(Map.Entry<String, Object> e : hints.entrySet()){
-			context.setHint(e.getKey(),e.getValue());
-		}
 		return internaOrmlQuery.insert(context);
 	}
 	
@@ -108,13 +105,8 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 * @param context the context
 	 */
 	private void setInsertValue(Field[] fs , Object entity, OrmUpdateParameter<Object> context){
-		for(Field f : fs){
-			Column column = f.getAnnotation(Column.class);
-			String name = column.name();
-			if(StringUtils.isEmpty(name)){
-				name = f.getName();
-			}
-			context.set(name, ReflectionUtils.get(f, entity));
+		for(Field f : fs){			
+			context.set(getColumnName(f), ReflectionUtils.get(f, entity));
 		}
 	}
 
@@ -122,8 +114,8 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#merge(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int update(Object entity, Object findedEntity) {
-		return update(entity,findedEntity,new PersistenceHints());
+	public int update(Object entity) {
+		return update(entity,new PersistenceHints());
 	}
 
 	/**
@@ -131,19 +123,84 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 */
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> int update(T entity, T findedEntity,PersistenceHints hints){
-		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());
-		for(Map.Entry<String, Object> h : hints.entrySet()){
-			condition.setHint(h.getKey(),h.getValue());
+	public int update(Object entity,PersistenceHints hints){
+
+		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());		
+		setHint(condition,hints);	
+		Object found = hints.getFoundEntity();
+		int result = 0;
+		if(found != null){
+			result = updateCompareFound(entity, found, condition);
+		}else{
+			result = updateEntity(entity,condition);			
 		}
+		if(result > 1){
+			throw new PersistenceException("update count must be less than 1");
+		}
+		return result;
+	}
+	
+	/**
+	 * Updates the entity.
+	 * 
+	 * @param entity
+	 * @param condition
+	 * @throws OptimisticLockException throw when the updated count is 0
+	 * @return updated count
+	 */
+	private int updateEntity(Object entity,OrmUpdateParameter<?> condition){
+		
+		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);		
+		List<Pair<Field>> where = new ArrayList<Pair<Field>>();
+		for(Field f : fs){			
+			Object dst = ReflectionUtils.get(f, entity);
+					
+			//ロック連番
+			if(f.getAnnotation(Version.class) != null){						
+				String name = getColumnName(f);
+				condition.set(name,new FixString(name + " + 1"));
+				where.add(new Pair<Field>(f,dst));
+			//主キー	
+			}else if(f.getAnnotation(Id.class) != null){
+				if( dst == null )throw new IllegalArgumentException("primary key must not be empty");
+				where.add(new Pair<Field>(f,dst));
+				
+			//その他(空項目はupdateしない)
+			}else if(ObjectUtils.isNotEmpty(dst)){
+				condition.set(getColumnName(f), dst);
+			}		
+		}		
+		//主キーを更新条件とする
+		for(WhereCondition w : createPkWhere(where)){
+			condition.getConditions().add(w);
+		}
+		int result = internaOrmlQuery.update(condition);
+		if(result == 0 ){
+			throw new OptimisticLockException(entity);
+		}
+		return result;
+	}
+		
+
+	
+	/**
+	 * Compare the found entity.
+	 * 
+	 * setting target is the column which is not equal to found entity.
+	 * 
+	 * @param entity
+	 * @param findedEntity
+	 * @param condition
+	 * @return
+	 */
+	private int updateCompareFound(Object entity , Object found ,OrmUpdateParameter<?> condition){
 		
 		//比較対象エンティティと比較して結果が変更されていればset句への比較対象に含める
 		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Column.class);		
-		List<Field> pk = new ArrayList<Field>();
-
-		for(Field f : fs){
-			Column column = f.getAnnotation(Column.class);
-			Object src = ReflectionUtils.get(f, findedEntity);
+		List<Pair<Field>> where = new ArrayList<Pair<Field>>();
+		
+		for(Field f : fs){			
+			Object src = ReflectionUtils.get(f, found);
 			Object dst = ReflectionUtils.get(f, entity);
 			
 			//ロック連番
@@ -152,32 +209,26 @@ public class PersistenceManagerImpl implements PersistenceManager{
 					//ロック連番の項目が異なっていたら並行性例外
 					throw new OptimisticLockException(entity);
 				}	
-				dst = ((Number)dst).longValue() + 1;
+				String name = getColumnName(f);
+				condition.set(name,new FixString(name + " + 1"));
 				
 			//主キー	
 			}else if(f.getAnnotation(Id.class) != null){
 				if( !ObjectUtils.equals(src, dst) ){
 					throw new IllegalArgumentException("primary key must not be change : src = " + src + " dst = " + dst);
 				}
-				pk.add(f);
+				where.add(new Pair<Field>(f,dst));
 				continue;
-			}
-			
-			//項目が異なる
-			if( !ObjectUtils.equals(src, dst) ){
-				String name = column.name();
-				if(StringUtils.isEmpty(name)){
-					name = f.getName();
-				}
-				condition.set(name, dst);
+			//その他	
+			}else if( !ObjectUtils.equals(src, dst) ){
+				condition.set(getColumnName(f), dst);
 			}
 		}
-		
+			
 		//主キーを更新条件とする
-		for(WhereCondition w : createPkWhere(pk.toArray(new Field[0]), entity)){
+		for(WhereCondition w : createPkWhere(where)){
 			condition.getConditions().add(w);
 		}
-
 		return internaOrmlQuery.update(condition);
 	}
 
@@ -197,18 +248,31 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	public int delete(Object entity, PersistenceHints hints) {
 		
 		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());
-		for(Map.Entry<String, Object> h : hints.entrySet()){
-			condition.setHint(h.getKey(),h.getValue());
+
+		setHint(condition,hints);
+		
+		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Id.class);		
+		List<Pair<Field>> key = new ArrayList<Pair<Field>>(); 
+		for(Field f : fs){
+			key.add(new Pair<Field>(f,ReflectionUtils.get(f,entity)));
 		}
-		
-		Field[] fs = ReflectionUtils.getAllAnotatedField(entity.getClass(), Id.class);
-		
 		//主キーを更新条件とする
-		for(WhereCondition w : createPkWhere(fs, entity)){
+		for(WhereCondition w : createPkWhere(key)){
 			condition.getConditions().add(w);
 		}
 		
 		return internaOrmlQuery.delete(condition);
+	}
+	
+	/**
+	 * Sets the hint to condition.
+	 * @param condition condition
+	 * @param hints hint
+	 */
+	private void setHint(OrmParameter<?> condition , PersistenceHints hints){
+		for(Map.Entry<String, Object> h : hints.entrySet()){
+			condition.setHint(h.getKey(),h.getValue());
+		}
 	}
 	
 	/**
@@ -217,20 +281,29 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 * @param entity the entity
 	 * @return the condition
 	 */
-	private List<WhereCondition> createPkWhere(Field[] fs, Object entity){
+	private List<WhereCondition> createPkWhere(List<Pair<Field>> where){
 		List<WhereCondition> pkWhere = new ArrayList<WhereCondition>();
-		for(int i=0; i < fs.length;i++){
-			Field f = fs[i];
-			Column column = f.getAnnotation(Column.class);
-			Object value = ReflectionUtils.get(f,entity);
-			String name = column.name();
-			if(StringUtils.isEmpty(name)){
-				name = f.getName();
-			}
-			pkWhere.add(new WhereCondition(name,i, WhereOperand.Equal, value));
+		for(int i=0; i < where.size();i++){
+			Pair<Field> p = where.get(i);					
+			String name = getColumnName(p.getKey());
+			pkWhere.add(new WhereCondition(name,i, WhereOperand.Equal, p.getValue()));
 		}
 		
 		return pkWhere;
+	}
+	
+	/**
+	 * Gets the column name.
+	 * @param f the field 
+	 * @return the column name
+	 */
+	private String getColumnName(Field f){
+		Column column = f.getAnnotation(Column.class);
+		String name = column.name();
+		if(StringUtils.isEmpty(name)){
+			name = f.getName();
+		}
+		return name;
 	}
 
 }

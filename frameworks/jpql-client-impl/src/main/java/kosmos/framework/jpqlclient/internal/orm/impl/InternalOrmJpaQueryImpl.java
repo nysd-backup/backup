@@ -73,7 +73,7 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	@Override
 	public int update(OrmUpdateParameter<?> condition){
 
-		String updateJpql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues().keySet());
+		String updateJpql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues());
 		final FreeUpdateParameter parameter = new FreeUpdateParameter(false, condition.getEntityClass().getSimpleName() + ".update", updateJpql);
 	
 		setParameterAndHint(condition,parameter);

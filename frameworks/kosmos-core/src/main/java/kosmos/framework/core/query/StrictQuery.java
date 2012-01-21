@@ -24,6 +24,16 @@ public interface StrictQuery<T> extends LimitedOrmQuery<T>{
 	 * @return self
 	 */
 	public abstract <V> StrictQuery<T> eq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public abstract <V> StrictQuery<T> eqFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '>'.
@@ -34,6 +44,16 @@ public interface StrictQuery<T> extends LimitedOrmQuery<T>{
 	 * @return self
 	 */
 	public abstract <V> StrictQuery<T> gt(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '>'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public abstract <V> StrictQuery<T> gtFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '<'.
@@ -44,6 +64,16 @@ public interface StrictQuery<T> extends LimitedOrmQuery<T>{
 	 * @return self
 	 */
 	public abstract <V> StrictQuery<T> lt(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '<'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public abstract <V> StrictQuery<T> ltFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '>='.
@@ -54,6 +84,16 @@ public interface StrictQuery<T> extends LimitedOrmQuery<T>{
 	 * @return self
 	 */
 	public abstract <V> StrictQuery<T> gtEq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '>='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public abstract <V> StrictQuery<T> gtEqFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds '<='.
@@ -64,6 +104,16 @@ public interface StrictQuery<T> extends LimitedOrmQuery<T>{
 	 * @return self
 	 */
 	public abstract <V> StrictQuery<T> ltEq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '<='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public abstract <V> StrictQuery<T> ltEqFix(Metadata<T, V> column, String value);
 
 	/**
 	 * Adds 'between'.
