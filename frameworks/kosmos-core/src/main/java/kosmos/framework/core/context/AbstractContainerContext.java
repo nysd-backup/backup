@@ -3,7 +3,6 @@
  */
 package kosmos.framework.core.context;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,9 +19,6 @@ public abstract class AbstractContainerContext {
 
 	/** the level of call stack */
 	protected int callStackLevel = 0;
-	
-	/** the list of the messages */
-	protected List<MessageResult> globalMessageList = new ArrayList<MessageResult>();
 	
 	/** the locale */
 	protected Locale locale = Locale.getDefault();
@@ -53,10 +49,17 @@ public abstract class AbstractContainerContext {
 	}
 	
 	/**
+	 * @return the message context
+	 */
+	protected MessageContext getMessageContext() {
+		return MessageContext.getCurrentInstance();
+	}
+	
+	/**
 	 * @param message the message to be added to
 	 */
 	public void addMessage(MessageResult message){
-		globalMessageList.add(message);
+		getMessageContext().addMessage(message);
 	}
 	
 	/**
@@ -98,22 +101,20 @@ public abstract class AbstractContainerContext {
 	 * @return the globalMessageList
 	 */
 	public List<MessageResult> getMessageList(){
-		return this.globalMessageList;
+		return getMessageContext().getMessageList();
 	}
 	
 	/**
 	 * @return the globalMessageList
 	 */
 	public MessageResult[] getMessageArray(){
-		 List<MessageResult> list = globalMessageList;
-		 return list.toArray(new MessageResult[0]);
+		return getMessageContext().getMessageArray();
 	}
 	
 	/**
 	 * Releases the context
 	 */
-	public void release(){
-		globalMessageList.clear();
+	public void release(){		
 		callStackLevel = 0;
 		locale = Locale.getDefault();
 	}

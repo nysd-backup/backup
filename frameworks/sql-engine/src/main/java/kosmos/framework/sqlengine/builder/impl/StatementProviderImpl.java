@@ -3,17 +3,16 @@
  */
 package kosmos.framework.sqlengine.builder.impl;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.List;
 
 import kosmos.framework.sqlengine.builder.StatementProvider;
 import kosmos.framework.sqlengine.exception.SQLEngineException;
+import kosmos.framework.sqlengine.executer.TypeConverter;
+import kosmos.framework.sqlengine.executer.impl.TypeConverterImpl;
 
 
 /**
@@ -29,6 +28,16 @@ public class StatementProviderImpl implements StatementProvider{
 	
 	/** the resultSetConcurrency */
 	private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
+	
+	/** the converter. */
+	private TypeConverter converter = new TypeConverterImpl();
+	
+	/**
+	 * @param converter the converter to set
+	 */
+	public void setConveter(TypeConverter converter){
+		this.converter = converter;
+	}
 
 	/**
 	 * @param resultSetType the resultSetType to set
@@ -118,38 +127,7 @@ public class StatementProviderImpl implements StatementProvider{
 			try{
 				Object value = bind.get(i);				
 				int arg = i+1;
-				if ( value instanceof String){
-					statement.setString(arg, String.class.cast(value));
-				}else if ( value instanceof Integer ){
-					statement.setInt(arg, Integer.class.cast(value));
-				}else if ( value instanceof Long ){
-					statement.setLong(arg, Long.class.cast(value));
-				}else if ( value instanceof Byte ){
-					statement.setByte(arg, Byte.class.cast(value));	
-				}else if ( value instanceof Short ){
-					statement.setShort(arg, Short.class.cast(value));		
-				}else if ( value instanceof byte[] ){
-					statement.setBytes(arg, byte[].class.cast(value));			
-				}else if ( value instanceof BigDecimal){
-					statement.setBigDecimal(arg, BigDecimal.class.cast(value));
-				}else if ( value instanceof java.sql.Date ){
-					statement.setDate(arg, java.sql.Date.class.cast(value));
-				}else if ( value instanceof Timestamp){
-					statement.setTimestamp(arg, Timestamp.class.cast(value));					
-				}else if ( value instanceof Time ){	
-					statement.setTime(arg, Time.class.cast(value));
-				}else if ( value instanceof java.util.Date){
-					statement.setTimestamp(arg, new Timestamp(java.util.Date.class.cast(value).getTime()));	
-				}else if ( value instanceof Boolean ){
-					statement.setBoolean(arg, Boolean.class.cast(value));
-				}else if ( value instanceof Double ){
-					statement.setDouble(arg, Double.class.cast(value));	
-				}else if ( value instanceof Float ){
-					statement.setFloat(arg, Float.class.cast(value));	
-				}else {
-					statement.setObject(arg, value);
-				}
-			
+				converter.setParameter(arg, value, statement);
 			}catch(SQLException sqle){
 				statement.close();
 				throw sqle;

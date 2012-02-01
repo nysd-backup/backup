@@ -53,7 +53,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.LimitedOrmQueryFactoryImpl" scope="prototype">	
+	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.OrmQueryWrapperFactoryImpl" scope="prototype">	
 		<property name="internalFactory" ref="internalQueryFactory" />
 	</bean>
  

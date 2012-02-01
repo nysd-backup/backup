@@ -9,14 +9,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import kosmos.framework.core.logics.log.FaultNotifier;
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
 import kosmos.framework.jpqlclient.internal.free.impl.InternalEclipseLinkNativeQueryImpl;
 import kosmos.framework.jpqlclient.internal.free.impl.InternalNamedQueryImpl;
 import kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
-import kosmos.framework.service.core.query.LimitedOrmQueryFactoryImpl;
+import kosmos.framework.service.core.query.OrmQueryWrapperFactoryImpl;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 import kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl;
@@ -100,11 +100,16 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	 * @see kosmos.framework.service.core.define.ComponentBuilder#createOrmQueryFactory()
 	 */
 	@Override
-	public LimitedOrmQueryFactory createOrmQueryFactory() {
-		LimitedOrmQueryFactoryImpl impl = new LimitedOrmQueryFactoryImpl();
+	public OrmQueryWrapperFactory createOrmQueryFactory() {
+		OrmQueryWrapperFactoryImpl impl = new OrmQueryWrapperFactoryImpl();
 		OrmQueryFactoryImpl internal = new OrmQueryFactoryImpl();
 		InternalOrmJpaQueryImpl dao = new InternalOrmJpaQueryImpl();
-		dao.setEntityManagerProvider(createEntityManagerProvider());	
+		EntityManagerProvider provider = createEntityManagerProvider();
+		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
+		named.setEntityManagerProvider(provider);
+		named.setSqlBuilder(new SQLBuilderProxyImpl());
+		dao.setInternalNamedQuery(named);
+		dao.setEntityManagerProvider(provider);	
 		internal.setInternalOrmQuery(dao);
 		impl.setInternalFactory(internal);
 		return impl;

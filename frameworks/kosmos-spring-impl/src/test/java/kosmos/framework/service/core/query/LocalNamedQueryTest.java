@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
-import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
+import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.CachableConst;
 import kosmos.framework.service.test.SampleNamedQuery;
@@ -43,7 +43,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	private QueryFactory queryFactory;
 	
 	@Resource
-	private LimitedOrmQueryFactory ormQueryFactory;
+	private OrmQueryWrapperFactory ormQueryFactory;
 	
 	@Autowired
 	private EntityManagerProvider per;
@@ -309,7 +309,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		StrictQuery<TestEntity> eq = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> eq = ormQueryFactory.createEasyQuery(TestEntity.class);
 		eq.eq(TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
 		
 		SampleNamedQueryConst c = queryFactory.createQuery(SampleNamedQueryConst.class);
@@ -337,7 +337,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(1,count);
 
 		//e2が永続化コンチE��ストに入ったままなので、JPQLアチE�EチE�Eトを実行する�Eで更新
-		StrictQuery<DateEntity> e = ormQueryFactory.createStrictQuery(DateEntity.class);
+		EasyQuery<DateEntity> e = ormQueryFactory.createEasyQuery(DateEntity.class);
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		DateEntity res = e.eq(IDateEntity.TEST, "1").getSingleResult();
 		assertEquals(900,res.getAttr2());
@@ -362,7 +362,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		StrictQuery<DateEntity> e = ormQueryFactory.createStrictQuery(DateEntity.class);
+		EasyQuery<DateEntity> e = ormQueryFactory.createEasyQuery(DateEntity.class);
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		DateEntity res = e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 		assertEquals(900,res.getAttr2());
@@ -379,7 +379,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		e2.setAttr(CachableConst.TARGET_TEST_1_OK).setTest("2").setDateCol(new Date());
 		per.getEntityManager().persist(e2);
 		
-		StrictQuery<DateEntity> eq = ormQueryFactory.createStrictQuery(DateEntity.class);
+		EasyQuery<DateEntity> eq = ormQueryFactory.createEasyQuery(DateEntity.class);
 		eq.eq(IDateEntity.TEST, "2").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
 		
 		SampleNamedUpdate update = queryFactory.createUpdate(SampleNamedUpdate.class);
@@ -389,7 +389,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		StrictQuery<DateEntity> e = ormQueryFactory.createStrictQuery(DateEntity.class);
+		EasyQuery<DateEntity> e = ormQueryFactory.createEasyQuery(DateEntity.class);
 		
 		//NamedUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E

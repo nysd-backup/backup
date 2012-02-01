@@ -6,6 +6,10 @@
 	<packaging>jar</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>APクライアント</name>
+	<description>
+		リモートコール専用のクライアント、ローカルコールではしない。
+		ローカルコールでは@EJB、@Autowiredなどを使用すること。
+	</description>
 	
 	<parent>
 		<groupId>kosmos.framework</groupId>

@@ -126,7 +126,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public int executeCount(QueryParameter param,Connection con) {
+	public long executeCount(QueryParameter param,Connection con) {
 		
 		List<Object> bindList = new ArrayList<Object>();	
 		String query = sqlBuilder.setCount(createSQL(param,bindList));
@@ -144,7 +144,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 			itr.hasNext();
 			Object value = itr.next();
 			if( Number.class.isAssignableFrom(value.getClass())){
-				return ((Number)value).intValue();
+				return ((Number)value).longValue();
 			}
 			throw new IllegalStateException("Illegal type : type = " + value.getClass());
 		}catch(SQLException sqle){

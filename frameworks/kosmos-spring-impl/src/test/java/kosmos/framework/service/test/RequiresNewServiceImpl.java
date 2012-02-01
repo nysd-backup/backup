@@ -11,8 +11,8 @@ import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
-import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
+import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
@@ -39,13 +39,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Resource
-	private LimitedOrmQueryFactory ormQueryFactory;
+	private OrmQueryWrapperFactory ormQueryFactory;
 	
 	@Autowired
 	private MessageBuilder builder;
 	
 	public String test() {
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);		
+		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
@@ -53,7 +53,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public String crushException() {
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");

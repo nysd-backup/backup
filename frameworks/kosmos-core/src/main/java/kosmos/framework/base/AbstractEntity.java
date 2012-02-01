@@ -10,6 +10,7 @@ import java.util.Map;
 import kosmos.framework.core.exception.PoorImplementationException;
 import kosmos.framework.sqlclient.api.FastEntity;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -33,6 +34,14 @@ public abstract class AbstractEntity implements Serializable , Cloneable,  FastE
 		}catch(CloneNotSupportedException cnse){
 			throw new PoorImplementationException("Cloneable interface is required", cnse);
 		}
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object object){
+		return EqualsBuilder.reflectionEquals(this,object);
 	}
 	
 	/**

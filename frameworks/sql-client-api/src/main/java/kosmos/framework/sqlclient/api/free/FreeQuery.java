@@ -16,12 +16,12 @@ public interface FreeQuery extends Query{
 	/**
 	 * @return the current parameter
 	 */
-	public FreeQueryParameter getCurrentParams(); 
+	FreeQueryParameter getCurrentParams(); 
 	
 	/**
 	 * @param parameter the parameter to set
 	 */
-	public void setCondition(FreeQueryParameter parameter); 
+	void setCondition(FreeQueryParameter parameter); 
 	
 	/**
 	 * Set the branch parameter.
@@ -31,7 +31,7 @@ public interface FreeQuery extends Query{
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public <T extends FreeQuery> T setBranchParameter(String arg0 , Object arg1);
+	<T extends FreeQuery> T setBranchParameter(String arg0 , Object arg1);
 
 	/**
 	 * Set the binding parameter.
@@ -41,6 +41,6 @@ public interface FreeQuery extends Query{
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public <T extends FreeQuery> T setParameter(String arg0 , Object arg1);
+	<T extends FreeQuery> T setParameter(String arg0 , Object arg1);
 	
 }

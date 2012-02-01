@@ -51,7 +51,7 @@ public abstract class AbstractInternalNativeQuery implements InternalQuery{
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#count()
 	 */
 	@Override
-	public int count(FreeQueryParameter param){		
+	public long count(FreeQueryParameter param){		
 
 		List<Object> bindList = new ArrayList<Object>();
 		String executingSql = buildSql(bindList,param);
@@ -65,7 +65,7 @@ public abstract class AbstractInternalNativeQuery implements InternalQuery{
 			query.setHint(h.getKey(), h.getValue());
 		}
 		Object value = query.getSingleResult();
-		return Integer.parseInt(value.toString());
+		return Long.parseLong(value.toString());
 	}
 	
 	/**

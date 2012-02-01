@@ -10,17 +10,8 @@ package kosmos.framework.core.query;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface LimitedOrmQueryFactory {
+public interface OrmQueryWrapperFactory {
 
-	/**
-	 * Creates the <code>StrictQuery</code>.
-	 * 
-	 * @param <T>　the type
-	 * @param <Q> 　the type
-	 * @param entityClass the class of target entity
-	 */
-	public <T> StrictQuery<T> createStrictQuery(Class<T> entityClass);
-	
 	/**
 	 * Creates the <code>EasyQuery</code>.
 	 * 
@@ -31,14 +22,14 @@ public interface LimitedOrmQueryFactory {
 	public <T> EasyQuery<T> createEasyQuery(Class<T> entityClass);
 	
 	/**
-	 * Creates the <code>StrictUpdate</code>.
+	 * Creates the <code>LightQuery</code>.
 	 * 
 	 * @param <T>　the type
 	 * @param <Q> 　the type
 	 * @param entityClass the class of target entity
 	 */
-	public <T> StrictUpdate<T> createStrictUpdate(Class<T> entityClass);
-
+	public <T> LightQuery<T> createLightQuery(Class<T> entityClass);
+	
 	/**
 	 * Creates the <code>EasyUpdate</code>.
 	 * 
@@ -47,5 +38,14 @@ public interface LimitedOrmQueryFactory {
 	 * @param entityClass the class of target entity
 	 */
 	public <T> EasyUpdate<T> createEasyUpdate(Class<T> entityClass);
+
+	/**
+	 * Creates the <code>LightUpdate</code>.
+	 * 
+	 * @param <T>　the type
+	 * @param <Q> 　the type
+	 * @param entityClass the class of target entity
+	 */
+	public <T> LightUpdate<T> createLightUpdate(Class<T> entityClass);
 
 }

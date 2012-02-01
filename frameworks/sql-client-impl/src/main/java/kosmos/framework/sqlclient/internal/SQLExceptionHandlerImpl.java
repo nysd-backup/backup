@@ -10,6 +10,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 import javax.persistence.QueryTimeoutException;
 
+import kosmos.framework.sqlclient.api.exception.DeadLockException;
 import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
 
@@ -26,6 +27,9 @@ public class SQLExceptionHandlerImpl implements ExceptionHandler{
 	
 	/** 悲観ロックエラー */
 	private int pessimisticErrorCode = 54;
+	
+	/** デッドロック */
+	private int deadLockErrorcode = 60;
 	
 	/** JDBCタイムアウトエラー */
 	private int timeoutErrorCode = 1013;
@@ -52,6 +56,9 @@ public class SQLExceptionHandlerImpl implements ExceptionHandler{
 		//悲観ロックタイムアウト
 		}else if(code == lockTimeoutErrorCode){
 			throw new LockTimeoutException(sqle);
+		//デッドロック
+		}else if(code == deadLockErrorcode){
+			throw new DeadLockException(sqle);
 		}
 		throw new PersistenceException(sqle);
 	

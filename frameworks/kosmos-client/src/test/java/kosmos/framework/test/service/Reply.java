@@ -3,7 +3,7 @@
  */
 package kosmos.framework.test.service;
 
-import kosmos.framework.core.dto.MessageReplyable;
+import kosmos.framework.client.service.MessageReplyable;
 import kosmos.framework.core.message.MessageResult;
 
 /**

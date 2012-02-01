@@ -1,25 +1,19 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.core.dto;
+package kosmos.framework.client.service;
 
 import kosmos.framework.core.message.MessageResult;
 
 /**
- * Replyable message.
+ * Message replying interface.
  *
  * @author yoshida-n
  * @version	created.
  */
 public interface MessageReplyable {
 
-	/**
-	 * @param messageList the messageList to set
-	 */
-	public void setMessageList(MessageResult[] messageList);
-	
-	/**
-	 * @return the message list
-	 */
 	public MessageResult[] getMessageList();
+	
+	public void setMessageList(MessageResult[] messageList);
 }

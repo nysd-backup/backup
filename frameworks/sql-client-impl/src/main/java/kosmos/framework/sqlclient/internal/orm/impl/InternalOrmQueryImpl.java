@@ -3,7 +3,7 @@
  */
 package kosmos.framework.sqlclient.internal.orm.impl;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +15,7 @@ import kosmos.framework.sqlclient.api.FastEntity;
 import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmParameter;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
@@ -69,22 +70,23 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		if(FastEntity.class.isAssignableFrom(context.getEntityClass())){
 			FastEntity entity = (FastEntity)ClassUtils.newInstance(context.getEntityClass());
 			int i = 0;
-			for(Map.Entry<String, Object> e: entity.getPrimaryKeys().entrySet()){
-				newContext.getConditions().add(new WhereCondition(e.getKey(),i++,WhereOperand.Equal,e.getValue()));				
+			for(String e: entity.toPrimaryKeys().keySet()){
+				newContext.getConditions().add(new WhereCondition(e,i,WhereOperand.Equal,pks[i]));
+				i++;
 			}
 		//通常エンティティ	
 		}else{
-			Field[] fs = ReflectionUtils.getAllAnotatedField(context.getEntityClass(), Id.class);
-			if(fs.length != pks.length){
+			List<Method> ms = ReflectionUtils.getAnotatedGetter(context.getEntityClass(), Id.class);
+			if(ms.size() != pks.length){
 				throw new IllegalArgumentException("invalid primary key count");
 			}		
-			for(int i = 0 ; i < fs.length; i++){
+			for(int i = 0 ; i < ms.size(); i++){
 				Object pk = pks[i];
-				Field f = fs[i];
+				Method f = ms.get(i);
 				Column col = f.getAnnotation(Column.class);
 				String name = col.name();
 				if(StringUtils.isEmpty(name)){
-					name = f.getName();
+					name = ReflectionUtils.getPropertyNameFromGetter(f);
 				}
 				newContext.getConditions().add(new WhereCondition(name,i,WhereOperand.Equal,pk));
 			}
@@ -111,19 +113,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 */
 	@Override
 	public <E> List<E> getResultList(OrmQueryParameter<E> condition) {
-		
-		String sql = sb.createSelect(condition);
-		final FreeQueryParameter parameter = new FreeQueryParameter(condition.getEntityClass(), true, condition.getEntityClass().getName()+".select", sql);
-	
-		sb.setConditionParameters(condition.getFilterString(),condition.getEasyParams(),condition.getConditions(),new Bindable(){
-			public void setParameter(String key , Object value){
-				parameter.getParam().put(key, value);
-			}
-		});
-
-		setHint(condition.getHints(),parameter);
-		parameter.setFirstResult( condition.getFirstResult());			
-		parameter.setMaxSize(condition.getMaxSize());
+		FreeQueryParameter parameter = createParameter(condition);
 		return internalQuery.getResultList(parameter);
 	}
 
@@ -257,6 +247,36 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 				parameter.getParam().put(key, value);
 			}
 		});
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.api.orm.OrmQueryParameter, kosmos.framework.sqlclient.api.free.QueryCallback)
+	 */
+	@Override
+	public <E> List<E> getFetchResult(OrmQueryParameter<E> condition,QueryCallback<E> callback) {
+		FreeQueryParameter parameter = createParameter(condition);
+		return internalQuery.getFetchResult(parameter);
+	}
+	
+	/**
+	 * Creates the selecting parameter
+	 * @param condition the condition
+	 * @return the parameter
+	 */
+	private <E> FreeQueryParameter createParameter(OrmQueryParameter<E> condition){
+		String sql = sb.createSelect(condition);
+		final FreeQueryParameter parameter = new FreeQueryParameter(condition.getEntityClass(), true, condition.getEntityClass().getName()+".select", sql);
+	
+		sb.setConditionParameters(condition.getFilterString(),condition.getEasyParams(),condition.getConditions(),new Bindable(){
+			public void setParameter(String key , Object value){
+				parameter.getParam().put(key, value);
+			}
+		});
+
+		setHint(condition.getHints(),parameter);
+		parameter.setFirstResult( condition.getFirstResult());			
+		parameter.setMaxSize(condition.getMaxSize());
+		return parameter;
 	}
 
 }

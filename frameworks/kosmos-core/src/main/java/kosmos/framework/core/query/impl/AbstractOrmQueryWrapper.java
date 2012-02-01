@@ -8,19 +8,19 @@ import javax.persistence.LockModeType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import kosmos.framework.core.query.LimitedOrmQuery;
+import kosmos.framework.core.query.OrmQueryWrapper;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 
 
 /**
- * AbstractLimitedOrmQuery.
+ * AbstractOrmQueryWrapper.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
+public abstract class AbstractOrmQueryWrapper<T> implements OrmQueryWrapper<T>{
 	
 	/** the delegating query */
 	protected OrmQuery<T> delegate;
@@ -28,12 +28,12 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	/**
 	 * @param delegate the delegate to set
 	 */
-	public AbstractLimitedOrmQuery(OrmQuery<T> delegate){
+	public AbstractOrmQueryWrapper(OrmQuery<T> delegate){
 		this.delegate = delegate;
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmQuery#getCurrentParams()
+	 * @see kosmos.framework.core.query.OrmQueryWrapper#getCurrentParams()
 	 */
 	@Override
 	public OrmQueryParameter<T> getCurrentParams(){
@@ -48,19 +48,19 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmQuery#setHint(java.lang.String, java.lang.Object)
+	 * @see kosmos.framework.core.query.OrmQueryWrapper#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public <Q extends LimitedOrmQuery<T>> Q setHint(String key, Object value){
+	public <Q extends OrmQueryWrapper<T>> Q setHint(String key, Object value){
 		delegate.setHint(key, value);
 		return (Q)this;
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmQuery#setLockMode(javax.persistence.LockModeType)
+	 * @see kosmos.framework.core.query.OrmQueryWrapper#setLockMode(javax.persistence.LockModeType)
 	 */
 	@Override
-	public <Q extends LimitedOrmQuery<T>> Q setLockMode(LockModeType lockModeType) {
+	public <Q extends OrmQueryWrapper<T>> Q setLockMode(LockModeType lockModeType) {
 		delegate.setLockMode(lockModeType);		
 		return (Q)this;
 	}
@@ -69,7 +69,7 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setMaxResults(int)
 	 */
 	@Override
-	public <Q extends LimitedOrmQuery<T>> Q setMaxResults(int arg0) {
+	public <Q extends OrmQueryWrapper<T>> Q setMaxResults(int arg0) {
 		delegate.setMaxResults(arg0);
 		return (Q)this;
 	}
@@ -78,13 +78,13 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setFirstResult(int)
 	 */
 	@Override
-	public <Q extends LimitedOrmQuery<T>> Q setFirstResult(int arg0) {
+	public <Q extends OrmQueryWrapper<T>> Q setFirstResult(int arg0) {
 		delegate.setFirstResult(arg0);
 		return (Q)this;
 	}
 
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmQuery#find(java.lang.Object[])
+	 * @see kosmos.framework.core.query.OrmQueryWrapper#find(java.lang.Object[])
 	 */
 	@Override
 	public T find(Object... pks){
@@ -92,10 +92,10 @@ public abstract class AbstractLimitedOrmQuery<T> implements LimitedOrmQuery<T>{
 	}
 
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
+	 * @see kosmos.framework.core.query.OrmQueryWrapper#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public <Q extends LimitedOrmQuery<T>> Q setCondition(OrmQueryParameter<T> condition) {
+	public <Q extends OrmQueryWrapper<T>> Q setCondition(OrmQueryParameter<T> condition) {
 		delegate.setCondition(condition);
 		return (Q)this;
 	}

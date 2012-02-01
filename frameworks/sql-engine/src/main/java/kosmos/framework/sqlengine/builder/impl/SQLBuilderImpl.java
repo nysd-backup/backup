@@ -173,6 +173,8 @@ public class SQLBuilderImpl implements SQLBuilder{
 					}else {
 						binds.add(variable);
 					}				
+				}else{
+					binds.add(variable);
 				}
 
 			}

@@ -14,5 +14,5 @@ public interface RecordFilter {
 	/**
 	 * @param data the data of one record
 	 */
-	public <T> T edit(T data);
+	<T> T edit(T data);
 }

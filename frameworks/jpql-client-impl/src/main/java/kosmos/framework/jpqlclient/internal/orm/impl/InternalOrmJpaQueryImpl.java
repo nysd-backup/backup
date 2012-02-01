@@ -12,6 +12,7 @@ import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.OrmParameter;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
@@ -166,6 +167,15 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	 */
 	@Override
 	public int[] batchInsert(OrmUpdateParameter<?> parameter) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.api.orm.OrmQueryParameter, kosmos.framework.sqlclient.api.free.QueryCallback)
+	 */
+	@Override
+	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter,
+			QueryCallback<E> callback) {
 		throw new UnsupportedOperationException();
 	}
 

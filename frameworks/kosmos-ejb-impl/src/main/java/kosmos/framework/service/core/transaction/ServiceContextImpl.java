@@ -12,31 +12,30 @@ import kosmos.framework.core.exception.PoorImplementationException;
  * @version 2011/08/31 created.
  */
 public class ServiceContextImpl extends TransactionManagingContext{
-	
-	private boolean topLevel = false;
-	
-	/**
-	 * @return the topLevel
-	 */
-	public boolean isTopLevel() {
-		return topLevel;
-	}
 
+	/** ignore optimisic lock error */
+	private boolean suppressOptimisticLockError = false;
+	
 	/**
-	 * @param topLevel the topLevel to set
+	 * @param suppressOptimisticLockError
 	 */
-	public void setTopLevel(boolean topLevel) {
-		this.topLevel = topLevel;
+	public void setSuppressOptimisticLockError(boolean suppressOptimisticLockError){
+		this.suppressOptimisticLockError = suppressOptimisticLockError;
 	}
 	
 	/**
-	 * @see kosmos.framework.core.context.AbstractContainerContext#release()
+	 * @return
+	 */
+	public boolean isSuppressOptimisticLockError(){
+		return suppressOptimisticLockError;
+	}
+	/**
+	 * @see kosmos.framework.service.core.context.AbstractServiceContext#release()
 	 */
 	public void release(){
-		topLevel = false;
-		super.release();		
+		super.release();
+		this.suppressOptimisticLockError = false;
 	}
-	
 
 	/**
 	 * @see kosmos.framework.service.core.transaction.TransactionManagingContext#startUnitOfWork()

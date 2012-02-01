@@ -9,13 +9,7 @@ import javax.persistence.OptimisticLockException;
 
 
 /**
- * function.
- *
- * @author yoshida-n
- * @version	created.
- */
-/**
- * function.
+ * PersistenceManager.
  *
  * @author yoshida-n
  * @version	created.
@@ -23,56 +17,41 @@ import javax.persistence.OptimisticLockException;
 public interface PersistenceManager {
 
 	/**
-	 * @param entity
-	 * @return
-	 */
-	public int insert(Object entity) ;
-	
-	/**
-	 * @param entity
-	 * @return
-	 */
-	public int[] insert(List<Object> entity) ;
-	
-	/**
-	 * @param entity
-	 * @param hints
-	 * @return
-	 */
-	public int[] insert(List<Object> entity,PersistenceHints hints);
-	
-	/**
-	 * @param entity
-	 * @param hints
-	 * @return
+	 * Inserts the entity.
+	 * @param entity the entity
+	 * @param hints hints
+	 * @return the updated count
+	 * @throws DeadLockException throw when the update conflict occur. 
+	 * @throws UniqueConstraintException throw when the record already exists.
 	 */
 	public int insert(Object entity,PersistenceHints hints);
-	
+
 	/**
-	 * @param entity
-	 * @throws OptimisticLockException 
-	 * @return
+	 * For batch insert.
+	 * 
+	 * @param entity the entity
+	 * @param hints hints
+	 * @return the updated count
 	 */
-	public int update(Object entity) ;
+	public int[] batchInsert(List<?> entity,PersistenceHints hints);	
 	
 	/**
-	 * @param entity
-	 * @param hints
-	 * @throws OptimisticLockException 
-	 * @return
+	 * Updates the entity.
+	 * @param entity the entity
+	 * @param hints the hints
+	 * @throws OptimisticLockException throw when the version no is not found.
+	 * @throws DeadLockException throw when the update conflict occur. 
+	 * @return the updated count
 	 */
 	public int update(Object entity,PersistenceHints hints);
 	
 	/**
-	 * @param entity
-	 * @return
-	 */
-	public int delete(Object entity);
-	
-	/**
-	 * @param entity
-	 * @param hints
-	 * @return
+	 * Deletes the entity.
+	 * @param entity the entity
+	 * @param hints the hints
+	 * @return the updated count
+	 * @throws OptimisticLockException throw when the version no is not found.
+	 * @throws DeadLockException throw when the delete conflict occur. 
 	 */
 	public int delete(Object entity,PersistenceHints hints);
 }

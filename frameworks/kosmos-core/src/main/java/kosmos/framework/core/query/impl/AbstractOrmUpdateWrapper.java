@@ -3,17 +3,17 @@
  */
 package kosmos.framework.core.query.impl;
 
-import kosmos.framework.core.query.LimitedOrmUpdate;
+import kosmos.framework.core.query.OrmUpdateWrapper;
 import kosmos.framework.sqlclient.api.orm.OrmUpdate;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 
 /**
- * AbstractLimitedOrmUpdate.
+ * AbstractOrmUpdateWrapper.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractLimitedOrmUpdate<T> implements LimitedOrmUpdate<T>{
+public abstract class AbstractOrmUpdateWrapper<T> implements OrmUpdateWrapper<T>{
 
 	/** the delegating query */
 	protected OrmUpdate<T> delegate;
@@ -21,12 +21,12 @@ public abstract class AbstractLimitedOrmUpdate<T> implements LimitedOrmUpdate<T>
 	/**
 	 * @param delegate the delegate to set
 	 */
-	public AbstractLimitedOrmUpdate(OrmUpdate<T> delegate){
+	public AbstractOrmUpdateWrapper(OrmUpdate<T> delegate){
 		this.delegate = delegate;
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmUpdate#getCurrentParams()
+	 * @see kosmos.framework.core.query.OrmUpdateWrapper#getCurrentParams()
 	 */
 	@Override
 	public OrmUpdateParameter<T> getCurrentParams(){
@@ -34,21 +34,21 @@ public abstract class AbstractLimitedOrmUpdate<T> implements LimitedOrmUpdate<T>
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
+	 * @see kosmos.framework.core.query.OrmUpdateWrapper#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public  <Q extends LimitedOrmUpdate<T>> Q setCondition(OrmUpdateParameter<T> condition) {
+	public  <Q extends OrmUpdateWrapper<T>> Q setCondition(OrmUpdateParameter<T> condition) {
 		delegate.setCondition(condition);
 		return (Q)this;
 	}
 	
 	/**
-	 * @see kosmos.framework.core.query.LimitedOrmUpdate#setHint(java.lang.String, java.lang.Object)
+	 * @see kosmos.framework.core.query.OrmUpdateWrapper#setHint(java.lang.String, java.lang.Object)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <Q extends LimitedOrmUpdate<T>> Q setHint(String key, Object value){
+	public <Q extends OrmUpdateWrapper<T>> Q setHint(String key, Object value){
 		delegate.setHint(key, value);
 		return (Q)this;
 	}

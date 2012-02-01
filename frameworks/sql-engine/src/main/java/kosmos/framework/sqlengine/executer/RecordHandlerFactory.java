@@ -21,5 +21,5 @@ public interface RecordHandlerFactory {
 	 * @return the handler
 	 * @throws SQLException 例外
 	 */
-	public RecordHandler create(Class<?> type , ResultSet rs) throws SQLException;
+	RecordHandler create(Class<?> type , ResultSet rs) throws SQLException;
 }

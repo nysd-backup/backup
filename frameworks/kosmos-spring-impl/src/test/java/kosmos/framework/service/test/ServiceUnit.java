@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
+import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.logics.log.LogWriter;
 import kosmos.framework.core.logics.log.LogWriterFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
@@ -36,6 +37,7 @@ import org.eclipse.persistence.sessions.server.ClientSession;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -63,6 +65,16 @@ public abstract class ServiceUnit extends Assert{
 
 	protected ServiceTestContextImpl context = null;
 
+	@org.junit.Before
+	public void before(){
+		MDC.put("transactionId",System.nanoTime()+"");
+	}
+	
+	@After
+	public void after(){
+		MDC.remove("transactionId");
+	}
+	
 	/**
 	 * コンチE��ストロード、個別チE��トケースで使用するServiceLocatorめEontextConfigurationを使用できるようにする
 	 * AutowiredよりもResourceの方がタイミング皁E��早ぁE��めResourceを使用する
@@ -74,6 +86,9 @@ public abstract class ServiceUnit extends Assert{
 		
 		locator = createLocator(applicationContext);
 		locator.construct();	
+		
+		MessageContext message = new MessageContext();
+		message.initialize();
 		
 		context = new ServiceTestContextImpl();	
 		context.initialize();	

@@ -12,14 +12,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kosmos.framework.bean.FastAccessible;
-import kosmos.framework.bean.Pair;
-import kosmos.framework.bean.PropertyAccessor;
 import kosmos.framework.sqlengine.executer.RecordHandler;
 import kosmos.framework.sqlengine.executer.RecordHandlerFactory;
 import kosmos.framework.sqlengine.executer.TypeConverter;
-import kosmos.framework.utility.ClassUtils;
-import kosmos.framework.utility.ReflectionUtils;
+import kosmos.framework.sqlengine.executer.AccessorDeclared;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -45,6 +41,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 	/**
 	 * @see kosmos.framework.sqlengine.executer.RecordHandlerFactory#create(java.lang.Class, java.sql.ResultSet)
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public RecordHandler create(Class<?> type , ResultSet rs)throws SQLException {
 	
 		ResultSetMetaData metaData = rs.getMetaData();
@@ -54,34 +51,34 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 		
 		//Map
 		if( Map.class.isAssignableFrom(type)){			
-			int[] columnType = new int[columnCount];
 			for (int i = 0; i < columnCount; i++) {
 				columnLabels[i] = metaData.getColumnLabel(i + 1);	
-				columnJavaLabels[i] = toJavaString(columnLabels[i]);
-				columnType[i] = metaData.getColumnType(i + 1);
+				columnJavaLabels[i] = toJavaString(columnLabels[i]);					
 			}
-			return new MapRecordHandlerImpl(type, columnLabels, columnJavaLabels,columnType,converter);
-			
-		//FastBean	
-		}else if(type.getAnnotation(FastAccessible.class) != null){			
-			@SuppressWarnings("unchecked")
-			PropertyAccessor<Object> accessor = (PropertyAccessor<Object>)ClassUtils.newInstance(type.getAnnotation(FastAccessible.class).propertyAccessor());	
-			Map<String,Pair<Class<?>>> types = accessor.getProperties(accessor.create());
-			Class<?>[] columnTypes = new Class<?>[columnCount];
-			for (int i = 0; i < columnCount; i++) {
-				columnLabels[i] = metaData.getColumnLabel(i + 1);
-				columnJavaLabels[i] = toJavaString(columnLabels[i]);			
-				columnTypes[i] = types.get(columnJavaLabels[i]).getKey();
-			}			
-			return new FastBeanRecordHandlerImpl(accessor, columnLabels,columnJavaLabels,columnTypes,converter);
-			
+			//AccessorDeclared
+			if( type.getAnnotation(AccessorDeclared.class) != null){	
+				Method[] target = type.getDeclaredMethods();
+				Map<String,Class<?>> types = new HashMap<String,Class<?>>();
+				for(Method m : target){
+					String name = m.getName();
+					if(name.startsWith("get") || name.startsWith("is")){
+						int start = name.startsWith("get")? 3 : 2;
+						types.put(StringUtils.uncapitalize(name.substring(start)), m.getReturnType());
+					}
+				}								
+				return new ResultMapRecordHandlerImpl((Class<? extends Map>)type, types, columnLabels, columnJavaLabels,converter);
+	
+			//Plain			
+			}else{							
+				return new MapRecordHandlerImpl(type, columnLabels, columnJavaLabels,converter);
+			}
 		//Bean	
 		}else{
 			Map<String,Method> methodMap = new HashMap<String,Method>();
 			if(!(Map.class.isAssignableFrom(type))){
 				Method[] ms = type.getMethods();
 				for(Method m : ms){
-					if(ReflectionUtils.isSetter(m)){
+					if(m.getName().startsWith("set")){
 						methodMap.put(m.getName(), m);
 					}
 				}

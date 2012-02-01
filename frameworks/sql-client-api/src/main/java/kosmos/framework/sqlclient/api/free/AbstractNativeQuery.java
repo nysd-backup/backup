@@ -3,7 +3,6 @@
  */
 package kosmos.framework.sqlclient.api.free;
 
-import java.util.List;
 
 
 /**
@@ -18,7 +17,7 @@ public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery>
 	 * @see kosmos.framework.sqlclient.api.free.AbstractFreeQuery#count()
 	 */
 	@Override
-	public int count() {
+	public long count() {
 		return delegate.count();
 	}
 
@@ -33,8 +32,8 @@ public abstract class AbstractNativeQuery extends AbstractFreeQuery<NativeQuery>
 	/**
 	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#getFetchResult()
 	 */
-	public <T> List<T> getFetchResult(){
-		return delegate.getFetchResult();
+	public long getFetchResult(QueryCallback<?> callback){
+		return delegate.getFetchResult(callback);
 	}
 
 	/**

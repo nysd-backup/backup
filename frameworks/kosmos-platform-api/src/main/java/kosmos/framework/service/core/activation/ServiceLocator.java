@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ComponentLocator;
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
@@ -53,9 +53,9 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public abstract AsyncServiceFactory createAsyncServiceFactory();
 	
 	/**
-	 * @return the <code>LimitedOrmQueryFactory</code>
+	 * @return the <code>OrmQueryWrapperFactory</code>
 	 */
-	public abstract LimitedOrmQueryFactory createOrmQueryFactory();
+	public abstract OrmQueryWrapperFactory createOrmQueryFactory();
 	
 	/**
 	 * @return the ServiceContext
@@ -98,9 +98,9 @@ public abstract class ServiceLocator extends ComponentLocator{
 	}
 	
 	/**
-	 * @return the LimitedOrmQueryFactory
+	 * @return the OrmQueryWrapperFactory
 	 */
-	public static LimitedOrmQueryFactory createDefaultOrmQueryFactory(){
+	public static OrmQueryWrapperFactory createDefaultOrmQueryFactory(){
 		return getDelegate().createOrmQueryFactory();
 	}
 	

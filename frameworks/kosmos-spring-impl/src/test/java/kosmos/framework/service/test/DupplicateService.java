@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
-import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
+import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.entity.TestEntity;
 
@@ -26,10 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class DupplicateService {
 
 	@Resource
-	private LimitedOrmQueryFactory ormQueryFactory;
+	private OrmQueryWrapperFactory ormQueryFactory;
 	
 	@Resource
-	private LimitedOrmQueryFactory readOnlyOrmQueryFactory;
+	private OrmQueryWrapperFactory readOnlyOrmQueryFactory;
 
 	@Resource
 	private EntityManagerProvider entityManagerProvider;
@@ -55,13 +55,13 @@ public class DupplicateService {
 		entityManagerProvider.getEntityManager().flush();
 			
 		//読み込み専用
-		StrictQuery<TestEntity> query = readOnlyOrmQueryFactory.createStrictQuery(TestEntity.class);	
+		EasyQuery<TestEntity> query = readOnlyOrmQueryFactory.createEasyQuery(TestEntity.class);	
 		List<TestEntity> result = query.getResultList();
 		System.out.println(result.size());
 		res[0] = result.size();
 		
 		//両用で取得
-		StrictQuery<TestEntity> wquery =ormQueryFactory.createStrictQuery(TestEntity.class);	
+		EasyQuery<TestEntity> wquery =ormQueryFactory.createEasyQuery(TestEntity.class);	
 		List<TestEntity> wresult = wquery.getResultList();
 		System.out.println(wresult.size());
 		res[1] = wresult.size();

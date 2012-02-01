@@ -3,39 +3,172 @@
  */
 package kosmos.framework.core.query;
 
-import java.util.List;
-
 /**
- * EasyUpdate.
+ * The ORM updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface EasyUpdate<T> extends LimitedOrmUpdate<T>{
-
-	/**
-	 * Adds the string to update.
-	 * 
-	 * @param setString the string
-	 * @return self 
-	 */
-	public EasyUpdate<T> set(String... setString);
+public interface EasyUpdate<T> extends OrmUpdateWrapper<T>{
 	
 	/**
-	 * Adds the filter to update.
-	 * 
-	 * @param filterString the filter
+	 * @param <T> the type
+	 * @param key　 the key of the hint
+	 * @param value　the hint value
 	 * @return self
 	 */
-	public EasyUpdate<T> filter(String filterString);
+	EasyUpdate<T> addBatch();
 	
+	/**
+	 * Batch update.
+	 * 
+	 * @return result
+	 */
+	int[] batchUpdate();
+
+	/**
+	 * Deletes the table.
+	 * @return reesult
+	 */
+	int delete();
+	
+	/**
+	 * Adds '='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> eq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> eqFix(Metadata<T, V> column, String value);
+
+	/**
+	 * Adds '>'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> gt(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '>'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> gtFix(Metadata<T, V> column, String value);
+
+	/**
+	 * Adds '<'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> lt(Metadata<T, V> column, V value);
+
+	/**
+	 * Adds '<'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> ltFix(Metadata<T, V> column, String value);
+	
+	/**
+	 * Adds '>='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> gtEq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '>='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> gtEqFix(Metadata<T, V> column, String value);
+
+	/**
+	 * Adds '<='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> ltEq(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds '<='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> ltEqFix(Metadata<T, V> column, String value);
+
+	/**
+	 * Adds 'between'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param from the from-value to be added
+	 * @param to the to-value to be added 
+	 * @return self
+	 */
+	<V> EasyUpdate<T> between(Metadata<T, V> column,V from, V to);
+	
+	/**
+	 * Adds value to update.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> set(Metadata<T, V> column, V value);
+	
+	/**
+	 * Adds value to update.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	<V> EasyUpdate<T> setFix(Metadata<T, V> column, String value);
+
 	/**
 	 * Updates the table.
 	 * 
-	 * @param set the parameter to update
-	 * @param params the condition to update
-	 * @return the updated count 
+	 * @return the updated count
 	 */
-	public int execute(List<Object> set , Object... params);
-	
+	int update();
+
+
 }

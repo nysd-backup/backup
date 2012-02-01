@@ -72,9 +72,6 @@ public final class ReflectionUtils {
 	 * @return
 	 */
 	public static boolean isGetter(Method m){
-		if( !Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())){
-			return false;
-		}
 		String name = m.getName();
 		if( name.startsWith("get")){
 			return true;
@@ -215,6 +212,23 @@ public final class ReflectionUtils {
 	 */
 	public static Field[] getAllAnotatedField(Class<?> clazz, Class<? extends Annotation> an) {
 		return getAllAnnotatedTypedField(clazz, an, null, true);
+	}
+	
+	/**
+	 * @param clazz
+	 * @param an
+	 * @return
+	 */
+	public static List<Method> getAnotatedGetter(Class<?> clazz , Class<? extends Annotation> an){
+		Method[] ms = clazz.getDeclaredMethods();
+		List<Method> mList = new ArrayList<Method>();
+		for(Method m : ms){
+			if(m.getAnnotation(an) != null && isGetter(m)){
+				mList.add(m);
+			}
+			
+		}
+		return mList;
 	}
 
 	/**

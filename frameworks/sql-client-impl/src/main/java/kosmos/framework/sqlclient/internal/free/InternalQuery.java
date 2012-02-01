@@ -44,7 +44,7 @@ public interface InternalQuery {
 	/**
 	 * @return the hit count.
 	 */
-	int count(FreeQueryParameter param);
+	long count(FreeQueryParameter param);
 
 	/**
 	 * Selects the table.

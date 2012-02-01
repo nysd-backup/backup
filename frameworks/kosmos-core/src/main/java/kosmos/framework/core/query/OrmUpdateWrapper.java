@@ -11,19 +11,19 @@ import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface LimitedOrmUpdate<T> {
+public interface OrmUpdateWrapper<T> {
 	
 	/**
 	 * @return the current parameter
 	 */
-	public OrmUpdateParameter<T> getCurrentParams();
+	OrmUpdateParameter<T> getCurrentParams();
 
 	/**
 	 * @param <T> the type
 	 * @param <Q> the type
 	 * @param condition the condition to set
 	 */
-	public <Q extends LimitedOrmUpdate<T>> Q setCondition(OrmUpdateParameter<T> condition);
+	<Q extends OrmUpdateWrapper<T>> Q setCondition(OrmUpdateParameter<T> condition);
 	
 	/**
 	 * @param <T> the type
@@ -31,7 +31,7 @@ public interface LimitedOrmUpdate<T> {
 	 * @param value　the hint value
 	 * @return self
 	 */
-	public <Q extends LimitedOrmUpdate<T>> Q setHint(String key, Object value);
+	<Q extends OrmUpdateWrapper<T>> Q setHint(String key, Object value);
 
 	
 }

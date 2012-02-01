@@ -70,7 +70,7 @@ public class InternalQueryImpl implements InternalQuery{
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#count()
 	 */
 	@Override
-	public int count(FreeQueryParameter param){
+	public long count(FreeQueryParameter param){
 		return facade.executeCount(createParameter(new QueryParameter(),param), cs.getConnection());
 	}
 

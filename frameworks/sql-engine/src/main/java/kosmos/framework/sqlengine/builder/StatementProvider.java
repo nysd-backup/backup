@@ -25,7 +25,7 @@ public interface StatementProvider {
 	 * @param sql the SQL
 	 * @return the statement
 	 */
-	public PreparedStatement createStatement(String sqlId,Connection con ,String sql ,int timeout , int maxRows,int fetchSize);
+	PreparedStatement createStatement(String sqlId,Connection con ,String sql ,int timeout , int maxRows,int fetchSize);
 	
 	/**
 	 * Creates the statement.
@@ -36,7 +36,7 @@ public interface StatementProvider {
 	 * @param sql the SQL
 	 * @return the statement
 	 */
-	public PreparedStatement buildStatement(String sqlId,Connection con ,String sql ,List<Object> bindList, int timeout , int maxRows,int fetchSize) throws SQLException;
+	PreparedStatement buildStatement(String sqlId,Connection con ,String sql ,List<Object> bindList, int timeout , int maxRows,int fetchSize) throws SQLException;
 	
 	/**
 	 * Binds the parameter to statement.
@@ -44,6 +44,6 @@ public interface StatementProvider {
 	 * @param statement the statement
 	 * @param bind the binding value
 	 */
-	public void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException;
+	void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException;
 
 }

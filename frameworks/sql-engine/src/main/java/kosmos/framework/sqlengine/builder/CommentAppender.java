@@ -17,5 +17,5 @@ public interface CommentAppender {
 	 * @param param the parameters
 	 * @param sql the SQL
 	 */
-	public String setExternalString(BaseSQLParameter param , String sql);
+	String setExternalString(BaseSQLParameter param , String sql);
 }

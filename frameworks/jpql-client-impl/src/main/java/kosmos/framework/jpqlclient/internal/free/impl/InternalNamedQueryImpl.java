@@ -67,7 +67,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#count(kosmos.framework.sqlclient.api.free.FreeQueryParameter)
 	 */
 	@Override
-	public int count(FreeQueryParameter param){
+	public long count(FreeQueryParameter param){
 		throw new UnsupportedOperationException();
 	}	
 	

@@ -52,6 +52,8 @@ public final class StringUtils implements Utils.StringScope {
 	 */
 	private StringUtils() {
 	}
+	
+	
 
 	// //////////////////////////////////////////////
 	// 条件判断メソッド群

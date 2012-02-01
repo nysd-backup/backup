@@ -66,6 +66,8 @@ public class ParentEntity{
 	/**
 	 * @return the test
 	 */
+	@Id
+	@Column
 	public String getTest() {
 		return test;
 	}
@@ -81,6 +83,7 @@ public class ParentEntity{
 	/**
 	 * @return the atstr
 	 */
+	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -96,6 +99,7 @@ public class ParentEntity{
 	/**
 	 * @return the attr2
 	 */
+	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -111,6 +115,8 @@ public class ParentEntity{
 	/**
 	 * @return the version
 	 */
+	@Version
+	@Column
 	public int getVersion() {
 		return version;
 	}

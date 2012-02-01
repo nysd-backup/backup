@@ -50,6 +50,8 @@ public class ChildAEntity{
 	/**
 	 * @return the atstr
 	 */
+	@Id
+	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -65,6 +67,7 @@ public class ChildAEntity{
 	/**
 	 * @return the attr2
 	 */
+	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -80,6 +83,8 @@ public class ChildAEntity{
 	/**
 	 * @return the version
 	 */
+	@Version
+	@Column
 	public int getVersion() {
 		return version;
 	}
@@ -94,6 +99,7 @@ public class ChildAEntity{
 	/**
 	 * @return the test
 	 */
+	@Column
 	public String getTest() {
 		return test;
 	}
@@ -108,6 +114,7 @@ public class ChildAEntity{
 	/**
 	 * @return the parent_test
 	 */
+	@Column
 	public String getParent_test() {
 		return parent_test;
 	}

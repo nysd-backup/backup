@@ -19,6 +19,8 @@ public class MessageResult {
 	
 	/** the message */
 	private String message;
+	
+	private boolean shouldNotify = false;
 
 	/**
 	 * @return the code
@@ -60,6 +62,20 @@ public class MessageResult {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	/**
+	 * @return the shouldNotify
+	 */
+	public boolean isShouldNotify() {
+		return shouldNotify;
+	}
+
+	/**
+	 * @param shouldNotify the shouldNotify to set
+	 */
+	public void setShouldNotify(boolean shouldNotify) {
+		this.shouldNotify = shouldNotify;
 	}
 
 }

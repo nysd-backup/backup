@@ -52,6 +52,8 @@ public class DateEntity{
 	/**
 	 * @return the test
 	 */
+	@Id
+	@Column
 	public String getTest() {
 		return test;
 	}
@@ -67,6 +69,7 @@ public class DateEntity{
 	/**
 	 * @return the atstr
 	 */
+	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -82,6 +85,7 @@ public class DateEntity{
 	/**
 	 * @return the attr2
 	 */
+	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -97,6 +101,7 @@ public class DateEntity{
 	/**
 	 * @return the version
 	 */
+	@Column
 	public int getVersion() {
 		return version;
 	}
@@ -111,6 +116,7 @@ public class DateEntity{
 	/**
 	 * @return the dateCol
 	 */
+	@Column
 	public Date getDateCol() {
 		return dateCol;
 	}

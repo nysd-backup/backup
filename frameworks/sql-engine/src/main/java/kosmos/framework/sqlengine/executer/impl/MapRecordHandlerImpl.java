@@ -13,7 +13,6 @@ import java.util.TreeMap;
 import kosmos.framework.sqlengine.exception.SQLEngineException;
 import kosmos.framework.sqlengine.executer.RecordHandler;
 import kosmos.framework.sqlengine.executer.TypeConverter;
-import kosmos.framework.utility.ClassUtils;
 
 
 /**
@@ -30,9 +29,6 @@ public class MapRecordHandlerImpl implements RecordHandler{
 	/** the names of the column */
 	private final String[] javaLabels;
 	
-	/** the types of the column */
-	private final int[] types;
-	
 	/** the result type */
 	private final Class<?> resultType;
 	
@@ -45,10 +41,9 @@ public class MapRecordHandlerImpl implements RecordHandler{
 	 * @param types the types
 	 * @param converter the converter
 	 */
-	public MapRecordHandlerImpl(Class<?> resultType , String[] labels, String[] javaLabels, int[] types ,TypeConverter converter){
+	public MapRecordHandlerImpl(Class<?> resultType , String[] labels, String[] javaLabels, TypeConverter converter){
 		this.labels = labels;
 		this.javaLabels = javaLabels;
-		this.types = types;
 		this.resultType = resultType;
 		this.converter = converter;
 	}
@@ -67,7 +62,11 @@ public class MapRecordHandlerImpl implements RecordHandler{
 		}else if(TreeMap.class.equals(resultType)){
 			row = (T)new TreeMap<String,Object>();			
 		}else{
-			row = (T)ClassUtils.newInstance(resultType);
+			try {
+				row = (T)resultType.newInstance();
+			} catch (Exception e) {
+				throw new SQLEngineException(e);
+			}
 		}
 		
 		//データ取得
@@ -76,14 +75,13 @@ public class MapRecordHandlerImpl implements RecordHandler{
 
 			String label = labels[i];
 			String javaLabel = javaLabels[i];
-			int type = types[i];
 			try{
 				Object value = converter.getParameter(Object.class, resultSet, label);
 				((Map)row).put(javaLabel, value);
 			}catch(SQLException sqle){
 				throw sqle;
 			} catch (Exception e) {
-				throw new SQLEngineException(String.format("label = %s : type = %d ",label,type),e);
+				throw new SQLEngineException(String.format("label = %s : type = %s",label,String.class.getName()),e);
 			}
 		}
 		

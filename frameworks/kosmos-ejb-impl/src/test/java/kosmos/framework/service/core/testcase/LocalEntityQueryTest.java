@@ -258,7 +258,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * EasyUpdate#executeのチE��チE
+	 * LightUpdate#executeのチE��チE
 	 */
 	@Test
 	public void easyUpdate(){		
@@ -266,7 +266,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * EasyQuery#listのチE��チE
+	 * LightQuery#listのチE��チE
 	 */
 	@Test
 	public void easyList(){
@@ -274,7 +274,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * EasyQuery#singleのチE��チE
+	 * LightQuery#singleのチE��チE
 	 */
 	@Test
 	public void easySingle(){

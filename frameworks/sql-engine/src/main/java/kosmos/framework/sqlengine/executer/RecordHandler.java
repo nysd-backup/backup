@@ -18,5 +18,5 @@ public interface RecordHandler {
 	 * @param rs the rs
 	 * @return the result 
 	 */
-	public <T> T getRecord(ResultSet rs) throws SQLException;
+	<T> T getRecord(ResultSet rs) throws SQLException;
 }

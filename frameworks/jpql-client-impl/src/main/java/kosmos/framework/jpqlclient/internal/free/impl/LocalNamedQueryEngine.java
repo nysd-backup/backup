@@ -72,7 +72,7 @@ public class LocalNamedQueryEngine extends AbstractLocalQueryEngine implements N
 	 * @see kosmos.framework.sqlclient.api.Query#count()
 	 */
 	@Override
-	public int count() {
+	public long count() {
 		return internalQuery.count(condition);
 	}
 

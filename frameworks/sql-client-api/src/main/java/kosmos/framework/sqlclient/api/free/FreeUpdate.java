@@ -16,12 +16,12 @@ public interface FreeUpdate extends Update{
 	/**
 	 * @return the current parameter
 	 */
-	public FreeUpdateParameter getCurrentParams();
+	FreeUpdateParameter getCurrentParams();
 	
 	/**
 	 * @param parameter the parameter to set
 	 */
-	public void setCondition(FreeUpdateParameter parameter) ;
+	void setCondition(FreeUpdateParameter parameter) ;
 	
 	/**
 	 * Set the binding parameter.
@@ -31,7 +31,7 @@ public interface FreeUpdate extends Update{
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public <T extends FreeUpdate> T setParameter(String arg0 , Object arg1);
+	<T extends FreeUpdate> T setParameter(String arg0 , Object arg1);
 	
 
 	/**
@@ -42,7 +42,7 @@ public interface FreeUpdate extends Update{
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public <T extends FreeUpdate> T setBranchParameter(String arg0, Object arg1);
+	<T extends FreeUpdate> T setBranchParameter(String arg0, Object arg1);
 
 	
 }

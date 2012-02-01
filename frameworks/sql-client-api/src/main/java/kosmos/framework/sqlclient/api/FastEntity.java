@@ -20,19 +20,19 @@ public interface FastEntity {
 	 * value = value 
 	 * @return versioning value
 	 */
-	Pair<String> getVersioningValue();
+	Pair<String> toVersioningValue();
 	
 	/**HashMap
  	 * Key = column name 
 	 * value = value 
 	 * @return the primary keys 
 	 */
-	Map<String,Object> getPrimaryKeys();
+	Map<String,Object> toPrimaryKeys();
 	
 	/**
 	 * Key = column name 
 	 * value = value 
 	 * @return the attributes 
 	 */
-	Map<String,Object> getAttributes();
+	Map<String,Object> toAttributes();
 }

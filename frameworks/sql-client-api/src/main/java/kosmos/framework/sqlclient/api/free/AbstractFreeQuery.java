@@ -85,7 +85,7 @@ public abstract class AbstractFreeQuery<D extends FreeQuery> implements FreeQuer
 	 * @see kosmos.framework.sqlclient.api.Query#count()
 	 */
 	@Override
-	public int count() {
+	public long count() {
 		return delegate.count();
 	}
 

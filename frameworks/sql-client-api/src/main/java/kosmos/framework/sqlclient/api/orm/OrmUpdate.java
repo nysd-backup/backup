@@ -16,7 +16,7 @@ public interface OrmUpdate<T> extends Update{
 	/**
 	 * @return the parameter
 	 */
-	public OrmUpdateParameter<T> getCurrentParams();
+	OrmUpdateParameter<T> getCurrentParams();
 	
 	/**
 	 * Adds '='.
@@ -25,7 +25,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmUpdate<T> eq(String column, Object value);
+	OrmUpdate<T> eq(String column, Object value);
 
 	/**
 	 * Adds '>'.
@@ -34,7 +34,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmUpdate<T> gt(String column, Object value);
+	OrmUpdate<T> gt(String column, Object value);
 
 	/**
 	 * Adds '<'.
@@ -43,7 +43,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmUpdate<T> lt(String column, Object value);
+	OrmUpdate<T> lt(String column, Object value);
 
 	/**
 	 * Adds '>='.
@@ -52,7 +52,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmUpdate<T> gtEq(String column, Object value);
+	OrmUpdate<T> gtEq(String column, Object value);
 
 	/**
 	 * Adds '<='.
@@ -61,7 +61,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmUpdate<T> ltEq(String column, Object value);
+	OrmUpdate<T> ltEq(String column, Object value);
 
 	/**
 	 * Adds 'between'.
@@ -71,7 +71,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param to the to value
 	 * @return self
 	 */
-	public OrmUpdate<T> between(String column, Object from, Object to);
+	OrmUpdate<T> between(String column, Object from, Object to);
 	
 	/**
 	 * Adds 'IN' or 'CONTAINS'.
@@ -80,7 +80,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmUpdate<T> contains(String column, List<?> value);
+	OrmUpdate<T> contains(String column, List<?> value);
 	
 	/**
 	 * Adds the updating value.
@@ -89,7 +89,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param value the value 
 	 * @return self
 	 */
-	public OrmUpdate<T> set(String column , Object value);
+	OrmUpdate<T> set(String column , Object value);
 	
 	/**
 	 * Adds the statement of update.
@@ -97,7 +97,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param setString the set
 	 * @return self 
 	 */
-	public OrmUpdate<T> set(String... setString);
+	OrmUpdate<T> set(String... setString);
 	
 	/**
 	 * Add the filter to update.
@@ -105,7 +105,7 @@ public interface OrmUpdate<T> extends Update{
 	 * @param filterString the filter
 	 * @return self
 	 */
-	public OrmUpdate<T> filter(String filterString);
+	OrmUpdate<T> filter(String filterString);
 	
 	/**
 	 * Updates the data.
@@ -114,20 +114,20 @@ public interface OrmUpdate<T> extends Update{
 	 * @param params the parameters
 	 * @return the updated count
 	 */
-	public int update(List<Object> set , Object... params);
+	int update(List<Object> set , Object... params);
 	
 	/**
 	 * Sets the condition.
 	 * 
 	 * @param condition the condition
 	 */
-	public OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition);
+	OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition);
 	
 	/**
 	 * Deletes the data.
 	 * 
 	 * @return the updated count
 	 */
-	public int delete();
+	int delete();
 
 }

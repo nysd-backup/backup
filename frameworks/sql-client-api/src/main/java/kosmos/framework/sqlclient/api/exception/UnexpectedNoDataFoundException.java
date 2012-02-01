@@ -6,7 +6,7 @@ package kosmos.framework.sqlclient.api.exception;
 import javax.persistence.PersistenceException;
 
 /**
- * function.
+ * UnexpectedNoDataFoundException .
  *
  * @author yoshida-n
  * @version	created.

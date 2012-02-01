@@ -5,6 +5,7 @@ package kosmos.framework.sqlclient.internal.orm;
 
 import java.util.List;
 
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 
@@ -75,5 +76,15 @@ public interface InternalOrmQuery {
 	 * @return the result
 	 */
  	public <E> List<E> getResultList(OrmQueryParameter<E> parameter);
+ 	
+ 	
+ 	/**
+ 	 * Execute callback after select.
+ 	 * 
+ 	 * @param parameter the parameter
+ 	 * @param callback the callback to execute
+ 	 * @return the result
+ 	 */
+ 	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter , QueryCallback<E> callback);
  
 }

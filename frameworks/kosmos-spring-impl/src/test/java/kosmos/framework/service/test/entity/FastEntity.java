@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import kosmos.framework.base.AbstractEntity;
-import kosmos.framework.bean.FastAccessible;
 import kosmos.framework.bean.Pair;
 
 
@@ -22,7 +21,6 @@ import kosmos.framework.bean.Pair;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@FastAccessible(propertyAccessor=FastEntityAccessor.class)
 @Entity
 @Table(name="fast")
 public class FastEntity extends AbstractEntity{
@@ -54,6 +52,8 @@ public class FastEntity extends AbstractEntity{
 	/**
 	 * @return the test
 	 */
+	@Id
+	@Column
 	public String getTest() {
 		return test;
 	}
@@ -69,6 +69,7 @@ public class FastEntity extends AbstractEntity{
 	/**
 	 * @return the atstr
 	 */
+	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -84,6 +85,7 @@ public class FastEntity extends AbstractEntity{
 	/**
 	 * @return the attr2
 	 */
+	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -99,6 +101,8 @@ public class FastEntity extends AbstractEntity{
 	/**
 	 * @return the version
 	 */
+	@Version
+	@Column
 	public int getVersion() {
 		return version;
 	}
@@ -114,7 +118,7 @@ public class FastEntity extends AbstractEntity{
 	 * @see kosmos.framework.sqlclient.api.FastEntity#getVersioningValue()
 	 */
 	@Override
-	public Pair<String> getVersioningValue() {
+	public Pair<String> toVersioningValue() {
 		return new Pair<String>("version",version);
 	}
 
@@ -122,7 +126,7 @@ public class FastEntity extends AbstractEntity{
 	 * @see kosmos.framework.sqlclient.api.FastEntity#getPrimaryKeys()
 	 */
 	@Override
-	public Map<String, Object> getPrimaryKeys() {
+	public Map<String, Object> toPrimaryKeys() {
 		Map<String,Object> map = createMap();
 		map.put("test", test);
 		return map;
@@ -132,10 +136,11 @@ public class FastEntity extends AbstractEntity{
 	 * @see kosmos.framework.sqlclient.api.FastEntity#getAttributes()
 	 */
 	@Override
-	public Map<String, Object> getAttributes() {
+	public Map<String, Object> toAttributes() {
 		Map<String,Object> map = createMap();
 		map.put("attr", attr);
 		map.put("attr2", attr2);
+		map.put("version", version);
 		return map;
 	}
 	

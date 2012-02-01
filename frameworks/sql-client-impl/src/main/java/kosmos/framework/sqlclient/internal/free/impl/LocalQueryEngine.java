@@ -3,6 +3,7 @@
  */
 package kosmos.framework.sqlclient.internal.free.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import kosmos.framework.sqlclient.api.Query;
@@ -10,6 +11,7 @@ import kosmos.framework.sqlclient.api.free.FreeQuery;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.NativeQuery;
 import kosmos.framework.sqlclient.api.free.NativeResult;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.free.ResultSetFilter;
 import kosmos.framework.sqlclient.internal.free.AbstractLocalQueryEngine;
 import kosmos.framework.sqlclient.internal.free.InternalQuery;
@@ -72,16 +74,8 @@ public class LocalQueryEngine extends AbstractLocalQueryEngine implements Native
 	 * @see kosmos.framework.sqlclient.api.Query#count()
 	 */
 	@Override
-	public int count() {
+	public long count() {
 		return internalQuery.count(condition);
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#getFetchResult()
-	 */
-	@Override
-	public <T> List<T> getFetchResult() {
-		return internalQuery.getFetchResult(condition);
 	}
 
 	/**
@@ -91,6 +85,25 @@ public class LocalQueryEngine extends AbstractLocalQueryEngine implements Native
 	public <T extends Query> T setHint(String key, Object value) {
 		condition.getHints().put(key, value);
 		return (T)this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.free.NativeQuery#getFetchResult(kosmos.framework.sqlclient.api.free.QueryCallback)
+	 */
+	@Override
+	public long getFetchResult(QueryCallback<?> callback) {
+		List<Object> lazyList = internalQuery.getFetchResult(condition);
+		Iterator<Object> iterator = lazyList.iterator();
+		long count = 0;
+		try{
+			while(iterator.hasNext()){	
+				((QueryCallback<Object>)callback).handleRow(iterator.next(), count);
+				count++;
+			}
+		}finally{
+			lazyList.clear();
+		}
+		return count;
 	}
 
 }

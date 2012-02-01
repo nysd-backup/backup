@@ -18,12 +18,12 @@ public interface TemplateEngine {
 	 * @param rowString the SQL before loading.
 	 * @return the SQL
 	 */
-	public String load(InputStream rowString);
+	String load(InputStream rowString);
 	
 	/**
 	 * @param rowString the SQL after loading.
 	 * @param parameter the parameter to evaluate if-statement
 	 * @return the evaluated SQL
 	 */
-	public String evaluate(String rowString,Map<String,Object> parameter);
+	String evaluate(String rowString,Map<String,Object> parameter);
 }

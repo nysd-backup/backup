@@ -15,5 +15,5 @@ public interface ConstAccessor {
 	 * @param variableName the variableName
 	 * @return the value
 	 */
-	public Object[] getConstTarget(String variableName);
+	Object[] getConstTarget(String variableName);
 }

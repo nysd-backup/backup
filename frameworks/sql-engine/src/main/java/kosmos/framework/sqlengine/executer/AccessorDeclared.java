@@ -1,18 +1,19 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.bean;
+package kosmos.framework.sqlengine.executer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * function.
+ * Annotation for result type.
+ * this indicates that getters and setters are declared. 
  *
  * @author yoshida-n
  * @version	created.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FastAccessible {
-	Class<? extends PropertyAccessor<?>> propertyAccessor();
+public @interface AccessorDeclared {
+
 }

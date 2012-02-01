@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.LockModeType;
 
 import kosmos.framework.sqlclient.api.Query;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 
 
 /**
@@ -171,7 +172,7 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 * @see kosmos.framework.sqlclient.api.Query#count()
 	 */
 	@Override
-	public int count() {
+	public long count() {
 		return delegate.count();
 	}
 
@@ -234,6 +235,22 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	@Override
 	public OrmQueryParameter<T> getCurrentParams() {
 		return delegate.getCurrentParams();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getFetchResult(kosmos.framework.sqlclient.api.free.QueryCallback)
+	 */
+	@Override
+	public long getFetchResult(QueryCallback<T> callback) {
+		return delegate.getFetchResult(callback);
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#fetch(kosmos.framework.sqlclient.api.free.QueryCallback, java.lang.Object[])
+	 */
+	@Override
+	public long fetch(QueryCallback<T> callback, Object... params) {
+		return delegate.fetch(callback, params);
 	}
 
 	

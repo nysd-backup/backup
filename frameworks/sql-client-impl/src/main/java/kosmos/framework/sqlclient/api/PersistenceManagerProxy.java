@@ -42,27 +42,11 @@ public class PersistenceManagerProxy implements PersistenceManager{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.lang.Object)
-	 */
-	@Override
-	public int insert(Object entity) {
-		return insert(entity,new PersistenceHints());
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List)
-	 */
-	@Override
-	public int[] insert(List<Object> entity) {
-		return insert(entity,new PersistenceHints());
-	}
-	
-	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List, kosmos.framework.sqlclient.api.PersistenceHints)
 	 */
 	@Override
-	public int[] insert(List<Object> entity, PersistenceHints hints) {
-		return entity.get(0) instanceof FastEntity ? fastManager.insert(entity,hints) : defaultManager.insert(entity,hints);
+	public int[] batchInsert(List<?> entity, PersistenceHints hints) {
+		return entity.get(0) instanceof FastEntity ? fastManager.batchInsert(entity,hints) : defaultManager.batchInsert(entity,hints);
 	}
 
 	/**
@@ -74,27 +58,11 @@ public class PersistenceManagerProxy implements PersistenceManager{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#update(java.lang.Object)
-	 */
-	@Override
-	public int update(Object entity) {
-		return update(entity,new PersistenceHints());
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#update(java.lang.Object, kosmos.framework.sqlclient.api.PersistenceHints)
 	 */
 	@Override
 	public int update(Object entity, PersistenceHints hints) {
 		return entity instanceof FastEntity ? fastManager.update(entity,hints) : defaultManager.update(entity,hints);
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#delete(java.lang.Object)
-	 */
-	@Override
-	public int delete(Object entity) {
-		return delete(entity,new PersistenceHints());
 	}
 
 	/**

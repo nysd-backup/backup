@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.LockModeType;
 
 import kosmos.framework.sqlclient.api.Query;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 
 
 /**
@@ -16,9 +17,9 @@ import kosmos.framework.sqlclient.api.Query;
 public interface OrmQuery<T> extends Query{
 	
 	/**
-	 * @return
+	 * @return the current condition
 	 */
-	public OrmQueryParameter<T> getCurrentParams();
+	OrmQueryParameter<T> getCurrentParams();
 	
 	/**
 	 * Adds '='.
@@ -27,7 +28,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmQuery<T> eq(String column, Object value);
+	OrmQuery<T> eq(String column, Object value);
 
 	/**
 	 * Adds '>'.
@@ -36,7 +37,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmQuery<T> gt(String column, Object value);
+	OrmQuery<T> gt(String column, Object value);
 
 	/**
 	 * Adds '<'.
@@ -45,7 +46,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmQuery<T> lt(String column, Object value);
+	OrmQuery<T> lt(String column, Object value);
 
 	/**
 	 * Adds '>='.
@@ -54,7 +55,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmQuery<T> gtEq(String column, Object value);
+	OrmQuery<T> gtEq(String column, Object value);
 
 	/**
 	 * Adds '<='.
@@ -63,7 +64,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmQuery<T> ltEq(String column, Object value);
+	OrmQuery<T> ltEq(String column, Object value);
 
 	/**
 	 * Adds 'between'.
@@ -73,7 +74,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param to the to value
 	 * @return self
 	 */
-	public OrmQuery<T> between(String column, Object from, Object to);
+	OrmQuery<T> between(String column, Object from, Object to);
 	
 	/**
 	 * Adds 'IN' or 'CONTAINS'.
@@ -82,7 +83,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public OrmQuery<T> contains(String column, List<?> value);
+	OrmQuery<T> contains(String column, List<?> value);
 
 	/**
 	 * Adds 'asc'.
@@ -91,7 +92,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param column the column
 	 * @return self
 	 */
-	public OrmQuery<T> asc(String column);
+	OrmQuery<T> asc(String column);
 
 	/**
 	 * Adds 'desc'.
@@ -100,19 +101,19 @@ public interface OrmQuery<T> extends Query{
 	 * @param column the column
 	 * @return self
 	 */
-	public OrmQuery<T> desc(String column);
+	OrmQuery<T> desc(String column);
 
 	/**
 	 * @param filterString the filterString
 	 * @return self
 	 */
-	public OrmQuery<T> filter(String filterString); 
+	OrmQuery<T> filter(String filterString); 
 	
 	/**
 	 * @param orderString order by 
 	 * @return self　
 	 */
-	public OrmQuery<T> order(String orderString); 
+	OrmQuery<T> order(String orderString); 
 	
 	/**
 	 * Finds the result.
@@ -120,7 +121,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param params the parameters
 	 * @return the result
 	 */
-	public T single(Object... params);
+	T single(Object... params);
 	
 	/**
 	 * Searches the result.
@@ -128,7 +129,7 @@ public interface OrmQuery<T> extends Query{
 	 * @param params the parmaeters
 	 * @return the result
 	 */
-	public List<T> list(Object... params);
+	List<T> list(Object... params);
 	
 	/**
 	 * Finds the result by primary keys.
@@ -137,19 +138,33 @@ public interface OrmQuery<T> extends Query{
 	 * @param poks the primary keys
 	 * @return the result
 	 */
-	public T find(Object... pks);
+	T find(Object... pks);
 
 	/**
 	 * Sets the condition.
 	 * 
 	 * @param condition the condition
 	 */
-	public OrmQuery<T> setCondition(OrmQueryParameter<T> condition);
+	OrmQuery<T> setCondition(OrmQueryParameter<T> condition);
 	
 	/**
 	 * @param type the lock mode
 	 * @return self
 	 */
-	public OrmQuery<T> setLockMode(LockModeType type);
+	OrmQuery<T> setLockMode(LockModeType type);
+	
+	/**
+	 * @param callback the callback
+	 * @return the result count
+	 */
+	long getFetchResult(QueryCallback<T> callback);
+	
+
+	/**
+	 * @param callback the callback
+	 * @param params the condition
+	 * @return the result count
+	 */
+	long fetch(QueryCallback<T> callback,Object... params);
 	
 }

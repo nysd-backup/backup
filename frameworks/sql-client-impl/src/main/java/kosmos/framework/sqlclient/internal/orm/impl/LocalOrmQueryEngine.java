@@ -3,11 +3,13 @@
  */
 package kosmos.framework.sqlclient.internal.orm.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.LockModeType;
 
 import kosmos.framework.sqlclient.api.Query;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.OrmQuery;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.SortKey;
@@ -195,7 +197,7 @@ public class LocalOrmQueryEngine<T> implements OrmQuery<T>{
 	 * @see kosmos.framework.sqlclient.api.Query#count()
 	 */
 	@Override
-	public int count() {
+	public long count() {
 		throw new UnsupportedOperationException("do you realy need to use this method?");
 	}
 
@@ -256,6 +258,34 @@ public class LocalOrmQueryEngine<T> implements OrmQuery<T>{
 	@Override
 	public OrmQueryParameter<T> getCurrentParams() {
 		return this.condition;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getFetchResult(kosmos.framework.sqlclient.api.free.QueryCallback)
+	 */
+	@Override
+	public long getFetchResult(QueryCallback<T> callback) {
+		List<T> lazyList = dao.getFetchResult(condition, callback);
+		Iterator<T> iterator = lazyList.iterator();
+		long count = 0;
+		try{
+			while(iterator.hasNext()){	
+				callback.handleRow(iterator.next(), count);
+				count++;
+			}
+		}finally{
+			lazyList.clear();
+		}
+		return count;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#fetch(kosmos.framework.sqlclient.api.free.QueryCallback)
+	 */
+	@Override
+	public long fetch(QueryCallback<T> callback,Object... params) {
+		condition.setEasyParams(params);
+		return getFetchResult(callback);
 	}
 
 }

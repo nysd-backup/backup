@@ -22,7 +22,7 @@ public interface SQLBuilder {
 	 * @param queryId the queryId
 	 * @return the SQL
 	 */
-	public String build(String queryId ,String rowString);
+	String build(String queryId ,String rowString);
 	
 	/**
 	 * Evaluates the SQL.
@@ -31,7 +31,7 @@ public interface SQLBuilder {
 	 * @param parameter the parameter to evaluate the if-statement
 	 * @return the SQL
 	 */
-	public String evaluate(String query , Map<String,Object> parameter , String queryId);
+	String evaluate(String query , Map<String,Object> parameter , String queryId);
 
 	/**
 	 * Replaces ':value' to ?.
@@ -41,7 +41,7 @@ public interface SQLBuilder {
 	 * @param queryId the queryId
 	 * @return the replaced SQL
 	 */
-	public String replaceToPreparedSql(String originalSql,List<Map<String,Object>> parameter,List<List<Object>> bindList, String queryId);
+	String replaceToPreparedSql(String originalSql,List<Map<String,Object>> parameter,List<List<Object>> bindList, String queryId);
 
 	
 	/**
@@ -50,7 +50,7 @@ public interface SQLBuilder {
 	 * @param sql the SQL
 	 * @return the SQL
 	 */
-	public String setCount(String sql);
+	String setCount(String sql);
 }
 
 

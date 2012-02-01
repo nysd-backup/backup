@@ -3,14 +3,13 @@
  */
 package kosmos.framework.service.core.testcase;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
-import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.query.EasyQuery;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.CachableConst;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.entity.ITestEntity;
@@ -20,6 +19,7 @@ import kosmos.framework.service.core.query.SampleNativeQueryConst;
 import kosmos.framework.service.core.query.SampleNativeResult;
 import kosmos.framework.service.core.query.SampleNativeUpdate;
 import kosmos.framework.sqlclient.api.free.NativeResult;
+import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.free.QueryFactory;
 
 import org.eclipse.persistence.config.HintValues;
@@ -38,7 +38,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	
 	private QueryFactory queryFactory = null;
 	
-	private LimitedOrmQueryFactory ormQueryFactory = null;
+	private OrmQueryWrapperFactory ormQueryFactory = null;
 	
 	@PostConstruct
 	public void construct(){
@@ -212,7 +212,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		StrictQuery<TestEntity> eq = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> eq = ormQueryFactory.createEasyQuery(TestEntity.class);
 		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
 		per.getEntityManager().flush();
 		
@@ -264,21 +264,24 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
 		query.setMaxResults(100);
-		List<SampleNativeResult> e = query.getFetchResult();
-		
-		Iterator<SampleNativeResult> itr = e.iterator();
-		int cnt = 0;
-		while(itr.hasNext()){
-			SampleNativeResult next = itr.next();
-			if(cnt == 0){
-				assertEquals("2",next.getTest());
-			}else {
-				assertEquals("1",next.getTest());
-			}
-			cnt++;
-		}
-		assertEquals(2,cnt);
+		long count = query.getFetchResult(new CallbackImpl());		
+		assertEquals(2,count);
 		context.setRollbackOnly();	
+	}
+	
+
+	private class CallbackImpl implements QueryCallback<SampleNativeResult> {
+
+		@Override
+		public void handleRow(SampleNativeResult oneRecord, long rowIndex) {
+			if(rowIndex == 0){
+				assertEquals("2",oneRecord.getTest());
+			}else {
+				assertEquals("1",oneRecord.getTest());
+			}
+		}
+
+		
 	}
 	
 
@@ -294,7 +297,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		StrictQuery<TestEntity> e = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> e = ormQueryFactory.createEasyQuery(TestEntity.class);
 		TestEntity res = e.eq(ITestEntity.TEST, "1").getSingleResult();
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
@@ -315,7 +318,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		StrictQuery<TestEntity> e = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> e = ormQueryFactory.createEasyQuery(TestEntity.class);
 		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
@@ -329,7 +332,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		StrictQuery<TestEntity> eq = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> eq = ormQueryFactory.createEasyQuery(TestEntity.class);
 		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
 		
 		SampleNativeUpdate update = queryFactory.createUpdate(SampleNativeUpdate.class);
@@ -338,7 +341,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		StrictQuery<TestEntity> e = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> e = ormQueryFactory.createEasyQuery(TestEntity.class);
 		
 		//NativeUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E

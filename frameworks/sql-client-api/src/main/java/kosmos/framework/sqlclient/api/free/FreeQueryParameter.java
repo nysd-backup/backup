@@ -100,6 +100,5 @@ public class FreeQueryParameter extends FreeParameter{
 	public void setLockMode(LockModeType lock) {
 		this.lock = lock;
 	}
-
 	
 }

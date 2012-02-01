@@ -17,5 +17,5 @@ public interface ExceptionHandler {
 	 * @param t the exception
 	 * @return the exception
 	 */
-	public RuntimeException rethrow(SQLException t);
+	RuntimeException rethrow(SQLException t);
 }

@@ -8,8 +8,6 @@ import javax.ejb.SessionContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import kosmos.framework.core.exception.PoorImplementationException;
-
 
 /**
  * The default interceptor.
@@ -31,12 +29,8 @@ public class DefaultInterceptor {
 	public Object around(InvocationContext ic) throws Throwable {
 	
 		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-		if(context == null){
-			throw new PoorImplementationException("context is required");
-		}
 		
-		if(context.isTopLevel()){
-			context.setTopLevel(false);
+		if(context == null){
 			return invokeAtTopLevel(ic);
 		}else {
 			return invoke(ic);
@@ -64,13 +58,17 @@ public class DefaultInterceptor {
 	 */
 	protected Object invokeAtTopLevel(InvocationContext ic) throws Throwable {
 	
-		TransactionManagingContext context = (TransactionManagingContext)TransactionManagingContext.getCurrentInstance();
-		Object returnValue = proceed(ic);	
-		if(context.getCurrentUnitOfWork().isRollbackOnly()){
-			sessionContext.setRollbackOnly();
-		}	
-		return returnValue;
-
+		ServiceContextImpl context = new ServiceContextImpl();
+		context.initialize();
+		try{
+			Object returnValue = proceed(ic);	
+			if(context.getCurrentUnitOfWork().isRollbackOnly()){
+				sessionContext.setRollbackOnly();
+			}	
+			return returnValue;
+		}finally{
+			context.release();
+		}
 	}
 	
 	/**

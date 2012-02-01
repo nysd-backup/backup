@@ -21,5 +21,5 @@ public interface Selector {
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	public ResultSet select(PreparedStatement stmt) throws SQLException;
+	ResultSet select(PreparedStatement stmt) throws SQLException;
 }

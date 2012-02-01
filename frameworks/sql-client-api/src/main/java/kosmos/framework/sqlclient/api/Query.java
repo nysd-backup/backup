@@ -21,37 +21,37 @@ public interface Query {
 	 * @param arg1 the hint value
 	 * @return self
 	 */
-	public <T extends Query> T setHint(String arg0 , Object arg1);
+	<T extends Query> T setHint(String arg0 , Object arg1);
 
 	/**
 	 * @param <T> the type
 	 * @param arg0 the max result
 	 * @return self
 	 */
-	public <T extends Query> T setMaxResults(int arg0) ;
+	<T extends Query> T setMaxResults(int arg0) ;
 	
 	/**
 	 * @param <T>　the type
 	 * @param arg0　the start position
 	 * @return self
 	 */
-	public <T extends Query> T setFirstResult(int arg0) ;
+	<T extends Query> T setFirstResult(int arg0) ;
 	
 	/**
 	 * @param <T> the type
 	 * @return the result
 	 */
-	public <T> List<T> getResultList() ;
+	<T> List<T> getResultList() ;
 
 	/**
 	 * @param <T> the type
 	 * @return the first result hit
 	 */
-	public <T> T getSingleResult();
+	<T> T getSingleResult();
 	
 	/**
 	 * @return the count
 	 */
-	public int count();
+	long count();
 
 }

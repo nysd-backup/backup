@@ -51,6 +51,7 @@ public class ChildEntity{
 	/**
 	 * @return the atstr
 	 */
+	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -66,6 +67,7 @@ public class ChildEntity{
 	/**
 	 * @return the attr2
 	 */
+	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -81,6 +83,8 @@ public class ChildEntity{
 	/**
 	 * @return the version
 	 */
+	@Version
+	@Column
 	public int getVersion() {
 		return version;
 	}
@@ -96,6 +100,8 @@ public class ChildEntity{
 	/**
 	 * @return the pk
 	 */
+	@Id
+	@Column
 	public String getPk() {
 		return pk;
 	}
@@ -110,6 +116,7 @@ public class ChildEntity{
 	/**
 	 * @return the parent
 	 */
+	@Column
 	public ParentEntity getParent() {
 		return parent;
 	}

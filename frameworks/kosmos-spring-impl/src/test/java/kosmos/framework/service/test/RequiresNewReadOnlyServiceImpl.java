@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.core.query.LimitedOrmQueryFactory;
-import kosmos.framework.core.query.StrictQuery;
+import kosmos.framework.core.query.OrmQueryWrapperFactory;
+import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.service.test.entity.TestEntity;
 
 import org.eclipse.persistence.config.QueryHints;
@@ -31,10 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyService{
 
 	@Resource
-	private LimitedOrmQueryFactory ormQueryFactory;
+	private OrmQueryWrapperFactory ormQueryFactory;
 	
 	public String test() {
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
 		query.find("1");
 		return "OK";
@@ -42,7 +42,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 
 	@Override
 	public String crushException() {
-		StrictQuery<TestEntity> query = ormQueryFactory.createStrictQuery(TestEntity.class);
+		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);

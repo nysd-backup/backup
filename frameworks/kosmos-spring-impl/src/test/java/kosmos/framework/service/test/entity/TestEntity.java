@@ -22,7 +22,7 @@ import org.junit.Ignore;
 @Entity
 @Table(name="testa")
 public class TestEntity implements Cloneable{
-	
+
 	@Id
 	@Column
 	private String test;
@@ -48,6 +48,8 @@ public class TestEntity implements Cloneable{
 	/**
 	 * @return the test
 	 */
+	@Id
+	@Column
 	public String getTest() {
 		return test;
 	}
@@ -63,6 +65,7 @@ public class TestEntity implements Cloneable{
 	/**
 	 * @return the atstr
 	 */
+	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -78,6 +81,7 @@ public class TestEntity implements Cloneable{
 	/**
 	 * @return the attr2
 	 */
+	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -93,6 +97,8 @@ public class TestEntity implements Cloneable{
 	/**
 	 * @return the version
 	 */
+	@Version
+	@Column
 	public int getVersion() {
 		return version;
 	}
@@ -101,11 +107,11 @@ public class TestEntity implements Cloneable{
 	 * @see java.lang.Object#clone()
 	 */
 	public TestEntity clone(){
-		
-		try{
+		try {
 			return (TestEntity)super.clone();
-		}catch(CloneNotSupportedException cnse){
-			throw new IllegalStateException(cnse);
-		}
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}		
 	}
+
 }

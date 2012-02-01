@@ -18,14 +18,14 @@ public interface Update {
 	 * 
 	 * @return self
 	 */
-	public <T extends Update> T addBatch();
+	<T extends Update> T addBatch();
 	
 	/**
 	 * Updates the data.
 	 * 
 	 * @return result
 	 */
-	public int[] batchUpdate();
+	int[] batchUpdate();
 	
 	/**
 	 * Adds the JPA hint.
@@ -35,15 +35,14 @@ public interface Update {
 	 * @param arg1 the hint value
 	 * @return self
 	 */
-	public <T extends Update> T setHint(String arg0 , Object arg1);
+	<T extends Update> T setHint(String arg0 , Object arg1);
 	
 	/**
 	 * Updates the data.
 	 * 
 	 * @return the updated count
 	 */
-	public int update();
-	
+	int update();
 	
 	
 }

@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.OptimisticLockException;
 
 import kosmos.framework.base.AbstractEntity;
 import kosmos.framework.core.exception.BusinessException;
@@ -29,6 +28,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 /**
  * 基底サービス.
+ * 主にDeveloper向けのシンタックスシュガーを提供する。
  *
  * @author yoshida-n
  * @version	created.
@@ -36,7 +36,7 @@ import org.apache.commons.beanutils.BeanUtils;
 public abstract class AbstractService {
 	
 	/** ログ */
-	private final LogWriter logger = LogWriterFactory.getLog(this.getClass());
+	private final LogWriter logger = LogWriterFactory.getLog(getClass());
 	
 	/** 判断ユーティリティ */
 	protected final Condition cond = new Condition();
@@ -52,79 +52,90 @@ public abstract class AbstractService {
 	}
 	
 	/**
-	 * Tests the data is single result.
+	 * collectionが1件でない場合にNonUniqueResultExceptionをスローする.
 	 * 
-	 * @param collection the collection
-	 * @throws NonUniqueResultException
+	 * @param collection 検索結果
+	 * @throws NonUniqueResultException 検索結果1件でない場合
 	 */
-	protected final void assertSingleResult(Collection<?> collection){
+	protected void assertSingleResult(Collection<?> collection){
 		if(collection != null && !collection.isEmpty() && collection.size() > 1){
 			throw new NonUniqueResultException("result size is " + collection.size());
-		}
-		
+		}		
 	}
 	
 	/**
-	 * Tests the data exists.
+	 * valueが0件でない場合UnexpectedDataFoundExceptionをスローする.
 	 * 
-	 * @param collection the collection
-	 * @throws UnexpectedDataFoundException
+	 * @param value 検索結果
+	 * @throws UnexpectedDataFoundException 検索結果ありの場合
 	 */
-	protected final void assertEmpty(Collection<?> collection){
-		if(collection != null && ! collection.isEmpty()){
-			throw new UnexpectedDataFoundException();
-		}
-		
+	protected void assertEmpty(Object value){
+		if(value != null){
+			if(value instanceof Collection){
+				if(!((Collection<?>) value).isEmpty()){
+					throw new UnexpectedDataFoundException();
+				}
+			}else{
+				throw new UnexpectedDataFoundException();
+			}			
+		}		
 	}
 	
 	/**
-	 * Tests the data exists.
+	 * valueが0件の場合にUnexpectedNoDataFoundExceptionをスローする.
 	 * 
-	 * @param collection the collection
-	 * @throws UnexpectedNoDataFoundException
+	 * @param value 検索結果
+	 * @throws UnexpectedNoDataFoundException 検索結果なしの場合
 	 */
-	protected final void assertExists(Collection<?> collection){
-		if(collection == null || collection.isEmpty()){
-			throw new UnexpectedNoDataFoundException();
+	protected void assertExists(Object value){
+		if(value == null){
+			if(value instanceof Collection){
+				if(((Collection<?>) value).isEmpty()){
+					throw new UnexpectedNoDataFoundException();
+				}
+			}else{
+				throw new UnexpectedNoDataFoundException();
+			}					
 		}
-		
 	}
 	
 	/**
-	 * Tests the data exists.
+	 * 業務エラー例外をスローする.
 	 * 
-	 * @param collection the collection
-	 * @throws UnexpectedNoDataFoundException
-	 */
-	protected final void assertExists(Object value){
-		if(value == null ){
-			throw new UnexpectedNoDataFoundException();
-		}
-		
-	}
-	
-	/**
-	 * Fails the service.
-	 * 
-	 * @param bean the MessageBean
+	 * @param bean 例外発生時に追加するメッセージ
 	 * @throws BusinessException the exception
 	 */
-	public void throwBizError(MessageBean bean) {
+	protected final void throwBizError(MessageBean bean) {
 		addError(bean);
 		throwBizError();
 	}
 		
 	/**
-	 * Fails the service.
+	 * 業務エラー例外をスローする.
 	 * 
 	 * @throws BusinessException the exception
 	 */
-	public void throwBizError() {
+	private void throwBizError() {
 		throw ServiceLocator.createDefaultBusinessException();
 	}
 		
 	/**
-	 * Fails the service if transaction is marked as rolled back.
+	 * トランザクションが失敗している場合に業務エラーをスローする.<br/>
+	 * 業務エラーが発生していたら処理を停止しタイ場合に実行する.
+	 * 
+	 * <pre>
+	 * OneQuery query = createQuery(OneQuery.class);
+	 * List<?> result = query.getResultList();
+	 * probablyExists(result);
+	 * if(conv.isNum(result.get(0).getAttr())) addMessage(bean);
+	 * if(conv.eq(result.get(0).getAttr2(),"aa"))addMessage(bean);
+	 * 
+	 * probablyCommitable();
+	 * 
+	 * OneService service = createSender(OneService.class);
+	 * service.execute();
+	 * ・・・
+	 * </pre>
 	 * 
 	 * @throws BusinessException the exception
 	 */
@@ -135,13 +146,14 @@ public abstract class AbstractService {
 	}
 	
 	/**
-	 * Fails the service if size is over maxSize.
+	 * 検索結果が指定した上限件数を超過している場合に業務エラーをスローする.
 	 * 
-	 * @param maxSize the maxSize
-	 * @param result the result
-	 * @throws BusinessException the exception
+	 * @param bean 上限超過時に追加するメッセージ
+	 * @param maxSize 上限件数
+	 * @param result 検索結果
+	 * @throws BusinessException 上限超過時
 	 */
-	protected final void probablyLessThanLimit(MessageBean bean ,List<?> result , int limit){
+	protected void probablyLessThanLimit(MessageBean bean ,List<?> result , int limit){
 		if(result == null || result.isEmpty()){
 			return;
 		}
@@ -149,79 +161,48 @@ public abstract class AbstractService {
 			throwBizError(bean);
 		}		
 	}
-	
-	
+		
 	/**
-	 * Fails the service if the version no is unmatch.
+	 * 検索結果が0件の場合に業務エラーをスローする.
 	 * 
-	 * @param holdingVersionNo 
-	 * @param currentVersionNo
-	 * @throws OptimisticLockException 
-	 * @return
+	 * @param bean 検索結果0件時に追加するメッセージ
+	 * @param result 検索結果
+	 * @throws BusinessException 検索結果0件時
 	 */
-	protected final <T> void probablySameVersion(T holdingVersionNo , T currentVersionNo ){
-		if(!holdingVersionNo.equals(currentVersionNo)){
-			throw new OptimisticLockException("current version = " + currentVersionNo + " holdingVersion = " + holdingVersionNo);
+	protected void probablyExists(MessageBean bean ,Object value){
+		if(value == null){
+			if(value instanceof Collection){
+				if(((Collection<?>) value).isEmpty()){
+					throwBizError(bean);
+				}
+			}else{
+				throwBizError(bean);
+			}					
 		}		
 	}
 	
-		
 	/**
-	 * Fails the service if the result is empty.
+	 * 検索結果が存在する場合に業務エラーをスローする.
 	 * 
-	 * @param bean the MessageBean
-	 * @param result the result
-	 * @throws BusinessException the exception
+	 * @param bean 検索結果が存在する場合の追加するメッセージ
+	 * @param result 検索結果
+	 * @throws BusinessException 検索結果が存在する場合
 	 */
-	protected final void probablyExists(MessageBean bean ,Collection<?> result){
-		if( result == null || result.isEmpty() ){
-			throwBizError(bean);
-		}
-		
+	protected void probablyEmpty(MessageBean bean ,Object value){
+		if(value != null){
+			if(value instanceof Collection){
+				if(!((Collection<?>) value).isEmpty()){
+					throwBizError(bean);
+				}
+			}else{
+				throwBizError(bean);
+			}			
+		}		
 	}
 	
 	/**
-	 * Fails the service if the result is not empty.
+	 * 業務エラーを追加する.
 	 * 
-	 * @param bean the MessageBean
-	 * @param result the result
-	 * @throws BusinessException the exception
-	 */
-	protected final void probablyEmpty(MessageBean bean ,Collection<?> result){
-		if( result != null && ! result.isEmpty() ){
-			throwBizError(bean);
-		}
-		
-	}
-	
-	/**
-	 * Fails the service if value is null.
-	 * @param bean the MessageBean
-	 * @param result the result
-	 * @throws BusinessException the exception
-	 */
-	protected final void probablyExists(MessageBean bean ,Object value){
-		if( value == null){
-			throwBizError(bean);
-		}
-		
-	}
-	
-	/**
-	 * Fails the service if value is not null.
-	 * 
-	 * @param bean the MessageBean
-	 * @param result the result
-	 * @throws BusinessException the exception
-	 */
-	protected final void probablyEmpty(MessageBean bean ,Object value){
-		if( value != null){
-			throwBizError(bean);
-		}
-		
-	}
-	
-	/**
 	 * @param bean the MessageBean
 	 */
 	private void addError(MessageBean bean) {
@@ -233,7 +214,16 @@ public abstract class AbstractService {
 	}
 	
 	/**
-	 * @param bean
+	 * 画面に表示するメッセージを追加する.
+	 * エラーレベル以上のメッセージが追加された場合トランザクションは必ずロールバックすることになる<br/>
+	 * 
+	 * <pre>
+	 * エラーレベル以上のメッセージが追加された場合、このクラス内のメソッドは以下のように振る舞う。
+	 * isRollbackOnly　→　true
+	 * probablyCommitable　→　BusinessExeptionがスローされる
+	 * </pre>
+	 * 
+	 * @param bean メッセージ定義
 	 */
 	protected final void addMessage(MessageBean bean){
 		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean);
@@ -241,23 +231,35 @@ public abstract class AbstractService {
 	}
 	
 	/**
+	 * 業務メッセージ定義を生成する.
+	 * 
+	 * <pre>
+	 * 	MessageBean bean = cerateMessage(Messages.ONE_ERROR,arguments);
+	 *  addMessage(bean);
+	 * </pre>
+	 * 
 	 * @param messageCode
 	 * @param args
 	 * @return
 	 */
-	protected final MessageBean createMessage(int messageCode , Object... args){
+	protected MessageBean createMessage(int messageCode , Object... args){
 		return new MessageBean(messageCode, args);
 	}
 	
 	/**
-	 * 
+	 * 実装ミスであることを示す。
+	 * この構文が実行されるようなケースがあれば直ちに修正が必要。
 	 */
 	protected final void bug(){
 		throw new PoorImplementationException();
 	}
 	
 	/**
-	 * @return
+	 *　トランザクションがロールバック状態になっているかを判定する。
+	 * この結果がtrueの場合必ずトランザクションはロールバックされる。
+	 * エラーレベル以上のメッセージが実行中のトランザクション内で1度でも発生していれば必ずtrueが返却される。
+	 * 
+	 * @return true:ロールバック状態
 	 */
 	protected final boolean isRollbackOnly(){
 		TransactionManagingContext context = (TransactionManagingContext)ServiceContext.getCurrentInstance();
@@ -268,7 +270,7 @@ public abstract class AbstractService {
 	 * @param dest
 	 * @param orig
 	 */
-	protected final void copyObject(Object dest , Object orig){
+	protected void copyObject(Object dest , Object orig){
 		if(orig instanceof AbstractEntity && dest instanceof AbstractEntity && dest.getClass().equals(orig.getClass())){
 			throw new UnsupportedOperationException("Use the AbstractEntity#clone");
 		}

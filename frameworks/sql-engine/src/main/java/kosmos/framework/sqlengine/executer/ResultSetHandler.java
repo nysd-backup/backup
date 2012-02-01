@@ -25,7 +25,7 @@ public interface ResultSetHandler {
 	 * @param firstResult the firstResult
 	 * @throws SQLException the exception
 	 */
-	public void skip(ResultSet rs , int firstResult) throws SQLException;
+	void skip(ResultSet rs , int firstResult) throws SQLException;
 
 	/**
 	 * @param <T>　the type
@@ -37,7 +37,7 @@ public interface ResultSetHandler {
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	public QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize,int firstResult)
+	QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize,int firstResult)
 	throws SQLException ;
 	
 	/**
@@ -48,6 +48,6 @@ public interface ResultSetHandler {
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	public <T> List<T> getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter)
+	<T> List<T> getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter)
 	throws SQLException ;
 }
