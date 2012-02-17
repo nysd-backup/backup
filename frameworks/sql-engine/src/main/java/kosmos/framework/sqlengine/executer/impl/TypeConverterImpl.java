@@ -28,9 +28,7 @@ public class TypeConverterImpl implements TypeConverter{
 	 */
 	@Override
 	public Object getParameter(Class<?> type, ResultSet resultSet , String columnLabel) throws SQLException {
-		if (Object.class.equals(type)){
-			return resultSet.getObject(columnLabel);			
-		}else if( String.class.equals(type)) {
+		if( String.class.equals(type)) {
 			return resultSet.getString(columnLabel);
 		}else if( BigDecimal.class.equals(type)){
 			return resultSet.getBigDecimal(columnLabel);
@@ -45,7 +43,7 @@ public class TypeConverterImpl implements TypeConverter{
 		}else if( byte[].class.equals(type)){
 			return resultSet.getBytes(columnLabel);		
 		}else if(Date.class.equals(type)|| Timestamp.class.equals(type)|| Time.class.equals(type)){
-			return new Date(resultSet.getTimestamp(columnLabel).getTime()); 		
+			return new java.util.Date(resultSet.getTimestamp(columnLabel).getTime()); 		
 		}else if( Boolean.class.equals(type) || boolean.class.equals(type)){
 			return resultSet.getBoolean(columnLabel);
 		}else if( Double.class.equals(type) || double.class.equals(type)) {
@@ -55,7 +53,7 @@ public class TypeConverterImpl implements TypeConverter{
 		}else if ( InputStream.class.equals(type) ){
 			return resultSet.getBinaryStream(columnLabel);
 		}else {
-			throw new IllegalArgumentException(String.format("invalid type : %s " ,type.getName()));
+			return resultSet.getObject(columnLabel);
 		}
 	}
 

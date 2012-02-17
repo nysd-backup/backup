@@ -9,6 +9,7 @@ import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.logics.message.MessageBuilder;
+import kosmos.framework.core.message.ExceptionMessageFactory;
 import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
@@ -173,5 +174,14 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	public FaultNotifier createFaultNotifier(){
 		return lookupByInterface(FaultNotifier.class);
 	}
-	
+
+
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createExceptionMessageFactory()
+	 */
+	@Override
+	public ExceptionMessageFactory createExceptionMessageFactory() {
+		return lookupByInterface(ExceptionMessageFactory.class);
+	}
+
 }

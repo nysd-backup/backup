@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 
 import kosmos.framework.core.logics.log.LogWriter;
 import kosmos.framework.core.logics.log.LogWriterFactory;
+import kosmos.framework.core.message.ExceptionMessageFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.activation.SpringServiceLocator;
@@ -108,6 +109,11 @@ public abstract class ClientUnit extends Assert{
 			public void construct() {
 				context = ConfigurableApplicationContext.class.cast(applicationContext);
 				delegate = this;
+			}
+			@Override
+			public ExceptionMessageFactory createExceptionMessageFactory() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 	}

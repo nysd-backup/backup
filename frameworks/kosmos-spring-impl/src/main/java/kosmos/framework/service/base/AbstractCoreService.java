@@ -10,6 +10,7 @@ import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.core.query.EasyUpdate;
 import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
+import kosmos.framework.service.core.query.IdentifierGenerator;
 import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.PersistenceManager;
 import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
@@ -43,6 +44,10 @@ public abstract class AbstractCoreService extends AbstractService{
 	/** 非同期メッセージクライアントファクトリ */
 	@Autowired
 	private MessageClientFactory messageClientFactory;
+	
+	/** ID生成 */
+	@Autowired
+	private IdentifierGenerator defaultIdGenerator;
 	
 	/**
 	 * P2P用非同期処理.
@@ -270,7 +275,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 主キー条件指定の単一行削除.<br/>
 	 * 
 	 * <pre>
-	 * delete( new OrderEntity().setId(1));
+	 * delete(new OrderEntity().setId(1));
 	 * 
 	 * 削除条件は主キー限定。
 	 * delete実行結果0件の場合OptimisticLockExceptionをスローする。
@@ -283,6 +288,22 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	protected int delete(AbstractEntity entity,PersistenceHints hints) throws OptimisticLockException{
 		return persister.delete(entity,hints);
+	}
+	
+	/**
+	 * デフォルトのシーケンス生成エンジンを使用して新規IDを生成する。
+	 * 
+	 * <pre>
+	 * 	OneEntity entity = new OneEntity();
+	 * 	entity.setId(newId(SequenceName.ONE_NAME));
+	 * </pre>
+	 * 
+	 * @param name シーケンス名
+	 * @param arguments　シーケンスに使用する引数
+	 * @return
+	 */
+	protected final long newId(String name,Object... arguments){
+		return defaultIdGenerator.generate(name, arguments);
 	}
 	
 	/**

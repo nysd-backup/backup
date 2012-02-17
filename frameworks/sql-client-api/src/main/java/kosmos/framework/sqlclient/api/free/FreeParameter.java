@@ -21,10 +21,10 @@ public abstract class FreeParameter {
 	private final String queryId;
 	
 	/** the SQL */
-	private final String sql;
+	private String sql;
 	
 	/** if true dont analyze the template*/
-	private final boolean useRowSql;
+	private boolean useRowSql;
 	
 	/** the parameter for <code>PreparedStatement</code> */
 	private Map<String,Object> param = new HashMap<String,Object>();
@@ -47,6 +47,20 @@ public abstract class FreeParameter {
 		this.useRowSql = useRowSql;
 		this.queryId = queryId;
 		this.sql = sql;
+	}
+	
+	/**
+	 * @param sql the sql to set
+	 */
+	public void setSql(String sql){
+		this.sql = sql;
+	}
+	
+	/**
+	 * @param useRowSql the useRowSql
+	 */
+	public void setUseRowSql(boolean useRowSql){
+		this.useRowSql = useRowSql;
 	}
 
 	/**

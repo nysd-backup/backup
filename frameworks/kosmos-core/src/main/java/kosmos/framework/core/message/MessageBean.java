@@ -16,7 +16,7 @@ public class MessageBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** the message */
-	private final int messageId;
+	private final int messageCode;
 	
 	/** the arguments of the message */
 	private final Object[] arguments;
@@ -25,16 +25,16 @@ public class MessageBean implements Serializable {
 	 * @param message
 	 * @param arguments
 	 */
-	public MessageBean(int messageId ,Object... arguments){
-		this.messageId = messageId;
+	public MessageBean(int messageCode ,Object... arguments){
+		this.messageCode = messageCode;
 		this.arguments = arguments;
 	}
 	
 	/**
 	 * @return the message
 	 */
-	public int getMessageId() {
-		return messageId;
+	public int getMessageCode() {
+		return messageCode;
 	}
 
 	/**

@@ -4,9 +4,7 @@
 package kosmos.framework.service.core.advice;
 
 import kosmos.framework.service.core.advice.InternalInterceptor;
-
 import org.aspectj.lang.ProceedingJoinPoint;
-
 
 /**
  * the intercepter to delegate.

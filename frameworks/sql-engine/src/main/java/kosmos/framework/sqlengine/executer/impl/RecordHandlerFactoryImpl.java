@@ -69,7 +69,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 				return new ResultMapRecordHandlerImpl((Class<? extends Map>)type, types, columnLabels, columnJavaLabels,converter);
 	
 			//Plain			
-			}else{							
+			}else{
 				return new MapRecordHandlerImpl(type, columnLabels, columnJavaLabels,converter);
 			}
 		//Bean	

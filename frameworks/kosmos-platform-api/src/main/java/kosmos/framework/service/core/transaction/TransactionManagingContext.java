@@ -66,9 +66,8 @@ public class TransactionManagingContext extends ServiceContext{
 		return unitOfWorkStack.peek();
 	}
 
-	
 	/**
-	 * @see kosmos.framework.core.context.AbstractContainerContext#addMessage(kosmos.framework.core.message.MessageResult)
+	 * @see kosmos.framework.service.core.transaction.ServiceContext#addMessage(kosmos.framework.core.message.MessageResult)
 	 */
 	@Override
 	public void addMessage(MessageResult message){
@@ -87,10 +86,11 @@ public class TransactionManagingContext extends ServiceContext{
 		// 0 level unit of work
 		startUnitOfWork();
 	}
-	
+
 	/**
-	 * @see kosmos.framework.core.context.AbstractContainerContext#release()
+	 * @see kosmos.framework.service.core.transaction.ServiceContext#release()
 	 */
+	@Override
 	public void release(){
 		anyTransactionFailed = false;
 		unitOfWorkStack = new LinkedList<InternalUnitOfWork>();

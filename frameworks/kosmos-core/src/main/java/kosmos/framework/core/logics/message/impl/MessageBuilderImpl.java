@@ -6,7 +6,7 @@ package kosmos.framework.core.logics.message.impl;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
-import kosmos.framework.core.context.AbstractContainerContext;
+import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageLevel;
@@ -34,12 +34,12 @@ public class MessageBuilderImpl implements MessageBuilder{
 	 */
 	@Override
 	public MessageResult load(MessageBean bean, String base){
-		AbstractContainerContext context = AbstractContainerContext.getCurrentInstance();
+		MessageContext context = MessageContext.getCurrentInstance();
 		ResourceBundle bundle = ResourceBundle.getBundle(base, context.getLocale());
-		String message = bundle.getString(String.valueOf(bean.getMessageId()));
+		String message = bundle.getString(String.valueOf(bean.getMessageCode()));
 		String[] splited = message.split(",");
 		MessageResult result = new MessageResult();
-		result.setCode(bean.getMessageId());
+		result.setCode(bean.getMessageCode());
 		result.setMessage(MessageFormat.format(splited[0], bean.getArguments()));
 		result.setLevel(MessageLevel.valueOf(splited[1]).ordinal());
 		if(splited.length > 2){

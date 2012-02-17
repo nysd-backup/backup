@@ -9,6 +9,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import kosmos.framework.core.logics.log.FaultNotifier;
+import kosmos.framework.core.message.ExceptionMessageFactory;
 import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl;
@@ -128,6 +129,12 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	 */
 	@Override
 	public FaultNotifier createFaultNotifier(){
+		return null;
+	}
+
+	@Override
+	public ExceptionMessageFactory createExceptionMessageFactory() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

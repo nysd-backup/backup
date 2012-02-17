@@ -16,7 +16,7 @@ public class SystemException extends RuntimeException{
 	private static final long serialVersionUID = 4928387597757529973L;
 	
 	/** the message code */
-	private String messageId = null;
+	private int messageCode = -1;
 	
 	/** the binding arguments */
 	private Object[] args;
@@ -25,8 +25,8 @@ public class SystemException extends RuntimeException{
 	 * @param messageCode the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String messageId , Object... args){
-		this.messageId = messageId;
+	public SystemException(int messageCode , Object... args){
+		this.messageCode = messageCode;
 		this.args = args;
 	}
 	
@@ -36,9 +36,9 @@ public class SystemException extends RuntimeException{
 	 * @param messageCode the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String message , Throwable cause , String messageId , Object... args){
+	public SystemException(String message , Throwable cause , int messageCode , Object... args){
 		super(message,cause);
-		this.messageId = messageId;
+		this.messageCode = messageCode;
 		this.args = args;
 	}
 	/**
@@ -46,17 +46,17 @@ public class SystemException extends RuntimeException{
 	 * @param messageCode the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String message , String messageId , Object... args){
+	public SystemException(String message , int messageCode , Object... args){
 		super(message);
-		this.messageId = messageId;
+		this.messageCode = messageCode;
 		this.args = args;
 	}
 	
 	/**
 	 * @return the message code
 	 */
-	public String getMessageId(){
-		return this.messageId;
+	public int getMessageCode(){
+		return this.messageCode;
 	}
 	
 	/**

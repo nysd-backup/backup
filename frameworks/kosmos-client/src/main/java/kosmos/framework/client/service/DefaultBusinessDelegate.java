@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.context.AbstractContainerContext;
+import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.dto.CompositeRequest;
 import kosmos.framework.core.message.MessageResult;
 
@@ -73,7 +73,7 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 		Object reply = processService(dto);
 		//メッセージをクライアントコンテキストに追加
 		for(MessageResult message: MessageReplyable.class.cast(reply).getMessageList()){
-			AbstractContainerContext.getCurrentInstance().addMessage(message);
+			MessageContext.getCurrentInstance().addMessage(message);
 		}
 		
 		return reply;

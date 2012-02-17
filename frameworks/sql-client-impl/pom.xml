@@ -17,13 +17,13 @@
 		<dependency>
 		    <groupId>kosmos.framework</groupId>
 		    <artifactId>sql-engine</artifactId>
-		    <version>${framework.sql.engine.version}</version>
+		    <version>${framework.version}</version>
 		    <scope>compile</scope>
 		</dependency>	
 			<dependency>
 		    <groupId>kosmos.framework</groupId>
 		    <artifactId>sql-client-api</artifactId>
-		    <version>${framework.sql.client.api.version}</version>
+		    <version>${framework.version}</version>
 		    <scope>compile</scope>
 		</dependency>					
 		<dependency>
@@ -35,7 +35,7 @@
 		<dependency>
 		    <groupId>kosmos.framework</groupId>
 		    <artifactId>utility</artifactId>
-		    <version>${framework.utility.version}</version>		  
+		    <version>${framework.version}</version>		  
 		</dependency>	
 	</dependencies>
 </project>

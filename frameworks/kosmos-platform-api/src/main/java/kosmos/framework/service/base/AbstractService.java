@@ -57,7 +57,7 @@ public abstract class AbstractService {
 	 * @param collection 検索結果
 	 * @throws NonUniqueResultException 検索結果1件でない場合
 	 */
-	protected void assertSingleResult(Collection<?> collection){
+	protected void assertIfMultiResult(Collection<?> collection){
 		if(collection != null && !collection.isEmpty() && collection.size() > 1){
 			throw new NonUniqueResultException("result size is " + collection.size());
 		}		
@@ -139,7 +139,7 @@ public abstract class AbstractService {
 	 * 
 	 * @throws BusinessException the exception
 	 */
-	protected final void probablyCommitable() {	
+	protected final void throwIfHasError() {	
 		if(isRollbackOnly()){
 			throwBizError();
 		}		
@@ -153,7 +153,7 @@ public abstract class AbstractService {
 	 * @param result 検索結果
 	 * @throws BusinessException 上限超過時
 	 */
-	protected void probablyLessThanLimit(MessageBean bean ,List<?> result , int limit){
+	protected void throwIfOverLimit(MessageBean bean ,List<?> result , int limit){
 		if(result == null || result.isEmpty()){
 			return;
 		}
@@ -169,7 +169,7 @@ public abstract class AbstractService {
 	 * @param result 検索結果
 	 * @throws BusinessException 検索結果0件時
 	 */
-	protected void probablyExists(MessageBean bean ,Object value){
+	protected void throwIfEmpty(MessageBean bean ,Object value){
 		if(value == null){
 			if(value instanceof Collection){
 				if(((Collection<?>) value).isEmpty()){
@@ -188,7 +188,7 @@ public abstract class AbstractService {
 	 * @param result 検索結果
 	 * @throws BusinessException 検索結果が存在する場合
 	 */
-	protected void probablyEmpty(MessageBean bean ,Object value){
+	protected void throwIfExists(MessageBean bean ,Object value){
 		if(value != null){
 			if(value instanceof Collection){
 				if(!((Collection<?>) value).isEmpty()){

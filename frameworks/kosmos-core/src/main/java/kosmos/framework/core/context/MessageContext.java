@@ -5,6 +5,7 @@ package kosmos.framework.core.context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import kosmos.framework.core.message.MessageResult;
 
@@ -15,7 +16,13 @@ import kosmos.framework.core.message.MessageResult;
  * @version	created.
  */
 public class MessageContext {
-
+	
+	/** the user locale */
+	private Locale locale = Locale.getDefault();
+	
+	/** the max level of message */
+	private int maximumLevel = 0;
+	
 	/** the list of the messages */
 	private List<MessageResult> globalMessageList = new ArrayList<MessageResult>();
 	
@@ -47,8 +54,32 @@ public class MessageContext {
 	/**
 	 * @param message the message to be added to
 	 */
-	void addMessage(MessageResult message){
+	public void addMessage(MessageResult message){
+		if(maximumLevel < message.getLevel()){
+			maximumLevel = message.getLevel();
+		}
 		globalMessageList.add(message);
+	}
+	
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale(){
+		return this.locale; 
+	}
+	
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale){
+		this.locale = locale;
+	}
+	
+	/**
+	 * @return maximum level
+	 */
+	public int getMaxLevel(){
+		return maximumLevel;
 	}
 	
 	/**
@@ -71,6 +102,7 @@ public class MessageContext {
 	 */
 	public void initialize(){
 		release();
+		locale = Locale.getDefault();
 		setCurrentInstance(this);
 	}
 	
@@ -78,6 +110,8 @@ public class MessageContext {
 	 * Releases the context
 	 */
 	public void release(){
+		maximumLevel = 0;
+		locale = null;
 		globalMessageList.clear();		
 		setCurrentInstance(null);
 	}

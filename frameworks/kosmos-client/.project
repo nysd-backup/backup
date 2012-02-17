@@ -1,13 +1,16 @@
 <projectDescription>
   <name>kosmos-client</name>
-  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <comment>リモートコール専用のクライアント、ローカルコールでは使用しない。
+		ローカルコールでは@EJB、@Autowiredなどを使用すること。. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
     <project>jpql-client-api</project>
     <project>jpql-client-eclipselink-plugin</project>
+    <project>jpql-client-impl</project>
     <project>kosmos-core</project>
     <project>kosmos-platform-api</project>
     <project>kosmos-spring-impl</project>
     <project>sql-client-api</project>
+    <project>sql-client-impl</project>
     <project>sql-engine</project>
     <project>utility</project>
   </projects>
