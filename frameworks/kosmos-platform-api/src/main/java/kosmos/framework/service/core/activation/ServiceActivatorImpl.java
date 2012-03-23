@@ -6,7 +6,7 @@ package kosmos.framework.service.core.activation;
 import java.lang.reflect.Method;
 
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.dto.InvocationParameter;
 
 
 /**
@@ -18,10 +18,10 @@ import kosmos.framework.core.dto.CompositeRequest;
 public class ServiceActivatorImpl implements ServiceActivator{
 
 	/**
-	 * @see kosmos.framework.core.activation.ServiceActivator#activateAndInvoke(kosmos.framework.core.dto.CompositeRequest)
+	 * @see kosmos.framework.core.activation.ServiceActivator#activateAndInvoke(kosmos.framework.core.dto.InvocationParameter)
 	 */
 	@Override
-	public Object activate(CompositeRequest dto) throws Throwable{
+	public Object activate(InvocationParameter dto) throws Throwable{
 		
 		Object service = getService(dto);	
 		
@@ -44,7 +44,7 @@ public class ServiceActivatorImpl implements ServiceActivator{
 	 * @param dto the DTO
 	 * @return the service
 	 */
-	protected Object getService(CompositeRequest dto){
+	protected Object getService(InvocationParameter dto){
 		return ServiceLocator.lookup(dto.getServiceName());
 	}
 

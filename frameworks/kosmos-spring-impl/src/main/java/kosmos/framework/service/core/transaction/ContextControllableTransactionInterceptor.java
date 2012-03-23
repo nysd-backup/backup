@@ -8,8 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.TransactionManagingContext;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.support.AopUtils;
@@ -60,7 +58,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 			
 			//トランザクションl境界の場合トランザクション開始（エラーメッセージによる自動ロールバックが不要であればこの処理は不要）
 			if(txInfo.getTransactionStatus().isNewTransaction()){
-				((TransactionManagingContext)ServiceContext.getCurrentInstance()).startUnitOfWork();
+				ServiceContext.getCurrentInstance().startUnitOfWork();
 			}
 			
 			Object retVal = null;		
@@ -83,7 +81,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 				
 				if(txInfo.getTransactionStatus().isNewTransaction()){
 					//トランザクション境界なのでコンテキスト初期化
-					((TransactionManagingContext)ServiceContext.getCurrentInstance()).endUnitOfWork();
+					ServiceContext.getCurrentInstance().endUnitOfWork();
 				}
 				
 				cleanupTransactionInfo(txInfo);
@@ -150,7 +148,7 @@ public class ContextControllableTransactionInterceptor extends TransactionInterc
 	protected boolean afterProceed(TransactionInfo txInfo,Object retVal , MethodInvocation invocation){
 		
 		//現在トランザクションでロールバックフラグが設定されている場合はエラーとする
-		if(((TransactionManagingContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly()){			
+		if(ServiceContext.getCurrentInstance().getCurrentUnitOfWork().isRollbackOnly()){			
 			completeTransactionAfterThrowing(txInfo,new BusinessException("set rollback only in current transaction"));			
 			return false;
 		}

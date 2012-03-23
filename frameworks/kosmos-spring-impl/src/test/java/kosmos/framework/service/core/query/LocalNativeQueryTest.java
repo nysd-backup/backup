@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.CachableConst;
 import kosmos.framework.service.test.SampleNativeQuery;
@@ -20,7 +18,9 @@ import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.QueryCallback;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -39,7 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	
 	@Resource
-	private QueryFactory queryFactory;
+	private QueryFactoryWrapper queryFactory;
 	
 	@Resource
 	private OrmQueryWrapperFactory ormQueryFactory;

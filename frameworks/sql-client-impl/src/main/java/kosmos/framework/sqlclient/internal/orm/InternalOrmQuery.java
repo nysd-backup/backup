@@ -5,7 +5,6 @@ package kosmos.framework.sqlclient.internal.orm;
 
 import java.util.List;
 
-import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
 
@@ -16,32 +15,7 @@ import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
  * @version	created.
  */
 public interface InternalOrmQuery {
-	
-	/**
-	 * Updates the batch.
-	 * 
-	 * @param parameter the parameter to set
-	 * @return the inserted count
-	 */
-	public int[] batchUpdate(OrmUpdateParameter<?> parameter);
-	
-	/**
-	 * Updates the batch.
-	 * 
-	 * @param parameter the parameter to set
-	 * @return the inserted count
-	 */
-	public int[] batchInsert(OrmUpdateParameter<?> parameter);
-	
-	/**
-	 * Insert the record.
-	 * 
-	 * @param parameter the parameter
-	 * @param hints the hints
-	 * @return the inserted count
-	 */
-	public int insert(OrmUpdateParameter<?> parameter);
-	
+
 	/**
 	 *　Updates the table.
 	 *
@@ -85,6 +59,6 @@ public interface InternalOrmQuery {
  	 * @param callback the callback to execute
  	 * @return the result
  	 */
- 	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter , QueryCallback<E> callback);
+ 	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter);
  
 }

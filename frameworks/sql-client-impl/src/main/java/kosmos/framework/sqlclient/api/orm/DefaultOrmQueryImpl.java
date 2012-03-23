@@ -3,12 +3,14 @@
  */
 package kosmos.framework.sqlclient.api.orm;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.LockModeType;
 
 import kosmos.framework.sqlclient.api.Query;
 import kosmos.framework.sqlclient.api.free.QueryCallback;
+import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
 
 
 /**
@@ -26,119 +28,37 @@ import kosmos.framework.sqlclient.api.free.QueryCallback;
 @SuppressWarnings("unchecked")
 public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	
-	/** the delegate */
-	private OrmQuery<T> delegate;
 
-	/**
-	 * @param delegate the delegate to set
-	 */
-	public DefaultOrmQueryImpl(OrmQuery<T> delegate){
-		this.delegate = delegate;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#eq(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> eq(String column, Object value) {
-		delegate.eq(column, value);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#gt(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> gt(String column, Object value) {
-		delegate.gt(column, value);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#lt(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> lt(String column, Object value) {
-		delegate.lt(column, value);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#gtEq(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> gtEq(String column, Object value) {
-		delegate.gtEq(column, value);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#ltEq(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> ltEq(String column, Object value) {
-		delegate.ltEq(column, value);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#between(java.lang.String, java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> between(String column, Object from, Object to) {
-		delegate.between(column, from,to);
-		return this;
-	}
+	/** the InternalOrmQuery */
+	private final InternalOrmQuery dao;
+	
+	/** the condition */
+	protected OrmQueryParameter<T> condition;
 	
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#contains(java.lang.String, java.util.List)
+	 * @param entityClass the entityClass to set
+	 */
+	public DefaultOrmQueryImpl(Class<T> entityClass,InternalOrmQuery dao){
+		condition = new OrmQueryParameter<T>(entityClass);		
+		this.dao = dao;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public OrmQuery<T> contains(String column, List<?> value) {
-		delegate.contains(column, value);
+	public OrmQuery<T> setCondition(OrmQueryParameter<T> condition) {
+		this.condition = (OrmQueryParameter<T>)condition;
 		return this;
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#asc(java.lang.String)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setHint(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmQuery<T> asc(String column) {
-		delegate.asc(column);
+	public OrmQuery<T> setHint(String key, Object value){
+		condition.setHint(key, value);
 		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#desc(java.lang.String)
-	 */
-	@Override
-	public OrmQuery<T> desc(String column) {
-		delegate.desc(column);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#find(java.lang.Object[])
-	 */
-	@Override
-	public T find(Object... pks) {
-		return delegate.find(pks);
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#getResultList()
-	 */
-	@Override
-	public List<T> getResultList() {
-		return delegate.getResultList();
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Query#getSingleResult()
-	 */
-	@Override
-	public T getSingleResult() {
-		return (T)delegate.getSingleResult();
 	}
 
 	/**
@@ -146,7 +66,7 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 */
 	@Override
 	public <Q extends Query> Q setMaxResults(int arg0) {
-		delegate.setMaxResults(arg0);
+		condition.setMaxSize(arg0);
 		return (Q)this;
 	}
 
@@ -155,17 +75,124 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 */
 	@Override
 	public <Q extends Query> Q setFirstResult(int arg0) {
-		delegate.setFirstResult(arg0);
+		condition.setFirstResult(arg0);
 		return (Q)this;
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#eq(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmQuery<T> setCondition(OrmQueryParameter<T> condition) {
-		delegate.setCondition(condition);
+	public OrmQuery<T> eq(String column , Object value ){
+		return setOperand(column, value, WhereOperand.Equal);
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#gt(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> gt(String column , Object value ){
+		return setOperand(column, value, WhereOperand.GreaterThan);
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#lt(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> lt(String column , Object value ){
+		return setOperand(column, value, WhereOperand.LessThan);
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#gtEq(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> gtEq(String column , Object value ){
+		return setOperand(column, value, WhereOperand.GreaterEqual);
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#ltEq(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> ltEq(String column , Object value ){
+		return setOperand(column, value, WhereOperand.LessEqual);
+	}
+	
+	/**
+	 * @param column the column 
+	 * @param value the value 
+	 * @param operand the operand
+	 * @return
+	 */
+	private OrmQuery<T> setOperand(String column, Object value,WhereOperand operand) {
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,operand,value));
 		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#between(java.lang.String, java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public OrmQuery<T> between(String column, Object from , Object to ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.Between,from,to));
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#contains(java.lang.String, java.util.List)
+	 */
+	@Override
+	public OrmQuery<T> contains(String column, List<?> value) {
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.IN,value));
+		return this;
+	}
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#asc(java.lang.String)
+	 */
+	@Override
+	public OrmQuery<T> asc(String column){
+		condition.getSortKeys().add(new SortKey(true,column));
+		return this;
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#desc(java.lang.String)
+	 */
+	@Override
+	public OrmQuery<T> desc(String column){
+		condition.getSortKeys().add(new SortKey(false,column));
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#find(java.lang.Object[])
+	 */
+	@Override
+	public T find(Object... pks) {
+		return dao.find(condition,pks);
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Query#getResultList()
+	 */
+	@Override
+	public List<T> getResultList() {
+		return dao.getResultList(condition);
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.Query#getSingleResult()
+	 */
+	@Override
+	public T getSingleResult() {
+		setMaxResults(1);
+		List<T> result = dao.getResultList(condition);
+		if(result.isEmpty()){
+			return null;
+		}else{
+			return result.get(0);
+		}
 	}
 
 	/**
@@ -173,7 +200,7 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 */
 	@Override
 	public long count() {
-		return delegate.count();
+		throw new UnsupportedOperationException("do you realy need to use this method?");
 	}
 
 	/**
@@ -181,42 +208,39 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 */
 	@Override
 	public OrmQuery<T> filter(String filterString) {
-		delegate.filter(filterString);
+		condition.setFilterString(filterString);
 		return this;
 	}
-	
+
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#single(java.lang.Object[])
 	 */
 	@Override
 	public T single(Object... params){
-		return delegate.single(params);
+		setMaxResults(1);
+		List<T> result = list(params);
+		if(result.isEmpty()){
+			return null;
+		}else{
+			return result.get(0);
+		}
 	}
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#list(java.lang.Object[])
 	 */
 	@Override
 	public List<T> list(Object... params){
-		return delegate.list(params);
+		condition.setEasyParams(params);
+		return dao.getResultList(condition);
 	}
-
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#order(java.lang.String)
 	 */
 	@Override
 	public OrmQuery<T> order(String orderString) {
-		delegate.order(orderString);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#setHint(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public OrmQuery<T> setHint(String key, Object value) {
-		delegate.setHint(key, value);
+		condition.setOrderString(orderString);
 		return this;
 	}
 
@@ -225,16 +249,17 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 */
 	@Override
 	public OrmQuery<T> setLockMode(LockModeType type) {
-		delegate.setLockMode(type);
+		condition.setLockModeType(type);
 		return this;
 	}
+
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getCurrentParams()
 	 */
 	@Override
 	public OrmQueryParameter<T> getCurrentParams() {
-		return delegate.getCurrentParams();
+		return this.condition;
 	}
 
 	/**
@@ -242,16 +267,45 @@ public class DefaultOrmQueryImpl<T> implements OrmQuery<T>{
 	 */
 	@Override
 	public long getFetchResult(QueryCallback<T> callback) {
-		return delegate.getFetchResult(callback);
+		List<T> lazyList = getFetchResult();
+		Iterator<T> iterator = lazyList.iterator();
+		long count = 0;
+		try{
+			while(iterator.hasNext()){	
+				callback.handleRow(iterator.next(), count);
+				count++;
+			}
+		}finally{
+			lazyList.clear();
+		}
+		return count;
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#fetch(kosmos.framework.sqlclient.api.free.QueryCallback, java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#fetch(kosmos.framework.sqlclient.api.free.QueryCallback)
 	 */
 	@Override
-	public long fetch(QueryCallback<T> callback, Object... params) {
-		return delegate.fetch(callback, params);
+	public long fetch(QueryCallback<T> callback,Object... params) {
+		condition.setEasyParams(params);
+		return getFetchResult(callback);
 	}
 
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#getFetchResult()
+	 */
+	@Override
+	public List<T> getFetchResult() {
+		List<T> lazyList = dao.getFetchResult(condition);
+		return lazyList;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmQuery#fetch(java.lang.Object[])
+	 */
+	@Override
+	public List<T> fetch(Object... params) {
+		condition.setEasyParams(params);
+		return getFetchResult();
+	}
 	
 }

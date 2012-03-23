@@ -36,9 +36,19 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- クエリファクトリ -->
-	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
-		<property name="internalQuery" ref="internalQuery"/>	
-		<property name="internalNamedQuery" ref="internalNamedQuery"/>			
+	<bean id="internalNamedFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalNamedQuery"/>			
+	</bean>
+	
+		<!-- クエリファクトリ -->
+	<bean id="internalFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalQuery"/>			
+	</bean>
+	
+	<!-- クエリファクトリ開発者API -->
+	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.wrapper.free.impl.QueryFactoryWrapperImpl" scope="prototype" >
+		<property name="internalFactory" ref="internalFactory"/>		
+		<property name="internalNamedFactory" ref="internalNamedFactory"/>			
 	</bean>
 	
 	<!-- ORM内部クエリ -->
@@ -53,7 +63,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.OrmQueryWrapperFactoryImpl" scope="prototype">	
+	<bean id="ormQueryFactory" class="kosmos.framework.sqlclient.api.wrapper.orm.impl.OrmQueryWrapperFactoryImpl" scope="prototype">	
 		<property name="internalFactory" ref="internalQueryFactory" />
 	</bean>
  

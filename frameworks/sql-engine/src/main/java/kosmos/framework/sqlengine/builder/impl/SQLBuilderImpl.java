@@ -28,7 +28,7 @@ import kosmos.framework.sqlengine.exception.SQLEngineException;
 public class SQLBuilderImpl implements SQLBuilder{
 	
 	/** the pattern for binding value. */
-	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
+	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-zA-Z0-9][a-zA-Z0-9_]*)");
 
 	/** the template engine */
 	private TemplateEngine engine = new VelocityTemplateEngineImpl();

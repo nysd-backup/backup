@@ -3,6 +3,8 @@
  */
 package kosmos.framework.sqlclient.api.free;
 
+import java.util.List;
+
 
 
 /**
@@ -22,12 +24,17 @@ public interface NativeQuery extends FreeQuery{
 	 * @return the result holding the <code>ResultSet</code>
 	 */
 	long getFetchResult(QueryCallback<?> callback);
+	
+	/**
+	 * @return the result holding the <code>ResultSet</code>
+	 */
+	<T> List<T> getFetchResult();
 
 	/**
 	 * @param <T> the type
 	 * @param filter the filter for <code>ResultSet</code>
 	 * @return self
 	 */
-	<T extends NativeQuery> T setFilter(ResultSetFilter filter);
+	NativeQuery setFilter(ResultSetFilter filter);
 	
 }

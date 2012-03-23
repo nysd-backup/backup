@@ -4,8 +4,6 @@
 package kosmos.framework.sqlclient.api.orm;
 
 import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
-import kosmos.framework.sqlclient.internal.orm.impl.LocalOrmQueryEngine;
-import kosmos.framework.sqlclient.internal.orm.impl.LocalOrmUpdateEngine;
 
 /**
  * The factory to create the query.
@@ -31,8 +29,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T,Q extends OrmQuery<T>> Q createQuery(Class<T> entityClass) {
-		OrmQuery<T> engine = new LocalOrmQueryEngine<T>(entityClass,internalOrmQuery);
-		return (Q)create(engine);
+		return (Q)new DefaultOrmQueryImpl<T>(entityClass,internalOrmQuery);
 	}
 	
 	/**
@@ -41,30 +38,7 @@ public class OrmQueryFactoryImpl implements OrmQueryFactory{
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T,Q extends OrmUpdate<T>> Q createUpdate(Class<T> entityClass){
-		OrmUpdate<T> engine = new LocalOrmUpdateEngine<T>(entityClass,internalOrmQuery);
-		return (Q)create(engine);
-	}
-	
-	/**
-	 * @param <T> the type
-	 * @param <Q> the type
-	 * @param engine the internal engine
-	 * @return the updater
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected OrmUpdate create(OrmUpdate engine ){
-		return new DefaultOrmUpdateImpl(engine);
-	}
-	
-	/**
-	 * @param <T> the type
-	 * @param <Q> the type
-	 * @param engine the internal engine
-	 * @return the query
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected OrmQuery create(OrmQuery engine ){
-		return new DefaultOrmQueryImpl(engine);
+		return (Q)new DefaultOrmUpdateImpl<T>(entityClass,internalOrmQuery);	
 	}
 	
 }

@@ -7,11 +7,11 @@ import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ComponentLocator;
 import kosmos.framework.core.activation.ServiceActivator;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 
 /**
@@ -45,7 +45,7 @@ public abstract class ServiceLocator extends ComponentLocator{
 	/**
 	 * @return the <code>QueryFactory</code>
 	 */
-	public abstract QueryFactory createQueryFactory();
+	public abstract QueryFactoryWrapper createQueryFactory();
 	
 	/**
 	 * @return the <code>AsyncServiceFactory</code>
@@ -93,7 +93,7 @@ public abstract class ServiceLocator extends ComponentLocator{
 	/**
 	 * @return the QueryFactory
 	 */
-	public static QueryFactory createDefaultQueryFactory(){
+	public static QueryFactoryWrapper createDefaultQueryFactory(){
 		return getDelegate().createQueryFactory();
 	}
 	

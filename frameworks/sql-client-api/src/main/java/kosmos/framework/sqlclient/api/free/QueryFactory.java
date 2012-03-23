@@ -19,7 +19,7 @@ public interface QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	<K extends FreeQuery,T extends AbstractFreeQuery<K>> T createQuery(Class<T> query);
+	<K extends FreeQuery> K createQuery();
 	
 
 	/**
@@ -29,6 +29,6 @@ public interface QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	<K extends FreeUpdate,T extends AbstractFreeUpdate<K>> T createUpdate(Class<T> query);
+	<K extends FreeUpdate> K createUpdate();
 	
 }

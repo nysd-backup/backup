@@ -3,6 +3,8 @@
  */
 package kosmos.framework.service.test;
 
+import java.util.Locale;
+
 import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
@@ -11,12 +13,11 @@ import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
-import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
 import kosmos.framework.service.test.entity.TestEntity;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	public String test() {
 		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
-		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
+		rollbackOnly =  ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
 	}
 
@@ -68,10 +69,10 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(100);
-		MessageResult message = builder.load(bean);
+		MessageBean bean = new MessageBean("100");
+		MessageResult message = builder.load(bean,Locale.getDefault());
 		ServiceContext.getCurrentInstance().addMessage(message);
-		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
+		rollbackOnly =  ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 		RequireService service2 = ServiceLocator.lookupByInterface(RequireService.class);
 		state= service2.persist();		
 		
-		rollbackOnly = ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
+		rollbackOnly = ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		
 	}
 	

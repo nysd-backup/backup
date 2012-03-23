@@ -23,13 +23,6 @@ public interface InternalQuery {
 	 * @return the updated count
 	 */
 	int executeUpdate(FreeUpdateParameter param);
-	
-	/**
-	 * Executes the batch.
-	 * 
-	 * @return result
-	 */
-	int[] batchUpdate(FreeUpdateParameter param);
 
 	/**
 	 * @return the total result

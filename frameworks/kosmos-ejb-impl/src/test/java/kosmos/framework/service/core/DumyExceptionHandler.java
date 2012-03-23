@@ -6,7 +6,6 @@ package kosmos.framework.service.core;
 import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.ExceptionHandler;
@@ -22,7 +21,7 @@ import org.eclipse.persistence.exceptions.OptimisticLockException;
 public class DumyExceptionHandler implements ExceptionHandler{
 
 	protected Object handleOptimisticLockException(OptimisticLockException e){
-		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
@@ -33,7 +32,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 	}
 	
 	protected Object handleDatabaseException(DatabaseException e){
-		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
@@ -44,7 +43,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 	}
 	
 	protected Object handlePessimisticLockException(PessimisticLockException e){
-		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");

@@ -45,4 +45,18 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<bean class="kosmos.framework.service.test.RequiresNewServiceImpl" scope="prototype" />
 	<bean class="kosmos.framework.service.test.RequiresNewReadOnlyServiceImpl" scope="prototype" />
 	
+	
+	<!-- 永続化エンジン -->
+	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerImpl" scope="prototype">
+		<property name="internalQuery" ref="internalQuery"/>		
+		<property name="batchUpdateFactory" ref="batchUpdateFactory"/>
+		<property name="contextProvider" ref="contextProvider"/>
+	</bean>
+	
+	<bean id="contextProvider" class="kosmos.framework.service.test.PersistenceContextProviderImpl"/>
+	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.api.free.BatchUpdateFactoryImpl">
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
+		<property name="connectionProvider" ref="txConnectionProvider"/>	
+	</bean>
+ 
 </beans>

@@ -6,10 +6,7 @@ package kosmos.framework.service.core.testcase;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.CachableConst;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.entity.ITestEntity;
@@ -20,7 +17,9 @@ import kosmos.framework.service.core.query.SampleNativeResult;
 import kosmos.framework.service.core.query.SampleNativeUpdate;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.QueryCallback;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -33,10 +32,9 @@ import org.eclipse.persistence.config.QueryHints;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@Stateless
 public class LocalNativeQueryTestBean extends BaseCase{
 	
-	private QueryFactory queryFactory = null;
+	private QueryFactoryWrapper queryFactory = null;
 	
 	private OrmQueryWrapperFactory ormQueryFactory = null;
 	

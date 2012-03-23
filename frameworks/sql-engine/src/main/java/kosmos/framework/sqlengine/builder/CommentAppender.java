@@ -3,7 +3,7 @@
  */
 package kosmos.framework.sqlengine.builder;
 
-import kosmos.framework.sqlengine.facade.BaseSQLParameter;
+import kosmos.framework.sqlengine.facade.SQLParameter;
 
 /**
  * Adds the comment to the specified SQL.
@@ -17,5 +17,5 @@ public interface CommentAppender {
 	 * @param param the parameters
 	 * @param sql the SQL
 	 */
-	String setExternalString(BaseSQLParameter param , String sql);
+	String setExternalString(SQLParameter param , String sql);
 }

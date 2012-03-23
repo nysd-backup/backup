@@ -159,6 +159,10 @@ public interface OrmQuery<T> extends Query{
 	 */
 	long getFetchResult(QueryCallback<T> callback);
 	
+	/**
+	 * @return the result
+	 */
+	List<T> getFetchResult();
 
 	/**
 	 * @param callback the callback
@@ -166,5 +170,11 @@ public interface OrmQuery<T> extends Query{
 	 * @return the result count
 	 */
 	long fetch(QueryCallback<T> callback,Object... params);
+	
+	/**
+	 * @param params the condition
+	 * @return the result
+	 */
+	List<T> fetch(Object... params);
 	
 }

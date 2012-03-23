@@ -3,6 +3,8 @@
  */
 package kosmos.framework.service.test;
 
+import java.util.Locale;
+
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
@@ -37,8 +39,8 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(100);
-		MessageResult message = builder.load(bean);
+		MessageBean bean = new MessageBean("100");
+		MessageResult message = builder.load(bean,Locale.getDefault());
 		ServiceContext.getCurrentInstance().addMessage( message);
 	}
 

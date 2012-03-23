@@ -19,7 +19,7 @@ import kosmos.framework.core.message.ExceptionMessageFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.activation.SpringServiceLocator;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
+import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlengine.builder.ConstCache;
 import kosmos.framework.test.client.CachableConst;
 
@@ -62,7 +62,7 @@ public abstract class ClientUnit extends Assert{
 	
 	private IDatabaseConnection connection = null;
 
-	private ServiceContextImpl context = null;
+	private ServiceContext context = null;
 
 	/**
 	 * @param applicationContext
@@ -73,7 +73,7 @@ public abstract class ClientUnit extends Assert{
 		locator = createLocator(applicationContext);
 		locator.construct();	
 		
-		context = new ServiceContextImpl();	
+		context = new ServiceContext();	
 		context.initialize();	
 		
 

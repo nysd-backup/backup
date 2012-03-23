@@ -8,7 +8,8 @@ import java.lang.reflect.Method;
 
 import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.context.MessageContext;
-import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.dto.InvocationParameter;
+import kosmos.framework.core.message.MessageReplyable;
 import kosmos.framework.core.message.MessageResult;
 
 
@@ -54,7 +55,7 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 			}
 		}
 			
-		CompositeRequest dto = new CompositeRequest();
+		InvocationParameter dto = new InvocationParameter();
 		if(alias != null){	
 			dto.setServiceName(alias);
 		}else{
@@ -85,7 +86,7 @@ public class DefaultBusinessDelegate implements BusinessDelegate{
 	 * @param dto DTO
 	 * @return the reply
 	 */
-	protected Object processService(CompositeRequest dto) throws Throwable{
+	protected Object processService(InvocationParameter dto) throws Throwable{
 		return serviceActivator.activate(dto);
 	}
 

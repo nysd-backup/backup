@@ -6,6 +6,7 @@ package kosmos.framework.sqlclient.api.orm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,9 @@ public abstract class OrmParameter<T> implements Serializable{
 	
 	/** the conditions */
 	private List<WhereCondition> conditions = new ArrayList<WhereCondition>();
+	
+	/** the updating values */
+	private Map<String,Object> values = new LinkedHashMap<String,Object>();
 	
 	/** the filter to search */
 	private String filterString = null;
@@ -100,6 +104,21 @@ public abstract class OrmParameter<T> implements Serializable{
 	 */
 	public Object[] getEasyParams() {
 		return easyParams;
+	}
+	
+	/**
+	 * @return the current values
+	 */
+	public Map<String,Object> getCurrentValues(){
+		return values;
+	}
+	
+	/**
+	 * @param key the key
+	 * @param value the value
+	 */
+	public void set(String key ,Object value){
+		values.put(key, value);
 	}
 	
 	/**

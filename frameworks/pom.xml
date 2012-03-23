@@ -87,7 +87,7 @@
 				<module>jpql-client-eclipselink-plugin</module>	
 				<module>kosmos-core</module>
 				<module>kosmos-client</module>	
-				<module>kosmos-rtfa-client</module>		
+						
 				<module>kosmos-platform-api</module>
 				<module>kosmos-spring-impl</module>	
 				<module>kosmos-web</module>		

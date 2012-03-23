@@ -6,19 +6,21 @@ package kosmos.framework.service.base;
 import javax.persistence.OptimisticLockException;
 
 import kosmos.framework.base.AbstractEntity;
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.EasyUpdate;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
-import kosmos.framework.service.core.query.IdentifierGenerator;
-import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.PersistenceManager;
 import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
-import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
-import kosmos.framework.sqlclient.api.free.AbstractNativeUpdate;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.free.BatchUpdate;
+import kosmos.framework.sqlclient.api.free.BatchUpdateFactory;
+import kosmos.framework.sqlclient.api.orm.PersistenceHints;
+import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeQuery;
+import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeUpdate;
+import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * Spring用サービス.
@@ -35,7 +37,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	
 	/** クエリファクトリ */
 	@Autowired
-	private QueryFactory queryFactory;
+	private QueryFactoryWrapper queryFactory;
 	
 	/** 永続化処理 */
 	@Autowired
@@ -45,9 +47,16 @@ public abstract class AbstractCoreService extends AbstractService{
 	@Autowired
 	private MessageClientFactory messageClientFactory;
 	
-	/** ID生成 */
 	@Autowired
-	private IdentifierGenerator defaultIdGenerator;
+	private BatchUpdateFactory batchUpdateFactory;
+	
+	/**
+	 * バッチ更新用エンジン生成.
+	 * @return バッチ更新エンジン
+	 */
+	protected BatchUpdate createBatchUpdate(){
+		return batchUpdateFactory.createBatchUpdate();
+	}
 	
 	/**
 	 * P2P用非同期処理.
@@ -223,8 +232,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @throws OptimisticLockException 楽観ロックエラー
 	 * @return 更新件数
 	 */
-	protected <T extends AbstractEntity> int update(T entity, T found)throws OptimisticLockException {
-		return persister.update(entity,createHints().setFoundEntity(found));
+	protected <T extends AbstractEntity> void update(T entity, T found)throws OptimisticLockException {
+		update(entity,found,createHints());
 	}
 	
 	/**
@@ -246,9 +255,9 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @throws OptimisticLockException 楽観ロックエラー
 	 * @return 更新件数
 	 */
-	protected <T extends AbstractEntity> int update(T entity,T found,PersistenceHints hints)
+	protected <T extends AbstractEntity> void update(T entity,T found,PersistenceHints hints)
 			throws OptimisticLockException {
-		return persister.update(entity,hints.setFoundEntity(found));
+		persister.merge(entity,found,hints);
 	}
 	
 	/**
@@ -259,7 +268,26 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * insert(entity);
 	 * 
 	 * NULL値はINSERT値に含まれないため、上記の例だとitemCountとidのみinsertのvalueに値が設定される
-	 * insert時にすでにレコードが存在した場合OptimisticLockExceptionをスローする。
+	 * insert時にすでにレコードが存在した場合UniqueConstraintExceptionをスローする。
+	 * </pre>
+	 * 
+	 * @param entity
+	 * @return　挿入件数
+	 * @throws UniqueConstraintException
+	 */
+	protected void insert(AbstractEntity entity) throws UniqueConstraintException{
+		insert(entity,createHints());
+	}
+	
+	/**
+	 * 単一行挿入.<br/>
+	 * 
+	 * <pre>
+	 * OrderEntity entity = new OrderEntity().setId(1).setItemCount(10)....;
+	 * insert(entity);
+	 * 
+	 * NULL値はINSERT値に含まれないため、上記の例だとitemCountとidのみinsertのvalueに値が設定される
+	 * insert時にすでにレコードが存在した場合UniqueConstraintExceptionをスローする。
 	 * </pre>
 	 * 
 	 * @param entity
@@ -267,8 +295,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return　挿入件数
 	 * @throws UniqueConstraintException
 	 */
-	protected int insert(AbstractEntity entity,PersistenceHints hints) throws UniqueConstraintException{
-		return persister.insert(entity,hints);
+	protected void insert(AbstractEntity entity,PersistenceHints hints) throws UniqueConstraintException{
+		persister.persist(entity,hints);
 	}
 	
 	/**
@@ -286,24 +314,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @throws OptimisticLockException 楽観ロックエラー
 	 * @return 削除件数
 	 */
-	protected int delete(AbstractEntity entity,PersistenceHints hints) throws OptimisticLockException{
-		return persister.delete(entity,hints);
-	}
-	
-	/**
-	 * デフォルトのシーケンス生成エンジンを使用して新規IDを生成する。
-	 * 
-	 * <pre>
-	 * 	OneEntity entity = new OneEntity();
-	 * 	entity.setId(newId(SequenceName.ONE_NAME));
-	 * </pre>
-	 * 
-	 * @param name シーケンス名
-	 * @param arguments　シーケンスに使用する引数
-	 * @return
-	 */
-	protected final long newId(String name,Object... arguments){
-		return defaultIdGenerator.generate(name, arguments);
+	protected void delete(AbstractEntity entity,PersistenceHints hints) throws OptimisticLockException{
+		persister.remove(entity,hints);
 	}
 	
 	/**

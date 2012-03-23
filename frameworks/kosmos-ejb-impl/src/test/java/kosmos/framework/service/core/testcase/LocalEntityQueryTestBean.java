@@ -17,11 +17,7 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.EasyUpdate;
-import kosmos.framework.core.query.LightQuery;
-import kosmos.framework.core.query.LightUpdate;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
+import kosmos.framework.service.core.ServiceTestContextImpl;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.ChildEntity;
@@ -32,7 +28,11 @@ import kosmos.framework.service.core.entity.ParentEntity;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.services.RequiresNewService;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.LightQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.LightUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -45,6 +45,28 @@ import org.eclipse.persistence.config.QueryHints;
  */
 @Stateless
 public class LocalEntityQueryTestBean extends BaseCase {
+	
+	public void duplicateError(){
+		
+		//1件目
+		TestEntity e = new TestEntity();
+		e.setAttr("attr");
+		e.setTest("1");
+		per.getEntityManager().persist(e);
+		
+		//2件目
+		TestEntity e2 = new TestEntity();
+		e2.setAttr("attr");
+		e2.setTest("1");
+		per.getEntityManager().persist(e2);
+		
+		try{
+			per.getEntityManager().flush();
+			fail();
+		}catch(PersistenceException dbe){
+			dbe.printStackTrace();
+		}
+	}
 	
 	public void allCondition(){
 		setUpData("TEST.xls");
@@ -378,8 +400,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void ignoreUniqueConstraintError(){
 		setUpData("TEST.xls");
 		//一意制紁E��効匁E
-		ServiceContextImpl impl = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-		impl.setSuppressOptimisticLockError(true);
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		impl.setSuppressOptimisticLockError();
 	
 		TestEntity entity = new TestEntity();
 		entity.setTest("1");
@@ -389,7 +411,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		per.getEntityManager().persist(entity);	
 		per.getEntityManager().flush();
 		
-		impl.setSuppressOptimisticLockError(false);
+		impl.setValidOptimisticLockError();
 		
 		TestEntity entity2 = new TestEntity();
 		entity2.setTest("530");
@@ -425,8 +447,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void ignoreVersionNoError(){
 		setUpData("TEST.xls");
 		//ロチE��連番エラー無効匁E行単位�E更新をさせる場合、こぁE��るか自律トランザクションにする忁E��がある�E�E
-		ServiceContextImpl impl = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-		impl.setSuppressOptimisticLockError(true);
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		impl.setSuppressOptimisticLockError();
 		
 			OrmQueryWrapperFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
 
@@ -449,7 +471,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //			
 //		}
 				);
-		impl.setSuppressOptimisticLockError(false);
+		impl.setValidOptimisticLockError();
 		
 		//バ�Eジョン番号を指定しなぁE��め更新成功
 		TestEntity res2 = query.find("2");
@@ -471,8 +493,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		service.persist();
 		
-		ServiceContextImpl impl = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-		impl.setSuppressOptimisticLockError(true);
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		impl.setSuppressOptimisticLockError();
 		
 		OrmQueryWrapperFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
 		ormQueryFactory.createEasyQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
@@ -572,8 +594,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 
 	public void invalidQueryPessimisticLockError(){	
 		
-		ServiceContextImpl impl = (ServiceContextImpl)ServiceContext.getCurrentInstance();
-		impl.setSuppressOptimisticLockError(true);
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		impl.setSuppressOptimisticLockError();
 		
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		service.persist();

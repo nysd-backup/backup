@@ -4,11 +4,14 @@
 package kosmos.framework.core.message;
 
 /**
- * function.
+ * Levels of messages .
  *
  * @author yoshida-n
  * @version	created.
  */
 public enum MessageLevel {
-	I,W,E,F
+	I,
+	W,
+	E,
+	F
 }

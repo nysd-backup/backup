@@ -3,7 +3,10 @@
  */
 package kosmos.framework.sqlclient.api.orm;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
 
 
 /**
@@ -19,41 +22,64 @@ import java.util.List;
  * @version 2011/08/31 created.
  */
 public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
+
+	/** the InternalOrmQuery */
+	private final InternalOrmQuery dao;
 	
-	/** the delegate */
-	private OrmUpdate<T> delegate;
+	/** the condition */
+	protected OrmUpdateParameter<T> condition;
+	
+	/**
+	 * @param entityClass the entityClass to set
+	 */
+	public DefaultOrmUpdateImpl(Class<T> entityClass,InternalOrmQuery dao){
+		condition = new OrmUpdateParameter<T>(entityClass);
+		this.dao = dao;
+	}
 
 	/**
-	 * @param delegate the delegate
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmParameter)
 	 */
-	public DefaultOrmUpdateImpl(OrmUpdate<T> delegate){
-		this.delegate = delegate;
+	@Override
+	public OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition) {
+		this.condition = condition;
+		return this;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setHint(java.lang.String, java.lang.Object)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public OrmUpdate<T> setHint(String key, Object value){
+		condition.setHint(key, value);
+		return this;
 	}
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#eq(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmUpdate<T> eq(String column, Object value) {
-		delegate.eq(column, value);
+	public OrmUpdate<T> eq(String column , Object value ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.Equal,value));
 		return this;
 	}
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#gt(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmUpdate<T> gt(String column, Object value) {
-		delegate.gt(column, value);
+	public OrmUpdate<T> gt(String column , Object value ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.GreaterThan,value));
 		return this;
 	}
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#lt(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmUpdate<T> lt(String column, Object value) {
-		delegate.lt(column, value);
+	public OrmUpdate<T> lt(String column , Object value ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.LessThan,value));
 		return this;
 	}
 
@@ -61,8 +87,8 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#gtEq(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmUpdate<T> gtEq(String column, Object value) {
-		delegate.gtEq(column, value);
+	public OrmUpdate<T> gtEq(String column , Object value ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.GreaterEqual,value));
 		return this;
 	}
 
@@ -70,35 +96,35 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#ltEq(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public OrmUpdate<T> ltEq(String column, Object value) {
-		delegate.ltEq(column, value);
+	public OrmUpdate<T> ltEq(String column , Object value ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.LessEqual,value));
 		return this;
 	}
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#between(java.lang.String, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public OrmUpdate<T> between(String column, Object from, Object to) {
-		delegate.between(column, from,to);
+	public OrmUpdate<T> between(String column, Object from , Object to ){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.Between,from,to));
 		return this;
 	}
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#contains(java.lang.String, java.util.List)
 	 */
 	@Override
-	public OrmUpdate<T> contains(String column, List<?> value) {
-		delegate.contains(column, value);
+	public OrmUpdate<T> contains(String column, List<?> value){
+		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,WhereOperand.IN,value));
 		return this;
 	}
-	
+
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public OrmUpdate<T> set(String column, Object value) {
-		delegate.set(column, value);
+		condition.set(column, value);
 		return this;
 	}
 
@@ -107,24 +133,30 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 */
 	@Override
 	public int update() {
-		return delegate.update();
+		return dao.update(condition);
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setCondition(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#update(java.util.List, java.lang.Object[])
 	 */
 	@Override
-	public OrmUpdate<T> setCondition(OrmUpdateParameter<T> condition) {
-		delegate.setCondition(condition);
-		return this;
+	public int update(List<Object> sets,Object... value){
+		List<String> a = new ArrayList<String>(condition.getCurrentValues().keySet());
+		for(int i = 0 ; i < sets.size(); i++){
+			condition.getCurrentValues().put(a.get(i),sets.get(i));
+		}
+		condition.setEasyParams(value);
+		return dao.update(condition);
 	}
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#set(java.lang.String[])
 	 */
 	@Override
-	public OrmUpdate<T> set(String... setString) {
-		delegate.set(setString);
+	public OrmUpdate<T> set(String... setColumn) {
+		for(String s : setColumn){
+			condition.getCurrentValues().put(s, null);
+		}
 		return this;
 	}
 
@@ -133,44 +165,8 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 */
 	@Override
 	public OrmUpdate<T> filter(String filterString) {
-		delegate.filter(filterString);
+		condition.setFilterString(filterString);
 		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#execute(java.util.List, java.lang.Object[])
-	 */
-	@Override
-	public int update(List<Object> set, Object... params) {
-		return delegate.update(set, params);
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.orm.OrmUpdate#setHint(java.lang.String, java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public OrmUpdate<T> setHint(String key, Object value) {
-		delegate.setHint(key, value);
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Update#addBatch()
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public OrmUpdate<T> addBatch() {
-		delegate.addBatch();
-		return this;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.api.Update#batchUpdate()
-	 */
-	@Override
-	public int[] batchUpdate() {
-		return delegate.batchUpdate();
 	}
 
 	/**
@@ -178,7 +174,7 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 */
 	@Override
 	public int delete() {
-		return delegate.delete();
+		return dao.delete(condition);
 	}
 
 	/**
@@ -186,9 +182,7 @@ public class DefaultOrmUpdateImpl<T> implements OrmUpdate<T>{
 	 */
 	@Override
 	public OrmUpdateParameter<T> getCurrentParams() {
-		return delegate.getCurrentParams();
+		return this.condition;
 	}
-
-
 
 }

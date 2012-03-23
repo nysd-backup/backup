@@ -11,8 +11,12 @@ import javax.naming.NamingException;
 
 import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.logics.log.FaultNotifier;
+import kosmos.framework.core.logics.log.impl.DefaultFaultNotifier;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.logics.message.impl.MessageBuilderImpl;
+import kosmos.framework.core.message.ExceptionMessageFactory;
+import kosmos.framework.core.message.impl.DefaultExceptionMessageFactoryImpl;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactoryImpl;
 import kosmos.framework.service.core.exception.ApplicationException;
@@ -154,6 +158,22 @@ public abstract class AbstractServiceLocator extends ServiceLocator{
 	@Override
 	public BusinessException createBusinessException() {
 		return new ApplicationException();
+	}
+
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createFaultNotifier()
+	 */
+	@Override
+	public FaultNotifier createFaultNotifier() {
+		return new DefaultFaultNotifier();
+	}
+
+	/**
+	 * @see kosmos.framework.core.activation.ComponentLocator#createExceptionMessageFactory()
+	 */
+	@Override
+	public ExceptionMessageFactory createExceptionMessageFactory() {
+		return new DefaultExceptionMessageFactoryImpl();
 	}
 
 }

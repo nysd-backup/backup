@@ -5,7 +5,6 @@ package kosmos.framework.service.test;
 
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
 import kosmos.framework.service.test.entity.TestEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class MockRequiresNewServiceImpl implements MockRequiresNewService{
 		e.setAttr2(2);
 		per.getEntityManager().persist(e);
 		if( v.equals("AA")){
-			((ServiceContextImpl)ServiceContext.getCurrentInstance()).setRollbackOnlyToCurrentTransaction();
+			ServiceContext.getCurrentInstance().setRollbackOnlyToCurrentTransaction();
 		}
 		return v;
 	}

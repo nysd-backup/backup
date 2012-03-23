@@ -5,7 +5,7 @@ package kosmos.framework.sqlclient.api;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,12 +16,16 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Version;
 
 import kosmos.framework.bean.Pair;
+import kosmos.framework.sqlclient.api.free.BatchUpdateFactory;
+import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.api.orm.FixString;
-import kosmos.framework.sqlclient.api.orm.OrmParameter;
-import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
+import kosmos.framework.sqlclient.api.orm.PersistenceHints;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.api.orm.WhereOperand;
-import kosmos.framework.sqlclient.internal.orm.InternalOrmQuery;
+import kosmos.framework.sqlclient.internal.free.InternalQuery;
+import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder;
+import kosmos.framework.sqlclient.internal.orm.SQLStatementBuilder.Bindable;
+import kosmos.framework.sqlclient.internal.orm.impl.SQLStatementBuilderImpl;
 import kosmos.framework.utility.ObjectUtils;
 import kosmos.framework.utility.ReflectionUtils;
 import kosmos.framework.utility.StringUtils;
@@ -35,250 +39,227 @@ import kosmos.framework.utility.StringUtils;
  */
 public class PersistenceManagerImpl implements PersistenceManager{
 
-	private InternalOrmQuery internaOrmlQuery;
+	/** the SQLStatementBuilder */
+	private SQLStatementBuilder sb = new SQLStatementBuilderImpl();
+	
+	/** the internal query */
+	private InternalQuery internalQuery;
+	
+	/** the context provider */
+	private PersistenceContextProvider contextProvider;
+	
+	private BatchUpdateFactory batchUpdateFactory;
 	
 	/**
-	 * @param internaOrmlQuery the internaOrmlQuery to set
+	 * @param batchUpdateFactory the batchUpdateFactory to set
 	 */
-	public void setInternalOrmQuery(InternalOrmQuery internaOrmlQuery){
-		this.internaOrmlQuery = internaOrmlQuery;
+	public void setBatchUpdateFactory(BatchUpdateFactory batchUpdateFactory) {
+		this.batchUpdateFactory = batchUpdateFactory;
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#insert(java.util.List, kosmos.framework.sqlclient.api.PersistenceHints)
+	 * @param internalQuery the internalQuery to set
 	 */
-	@Override
-	public int[] batchInsert(List<?>  entity, PersistenceHints hints) {
-		
-		@SuppressWarnings("unchecked")
-		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.get(0).getClass());
-		
-		//エンティティから登録対象項目追加
-		List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.get(0).getClass(), Column.class);
-		for(Object e : entity){
-			setInsertValue(ms,e,context,hints);
-			context.addBatch();
-		}
-		
-		setHint(context,hints);
-		
-		return internaOrmlQuery.batchInsert(context);
+	public void setInternalQuery(InternalQuery internalQuery){
+		this.internalQuery = internalQuery;
 	}
 
+	/**
+	 * @param sb the sb to set
+	 */
+	public void setSqlStatementBuilder(SQLStatementBuilder sb){
+		this.sb = sb;
+	}
+	
+	/**
+	 * @param contextProvider the contextProvider to set
+	 */
+	public void setContextProvider(PersistenceContextProvider contextProvider) {
+		this.contextProvider = contextProvider;
+	}
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#persist(java.lang.Object, java.util.Map)
 	 */
 	@Override
-	public int insert(Object entity, PersistenceHints hints) {
+	public void persist(Object entity, PersistenceHints hints) {
 		
-		@SuppressWarnings("unchecked")
-		OrmUpdateParameter<Object> context = new OrmUpdateParameter<Object>((Class<Object>)entity.getClass());		
-		List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);
-		setInsertValue(ms,entity,context,hints);			
-		setHint(context,hints);
-		
-		return internaOrmlQuery.insert(context);
-	}
-	
-	/**
-	 * Sets the inserting value.
-	 * @param fs the field
-	 * @param entity the entity
-	 * @param context the context
-	 */
-	private void setInsertValue(List<Method> ms , Object entity, OrmUpdateParameter<Object> context, PersistenceHints hints){
-		for(Method m : ms){						
-			Object value = ReflectionUtils.invokeMethod(m, entity);
-			if(ObjectUtils.isNotEmpty(value)){
-				context.set(getColumnName(m),value);
-			}else {
-				//NULL項目であるが対象とするもの
-				String[] includables = hints.getIncludables();
-				String name = getColumnName(m);
-				if(includables != null && Arrays.asList(includables).contains(name)){
-					context.set(name, value);
-				}
+		Map<String,Object> bindValues = new LinkedHashMap<String,Object>();
+		if(entity instanceof FastEntity){
+			FastEntity e = FastEntity.class.cast(entity);
+			bindValues.putAll(e.toPrimaryKeys());
+			bindValues.putAll(e.toAttributes());
+		}else{
+			List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);			
+			for(Method m : ms){						
+				Object value = ReflectionUtils.invokeMethod(m, entity);
+				bindValues.put(getColumnName(m),value);		
 			}
+		}
+		String sql = sb.createInsert(entity.getClass(), bindValues);
+		FreeUpdateParameter freeUpdateParameter = new FreeUpdateParameter();
+		freeUpdateParameter.setSql(sql);
+		freeUpdateParameter.setQueryId(entity.getClass().getSimpleName()+".insert");
+		freeUpdateParameter.setHints(hints);
+		freeUpdateParameter.setParam(bindValues);
 		
+		PersistenceContext context = contextProvider.getContext();
+		if(context.isEnabled()){
+			context.add(entity, freeUpdateParameter);
+		}else{
+			internalQuery.executeUpdate(freeUpdateParameter);
 		}
 	}
-
+	
 	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#merge(java.lang.Object, java.lang.Object, java.util.Map)
 	 */
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public int update(Object entity,PersistenceHints hints){
+	public <T> void merge(T entity,T found ,PersistenceHints hints){
 
-		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());		
-		setHint(condition,hints);	
-		Object found = hints.getFoundEntity();
-		int result = 0;
+		Map<String,Object> setValues = new LinkedHashMap<String, Object>();
+		List<WhereCondition> conditions = null;
+		if(entity instanceof FastEntity){
+			FastEntity src = FastEntity.class.cast(found);
+			FastEntity dst = FastEntity.class.cast(entity);
+			Pair<String> dstVersion = dst.toVersioningValue();
+			Pair<String> srcVersion = src.toVersioningValue();
+			conditions = new ArrayList<WhereCondition>();
 			
-		if(found != null){
-			result = updateCompareFound(entity, found, hints,condition);
-		}else{
-			result = updateEntity(entity,hints,condition);			
-		}
-		
-		if(result == 0){
-			throw new OptimisticLockException(entity);
-		}
-		if(result > 1){
-			throw new PersistenceException("update count must be less than 1");
-		}
-		return result;
-	}
-	
-	/**
-	 * Updates the entity.
-	 * 
-	 * @param entity
-	 * @param condition
-	 * @throws OptimisticLockException throw when the updated count is 0
-	 * @return updated count
-	 */
-	private int updateEntity(Object entity,PersistenceHints hints,OrmUpdateParameter<?> condition){
-		
-		List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
-		List<Pair<Method>> where = new ArrayList<Pair<Method>>();
-		for(Method m : ms){			
-			Object dst = ReflectionUtils.invokeMethod(m, entity);
-					
-			//ロック連番
-			if(m.getAnnotation(Version.class) != null){						
-				String name = getColumnName(m);
-				condition.set(name,new FixString(name + " + 1"));
-				if(dst == null){
-					throw new IllegalArgumentException(name + " must be not null");
-				}
-				where.add(new Pair<Method>(m,dst));
-			//主キー	
-			}else if(m.getAnnotation(Id.class) != null){				
-				where.add(new Pair<Method>(m,dst));
-				
-			//その他(空項目はupdateしない)
-			}else {
-				if(ObjectUtils.isNotEmpty(dst)){
-					condition.set(getColumnName(m), dst);
-				}else{
-					//NUll項目であるが更新対象とするもの
-					String[] includables = hints.getIncludables();
-					String name = getColumnName(m);
-					if(includables != null && Arrays.asList(includables).contains(name)){
-						condition.set(name, dst);
-					}
-				}
-			}		
-		}		
-		//主キーを更新条件とする
-		for(WhereCondition w : createPkWhere(where)){
-			condition.getConditions().add(w);
-		}
-		return internaOrmlQuery.update(condition);
-	}
-		
-
-	
-	/**
-	 * Compare the found entity.
-	 * 
-	 * setting target is the column which is not equal to found entity.
-	 * 
-	 * @param entity
-	 * @param findedEntity
-	 * @param condition
-	 * @return
-	 */
-	private int updateCompareFound(Object entity , Object found ,PersistenceHints hints,OrmUpdateParameter<?> condition){
-		
-		//比較対象エンティティと比較して結果が変更されていればset句への比較対象に含める
-		List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
-		List<Pair<Method>> where = new ArrayList<Pair<Method>>();
-		
-		for(Method m : ms){			
-			Object src = ReflectionUtils.invokeMethod(m, found);
-			Object dst = ReflectionUtils.invokeMethod(m, entity);
-			
-			//ロック連番
-			if(m.getAnnotation(Version.class) != null){
-				if( !ObjectUtils.equals(src, dst) ){
-					return 0;
-				}	
-				String name = getColumnName(m);
-				condition.set(name,new FixString(name + " + 1"));
-				
-			//主キー	
-			}else if(m.getAnnotation(Id.class) != null){
-				if( !ObjectUtils.equals(src, dst) ){
-					throw new IllegalArgumentException("primary key must not be changed : src = " + src + " dst = " + dst);
-				}
-				where.add(new Pair<Method>(m,dst));
-			//その他	
-			}else if( !ObjectUtils.equals(src, dst) ){
-				condition.set(getColumnName(m), dst);
+			//バージョン番号違い
+			if(!ObjectUtils.equals(dstVersion.getValue(),srcVersion.getValue())){
+				throw new OptimisticLockException(entity);
 			}
-		}
 			
-		//主キーを更新条件とする
-		for(WhereCondition w : createPkWhere(where)){
-			condition.getConditions().add(w);
+			//主キー違い
+			Map<String,Object> srcpks = src.toPrimaryKeys();
+			Map<String,Object> dstpks = dst.toPrimaryKeys();
+			int count = 0;
+			for(Map.Entry<String, Object> e: dstpks.entrySet()){
+				if(!ObjectUtils.equals(srcpks.get(e.getKey()),e.getValue())){
+					throw new IllegalArgumentException("primary key must not be change : src = " + src + " dst = " + dst);
+				}else{
+					conditions.add(new WhereCondition(e.getKey(), count++, WhereOperand.Equal, e.getValue()));
+				}
+			}
+			
+			//属性は全てset句
+			setValues.putAll(dst.toAttributes());			
+			
+			//ロック連番の上書き
+			setValues.put(dstVersion.getKey(), new FixString(dstVersion.getKey() + " + 1"));
+			
+		}else{
+			List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
+			List<Pair<Method>> where = new ArrayList<Pair<Method>>();	
+			for(Method m : ms){			
+				Object src = ReflectionUtils.invokeMethod(m, found);
+				Object dst = ReflectionUtils.invokeMethod(m, entity);
+				
+				//ロック連番
+				if(m.getAnnotation(Version.class) != null){
+					if( !ObjectUtils.equals(src, dst) ){
+						throw new OptimisticLockException(entity);
+					}	
+					String name = getColumnName(m);
+					setValues.put(name,new FixString(name + " + 1"));				
+				//主キー	
+				}else if(m.getAnnotation(Id.class) != null){
+					if( !ObjectUtils.equals(src, dst) ){
+						throw new IllegalArgumentException("primary key must not be changed : src = " + src + " dst = " + dst);
+					}
+					where.add(new Pair<Method>(m,dst));
+				//その他	
+				}else{
+					setValues.put(getColumnName(m), dst);
+				}
+			}
+			conditions = createPkWhere(where);		
 		}
-		return internaOrmlQuery.update(condition);
+		String sql = sb.createUpdate(entity.getClass(), null,conditions , setValues);		
+		FreeUpdateParameter parameter = new FreeUpdateParameter();
+		parameter.setSql(sql);
+		parameter.setQueryId(entity.getClass().getSimpleName()+".update");
+		parameter.setParam(setValues);
+		update(parameter,entity, hints, conditions);
+	}
+	
+	/**
+	 * @param parameter
+	 * @param conditions
+	 */
+	private void setWhereCondition(final FreeUpdateParameter parameter,List<WhereCondition> conditions){
+		sb.setConditionParameters(null,null,conditions, new Bindable(){
+			public void setParameter(String key , Object value){
+				parameter.getParam().put(key, value);
+			}
+		});
 	}
 
 	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#delete(java.lang.Object, java.util.Map)
 	 */
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public int delete(Object entity, PersistenceHints hints) {
-		
-		OrmUpdateParameter<?> condition = new OrmUpdateParameter(entity.getClass());
-
-		setHint(condition,hints);
-				
-		List<Pair<Method>> key = new ArrayList<Pair<Method>>(); 
-		List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
-		List<Pair<Method>> where = new ArrayList<Pair<Method>>();
-		for(Method m : ms){			
-			Object dst = ReflectionUtils.invokeMethod(m, entity);					
-			//ロック連番
-			if(m.getAnnotation(Version.class) != null){						
-				String name = getColumnName(m);			
-				if(dst == null){
-					throw new IllegalArgumentException(name + " must be not null");
+	public void remove(Object entity, PersistenceHints hints) {
+			
+		List<WhereCondition> conditions = null;
+		if(entity instanceof FastEntity){
+			conditions = new ArrayList<WhereCondition>();
+			int count = 0;
+			for(Map.Entry<String, Object> e: FastEntity.class.cast(entity).toPrimaryKeys().entrySet()){
+				conditions.add(new WhereCondition(e.getKey(), count++, WhereOperand.Equal, e.getValue()));
+			}			
+			//楽観ロック番号
+			Pair<String> version = FastEntity.class.cast(entity).toVersioningValue();
+			conditions.add(new WhereCondition(version.getKey(), count++, WhereOperand.Equal, version.getValue()));
+			
+		}else{
+			List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
+			List<Pair<Method>> where = new ArrayList<Pair<Method>>();
+			for(Method m : ms){			
+				Object dst = ReflectionUtils.invokeMethod(m, entity);					
+				//ロック連番
+				if(m.getAnnotation(Version.class) != null){						
+					String name = getColumnName(m);			
+					if(dst == null){
+						throw new IllegalArgumentException(name + " must be not null");
+					}
+					where.add(new Pair<Method>(m,dst));
+				//主キー	
+				}else if(m.getAnnotation(Id.class) != null){				
+					where.add(new Pair<Method>(m,dst));			
 				}
-				where.add(new Pair<Method>(m,dst));
-			//主キー	
-			}else if(m.getAnnotation(Id.class) != null){				
-				where.add(new Pair<Method>(m,dst));			
-			}
-		}		
-		//主キーとロック連番を更新条件とする
-		for(WhereCondition w : createPkWhere(key)){
-			condition.getConditions().add(w);
+			}		
+			conditions = createPkWhere(where);
 		}
-		
-		int result = internaOrmlQuery.delete(condition);
-		if(result == 0){
-			throw new OptimisticLockException(entity);
-		}
-		if(result > 1){
-			throw new PersistenceException("update count must be less than 1");
-		}
-		return result;
+		String sql = sb.createDelete(entity.getClass(), null, conditions);
+		FreeUpdateParameter parameter = new FreeUpdateParameter();
+		parameter.setSql(sql);
+		parameter.setQueryId(entity.getClass().getSimpleName()+".delete");
+		update(parameter,entity, hints, conditions) ;
 	}
 	
 	/**
-	 * Sets the hint to condition.
-	 * @param condition condition
-	 * @param hints hint
+	 * @param entity
+	 * @param hints
+	 * @param conditions
+	 * @param sql
+	 * @param sqlId
 	 */
-	private void setHint(OrmParameter<?> condition , PersistenceHints hints){
-		for(Map.Entry<String, Object> h : hints.entrySet()){
-			condition.setHint(h.getKey(),h.getValue());
+	private void update(FreeUpdateParameter parameter, Object entity, PersistenceHints hints,List<WhereCondition> conditions){		
+		setWhereCondition(parameter, conditions);
+		parameter.setHints(hints);
+		PersistenceContext context = contextProvider.getContext();
+		if(context.isEnabled()){
+			context.add(entity, parameter);
+		}else{
+			int result = internalQuery.executeUpdate(parameter);
+			if(result == 0){
+				throw new OptimisticLockException(entity);
+			}
+			if(result > 1){
+				throw new PersistenceException("update count must be less than 1");
+			}
 		}
 	}
 	
@@ -314,6 +295,17 @@ public class PersistenceManagerImpl implements PersistenceManager{
 			name = ReflectionUtils.getPropertyNameFromGetter(m);
 		}
 		return name;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#flush()
+	 */
+	@Override
+	public void flush() {
+		PersistenceContext context = contextProvider.getContext();
+		if(context.isEnabled()){
+			context.flush(batchUpdateFactory);
+		}		
 	}
 
 }

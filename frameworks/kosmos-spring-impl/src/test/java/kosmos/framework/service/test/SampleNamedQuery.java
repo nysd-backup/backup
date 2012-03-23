@@ -3,8 +3,8 @@
  */
 package kosmos.framework.service.test;
 
-import kosmos.framework.jpqlclient.api.free.AbstractNamedQuery;
-import kosmos.framework.sqlclient.api.free.AnonymousQuery;
+import kosmos.framework.jpqlclient.api.wrapper.free.AbstractNamedQuery;
+import kosmos.framework.sqlclient.api.wrapper.free.AnonymousQuery;
 
 /**
  * function.

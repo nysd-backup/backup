@@ -7,10 +7,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
-import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.test.entity.TestEntity;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -15,7 +15,6 @@ import kosmos.framework.sqlclient.api.FastEntity;
 import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
-import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmParameter;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
@@ -118,50 +117,15 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(java.lang.Object)
-	 */
-	@Override
-	public int insert(OrmUpdateParameter<?> context) {
-		
-		String sql = sb.createInsert(context.getEntityClass(),context.getCurrentValues());
-		
-		FreeUpdateParameter parameter = new FreeUpdateParameter(true, context.getEntityClass().getName()+".insert", sql);
-
-		//set statement
-		setUpdateValule(parameter,context.getCurrentValues());
-		
-		setHint(context.getHints(),parameter);
-		return internalQuery.executeUpdate(parameter);
-	}
-	
-
-	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#batchInsert(kosmos.framework.sqlclient.api.orm.OrmUpdateParameter)
-	 */
-	@Override
-	public int[] batchInsert(OrmUpdateParameter<?> condition) {
-		String sql = sb.createInsert(condition.getEntityClass(),condition.getBatchValues().get(0));
-		FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".insert", sql);
-
-		//更新値設定
-		for(Map<String,Object> v: condition.getBatchValues()){
-			//set statement
-			setUpdateValule(parameter,v);
-			parameter.addBatch();
-		}
-		setHint(parameter.getHints(),parameter);
-		return internalQuery.batchUpdate(parameter);
-	}
-
-
-	/**
 	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#update(kosmos.framework.sqlclient.api.orm.OrmQueryParameter, java.util.Map)
 	 */
 	@Override
 	public int update(OrmUpdateParameter<?> condition) {
 		
 		String sql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues());		
-		final FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".update", sql);		
+		final FreeUpdateParameter parameter = new FreeUpdateParameter();
+		parameter.setSql(sql);
+		parameter.setQueryId(condition.getEntityClass().getName()+".update");
 		setCondition(condition,parameter);
 		
 		//set statement
@@ -171,33 +135,6 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		
 		return internalQuery.executeUpdate(parameter);
 	}
-	
-	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#batchUpdate(kosmos.framework.sqlclient.api.orm.OrmUpdateParameter)
-	 */
-	@Override
-	public int[] batchUpdate(OrmUpdateParameter<?> condition) {
-		String sql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getBatchCondition().get(0), condition.getBatchValues().get(0));		
-		final FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".batchUpdate", sql);
-	
-		for(int i = 0 ; i < condition.getBatchCondition().size(); i++){
-			List<WhereCondition> c = condition.getBatchCondition().get(i);
-			Map<String,Object> set = condition.getBatchValues().get(i);
-			
-			sb.setConditionParameters(condition.getFilterString(),condition.getEasyParams(),c, new Bindable(){
-				public void setParameter(String key , Object value){
-					parameter.getParam().put(key, value);
-				}
-			});
-			setUpdateValule(parameter,set);
-			
-			parameter.addBatch();
-			
-		}
-		setHint(condition.getHints(),parameter);
-		return internalQuery.batchUpdate(parameter);
-	}
-
 
 	/**
 	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#delete(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
@@ -205,7 +142,9 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	@Override
 	public int delete(OrmUpdateParameter<?> condition) {
 		String sql = sb.createDelete(condition.getEntityClass(),condition.getFilterString(),condition.getConditions());
-		FreeUpdateParameter parameter = new FreeUpdateParameter(true, condition.getEntityClass().getName()+".delete", sql);
+		FreeUpdateParameter parameter =new FreeUpdateParameter();
+		parameter.setSql(sql);
+		parameter.setQueryId(condition.getEntityClass().getName()+".delete");
 		setCondition(condition,parameter);
 		setHint(condition.getHints(),parameter);
 		return internalQuery.executeUpdate(parameter);
@@ -253,7 +192,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.api.orm.OrmQueryParameter, kosmos.framework.sqlclient.api.free.QueryCallback)
 	 */
 	@Override
-	public <E> List<E> getFetchResult(OrmQueryParameter<E> condition,QueryCallback<E> callback) {
+	public <E> List<E> getFetchResult(OrmQueryParameter<E> condition) {
 		FreeQueryParameter parameter = createParameter(condition);
 		return internalQuery.getFetchResult(parameter);
 	}
@@ -265,7 +204,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 */
 	private <E> FreeQueryParameter createParameter(OrmQueryParameter<E> condition){
 		String sql = sb.createSelect(condition);
-		final FreeQueryParameter parameter = new FreeQueryParameter(condition.getEntityClass(), true, condition.getEntityClass().getName()+".select", sql);
+		final FreeQueryParameter parameter = new FreeQueryParameter();
+		parameter.setSql(sql);
+		parameter.setResultType(condition.getEntityClass());
+		parameter.setQueryId(condition.getEntityClass().getName()+".select");
 	
 		sb.setConditionParameters(condition.getFilterString(),condition.getEasyParams(),condition.getConditions(),new Bindable(){
 			public void setParameter(String key , Object value){
@@ -278,5 +220,6 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		parameter.setMaxSize(condition.getMaxSize());
 		return parameter;
 	}
+
 
 }

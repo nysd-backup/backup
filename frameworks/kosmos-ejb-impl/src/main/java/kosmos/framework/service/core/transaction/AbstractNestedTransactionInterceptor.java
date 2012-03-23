@@ -17,7 +17,7 @@ import javax.interceptor.InvocationContext;
  * @version	created.
  */
 @Deprecated
-public abstract class AbstractNestedTransactionInterceptor extends DefaultInterceptor{
+public abstract class AbstractNestedTransactionInterceptor extends ContextControllableTransactionInterceptor{
 	
 	@Resource
 	private SessionContext context;

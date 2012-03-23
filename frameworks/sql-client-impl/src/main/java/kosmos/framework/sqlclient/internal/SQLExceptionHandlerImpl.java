@@ -4,6 +4,7 @@
 package kosmos.framework.sqlclient.internal;
 
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 
 import javax.persistence.LockTimeoutException;
 import javax.persistence.PersistenceException;
@@ -51,7 +52,7 @@ public class SQLExceptionHandlerImpl implements ExceptionHandler{
 		}else if(code == pessimisticErrorCode){
 			throw new PessimisticLockException(sqle);
 		//タイムアウト	
-		}else if(code == timeoutErrorCode){
+		}else if(code == timeoutErrorCode || sqle instanceof SQLTimeoutException){
 			throw new QueryTimeoutException(sqle);
 		//悲観ロックタイムアウト
 		}else if(code == lockTimeoutErrorCode){

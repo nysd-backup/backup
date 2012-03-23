@@ -7,9 +7,9 @@ import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
-import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.service.test.entity.TestEntity;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.config.BeanDefinition;

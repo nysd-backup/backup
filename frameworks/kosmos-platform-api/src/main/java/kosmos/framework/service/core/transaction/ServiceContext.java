@@ -3,9 +3,12 @@
  */
 package kosmos.framework.service.core.transaction;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
-import kosmos.framework.core.context.MessageContext;
+import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
 
 /**
@@ -14,13 +17,24 @@ import kosmos.framework.core.message.MessageResult;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class ServiceContext {
+public class ServiceContext {
+	
+	private Locale locale;
 	
 	/** the level of call stack */
 	private int callStackLevel = 0;
 	
 	/** the requestId */
 	private String requestId = null;
+
+	/** true:any transaction is failed. */
+	private boolean anyTransactionFailed = false;
+	
+	private List<MessageResult> messageList = new ArrayList<MessageResult>();
+
+	
+	/** the stack of unit of work */
+	protected LinkedList<InternalUnitOfWork> unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
 	
 
 	/** the thread local instance*/
@@ -41,12 +55,69 @@ public abstract class ServiceContext {
 		}
 	}
 	
+
 	/**
 	 * @return the current context
 	 */
 	public static ServiceContext getCurrentInstance(){
 		return instance.get();
 	}
+	
+
+	/**
+	 * Set the current transaction to rolling back.
+	 */
+	public void setRollbackOnlyToCurrentTransaction(){
+		getCurrentUnitOfWork().setRollbackOnly();
+		setAnyTransactionFailed();
+	}
+	
+	/**
+	 * start unit of work.
+	 */
+	public void startUnitOfWork(){
+		unitOfWorkStack.push(createInternalUnitOfWork());
+	}
+	
+	/**
+	 * end unit of work.
+	 */
+	public void endUnitOfWork(){
+		unitOfWorkStack.pop();
+	}
+	
+	/**
+	 * @return the unit of work of current transaction
+	 */
+	public InternalUnitOfWork getCurrentUnitOfWork(){
+		return unitOfWorkStack.peek();
+	}
+
+	/**
+	 * Adds the messages 
+	 * @param message the message
+	 */
+	public void addMessage(MessageResult message){
+		if(message.getLevel() >= MessageLevel.E.ordinal()){
+			setRollbackOnlyToCurrentTransaction();
+		}		
+		addMessageInternal(message);
+	}
+	
+	/**
+	 * set anyTransactionFailed to true. 
+	 */
+	protected void setAnyTransactionFailed(){
+		anyTransactionFailed = true;
+	}
+	
+	/**
+	 * @return the anyTransactionFailed
+	 */
+	public boolean isAnyTransactionFailed(){
+		return anyTransactionFailed;
+	}
+	
 	
 	/**
 	 * @param requestId
@@ -84,32 +155,10 @@ public abstract class ServiceContext {
 	}
 	
 	/**
-	 * @return the message context
-	 */
-	protected MessageContext getMessageContext() {
-		return MessageContext.getCurrentInstance();
-	}
-	
-	
-	/**
 	 * @return the globalMessageList
 	 */
 	public List<MessageResult> getMessageList(){
-		return getMessageContext().getMessageList();
-	}
-	
-	/**
-	 * @param message the message to be added to
-	 */
-	public void addMessage(MessageResult message){
-		getMessageContext().addMessage(message);
-	}
-	
-	/**
-	 * @return the globalMessageList
-	 */
-	public MessageResult[] getMessageArray(){
-		return getMessageContext().getMessageArray();
+		return messageList;
 	}
 	
 	/**
@@ -118,15 +167,51 @@ public abstract class ServiceContext {
 	public void initialize(){
 		release();
 		setCurrentInstance(this);
+		startUnitOfWork();
 	}
 	
 	/**
 	 * Releases the context.
 	 */
 	public void release(){
+		anyTransactionFailed = false;
+		unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
+		locale = null;
 		callStackLevel = 0;
-		requestId = null;		
+		requestId = null;	
+		messageList.clear();
+		messageList = new ArrayList<MessageResult>();
 		setCurrentInstance(null);
 	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	/** 
+	 * @return the internal unit of work
+	 */
+	protected InternalUnitOfWork createInternalUnitOfWork(){
+		return new InternalUnitOfWork();
+	}
+	
+	/**
+	 * Adds the message to the context. 
+	 * @param message the message
+	 */
+	protected void addMessageInternal(MessageResult message){
+		messageList.add(message);
+	}
+
 
 }

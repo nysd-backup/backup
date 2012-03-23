@@ -3,7 +3,8 @@
  */
 package kosmos.framework.core.activation;
 
-import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.dto.InvocationParameter;
+
 
 
 /**
@@ -19,5 +20,5 @@ public interface ServiceActivator {
 	 * @return the result
 	 * @throws Throwable the exception
 	 */
-	public Object activate(CompositeRequest contextInvoker) throws Throwable;
+	public Object activate(InvocationParameter contextInvoker) throws Throwable;
 }

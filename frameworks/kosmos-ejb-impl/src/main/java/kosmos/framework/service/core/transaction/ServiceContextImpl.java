@@ -3,7 +3,11 @@
  */
 package kosmos.framework.service.core.transaction;
 
+import java.util.List;
+
+import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.exception.PoorImplementationException;
+import kosmos.framework.core.message.MessageResult;
 
 /**
  * the context.
@@ -11,32 +15,24 @@ import kosmos.framework.core.exception.PoorImplementationException;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServiceContextImpl extends TransactionManagingContext{
+public class ServiceContextImpl extends ServiceContext{
 
-	/** ignore optimisic lock error */
-	private boolean suppressOptimisticLockError = false;
-	
 	/**
-	 * @param suppressOptimisticLockError
+	 * @see kosmos.framework.service.core.transaction.TransactionManagingContext#addMessageInternal(kosmos.framework.core.message.MessageResult)
 	 */
-	public void setSuppressOptimisticLockError(boolean suppressOptimisticLockError){
-		this.suppressOptimisticLockError = suppressOptimisticLockError;
-	}
-	
-	/**
-	 * @return
-	 */
-	public boolean isSuppressOptimisticLockError(){
-		return suppressOptimisticLockError;
-	}
-	/**
-	 * @see kosmos.framework.service.core.context.AbstractServiceContext#release()
-	 */
-	public void release(){
-		super.release();
-		this.suppressOptimisticLockError = false;
+	@Override
+	protected void addMessageInternal(MessageResult message) {
+		MessageContext.getCurrentInstance().addMessage(message);
 	}
 
+	/**
+	 * @see kosmos.framework.service.core.transaction.ServiceContext#getMessageList()
+	 */
+	@Override
+	public List<MessageResult> getMessageList() {
+		return MessageContext.getCurrentInstance().getMessageList();
+	}
+	
 	/**
 	 * @see kosmos.framework.service.core.transaction.TransactionManagingContext#startUnitOfWork()
 	 */

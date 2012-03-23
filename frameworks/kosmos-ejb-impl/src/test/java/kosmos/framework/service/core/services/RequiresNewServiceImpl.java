@@ -3,6 +3,8 @@
  */
 package kosmos.framework.service.core.services;
 
+import java.util.Locale;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -13,14 +15,14 @@ import javax.persistence.PessimisticLockException;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -61,8 +63,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageBean bean = new MessageBean(100);
-		MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean);
+		MessageBean bean = new MessageBean("100");
+		MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean,Locale.getDefault());
 		ServiceContext.getCurrentInstance().addMessage(message);	
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 	}

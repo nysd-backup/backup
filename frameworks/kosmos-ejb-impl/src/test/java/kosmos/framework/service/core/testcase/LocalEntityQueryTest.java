@@ -293,4 +293,9 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void remote(){
 		bean().remote();
 	}
+	
+	@Test
+	public void duplicateError(){
+		bean().duplicateError();
+	}
 }

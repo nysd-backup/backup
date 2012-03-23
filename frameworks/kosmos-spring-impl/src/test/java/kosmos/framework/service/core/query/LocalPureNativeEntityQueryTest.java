@@ -6,7 +6,6 @@ package kosmos.framework.service.core.query;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,14 +16,11 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 import javax.sql.DataSource;
 
-import kosmos.framework.core.query.LightQuery;
-import kosmos.framework.core.query.LightUpdate;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.EasyUpdate;
 import kosmos.framework.service.core.activation.ServiceLocator;
+import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.RequiresNewReadOnlyService;
 import kosmos.framework.service.test.RequiresNewService;
+import kosmos.framework.service.test.ServiceTestContextImpl;
 import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.DateEntity;
 import kosmos.framework.service.test.entity.FastEntity;
@@ -33,9 +29,14 @@ import kosmos.framework.service.test.entity.IFastEntity;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
 import kosmos.framework.sqlclient.api.ConnectionProvider;
-import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.PersistenceManager;
 import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
+import kosmos.framework.sqlclient.api.orm.PersistenceHints;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.LightQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.LightUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -130,8 +131,8 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void allConditionFast() throws SQLException, Exception{	
 		FastEntity e = new FastEntity();
 		e.setTest("1").setAttr("2").setAttr2(2).setVersion(0);
-		per.insert(e,new PersistenceHints());
-		per.insert(e.clone().setTest("2"),new PersistenceHints());
+		per.persist(e,new PersistenceHints());
+		per.persist(e.clone().setTest("2"),new PersistenceHints());
 		
 		EasyQuery<FastEntity> query = ormQueryFactory.createEasyQuery(FastEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");		
@@ -143,7 +144,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		assertEquals(1,result.size());
 		
 		FastEntity updatable = result.get(0).clone().setAttr("1111");
-		per.update(updatable, new PersistenceHints().setFoundEntity(result.get(0)));
+		per.merge(updatable, result.get(0),new PersistenceHints());
 	}
 	
 	/**
@@ -154,11 +155,33 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void updateFast() throws SQLException, Exception{	
 		FastEntity e = new FastEntity();
 		e.setTest("1").setAttr("2").setAttr2(2).setVersion(0);
-		per.insert(e,new PersistenceHints());
-		per.insert(e.clone().setTest("2"),new PersistenceHints());
+		per.persist(e,new PersistenceHints());
+		per.persist(e.clone().setTest("2"),new PersistenceHints());
 	
 		FastEntity updatable = e.clone().setTest("2").setAttr("aaaa");
-		assertEquals(1,per.update(updatable,new PersistenceHints()));
+		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
+	}
+	
+	/**
+	 * 条件追加
+	 * @throws SQLException 
+	 */
+	@Test
+	public void updateFastFlushable() throws SQLException, Exception{	
+		
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		impl.getContext().setEnabled(true);
+		
+		FastEntity e = new FastEntity();
+		e.setTest("1").setAttr("2").setAttr2(2).setVersion(0);
+		per.persist(e,new PersistenceHints());
+		per.persist(e.clone().setTest("2"),new PersistenceHints());
+		per.flush();
+		
+		FastEntity updatable = e.clone().setTest("2").setAttr("aaaa");
+		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
+		per.flush();
+		impl.getContext().setEnabled(false);
 	}
 	
 	/**
@@ -169,11 +192,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void updateFastNull() throws SQLException, Exception{	
 		FastEntity e = new FastEntity();
 		e.setTest("1").setAttr(null).setAttr2(10).setVersion(0);
-		per.insert(e,new PersistenceHints().setIncludables(IFastEntity.ATTR.name()));
-		per.insert(e.clone().setTest("2").setAttr("2"),new PersistenceHints());
+		per.persist(e,new PersistenceHints());
+		per.persist(e.clone().setTest("2").setAttr("2"),new PersistenceHints());
 	
 		FastEntity updatable = e.clone().setTest("2").setAttr(null);
-		assertEquals(1,per.update(updatable,new PersistenceHints().setIncludables(IFastEntity.ATTR.name())));
+		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
 		
 		FastEntity ef = ormQueryFactory.createEasyQuery(FastEntity.class).find("1");
 		assertNull(ef.getAttr());
@@ -213,7 +236,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		//更新
 		TestEntity first = result.get(0);
-		per.update( first.clone().setAttr("100"), new PersistenceHints().setFoundEntity(first));
+		per.merge( first.clone().setAttr("100"),first, new PersistenceHints());
 	
 		//更新結果
 		EasyQuery<TestEntity> forres = ormQueryFactory.createEasyQuery(TestEntity.class);
@@ -321,15 +344,15 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		per.insert(f,new PersistenceHints());
+		per.persist(f,new PersistenceHints());
 		
 		TestEntity s = new TestEntity();
 		s.setTest("901").setAttr("901").setAttr2(900).setVersion(1);
-		per.insert(s,new PersistenceHints());
+		per.persist(s,new PersistenceHints());
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		per.insert(t,new PersistenceHints());
+		per.persist(t,new PersistenceHints());
 		
 		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class).desc(TEST);
 		query.contains(TEST, "0","1,","2","900","901","902");
@@ -343,7 +366,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		//更新
 		TestEntity findedEntity = result.get(0);
-		per.update(findedEntity.clone().setAttr("AAA"), new PersistenceHints().setFoundEntity(result.get(0)));
+		per.merge(findedEntity.clone().setAttr("AAA"), result.get(0),new PersistenceHints());
 		
 		//楽観ロチE��番号インクリメント確誁E
 		result = query.getResultList();		
@@ -375,7 +398,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
 		TestEntity result = query.find("1");
 		TestEntity updatable = result.clone();
-		per.update(updatable.setAttr("1100"), new PersistenceHints().setFoundEntity(result));
+		per.merge(updatable.setAttr("1100"), result,new PersistenceHints());
 		
 		EasyQuery<TestEntity> query2 = ormQueryFactory.createEasyQuery(TestEntity.class);
 		result = query2.find("1");
@@ -425,57 +448,13 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		entity.setAttr2(30);
 		
 		try{
-			per.insert(entity,new PersistenceHints());
+			per.persist(entity,new PersistenceHints());
 			fail();
 		}catch(UniqueConstraintException sqle){
 			SQLIntegrityConstraintViolationException bi = (SQLIntegrityConstraintViolationException)sqle.getCause();
 			assertEquals("1",String.valueOf(bi.getErrorCode()));
 		}
 	
-	}
-	
-
-	/**
-	 * バッチアップデート
-	 */
-	@Test
-	public void batchUpdate(){
-		setUpData("TEST.xls");
-	
-		EasyUpdate<TestEntity> update = ormQueryFactory.createEasyUpdate(TestEntity.class);
-		for(int i = 0 ; i < 30; i++){
-			update.eq(TEST, "2").set(ATTR, "999").set(ATTR2, i);
-			update.addBatch();
-		}
-		assertEquals(30,update.batchUpdate().length);
-		
-	}
-	
-	/**
-	 * バッチアップデート
-	 */
-	@Test	
-	public void batchInsert(){
-		
-		EasyUpdate<TestEntity> su = ormQueryFactory.createEasyUpdate(TestEntity.class);
-		su.delete();
-		
-		LightQuery<TestEntity> query = ormQueryFactory.createLightQuery(TestEntity.class);
-		List<TestEntity> res = query.list();
-		assertEquals(0,res.size());
-		
-		List<TestEntity> eList = new ArrayList<TestEntity>();
-		for(int i = 0; i < 30; i++){
-			TestEntity e = new TestEntity();
-			e.setAttr("aaa").setAttr2(i+5000).setTest(String.valueOf(i*100));
-			eList.add(e);
-		}
-		per.batchInsert(eList,new PersistenceHints());
-		assertEquals(30,eList.size());
-
-		List<TestEntity> e = query.list();
-		assertEquals(30,e.size());
-		
 	}
 	
 	/**
@@ -489,7 +468,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		TestEntity updatable = result.clone();
 		updatable.setVersion(2);
 		try{
-			per.update(updatable, new PersistenceHints().setFoundEntity(result));
+			per.merge(updatable, result,new PersistenceHints());
 			fail();
 		}catch(OptimisticLockException e){
 			return;
@@ -505,7 +484,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		TestEntity updatable = new TestEntity();
 		updatable.setVersion(2).setTest("1");
 		try{
-			per.update(updatable,new PersistenceHints());
+			per.merge(updatable,updatable.clone().setVersion(1),new PersistenceHints());
 			fail();
 		}catch(OptimisticLockException e){
 			return;
@@ -619,7 +598,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 
 		DateEntity entity = new DateEntity();
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());
-		per.insert(entity,new PersistenceHints());
+		per.persist(entity,new PersistenceHints());
 		
 		EasyQuery<DateEntity> query = ormQueryFactory.createEasyQuery(DateEntity.class);
 		assertFalse(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").exists());
@@ -633,11 +612,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.insert(e,new PersistenceHints());
+		per.persist(e,new PersistenceHints());
 		
 		TestEntity e2 = new TestEntity();
 		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.insert(e2,new PersistenceHints());
+		per.persist(e2,new PersistenceHints());
 		
 		int cnt = createUpdate().filter("e.test = :p1 and e.attr = :p2").set("attr","attr2").execute(Arrays.asList(new Object[]{"A",10}), "200","aa");
 		assertEquals(1,cnt);
@@ -651,11 +630,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.insert(e,new PersistenceHints());
+		per.persist(e,new PersistenceHints());
 		
 		TestEntity e2 = new TestEntity();
 		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.insert(e2,new PersistenceHints());
+		per.persist(e2,new PersistenceHints());
 		
 		List<TestEntity> ls = create().filter("e.test = :p1 or e.attr = :p2").order("e.test asc").list("200","aa");
 		assertEquals(2,ls.size());
@@ -669,10 +648,10 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		TestEntity e = new TestEntity();
 		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.insert(e,new PersistenceHints());
+		per.persist(e,new PersistenceHints());
 		TestEntity e2 = new TestEntity();
 		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.insert(e2,new PersistenceHints());
+		per.persist(e2,new PersistenceHints());
 		
 		TestEntity ls = create().filter("e.test = :p1 or e.attr = :p2").order("e.test asc").single("200","aa");
 		assertTrue(ls != null);

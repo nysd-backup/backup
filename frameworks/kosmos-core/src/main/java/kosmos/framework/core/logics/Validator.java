@@ -5,6 +5,8 @@ package kosmos.framework.core.logics;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
+
 import kosmos.framework.utility.DateUtils;
 import kosmos.framework.utility.StringUtils;
 
@@ -291,12 +293,12 @@ public class Validator {
 	 * @param str チェック対象文字列
 	 * @return <code>true</code>:全角の場合,<code>false</code>:全角以外の場合
 	 */
-	public boolean isWide(String str) {
+	public boolean isJISWide(String str) {
 		if (StringUtils.isEmpty(str)) {
 			return false;
 		}
 
-		if (!checkCharCode(str)) {
+		if (!checkJISCharCode(str)) {
 			return false;
 		}
 		String src = str.replaceAll("\r|\n", "");
@@ -408,8 +410,8 @@ public class Validator {
 	 * @param str 対象文字列
 	 * @return <code>true</code>:機種依存文字、JIS 第1, 第2水準以外の場合,<code>false</code>:機種依存文字、JIS 第1, 第2水準いずれかの場合
 	 */
-	public boolean checkCharCode(String str) {
-		return StringUtils.checkCharCode(str);
+	public boolean checkJISCharCode(String str) {
+		return StringUtils.checkJISCharCode(str);
 	}
 
 	/**
@@ -441,8 +443,8 @@ public class Validator {
 	 * @param str 対象文字列
 	 * @return <code>true</code>:機種依存文字、JIS 第1, 第2水準以外の場合,<code>false</code>:機種依存文字、JIS 第1, 第2水準いずれかの場合
 	 */
-	public boolean checkExtendCharCode(String str) {
-		return StringUtils.checkExtendCharCode(str);
+	public boolean checkJISExtendCharCode(String str) {
+		return StringUtils.checkJISExtendCharCode(str);
 	}
 
 	/**
@@ -464,19 +466,15 @@ public class Validator {
 	 * @param maxbyte 最大バイト数
 	 * @return <code>true</code>:対象文字列が最大バイト数を超えていない場合 <code>false</code>:対象文字列が最大バイト数を超えている場合
 	 */
-	public boolean checkMaxbyte(String str, String maxbyte) {
+	public boolean checkMaxbyte(String str, String maxbyte,Charset charset) {
 		if (StringUtils.isEmpty(str) || StringUtils.isEmpty(maxbyte)) {
 			return true;
 		}
 
 		int length = Integer.parseInt(maxbyte);
 		if (length >= 0) {
-			int strBytes;
-			try {
-				strBytes = str.getBytes("MS932").length;
-			} catch (UnsupportedEncodingException e) {
-				strBytes = str.getBytes().length;
-			}
+			int strBytes;			
+			strBytes = str.getBytes(charset).length;			
 			if (strBytes > length) {
 				return false;
 			}

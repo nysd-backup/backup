@@ -7,7 +7,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.dto.InvocationParameter;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -39,18 +39,18 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	 * @param destinationName the destinationName
 	 * @return the template
 	 */
-	protected JmsTemplate getJmsTemplate(CompositeRequest dto , String destinationName){
+	protected JmsTemplate getJmsTemplate(InvocationParameter dto , String destinationName){
 		return template;
 	}
 	
 	/**
-	 * @see kosmos.framework.service.core.messaging.AbstractMessageProducer#invoke(kosmos.framework.core.dto.CompositeRequest, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.AbstractMessageProducer#invoke(kosmos.framework.core.dto.InvocationParameter, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(CompositeRequest dto, String destinationName)
+	protected Object invoke(InvocationParameter dto, String destinationName)
 			throws Throwable {
 		
-		final CompositeRequest req = dto;
+		final InvocationParameter req = dto;
 		MessageCreator creater =new MessageCreator() {			
 			@Override
 			public Message createMessage(Session session) throws JMSException {

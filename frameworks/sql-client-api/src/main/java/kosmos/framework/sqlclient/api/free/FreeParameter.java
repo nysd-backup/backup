@@ -18,13 +18,13 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public abstract class FreeParameter {
 	
 	/** the queryId */
-	private final String queryId;
+	private String queryId = null;
 	
 	/** the SQL */
-	private String sql;
+	private String sql = null;
 	
 	/** if true dont analyze the template*/
-	private boolean useRowSql;
+	private boolean useRowSql = true;
 	
 	/** the parameter for <code>PreparedStatement</code> */
 	private Map<String,Object> param = new HashMap<String,Object>();
@@ -39,35 +39,11 @@ public abstract class FreeParameter {
 	private String name = null;
 	
 	/**
-	 * @param useRowSql
-	 * @param queryId
-	 * @param sql
-	 */
-	public FreeParameter(boolean useRowSql , String queryId , String sql ){
-		this.useRowSql = useRowSql;
-		this.queryId = queryId;
-		this.sql = sql;
-	}
-	
-	/**
 	 * @param sql the sql to set
 	 */
 	public void setSql(String sql){
+		this.useRowSql = sql.charAt(0) != '@';
 		this.sql = sql;
-	}
-	
-	/**
-	 * @param useRowSql the useRowSql
-	 */
-	public void setUseRowSql(boolean useRowSql){
-		this.useRowSql = useRowSql;
-	}
-
-	/**
-	 * @return the queryId
-	 */
-	public String getQueryId() {
-		return queryId;
 	}
 
 	/**
@@ -146,6 +122,20 @@ public abstract class FreeParameter {
 	@Override
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	/**
+	 * @return the queryId
+	 */
+	public String getQueryId() {
+		return queryId;
+	}
+
+	/**
+	 * @param queryId the queryId to set
+	 */
+	public void setQueryId(String queryId) {
+		this.queryId = queryId;
 	}
 
 }

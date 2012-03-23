@@ -14,7 +14,6 @@ import javax.persistence.Query;
 import kosmos.framework.jpqlclient.internal.free.AbstractInternalNativeQuery;
 import kosmos.framework.jpqlclient.internal.free.LazyList;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
-import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.internal.free.impl.DelegatingResultSetFilter;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
@@ -173,14 +172,6 @@ public class InternalEclipseLinkNativeQueryImpl extends AbstractInternalNativeQu
 		//ResultSetの取得を可能とする。
 		query.setHint(QueryHints.SCROLLABLE_CURSOR, HintValues.TRUE);
 		return query;
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#batchUpdate(kosmos.framework.sqlclient.api.free.FreeUpdateParameter)
-	 */
-	@Override
-	public int[] batchUpdate(FreeUpdateParameter parameter) {
-		throw new UnsupportedOperationException();
 	}
 
 }

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import kosmos.framework.sqlengine.builder.CommentAppender;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
@@ -31,8 +32,6 @@ import kosmos.framework.sqlengine.executer.impl.RecordHandlerFactoryImpl;
 import kosmos.framework.sqlengine.executer.impl.ResultSetHandlerImpl;
 import kosmos.framework.sqlengine.executer.impl.SelectorImpl;
 import kosmos.framework.sqlengine.executer.impl.UpdaterImpl;
-import kosmos.framework.sqlengine.facade.BaseSQLParameter;
-import kosmos.framework.sqlengine.facade.BatchParameter;
 import kosmos.framework.sqlengine.facade.QueryParameter;
 import kosmos.framework.sqlengine.facade.QueryResult;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
@@ -254,21 +253,27 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @see kosmos.framework.sqlengine.facade.SQLEngineFacade#executeBatch(kosmos.framework.sqlengine.facade.BatchParameter, java.sql.Connection)
 	 */
 	@Override
-	public int[] executeBatch(BatchParameter param, Connection con) {
-
-		//SQL生成
-		List<List<Object>> bindList = new ArrayList<List<Object>>();
-		for(int i = 0 ; i < param.getParameters().size(); i++){
-			bindList.add(new ArrayList<Object>());
-		}
-		String executingSql = buildSql(param);
+	public int[] executeBatch(List<UpdateParameter> param, Connection con) {
 		
-		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, param.getParameters(),bindList,param.getSqlId());						
+		//先頭行で作成されたSQLを使用する
+		
+		UpdateParameter base = param.get(0);
+		
+		//SQL生成
+		String executingSql = buildSql(base);
+		
+		List<List<Object>> bindList = new ArrayList<List<Object>>();
+		List<Map<String,Object>> parameters = new ArrayList<Map<String,Object>>();
+		for(UpdateParameter p : param){
+			bindList.add(new ArrayList<Object>());
+			parameters.add(p.getParameter());
+		}
+		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, parameters,bindList,base.getSqlId());						
 		PreparedStatement stmt = null;
 		
 		try{
 			//ステートメント
-			stmt = provider.createStatement(param.getSqlId(),con, executingSql, param.getTimeoutSeconds(),0,0);	
+			stmt = provider.createStatement(base.getSqlId(),con, executingSql, base.getTimeoutSeconds(),0,0);	
 			
 			//バインド変数追加、バッチ実行
 			for(int i = 0 ; i < bindList.size(); i++){
@@ -307,7 +312,7 @@ public class SQLEngineFacadeImpl implements SQLEngineFacade{
 	 * @param param the parameter
 	 * @return the SQL
 	 */
-	private String buildSql(BaseSQLParameter param){
+	private String buildSql(SQLParameter param){
 		String executingSql  = param.getSql();
 		if(!param.isUseRowSql()){
 			executingSql = sqlBuilder.build(param.getSqlId(), executingSql);		

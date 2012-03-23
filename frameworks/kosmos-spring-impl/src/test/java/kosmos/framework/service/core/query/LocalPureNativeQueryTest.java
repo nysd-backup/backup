@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.test.CachableConst;
 import kosmos.framework.service.test.SampleNativeQuery;
 import kosmos.framework.service.test.SampleNativeQueryConst;
@@ -19,11 +17,15 @@ import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
 import kosmos.framework.sqlclient.api.ConnectionProvider;
-import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.PersistenceManager;
+import kosmos.framework.sqlclient.api.free.BatchUpdate;
+import kosmos.framework.sqlclient.api.free.BatchUpdateFactory;
 import kosmos.framework.sqlclient.api.free.NativeResult;
 import kosmos.framework.sqlclient.api.free.QueryCallback;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.orm.PersistenceHints;
+import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -43,7 +45,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity{
 	
 	@Resource
-	private QueryFactory queryFactory;
+	private QueryFactoryWrapper queryFactory;
 	
 	@Resource
 	private OrmQueryWrapperFactory ormQueryFactory;
@@ -53,6 +55,9 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	
 	@Autowired
 	private PersistenceManager pm;
+	
+	@Autowired
+	private BatchUpdateFactory buf;
 	
 	/**
 	 * @see kosmos.framework.service.test.ServiceUnit#setUpData(java.lang.String)
@@ -130,15 +135,15 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		pm.insert(f,new PersistenceHints());
+		pm.persist(f,new PersistenceHints());
 		
 		TestEntity s = new TestEntity();
 		s.setTest("901").setAttr("901").setAttr2(900).setVersion(1);
-		pm.insert(s,new PersistenceHints());
+		pm.persist(s,new PersistenceHints());
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		pm.insert(t,new PersistenceHints());
+		pm.persist(t,new PersistenceHints());
 		
 		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);		
 		query.setFirstResult(1);
@@ -189,7 +194,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		TestEntity entity = eq.eq(TEST, "1").getSingleResult();
 		TestEntity updatable = entity.clone();
 		updatable.setAttr2(CachableConst.TARGET_INT);
-		pm.update(updatable,  new PersistenceHints().setFoundEntity(entity));
+		pm.merge(updatable, entity, new PersistenceHints());
 		
 		SampleNativeQueryConst c = queryFactory.createQuery(SampleNativeQueryConst.class);
 		c.setArc(CachableConst.TARGET_INT);		
@@ -233,13 +238,15 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test 
 	public void batchUpdate(){
 		setUpData("TEST.xls");
-		SampleNativeUpdate update = queryFactory.createUpdate(SampleNativeUpdate.class);
+		
+		BatchUpdate batcher = buf.createBatchUpdate();
 		for(int i = 1  ; i <= 31; i++){
+			SampleNativeUpdate update = queryFactory.createUpdate(SampleNativeUpdate.class);
 			update.setTest("1");	
 			update.setAttr2set(900+i);			
-			update.addBatch();
+			batcher.addBatch(update);
 		}
-		int[] res= update.batchUpdate();
+		int[] res= batcher.executeBatch();
 		assertEquals(31,res.length);
 		for(int r : res){
 			assertEquals(-2,r);
@@ -278,10 +285,10 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	
 		setUpData("TEST.xls");
 		EasyQuery<TestEntity> eq = ormQueryFactory.createEasyQuery(TestEntity.class);
-		TestEntity finded = eq.eq(TEST, "1").getSingleResult();
-		TestEntity entity = finded.clone();
+		TestEntity found = eq.eq(TEST, "1").getSingleResult();
+		TestEntity entity = found.clone();
 		entity.setAttr2(CachableConst.TARGET_INT);
-		pm.update(entity, new PersistenceHints().setFoundEntity(finded));
+		pm.merge(entity, found,new PersistenceHints());
 		
 		SampleNativeUpdate update = queryFactory.createUpdate(SampleNativeUpdate.class);
 		update.setArc(CachableConst.TARGET_INT);		

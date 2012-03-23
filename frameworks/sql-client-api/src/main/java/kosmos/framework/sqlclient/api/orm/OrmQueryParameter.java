@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.persistence.LockModeType;
 
-import kosmos.framework.sqlclient.api.PersistenceHints;
-
 
 /**
  * The condition to execute SQL.

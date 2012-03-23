@@ -38,6 +38,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
    	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>  	
    	<class>framework.service.test.entity.TestEntity</class>	   
     <properties>
+    
 	    	<property name="eclipselink.exception-handler" value="kosmos.framework.service.test.DumyExceptionHandler"/>      	 
     	 	<property name="eclipselink.target-database" value="ORACLE" />    
       	 	<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>                
@@ -58,6 +59,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
    	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>  	
    	<class>framework.service.test.entity.TestEntity</class>	   
     <properties>
+    		<property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
 	    	<property name="eclipselink.exception-handler" value="kosmos.framework.service.test.DumyExceptionHandler"/>      	 
     	 	<property name="eclipselink.target-database" value="ORACLE" />         	 	      
          	<property name="eclipselink.logging.level" value="ALL" />

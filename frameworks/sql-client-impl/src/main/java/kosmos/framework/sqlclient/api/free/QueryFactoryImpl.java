@@ -3,11 +3,7 @@
  */
 package kosmos.framework.sqlclient.api.free;
 
-import javax.persistence.QueryHint;
-
 import kosmos.framework.sqlclient.internal.free.InternalQuery;
-import kosmos.framework.sqlclient.internal.free.impl.LocalQueryEngine;
-import kosmos.framework.sqlclient.internal.free.impl.LocalUpdateEngine;
 
 /**
  * The factory to create the free writable query.
@@ -28,51 +24,24 @@ public class QueryFactoryImpl implements QueryFactory{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createQuery(java.lang.Class)
+	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createQuery()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends FreeQuery, T extends AbstractFreeQuery<K>> T createQuery(Class<T> queryClass) {
-		AnonymousQuery aq = queryClass.getAnnotation(AnonymousQuery.class);		
-
-		FreeQueryParameter parameter = new FreeQueryParameter(aq.resultClass(), false, queryClass.getSimpleName(), aq.query());
-		
-		K engine = (K)new LocalQueryEngine(internalQuery,parameter);
-		for(QueryHint hint : aq.hints()){
-			engine.setHint(hint.name(), hint.value());
-		}
-		T q;
-		try {
-			q = queryClass.newInstance();
-		} catch (Exception e) {
-			throw new IllegalStateException(e);
-		}
-		q.setDelegate(engine);
-		return q;
+	public NativeQueryImpl createQuery() {
+		NativeQueryImpl query = new NativeQueryImpl();
+		query.setInternalQuery(internalQuery);
+		return query;
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createUpdate(java.lang.Class)
+	 * @see kosmos.framework.sqlclient.api.free.QueryFactory#createUpdate()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends FreeUpdate, T extends AbstractFreeUpdate<K>> T createUpdate(Class<T> updateClass) {
-		
-		AnonymousQuery aq = updateClass.getAnnotation(AnonymousQuery.class);		
-		FreeUpdateParameter parameter = new FreeUpdateParameter(false, updateClass.getSimpleName(), aq.query());
-
-		K engine = (K)new LocalUpdateEngine(internalQuery,parameter);
-		for(QueryHint hint : aq.hints()){
-			engine.setHint(hint.name(), hint.value());
-		}
-		T q;
-		try {
-			q = updateClass.newInstance();
-		} catch (Exception e) {
-			throw new IllegalStateException(e);
-		}
-		q.setDelegate(engine);
-		return q;
+	public NativeUpdateImpl createUpdate() {
+		NativeUpdateImpl update = new NativeUpdateImpl();
+		update.setInternalQuery(internalQuery);
+		return update;
 	}
-
 }

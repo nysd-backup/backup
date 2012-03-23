@@ -72,5 +72,5 @@ public interface SQLEngineFacade {
 	 * @param con the connection
 	 * @return the updated count
 	 */
-	int[] executeBatch(BatchParameter parameter ,Connection con);
+	int[] executeBatch(List<UpdateParameter> parameter ,Connection con);
 }

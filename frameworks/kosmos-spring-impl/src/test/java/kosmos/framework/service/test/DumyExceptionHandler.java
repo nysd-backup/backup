@@ -13,7 +13,7 @@ import org.eclipse.persistence.exceptions.OptimisticLockException;
 
 
 /**
- * function.
+ * JPQLでBatchUpdateを実行するように設定している場合ExceptionHandlerは呼び出されない.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

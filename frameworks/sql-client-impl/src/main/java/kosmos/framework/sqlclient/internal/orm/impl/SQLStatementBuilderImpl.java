@@ -9,9 +9,9 @@ import java.util.Map;
 import javax.persistence.LockModeType;
 import javax.persistence.Table;
 
-import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.orm.FixString;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.api.orm.PersistenceHints;
 import kosmos.framework.sqlclient.api.orm.WhereCondition;
 import kosmos.framework.sqlclient.internal.orm.AbstractStatementBuilder;
 

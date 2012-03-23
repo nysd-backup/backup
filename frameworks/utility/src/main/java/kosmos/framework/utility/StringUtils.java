@@ -1403,7 +1403,7 @@ public final class StringUtils implements Utils.StringScope {
 	 * @param str 対象文字列
 	 * @return <code>true</code>:機種依存文字、JIS 第1, 第2水準以外の場合,<code>false</code>:機種依存文字、JIS 第1, 第2水準いずれかの場合
 	 */
-	public static boolean checkCharCode(String str) {
+	public static boolean checkJISCharCode(String str) {
 		return checkCharCode(str, new CharCodeRange() {
 			public boolean allowChar(int asciiCode) {
 				// 機種依存文字チェック
@@ -1436,7 +1436,7 @@ public final class StringUtils implements Utils.StringScope {
 	 * @param str 対象文字列
 	 * @return <code>true</code>:機種依存文字、JIS 第1, 第2水準以外の場合,<code>false</code> :機種依存文字、JIS 第1, 第2水準いずれかの場合
 	 */
-	public static boolean checkExtendCharCode(String str) {
+	public static boolean checkJISExtendCharCode(String str) {
 		return checkCharCode(str, new CharCodeRange() {
 			public boolean allowChar(int asciiCode) {
 				// 機種依存文字チェック

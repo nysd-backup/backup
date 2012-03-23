@@ -14,15 +14,10 @@
 	      <param name="ConversionPattern" value="[%X{transactionId}][%X{userId}][%X{terminalId}][%X{serviceId}] %d{yyyy/MM/dd HH:mm:ss,SSS} %-5p [%t] %c{1} - :%m%n"/>
 	    </layout>
 	  </appender>
-	<category name="PERF:framework" >
-		<priority value ="INFO" />
-		<appender-ref ref="Console" />
-		<appender-ref ref="Perf" />
-	</category>
-
-	<category name="framework" >
+	<root>
 		<priority value ="DEBUG" />
 		<appender-ref ref="Console" />
-	</category>
+		<appender-ref ref="Perf" />
+	</root>
 
 </log4j:configuration>

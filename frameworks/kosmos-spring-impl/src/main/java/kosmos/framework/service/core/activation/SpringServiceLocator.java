@@ -10,12 +10,11 @@ import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.ExceptionMessageFactory;
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
-import kosmos.framework.sqlclient.api.free.QueryFactory;
+import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -92,7 +91,7 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	 */
 	@Override
 	public ServiceContext createServiceContext() {
-		return new ServiceContextImpl();
+		return new ServiceContext();
 	}
 	
 	/**
@@ -139,8 +138,8 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	 * @see kosmos.framework.service.core.activation.ServiceLocator#createQueryFactory()
 	 */
 	@Override
-	public QueryFactory createQueryFactory() {
-		return lookupByInterface(QueryFactory.class);
+	public QueryFactoryWrapper createQueryFactory() {
+		return lookupByInterface(QueryFactoryWrapper.class);
 	}
 
 	/**

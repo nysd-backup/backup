@@ -7,8 +7,6 @@ import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.InternalUnitOfWork;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.ServiceContextImpl;
-import kosmos.framework.service.core.transaction.TransactionManagingContext;
 import kosmos.framework.service.test.RequiresNewService;
 import kosmos.framework.service.test.ServiceUnit;
 
@@ -36,7 +34,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 		
 		service.addMessage();
 		assertTrue(service.isRollbackOnly());
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());			
+		assertFalse( ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());			
 		
 	}
 	
@@ -55,7 +53,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 			be.printStackTrace();
 			assertEquals("error",be.getMessage());
 		}
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());			
+		assertFalse( ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());			
 		
 	}
 	
@@ -72,7 +70,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 		
 		assertEquals(1,service.getState());
 		assertTrue(service.isRollbackOnly());
-		assertFalse( ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
+		assertFalse( ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly());
 		
 	}
 	
@@ -83,7 +81,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	@Rollback(false)
 	public void errorInCurrentAfterSuccessInNew(){
 		
-		TransactionManagingContext context = getContext();
+		ServiceContext context = getContext();
 		InternalUnitOfWork internal = context.getCurrentUnitOfWork();
 		context.setRollbackOnlyToCurrentTransaction();
 		
@@ -96,8 +94,8 @@ public class LocalTransactionalTest extends ServiceUnit{
 	}
 	
 	
-	private TransactionManagingContext getContext(){
-		return ((TransactionManagingContext)ServiceContext.getCurrentInstance());
+	private ServiceContext getContext(){
+		return ServiceContext.getCurrentInstance();
 	}
 	
 }

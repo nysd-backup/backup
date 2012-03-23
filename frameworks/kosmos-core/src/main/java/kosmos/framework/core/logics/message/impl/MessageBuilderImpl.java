@@ -4,9 +4,9 @@
 package kosmos.framework.core.logics.message.impl;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
-import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageLevel;
@@ -25,26 +25,27 @@ public class MessageBuilderImpl implements MessageBuilder{
 	 * @see kosmos.framework.core.logics.message.MessageBuilder#load(kosmos.framework.core.message.MessageBean)
 	 */
 	@Override
-	public MessageResult load(MessageBean bean){
-		return load(bean,"META-INF/message");
+	public MessageResult load(MessageBean bean,Locale locale){
+		return load(bean,locale,"META-INF/message");
 	}
 	
 	/**
 	 * @see kosmos.framework.core.logics.message.MessageBuilder#load(kosmos.framework.core.message.MessageBean, java.lang.String)
 	 */
 	@Override
-	public MessageResult load(MessageBean bean, String base){
-		MessageContext context = MessageContext.getCurrentInstance();
-		ResourceBundle bundle = ResourceBundle.getBundle(base, context.getLocale());
-		String message = bundle.getString(String.valueOf(bean.getMessageCode()));
+	public MessageResult load(MessageBean bean, Locale locale,String base){
+	
+		ResourceBundle bundle = ResourceBundle.getBundle(base, locale==null?Locale.getDefault():locale);
+		String message = bundle.getString(String.valueOf(bean.getMessageId()));
 		String[] splited = message.split(",");
 		MessageResult result = new MessageResult();
-		result.setCode(bean.getMessageCode());
-		result.setMessage(MessageFormat.format(splited[0], bean.getArguments()));
-		result.setLevel(MessageLevel.valueOf(splited[1]).ordinal());
+		result.setCode(Integer.parseInt(splited[0]));
+		result.setMessage(MessageFormat.format(splited[1], bean.getArguments()));
+		result.setLevel(MessageLevel.valueOf(splited[2]).ordinal());
 		if(splited.length > 2){
 			result.setShouldNotify(Boolean.parseBoolean(splited[2]));
 		}
+		result.setClientBean(bean.getClientBean());
 		return result;
 	}
 

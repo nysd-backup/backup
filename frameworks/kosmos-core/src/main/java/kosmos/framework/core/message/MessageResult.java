@@ -3,15 +3,24 @@
  */
 package kosmos.framework.core.message;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A result of the messageId.
  *
  * @author yoshida-n
  * @version	created.
  */
-public class MessageResult {
+public class MessageResult implements Serializable{
 	
-	/** the cod */
+	private static final long serialVersionUID = 1L;
+
+	/** client information such as component id */
+	private List<ClientBean> clientBean = new ArrayList<ClientBean>();
+	
+	/** the message code */
 	private int code;
 	
 	/** the message level */
@@ -20,6 +29,7 @@ public class MessageResult {
 	/** the message */
 	private String message;
 	
+	/** true:notify to the fault agent */
 	private boolean shouldNotify = false;
 
 	/**
@@ -76,6 +86,20 @@ public class MessageResult {
 	 */
 	public void setShouldNotify(boolean shouldNotify) {
 		this.shouldNotify = shouldNotify;
+	}
+
+	/**
+	 * @return the clientBean
+	 */
+	public List<ClientBean> getClientBean() {
+		return clientBean;
+	}
+
+	/**
+	 * @param clientBean the clientBean to set
+	 */
+	public void setClientBean(List<ClientBean> clientBean) {
+		this.clientBean = clientBean;
 	}
 
 }

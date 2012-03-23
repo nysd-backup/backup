@@ -6,14 +6,12 @@ package kosmos.framework.sqlclient.internal.free.impl;
 import java.util.List;
 
 import kosmos.framework.sqlclient.api.ConnectionProvider;
-import kosmos.framework.sqlclient.api.PersistenceHints;
 import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.api.free.NativeResult;
+import kosmos.framework.sqlclient.api.orm.PersistenceHints;
 import kosmos.framework.sqlclient.internal.free.InternalQuery;
-import kosmos.framework.sqlengine.facade.BaseSQLParameter;
-import kosmos.framework.sqlengine.facade.BatchParameter;
 import kosmos.framework.sqlengine.facade.QueryParameter;
 import kosmos.framework.sqlengine.facade.QueryResult;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
@@ -105,17 +103,6 @@ public class InternalQueryImpl implements InternalQuery{
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#batchUpdate()
-	 */
-	@Override
-	public int[] batchUpdate(FreeUpdateParameter param){
-		BatchParameter batch = new BatchParameter();
-		batch = createBaseParameter(batch,param);
-		batch.setParameters(param.getBatchParam());
-		return facade.executeBatch(batch, cs.getConnection());
-	}
-	
-	/**
 	 * @return the parameter
 	 */
 	private QueryParameter createQueryParameter(FreeQueryParameter param){
@@ -135,22 +122,11 @@ public class InternalQueryImpl implements InternalQuery{
 	}
 	
 	/**
-	 * @param <S> the type
-	 * @param parameter the parameter
-	 * @return the parameter
-	 */
-	private <S extends SQLParameter> S createParameter(S parameter,FreeParameter param){
-		S sqlParam = createBaseParameter(parameter,param);
-		sqlParam.setAllParameter(param.getParam());
-		return sqlParam;
-	}
-	
-	/**
 	 * Creates the baseParameter.
 	 * @param parameter the parameter
 	 * @return the result
 	 */
-	private <S extends BaseSQLParameter> S createBaseParameter(S parameter,FreeParameter param){
+	private <S extends SQLParameter> S createParameter(S parameter,FreeParameter param){
 		parameter.setSqlId(param.getQueryId());
 		parameter.setSql(param.getSql());		
 
@@ -159,6 +135,7 @@ public class InternalQueryImpl implements InternalQuery{
 		}
 		parameter.setAllBranchParameter(param.getBranchParam());
 		parameter.setUseRowSql(param.isUseRowSql());
+		parameter.setAllParameter(param.getParam());
 		return parameter;
 	}
 

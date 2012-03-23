@@ -90,14 +90,6 @@ public class MessageContext {
 	}
 	
 	/**
-	 * @return the globalMessageList
-	 */
-	public MessageResult[] getMessageArray(){
-		 List<MessageResult> list = globalMessageList;
-		 return list.toArray(new MessageResult[0]);
-	}
-	
-	/**
 	 * Initializes the context.
 	 */
 	public void initialize(){

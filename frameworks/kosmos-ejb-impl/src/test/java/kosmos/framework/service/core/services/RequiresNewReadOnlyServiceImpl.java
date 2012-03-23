@@ -9,11 +9,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
-import kosmos.framework.core.query.EasyQuery;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 

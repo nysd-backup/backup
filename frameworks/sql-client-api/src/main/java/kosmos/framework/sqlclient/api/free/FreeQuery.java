@@ -13,16 +13,18 @@ import kosmos.framework.sqlclient.api.Query;
  */
 public interface FreeQuery extends Query{
 	
+	<T extends FreeQuery> T setSql(String sql);
+	
+	<T extends FreeQuery> T setSqlId(String sqlId);
+	
+	@SuppressWarnings("rawtypes")
+	<T extends FreeQuery> T setResultType(Class resultType);
+	
 	/**
 	 * @return the current parameter
 	 */
 	FreeQueryParameter getCurrentParams(); 
-	
-	/**
-	 * @param parameter the parameter to set
-	 */
-	void setCondition(FreeQueryParameter parameter); 
-	
+
 	/**
 	 * Set the branch parameter.
 	 * 

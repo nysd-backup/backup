@@ -12,7 +12,6 @@ import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.sqlclient.api.free.FreeParameter;
 import kosmos.framework.sqlclient.api.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
-import kosmos.framework.sqlclient.api.free.QueryCallback;
 import kosmos.framework.sqlclient.api.orm.OrmParameter;
 import kosmos.framework.sqlclient.api.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.api.orm.OrmUpdateParameter;
@@ -59,14 +58,6 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	public void setSqlStatementBuilder(SQLStatementBuilder sb){
 		this.sb = sb;
 	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#insert(kosmos.framework.sqlclient.api.orm.OrmParameter, java.util.Map)
-	 */
-	@Override
-	public int insert(OrmUpdateParameter<?> entity) {
-		throw new UnsupportedOperationException("Dont' use this method. Use 'EntityManager#persist' instead");
-	}
 	
 	/**
 	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#update(kosmos.framework.sqlclient.api.orm.OrmParameter, java.util.Map)
@@ -75,7 +66,9 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	public int update(OrmUpdateParameter<?> condition){
 
 		String updateJpql = sb.createUpdate(condition.getEntityClass(),condition.getFilterString(),condition.getConditions(), condition.getCurrentValues());
-		final FreeUpdateParameter parameter = new FreeUpdateParameter(false, condition.getEntityClass().getSimpleName() + ".update", updateJpql);
+		final FreeUpdateParameter parameter = new FreeUpdateParameter();
+		parameter.setSql(updateJpql);
+		parameter.setQueryId(condition.getEntityClass().getSimpleName() + ".update");
 	
 		setParameterAndHint(condition,parameter);
 
@@ -90,10 +83,13 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#delete(kosmos.framework.sqlclient.api.orm.OrmParameter)
 	 */
 	@Override
-	public  int delete(OrmUpdateParameter<?> condition){		
+	public int delete(OrmUpdateParameter<?> condition){		
 	
 		String updateJpql = sb.createDelete(condition.getEntityClass(),condition.getFilterString(),condition.getConditions());
-		final FreeUpdateParameter parameter = new FreeUpdateParameter(false, condition.getEntityClass().getSimpleName() + ".delete", updateJpql);
+		final FreeUpdateParameter parameter = new FreeUpdateParameter();
+		parameter.setSql(updateJpql);
+		parameter.setQueryId(condition.getEntityClass().getSimpleName() + ".delete");
+	
 		setParameterAndHint(condition,parameter);
 
 		return internalNamedQuery.executeUpdate(parameter);
@@ -125,9 +121,12 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 
 		String jpql = sb.createSelect(condition);
 		
-		final FreeQueryParameter parameter = new FreeQueryParameter(condition.getEntityClass(), false, condition.getEntityClass().getSimpleName() + ".select", jpql);
+		final FreeQueryParameter parameter = new FreeQueryParameter();
+		parameter.setResultType(condition.getEntityClass());
+		parameter.setQueryId(condition.getEntityClass().getSimpleName() + ".select");
+		parameter.setSql(jpql);
 		setParameterAndHint(condition,parameter);
-		
+
 		parameter.setFirstResult(condition.getFirstResult());
 		parameter.setMaxSize(condition.getMaxSize());		
 		parameter.setLockMode(condition.getLockModeType());
@@ -155,27 +154,10 @@ public class InternalOrmJpaQueryImpl implements InternalOrmQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#batchUpdate(kosmos.framework.sqlclient.api.orm.OrmUpdateParameter)
+	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.api.orm.OrmQueryParameter)
 	 */
 	@Override
-	public int[] batchUpdate(OrmUpdateParameter<?> parameter) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#batchInsert(kosmos.framework.sqlclient.api.orm.OrmUpdateParameter)
-	 */
-	@Override
-	public int[] batchInsert(OrmUpdateParameter<?> parameter) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * @see kosmos.framework.sqlclient.internal.orm.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.api.orm.OrmQueryParameter, kosmos.framework.sqlclient.api.free.QueryCallback)
-	 */
-	@Override
-	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter,
-			QueryCallback<E> callback) {
+	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -211,12 +211,4 @@ public class InternalNamedQueryImpl implements InternalQuery{
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * @see kosmos.framework.sqlclient.internal.free.InternalQuery#batchUpdate(kosmos.framework.sqlclient.api.free.FreeUpdateParameter)
-	 */
-	@Override
-	public int[] batchUpdate(FreeUpdateParameter param){
-		throw new UnsupportedOperationException();
-	}
-
 }

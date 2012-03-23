@@ -11,6 +11,8 @@ import javax.persistence.NonUniqueResultException;
 import kosmos.framework.base.AbstractEntity;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.exception.PoorImplementationException;
+import kosmos.framework.core.exception.UnexpectedDataFoundException;
+import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
 import kosmos.framework.core.logics.Condition;
 import kosmos.framework.core.logics.Converter;
 import kosmos.framework.core.logics.log.LogWriter;
@@ -20,9 +22,6 @@ import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.service.core.transaction.TransactionManagingContext;
-import kosmos.framework.sqlclient.api.exception.UnexpectedDataFoundException;
-import kosmos.framework.sqlclient.api.exception.UnexpectedNoDataFoundException;
 
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -206,7 +205,7 @@ public abstract class AbstractService {
 	 * @param bean the MessageBean
 	 */
 	private void addError(MessageBean bean) {
-		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean);
+		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean,ServiceContext.getCurrentInstance().getLocale());
 		if(result.getLevel() < MessageLevel.E.ordinal()){
 			bug();
 		}
@@ -226,7 +225,7 @@ public abstract class AbstractService {
 	 * @param bean メッセージ定義
 	 */
 	protected final void addMessage(MessageBean bean){
-		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean);
+		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean,ServiceContext.getCurrentInstance().getLocale());
 		ServiceContext.getCurrentInstance().addMessage(result);
 	}
 	
@@ -242,8 +241,8 @@ public abstract class AbstractService {
 	 * @param args
 	 * @return
 	 */
-	protected MessageBean createMessage(int messageCode , Object... args){
-		return new MessageBean(messageCode, args);
+	protected MessageBean createMessage(String messageId , Object... args){
+		return new MessageBean(messageId, args);
 	}
 	
 	/**
@@ -262,7 +261,7 @@ public abstract class AbstractService {
 	 * @return true:ロールバック状態
 	 */
 	protected final boolean isRollbackOnly(){
-		TransactionManagingContext context = (TransactionManagingContext)ServiceContext.getCurrentInstance();
+		ServiceContext context = ServiceContext.getCurrentInstance();
 		return context.getCurrentUnitOfWork().isRollbackOnly();
 	}
 	

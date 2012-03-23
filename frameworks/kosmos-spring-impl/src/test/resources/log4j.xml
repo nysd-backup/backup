@@ -13,12 +13,7 @@
 	    <layout class="org.apache.log4j.PatternLayout">
 	      <param name="ConversionPattern" value="[%X{transactionId}] %d{yyyy/MM/dd HH:mm:ss,SSS} %-5p [%t] %c{1} - :%m%n"/>
 	    </layout>
-	  </appender>
-	<category name="PERF:kosmos" >
-		<priority value ="DEBUG" />
-		<appender-ref ref="Console" />
-		<appender-ref ref="Perf" />
-	</category>
+  </appender>
 
 	<root>
 		<priority value="DEBUG" />

@@ -4,7 +4,6 @@
 package kosmos.framework.service.core.query;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,11 +16,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 import javax.persistence.RollbackException;
 
-import kosmos.framework.core.query.OrmQueryWrapperFactory;
-import kosmos.framework.core.query.LightQuery;
-import kosmos.framework.core.query.LightUpdate;
-import kosmos.framework.core.query.EasyQuery;
-import kosmos.framework.core.query.EasyUpdate;
 import kosmos.framework.jpqlclient.api.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
@@ -35,6 +29,11 @@ import kosmos.framework.service.test.entity.IDateEntity;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.ParentEntity;
 import kosmos.framework.service.test.entity.TestEntity;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.LightQuery;
+import kosmos.framework.sqlclient.api.wrapper.orm.LightUpdate;
+import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
@@ -122,6 +121,35 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(TEST, "2").getSingleResult();
 		assertEquals("AAA",entity.getAttr());
+	}
+	
+	/**
+	 * 更新後検索
+	 */
+	@Test
+	public void updateBatch(){
+		TestEntity e1 = new TestEntity();
+		e1.setTest("10").setAttr("2").setAttr2(1);
+		
+		TestEntity e2 = new TestEntity();
+		e2.setTest("20").setAttr("2").setAttr2(1);
+		
+		TestEntity e3 = new TestEntity();
+		e3.setTest("30").setAttr("2").setAttr2(1);
+		
+		per.getEntityManager().persist(e1);
+		per.getEntityManager().persist(e2);
+		per.getEntityManager().persist(e3);
+		
+		per.getEntityManager().flush();
+		
+		//検索
+		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
+		List<TestEntity> result = query.getResultList();
+		result.get(0).setAttr("100");
+		result.get(1).setAttr("20");
+		result.get(2).setAttr("aaaa");
+		per.getEntityManager().flush();
 	}
 	
 	/**
@@ -341,7 +369,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 			per.getEntityManager().flush();
 			fail();
 		}catch(PersistenceException de){
-			SQLIntegrityConstraintViolationException sqle = (SQLIntegrityConstraintViolationException)de.getCause().getCause();
+			SQLException sqle = (SQLException)de.getCause().getCause();
 			assertEquals("1",String.valueOf(sqle.getErrorCode()));
 		}
 	

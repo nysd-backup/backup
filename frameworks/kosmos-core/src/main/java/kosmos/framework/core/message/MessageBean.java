@@ -4,6 +4,8 @@
 package kosmos.framework.core.message;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The message bean.
@@ -14,9 +16,11 @@ import java.io.Serializable;
 public class MessageBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private List<ClientBean> clientBean = new ArrayList<ClientBean>();
 
 	/** the message */
-	private final int messageCode;
+	private final String messageId;
 	
 	/** the arguments of the message */
 	private final Object[] arguments;
@@ -25,16 +29,16 @@ public class MessageBean implements Serializable {
 	 * @param message
 	 * @param arguments
 	 */
-	public MessageBean(int messageCode ,Object... arguments){
-		this.messageCode = messageCode;
+	public MessageBean(String messageId ,Object... arguments){
+		this.messageId = messageId;
 		this.arguments = arguments;
 	}
 	
 	/**
 	 * @return the message
 	 */
-	public int getMessageCode() {
-		return messageCode;
+	public String getMessageId() {
+		return messageId;
 	}
 
 	/**
@@ -42,6 +46,33 @@ public class MessageBean implements Serializable {
 	 */
 	public Object[] getArguments() {
 		return arguments;
+	}
+	
+	/**
+	 * @return
+	 */
+	public List<ClientBean> getClientBean() {
+		return clientBean;
+	}
+	
+	/**
+	 * @param namingContainerId
+	 * @param rowIndex
+	 * @param componentId
+	 */
+	public void addComponents(String namingContainerId ,long rowIndex,String componentId){
+		ClientBean bean = new ClientBean();
+		bean.setComponentId(componentId);
+		bean.setNamingContainerId(namingContainerId);
+		bean.setRowIndex(rowIndex);
+		clientBean.add(bean);
+	}
+	
+	/**
+	 * @param componentId
+	 */
+	public void addComponents(String componentId){
+		addComponents(null,-1,componentId);
 	}
 
 }

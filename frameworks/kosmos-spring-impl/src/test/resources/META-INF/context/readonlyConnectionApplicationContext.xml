@@ -72,10 +72,20 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<bean id="readOnlyEntityManagerProvider" class="kosmos.framework.service.core.ReadOnlyEntityManagerProviderImpl" scope="prototype" />
 
 	<!-- クエリファクトリ -->
-	<bean id="readOnlyQueryFactory" class="kosmos.framework.jpqlclient.api.free.EclipseLinkQueryFactoryImpl" scope="prototype" >
-		<property name="internalQuery" ref="readsOnlyInternalQuery"/>
-		<property name="internalNamedQuery" ref="readOnlyInternalNamedQuery"/>				
+	<bean id="readOnlyInternalQueryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+		<property name="internalQuery" ref="readsOnlyInternalQuery"/>			
 	</bean>
+	<!-- クエリファクトリ -->
+	<bean id="readOnlyInternalNamedQueryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+		<property name="internalQuery" ref="readOnlyInternalNamedQuery"/>		
+	</bean>
+
+	<!-- クエリファクトリ -->
+	<bean id="readOnlyQueryFactory" class="kosmos.framework.jpqlclient.api.wrapper.free.impl.QueryFactoryWrapperImpl" scope="prototype" >
+		<property name="internalFactory" ref="readOnlyInternalQueryFactory"/>
+		<property name="internalNamedFactory" ref="readOnlyInternalNamedQueryFactory"/>				
+	</bean>
+
 
 	<!-- DAO -->
 	<bean id="readOnlyInternalOrmQuery" class="kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl" scope="prototype" >
@@ -84,13 +94,13 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="readOnlyInternalQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+	<bean id="readOnlyInternalOrmQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
 		<property name="internalOrmQuery" ref="readOnlyInternalOrmQuery" />
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="readOnlyOrmQueryFactory" class="kosmos.framework.service.core.query.OrmQueryWrapperFactoryImpl" scope="prototype">	
-		<property name="internalFactory" ref="readOnlyInternalQueryFactory" />
+	<bean id="readOnlyOrmQueryFactory" class="kosmos.framework.sqlclient.api.wrapper.orm.impl.OrmQueryWrapperFactoryImpl" scope="prototype">	
+		<property name="internalFactory" ref="readOnlyInternalOrmQueryFactory" />
 	</bean>
 
 </beans>

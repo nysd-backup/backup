@@ -14,7 +14,7 @@ import javax.persistence.LockModeType;
 public class FreeQueryParameter extends FreeParameter{
 	
 	/** the resultType */
-	private final Class<?> resultType;
+	private Class<?> resultType;
 	
 	/** the lock mode */
 	private LockModeType lock = null;
@@ -27,16 +27,6 @@ public class FreeQueryParameter extends FreeParameter{
 	
 	/** the start position */
 	private int firstResult = 0;
-	
-	/**
-	 * @param useRowSql the useRowSql
-	 * @param queryId the queryId
-	 * @param sql the SQL
-	 */
-	public FreeQueryParameter(Class<?> resultType,boolean useRowSql, String queryId, String sql) {
-		super(useRowSql, queryId, sql);
-		this.resultType = resultType;
-	}
 	
 	/**
 	 * @return the maxSize
@@ -80,12 +70,6 @@ public class FreeQueryParameter extends FreeParameter{
 		this.filter = filter;
 	}
 
-	/**
-	 * @return the resultType
-	 */
-	public Class<?> getResultType() {
-		return resultType;
-	}
 	
 	/**
 	 * @return the lock
@@ -99,6 +83,20 @@ public class FreeQueryParameter extends FreeParameter{
 	 */
 	public void setLockMode(LockModeType lock) {
 		this.lock = lock;
+	}
+
+	/**
+	 * @return the resultType
+	 */
+	public Class<?> getResultType() {
+		return resultType;
+	}
+
+	/**
+	 * @param resultType the resultType to set
+	 */
+	public void setResultType(Class<?> resultType) {
+		this.resultType = resultType;
 	}
 	
 }

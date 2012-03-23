@@ -3,8 +3,8 @@
  */
 package kosmos.framework.test.client;
 
-import kosmos.framework.sqlclient.api.free.AbstractNativeQuery;
-import kosmos.framework.sqlclient.api.free.AnonymousQuery;
+import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeQuery;
+import kosmos.framework.sqlclient.api.wrapper.free.AnonymousQuery;
 import kosmos.framework.test.entity.TestEntity;
 
 /**

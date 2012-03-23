@@ -11,7 +11,7 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
-import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.dto.InvocationParameter;
 
 
 /**
@@ -28,19 +28,19 @@ import kosmos.framework.core.dto.CompositeRequest;
 public abstract class AbstractJmsProducer implements JmsProducer {
 
 	/**
-	 * @see kosmos.framework.service.core.messaging.JmsProducer#send(kosmos.framework.core.dto.CompositeRequest, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.JmsProducer#send(kosmos.framework.core.dto.InvocationParameter, java.lang.String)
 	 */
 	@Override
-	public void send(CompositeRequest dto, String destinationName) throws JMSException{
+	public void send(InvocationParameter dto, String destinationName) throws JMSException{
 		ConnectionFactory factory = createQueueConnectionFactory(dto , destinationName);
 		sendMessage(factory,dto,destinationName);
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.messaging.JmsProducer#publish(kosmos.framework.core.dto.CompositeRequest, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.JmsProducer#publish(kosmos.framework.core.dto.InvocationParameter, java.lang.String)
 	 */
 	@Override
-	public void publish(CompositeRequest dto, String destinationName)  throws JMSException{
+	public void publish(InvocationParameter dto, String destinationName)  throws JMSException{
 		ConnectionFactory factory = createTopicConnectionFactory(dto , destinationName);
 		sendMessage(factory,dto,destinationName);
 	}
@@ -52,7 +52,7 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	 * @param destinationName the name of destination
 	 * @throws JMSException the exception
 	 */
-	protected void sendMessage(ConnectionFactory factory ,CompositeRequest dto, String destinationName) throws JMSException{
+	protected void sendMessage(ConnectionFactory factory ,InvocationParameter dto, String destinationName) throws JMSException{
 		Connection connection = null;
 		Session session = null;		
 		MessageProducer sender = null;
@@ -100,13 +100,13 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	 * @param destinationName the name of the destination
 	 * @return the XA connection factory for QUEUE
 	 */
-	protected abstract ConnectionFactory createQueueConnectionFactory(CompositeRequest dto ,String destinationName);
+	protected abstract ConnectionFactory createQueueConnectionFactory(InvocationParameter dto ,String destinationName);
 	
 	/**
  	 * @param dto the DTO
 	 * @param destinationName the name of the destination
 	 * @return the XA connection factory for TOPIC
 	 */
-	protected abstract ConnectionFactory createTopicConnectionFactory(CompositeRequest dto ,String destinationName);
+	protected abstract ConnectionFactory createTopicConnectionFactory(InvocationParameter dto ,String destinationName);
 	
 }

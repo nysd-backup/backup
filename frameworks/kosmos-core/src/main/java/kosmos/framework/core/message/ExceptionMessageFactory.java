@@ -15,11 +15,12 @@ public interface ExceptionMessageFactory {
 	 * @param t
 	 * @return
 	 */
-	MessageBean getMessageBeanFrom(Throwable t);
-	
+	MessageBean getBizMessageFrom(Throwable t);
 	
 	/**
+	 * @param t
 	 * @return
 	 */
-	MessageBean getOtherErrorBean();
+	MessageBean getSysMessageFrom(Throwable t);
+	
 }

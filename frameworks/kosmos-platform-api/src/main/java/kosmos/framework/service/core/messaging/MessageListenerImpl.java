@@ -11,7 +11,7 @@ import javax.jms.ObjectMessage;
 
 import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.context.MessageContext;
-import kosmos.framework.core.dto.CompositeRequest;
+import kosmos.framework.core.dto.InvocationParameter;
 import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
@@ -43,10 +43,10 @@ public class MessageListenerImpl implements MessageListener{
 		
 		FaultNotifier notifier = ServiceLocator.createDefaultFaultNotifier();
 		
-		CompositeRequest dto  = null;
+		InvocationParameter dto  = null;
 		try{
 			ObjectMessage message = ObjectMessage.class.cast(arg0);		
-			dto = CompositeRequest.class.cast( message.getObject());
+			dto = InvocationParameter.class.cast( message.getObject());
 		}catch(Throwable jmse){
 			notifyException(jmse,notifier);
 			throw new IllegalStateException(jmse);

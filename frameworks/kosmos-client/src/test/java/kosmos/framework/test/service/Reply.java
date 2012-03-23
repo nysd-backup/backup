@@ -3,7 +3,7 @@
  */
 package kosmos.framework.test.service;
 
-import kosmos.framework.client.service.MessageReplyable;
+import kosmos.framework.core.message.MessageReplyable;
 import kosmos.framework.core.message.MessageResult;
 
 /**
@@ -17,7 +17,7 @@ public class Reply implements MessageReplyable{
 	private MessageResult[] messageList = null;
 
 	/**
-	 * @see kosmos.framework.core.dto.MessageReplyable#setMessageList(kosmos.framework.core.message.MessageResult[])
+	 * @see kosmos.framework.core.message.MessageReplyable#setMessageList(kosmos.framework.core.message.MessageResult[])
 	 */
 	@Override
 	public void setMessageList(MessageResult[] messageList) {
@@ -25,7 +25,7 @@ public class Reply implements MessageReplyable{
 	}
 
 	/**
-	 * @see kosmos.framework.core.dto.MessageReplyable#getMessageList()
+	 * @see kosmos.framework.core.message.MessageReplyable#getMessageList()
 	 */
 	@Override
 	public MessageResult[] getMessageList() {

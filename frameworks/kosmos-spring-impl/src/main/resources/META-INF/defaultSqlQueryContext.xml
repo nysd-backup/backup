@@ -40,9 +40,19 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="connectionProvider" ref="txConnectionProvider"/>	
 	</bean>
 	
-	<!-- クエリファクトリ -->
-	<bean id="queryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
+	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.api.free.BatchUpdateFactoryImpl" scope="prototype" >
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
+		<property name="connectionProvider" ref="txConnectionProvider"/>	
+	</bean>
+	
+	<!-- 内部クエリファクトリ -->
+	<bean id="internalQueryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
 		<property name="internalQuery" ref="internalQuery"/>			
+	</bean>
+	
+	<!-- クエリファクトリ開発者API -->
+	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.wrapper.free.impl.QueryFactoryWrapperImpl" scope="prototype" >
+		<property name="internalFactory" ref="internalQueryFactory"/>			
 	</bean>
 	
 	<!-- ORM内部クエリ -->
@@ -56,14 +66,8 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="kosmos.framework.service.core.query.OrmQueryWrapperFactoryImpl" scope="prototype">	
+	<bean id="ormQueryFactory" class="kosmos.framework.sqlclient.api.wrapper.orm.impl.OrmQueryWrapperFactoryImpl" scope="prototype">	
 		<property name="internalFactory" ref="internalOrmQueryFactory" />
 	</bean>
 	
-	<!-- 永続化エンジン -->
-	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerProxy" scope="prototype" 
-		init-method="defaultInit">
-		<property name="internalOrmQuery" ref="internalOrmQuery" />
-	</bean>
- 
 </beans>
