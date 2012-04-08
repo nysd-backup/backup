@@ -46,7 +46,7 @@ public abstract class AbstractService {
 	/**
 	 * @param message デバッグメッセージ
 	 */
-	protected final void debug(String message){
+	protected void debug(String message){
 		logger.debug(message);
 	}
 	
@@ -104,7 +104,7 @@ public abstract class AbstractService {
 	 * @param bean 例外発生時に追加するメッセージ
 	 * @throws BusinessException the exception
 	 */
-	protected final void throwBizError(MessageBean bean) {
+	protected void throwBizError(MessageBean bean) {
 		addError(bean);
 		throwBizError();
 	}
@@ -138,7 +138,7 @@ public abstract class AbstractService {
 	 * 
 	 * @throws BusinessException the exception
 	 */
-	protected final void throwIfHasError() {	
+	protected void throwIfHasError() {	
 		if(isRollbackOnly()){
 			throwBizError();
 		}		
@@ -224,7 +224,7 @@ public abstract class AbstractService {
 	 * 
 	 * @param bean メッセージ定義
 	 */
-	protected final void addMessage(MessageBean bean){
+	protected void addMessage(MessageBean bean){
 		MessageResult result = ServiceLocator.createDefaultMessageBuilder().load(bean,ServiceContext.getCurrentInstance().getLocale());
 		ServiceContext.getCurrentInstance().addMessage(result);
 	}
@@ -249,7 +249,7 @@ public abstract class AbstractService {
 	 * 実装ミスであることを示す。
 	 * この構文が実行されるようなケースがあれば直ちに修正が必要。
 	 */
-	protected final void bug(){
+	protected void bug(){
 		throw new PoorImplementationException();
 	}
 	
@@ -260,7 +260,7 @@ public abstract class AbstractService {
 	 * 
 	 * @return true:ロールバック状態
 	 */
-	protected final boolean isRollbackOnly(){
+	protected boolean isRollbackOnly(){
 		ServiceContext context = ServiceContext.getCurrentInstance();
 		return context.getCurrentUnitOfWork().isRollbackOnly();
 	}

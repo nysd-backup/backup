@@ -3,15 +3,8 @@
  */
 package kosmos.framework.service.base;
 
-import javax.persistence.OptimisticLockException;
-
 import kosmos.framework.base.AbstractEntity;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
-import kosmos.framework.sqlclient.api.PersistenceManager;
-import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
-import kosmos.framework.sqlclient.api.free.BatchUpdate;
-import kosmos.framework.sqlclient.api.free.BatchUpdateFactory;
-import kosmos.framework.sqlclient.api.orm.PersistenceHints;
 import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeQuery;
 import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeUpdate;
 import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
@@ -38,25 +31,10 @@ public abstract class AbstractCoreService extends AbstractService{
 	/** クエリファクトリ */
 	@Autowired
 	private QueryFactoryWrapper queryFactory;
-	
-	/** 永続化処理 */
-	@Autowired
-	private PersistenceManager persister;
-	
+
 	/** 非同期メッセージクライアントファクトリ */
 	@Autowired
 	private MessageClientFactory messageClientFactory;
-	
-	@Autowired
-	private BatchUpdateFactory batchUpdateFactory;
-	
-	/**
-	 * バッチ更新用エンジン生成.
-	 * @return バッチ更新エンジン
-	 */
-	protected BatchUpdate createBatchUpdate(){
-		return batchUpdateFactory.createBatchUpdate();
-	}
 	
 	/**
 	 * P2P用非同期処理.
@@ -209,120 +187,6 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	protected <T extends AbstractNativeUpdate> T createUpdate(Class<T> updateClass){
 		return queryFactory.createUpdate(updateClass);
-	}
-	
-	/**
-	 * 主キー条件指定の単一行更新.<br/>
-	 * 楽観ロックチェックを行う場合は当メソッド使用すること.<br/>
-	 * 
-	 * <pre>
-	 * OrderEntity found = createEasyQuery(OrderEntity.class).setLockMode(LockModeType.PESSIMISTIC_LOCK).find("10");
-	 * OrderEntity updatable = entity.clone();
-	 * updatable.setItemCount(found.getItemCount-1);
-	 * update(updatable,found);
-	 * 
-	 * foundと異なるupdatableの項目のみset値に含まれる。
-	 * 上記の例だとitemCountのみset値に設定される。
-	 * 更新条件は主キー限定。
-	 * foundとupdatableでロック連番が異なる場合OptimisticLockExceptionをスローする。
-	 * </pre>
-	 * 
-	 * @param entity 更新対象エンティティ（set値に含めるもの）
-	 * @param found このトランザクションで検索したエンティティ
-	 * @throws OptimisticLockException 楽観ロックエラー
-	 * @return 更新件数
-	 */
-	protected <T extends AbstractEntity> void update(T entity, T found)throws OptimisticLockException {
-		update(entity,found,createHints());
-	}
-	
-	/**
-	 * 主キー条件指定の単一行更新.<br/>
-	 * 楽観ロックチェックを行う場合は当メソッド使用すること.<br/>
-	 * 高速レスポンスが求められるか大量件数の更新でupdate前にfindすると性能が要求を満たせない場合に使用する。
-	 * 
-	 * <pre>
-	 * OrderEntity entity = new OrderEntity().setId(1).setItemCount(10);
-	 * update(entity);
-	 * 
-	 * NULL値はsetに含まれないため、上記の例だとitemCountのみset値に設定される。
-	 * 更新条件は主キー限定。
-	 * update実行結果0件の場合OptimisticLockExceptionをスローする。
-	 * </pre>
-	 * 
-	 * @param entity 更新対象エンティティ
-	 * @param hints 更新オプション
-	 * @throws OptimisticLockException 楽観ロックエラー
-	 * @return 更新件数
-	 */
-	protected <T extends AbstractEntity> void update(T entity,T found,PersistenceHints hints)
-			throws OptimisticLockException {
-		persister.merge(entity,found,hints);
-	}
-	
-	/**
-	 * 単一行挿入.<br/>
-	 * 
-	 * <pre>
-	 * OrderEntity entity = new OrderEntity().setId(1).setItemCount(10)....;
-	 * insert(entity);
-	 * 
-	 * NULL値はINSERT値に含まれないため、上記の例だとitemCountとidのみinsertのvalueに値が設定される
-	 * insert時にすでにレコードが存在した場合UniqueConstraintExceptionをスローする。
-	 * </pre>
-	 * 
-	 * @param entity
-	 * @return　挿入件数
-	 * @throws UniqueConstraintException
-	 */
-	protected void insert(AbstractEntity entity) throws UniqueConstraintException{
-		insert(entity,createHints());
-	}
-	
-	/**
-	 * 単一行挿入.<br/>
-	 * 
-	 * <pre>
-	 * OrderEntity entity = new OrderEntity().setId(1).setItemCount(10)....;
-	 * insert(entity);
-	 * 
-	 * NULL値はINSERT値に含まれないため、上記の例だとitemCountとidのみinsertのvalueに値が設定される
-	 * insert時にすでにレコードが存在した場合UniqueConstraintExceptionをスローする。
-	 * </pre>
-	 * 
-	 * @param entity
-	 * @param hints 更新オプション
-	 * @return　挿入件数
-	 * @throws UniqueConstraintException
-	 */
-	protected void insert(AbstractEntity entity,PersistenceHints hints) throws UniqueConstraintException{
-		persister.persist(entity,hints);
-	}
-	
-	/**
-	 * 主キー条件指定の単一行削除.<br/>
-	 * 
-	 * <pre>
-	 * delete(new OrderEntity().setId(1));
-	 * 
-	 * 削除条件は主キー限定。
-	 * delete実行結果0件の場合OptimisticLockExceptionをスローする。
-	 * </pre>
-	 * 
-	 * @param entity 更新対象エンティティ
-	 * @param hints 削除オプション
-	 * @throws OptimisticLockException 楽観ロックエラー
-	 * @return 削除件数
-	 */
-	protected void delete(AbstractEntity entity,PersistenceHints hints) throws OptimisticLockException{
-		persister.remove(entity,hints);
-	}
-	
-	/**
-	 * @return 永続化オプション
-	 */
-	protected PersistenceHints createHints(){
-		return new PersistenceHints();
 	}
 	
 }

@@ -4,7 +4,6 @@
 package kosmos.framework.service.test;
 
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.sqlclient.api.PersistenceContext;
 
 /**
  * function.
@@ -16,8 +15,6 @@ public class ServiceTestContextImpl extends ServiceContext{
 
 	//JPA専用、JPA以外の場合はこれを使用せずヒントを使用する
 	private boolean suppressOptimisticLockError = false;
-	
-	private PersistenceContext context = new PersistenceContext();
 	
 	public void refleshTransactionScope(){
 		super.endUnitOfWork();
@@ -40,22 +37,8 @@ public class ServiceTestContextImpl extends ServiceContext{
 	 * @see kosmos.framework.service.core.context.AbstractServiceContext#release()
 	 */
 	public void release(){
-		super.release();
-		this.context = new PersistenceContext();
+		super.release();		
 		this.suppressOptimisticLockError = false;
 	}
 
-	/**
-	 * @return the context
-	 */
-	public PersistenceContext getContext() {
-		return context;
-	}
-
-	/**
-	 * @param context the context to set
-	 */
-	public void setContext(PersistenceContext context) {
-		this.context = context;
-	}
 }

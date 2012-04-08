@@ -6,6 +6,7 @@ package kosmos.framework.service.core.query;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +18,8 @@ import javax.persistence.PessimisticLockException;
 import javax.sql.DataSource;
 
 import kosmos.framework.service.core.activation.ServiceLocator;
-import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.RequiresNewReadOnlyService;
 import kosmos.framework.service.test.RequiresNewService;
-import kosmos.framework.service.test.ServiceTestContextImpl;
 import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.DateEntity;
 import kosmos.framework.service.test.entity.FastEntity;
@@ -155,9 +154,12 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void updateFast() throws SQLException, Exception{	
 		FastEntity e = new FastEntity();
 		e.setTest("1").setAttr("2").setAttr2(2).setVersion(0);
-		per.persist(e,new PersistenceHints());
-		per.persist(e.clone().setTest("2"),new PersistenceHints());
-	
+		
+		List<FastEntity> result = new ArrayList<FastEntity>();
+		result.add(e);
+		result.add(e.clone().setTest("2"));
+		per.batchPersist(result, new PersistenceHints());
+		
 		FastEntity updatable = e.clone().setTest("2").setAttr("aaaa");
 		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
 	}
@@ -169,19 +171,18 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void updateFastFlushable() throws SQLException, Exception{	
 		
-		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-		impl.getContext().setEnabled(true);
-		
 		FastEntity e = new FastEntity();
 		e.setTest("1").setAttr("2").setAttr2(2).setVersion(0);
-		per.persist(e,new PersistenceHints());
-		per.persist(e.clone().setTest("2"),new PersistenceHints());
-		per.flush();
+		List<FastEntity> result = new ArrayList<FastEntity>();
+		result.add(e);
+		result.add(e.clone().setTest("2"));
+		per.batchPersist(result, new PersistenceHints());
 		
 		FastEntity updatable = e.clone().setTest("2").setAttr("aaaa");
-		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
-		per.flush();
-		impl.getContext().setEnabled(false);
+		List<FastEntity> megeable = new ArrayList<FastEntity>();
+		megeable.add(updatable);
+		per.batchUpdate(megeable, new PersistenceHints());
+
 	}
 	
 	/**
@@ -191,7 +192,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void updateFastNull() throws SQLException, Exception{	
 		FastEntity e = new FastEntity();
-		e.setTest("1").setAttr(null).setAttr2(10).setVersion(0);
+		e.setTest("1").setAttr2(10).setVersion(0).setAttr("a");
 		per.persist(e,new PersistenceHints());
 		per.persist(e.clone().setTest("2").setAttr("2"),new PersistenceHints());
 	
@@ -199,7 +200,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
 		
 		FastEntity ef = ormQueryFactory.createEasyQuery(FastEntity.class).find("1");
-		assertNull(ef.getAttr());
+		assertNotNull(ef.getAttr());
 		ef = ormQueryFactory.createEasyQuery(FastEntity.class).find("2");
 		assertNull(ef.getAttr());
 	}

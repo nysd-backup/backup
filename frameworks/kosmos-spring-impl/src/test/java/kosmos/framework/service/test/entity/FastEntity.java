@@ -110,6 +110,7 @@ public class FastEntity extends AbstractEntity{
 	/**
 	 * @see java.lang.Object#clone()
 	 */
+	@Override
 	public FastEntity clone(){
 		return (FastEntity)super.clone();
 	}

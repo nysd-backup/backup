@@ -3,6 +3,7 @@
  */
 package kosmos.framework.service.base;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 import kosmos.framework.base.AbstractEntity;
@@ -38,9 +39,11 @@ public abstract class AbstractCoreService extends AbstractService{
 	private MessageClientFactory messageClientFactory;
 	
 	/**
-	 * コンストラクタ
+	 * 初期化処理後処理.
+	 * コンストラクタで初期化した場合、他のSessionBeanがまだ作成済みになっていないので生成できない。
 	 */
-	public AbstractCoreService(){
+	@PostConstruct
+	public void postConstruct(){
 		ormQueryFactory = ServiceLocator.createDefaultOrmQueryFactory();
 		queryFactory = ServiceLocator.createDefaultQueryFactory();
 		em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();

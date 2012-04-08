@@ -16,6 +16,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Version;
 
 import kosmos.framework.bean.Pair;
+import kosmos.framework.sqlclient.api.free.BatchUpdate;
 import kosmos.framework.sqlclient.api.free.BatchUpdateFactory;
 import kosmos.framework.sqlclient.api.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.api.orm.FixString;
@@ -44,10 +45,8 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	
 	/** the internal query */
 	private InternalQuery internalQuery;
-	
-	/** the context provider */
-	private PersistenceContextProvider contextProvider;
-	
+
+	/** the batch update Factory */
 	private BatchUpdateFactory batchUpdateFactory;
 	
 	/**
@@ -72,18 +71,20 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	}
 	
 	/**
-	 * @param contextProvider the contextProvider to set
-	 */
-	public void setContextProvider(PersistenceContextProvider contextProvider) {
-		this.contextProvider = contextProvider;
-	}
-
-	/**
 	 * @see kosmos.framework.sqlclient.api.PersistenceManager#persist(java.lang.Object, java.util.Map)
 	 */
 	@Override
 	public void persist(Object entity, PersistenceHints hints) {
-		
+		internalQuery.executeUpdate(createInsertingParameter(entity,hints));
+	}
+	
+	/**
+	 * Creates the inserting parameter
+	 * @param entity the entity
+	 * @param hints the hints
+	 * @return
+	 */
+	private FreeUpdateParameter createInsertingParameter(Object entity, PersistenceHints hints) {
 		Map<String,Object> bindValues = new LinkedHashMap<String,Object>();
 		if(entity instanceof FastEntity){
 			FastEntity e = FastEntity.class.cast(entity);
@@ -102,13 +103,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 		freeUpdateParameter.setQueryId(entity.getClass().getSimpleName()+".insert");
 		freeUpdateParameter.setHints(hints);
 		freeUpdateParameter.setParam(bindValues);
-		
-		PersistenceContext context = contextProvider.getContext();
-		if(context.isEnabled()){
-			context.add(entity, freeUpdateParameter);
-		}else{
-			internalQuery.executeUpdate(freeUpdateParameter);
-		}
+		return freeUpdateParameter;
 	}
 	
 	/**
@@ -116,72 +111,127 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 */
 	@Override
 	public <T> void merge(T entity,T found ,PersistenceHints hints){
-
+		if(found == null){
+			throw new IllegalArgumentException();
+		}
+		List<WhereCondition> conditions = new ArrayList<WhereCondition>();
+		update(createUpdatingParameter(entity,found,hints,conditions),entity, hints,conditions);
+	}
+	
+	/**
+	 * Creates the updating parameter.
+	 * @param entity the entity 
+	 * @param found the found entity
+	 * @param hints the hints
+	 * @param conditions the where conditions
+	 * @return the parameter
+	 */
+	private <T> FreeUpdateParameter createUpdatingParameter(T entity,T found ,PersistenceHints hints,List<WhereCondition> conditions){
 		Map<String,Object> setValues = new LinkedHashMap<String, Object>();
-		List<WhereCondition> conditions = null;
-		if(entity instanceof FastEntity){
-			FastEntity src = FastEntity.class.cast(found);
-			FastEntity dst = FastEntity.class.cast(entity);
-			Pair<String> dstVersion = dst.toVersioningValue();
-			Pair<String> srcVersion = src.toVersioningValue();
-			conditions = new ArrayList<WhereCondition>();
-			
-			//バージョン番号違い
-			if(!ObjectUtils.equals(dstVersion.getValue(),srcVersion.getValue())){
-				throw new OptimisticLockException(entity);
+		if(found != null){
+			if(entity instanceof FastEntity){
+				FastEntity src = FastEntity.class.cast(found);
+				FastEntity dst = FastEntity.class.cast(entity);
+				Pair<String> dstVersion = dst.toVersioningValue();
+				Pair<String> srcVersion = src.toVersioningValue();			
+				
+				//バージョン番号違い
+				if(!ObjectUtils.equals(dstVersion.getValue(),srcVersion.getValue())){
+					throw new OptimisticLockException(entity);
+				}
+				
+				//主キー違い
+				Map<String,Object> srcpks = src.toPrimaryKeys();
+				Map<String,Object> dstpks = dst.toPrimaryKeys();
+				int count = 0;
+				for(Map.Entry<String, Object> e: dstpks.entrySet()){
+					if(!ObjectUtils.equals(srcpks.get(e.getKey()),e.getValue())){
+						throw new IllegalArgumentException("primary key must not be change : src = " + src + " dst = " + dst);
+					}else{
+						conditions.add(new WhereCondition(e.getKey(), count++, WhereOperand.Equal, e.getValue()));
+					}
+				}
+				//検索値と異なる値のみset句
+				Map<String,Object> srcAttr = src.toAttributes();
+				Map<String,Object> dstAttr = dst.toAttributes();
+				for(Map.Entry<String, Object> e: dstAttr.entrySet()){
+					Object srcValue = srcAttr.get(e.getKey());
+					if(!ObjectUtils.equals(srcValue, e.getValue())){
+						setValues.put(e.getKey(), e.getValue());
+					}
+				}
+				
+				//ロック連番の上書き
+				setValues.put(dstVersion.getKey(), new FixString(dstVersion.getKey() + " + 1"));
+				
+			}else{
+				List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
+				List<Pair<Method>> where = new ArrayList<Pair<Method>>();	
+				for(Method m : ms){			
+					Object src = ReflectionUtils.invokeMethod(m, found);
+					Object dst = ReflectionUtils.invokeMethod(m, entity);
+					
+					//ロック連番
+					if(m.getAnnotation(Version.class) != null){
+						if( !ObjectUtils.equals(src, dst) ){
+							throw new OptimisticLockException(entity);
+						}	
+						String name = getColumnName(m);
+						setValues.put(name,new FixString(name + " + 1"));				
+					//主キー	
+					}else if(m.getAnnotation(Id.class) != null){
+						if( !ObjectUtils.equals(src, dst) ){
+							throw new IllegalArgumentException("primary key must not be changed : src = " + src + " dst = " + dst);
+						}
+						where.add(new Pair<Method>(m,dst));
+					//その他	
+					}else{
+						if( !ObjectUtils.equals(src, dst) ){
+							setValues.put(getColumnName(m), dst);
+						}						
+					}
+				}
+				conditions.addAll(createPkWhere(where));		
 			}
-			
-			//主キー違い
-			Map<String,Object> srcpks = src.toPrimaryKeys();
-			Map<String,Object> dstpks = dst.toPrimaryKeys();
-			int count = 0;
-			for(Map.Entry<String, Object> e: dstpks.entrySet()){
-				if(!ObjectUtils.equals(srcpks.get(e.getKey()),e.getValue())){
-					throw new IllegalArgumentException("primary key must not be change : src = " + src + " dst = " + dst);
-				}else{
+		}else {
+			if(entity instanceof FastEntity){
+				FastEntity dst = FastEntity.class.cast(entity);
+				Map<String,Object> dstpks = dst.toPrimaryKeys();
+				int count  = 0;
+				for(Map.Entry<String, Object> e: dstpks.entrySet()){
 					conditions.add(new WhereCondition(e.getKey(), count++, WhereOperand.Equal, e.getValue()));
 				}
-			}
-			
-			//属性は全てset句
-			setValues.putAll(dst.toAttributes());			
-			
-			//ロック連番の上書き
-			setValues.put(dstVersion.getKey(), new FixString(dstVersion.getKey() + " + 1"));
-			
-		}else{
-			List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
-			List<Pair<Method>> where = new ArrayList<Pair<Method>>();	
-			for(Method m : ms){			
-				Object src = ReflectionUtils.invokeMethod(m, found);
-				Object dst = ReflectionUtils.invokeMethod(m, entity);
-				
-				//ロック連番
-				if(m.getAnnotation(Version.class) != null){
-					if( !ObjectUtils.equals(src, dst) ){
-						throw new OptimisticLockException(entity);
-					}	
-					String name = getColumnName(m);
-					setValues.put(name,new FixString(name + " + 1"));				
-				//主キー	
-				}else if(m.getAnnotation(Id.class) != null){
-					if( !ObjectUtils.equals(src, dst) ){
-						throw new IllegalArgumentException("primary key must not be changed : src = " + src + " dst = " + dst);
+				//全項目set句に含める
+				setValues.putAll(dst.toAttributes());						
+				Pair<String> dstVersion = dst.toVersioningValue();
+				setValues.put(dstVersion.getKey(), new FixString(dstVersion.getKey() + " + 1"));
+			}else{
+				List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
+				List<Pair<Method>> where = new ArrayList<Pair<Method>>();	
+				for(Method m : ms){								
+					Object dst = ReflectionUtils.invokeMethod(m, entity);
+					
+					//ロック連番
+					if(m.getAnnotation(Version.class) != null){
+						String name = getColumnName(m);
+						setValues.put(name,new FixString(name + " + 1"));				
+					//主キー	
+					}else if(m.getAnnotation(Id.class) != null){						
+						where.add(new Pair<Method>(m,dst));
+					//その他	
+					}else{
+						setValues.put(getColumnName(m), dst);
 					}
-					where.add(new Pair<Method>(m,dst));
-				//その他	
-				}else{
-					setValues.put(getColumnName(m), dst);
 				}
+				conditions.addAll(createPkWhere(where));		
 			}
-			conditions = createPkWhere(where);		
 		}
 		String sql = sb.createUpdate(entity.getClass(), null,conditions , setValues);		
 		FreeUpdateParameter parameter = new FreeUpdateParameter();
 		parameter.setSql(sql);
 		parameter.setQueryId(entity.getClass().getSimpleName()+".update");
 		parameter.setParam(setValues);
-		update(parameter,entity, hints, conditions);
+		return parameter;
 	}
 	
 	/**
@@ -249,17 +299,12 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	private void update(FreeUpdateParameter parameter, Object entity, PersistenceHints hints,List<WhereCondition> conditions){		
 		setWhereCondition(parameter, conditions);
 		parameter.setHints(hints);
-		PersistenceContext context = contextProvider.getContext();
-		if(context.isEnabled()){
-			context.add(entity, parameter);
-		}else{
-			int result = internalQuery.executeUpdate(parameter);
-			if(result == 0){
-				throw new OptimisticLockException(entity);
-			}
-			if(result > 1){
-				throw new PersistenceException("update count must be less than 1");
-			}
+		int result = internalQuery.executeUpdate(parameter);
+		if(result == 0){
+			throw new OptimisticLockException(entity);
+		}
+		if(result > 1){
+			throw new PersistenceException("update count must be less than 1");
 		}
 	}
 	
@@ -298,14 +343,31 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.PersistenceManager#flush()
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#persist(java.util.List, kosmos.framework.sqlclient.api.orm.PersistenceHints)
 	 */
 	@Override
-	public void flush() {
-		PersistenceContext context = contextProvider.getContext();
-		if(context.isEnabled()){
-			context.flush(batchUpdateFactory);
-		}		
+	public <T> void batchPersist(List<T> entity, PersistenceHints hints) {
+		BatchUpdate updater = batchUpdateFactory.createBatchUpdate();
+		for(Object e : entity){
+			updater.addBatch(createInsertingParameter(e, hints));
+		}
+		updater.executeBatch();
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.PersistenceManager#merge(java.util.List, kosmos.framework.sqlclient.api.orm.PersistenceHints)
+	 */
+	@Override
+	public <T> void batchUpdate(List<T> entity, PersistenceHints hints) {
+		BatchUpdate updater = batchUpdateFactory.createBatchUpdate();
+		for(Object e : entity){
+			List<WhereCondition> conditions = new ArrayList<WhereCondition>();
+			FreeUpdateParameter parameter = createUpdatingParameter(e,null,hints,conditions);
+			setWhereCondition(parameter, conditions);
+			parameter.setHints(hints);
+			updater.addBatch(parameter);
+		}
+		updater.executeBatch();
 	}
 
 }

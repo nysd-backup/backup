@@ -3,6 +3,8 @@
  */
 package kosmos.framework.sqlclient.api;
 
+import java.util.List;
+
 import javax.persistence.OptimisticLockException;
 
 import kosmos.framework.sqlclient.api.exception.DeadLockException;
@@ -17,6 +19,16 @@ import kosmos.framework.sqlclient.api.orm.PersistenceHints;
  * @version	created.
  */
 public interface PersistenceManager {
+	
+	/**
+	 * Inserts the entity.
+	 * @param entity the entity
+	 * @param hints hints
+	 * @return the updated count
+	 * @throws DeadLockException throw when the update conflict occur. 
+	 * @throws UniqueConstraintException throw when the record already exists.
+	 */
+	public <T> void batchPersist(List<T> entity,PersistenceHints hints);
 
 	/**
 	 * Inserts the entity.
@@ -27,6 +39,16 @@ public interface PersistenceManager {
 	 * @throws UniqueConstraintException throw when the record already exists.
 	 */
 	public void persist(Object entity,PersistenceHints hints);
+	
+	/**
+	 * Updates the entity.
+	 * @param entity the entity
+	 * @param hints the hints
+	 * @throws OptimisticLockException throw when the version no is not found.
+	 * @throws DeadLockException throw when the update conflict occur. 
+	 * @return the updated count
+	 */
+	public <T> void batchUpdate(List<T> entity,PersistenceHints hints);
 	
 	/**
 	 * Updates the entity.
@@ -48,5 +70,4 @@ public interface PersistenceManager {
 	 */
 	public void remove(Object entity,PersistenceHints hints);
 	
-	public void flush();
 }
