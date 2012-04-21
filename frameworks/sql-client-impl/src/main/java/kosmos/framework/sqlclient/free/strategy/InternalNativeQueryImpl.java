@@ -7,11 +7,11 @@ import java.util.List;
 
 import kosmos.framework.sqlclient.ConnectionProvider;
 import kosmos.framework.sqlclient.EngineHints;
-import kosmos.framework.sqlclient.free.DelegatingResultSetFilter;
 import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.NativeResult;
+import kosmos.framework.sqlengine.executer.RecordFilter;
 import kosmos.framework.sqlengine.facade.QueryParameter;
 import kosmos.framework.sqlengine.facade.QueryResult;
 import kosmos.framework.sqlengine.facade.SQLEngineFacade;
@@ -105,7 +105,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	/**
 	 * @return the parameter
 	 */
-	private QueryParameter createQueryParameter(FreeQueryParameter param){
+	private QueryParameter createQueryParameter(final FreeQueryParameter param){
 		QueryParameter parameter = createParameter(new QueryParameter(),param);		
 		parameter.setMaxSize(param.getMaxSize());
 		parameter.setFirstResult(param.getFirstResult());
@@ -116,7 +116,14 @@ public class InternalNativeQueryImpl implements InternalQuery{
 		}
 		
 		if(param.getFilter() != null){
-			parameter.setFilter(new DelegatingResultSetFilter(param.getFilter()));
+			parameter.setFilter(
+				new RecordFilter(){
+					@Override
+					public <T> T edit(T data) {
+						return param.getFilter().edit(data);
+					}					
+				}
+			);
 		}
 		return parameter;
 	}

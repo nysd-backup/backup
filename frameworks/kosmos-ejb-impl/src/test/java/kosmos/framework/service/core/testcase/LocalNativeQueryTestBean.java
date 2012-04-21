@@ -8,7 +8,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import kosmos.framework.service.core.CachableConst;
-import kosmos.framework.service.core.activation.AbstractServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocatorImpl;
 import kosmos.framework.service.core.entity.ITestEntity;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.query.SampleNativeQuery;
@@ -40,8 +40,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	
 	@PostConstruct
 	public void construct(){
-		queryFactory = AbstractServiceLocator.createDefaultQueryFactory();
-		ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+		queryFactory = ServiceLocatorImpl.createDefaultQueryFactory();
+		ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 	}
 	/**
 	 * 通常検索

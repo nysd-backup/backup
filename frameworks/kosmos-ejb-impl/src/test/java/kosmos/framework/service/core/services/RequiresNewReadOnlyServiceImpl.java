@@ -9,7 +9,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import kosmos.framework.service.core.activation.AbstractServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocatorImpl;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.sqlclient.orm.OrmQuery;
@@ -38,7 +38,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 
 	@Override
 	public String crushException() {
-		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE

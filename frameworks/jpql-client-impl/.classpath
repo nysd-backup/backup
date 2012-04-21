@@ -11,7 +11,6 @@
 	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar"/>
 	<classpathentry kind="var" path="M2_REPO/oro/oro/2.0.8/oro-2.0.8.jar" sourcepath="M2_REPO/oro/oro/2.0.8/oro-2.0.8-sources.jar"/>
 	<classpathentry kind="src" path="/sql-client-api"/>
-	<classpathentry kind="src" path="/sql-client-impl"/>
 	<classpathentry kind="src" path="/sql-engine"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/velocity/velocity/1.6.4/velocity-1.6.4.jar" sourcepath="M2_REPO/org/apache/velocity/velocity/1.6.4/velocity-1.6.4-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

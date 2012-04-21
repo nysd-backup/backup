@@ -15,15 +15,16 @@ import javax.persistence.Query;
 
 import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.jpqlclient.free.LazyList;
-import kosmos.framework.sqlclient.free.DelegatingResultSetFilter;
 import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.NativeResult;
+import kosmos.framework.sqlclient.free.ResultSetFilter;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
 import kosmos.framework.sqlengine.exception.impl.ExceptionHandlerImpl;
+import kosmos.framework.sqlengine.executer.RecordFilter;
 import kosmos.framework.sqlengine.executer.RecordHandlerFactory;
 import kosmos.framework.sqlengine.executer.ResultSetHandler;
 import kosmos.framework.sqlengine.executer.impl.RecordHandlerFactoryImpl;
@@ -107,7 +108,17 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		ResultSet rs = cursor.getResultSet();
 		
 		try {
-			return handler.getResultList(rs, parameter.getResultType(), new DelegatingResultSetFilter(parameter.getFilter()));
+			final ResultSetFilter filter = parameter.getFilter();
+			RecordFilter recordFilter = null;
+			if(filter != null){
+				recordFilter = new RecordFilter(){
+					@Override
+					public <K> K edit(K data) {
+						return filter.edit(data);
+					}					
+				};
+			}			
+			return handler.getResultList(rs, parameter.getResultType(), recordFilter);
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
@@ -129,7 +140,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeQueryParameter parameter) {
+	public NativeResult getTotalResult(final FreeQueryParameter parameter) {
 
 		Query query = mapping(parameter,createQuery(parameter));
 		query.setMaxResults(0);
@@ -138,8 +149,17 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		ResultSet rs = cursor.getResultSet();
 		QueryResult result;
 		try {
-			result = handler.getResultList(rs, parameter.getResultType(), new DelegatingResultSetFilter(parameter.getFilter()),
-					parameter.getMaxSize(),parameter.getFirstResult());
+			final ResultSetFilter filter = parameter.getFilter();
+			RecordFilter recordFilter = null;
+			if(filter != null){
+				recordFilter = new RecordFilter(){
+					@Override
+					public <K> K edit(K data) {
+						return filter.edit(data);
+					}					
+				};
+			}			
+			result = handler.getResultList(rs, parameter.getResultType(),recordFilter,parameter.getMaxSize(),parameter.getFirstResult());
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{

@@ -11,9 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.NonUniqueResultException;
 
-import kosmos.framework.core.logics.utility.ClassUtils;
-import kosmos.framework.core.logics.utility.ReflectionUtils;
-import kosmos.framework.core.logics.utility.StringUtils;
+import kosmos.framework.sqlclient.ReflectionUtils;
 import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
@@ -25,9 +23,9 @@ import kosmos.framework.sqlclient.orm.OrmQueryParameter;
 import kosmos.framework.sqlclient.orm.OrmUpdateParameter;
 import kosmos.framework.sqlclient.orm.WhereCondition;
 import kosmos.framework.sqlclient.orm.WhereOperand;
-import kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery;
-import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder.Bindable;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * The internal ORM query.
@@ -67,7 +65,8 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 
 		//高速エンティティ
 		if(FastEntity.class.isAssignableFrom(context.getEntityClass())){
-			FastEntity entity = (FastEntity)context.getEntityClass().newInstance();
+			
+			FastEntity entity = (FastEntity)ReflectionUtils.newInstance(context.getEntityClass());
 			int i = 0;
 			for(String e: entity.toPrimaryKeys().keySet()){
 				newContext.getConditions().add(new WhereCondition(e,i,WhereOperand.Equal,pks[i]));

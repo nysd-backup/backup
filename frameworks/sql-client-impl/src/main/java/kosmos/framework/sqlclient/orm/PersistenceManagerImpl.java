@@ -15,21 +15,18 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Version;
 
-import kosmos.framework.core.logics.Pair;
-import kosmos.framework.core.logics.utility.ObjectUtils;
-import kosmos.framework.core.logics.utility.ReflectionUtils;
-import kosmos.framework.core.logics.utility.StringUtils;
 import kosmos.framework.sqlclient.PersistenceHints;
+import kosmos.framework.sqlclient.ReflectionUtils;
 import kosmos.framework.sqlclient.free.BatchUpdate;
 import kosmos.framework.sqlclient.free.BatchUpdateFactory;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
-import kosmos.framework.sqlclient.orm.FixString;
-import kosmos.framework.sqlclient.orm.WhereCondition;
-import kosmos.framework.sqlclient.orm.WhereOperand;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder;
-import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilderImpl;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder.Bindable;
+import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilderImpl;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Persists the entity.
@@ -267,7 +264,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 			List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
 			List<Pair<Method>> where = new ArrayList<Pair<Method>>();
 			for(Method m : ms){			
-				Object dst = m.invoke(entity);					
+				Object dst = ReflectionUtils.invokeMethod(m,entity);				
 				//ロック連番
 				if(m.getAnnotation(Version.class) != null){						
 					String name = getColumnName(m);			
@@ -318,7 +315,7 @@ public class PersistenceManagerImpl implements PersistenceManager{
 		List<WhereCondition> pkWhere = new ArrayList<WhereCondition>();
 		for(int i=0; i < where.size();i++){
 			Pair<Method> p = where.get(i);	
-			if( !ObjectUtils.isNotEmpty(p.getValue()) ){
+			if( p.getValue() == null || (p.getValue() instanceof String && ((String)p.getValue()).isEmpty())){
 				throw new IllegalArgumentException("primary key must not be empty");
 			}
 			String name = getColumnName(p.getKey());

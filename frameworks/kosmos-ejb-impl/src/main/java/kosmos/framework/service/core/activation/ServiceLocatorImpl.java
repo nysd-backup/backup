@@ -16,6 +16,13 @@ import kosmos.framework.core.message.ExceptionMessageFactory;
 import kosmos.framework.core.message.MessageBuilder;
 import kosmos.framework.core.message.impl.DefaultExceptionMessageFactoryImpl;
 import kosmos.framework.core.message.impl.MessageBuilderImpl;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
+import kosmos.framework.jpqlclient.free.strategy.InternalNamedQueryImpl;
+import kosmos.framework.jpqlclient.free.strategy.InternalNativeQueryImpl;
+import kosmos.framework.jpqlclient.orm.strategy.InternalOrmQueryImpl;
+import kosmos.framework.service.core.advice.InternalPerfInterceptor;
+import kosmos.framework.service.core.advice.InternalSQLBuilderInterceptor;
+import kosmos.framework.service.core.advice.ProxyFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.async.AsyncServiceFactoryImpl;
 import kosmos.framework.service.core.exception.ApplicationException;
@@ -25,6 +32,11 @@ import kosmos.framework.service.core.messaging.QueueProducerDelegate;
 import kosmos.framework.service.core.messaging.TopicProducerDelegate;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.free.strategy.InternalQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
+import kosmos.framework.sqlengine.builder.SQLBuilder;
+import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
 
 
 /**
@@ -33,7 +45,7 @@ import kosmos.framework.service.core.transaction.ServiceContextImpl;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractServiceLocator extends ServiceLocator{
+public abstract class ServiceLocatorImpl extends ServiceLocator{
 
 	/** the JNDI prefix */
 	private static final String PREFIX = "java:module";
@@ -45,7 +57,7 @@ public abstract class AbstractServiceLocator extends ServiceLocator{
 	 * @param componentBuilder the componentBuilder to set
 	 * @param remotingProperties the remotingProperties to set
 	 */
-	public AbstractServiceLocator(Properties remotingProperties){
+	public ServiceLocatorImpl(Properties remotingProperties){
 		this.remotingProperties = remotingProperties;
 		delegate = this;
 	}
@@ -166,6 +178,64 @@ public abstract class AbstractServiceLocator extends ServiceLocator{
 	public ExceptionMessageFactory createExceptionMessageFactory() {
 		return new DefaultExceptionMessageFactoryImpl();
 	}
+	
+	
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createQueryFactory()
+	 */
+	@Override
+	public QueryFactory createQueryFactory() {
+
+		//インターセプターを設定する
+		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
+		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
+		
+		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
+		named.setSqlBuilder(builder);
+		named.setEntityManagerProvider(createEntityManagerProvider());
+		
+		ntv.setEntityManagerProvider(createEntityManagerProvider());				
+		ntv.setSqlBuilder(builder);
+		
+		InternalQuery namedQuery =  ProxyFactory.create(InternalQuery.class, named, new InternalPerfInterceptor(),"*");		
+		InternalQuery nativeQuery =  ProxyFactory.create(InternalQuery.class, ntv, new InternalPerfInterceptor(),"*");		
+					
+		QueryFactory nf = new QueryFactory();
+		nf.setInternalNativeQuery(nativeQuery);
+		nf.setInternalNamedQuery(namedQuery);
+		
+		return nf;	
+	}
+	
+	/**
+	 * @see kosmos.framework.service.core.define.ComponentBuilder#createOrmQueryFactory()
+	 */
+	@Override
+	public OrmQueryFactory createOrmQueryFactory() {
+		
+		OrmQueryFactory impl = new OrmQueryFactory();
+		
+		InternalOrmQueryImpl dao = new InternalOrmQueryImpl();
+		EntityManagerProvider provider = createEntityManagerProvider();
+		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
+		named.setEntityManagerProvider(provider);
+		
+		//インターセプターを設定する
+		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
+		named.setSqlBuilder(builder);
+		dao.setInternalNamedQuery(named);
+		dao.setEntityManagerProvider(provider);	
+		impl.setInternalOrmQuery(dao);
+		return impl;
+	}
+	
+	/**
+	 * @return EntityManagerProvider
+	 */
+	protected EntityManagerProvider createEntityManagerProvider() {
+		return lookupByInterface(EntityManagerProvider.class);
+	}
+	
 
 }
 

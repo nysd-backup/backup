@@ -16,7 +16,7 @@ import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.jpqlclient.EntityManagerProvider;
-import kosmos.framework.service.core.activation.AbstractServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocatorImpl;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.transaction.ServiceContext;
@@ -38,7 +38,7 @@ import org.eclipse.persistence.config.QueryHints;
 public class RequiresNewServiceImpl implements RequiresNewService{
 
 	public String test() {
-		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
@@ -47,7 +47,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public String crushException() {
-		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();	
+		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();	
 		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
@@ -113,7 +113,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public void persist() {
-		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();	
+		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();	
 		TestEntity result = ormQueryFactory.createQuery(TestEntity.class).find("1");
 		if(result == null){
 			TestEntity e = new TestEntity();
