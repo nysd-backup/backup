@@ -3,7 +3,7 @@
  */
 package kosmos.framework.service.test;
 
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.entity.TestEntity;
 

@@ -22,27 +22,21 @@
 		</dependency>	
 		<dependency>
 		    <groupId>kosmos.framework</groupId>
-		    <artifactId>jpql-client-api</artifactId>
-		    <version>${framework.version}</version>
-		    <scope>compile</scope>
-		</dependency>
-		<dependency>
-		    <groupId>kosmos.framework</groupId>
 		    <artifactId>sql-client-api</artifactId>
 		    <version>${framework.version}</version>
 		    <scope>compile</scope>
-		</dependency>
-		<dependency>
-		    <groupId>kosmos.framework</groupId>
-		    <artifactId>sql-client-impl</artifactId>
-		    <version>${framework.version}</version>
-		    <scope>compile</scope>
-		</dependency>			
+		</dependency>		
 		<dependency>
 		    <groupId>org.eclipse.persistence</groupId>
 		    <artifactId>javax.persistence</artifactId>
 		    <version>${jpa.version}</version>
 		    <scope>provided</scope>
 		</dependency>				
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>eclipselink</artifactId>
+		    <version>${eclipselink.version}</version>
+		    <scope>provided</scope>
+		</dependency>		
 	</dependencies>
 </project>

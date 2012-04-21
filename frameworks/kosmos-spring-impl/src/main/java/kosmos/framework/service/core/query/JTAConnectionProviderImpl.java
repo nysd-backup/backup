@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import kosmos.framework.sqlclient.api.ConnectionProvider;
+import kosmos.framework.sqlclient.ConnectionProvider;
 
 /**
  * A connection provider only for 'SQLEngine'.
@@ -32,7 +32,7 @@ public class JTAConnectionProviderImpl implements ConnectionProvider{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.ConnectionProvider#getConnection()
+	 * @see kosmos.framework.sqlclient.ConnectionProvider#getConnection()
 	 */
 	@Override
 	public Connection getConnection() {	

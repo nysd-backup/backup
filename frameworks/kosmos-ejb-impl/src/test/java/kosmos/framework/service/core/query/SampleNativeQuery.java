@@ -3,8 +3,8 @@
  */
 package kosmos.framework.service.core.query;
 
-import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeQuery;
-import kosmos.framework.sqlclient.api.wrapper.free.AnonymousQuery;
+import kosmos.framework.sqlclient.free.AbstractNativeQuery;
+import kosmos.framework.sqlclient.free.AnonymousQuery;
 
 /**
  * function.

@@ -7,7 +7,7 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import kosmos.framework.sqlclient.api.ConnectionProvider;
+import kosmos.framework.sqlclient.ConnectionProvider;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
@@ -34,7 +34,7 @@ public class TxDataSourceConnectionProviderImpl implements ConnectionProvider{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.ConnectionProvider#getConnection()
+	 * @see kosmos.framework.sqlclient.ConnectionProvider#getConnection()
 	 */
 	@Override
 	public Connection getConnection() {	

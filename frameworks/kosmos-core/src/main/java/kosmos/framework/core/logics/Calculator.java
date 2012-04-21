@@ -3,8 +3,8 @@
  */
 package kosmos.framework.core.logics;
 
-import static kosmos.framework.utility.DateUtils.format;
-import static kosmos.framework.utility.DateUtils.parse;
+import static kosmos.framework.core.logics.utility.DateUtils.format;
+import static kosmos.framework.core.logics.utility.DateUtils.parse;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import kosmos.framework.utility.DateUtils;
-import kosmos.framework.utility.Utils;
+import kosmos.framework.core.logics.utility.DateUtils;
+import kosmos.framework.core.logics.utility.Utils;
 
 /**
  * 計算エンジン.

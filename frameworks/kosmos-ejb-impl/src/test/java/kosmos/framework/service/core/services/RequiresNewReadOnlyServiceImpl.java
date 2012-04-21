@@ -12,8 +12,8 @@ import javax.persistence.PessimisticLockException;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -29,8 +29,8 @@ import org.eclipse.persistence.config.QueryHints;
 public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyService{
 
 	public String test() {
-		OrmQueryWrapperFactory ormQueryFactory = ServiceLocator.createDefaultOrmQueryFactory();
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQueryFactory ormQueryFactory = ServiceLocator.createDefaultOrmQueryFactory();
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
 		query.find("1");
 		return "OK";
@@ -38,8 +38,8 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 
 	@Override
 	public String crushException() {
-		OrmQueryWrapperFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);

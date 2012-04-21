@@ -7,8 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 
-import kosmos.framework.utility.DateUtils;
-import kosmos.framework.utility.StringUtils;
+import kosmos.framework.core.logics.utility.DateUtils;
+import kosmos.framework.core.logics.utility.StringUtils;
 
 /**
  * バリデータ.

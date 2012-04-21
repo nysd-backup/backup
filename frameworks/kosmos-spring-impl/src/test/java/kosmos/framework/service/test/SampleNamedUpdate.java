@@ -5,8 +5,8 @@ package kosmos.framework.service.test;
 
 import java.util.Date;
 
-import kosmos.framework.jpqlclient.api.wrapper.free.AbstractNamedUpdate;
-import kosmos.framework.sqlclient.api.wrapper.free.AnonymousQuery;
+import kosmos.framework.sqlclient.free.AbstractNamedUpdate;
+import kosmos.framework.sqlclient.free.AnonymousQuery;
 
 
 /**

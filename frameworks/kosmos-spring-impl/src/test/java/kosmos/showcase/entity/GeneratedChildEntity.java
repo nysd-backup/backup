@@ -12,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import kosmos.framework.base.AbstractEntity;
-import kosmos.framework.bean.Pair;
-import kosmos.framework.sqlclient.api.wrapper.orm.Metadata;
+import kosmos.framework.sqlclient.orm.Metadata;
+import kosmos.framework.sqlclient.orm.Pair;
 
 
 /**
@@ -167,7 +167,7 @@ public class GeneratedChildEntity extends AbstractEntity {
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.FastEntity#getVersioningValue()
+	 * @see kosmos.framework.sqlclient.orm.FastEntity#getVersioningValue()
 	 */
 	@Override
 	public Pair<String> toVersioningValue() {				
@@ -175,7 +175,7 @@ public class GeneratedChildEntity extends AbstractEntity {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.api.FastEntity#getPrimaryKeys()
+	 * @see kosmos.framework.sqlclient.orm.FastEntity#getPrimaryKeys()
 	 */
 	@Override
 	public Map<String, Object> toPrimaryKeys() {
@@ -185,7 +185,7 @@ public class GeneratedChildEntity extends AbstractEntity {
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.FastEntity#getAttributes()
+	 * @see kosmos.framework.sqlclient.orm.FastEntity#getAttributes()
 	 */
 	@Override
 	public Map<String, Object> toAttributes() {

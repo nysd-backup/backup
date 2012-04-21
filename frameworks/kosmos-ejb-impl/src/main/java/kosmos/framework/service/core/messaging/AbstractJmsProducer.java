@@ -11,7 +11,6 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
-import kosmos.framework.core.dto.InvocationParameter;
 
 
 /**
@@ -28,7 +27,7 @@ import kosmos.framework.core.dto.InvocationParameter;
 public abstract class AbstractJmsProducer implements JmsProducer {
 
 	/**
-	 * @see kosmos.framework.service.core.messaging.JmsProducer#send(kosmos.framework.core.dto.InvocationParameter, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.JmsProducer#send(kosmos.framework.service.core.messaging.InvocationParameter, java.lang.String)
 	 */
 	@Override
 	public void send(InvocationParameter dto, String destinationName) throws JMSException{
@@ -37,7 +36,7 @@ public abstract class AbstractJmsProducer implements JmsProducer {
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.messaging.JmsProducer#publish(kosmos.framework.core.dto.InvocationParameter, java.lang.String)
+	 * @see kosmos.framework.service.core.messaging.JmsProducer#publish(kosmos.framework.service.core.messaging.InvocationParameter, java.lang.String)
 	 */
 	@Override
 	public void publish(InvocationParameter dto, String destinationName)  throws JMSException{

@@ -77,22 +77,17 @@
 	<profiles>
 		<profile>
 			<id>all</id>
-			<modules>	
-				<module>utility</module>
+			<modules>				
 				<module>sql-engine</module>
 				<module>sql-client-api</module>
-				<module>sql-client-impl</module>
-				<module>jpql-client-api</module>
-				<module>jpql-client-impl</module>	
-				<module>jpql-client-eclipselink-plugin</module>	
-				<module>kosmos-core</module>
-				<module>kosmos-client</module>	
-						
+				<module>sql-client-impl</module>			
+				<module>jpql-client-impl</module>				
+				<module>kosmos-core</module>			
 				<module>kosmos-platform-api</module>
 				<module>kosmos-spring-impl</module>	
+				<module>kosmos-ejb-impl</module>	
 				<module>kosmos-web</module>		
-				<module>kosmos-web-spring</module>			
-				<module>kosmos-ejb-impl</module>							
+				<module>kosmos-web-spring</module>													
 			</modules>
 		</profile>
 	</profiles>

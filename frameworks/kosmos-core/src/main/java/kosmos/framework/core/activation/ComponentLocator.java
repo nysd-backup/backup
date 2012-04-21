@@ -5,8 +5,8 @@ package kosmos.framework.core.activation;
 
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.log.FaultNotifier;
-import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.ExceptionMessageFactory;
+import kosmos.framework.core.message.MessageBuilder;
 
 
 

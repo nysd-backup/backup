@@ -27,15 +27,13 @@ import kosmos.framework.service.test.entity.IDateEntity;
 import kosmos.framework.service.test.entity.IFastEntity;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
-import kosmos.framework.sqlclient.api.ConnectionProvider;
-import kosmos.framework.sqlclient.api.PersistenceManager;
-import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
-import kosmos.framework.sqlclient.api.orm.PersistenceHints;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
-import kosmos.framework.sqlclient.api.wrapper.orm.LightQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.LightUpdate;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.ConnectionProvider;
+import kosmos.framework.sqlclient.PersistenceHints;
+import kosmos.framework.sqlclient.exception.UniqueConstraintException;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
+import kosmos.framework.sqlclient.orm.OrmUpdate;
+import kosmos.framework.sqlclient.orm.PersistenceManager;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -57,7 +55,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@Resource
-	private OrmQueryWrapperFactory ormQueryFactory;
+	private OrmQueryFactory ormQueryFactory;
 
 	@Autowired
 	private PersistenceManager per;
@@ -110,14 +108,14 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void allCondition() throws SQLException{	
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);	
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
 		List<TestEntity> result = getOneRecord(query);
 	
 		assertEquals(1,result.size());
 		
-		EasyQuery<TestEntity> forres = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> forres = ormQueryFactory.createQuery(TestEntity.class);
 		List<TestEntity> updated = getOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
 	}
@@ -133,12 +131,12 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		per.persist(e,new PersistenceHints());
 		per.persist(e.clone().setTest("2"),new PersistenceHints());
 		
-		EasyQuery<FastEntity> query = ormQueryFactory.createEasyQuery(FastEntity.class);	
+		OrmQuery<FastEntity> query = ormQueryFactory.createQuery(FastEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");		
 		query.between(IFastEntity.TEST, "0", "30").eq(IFastEntity.TEST,"2").gtEq(IFastEntity.TEST, "0").ltEq(IFastEntity.TEST, "30").lt(IFastEntity.TEST, "30").gt(IFastEntity.TEST, "0");		
 		query.between(IFastEntity.ATTR, "0", "20").eq(IFastEntity.ATTR,"2").gtEq(IFastEntity.ATTR, "0").ltEq(IFastEntity.ATTR, "20").lt(IFastEntity.ATTR, "20").gt(IFastEntity.ATTR, "0");
 		query.between(IFastEntity.ATTR2, 0, 100).eq(IFastEntity.ATTR2,2).gtEq(IFastEntity.ATTR2, 0).ltEq(IFastEntity.ATTR2, 100).lt(IFastEntity.ATTR2, 100).gt(IFastEntity.ATTR2, 0);		
-		query.contains(IFastEntity.TEST, "2","2","2");
+		query.contains(IFastEntity.TEST, Arrays.asList("2","2","2"));
 		List<FastEntity> result = query.getResultList();
 		assertEquals(1,result.size());
 		
@@ -199,9 +197,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		FastEntity updatable = e.clone().setTest("2").setAttr(null);
 		per.merge(updatable,e.clone().setTest("2"),new PersistenceHints());
 		
-		FastEntity ef = ormQueryFactory.createEasyQuery(FastEntity.class).find("1");
+		FastEntity ef = ormQueryFactory.createQuery(FastEntity.class).find("1");
 		assertNotNull(ef.getAttr());
-		ef = ormQueryFactory.createEasyQuery(FastEntity.class).find("2");
+		ef = ormQueryFactory.createQuery(FastEntity.class).find("2");
 		assertNull(ef.getAttr());
 	}
 	
@@ -212,14 +210,14 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void allConditionFixValue() throws SQLException{	
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);	
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
 		List<TestEntity> result = getFixOneRecord(query);
 	
 		assertEquals(1,result.size());
 		
-		EasyQuery<TestEntity> forres = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> forres = ormQueryFactory.createQuery(TestEntity.class);
 		List<TestEntity> updated = getFixOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
 	}
@@ -231,7 +229,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void disableDetach(){
 		setUpData("TEST.xls");
 		//更新前取征E
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		List<TestEntity> result = getOneRecord(query);	
 		assertEquals(1,result.size());
 		
@@ -240,7 +238,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		per.merge( first.clone().setAttr("100"),first, new PersistenceHints());
 	
 		//更新結果
-		EasyQuery<TestEntity> forres = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> forres = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity entity = forres.eq(TEST, "2").getSingleResult();
 		assertEquals("100",entity.getAttr());
 	}
@@ -254,11 +252,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		setUpData("TEST.xls");
 		
 		//更新
-		EasyUpdate<TestEntity> update = ormQueryFactory.createEasyUpdate(TestEntity.class);
+		OrmUpdate<TestEntity> update = ormQueryFactory.createUpdate(TestEntity.class);
 		update.eq(TEST, "2").set(ATTR, "AAA").update();
 		
 		//検索
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(TEST, "2").getSingleResult();
@@ -277,11 +275,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		setUpData("TEST.xls");
 		
 		//更新
-		EasyUpdate<TestEntity> update = ormQueryFactory.createEasyUpdate(TestEntity.class);
+		OrmUpdate<TestEntity> update = ormQueryFactory.createUpdate(TestEntity.class);
 		update.eqFix(TEST, "'2'").setFix(ATTR, "'AAA'").update();
 		
 		//検索
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(TEST, "2").getSingleResult();
@@ -294,7 +292,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getSingleResultWithDesc(){
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class).desc(TEST);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).desc(TEST);
 		TestEntity result = query.getSingleResult();
 		assertEquals("2",result.getAttr());
 	}
@@ -305,7 +303,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getSingleResultWithAsc(){
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class).asc(TEST);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).asc(TEST);
 		TestEntity result = query.getSingleResult();
 		assertEquals("3",result.getAttr());
 	}
@@ -317,7 +315,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getSingleResultSetFirstWithDesc(){
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class).desc(TEST);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).desc(TEST);
 		query.setFirstResult(1);
 		TestEntity result = query.getSingleResult();
 		assertEquals("3",result.getAttr());
@@ -329,7 +327,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getResultSetFirst(){
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		query.setFirstResult(1);
 		List<TestEntity> result = query.getResultList();
 		assertEquals(1,result.size());
@@ -355,8 +353,8 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		t.setTest("902").setAttr("902").setAttr2(900);
 		per.persist(t,new PersistenceHints());
 		
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class).desc(TEST);
-		query.contains(TEST, "0","1,","2","900","901","902");
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).desc(TEST);
+		query.contains(TEST, Arrays.asList("0","1,","2","900","901","902"));
 		query.setFirstResult(1);
 		query.setMaxResults(2);
 		List<TestEntity> result = query.getResultList();
@@ -380,10 +378,10 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void find(){	
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity result = query.find("1");
 
-		EasyQuery<TestEntity> query2 = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query2 = ormQueryFactory.createQuery(TestEntity.class);
 		result = query2.find("1");
 		assertEquals("3",result.getAttr());
 		
@@ -396,44 +394,14 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void findDisableDetach(){
 	
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity result = query.find("1");
 		TestEntity updatable = result.clone();
 		per.merge(updatable.setAttr("1100"), result,new PersistenceHints());
 		
-		EasyQuery<TestEntity> query2 = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query2 = ormQueryFactory.createQuery(TestEntity.class);
 		result = query2.find("1");
 		assertEquals("1100",result.getAttr());
-	}
-	
-	/**
-	 *  存在チェチE�� not 
-	 */
-	@Test
-	public void exists(){
-		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
-		assertTrue(query.exists());
-	}
-	
-	/**
-	 * PK存在チェチE��
-	 */
-	@Test
-	public void isEmptyPK(){
-		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
-		assertFalse(query.exists("AGA"));
-	}
-	
-	/**
-	 * PK存在チェチE��
-	 */
-	@Test
-	public void existsPK(){
-		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
-		assertTrue(query.exists("1"));
 	}
 	
 	/**
@@ -464,7 +432,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test	
 	public void versionNoError(){
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity result = query.find("1");
 		TestEntity updatable = result.clone();
 		updatable.setVersion(2);
@@ -500,7 +468,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createEasyQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
+		ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -525,7 +493,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createEasyQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
+		ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewService service = ServiceLocator.lookupByInterface(RequiresNewService.class);
 		
@@ -556,7 +524,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		ormQueryFactory.createEasyQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
+		ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		RequiresNewReadOnlyService service = ServiceLocator.lookupByInterface(RequiresNewReadOnlyService.class);
 		
@@ -573,7 +541,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void queryPessimisticLockError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		
 		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
@@ -601,100 +569,29 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());
 		per.persist(entity,new PersistenceHints());
 		
-		EasyQuery<DateEntity> query = ormQueryFactory.createEasyQuery(DateEntity.class);
-		assertFalse(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").exists());
-	}
-	
-	/**
-	 * LightUpdate#executeのチE��チE
-	 */
-	@Test
-	public void easyUpdate(){
-		
-		TestEntity e = new TestEntity();
-		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e,new PersistenceHints());
-		
-		TestEntity e2 = new TestEntity();
-		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.persist(e2,new PersistenceHints());
-		
-		int cnt = createUpdate().filter("e.test = :p1 and e.attr = :p2").set("attr","attr2").execute(Arrays.asList(new Object[]{"A",10}), "200","aa");
-		assertEquals(1,cnt);
-	}
-	
-	/**
-	 * LightQuery#listのチE��チE
-	 */
-	@Test
-	public void easyList(){
-		
-		TestEntity e = new TestEntity();
-		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e,new PersistenceHints());
-		
-		TestEntity e2 = new TestEntity();
-		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.persist(e2,new PersistenceHints());
-		
-		List<TestEntity> ls = create().filter("e.test = :p1 or e.attr = :p2").order("e.test asc").list("200","aa");
-		assertEquals(2,ls.size());
-	}
-	
-	/**
-	 * LightQuery#singleのチE��チE
-	 */
-	@Test
-	public void easySingle(){
-		
-		TestEntity e = new TestEntity();
-		e.setTest("200").setAttr("aa").setAttr2(2);
-		per.persist(e,new PersistenceHints());
-		TestEntity e2 = new TestEntity();
-		e2.setTest("201").setAttr("aa").setAttr2(2);
-		per.persist(e2,new PersistenceHints());
-		
-		TestEntity ls = create().filter("e.test = :p1 or e.attr = :p2").order("e.test asc").single("200","aa");
-		assertTrue(ls != null);
-	}
-	
-	/**
-	 * カスケーチE
-	 */
-	
-	/**
-	 * @return
-	 */
-	private LightQuery<TestEntity> create(){
-		return ormQueryFactory.createLightQuery(TestEntity.class);
+		OrmQuery<DateEntity> query = ormQueryFactory.createQuery(DateEntity.class);
+		assertNull(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").getSingleResult());
 	}
 	
 	/**
 	 * @return
 	 */
-	private LightUpdate<TestEntity> createUpdate(){
-		return ormQueryFactory.createLightUpdate(TestEntity.class);
-	}
-	
-	/**
-	 * @return
-	 */
-	private List<TestEntity> getOneRecord(EasyQuery<TestEntity> query ){	
+	private List<TestEntity> getOneRecord(OrmQuery<TestEntity> query ){	
 		query.between(TEST, "0", "30").eq(TEST,"2").gtEq(TEST, "0").ltEq(TEST, "30").lt(TEST, "30").gt(TEST, "0");		
 		query.between(ATTR, "0", "20").eq(ATTR,"2").gtEq(ATTR, "0").ltEq(ATTR, "20").lt(ATTR, "20").gt(ATTR, "0");
 		query.between(ATTR2, 0, 100).eq(ATTR2,2).gtEq(ATTR2, 0).ltEq(ATTR2, 100).lt(ATTR2, 100).gt(ATTR2, 0);		
-		query.contains(TEST, "2","2","2");
+		query.contains(TEST, Arrays.asList("2","2","2"));
 		return query.getResultList();
 	}
 	
 	/**
 	 * @return
 	 */
-	private List<TestEntity> getFixOneRecord(EasyQuery<TestEntity> query ){	
+	private List<TestEntity> getFixOneRecord(OrmQuery<TestEntity> query ){	
 		query.between(TEST, "0", "30").eqFix(TEST,"2").gtEqFix(TEST, "0").ltEqFix(TEST, "30").ltFix(TEST, "30").gtFix(TEST, "0");		
 		query.between(ATTR, "0", "20").eqFix(ATTR,"2").gtEqFix(ATTR, "0").ltEqFix(ATTR, "20").ltFix(ATTR, "20").gtFix(ATTR, "0");
 		query.between(ATTR2, 0, 100).eqFix(ATTR2,"2").gtEqFix(ATTR2, "0").ltEqFix(ATTR2, "100").ltFix(ATTR2, "100").gtFix(ATTR2, "0");		
-		query.contains(TEST, "2","2","2");
+		query.contains(TEST, Arrays.asList("2","2","2"));
 		return query.getResultList();
 	}
 	

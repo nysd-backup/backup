@@ -5,16 +5,15 @@ package kosmos.framework.service.core.activation;
 
 import java.lang.reflect.InvocationHandler;
 
-import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.logics.log.FaultNotifier;
-import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.ExceptionMessageFactory;
+import kosmos.framework.core.message.MessageBuilder;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -111,14 +110,6 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	}
 
 	/**
-	 * @see kosmos.framework.service.core.activation.ServiceLocator#createServiceActivator()
-	 */
-	@Override
-	public ServiceActivator createServiceActivator() {
-		return new ServiceActivatorImpl();
-	}
-
-	/**
 	 * @see kosmos.framework.service.core.activation.ServiceLocator#createPublisher()
 	 */
 	@Override
@@ -138,8 +129,8 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	 * @see kosmos.framework.service.core.activation.ServiceLocator#createQueryFactory()
 	 */
 	@Override
-	public QueryFactoryWrapper createQueryFactory() {
-		return lookupByInterface(QueryFactoryWrapper.class);
+	public QueryFactory createQueryFactory() {
+		return lookupByInterface(QueryFactory.class);
 	}
 
 	/**
@@ -154,8 +145,8 @@ public abstract class SpringServiceLocator extends ServiceLocator{
 	 * @see kosmos.framework.service.core.activation.ServiceLocator#createOrmQueryFactory()
 	 */
 	@Override
-	public OrmQueryWrapperFactory createOrmQueryFactory() {
-		return lookupByInterface(OrmQueryWrapperFactory.class);
+	public OrmQueryFactory createOrmQueryFactory() {
+		return lookupByInterface(OrmQueryFactory.class);
 	}
 	
 	/**

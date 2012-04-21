@@ -13,8 +13,8 @@ import kosmos.framework.core.exception.SystemException;
 import kosmos.framework.core.message.ExceptionMessageFactory;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageId;
-import kosmos.framework.sqlclient.api.exception.DeadLockException;
-import kosmos.framework.sqlclient.api.exception.UniqueConstraintException;
+import kosmos.framework.sqlclient.exception.DeadLockException;
+import kosmos.framework.sqlclient.exception.UniqueConstraintException;
 
 /**
  * function.

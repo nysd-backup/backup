@@ -7,15 +7,15 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 import kosmos.framework.base.AbstractEntity;
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
-import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeQuery;
-import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeUpdate;
-import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.free.AbstractNativeQuery;
+import kosmos.framework.sqlclient.free.AbstractNativeUpdate;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
+import kosmos.framework.sqlclient.orm.OrmUpdate;
 
 /**
  * EJB用サービス.
@@ -27,10 +27,10 @@ import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
 public abstract class AbstractCoreService extends AbstractService{
 
 	/** ORMクエリファクトリ */
-	private OrmQueryWrapperFactory ormQueryFactory;
+	private OrmQueryFactory ormQueryFactory;
 	
 	/** クエリファクトリ */
-	private QueryFactoryWrapper queryFactory;
+	private QueryFactory queryFactory;
 	
 	/** 永続化処理 */
 	private EntityManager em;
@@ -105,8 +105,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends EasyQuery<V>> T createEasyQuery(Class<V> entityClass){
-		EasyQuery<V> query = ormQueryFactory.createEasyQuery(entityClass);		
+	protected <V extends AbstractEntity,T extends OrmQuery<V>> T createEasyQuery(Class<V> entityClass){
+		OrmQuery<V> query = ormQueryFactory.createQuery(entityClass);		
 		return (T)query;
 	}
 	
@@ -125,8 +125,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends EasyUpdate<V>> T createEasyUpdate(Class<V> entityClass){
-		EasyUpdate<V> query = ormQueryFactory.createEasyUpdate(entityClass);		
+	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createEasyUpdate(Class<V> entityClass){
+		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass);		
 		return (T)query;
 	}
 	

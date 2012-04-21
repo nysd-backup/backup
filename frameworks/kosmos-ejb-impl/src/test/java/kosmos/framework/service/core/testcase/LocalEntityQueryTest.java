@@ -257,38 +257,6 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		bean().dateCheck();
 	}
 	
-	/**
-	 * LightUpdate#executeのチE��チE
-	 */
-	@Test
-	public void easyUpdate(){		
-		bean().easyUpdate();
-	}
-	
-	/**
-	 * LightQuery#listのチE��チE
-	 */
-	@Test
-	public void easyList(){
-		bean().easyList();
-	}
-	
-	/**
-	 * LightQuery#singleのチE��チE
-	 */
-	@Test
-	public void easySingle(){
-		bean().easySingle();
-	}
-	
-	/**
-	 * カスケーチE
-	 */
-	@Test
-	public void cascade(){
-		bean().cascade();
-	}
-	
 	@Test
 	public void remote(){
 		bean().remote();

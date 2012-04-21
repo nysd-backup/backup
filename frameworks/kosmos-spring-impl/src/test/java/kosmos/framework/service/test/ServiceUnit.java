@@ -16,7 +16,7 @@ import javax.persistence.EntityManager;
 import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.logics.log.LogWriter;
 import kosmos.framework.core.logics.log.LogWriterFactory;
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.activation.SpringServiceLocator;
 import kosmos.framework.sqlengine.builder.ConstCache;

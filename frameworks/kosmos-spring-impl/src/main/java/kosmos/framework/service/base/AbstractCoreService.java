@@ -5,12 +5,12 @@ package kosmos.framework.service.base;
 
 import kosmos.framework.base.AbstractEntity;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
-import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeQuery;
-import kosmos.framework.sqlclient.api.wrapper.free.AbstractNativeUpdate;
-import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyUpdate;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.free.AbstractNativeQuery;
+import kosmos.framework.sqlclient.free.AbstractNativeUpdate;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
+import kosmos.framework.sqlclient.orm.OrmUpdate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,11 +26,11 @@ public abstract class AbstractCoreService extends AbstractService{
 
 	/** ORMクエリファクトリ */
 	@Autowired
-	private OrmQueryWrapperFactory ormQueryFactory;
+	private OrmQueryFactory ormQueryFactory;
 	
 	/** クエリファクトリ */
 	@Autowired
-	private QueryFactoryWrapper queryFactory;
+	private QueryFactory queryFactory;
 
 	/** 非同期メッセージクライアントファクトリ */
 	@Autowired
@@ -77,13 +77,13 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 
 	 * <pre>
 	 * ◆複数件数取得
-	 * EasyQuery&ltOneEntity&gt query = createEasyQuery(OneEntity.class);
+	 * OrmQuery&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
 	 * List&ltOneEntity&gt result = query.eq(OneEntity.ATTR1,100).contains(OneEntity.ATTR2,"a","b","c).getResultList();
 	 * for(OneEntity e : result){
 	 * 		// process
 	 * }
 	 * ◆主キー検索
-	 * EasyQuery&ltOneEntity&gt query = createEasyQuery(OneEntity.class);
+	 * OrmQuery&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
 	 * OneEntity result = query.find("key1","key2");
 	 * </pre>
 	 * 
@@ -91,8 +91,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends EasyQuery<V>> T createEasyQuery(Class<V> entityClass){
-		EasyQuery<V> query = ormQueryFactory.createEasyQuery(entityClass);		
+	protected <V extends AbstractEntity,T extends OrmQuery<V>> T createOrmQuery(Class<V> entityClass){
+		OrmQuery<V> query = ormQueryFactory.createQuery(entityClass);		
 		return (T)query;
 	}
 	
@@ -102,12 +102,12 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 
 	 * <pre>
 	 * ◆単純更新
-	 * EasyUpdate&ltOneEntity&gt updater = createEasyUpdate(OneEntity.class);
+	 * OrmUpdate&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
 	 * updater.eq(OneEntity.ATTR1,100).contains(OneEntity.ATTR2,"a","b","c).set(OneEntity.ATTR3,"10");
 	 * int result = updater.update();
 	 *
 	 * ◆バッチ更新
-	 * EasyUpdate&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
+	 * OrmUpdate&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
 	 * for(int i = 0 ; i < 100; i++){
 	 * 	updater.eq(OneEntity.ATTR1,i).set(OneEntity.ATTR3,i);
 	 * 	updater.addBatch();
@@ -122,8 +122,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends EasyUpdate<V>> T createEasyUpdate(Class<V> entityClass){
-		EasyUpdate<V> query = ormQueryFactory.createEasyUpdate(entityClass);		
+	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createOrmUpdate(Class<V> entityClass){
+		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass);		
 		return (T)query;
 	}
 	

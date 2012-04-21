@@ -6,7 +6,7 @@ package kosmos.framework.service.core;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 
 /**
  * Provides the <code>EntityManager</code>.
@@ -21,7 +21,7 @@ public class ReadOnlyEntityManagerProviderImpl implements EntityManagerProvider{
 	private EntityManager em;
 		
 	/**
-	 * @see kosmos.framework.jpqlclient.api.EntityManagerProvider#getEntityManager()
+	 * @see kosmos.framework.jpqlclient.EntityManagerProvider#getEntityManager()
 	 */
 	@Override
 	public EntityManager getEntityManager(){	

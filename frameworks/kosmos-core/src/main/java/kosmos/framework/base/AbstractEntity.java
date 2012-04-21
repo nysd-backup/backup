@@ -6,7 +6,7 @@ package kosmos.framework.base;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import kosmos.framework.sqlclient.api.FastEntity;
+import kosmos.framework.sqlclient.orm.FastEntity;
 
 /**
  * The base of an entity.

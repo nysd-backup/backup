@@ -9,7 +9,7 @@ import java.util.List;
 
 import kosmos.framework.core.logics.log.LogWriter;
 import kosmos.framework.core.logics.log.LogWriterFactory;
-import kosmos.framework.service.core.logics.QueryUtils;
+import kosmos.framework.core.logics.utility.QueryUtils;
 
 
 /**

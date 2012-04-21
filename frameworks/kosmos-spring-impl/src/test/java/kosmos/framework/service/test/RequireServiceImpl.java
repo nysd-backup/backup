@@ -5,10 +5,10 @@ package kosmos.framework.service.test;
 
 import java.util.Locale;
 
-import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageBuilder;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.entity.TestEntity;
 

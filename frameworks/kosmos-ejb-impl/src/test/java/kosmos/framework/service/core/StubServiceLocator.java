@@ -8,22 +8,18 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.jpqlclient.api.wrapper.free.impl.QueryFactoryWrapperImpl;
-import kosmos.framework.jpqlclient.internal.free.impl.InternalEclipseLinkNativeQueryImpl;
-import kosmos.framework.jpqlclient.internal.free.impl.InternalNamedQueryImpl;
-import kosmos.framework.jpqlclient.internal.orm.impl.InternalOrmJpaQueryImpl;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
+import kosmos.framework.jpqlclient.free.strategy.InternalNamedQueryImpl;
+import kosmos.framework.jpqlclient.free.strategy.InternalNativeQueryImpl;
+import kosmos.framework.jpqlclient.orm.strategy.InternalOrmQueryImpl;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.advice.InternalPerfInterceptor;
 import kosmos.framework.service.core.advice.InternalSQLBuilderInterceptor;
 import kosmos.framework.service.core.advice.ProxyFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.sqlclient.api.free.QueryFactoryImpl;
-import kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl;
-import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
-import kosmos.framework.sqlclient.api.wrapper.orm.impl.OrmQueryWrapperFactoryImpl;
-import kosmos.framework.sqlclient.internal.free.InternalQuery;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.free.strategy.InternalQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 import kosmos.framework.sqlengine.builder.impl.SQLBuilderProxyImpl;
 
@@ -87,12 +83,11 @@ public class StubServiceLocator extends AbstractServiceLocator{
 	 * @see kosmos.framework.service.core.define.ComponentBuilder#createQueryFactory()
 	 */
 	@Override
-	public QueryFactoryWrapper createQueryFactory() {
-		QueryFactoryWrapperImpl factory = new QueryFactoryWrapperImpl();
+	public QueryFactory createQueryFactory() {
 
 		//インターセプターを設定する
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
-		InternalEclipseLinkNativeQueryImpl ntv = new InternalEclipseLinkNativeQueryImpl();
+		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
 		
 		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
 		named.setSqlBuilder(builder);
@@ -104,26 +99,22 @@ public class StubServiceLocator extends AbstractServiceLocator{
 		InternalQuery namedQuery =  ProxyFactory.create(InternalQuery.class, named, new InternalPerfInterceptor(),"*");		
 		InternalQuery nativeQuery =  ProxyFactory.create(InternalQuery.class, ntv, new InternalPerfInterceptor(),"*");		
 					
-		QueryFactoryImpl nf = new QueryFactoryImpl();
-		nf.setInternalQuery(nativeQuery);
+		QueryFactory nf = new QueryFactory();
+		nf.setInternalNativeQuery(nativeQuery);
+		nf.setInternalNamedQuery(namedQuery);
 		
-		QueryFactoryImpl namef = new QueryFactoryImpl();
-		namef.setInternalQuery(namedQuery);
-		
-		factory.setInternalFactory(nf);
-		factory.setInternalNamedFactory(namef);
-		
-		return factory;	
+		return nf;	
 	}
 
 	/**
 	 * @see kosmos.framework.service.core.define.ComponentBuilder#createOrmQueryFactory()
 	 */
 	@Override
-	public OrmQueryWrapperFactory createOrmQueryFactory() {
-		OrmQueryWrapperFactoryImpl impl = new OrmQueryWrapperFactoryImpl();
-		OrmQueryFactoryImpl internal = new OrmQueryFactoryImpl();
-		InternalOrmJpaQueryImpl dao = new InternalOrmJpaQueryImpl();
+	public OrmQueryFactory createOrmQueryFactory() {
+		
+		OrmQueryFactory impl = new OrmQueryFactory();
+		
+		InternalOrmQueryImpl dao = new InternalOrmQueryImpl();
 		EntityManagerProvider provider = createEntityManagerProvider();
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
 		named.setEntityManagerProvider(provider);
@@ -133,8 +124,7 @@ public class StubServiceLocator extends AbstractServiceLocator{
 		named.setSqlBuilder(builder);
 		dao.setInternalNamedQuery(named);
 		dao.setEntityManagerProvider(provider);	
-		internal.setInternalOrmQuery(dao);
-		impl.setInternalFactory(internal);
+		impl.setInternalOrmQuery(dao);
 		return impl;
 	}
 	

@@ -3,15 +3,14 @@
  */
 package kosmos.framework.service.core.messaging;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.core.context.MessageContext;
-import kosmos.framework.core.dto.InvocationParameter;
 import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
@@ -55,9 +54,8 @@ public class MessageListenerImpl implements MessageListener{
 		context.initialize();			
 		try{
 			Throwable t = null;
-			try {
-				ServiceActivator activator = ServiceLocator.createDefaultServiceActivator();
-				activator.activate(dto);			
+			try{
+				invoke(dto);				
 			} catch (Throwable e) {
 				t = e;
 			}
@@ -69,6 +67,26 @@ public class MessageListenerImpl implements MessageListener{
 		}finally{
 			context.release();
 		}
+	}
+	
+	/**
+	 * Invokes the service.
+	 * @param dto the dto 
+	 */
+	protected void invoke(InvocationParameter dto) throws Throwable{
+
+		Object service = ServiceLocator.lookup(dto.getServiceName());					
+		Method m = null;
+		if(dto.getParameterTypeNames() == null){
+			m = service.getClass().getMethod(dto.getMethodName());
+		}else {
+			Class<?>[] clss = new Class[dto.getParameterTypeNames().length];
+			for(int i = 0 ; i< clss.length; i++){
+				clss[i] = Class.forName(dto.getParameterTypeNames()[i]);
+			}
+			m = service.getClass().getMethod(dto.getMethodName(),clss);
+		}		
+		m.invoke(service, (Object[])dto.getParameter());
 	}
 	
 	/**

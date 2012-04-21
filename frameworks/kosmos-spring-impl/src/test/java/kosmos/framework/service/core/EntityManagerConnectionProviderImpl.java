@@ -7,8 +7,8 @@ import java.sql.Connection;
 
 import javax.persistence.EntityManager;
 
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
-import kosmos.framework.sqlclient.api.ConnectionProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
+import kosmos.framework.sqlclient.ConnectionProvider;
 
 import org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor;
 import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
@@ -51,7 +51,7 @@ public class EntityManagerConnectionProviderImpl implements ConnectionProvider{
 	}	
 
 	/**
-	 * @see kosmos.framework.sqlclient.api.ConnectionProvider#getConnection()
+	 * @see kosmos.framework.sqlclient.ConnectionProvider#getConnection()
 	 */
 	@Override
 	public Connection getConnection() {	

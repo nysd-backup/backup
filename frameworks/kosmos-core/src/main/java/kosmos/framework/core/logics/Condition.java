@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 import kosmos.framework.core.exception.PoorImplementationException;
-import kosmos.framework.utility.DateUtils;
-import kosmos.framework.utility.StringUtils;
-import kosmos.framework.utility.Utils;
+import kosmos.framework.core.logics.utility.DateUtils;
+import kosmos.framework.core.logics.utility.StringUtils;
+import kosmos.framework.core.logics.utility.Utils;
 
 /**
  * 条件判断クラス

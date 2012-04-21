@@ -15,14 +15,14 @@ import javax.persistence.PessimisticLockException;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.activation.AbstractServiceLocator;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -38,8 +38,8 @@ import org.eclipse.persistence.config.QueryHints;
 public class RequiresNewServiceImpl implements RequiresNewService{
 
 	public String test() {
-		OrmQueryWrapperFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
@@ -47,8 +47,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public String crushException() {
-		OrmQueryWrapperFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();	
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();	
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
@@ -113,8 +113,8 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public void persist() {
-		OrmQueryWrapperFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();	
-		TestEntity result = ormQueryFactory.createEasyQuery(TestEntity.class).find("1");
+		OrmQueryFactory ormQueryFactory = AbstractServiceLocator.createDefaultOrmQueryFactory();	
+		TestEntity result = ormQueryFactory.createQuery(TestEntity.class).find("1");
 		if(result == null){
 			TestEntity e = new TestEntity();
 			e.setTest("1");

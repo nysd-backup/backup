@@ -5,7 +5,6 @@ package kosmos.framework.service.core.messaging;
 
 import javax.jms.JMSException;
 
-import kosmos.framework.core.dto.InvocationParameter;
 
 
 /**

@@ -6,12 +6,11 @@ package kosmos.framework.service.core.activation;
 import java.lang.reflect.InvocationHandler;
 
 import kosmos.framework.core.activation.ComponentLocator;
-import kosmos.framework.core.activation.ServiceActivator;
 import kosmos.framework.service.core.async.AsyncServiceFactory;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
 import kosmos.framework.service.core.transaction.ServiceContext;
-import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 
 /**
@@ -26,12 +25,7 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 * @return the <code>MessageClientFactory</code>
 	 */
 	public abstract MessageClientFactory createMessageClientFactory();
-	
-	/**
-	 * @return the <code>ServiceActivator</code>
-	 */
-	public abstract ServiceActivator createServiceActivator();
-	
+
 	/**
 	 * @return the JMS publisher
 	 */
@@ -45,7 +39,7 @@ public abstract class ServiceLocator extends ComponentLocator{
 	/**
 	 * @return the <code>QueryFactory</code>
 	 */
-	public abstract QueryFactoryWrapper createQueryFactory();
+	public abstract QueryFactory createQueryFactory();
 	
 	/**
 	 * @return the <code>AsyncServiceFactory</code>
@@ -55,7 +49,7 @@ public abstract class ServiceLocator extends ComponentLocator{
 	/**
 	 * @return the <code>OrmQueryWrapperFactory</code>
 	 */
-	public abstract OrmQueryWrapperFactory createOrmQueryFactory();
+	public abstract OrmQueryFactory createOrmQueryFactory();
 	
 	/**
 	 * @return the ServiceContext
@@ -67,13 +61,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 */
 	public static MessageClientFactory createDefaultMessageClientFactory(){
 		return getDelegate().createMessageClientFactory();
-	}
-	
-	/**
-	 * @return the ServiceActivator
-	 */
-	public static ServiceActivator createDefaultServiceActivator(){
-		return getDelegate().createServiceActivator();
 	}
 	
 	/**
@@ -93,14 +80,14 @@ public abstract class ServiceLocator extends ComponentLocator{
 	/**
 	 * @return the QueryFactory
 	 */
-	public static QueryFactoryWrapper createDefaultQueryFactory(){
+	public static QueryFactory createDefaultQueryFactory(){
 		return getDelegate().createQueryFactory();
 	}
 	
 	/**
 	 * @return the OrmQueryWrapperFactory
 	 */
-	public static OrmQueryWrapperFactory createDefaultOrmQueryFactory(){
+	public static OrmQueryFactory createDefaultOrmQueryFactory(){
 		return getDelegate().createOrmQueryFactory();
 	}
 	

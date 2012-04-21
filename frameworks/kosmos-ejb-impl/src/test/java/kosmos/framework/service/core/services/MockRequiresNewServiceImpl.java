@@ -6,7 +6,7 @@ package kosmos.framework.service.core.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.core.transaction.ServiceContextImpl;

@@ -10,14 +10,14 @@ import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.core.exception.BusinessException;
-import kosmos.framework.core.logics.message.MessageBuilder;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageBuilder;
 import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.entity.TestEntity;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +40,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Resource
-	private OrmQueryWrapperFactory ormQueryFactory;
+	private OrmQueryFactory ormQueryFactory;
 	
 	@Autowired
 	private MessageBuilder builder;
 	
 	public String test() {
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);		
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
@@ -54,7 +54,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public String crushException() {
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");

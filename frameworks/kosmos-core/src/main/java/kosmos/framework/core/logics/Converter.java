@@ -3,8 +3,8 @@
  */
 package kosmos.framework.core.logics;
 
-import static kosmos.framework.utility.DateUtils.format;
-import static kosmos.framework.utility.DateUtils.parse;
+import static kosmos.framework.core.logics.utility.DateUtils.format;
+import static kosmos.framework.core.logics.utility.DateUtils.parse;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -18,10 +18,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import kosmos.framework.utility.DateUtils;
-import kosmos.framework.utility.FileUtils;
-import kosmos.framework.utility.StringUtils;
-import kosmos.framework.utility.Utils;
+import kosmos.framework.core.logics.utility.DateUtils;
+import kosmos.framework.core.logics.utility.FileUtils;
+import kosmos.framework.core.logics.utility.StringUtils;
+import kosmos.framework.core.logics.utility.Utils;
 
 /**
  * コンバータ.

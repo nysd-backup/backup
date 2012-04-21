@@ -3,7 +3,7 @@
  */
 package kosmos.framework.service.test.entity;
 
-import kosmos.framework.sqlclient.api.wrapper.orm.Metadata;
+import kosmos.framework.sqlclient.orm.Metadata;
 
 /**
  * function.

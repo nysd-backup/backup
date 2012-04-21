@@ -16,16 +16,16 @@ import kosmos.framework.service.test.SampleNativeUpdate;
 import kosmos.framework.service.test.ServiceUnit;
 import kosmos.framework.service.test.entity.ITestEntity;
 import kosmos.framework.service.test.entity.TestEntity;
-import kosmos.framework.sqlclient.api.ConnectionProvider;
-import kosmos.framework.sqlclient.api.PersistenceManager;
-import kosmos.framework.sqlclient.api.free.BatchUpdate;
-import kosmos.framework.sqlclient.api.free.BatchUpdateFactory;
-import kosmos.framework.sqlclient.api.free.NativeResult;
-import kosmos.framework.sqlclient.api.free.QueryCallback;
-import kosmos.framework.sqlclient.api.orm.PersistenceHints;
-import kosmos.framework.sqlclient.api.wrapper.free.QueryFactoryWrapper;
-import kosmos.framework.sqlclient.api.wrapper.orm.EasyQuery;
-import kosmos.framework.sqlclient.api.wrapper.orm.OrmQueryWrapperFactory;
+import kosmos.framework.sqlclient.ConnectionProvider;
+import kosmos.framework.sqlclient.PersistenceHints;
+import kosmos.framework.sqlclient.free.BatchUpdate;
+import kosmos.framework.sqlclient.free.BatchUpdateFactory;
+import kosmos.framework.sqlclient.free.NativeResult;
+import kosmos.framework.sqlclient.free.QueryCallback;
+import kosmos.framework.sqlclient.free.QueryFactory;
+import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmQueryFactory;
+import kosmos.framework.sqlclient.orm.PersistenceManager;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -45,10 +45,10 @@ import org.springframework.test.context.ContextConfiguration;
 public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity{
 	
 	@Resource
-	private QueryFactoryWrapper queryFactory;
+	private QueryFactory queryFactory;
 	
 	@Resource
-	private OrmQueryWrapperFactory ormQueryFactory;
+	private OrmQueryFactory ormQueryFactory;
 
 	@Autowired
 	private ConnectionProvider provider;
@@ -190,7 +190,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> eq = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> eq = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity entity = eq.eq(TEST, "1").getSingleResult();
 		TestEntity updatable = entity.clone();
 		updatable.setAttr2(CachableConst.TARGET_INT);
@@ -226,7 +226,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		int count = update.update();
 		assertEquals(1,count);
 		
-		EasyQuery<TestEntity> e = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> e = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity res = e.eq(TEST, "1").getSingleResult();
 		assertEquals(900,res.getAttr2());
 		
@@ -252,7 +252,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 			assertEquals(-2,r);
 		}
 		
-		EasyQuery<TestEntity> query = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity findedEntity = query.eq(TEST, "1").getSingleResult();
 		assertEquals(931,findedEntity.getAttr2());
 		
@@ -271,7 +271,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		int count = update.update();
 		assertEquals(1,count);
 		
-		EasyQuery<TestEntity> e = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> e = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity res = e.eq(ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 		assertEquals(900,res.getAttr2());
 		
@@ -284,7 +284,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		EasyQuery<TestEntity> eq = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> eq = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity found = eq.eq(TEST, "1").getSingleResult();
 		TestEntity entity = found.clone();
 		entity.setAttr2(CachableConst.TARGET_INT);
@@ -296,7 +296,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		int count = update.update();
 		assertEquals(1,count);
 		
-		EasyQuery<TestEntity> e = ormQueryFactory.createEasyQuery(TestEntity.class);
+		OrmQuery<TestEntity> e = ormQueryFactory.createQuery(TestEntity.class);
 		TestEntity res = e.eq(ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 
 		assertEquals(900,res.getAttr2());

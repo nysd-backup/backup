@@ -10,7 +10,7 @@ import javax.ejb.Stateless;
 
 import kosmos.framework.core.message.MessageBean;
 import kosmos.framework.core.message.MessageResult;
-import kosmos.framework.jpqlclient.api.EntityManagerProvider;
+import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.transaction.ServiceContext;
