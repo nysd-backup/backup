@@ -26,7 +26,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- Statement作成 -->
 	<bean id="statementProvider" class="kosmos.framework.sqlengine.builder.impl.StatementProviderImpl"/>		  	
 
-	<bean id="sqlExceptionHandler" class="kosmos.framework.sqlclient.internal.SQLExceptionHandlerImpl"/>
+	<bean id="sqlExceptionHandler" class="kosmos.framework.sqlclient.free.SQLExceptionHandlerImpl"/>
 
 	<bean id="sqlEngineFacade" class="kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl">
 		<property name="sqlBuilder" ref="sqlBuilder"/>
@@ -35,39 +35,29 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- 内部クエリ -->
-	<bean id="internalQuery" class="kosmos.framework.sqlclient.internal.free.impl.InternalQueryImpl" scope="prototype" >
+	<bean id="internalNativeQuery" class="kosmos.framework.sqlclient.free.strategy.InternalNativeQueryImpl" scope="prototype" >
 		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
 		<property name="connectionProvider" ref="txConnectionProvider"/>	
 	</bean>
 	
-	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.api.free.BatchUpdateFactoryImpl" scope="prototype" >
+	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.free.BatchUpdateFactoryImpl" scope="prototype" >
 		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
 		<property name="connectionProvider" ref="txConnectionProvider"/>	
 	</bean>
 	
-	<!-- 内部クエリファクトリ -->
-	<bean id="internalQueryFactory" class="kosmos.framework.sqlclient.api.free.QueryFactoryImpl" scope="prototype" >
-		<property name="internalQuery" ref="internalQuery"/>			
-	</bean>
-	
-	<!-- クエリファクトリ開発者API -->
-	<bean id="queryFactory" class="kosmos.framework.jpqlclient.api.wrapper.free.impl.QueryFactoryWrapperImpl" scope="prototype" >
-		<property name="internalFactory" ref="internalQueryFactory"/>			
+	<!-- クエリファクトリ -->
+	<bean id="queryFactory" class="kosmos.framework.sqlclient.free.QueryFactory" scope="prototype" >
+		<property name="internalNativeQuery" ref="internalNativeQuery"/>			
 	</bean>
 	
 	<!-- ORM内部クエリ -->
-	<bean id="internalOrmQuery" class="kosmos.framework.sqlclient.internal.orm.impl.InternalOrmQueryImpl" scope="prototype" >
-		<property name="internalQuery" ref="internalQuery"/>			
+	<bean id="internalOrmQuery" class="kosmos.framework.sqlclient.orm.strategy.InternalOrmQueryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalNativeQuery"/>			
 	</bean>
 	
 	<!-- ORM内部クエリファクトリ -->
-	<bean id="internalOrmQueryFactory" class="kosmos.framework.sqlclient.api.orm.OrmQueryFactoryImpl" scope="prototype">
+	<bean id="ormQueryFactory" class="kosmos.framework.sqlclient.orm.OrmQueryFactory" scope="prototype">
 		<property name="internalOrmQuery" ref="internalOrmQuery" />
-	</bean>
-
-	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="kosmos.framework.sqlclient.api.wrapper.orm.impl.OrmQueryWrapperFactoryImpl" scope="prototype">	
-		<property name="internalFactory" ref="internalOrmQueryFactory" />
 	</bean>
 	
 </beans>

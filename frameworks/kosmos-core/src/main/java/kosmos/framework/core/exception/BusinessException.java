@@ -19,7 +19,7 @@ import kosmos.framework.core.message.MessageResult;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public class BusinessException extends AbstractBusinessException{
+public class BusinessException extends RuntimeException{
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;

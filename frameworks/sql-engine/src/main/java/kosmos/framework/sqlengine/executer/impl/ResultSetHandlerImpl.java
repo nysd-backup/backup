@@ -82,7 +82,8 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 		RecordHandler handler = factory.create(resultType, rs);
 		while (rs.next()) {			
 			// 1行の情報カラム取得
-			T row = handler.getRecord(rs);					
+			@SuppressWarnings("unchecked")
+			T row = (T)handler.getRecord(rs);					
 			//必要に応じて加工
 			if( filter != null){
 				filter.edit(row);

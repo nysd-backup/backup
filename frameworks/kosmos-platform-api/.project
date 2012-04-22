@@ -2,10 +2,8 @@
   <name>kosmos-platform-api</name>
   <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
-    <project>jpql-client-api</project>
     <project>kosmos-core</project>
     <project>sql-client-api</project>
-    <project>utility</project>
   </projects>
   <buildSpec>
     <buildCommand>

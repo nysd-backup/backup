@@ -47,11 +47,11 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	
 	<!-- 永続化エンジン -->
-	<bean id="persistenceManager" class="kosmos.framework.sqlclient.api.PersistenceManagerImpl" scope="prototype">
-		<property name="internalQuery" ref="internalQuery"/>		
+	<bean id="persistenceManager" class="kosmos.framework.sqlclient.orm.PersistenceManagerImpl" scope="prototype">
+		<property name="internalQuery" ref="internalNativeQuery"/>		
 		<property name="batchUpdateFactory" ref="batchUpdateFactory"/>		
 	</bean>
-	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.api.free.BatchUpdateFactoryImpl">
+	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.free.BatchUpdateFactoryImpl">
 		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
 		<property name="connectionProvider" ref="txConnectionProvider"/>	
 	</bean>

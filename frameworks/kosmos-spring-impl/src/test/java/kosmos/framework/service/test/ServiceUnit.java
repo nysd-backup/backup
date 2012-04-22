@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
-import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.logics.log.LogWriter;
 import kosmos.framework.core.logics.log.LogWriterFactory;
 import kosmos.framework.jpqlclient.EntityManagerProvider;
@@ -86,9 +85,6 @@ public abstract class ServiceUnit extends Assert{
 		
 		locator = createLocator(applicationContext);
 		locator.construct();	
-		
-		MessageContext message = new MessageContext();
-		message.initialize();
 		
 		context = new ServiceTestContextImpl();	
 		context.initialize();	

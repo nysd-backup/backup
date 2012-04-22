@@ -4,16 +4,13 @@
 package kosmos.framework.service.core.messaging;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.logics.log.FaultNotifier;
 import kosmos.framework.core.message.MessageLevel;
-import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 
 /**
@@ -50,30 +47,19 @@ public class MessageListenerImpl implements MessageListener{
 			notifyException(jmse,notifier);
 			throw new IllegalStateException(jmse);
 		}
-		MessageContext context = new MessageContext();		
-		context.initialize();			
+
 		try{
-			Throwable t = null;
-			try{
-				invoke(dto);				
-			} catch (Throwable e) {
-				t = e;
-			}
-			if(t != null){
-				handleThrowable(t,notifier);
-			}else{
-				afterComplete(notifier);
-			}
-		}finally{
-			context.release();
-		}
+			invoke(dto);	
+		} catch (Throwable e) {
+			handleThrowable(e,notifier);
+		}				
 	}
 	
 	/**
 	 * Invokes the service.
 	 * @param dto the dto 
 	 */
-	protected void invoke(InvocationParameter dto) throws Throwable{
+	protected Object invoke(InvocationParameter dto) throws Throwable{
 
 		Object service = ServiceLocator.lookup(dto.getServiceName());					
 		Method m = null;
@@ -86,7 +72,7 @@ public class MessageListenerImpl implements MessageListener{
 			}
 			m = service.getClass().getMethod(dto.getMethodName(),clss);
 		}		
-		m.invoke(service, (Object[])dto.getParameter());
+		return m.invoke(service, (Object[])dto.getParameter());
 	}
 	
 	/**
@@ -95,22 +81,13 @@ public class MessageListenerImpl implements MessageListener{
 	 * @param e the exception
 	 */
 	protected void handleThrowable(Throwable e,FaultNotifier notifier){
-		notifyException(e,notifier);
-		notifyMessages(notifier);		
+		notifyException(e,notifier);	
 		if(e instanceof Error){
 			throw Error.class.cast(e);
 		}else if(e instanceof RuntimeException){
 			throw RuntimeException.class.cast(e);
 		}
 		throw new IllegalStateException(e);
-	}
-	
-	/**
-	 * After completion.
-	 * @param notifier the notifier
-	 */
-	protected void afterComplete(FaultNotifier notifier){
-		notifyMessages(notifier);
 	}
 	
 	/**
@@ -121,19 +98,4 @@ public class MessageListenerImpl implements MessageListener{
 	protected void notifyException(Throwable t ,FaultNotifier notifier){		
 		notifier.notify(99, "unknown error : " + t.getMessage(), MessageLevel.F.ordinal());
 	}	
-	
-	/**
-	 * Notifies messages to the agent.
-	 * @param notifier the notifier
-	 */
-	private void notifyMessages(FaultNotifier notifier){
-		//業務エラーの障害通知		
-		List<MessageResult> messages = MessageContext.getCurrentInstance().getMessageList();
-		for(MessageResult r: messages){
-			if(r.isShouldNotify()){
-				notifier.notify(r.getCode(), r.getMessage(), r.getLevel());
-			}
-		}
-		
-	}
 }

@@ -11,13 +11,10 @@ import java.util.Properties;
 
 import javax.ejb.embeddable.EJBContainer;
 
-import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.sqlengine.builder.ConstCache;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -80,21 +77,5 @@ public abstract class ServiceUnit extends Assert{
 		ConstCache.destroy();
 		container.close();
 	}
-	
-	/**
-	 * 
-	 */
-	@Before
-	public void before(){
-		MessageContext message = new MessageContext();
-		message.initialize();
-	}
-	
-	/**
-	 * 
-	 */
-	@After
-	public void after(){
-		MessageContext.getCurrentInstance().release();
-	}
+
 }

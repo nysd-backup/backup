@@ -5,7 +5,7 @@
 	<artifactId>kosmos-ejb-impl</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>サービスコンテナEJB拡張</name>
+	<name>APコンテナ実装(EJB)</name>
 	
 	<parent>
 		<groupId>kosmos.framework</groupId>
@@ -45,6 +45,12 @@
 		    <artifactId>jpql-client-impl</artifactId>
 		    <version>${framework.version}</version>		   
 		</dependency>				
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>eclipselink</artifactId>
+		    <version>${eclipselink.version}</version>
+		    <scope>provided</scope>
+		</dependency>	
 		
 		<dependency>
 			<groupId>org.dbunit</groupId>

@@ -14,7 +14,7 @@ import kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery;
 public class OrmUpdate<T> {
 	
 	/** the InternalOrmUpdate */
-	private InternalOrmQuery internalQuery = null;
+	private final InternalOrmQuery internalQuery;
 	
 	/** the condition */
 	private OrmUpdateParameter<T> condition = null;
@@ -24,6 +24,7 @@ public class OrmUpdate<T> {
 	 */
 	OrmUpdate(Class<T> entityClass,InternalOrmQuery internalQuery){
 		this.condition = new OrmUpdateParameter<T>(entityClass);
+		this.internalQuery = internalQuery;
 	}
 
 	/**

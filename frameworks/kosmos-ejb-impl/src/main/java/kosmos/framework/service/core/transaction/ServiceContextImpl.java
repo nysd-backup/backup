@@ -3,11 +3,7 @@
  */
 package kosmos.framework.service.core.transaction;
 
-import java.util.List;
-
-import kosmos.framework.core.context.MessageContext;
 import kosmos.framework.core.exception.PoorImplementationException;
-import kosmos.framework.core.message.MessageResult;
 
 /**
  * the context.
@@ -17,22 +13,6 @@ import kosmos.framework.core.message.MessageResult;
  */
 public class ServiceContextImpl extends ServiceContext{
 
-	/**
-	 * @see kosmos.framework.service.core.transaction.TransactionManagingContext#addMessageInternal(kosmos.framework.core.message.MessageResult)
-	 */
-	@Override
-	protected void addMessageInternal(MessageResult message) {
-		MessageContext.getCurrentInstance().addMessage(message);
-	}
-
-	/**
-	 * @see kosmos.framework.service.core.transaction.ServiceContext#getMessageList()
-	 */
-	@Override
-	public List<MessageResult> getMessageList() {
-		return MessageContext.getCurrentInstance().getMessageList();
-	}
-	
 	/**
 	 * @see kosmos.framework.service.core.transaction.TransactionManagingContext#startUnitOfWork()
 	 */

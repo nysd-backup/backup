@@ -8,6 +8,9 @@ import javax.ejb.SessionContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
+import kosmos.framework.core.exception.BusinessException;
+import kosmos.framework.core.message.MessageReplyable;
+import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 
 
@@ -67,7 +70,14 @@ public class ContextControllableTransactionInterceptor {
 			if(context.getCurrentUnitOfWork().isRollbackOnly()){
 				sessionContext.setRollbackOnly();
 			}	
+			if(returnValue instanceof MessageReplyable){
+				MessageReplyable replyable = (MessageReplyable)returnValue;
+				replyable.setMessageList(context.getMessageList().toArray(new MessageResult[0]));				
+			}
 			return returnValue;
+		}catch(BusinessException be){
+			be.setMessageList(context.getMessageList().toArray(new MessageResult[0]));
+			throw be;
 		}finally{
 			context.release();
 		}

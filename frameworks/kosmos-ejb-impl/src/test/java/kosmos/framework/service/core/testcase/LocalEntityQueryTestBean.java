@@ -335,7 +335,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 		setUpData("TEST.xls");
 		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
-		assertTrue(query.getSingleResult() == null);
+		assertTrue(query.getSingleResult() != null);
 		context.setRollbackOnly();
 	}
 	

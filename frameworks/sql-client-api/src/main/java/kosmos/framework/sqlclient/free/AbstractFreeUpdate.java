@@ -55,7 +55,7 @@ public abstract class AbstractFreeUpdate {
 	 * @return self
 	 */
 	public AbstractFreeUpdate setParameter(String arg0, Object arg1) {
-		parameter.getBranchParam().put(arg0,arg1);
+		parameter.getParam().put(arg0,arg1);
 		return this;
 	}
 	

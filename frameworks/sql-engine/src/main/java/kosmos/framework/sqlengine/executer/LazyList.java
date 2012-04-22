@@ -298,10 +298,11 @@ public class LazyList<E> implements List<E>{
 		/**
 		 * @see java.util.Iterator#next()
 		 */
+		@SuppressWarnings("unchecked")
 		@Override
 		public E next() {
 			try{
-				return handler.getRecord(rs);
+				return (E)handler.getRecord(rs);
 			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
