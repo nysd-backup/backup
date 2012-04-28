@@ -3,6 +3,7 @@
  */
 package kosmos.framework.jpqlclient.free.strategy;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.persistence.Query;
 
 import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.jpqlclient.free.LazyList;
+import kosmos.framework.jpqlclient.free.SQLExceptionHandlerImpl;
 import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
@@ -23,17 +25,23 @@ import kosmos.framework.sqlclient.free.ResultSetFilter;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
 import kosmos.framework.sqlengine.builder.SQLBuilder;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
-import kosmos.framework.sqlengine.exception.impl.ExceptionHandlerImpl;
 import kosmos.framework.sqlengine.executer.RecordFilter;
 import kosmos.framework.sqlengine.executer.RecordHandlerFactory;
 import kosmos.framework.sqlengine.executer.ResultSetHandler;
 import kosmos.framework.sqlengine.executer.impl.RecordHandlerFactoryImpl;
 import kosmos.framework.sqlengine.executer.impl.ResultSetHandlerImpl;
 import kosmos.framework.sqlengine.facade.QueryResult;
+import kosmos.framework.sqlengine.facade.SQLEngineFacade;
+import kosmos.framework.sqlengine.facade.UpdateParameter;
+import kosmos.framework.sqlengine.facade.impl.SQLEngineFacadeImpl;
 
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
+import org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
+import org.eclipse.persistence.internal.sessions.AbstractSession;
 import org.eclipse.persistence.queries.ScrollableCursor;
+import org.eclipse.persistence.sessions.server.ClientSession;
 
 
 /**
@@ -61,7 +69,17 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	private RecordHandlerFactory recordHandlerFactory = new RecordHandlerFactoryImpl();
 	
 	/** the ExceptionHandler */
-	private ExceptionHandler exceptionHandler = new ExceptionHandlerImpl();
+	private ExceptionHandler exceptionHandler = new SQLExceptionHandlerImpl();
+	
+	/** the engine facade */
+	private SQLEngineFacade facade = new SQLEngineFacadeImpl();
+	
+	/**
+	 * @param facade the facade to set
+	 */
+	public void setSqlEngineFacade(SQLEngineFacade facade){
+		this.facade = facade;
+	}
 	
 	/**
 	 * @param em the em to set
@@ -313,6 +331,38 @@ public class InternalNativeQueryImpl implements InternalQuery {
 			query.setParameter(i+1,bindList.get(i));			
 		}		
 		return query;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#executeBatch(java.util.List)
+	 */
+	@Override
+	public int[] executeBatch(List<FreeUpdateParameter> param) {
+		
+		//TODO 要検証		
+		
+		List<UpdateParameter> engineParams = new ArrayList<UpdateParameter>();
+		for(FreeParameter p: param){
+			UpdateParameter ep = new UpdateParameter();
+			ep.setAllParameter(p.getParam());
+			ep.setAllBranchParameter(p.getBranchParam());
+			ep.setSqlId(p.getQueryId());
+			ep.setSql(p.getSql());
+			ep.setUseRowSql(p.isUseRowSql());	
+			Object value = p.getHints().get(QueryHints.JDBC_TIMEOUT);
+			if( value != null){
+				ep.setTimeoutSeconds((Integer)value);
+			}
+			engineParams.add(ep);
+		}		
+		
+		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();		
+		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
+		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
+		Connection con = accessor.getConnection();
+		
+		return facade.executeBatch(engineParams, con);
+		
 	}
 
 }

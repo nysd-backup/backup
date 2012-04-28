@@ -11,13 +11,13 @@ import javax.persistence.NonUniqueResultException;
 import kosmos.framework.base.AbstractEntity;
 import kosmos.framework.core.exception.BusinessException;
 import kosmos.framework.core.exception.PoorImplementationException;
-import kosmos.framework.core.exception.UnexpectedDataFoundException;
-import kosmos.framework.core.exception.UnexpectedNoDataFoundException;
+import kosmos.framework.core.exception.SystemException;
 import kosmos.framework.core.logics.Condition;
 import kosmos.framework.core.logics.Converter;
 import kosmos.framework.core.logics.log.LogWriter;
 import kosmos.framework.core.logics.log.LogWriterFactory;
 import kosmos.framework.core.message.MessageBean;
+import kosmos.framework.core.message.MessageId;
 import kosmos.framework.core.message.MessageLevel;
 import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
@@ -72,10 +72,10 @@ public abstract class AbstractService {
 		if(value != null){
 			if(value instanceof Collection){
 				if(!((Collection<?>) value).isEmpty()){
-					throw new UnexpectedDataFoundException();
+					throw new SystemException(MessageId.UNEXPECTED_DATAFOUND_ERROR);
 				}
 			}else{
-				throw new UnexpectedDataFoundException();
+				throw new SystemException(MessageId.UNEXPECTED_DATAFOUND_ERROR);
 			}			
 		}		
 	}
@@ -90,10 +90,10 @@ public abstract class AbstractService {
 		if(value == null){
 			if(value instanceof Collection){
 				if(((Collection<?>) value).isEmpty()){
-					throw new UnexpectedNoDataFoundException();
+					throw new SystemException(MessageId.UNEXPECTED_NODATA_ERROR);
 				}
 			}else{
-				throw new UnexpectedNoDataFoundException();
+				throw new SystemException(MessageId.UNEXPECTED_NODATA_ERROR);
 			}					
 		}
 	}

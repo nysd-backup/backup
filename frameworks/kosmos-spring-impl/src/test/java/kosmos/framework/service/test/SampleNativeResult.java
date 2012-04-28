@@ -3,6 +3,11 @@
  */
 package kosmos.framework.service.test;
 
+import java.util.HashMap;
+
+import kosmos.framework.sqlengine.executer.AccessorDeclared;
+
+
 
 /**
  * function.
@@ -10,21 +15,16 @@ package kosmos.framework.service.test;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SampleNativeResult{
+@AccessorDeclared
+public class SampleNativeResult extends HashMap<String,Object>{
 	
-	private String test;
+	private static final long serialVersionUID = 1L;
 
-	private String attr;
-	
-	private int attr2;
-
-	private int version;
-	
 	/**
 	 * @param test the test to set
 	 */
 	public SampleNativeResult setTest(String test) {
-		this.test = test;
+		put("test",test);
 		return this;
 	}
 
@@ -32,14 +32,14 @@ public class SampleNativeResult{
 	 * @return the test
 	 */
 	public String getTest() {
-		return test;
+		return (String)get("test");
 	}
 
 	/**
 	 * @param attr the attr to set
 	 */
 	public SampleNativeResult setAttr(String attr) {
-		this.attr = attr;
+		put("attr",attr);
 		return this;
 	}
 
@@ -47,36 +47,36 @@ public class SampleNativeResult{
 	 * @return the atstr
 	 */
 	public String getAttr() {
-		return attr;
+		return (String)get("attr");
 	}
 
 	/**
 	 * @param attr2 the attr2 to set
 	 */
 	public SampleNativeResult setAttr2(int attr2) {
-		this.attr2 = attr2;
+		put("attr2",attr2);
 		return this;
 	}
 
 	/**
 	 * @return the attr2
 	 */
-	public int getAttr2() {
-		return attr2;
+	public Integer getAttr2() {
+		return (Integer)get("attr2");
 	}
 
 	/**
 	 * @param version the version to set
 	 */
 	public SampleNativeResult setVersion(int version) {
-		this.version = version;
+		put("version",version);
 		return this;
 	}
 
 	/**
 	 * @return the version
 	 */
-	public int getVersion() {
-		return version;
+	public Integer getVersion() {
+		return (Integer)get("version");
 	}
 }

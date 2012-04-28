@@ -3,6 +3,7 @@
  */
 package kosmos.framework.sqlclient.free;
 
+import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
 
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
@@ -50,9 +51,35 @@ public class QueryFactory {
 		}catch(Exception e){
 			throw new IllegalStateException(e);
 		}
-				
-		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);
 		instance.getParameter().setQueryId(clazz.getSimpleName());
+		boolean namedQuery = instance instanceof AbstractNamedQuery;
+		if(namedQuery){
+			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
+			if(nq == null){
+				setAnonymousQuery(clazz,instance);
+			}else{		
+				instance.getParameter().setName(nq.name());
+				instance.getParameter().setSql(nq.query());
+				for(QueryHint hints : nq.hints()){
+					instance.setHint(hints.name(), hints.value());
+				}
+				
+			}
+			instance.setInternalQuery(internalNamedQuery);
+		}else{
+			setAnonymousQuery(clazz,instance);
+			instance.setInternalQuery(internalNativeQuery);;
+		}		
+		return instance;
+	}
+	
+	/**
+	 * Sets the anonymous query.
+	 * @param clazz the class
+	 * @param instance the instance
+	 */
+	private void setAnonymousQuery(Class<?> clazz, AbstractFreeQuery instance){		
+		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
 		if(aq != null){
 			instance.getParameter().setResultType(aq.resultClass());
 			instance.getParameter().setSql(aq.query());
@@ -60,10 +87,7 @@ public class QueryFactory {
 				instance.setHint(hints.name(), hints.value());
 			}
 		}
-		instance.setInternalQuery(instance instanceof AbstractNamedQuery ? internalNamedQuery :internalNativeQuery);
-		return instance;
 	}
-	
 	
 	/**
 	 * Creates the updater.
@@ -79,17 +103,42 @@ public class QueryFactory {
 		}catch(Exception e){
 			throw new IllegalStateException(e);
 		}
-		instance.setInternalQuery(instance instanceof AbstractNamedUpdate ? internalNamedQuery :internalNativeQuery);
-				
-		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);
+		boolean namedQuery = instance instanceof AbstractNamedUpdate;
 		instance.getParameter().setQueryId(clazz.getSimpleName());
-		if(aq != null){			
+		
+		if(namedQuery){
+			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
+			if(nq == null){
+				setAnonymousUpdate(clazz,instance);
+			}else{		
+				instance.getParameter().setName(nq.name());
+				instance.getParameter().setSql(nq.query());
+				for(QueryHint hints : nq.hints()){
+					instance.setHint(hints.name(), hints.value());
+				}
+				
+			}
+			instance.setInternalQuery(internalNamedQuery);
+		}else{
+			setAnonymousUpdate(clazz,instance);
+			instance.setInternalQuery(internalNativeQuery);;
+		}		
+		return instance;		
+	}
+	
+
+	/**
+	 * Sets the anonymous query.
+	 * @param clazz the class
+	 * @param instance the instance
+	 */
+	private void setAnonymousUpdate(Class<?> clazz, AbstractFreeUpdate instance){		
+		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
+		if(aq != null){		
 			instance.getParameter().setSql(aq.query());
 			for(QueryHint hints : aq.hints()){
 				instance.setHint(hints.name(), hints.value());
 			}
 		}
-		return instance;
 	}
-	
 }

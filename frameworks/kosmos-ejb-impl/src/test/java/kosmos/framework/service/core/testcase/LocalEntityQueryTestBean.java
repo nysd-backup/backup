@@ -4,7 +4,6 @@
 package kosmos.framework.service.core.testcase;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -13,18 +12,18 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
-import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.service.core.ServiceTestContextImpl;
-import kosmos.framework.service.core.activation.ServiceLocatorImpl;
 import kosmos.framework.service.core.activation.ServiceLocator;
+import kosmos.framework.service.core.activation.ServiceLocatorImpl;
 import kosmos.framework.service.core.entity.DateEntity;
 import kosmos.framework.service.core.entity.IDateEntity;
 import kosmos.framework.service.core.entity.ITestEntity;
 import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.services.RequiresNewService;
 import kosmos.framework.service.core.transaction.ServiceContext;
+import kosmos.framework.sqlclient.exception.UniqueConstraintException;
 import kosmos.framework.sqlclient.orm.OrmQuery;
 import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 import kosmos.framework.sqlclient.orm.OrmUpdate;
@@ -58,7 +57,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		try{
 			per.getEntityManager().flush();
 			fail();
-		}catch(PersistenceException dbe){
+		}catch(UniqueConstraintException dbe){
 			dbe.printStackTrace();
 		}
 	}
@@ -381,9 +380,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		try{
 			per.getEntityManager().flush();
 			fail();
-		}catch(PersistenceException de){
-			SQLIntegrityConstraintViolationException sqle = (SQLIntegrityConstraintViolationException)de.getCause().getCause();
-			assertEquals("1",String.valueOf(sqle.getErrorCode()));
+		}catch(UniqueConstraintException de){
+			de.printStackTrace();
 		}
 	
 	}

@@ -3,12 +3,10 @@
  */
 package kosmos.framework.service.core;
 
-import javax.persistence.PessimisticLockException;
-
+import kosmos.framework.jpqlclient.customizer.JPQLExceptionHandlerImpl;
 import kosmos.framework.service.core.transaction.ServiceContext;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
-import org.eclipse.persistence.exceptions.ExceptionHandler;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 
 
@@ -18,31 +16,11 @@ import org.eclipse.persistence.exceptions.OptimisticLockException;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DumyExceptionHandler implements ExceptionHandler{
+public class DumyExceptionHandler extends JPQLExceptionHandlerImpl{
 
+	//TODO ここで判定するにはDat
+	
 	protected Object handleOptimisticLockException(OptimisticLockException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-
-		if( context.isSuppressOptimisticLockError() ){
-			System.out.println("ロック連番");
-		}else{
-			throw e;
-		}
-		return null;
-	}
-	
-	protected Object handleDatabaseException(DatabaseException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-
-		if( context.isSuppressOptimisticLockError() ){
-			System.out.println("ロック連番");
-		}else{
-			throw e;
-		}
-		return null;
-	}
-	
-	protected Object handlePessimisticLockException(PessimisticLockException e){
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 
 		if( context.isSuppressOptimisticLockError() ){
@@ -55,12 +33,22 @@ public class DumyExceptionHandler implements ExceptionHandler{
 
 	@Override
 	public Object handleException(RuntimeException exception) {
+		//楽観ロック例外かDatabaseExceptionしかない
 		if(exception instanceof OptimisticLockException){
 			return handleOptimisticLockException((OptimisticLockException)exception);
-		}else if(exception instanceof PessimisticLockException){
-			return handlePessimisticLockException((PessimisticLockException)exception);
 		}else if(exception instanceof DatabaseException){
-			return handleDatabaseException((DatabaseException)exception);
+			try{
+				return super.handleException(exception);
+			}catch(RuntimeException uce){
+				ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+
+				if( context.isSuppressOptimisticLockError() ){
+					System.out.println("ロック連番");
+				}else{
+					throw uce;
+				}
+				return null;
+			}
 		}
 		throw exception;
 	}

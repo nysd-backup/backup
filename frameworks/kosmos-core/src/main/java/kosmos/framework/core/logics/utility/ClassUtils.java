@@ -89,23 +89,6 @@ public final class ClassUtils {
 			}
 		}
 	}
- 
-	/**
-	 * Creates the new instance.
-	 * @param <T> the type
-	 * @param clazz the clazz
-	 * @return the object
-	 */
-	public static <T> T newInstance(Class<T> clazz){
-		T object = null;
-		try{
-			object = clazz.newInstance();
-		}catch(Exception ex){
-			throw new IllegalStateException("Failed to instantiate class ",ex);
-		}
-		return object;
-	}
-	
 
 
     /**

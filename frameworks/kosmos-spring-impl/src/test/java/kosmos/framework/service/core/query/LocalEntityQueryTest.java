@@ -52,15 +52,15 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@Autowired
 	private EntityManagerProvider per;
-
+	
 	/**
 	 * 条件追加
 	 * @throws SQLException 
 	 */
 	@Test
 	public void allCondition() throws SQLException{	
-		
 		setUpData("TEST.xls");
+		
 		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		

@@ -17,8 +17,6 @@ import javax.persistence.Version;
 
 import kosmos.framework.sqlclient.PersistenceHints;
 import kosmos.framework.sqlclient.ReflectionUtils;
-import kosmos.framework.sqlclient.free.BatchUpdate;
-import kosmos.framework.sqlclient.free.BatchUpdateFactory;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder;
@@ -42,16 +40,6 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	
 	/** the internal query */
 	private InternalQuery internalQuery;
-
-	/** the batch update Factory */
-	private BatchUpdateFactory batchUpdateFactory;
-	
-	/**
-	 * @param batchUpdateFactory the batchUpdateFactory to set
-	 */
-	public void setBatchUpdateFactory(BatchUpdateFactory batchUpdateFactory) {
-		this.batchUpdateFactory = batchUpdateFactory;
-	}
 	
 	/**
 	 * @param internalQuery the internalQuery to set
@@ -344,11 +332,11 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 */
 	@Override
 	public <T> void batchPersist(List<T> entity, PersistenceHints hints) {
-		BatchUpdate updater = batchUpdateFactory.createBatchUpdate();
+		List<FreeUpdateParameter> params = new ArrayList<FreeUpdateParameter>();
 		for(Object e : entity){
-			updater.addBatch(createInsertingParameter(e, hints));
+			params.add(createInsertingParameter(e, hints));
 		}
-		updater.executeBatch();
+		internalQuery.executeBatch(params);
 	}
 
 	/**
@@ -356,15 +344,16 @@ public class PersistenceManagerImpl implements PersistenceManager{
 	 */
 	@Override
 	public <T> void batchUpdate(List<T> entity, PersistenceHints hints) {
-		BatchUpdate updater = batchUpdateFactory.createBatchUpdate();
+		
+		List<FreeUpdateParameter> params = new ArrayList<FreeUpdateParameter>();
 		for(Object e : entity){
 			List<WhereCondition> conditions = new ArrayList<WhereCondition>();
 			FreeUpdateParameter parameter = createUpdatingParameter(e,null,hints,conditions);
 			setWhereCondition(parameter, conditions);
 			parameter.setHints(hints);
-			updater.addBatch(parameter);
+			params.add(parameter);
 		}
-		updater.executeBatch();
+		internalQuery.executeBatch(params);		
 	}
 
 }

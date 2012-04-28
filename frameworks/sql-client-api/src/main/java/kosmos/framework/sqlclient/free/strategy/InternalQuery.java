@@ -27,6 +27,13 @@ public interface InternalQuery {
 	 * @return the updated count
 	 */
 	int executeUpdate(FreeUpdateParameter param);
+	
+	/**
+	 * Updates the table.
+	 * 
+	 * @return the each updated count
+	 */
+	int[] executeBatch(List<FreeUpdateParameter> param);
 
 	/**
 	 * @return the total result

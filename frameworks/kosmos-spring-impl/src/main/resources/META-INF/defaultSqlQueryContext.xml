@@ -41,8 +41,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<bean id="batchUpdateFactory" class="kosmos.framework.sqlclient.free.BatchUpdateFactoryImpl" scope="prototype" >
-		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
-		<property name="connectionProvider" ref="txConnectionProvider"/>	
+		<property name="internalQuery" ref="internalNativeQuery"/>	
 	</bean>
 	
 	<!-- クエリファクトリ -->

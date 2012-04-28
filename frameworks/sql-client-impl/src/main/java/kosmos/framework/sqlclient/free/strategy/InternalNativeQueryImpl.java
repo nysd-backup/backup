@@ -3,6 +3,7 @@
  */
 package kosmos.framework.sqlclient.free.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kosmos.framework.sqlclient.ConnectionProvider;
@@ -144,6 +145,24 @@ public class InternalNativeQueryImpl implements InternalQuery{
 		parameter.setUseRowSql(param.isUseRowSql());
 		parameter.setAllParameter(param.getParam());
 		return parameter;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#executeBatch(java.util.List)
+	 */
+	@Override
+	public int[] executeBatch(List<FreeUpdateParameter> param) {
+		List<UpdateParameter> engineParams = new ArrayList<UpdateParameter>();
+		for(FreeParameter p: param){
+			UpdateParameter ep = new UpdateParameter();
+			ep.setAllParameter(p.getParam());
+			ep.setAllBranchParameter(p.getBranchParam());
+			ep.setSqlId(p.getQueryId());
+			ep.setSql(p.getSql());
+			ep.setUseRowSql(p.isUseRowSql());		
+			engineParams.add(ep);
+		}				
+		return facade.executeBatch(engineParams, cs.getConnection());
 	}
 
 }

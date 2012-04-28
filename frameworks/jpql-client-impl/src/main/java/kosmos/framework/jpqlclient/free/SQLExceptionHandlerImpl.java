@@ -1,8 +1,9 @@
 /**
  * Copyright 2011 the original author
  */
-package kosmos.framework.sqlclient.free;
+package kosmos.framework.jpqlclient.free;
 
+import kosmos.framework.sqlclient.free.SQLExceptionHandler;
 import kosmos.framework.sqlengine.exception.ExceptionHandler;
 
 /**

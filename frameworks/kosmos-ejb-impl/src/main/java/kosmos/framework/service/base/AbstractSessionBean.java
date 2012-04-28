@@ -24,7 +24,7 @@ import kosmos.framework.sqlclient.orm.OrmUpdate;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class AbstractCoreService extends AbstractService{
+public abstract class AbstractSessionBean extends AbstractService{
 
 	/** ORMクエリファクトリ */
 	private OrmQueryFactory ormQueryFactory;
@@ -91,13 +91,13 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 
 	 * <pre>
 	 * ◆複数件数取得
-	 * EasyQuery&ltOneEntity&gt query = createEasyQuery(OneEntity.class);
+	 * OrmQuery&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
 	 * List&ltOneEntity&gt result = query.eq(OneEntity.ATTR1,100).contains(OneEntity.ATTR2,"a","b","c).getResultList();
 	 * for(OneEntity e : result){
 	 * 		// process
 	 * }
 	 * ◆主キー検索
-	 * EasyQuery&ltOneEntity&gt query = createEasyQuery(OneEntity.class);
+	 * OrmQuery&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
 	 * OneEntity result = query.find("key1","key2");
 	 * </pre>
 	 * 
@@ -105,7 +105,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends OrmQuery<V>> T createEasyQuery(Class<V> entityClass){
+	protected <V extends AbstractEntity,T extends OrmQuery<V>> T createOrmQuery(Class<V> entityClass){
 		OrmQuery<V> query = ormQueryFactory.createQuery(entityClass);		
 		return (T)query;
 	}
@@ -116,7 +116,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * また、更新時に永続化コンテキストはDBと同期がとれていない状態のため、次に検索するときは必ずDBから検索すること。
 	 * 
 	 * <pre>
-	 * EasyUpdate&ltOneEntity&gt updater = createEasyUpdate(OneEntity.class);
+	 * OrmUpdate&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
 	 * updater.eq(OneEntity.ATTR1,100).contains(OneEntity.ATTR2,"a","b","c).set(OneEntity.ATTR3,"10");
 	 * int result = updater.update();
 	 * </pre>
@@ -125,7 +125,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createEasyUpdate(Class<V> entityClass){
+	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createOrmUpdate(Class<V> entityClass){
 		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass);		
 		return (T)query;
 	}

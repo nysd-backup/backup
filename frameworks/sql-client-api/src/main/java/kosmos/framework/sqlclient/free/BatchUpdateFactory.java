@@ -4,12 +4,15 @@
 package kosmos.framework.sqlclient.free;
 
 /**
- * function.
+ * BatchUpdateFactory.
  *
  * @author yoshida-n
  * @version	created.
  */
 public interface BatchUpdateFactory {
 
+	/**
+	 * @return BatchUpdate
+	 */
 	public BatchUpdate createBatchUpdate();
 }

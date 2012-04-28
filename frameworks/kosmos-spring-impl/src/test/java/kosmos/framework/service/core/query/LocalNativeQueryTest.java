@@ -89,94 +89,6 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(0,result.size());
 	}
 	
-//	/**
-//	 * 結果0件シスチE��エラー
-//	 */
-//	@Test
-//	public void nodataError(){
-//		setUpData("TEST.xls");
-//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class).enableNoDataError();
-//		query.setAttr2(500).setTest("1").setArc("500");
-//		
-//		try{
-//			query.getResultList();
-//			fail();
-//		}catch(UnexpectedNoDataFoundException e){
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	/**
-//	 * exists
-//	 */
-//	@Test
-//	public void exists(){
-//		setUpData("TEST.xls");
-//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-//		query.setAttr2(500).setTest("1");
-//		assertTrue(query.exists());
-//	}
-
-//	/**
-//	 * exists
-//	 */
-//	@Test
-//	public void existsMessage(){
-//		
-//		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
-//		
-//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-//		query.setTest("200");
-//		assertFalse(query.exists(mh.createMessage(1,"test")));
-//		
-//		assertTrue(MessageLevel.getCurrentInstance().isRollbackOnly());
-//		assertEquals(1,MessageLevel.getCurrentInstance().getMessageList().size());		
-//		
-//	}
-//	
-//	/**
-//	 * exists
-//	 */
-//	@Test
-//	public void throwIfEmpty(){
-//		
-//		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
-//
-//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-//		query.setAttr2(500).setTest("200");
-//		query.throwIfExists(mh.createMessage(1, "test"));
-//		
-//		try{
-//			query.throwIfEmpty(mh.createMessage(1, "test"));
-//			fail();
-//		}catch(UnexpectedNoDataFoundException se){		
-//			assertTrue(MessageLevel.getCurrentInstance().isRollbackOnly());
-//			assertEquals(1,MessageLevel.getCurrentInstance().getMessageList().size());
-//		}
-//	}
-//	
-//	/**
-//	 * exists
-//	 */
-//	@Test
-//	public void throwIfExists(){
-//		
-//		setUpData("TEST.xls");
-//		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
-//
-//		SampleNativeQuery query = queryFactory.createQuery(SampleNativeQuery.class);
-//		query.setAttr2(500).setTest("1");
-//		query.throwIfEmpty(mh.createMessage(1, "test"));
-//		
-//		try{
-//			query.throwIfExists(mh.createMessage(1, "test"));
-//			fail();
-//		}catch(DuplicateDataFoundException se){		
-//			assertTrue(MessageLevel.getCurrentInstance().isRollbackOnly());
-//			assertEquals(1,MessageLevel.getCurrentInstance().getMessageList().size());
-//		}
-//	}
-	
 	/**
 	 * getSingleResult
 	 */
@@ -231,7 +143,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
+		assertEquals(new Integer(1),result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
 		assertEquals("900",result.get(1).getAttr());
 	}
 	

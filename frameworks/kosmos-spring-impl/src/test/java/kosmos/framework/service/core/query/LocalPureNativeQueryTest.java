@@ -151,7 +151,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
-		assertEquals(1,result.get(0).getVersion());
+		assertEquals(new Integer(1),result.get(0).getVersion());
 		assertEquals("900",result.get(1).getAttr());
 	}
 	
