@@ -150,9 +150,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	}
 	
 	/**
-	 * 更新値設定
-	 * @param parameter
-	 * @param bind
+	 * Sets the updating value.
+	 * 
+	 * @param parameter the parameter to
+	 * @param bind the bind
 	 */
 	private void setUpdateValule(FreeUpdateParameter parameter, Map<String,Object> bind){
 		for(Map.Entry<String, Object> v: bind.entrySet()){
