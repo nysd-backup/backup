@@ -30,7 +30,7 @@ public abstract class AbstractFreeQuery {
 	/**
 	 * @return the condition
 	 */
-	protected FreeQueryParameter getParameter(){
+	public FreeQueryParameter getParameter(){
 		return this.condition;
 	}
 	

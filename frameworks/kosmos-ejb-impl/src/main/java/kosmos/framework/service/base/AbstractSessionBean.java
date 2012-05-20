@@ -169,20 +169,10 @@ public abstract class AbstractSessionBean extends AbstractService{
 	 * 楽観ロックチェックを行う場合は当メソッドは使用せずupdate/deleteを使用すること.
 	 * 
 	 * <pre>
-	 * ◆単純更新
+	 * 
 	 * OrderUpdate query = createUpdate(OrderUpdate.class);
 	 * int result = query.setOrderCount(10).setOrderCategory("A").update();
-	 *  
-	 * ◆バッチ更新
-	 * OrderUpdate updater = createUpdate(OrderUpdate.class);
-	 * for(int i = 0 ; i < 100; i++){
-	 * 	updater.setOrderCount(10).setOrderCategory("A");
-	 * 	updater.addBatch();
-	 * }
-	 * int[] result = updater.batchUpdate();
-	 * 
-	 * ※Oracleの場合、Oracleの仕様でbatchUpdateの結果配列にはすべて-2が入っているためSQL単位の更新件数は取得不可能
-	 *  
+	 *
 	 * </pre>
 	 * 
 	 * @param updateClass アップデータクラス

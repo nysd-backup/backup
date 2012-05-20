@@ -23,9 +23,6 @@ public class BusinessException extends RuntimeException{
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;
-	
-	/** the data to reply to client */
-	private Serializable replyData = null;
 
 	/** the messageList */
 	private MessageResult[] messageList = null;
@@ -79,14 +76,6 @@ public class BusinessException extends RuntimeException{
 	 */
 	public MessageResult[] getMessageList() {
 		return messageList;
-	}
-	
-	/**
-	 * @return　the reply data
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Serializable> T getReplyData(){
-		return (T)replyData;
 	}
 
 }
