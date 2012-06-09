@@ -44,7 +44,7 @@ public class QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <T extends AbstractFreeQuery> T createQuery(Class<T> clazz){
+	public <T extends AbstractFreeSelect> T createSelect(Class<T> clazz){
 		T instance = null;
 		try{
 			instance = clazz.newInstance();
@@ -52,7 +52,7 @@ public class QueryFactory {
 			throw new IllegalStateException(e);
 		}
 		instance.getParameter().setQueryId(clazz.getSimpleName());
-		boolean namedQuery = instance instanceof AbstractNamedQuery;
+		boolean namedQuery = instance instanceof AbstractNamedSelect;
 		if(namedQuery){
 			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
 			if(nq == null){
@@ -78,7 +78,7 @@ public class QueryFactory {
 	 * @param clazz the class
 	 * @param instance the instance
 	 */
-	private void setAnonymousQuery(Class<?> clazz, AbstractFreeQuery instance){		
+	private void setAnonymousQuery(Class<?> clazz, AbstractFreeSelect instance){		
 		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
 		if(aq != null){
 			instance.getParameter().setResultType(aq.resultClass());
@@ -96,14 +96,14 @@ public class QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <T extends AbstractFreeUpdate> T createUpdate(Class<T> clazz){
+	public <T extends AbstractFreeUpsert> T createUpsert(Class<T> clazz){
 		T instance = null;
 		try{
 			instance = clazz.newInstance();
 		}catch(Exception e){
 			throw new IllegalStateException(e);
 		}
-		boolean namedQuery = instance instanceof AbstractNamedUpdate;
+		boolean namedQuery = instance instanceof AbstractNamedUpsert;
 		instance.getParameter().setQueryId(clazz.getSimpleName());
 		
 		if(namedQuery){
@@ -132,7 +132,7 @@ public class QueryFactory {
 	 * @param clazz the class
 	 * @param instance the instance
 	 */
-	private void setAnonymousUpdate(Class<?> clazz, AbstractFreeUpdate instance){		
+	private void setAnonymousUpdate(Class<?> clazz, AbstractFreeUpsert instance){		
 		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
 		if(aq != null){		
 			instance.getParameter().setSql(aq.query());

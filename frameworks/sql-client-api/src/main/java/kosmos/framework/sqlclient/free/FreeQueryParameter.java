@@ -3,100 +3,139 @@
  */
 package kosmos.framework.sqlclient.free;
 
-import javax.persistence.LockModeType;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * The query parameter.
- * 
+ * The free parameter.
+ *
  * @author yoshida-n
  * @version	created.
  */
-public class FreeQueryParameter extends FreeParameter{
+public abstract class FreeQueryParameter {
 	
-	/** the resultType */
-	private Class<?> resultType;
+	/** the queryId */
+	private String queryId = null;
 	
-	/** the lock mode */
-	private LockModeType lock = null;
+	/** the SQL */
+	private String sql = null;
 	
-	/** the filter for <code>ResultSet</code> */
-	private ResultSetFilter filter = null;
-
-	/** the max size */
-	private int maxSize = 0;
+	/** if true dont analyze the template*/
+	private boolean useRowSql = true;
 	
-	/** the start position */
-	private int firstResult = 0;
+	/** the parameter for <code>PreparedStatement</code> */
+	private Map<String,Object> param = new HashMap<String,Object>();
+		
+	/** the parameter for analyze the template */
+	private Map<String,Object> branchParam = new HashMap<String,Object>();
 	
-	/**
-	 * @return the maxSize
-	 */
-	public int getMaxSize() {
-		return maxSize;
-	}
-
-	/**
-	 * @param maxSize the maxSize to set
-	 */
-	public void setMaxSize(int maxSize) {
-		this.maxSize = maxSize;
-	}
-
-	/**
-	 * @return the firstResult
-	 */
-	public int getFirstResult() {
-		return firstResult;
-	}
-
-	/**
-	 * @param firstResult the firstResult to set
-	 */
-	public void setFirstResult(int firstResult) {
-		this.firstResult = firstResult;
-	}
-
-	/**
-	 * @return the filter
-	 */
-	public ResultSetFilter getFilter() {
-		return filter;
-	}
-
-	/**
-	 * @param filter the filter to set
-	 */
-	public void setFilter(ResultSetFilter filter) {
-		this.filter = filter;
-	}
-
+	/** the JPA hint */
+	private Map<String,Object> hints = new HashMap<String,Object>();
+	
+	/** the named querys name */
+	private String name = null;
 	
 	/**
-	 * @return the lock
+	 * @param sql the sql to set
 	 */
-	public LockModeType getLockMode() {
-		return lock;
+	public void setSql(String sql){
+		this.useRowSql = sql.charAt(0) != '@';
+		this.sql = sql;
 	}
 
 	/**
-	 * @param lock the lock to set
+	 * @return the useRowSql
 	 */
-	public void setLockMode(LockModeType lock) {
-		this.lock = lock;
+	public boolean isUseRowSql() {
+		return useRowSql;
 	}
 
 	/**
-	 * @return the resultType
+	 * @return the param
 	 */
-	public Class<?> getResultType() {
-		return resultType;
+	public Map<String,Object> getParam() {
+		return param;
 	}
 
 	/**
-	 * @param resultType the resultType to set
+	 * @param param the param to set
 	 */
-	public void setResultType(Class<?> resultType) {
-		this.resultType = resultType;
+	public void setParam(Map<String,Object> param) {
+		this.param = param;
+	}
+
+	/**
+	 * @return the branchParam
+	 */
+	public Map<String,Object> getBranchParam() {
+		return branchParam;
+	}
+
+	/**
+	 * @param branchParam the branchParam to set
+	 */
+	public void setBranchParam(Map<String,Object> branchParam) {
+		this.branchParam = branchParam;
+	}
+
+	/**
+	 * @return the hints
+	 */
+	public Map<String,Object> getHints() {
+		return hints;
+	}
+
+	/**
+	 * @param hints the hints to set
+	 */
+	public void setHints(Map<String,Object> hints) {
+		this.hints = hints;
+	}
+
+	/**
+	 * @return the sql
+	 */
+	public String getSql() {
+		return sql;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	/**
+	 * @return the queryId
+	 */
+	public String getQueryId() {
+		return queryId;
+	}
+
+	/**
+	 * @param queryId the queryId to set
+	 */
+	public void setQueryId(String queryId) {
+		this.queryId = queryId;
+	}
+
 }

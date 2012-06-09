@@ -3,7 +3,7 @@
  */
 package kosmos.framework.service.test;
 
-import kosmos.framework.sqlclient.free.AbstractNamedQuery;
+import kosmos.framework.sqlclient.free.AbstractNamedSelect;
 import kosmos.framework.sqlclient.free.AnonymousQuery;
 
 /**
@@ -13,7 +13,7 @@ import kosmos.framework.sqlclient.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_QUERY.sql")
-public class SampleNamedQuery extends AbstractNamedQuery{
+public class SampleNamedQuery extends AbstractNamedSelect{
 
 	public enum Bind {
 		test,

@@ -17,8 +17,8 @@ import javax.persistence.Query;
 import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.jpqlclient.free.LazyList;
 import kosmos.framework.jpqlclient.free.SQLExceptionHandlerImpl;
-import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.free.FreeSelectParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.NativeResult;
 import kosmos.framework.sqlclient.free.ResultSetFilter;
@@ -117,10 +117,10 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getResultList(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getResultList(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public <T> List<T> getResultList(FreeQueryParameter parameter) {
+	public <T> List<T> getResultList(FreeSelectParameter parameter) {
 		Query query = mapping(parameter,createQuery(parameter));	
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		ResultSet rs = cursor.getResultSet();
@@ -148,17 +148,17 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see kosmos.framework.sqlclient.internal.free.AbstractInternalQuery#getSingleResult()
 	 */
 	@Override
-	public <T> T getSingleResult(FreeQueryParameter parameter) {
+	public <T> T getSingleResult(FreeSelectParameter parameter) {
 		parameter.setMaxSize(1);
 		List<T> result = getResultList(parameter);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(final FreeQueryParameter parameter) {
+	public NativeResult getTotalResult(final FreeSelectParameter parameter) {
 
 		Query query = mapping(parameter,createQuery(parameter));
 		query.setMaxResults(0);
@@ -192,7 +192,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List getFetchResult(FreeQueryParameter parameter) {
+	public List getFetchResult(FreeSelectParameter parameter) {
 		Query query = mapping(parameter,createQuery(parameter));		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
@@ -208,7 +208,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * 
 	 * @return the query
 	 */
-	protected Query createQuery(FreeQueryParameter param) {
+	protected Query createQuery(FreeSelectParameter param) {
 		List<Object> bindList = new ArrayList<Object>();
 		String executingSql = buildSql(bindList,param);		
 		Query query = param.getName() != null ? createNamedQuery(executingSql, param) : em.createNativeQuery(executingSql);
@@ -221,7 +221,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @param query the query
 	 * @return the query
 	 */
-	protected Query mapping(FreeQueryParameter parameter,Query query){
+	protected Query mapping(FreeSelectParameter parameter,Query query){
 				
 		for(Map.Entry<String, Object> h : parameter.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
@@ -242,7 +242,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#count()
 	 */
 	@Override
-	public long count(FreeQueryParameter param){		
+	public long count(FreeSelectParameter param){		
 
 		List<Object> bindList = new ArrayList<Object>();
 		String executingSql = buildSql(bindList,param);
@@ -287,7 +287,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * 
 	 * @return the query
 	 */
-	protected Query createNamedQuery(String executingQuery,FreeQueryParameter param){
+	protected Query createNamedQuery(String executingQuery,FreeSelectParameter param){
 		Query query = em.createNamedQuery(executingQuery);
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
@@ -308,7 +308,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @return the SQL
 	 */
 	@SuppressWarnings("unchecked")
-	protected String buildSql(List<Object> bindList, FreeParameter param){
+	protected String buildSql(List<Object> bindList, FreeQueryParameter param){
 		String str = param.getSql();	
 		if(!param.isUseRowSql()){
 			str = builder.build(param.getQueryId(), str);
@@ -342,7 +342,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		//TODO 要検証		
 		
 		List<UpdateParameter> engineParams = new ArrayList<UpdateParameter>();
-		for(FreeParameter p: param){
+		for(FreeQueryParameter p: param){
 			UpdateParameter ep = new UpdateParameter();
 			ep.setAllParameter(p.getParam());
 			ep.setAllBranchParameter(p.getBranchParam());

@@ -5,8 +5,8 @@ package kosmos.framework.sqlclient.orm.strategy;
 
 import java.util.List;
 
-import kosmos.framework.sqlclient.orm.OrmQueryParameter;
-import kosmos.framework.sqlclient.orm.OrmUpdateParameter;
+import kosmos.framework.sqlclient.orm.OrmSelectParameter;
+import kosmos.framework.sqlclient.orm.OrmUpsertParameter;
 
 /**
  * function.
@@ -23,14 +23,14 @@ public interface InternalOrmQuery {
 	 * @param set the updating target
 	 * @return the updated count
 	 */
-	public int update(OrmUpdateParameter<?> parameter);
+	public int update(OrmUpsertParameter<?> parameter);
 	
 	/** 
 	 * Deletes the table.
 	 * 
 	 * @param condition the condition
 	 */
-	public int delete(OrmUpdateParameter<?> parameter);
+	public int delete(OrmUpsertParameter<?> parameter);
 	
 	/**
 	 * Finds by primary keys.
@@ -40,7 +40,7 @@ public interface InternalOrmQuery {
 	 * @param pks the primary keys
 	 * @return the result
  	 */
-	public <E> E find(OrmQueryParameter<E> parameter,Object... pks);
+	public <E> E find(OrmSelectParameter<E> parameter,Object... pks);
 	
 	/**
 	 * Searches the records.
@@ -49,7 +49,7 @@ public interface InternalOrmQuery {
 	 * @param parameter the parameter
 	 * @return the result
 	 */
- 	public <E> List<E> getResultList(OrmQueryParameter<E> parameter);
+ 	public <E> List<E> getResultList(OrmSelectParameter<E> parameter);
  	
  	
  	/**
@@ -59,6 +59,6 @@ public interface InternalOrmQuery {
  	 * @param callback the callback to execute
  	 * @return the result
  	 */
- 	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter);
+ 	public <E> List<E> getFetchResult(OrmSelectParameter<E> parameter);
  
 }

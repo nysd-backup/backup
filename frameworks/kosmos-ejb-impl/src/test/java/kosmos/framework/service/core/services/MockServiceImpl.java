@@ -29,7 +29,7 @@ public class MockServiceImpl implements MockService{
 		ms.exec(v);
 		m2.exec("100");
 		
-		//OrmQuery<NotTestEntity> eq = ormQueryFactory.createQuery(NotTestEntity.class);		
+		//OrmSelect<NotTestEntity> eq = ormQueryFactory.createQuery(NotTestEntity.class);		
 		return v;
 	}
 

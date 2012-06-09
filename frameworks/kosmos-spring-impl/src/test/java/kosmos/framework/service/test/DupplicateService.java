@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 
 import kosmos.framework.jpqlclient.EntityManagerProvider;
 import kosmos.framework.service.test.entity.TestEntity;
-import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmSelect;
 import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.springframework.stereotype.Service;
@@ -55,13 +55,13 @@ public class DupplicateService {
 		entityManagerProvider.getEntityManager().flush();
 			
 		//読み込み専用
-		OrmQuery<TestEntity> query = readOnlyOrmQueryFactory.createQuery(TestEntity.class);	
+		OrmSelect<TestEntity> query = readOnlyOrmQueryFactory.createSelect(TestEntity.class);	
 		List<TestEntity> result = query.getResultList();
 		System.out.println(result.size());
 		res[0] = result.size();
 		
 		//両用で取得
-		OrmQuery<TestEntity> wquery =ormQueryFactory.createQuery(TestEntity.class);	
+		OrmSelect<TestEntity> wquery =ormQueryFactory.createSelect(TestEntity.class);	
 		List<TestEntity> wresult = wquery.getResultList();
 		System.out.println(wresult.size());
 		res[1] = wresult.size();

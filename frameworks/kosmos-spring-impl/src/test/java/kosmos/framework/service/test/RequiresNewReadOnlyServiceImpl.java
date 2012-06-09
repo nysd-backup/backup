@@ -8,7 +8,7 @@ import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
 import kosmos.framework.service.test.entity.TestEntity;
-import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmSelect;
 import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.eclipse.persistence.config.QueryHints;
@@ -34,7 +34,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 	private OrmQueryFactory ormQueryFactory;
 	
 	public String test() {
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
 		query.find("1");
 		return "OK";
@@ -42,7 +42,7 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 
 	@Override
 	public String crushException() {
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);

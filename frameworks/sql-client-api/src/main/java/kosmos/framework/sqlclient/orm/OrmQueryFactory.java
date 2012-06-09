@@ -32,8 +32,8 @@ public class OrmQueryFactory {
 	 * @param entityClass the entityClass
 	 * @return self
 	 */
-	public <T> OrmQuery<T> createQuery(Class<T> entityClass){
-		return new OrmQuery<T>(entityClass,internalOrmQuery);
+	public <T> OrmSelect<T> createSelect(Class<T> entityClass){
+		return new OrmSelect<T>(entityClass,internalOrmQuery);
 	}
 	
 	/**
@@ -43,8 +43,8 @@ public class OrmQueryFactory {
 	 * @param entityClass the entityClass
 	 * @return self
 	 */
-	public <T> OrmUpdate<T> createUpdate(Class<T> entityClass){
-		return new OrmUpdate<T>(entityClass,internalOrmQuery);
+	public <T> OrmUpsert<T> createUpsert(Class<T> entityClass){
+		return new OrmUpsert<T>(entityClass,internalOrmQuery);
 	}
 
 }

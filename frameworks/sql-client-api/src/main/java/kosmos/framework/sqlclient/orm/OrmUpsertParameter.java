@@ -10,14 +10,14 @@ package kosmos.framework.sqlclient.orm;
  * @author yoshida-n
  * @version	created.
  */
-public class OrmUpdateParameter<T> extends OrmParameter<T>{
+public class OrmUpsertParameter<T> extends OrmQueryParameter<T>{
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param entityClass the entityClass to set
 	 */
-	public OrmUpdateParameter(Class<T> entityClass) {
+	public OrmUpsertParameter(Class<T> entityClass) {
 		super(entityClass);
 	}
 

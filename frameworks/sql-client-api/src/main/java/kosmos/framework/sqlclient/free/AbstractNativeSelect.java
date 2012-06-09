@@ -13,7 +13,7 @@ import java.util.List;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractNativeQuery extends AbstractFreeQuery{
+public abstract class AbstractNativeSelect extends AbstractFreeSelect{
 
 	/**
 	 * Gets the total result.
@@ -58,7 +58,7 @@ public abstract class AbstractNativeQuery extends AbstractFreeQuery{
 	 * @return self
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends AbstractNativeQuery> T setFilter(ResultSetFilter filter) {
+	public <T extends AbstractNativeSelect> T setFilter(ResultSetFilter filter) {
 		getParameter().setFilter(filter);
 		return (T)this;
 	}

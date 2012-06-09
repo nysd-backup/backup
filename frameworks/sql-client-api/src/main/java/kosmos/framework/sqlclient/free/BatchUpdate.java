@@ -3,7 +3,7 @@
  */
 package kosmos.framework.sqlclient.free;
 
-import kosmos.framework.sqlclient.free.AbstractNativeUpdate;
+import kosmos.framework.sqlclient.free.AbstractNativeUpsert;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 
 
@@ -17,7 +17,7 @@ public interface BatchUpdate {
 
 	public void addBatch(FreeUpdateParameter parameter);
 
-	public void addBatch(AbstractNativeUpdate parameter);
+	public void addBatch(AbstractNativeUpsert parameter);
 	
 	public int[] executeBatch();
 }

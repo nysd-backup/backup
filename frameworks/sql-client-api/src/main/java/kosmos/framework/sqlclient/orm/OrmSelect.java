@@ -15,19 +15,19 @@ import kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class OrmQuery<T>{
+public class OrmSelect<T>{
 	
 	/** the InternalOrmQuery */
 	private final InternalOrmQuery internalQuery ;
 	
 	/** the condition */
-	private OrmQueryParameter<T> condition = null;
+	private OrmSelectParameter<T> condition = null;
 	
 	/**
 	 * @param entityClass the entity class
 	 */
-	OrmQuery(Class<T> entityClass,InternalOrmQuery internalQuery){
-		this.condition = new OrmQueryParameter<T>(entityClass);
+	OrmSelect(Class<T> entityClass,InternalOrmQuery internalQuery){
+		this.condition = new OrmSelectParameter<T>(entityClass);
 		this.internalQuery = internalQuery;
 	}
 	
@@ -39,7 +39,7 @@ public class OrmQuery<T>{
 	 * @param arg1 the hint value
 	 * @return self
 	 */
-	public OrmQuery<T> setHint(String arg0 , Object arg1){
+	public OrmSelect<T> setHint(String arg0 , Object arg1){
 		condition.getHints().put(arg0, arg1);
 		return this;
 	}
@@ -49,7 +49,7 @@ public class OrmQuery<T>{
 	 * @param arg0 the max result
 	 * @return self
 	 */
-	public OrmQuery<T> setMaxResults(int arg0){
+	public OrmSelect<T> setMaxResults(int arg0){
 		condition.setMaxSize(arg0);
 		return this;
 	}
@@ -59,7 +59,7 @@ public class OrmQuery<T>{
 	 * @param arg0　the start position
 	 * @return self
 	 */
-	public OrmQuery<T> setFirstResult(int arg0){
+	public OrmSelect<T> setFirstResult(int arg0){
 		condition.setFirstResult(arg0);
 		return this;
 	}
@@ -94,7 +94,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> eq(Metadata<T, V> column, V value){
+	public <V> OrmSelect<T> eq(Metadata<T, V> column, V value){
 		return setOperand(column.name(), value, WhereOperand.Equal);
 	}
 	
@@ -106,7 +106,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> eqFix(Metadata<T, V> column, String value){
+	public <V> OrmSelect<T> eqFix(Metadata<T, V> column, String value){
 		return setOperand(column.name(), new FixString(value), WhereOperand.Equal);
 	}
 
@@ -118,7 +118,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> gt(Metadata<T, V> column, V value){
+	public <V> OrmSelect<T> gt(Metadata<T, V> column, V value){
 		return setOperand(column.name(), value, WhereOperand.GreaterThan);
 	}
 	
@@ -130,7 +130,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> gtFix(Metadata<T, V> column, String value){
+	public <V> OrmSelect<T> gtFix(Metadata<T, V> column, String value){
 		return setOperand(column.name(), new FixString(value), WhereOperand.GreaterThan);
 	}
 	/**
@@ -141,7 +141,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> lt(Metadata<T, V> column, V value){
+	public <V> OrmSelect<T> lt(Metadata<T, V> column, V value){
 		return setOperand(column.name(), value, WhereOperand.LessThan);
 	}
 	
@@ -153,7 +153,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> ltFix(Metadata<T, V> column, String value){
+	public <V> OrmSelect<T> ltFix(Metadata<T, V> column, String value){
 		return setOperand(column.name(), new FixString(value), WhereOperand.LessThan);
 	}
 	
@@ -165,7 +165,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> gtEq(Metadata<T, V> column, V value){
+	public <V> OrmSelect<T> gtEq(Metadata<T, V> column, V value){
 		return setOperand(column.name(), value, WhereOperand.GreaterEqual);
 	}
 	
@@ -177,7 +177,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> gtEqFix(Metadata<T, V> column, String value){
+	public <V> OrmSelect<T> gtEqFix(Metadata<T, V> column, String value){
 		return setOperand(column.name(), new FixString(value), WhereOperand.GreaterEqual);
 	}
 	
@@ -189,7 +189,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> ltEq(Metadata<T, V> column, V value){
+	public <V> OrmSelect<T> ltEq(Metadata<T, V> column, V value){
 		return setOperand(column.name(), value, WhereOperand.LessEqual);
 	}
 	
@@ -201,7 +201,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> ltEqFix(Metadata<T, V> column, String value){
+	public <V> OrmSelect<T> ltEqFix(Metadata<T, V> column, String value){
 		return setOperand(column.name(), new FixString(value), WhereOperand.LessEqual);
 	}
 
@@ -214,7 +214,7 @@ public class OrmQuery<T>{
 	 * @param to the to-value to be added 
 	 * @return self
 	 */
-	public <V> OrmQuery<T> between(Metadata<T, V> column, V from , V to){
+	public <V> OrmSelect<T> between(Metadata<T, V> column, V from , V to){
 		condition.getConditions().add(new WhereCondition(column.name(),condition.getConditions().size()+1,WhereOperand.Between,from,to));
 		return this;
 	}
@@ -227,7 +227,7 @@ public class OrmQuery<T>{
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> OrmQuery<T> contains(Metadata<T, V> column, List<V> value){
+	public <V> OrmSelect<T> contains(Metadata<T, V> column, List<V> value){
 		condition.getConditions().add(new WhereCondition(column.name(),condition.getConditions().size()+1,WhereOperand.IN,value));
 		return this;
 	}
@@ -239,7 +239,7 @@ public class OrmQuery<T>{
 	 * @param column the column to add to
 	 * @return self
 	 */
-	public OrmQuery<T> desc(Metadata<T,?> column){
+	public OrmSelect<T> desc(Metadata<T,?> column){
 		condition.getSortKeys().add(new SortKey(false,column.name()));
 		return this;
 	}
@@ -251,7 +251,7 @@ public class OrmQuery<T>{
 	 * @param column the column to add to
 	 * @return self
 	 */
-	public OrmQuery<T> asc(Metadata<T, ?> column){
+	public OrmSelect<T> asc(Metadata<T, ?> column){
 		condition.getSortKeys().add(new SortKey(true,column.name()));
 		return this;
 	}
@@ -271,7 +271,7 @@ public class OrmQuery<T>{
 	 * @param type the lock mode
 	 * @return self
 	 */
-	public OrmQuery<T> setLockMode(LockModeType type){
+	public OrmSelect<T> setLockMode(LockModeType type){
 		condition.setLockModeType(type);
 		return this;
 	}
@@ -309,7 +309,7 @@ public class OrmQuery<T>{
 	 * @param operand the operand
 	 * @return
 	 */
-	private OrmQuery<T> setOperand(String column, Object value,WhereOperand operand) {
+	private OrmSelect<T> setOperand(String column, Object value,WhereOperand operand) {
 		condition.getConditions().add(new WhereCondition(column,condition.getConditions().size()+1,operand,value));
 		return this;
 	}

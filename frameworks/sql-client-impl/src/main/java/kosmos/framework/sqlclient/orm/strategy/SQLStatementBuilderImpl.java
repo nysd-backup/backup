@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import kosmos.framework.sqlclient.PersistenceHints;
 import kosmos.framework.sqlclient.orm.FixString;
-import kosmos.framework.sqlclient.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.orm.OrmSelectParameter;
 import kosmos.framework.sqlclient.orm.WhereCondition;
 import kosmos.framework.sqlclient.orm.strategy.AbstractStatementBuilder;
 
@@ -25,10 +25,10 @@ import kosmos.framework.sqlclient.orm.strategy.AbstractStatementBuilder;
 public class SQLStatementBuilderImpl extends AbstractStatementBuilder{
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.AbstractStatementBuilder#afterCreateSelect(java.lang.StringBuilder, kosmos.framework.sqlclient.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.AbstractStatementBuilder#afterCreateSelect(java.lang.StringBuilder, kosmos.framework.sqlclient.orm.OrmSelectParameter)
 	 */
 	@Override
-	protected StringBuilder afterCreateSelect(StringBuilder query,OrmQueryParameter<?> condition){
+	protected StringBuilder afterCreateSelect(StringBuilder query,OrmSelectParameter<?> condition){
 		//悲観ロックの追加
 		LockModeType lockModeType = condition.getLockModeType();
 		if(LockModeType.PESSIMISTIC_READ == lockModeType){			

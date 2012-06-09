@@ -13,7 +13,7 @@ import javax.persistence.LockModeType;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractNamedQuery extends AbstractFreeQuery{
+public abstract class AbstractNamedSelect extends AbstractFreeSelect{
 	
 	/**
 	 * Sets the Lock mode.
@@ -21,7 +21,7 @@ public abstract class AbstractNamedQuery extends AbstractFreeQuery{
 	 * @return self
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends AbstractNamedQuery> T setLockMode(LockModeType arg0) {
+	public <T extends AbstractNamedSelect> T setLockMode(LockModeType arg0) {
 		super.getParameter().setLockMode(arg0);
 		return (T)this;
 	}

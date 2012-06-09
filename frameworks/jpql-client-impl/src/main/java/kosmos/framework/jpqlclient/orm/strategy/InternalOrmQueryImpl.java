@@ -9,13 +9,13 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import kosmos.framework.jpqlclient.EntityManagerProvider;
-import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.free.FreeSelectParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
-import kosmos.framework.sqlclient.orm.OrmParameter;
 import kosmos.framework.sqlclient.orm.OrmQueryParameter;
-import kosmos.framework.sqlclient.orm.OrmUpdateParameter;
+import kosmos.framework.sqlclient.orm.OrmSelectParameter;
+import kosmos.framework.sqlclient.orm.OrmUpsertParameter;
 import kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder.Bindable;
@@ -60,10 +60,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#update(kosmos.framework.sqlclient.orm.OrmParameter, java.util.Map)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#update(kosmos.framework.sqlclient.orm.OrmQueryParameter, java.util.Map)
 	 */
 	@Override
-	public int update(OrmUpdateParameter<?> condition){
+	public int update(OrmUpsertParameter<?> condition){
 
 		String updateJpql = sb.createUpdate(condition.getEntityClass(),condition.getConditions(), condition.getCurrentValues());
 		final FreeUpdateParameter parameter = new FreeUpdateParameter();
@@ -80,10 +80,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery {
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#delete(kosmos.framework.sqlclient.orm.OrmParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#delete(kosmos.framework.sqlclient.orm.OrmQueryParameter)
 	 */
 	@Override
-	public int delete(OrmUpdateParameter<?> condition){		
+	public int delete(OrmUpsertParameter<?> condition){		
 	
 		String updateJpql = sb.createDelete(condition.getEntityClass(),condition.getConditions());
 		final FreeUpdateParameter parameter = new FreeUpdateParameter();
@@ -96,10 +96,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery {
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#find(kosmos.framework.sqlclient.orm.OrmQueryParameter, java.lang.Object[])
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#find(kosmos.framework.sqlclient.orm.OrmSelectParameter, java.lang.Object[])
 	 */
 	@Override
-	public <E> E find(OrmQueryParameter<E> query,Object... pks) {
+	public <E> E find(OrmSelectParameter<E> query,Object... pks) {
 		Object v = pks;
 		if( pks.length == 1){
 			v = pks[0];
@@ -114,14 +114,14 @@ public class InternalOrmQueryImpl implements InternalOrmQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.orm.OrmSelectParameter)
 	 */
 	@Override
-	public <E> List<E> getResultList(OrmQueryParameter<E> condition){	
+	public <E> List<E> getResultList(OrmSelectParameter<E> condition){	
 
 		String jpql = sb.createSelect(condition);
 		
-		final FreeQueryParameter parameter = new FreeQueryParameter();
+		final FreeSelectParameter parameter = new FreeSelectParameter();
 		parameter.setResultType(condition.getEntityClass());
 		parameter.setQueryId(condition.getEntityClass().getSimpleName() + ".select");
 		parameter.setSql(jpql);
@@ -140,7 +140,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery {
 	 * @param condition
 	 * @param parameter
 	 */
-	private void setParameterAndHint(OrmParameter<?> condition,final FreeParameter parameter ){
+	private void setParameterAndHint(OrmQueryParameter<?> condition,final FreeQueryParameter parameter ){
 		for(Map.Entry<String, Object> e : condition.getHints().entrySet()){
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}
@@ -154,10 +154,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery {
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.orm.OrmSelectParameter)
 	 */
 	@Override
-	public <E> List<E> getFetchResult(OrmQueryParameter<E> parameter) {
+	public <E> List<E> getFetchResult(OrmSelectParameter<E> parameter) {
 		throw new UnsupportedOperationException();
 	}
 

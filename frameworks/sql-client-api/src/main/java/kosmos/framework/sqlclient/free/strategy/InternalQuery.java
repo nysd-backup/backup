@@ -5,7 +5,7 @@ package kosmos.framework.sqlclient.free.strategy;
 
 import java.util.List;
 
-import kosmos.framework.sqlclient.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.free.FreeSelectParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.NativeResult;
 
@@ -38,30 +38,30 @@ public interface InternalQuery {
 	/**
 	 * @return the total result
 	 */
-	NativeResult getTotalResult(FreeQueryParameter param);
+	NativeResult getTotalResult(FreeSelectParameter param);
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>
 	 */
-	<T> List<T> getFetchResult(FreeQueryParameter param);
+	<T> List<T> getFetchResult(FreeSelectParameter param);
 
 	/**
 	 * @return the hit count.
 	 */
-	long count(FreeQueryParameter param);
+	long count(FreeSelectParameter param);
 
 	/**
 	 * Selects the table.
 	 * 
 	 * @return the found data.
 	 */
-	<T> List<T> getResultList(FreeQueryParameter param);
+	<T> List<T> getResultList(FreeSelectParameter param);
 
 	/**
 	 * Selects the table.
 	 * 
 	 * @return the found one record.
 	 */
-	<T> T getSingleResult(FreeQueryParameter param);
+	<T> T getSingleResult(FreeSelectParameter param);
 
 }

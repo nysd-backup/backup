@@ -5,7 +5,7 @@ package kosmos.framework.service.test;
 
 import java.util.Date;
 
-import kosmos.framework.sqlclient.free.AbstractNamedUpdate;
+import kosmos.framework.sqlclient.free.AbstractNamedUpsert;
 import kosmos.framework.sqlclient.free.AnonymousQuery;
 
 
@@ -16,7 +16,7 @@ import kosmos.framework.sqlclient.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_UPDATE.sql")
-public class SampleNamedUpdate extends AbstractNamedUpdate{
+public class SampleNamedUpdate extends AbstractNamedUpsert{
 
 	public enum Bind {
 		test,

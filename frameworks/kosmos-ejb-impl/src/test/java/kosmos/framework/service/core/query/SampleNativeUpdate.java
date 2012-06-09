@@ -3,7 +3,7 @@
  */
 package kosmos.framework.service.core.query;
 
-import kosmos.framework.sqlclient.free.AbstractNativeUpdate;
+import kosmos.framework.sqlclient.free.AbstractNativeUpsert;
 import kosmos.framework.sqlclient.free.AnonymousQuery;
 
 /**
@@ -13,7 +13,7 @@ import kosmos.framework.sqlclient.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_NATIVE_UPDATE.sql")
-public class SampleNativeUpdate extends AbstractNativeUpdate{
+public class SampleNativeUpdate extends AbstractNativeUpsert{
 
 	public enum Bind {
 		test,

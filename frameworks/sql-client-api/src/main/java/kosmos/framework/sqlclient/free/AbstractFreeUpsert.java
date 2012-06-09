@@ -12,7 +12,7 @@ import kosmos.framework.sqlclient.free.strategy.InternalQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractFreeUpdate {
+public abstract class AbstractFreeUpsert {
 	
 	/** the query */
 	private FreeUpdateParameter parameter;
@@ -37,7 +37,7 @@ public abstract class AbstractFreeUpdate {
 	/**
 	 * Constructor
 	 */
-	public AbstractFreeUpdate(){
+	public AbstractFreeUpsert(){
 		parameter = new FreeUpdateParameter();
 	}
 	
@@ -54,7 +54,7 @@ public abstract class AbstractFreeUpdate {
 	 * @param arg1 the param
 	 * @return self
 	 */
-	public AbstractFreeUpdate setParameter(String arg0, Object arg1) {
+	public AbstractFreeUpsert setParameter(String arg0, Object arg1) {
 		parameter.getParam().put(arg0,arg1);
 		return this;
 	}
@@ -65,7 +65,7 @@ public abstract class AbstractFreeUpdate {
 	 * @param arg1 the param
 	 * @return self
 	 */
-	public AbstractFreeUpdate setBranchParameter(String arg0, Object arg1) {
+	public AbstractFreeUpsert setBranchParameter(String arg0, Object arg1) {
 		parameter.getBranchParam().put(arg0, arg1);
 		return this;
 	}
@@ -76,7 +76,7 @@ public abstract class AbstractFreeUpdate {
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public AbstractFreeUpdate setHint(String arg0, Object arg1) {
+	public AbstractFreeUpsert setHint(String arg0, Object arg1) {
 		parameter.getHints().put(arg0,arg1);
 		return this;
 	}

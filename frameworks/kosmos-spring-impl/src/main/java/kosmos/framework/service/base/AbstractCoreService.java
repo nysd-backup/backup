@@ -5,12 +5,12 @@ package kosmos.framework.service.base;
 
 import kosmos.framework.base.AbstractEntity;
 import kosmos.framework.service.core.messaging.MessageClientFactory;
-import kosmos.framework.sqlclient.free.AbstractNativeQuery;
-import kosmos.framework.sqlclient.free.AbstractNativeUpdate;
+import kosmos.framework.sqlclient.free.AbstractNativeSelect;
+import kosmos.framework.sqlclient.free.AbstractNativeUpsert;
 import kosmos.framework.sqlclient.free.QueryFactory;
-import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmSelect;
 import kosmos.framework.sqlclient.orm.OrmQueryFactory;
-import kosmos.framework.sqlclient.orm.OrmUpdate;
+import kosmos.framework.sqlclient.orm.OrmUpsert;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -77,13 +77,13 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 
 	 * <pre>
 	 * ◆複数件数取得
-	 * OrmQuery&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
+	 * OrmSelect&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
 	 * List&ltOneEntity&gt result = query.eq(OneEntity.ATTR1,100).contains(OneEntity.ATTR2,"a","b","c).getResultList();
 	 * for(OneEntity e : result){
 	 * 		// process
 	 * }
 	 * ◆主キー検索
-	 * OrmQuery&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
+	 * OrmSelect&ltOneEntity&gt query = createOrmQuery(OneEntity.class);
 	 * OneEntity result = query.find("key1","key2");
 	 * </pre>
 	 * 
@@ -91,8 +91,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends OrmQuery<V>> T createOrmQuery(Class<V> entityClass){
-		OrmQuery<V> query = ormQueryFactory.createQuery(entityClass);		
+	protected <V extends AbstractEntity,T extends OrmSelect<V>> T createOrmSelect(Class<V> entityClass){
+		OrmSelect<V> query = ormQueryFactory.createSelect(entityClass);		
 		return (T)query;
 	}
 	
@@ -102,12 +102,12 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 
 	 * <pre>
 	 * ◆単純更新
-	 * OrmUpdate&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
+	 * OrmUpsert&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
 	 * updater.eq(OneEntity.ATTR1,100).contains(OneEntity.ATTR2,"a","b","c).set(OneEntity.ATTR3,"10");
 	 * int result = updater.update();
 	 *
 	 * ◆バッチ更新
-	 * OrmUpdate&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
+	 * OrmUpsert&ltOneEntity&gt updater = createOrmUpdate(OneEntity.class);
 	 * for(int i = 0 ; i < 100; i++){
 	 * 	updater.eq(OneEntity.ATTR1,i).set(OneEntity.ATTR3,i);
 	 * 	updater.addBatch();
@@ -122,8 +122,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createOrmUpdate(Class<V> entityClass){
-		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass);		
+	protected <V extends AbstractEntity,T extends OrmUpsert<V>> T createOrmUpsert(Class<V> entityClass){
+		OrmUpsert<V> query = ormQueryFactory.createUpsert(entityClass);		
 		return (T)query;
 	}
 	
@@ -157,8 +157,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @param queryClass クエリクラス
 	 * @return クエリ
 	 */
-	protected <T extends AbstractNativeQuery> T createQuery(Class<T> queryClass){
-		return queryFactory.createQuery(queryClass);
+	protected <T extends AbstractNativeSelect> T createSelect(Class<T> queryClass){
+		return queryFactory.createSelect(queryClass);
 	}
 	
 	/**
@@ -185,8 +185,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @param updateClass アップデータクラス
 	 * @return アップデータ
 	 */
-	protected <T extends AbstractNativeUpdate> T createUpdate(Class<T> updateClass){
-		return queryFactory.createUpdate(updateClass);
+	protected <T extends AbstractNativeUpsert> T createUpsert(Class<T> updateClass){
+		return queryFactory.createUpsert(updateClass);
 	}
 	
 }

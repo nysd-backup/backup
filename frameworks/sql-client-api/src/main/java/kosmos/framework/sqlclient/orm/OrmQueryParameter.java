@@ -3,12 +3,15 @@
  */
 package kosmos.framework.sqlclient.orm;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.persistence.LockModeType;
-
-import kosmos.framework.sqlclient.PersistenceHints;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 
 /**
@@ -17,83 +20,79 @@ import kosmos.framework.sqlclient.PersistenceHints;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class OrmQueryParameter<T> extends OrmParameter<T>{
+public abstract class OrmQueryParameter<T> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	/** the max size to be able to search */
-	private int maxSize = 0;
+	/** the entityClass */
+	private final Class<T> entityClass;
 	
-	/** the start position */
-	private int firstResult = 0;
-
-	/** the keys of the sorting */
-	private List<SortKey> sortKeys = new ArrayList<SortKey>();
-
-	/** the lock mode */
-	private LockModeType lockModeType;
-
-	/**
-	 * @param lockModeType the lockModeType to set
-	 */
-	public void setLockModeType(LockModeType lockModeType) {
-		this.lockModeType = lockModeType;
-		//ロック指定の場合はタイムアウト設定、先にタイムアウト設定されていた場合は何もしない
-		if(!getHints().containsKey(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT)){
-			if(LockModeType.OPTIMISTIC == lockModeType){
-				setHint(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
-			}
-		}
-	}
-
-	/**
-	 * @return the lockModeType
-	 */
-	public LockModeType getLockModeType() {
-		return lockModeType;
-	}
+	/** the query hints */
+	private Map<String,Object> hints = new HashMap<String,Object>();
+	
+	/** the conditions */
+	private List<WhereCondition> conditions = new ArrayList<WhereCondition>();
+	
+	/** the updating values */
+	private Map<String,Object> values = new LinkedHashMap<String,Object>();
 	
 	/**
 	 * @param entityClass the entityClass
 	 */
 	public OrmQueryParameter(Class<T> entityClass){
-		super(entityClass);
-	}
-	
-	
-	/**
-	 * @return the sort key
-	 */
-	public List<SortKey> getSortKeys() {
-		return sortKeys;
+		this.entityClass = entityClass;
 	}
 	
 	/**
-	 * @param maxSize the maxSize
+	 * @return the hints
 	 */
-	public void setMaxSize(int maxSize){
-		this.maxSize = maxSize;
+	public Map<String,Object> getHints(){
+		return hints;
 	}
 	
 	/**
-	 * @return the maxSize
+	 * @param key the key of the hint
+	 * @param value the hint value
 	 */
-	public int getMaxSize(){
-		return this.maxSize;
+	public void setHint(String key , Object value){
+		hints.put(key, value);
 	}
 	
 	/**
-	 * @param firstResult the firstResult
+	 * @return the entity class
 	 */
-	public void setFirstResult(int firstResult){
-		this.firstResult = firstResult;
+	public Class<T> getEntityClass(){
+		return this.entityClass;
+	}
+
+	/**
+	 * @return the conditions
+	 */
+	public List<WhereCondition> getConditions() {
+		return conditions;
 	}
 	
 	/**
-	 * @return the firstResult
+	 * @return the current values
 	 */
-	public int getFirstResult(){
-		return this.firstResult;
+	public Map<String,Object> getCurrentValues(){
+		return values;
+	}
+	
+	/**
+	 * @param key the key
+	 * @param value the value
+	 */
+	public void set(String key ,Object value){
+		values.put(key, value);
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

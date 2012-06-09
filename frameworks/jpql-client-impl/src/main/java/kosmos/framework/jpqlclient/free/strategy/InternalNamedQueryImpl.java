@@ -12,8 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import kosmos.framework.jpqlclient.EntityManagerProvider;
-import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.free.FreeSelectParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.NativeResult;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
@@ -64,19 +64,19 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#count(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#count(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public long count(FreeQueryParameter param){
+	public long count(FreeSelectParameter param){
 		throw new UnsupportedOperationException();
 	}	
 	
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getResultList(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getResultList(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> getResultList(FreeQueryParameter param){
+	public <T> List<T> getResultList(FreeSelectParameter param){
 		Query query = createQuery(param);
 		query = mapping( param , query );
 		if(param.getLockMode() != null){
@@ -86,11 +86,11 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getSingleResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getSingleResult(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getSingleResult(FreeQueryParameter param){
+	public <T> T getSingleResult(FreeSelectParameter param){
 		Query query = createQuery(param);
 		query = mapping( param , query );
 		if(param.getLockMode() != null){
@@ -114,7 +114,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	 * 
 	 * @return the query
 	 */
-	protected Query createQuery(FreeParameter param) {
+	protected Query createQuery(FreeQueryParameter param) {
 		String executingSql = param.getSql();
 		Query query = null;
 		//SQLエンジンを使用してクエリを読み込む
@@ -172,7 +172,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	 * @param query　the query
 	 * @return the query
 	 */
-	protected Query mapping(FreeParameter param,Query query){
+	protected Query mapping(FreeQueryParameter param,Query query){
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}
@@ -196,18 +196,18 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeQueryParameter param){
+	public NativeResult getTotalResult(FreeSelectParameter param){
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getFetchResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getFetchResult(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public <T> List<T> getFetchResult(FreeQueryParameter param){
+	public <T> List<T> getFetchResult(FreeSelectParameter param){
 		throw new UnsupportedOperationException();
 	}
 

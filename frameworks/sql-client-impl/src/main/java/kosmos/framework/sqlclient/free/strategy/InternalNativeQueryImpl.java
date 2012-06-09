@@ -8,8 +8,8 @@ import java.util.List;
 
 import kosmos.framework.sqlclient.ConnectionProvider;
 import kosmos.framework.sqlclient.EngineHints;
-import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.free.FreeSelectParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.NativeResult;
 import kosmos.framework.sqlengine.executer.RecordFilter;
@@ -49,19 +49,19 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getTotalResult(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeQueryParameter param){
+	public NativeResult getTotalResult(FreeSelectParameter param){
 		QueryResult result = facade.executeTotalQuery(createQueryParameter(param), cs.getConnection());
 		return new NativeResult(result.isLimited(), result.getResultList(), result.getHitCount());
 	}
 	
 	/**
-	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getFetchResult(kosmos.framework.sqlclient.free.FreeQueryParameter)
+	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getFetchResult(kosmos.framework.sqlclient.free.FreeSelectParameter)
 	 */
 	@Override
-	public <T> List<T> getFetchResult(FreeQueryParameter param){
+	public <T> List<T> getFetchResult(FreeSelectParameter param){
 		return facade.executeFetch(createQueryParameter(param), cs.getConnection());		
 	}
 	
@@ -69,7 +69,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#count()
 	 */
 	@Override
-	public long count(FreeQueryParameter param){
+	public long count(FreeSelectParameter param){
 		return facade.executeCount(createParameter(new QueryParameter(),param), cs.getConnection());
 	}
 
@@ -77,7 +77,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getResultList()
 	 */
 	@Override
-	public <T> List<T> getResultList(FreeQueryParameter param){
+	public <T> List<T> getResultList(FreeSelectParameter param){
 		return facade.executeQuery(createQueryParameter(param), cs.getConnection());		
 	}
 	
@@ -85,7 +85,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see kosmos.framework.sqlclient.free.strategy.InternalQuery#getSingleResult()
 	 */
 	@Override
-	public <T> T getSingleResult(FreeQueryParameter param){
+	public <T> T getSingleResult(FreeSelectParameter param){
 		param.setMaxSize(1);
 		List<T> result = getResultList(param);
 		if(result.isEmpty()){
@@ -106,7 +106,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	/**
 	 * @return the parameter
 	 */
-	private QueryParameter createQueryParameter(final FreeQueryParameter param){
+	private QueryParameter createQueryParameter(final FreeSelectParameter param){
 		QueryParameter parameter = createParameter(new QueryParameter(),param);		
 		parameter.setMaxSize(param.getMaxSize());
 		parameter.setFirstResult(param.getFirstResult());
@@ -134,7 +134,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @param parameter the parameter
 	 * @return the result
 	 */
-	private <S extends SQLParameter> S createParameter(S parameter,FreeParameter param){
+	private <S extends SQLParameter> S createParameter(S parameter,FreeQueryParameter param){
 		parameter.setSqlId(param.getQueryId());
 		parameter.setSql(param.getSql());		
 
@@ -153,7 +153,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	@Override
 	public int[] executeBatch(List<FreeUpdateParameter> param) {
 		List<UpdateParameter> engineParams = new ArrayList<UpdateParameter>();
-		for(FreeParameter p: param){
+		for(FreeQueryParameter p: param){
 			UpdateParameter ep = new UpdateParameter();
 			ep.setAllParameter(p.getParam());
 			ep.setAllBranchParameter(p.getBranchParam());

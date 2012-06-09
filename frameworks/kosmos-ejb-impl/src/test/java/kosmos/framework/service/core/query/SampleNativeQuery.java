@@ -3,7 +3,7 @@
  */
 package kosmos.framework.service.core.query;
 
-import kosmos.framework.sqlclient.free.AbstractNativeQuery;
+import kosmos.framework.sqlclient.free.AbstractNativeSelect;
 import kosmos.framework.sqlclient.free.AnonymousQuery;
 
 /**
@@ -13,7 +13,7 @@ import kosmos.framework.sqlclient.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_NATIVE_QUERY.sql",resultClass=SampleNativeResult.class)
-public class SampleNativeQuery extends AbstractNativeQuery{
+public class SampleNativeQuery extends AbstractNativeSelect{
 
 	public enum Bind {
 		test,

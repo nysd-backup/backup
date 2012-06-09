@@ -12,15 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.NonUniqueResultException;
 
 import kosmos.framework.sqlclient.ReflectionUtils;
-import kosmos.framework.sqlclient.free.FreeParameter;
 import kosmos.framework.sqlclient.free.FreeQueryParameter;
+import kosmos.framework.sqlclient.free.FreeSelectParameter;
 import kosmos.framework.sqlclient.free.FreeUpdateParameter;
 import kosmos.framework.sqlclient.free.strategy.InternalQuery;
 import kosmos.framework.sqlclient.orm.FastEntity;
 import kosmos.framework.sqlclient.orm.FixString;
-import kosmos.framework.sqlclient.orm.OrmParameter;
 import kosmos.framework.sqlclient.orm.OrmQueryParameter;
-import kosmos.framework.sqlclient.orm.OrmUpdateParameter;
+import kosmos.framework.sqlclient.orm.OrmSelectParameter;
+import kosmos.framework.sqlclient.orm.OrmUpsertParameter;
 import kosmos.framework.sqlclient.orm.WhereCondition;
 import kosmos.framework.sqlclient.orm.WhereOperand;
 import kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder.Bindable;
@@ -59,9 +59,9 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#find(java.lang.Class, java.util.Map, java.lang.Object[])
 	 */
 	@Override
-	public <E> E find(OrmQueryParameter<E> context,Object... pks) {
+	public <E> E find(OrmSelectParameter<E> context,Object... pks) {
 		
-		OrmQueryParameter<E> newContext = new OrmQueryParameter<E>(context.getEntityClass());
+		OrmSelectParameter<E> newContext = new OrmSelectParameter<E>(context.getEntityClass());
 
 		//高速エンティティ
 		if(FastEntity.class.isAssignableFrom(context.getEntityClass())){
@@ -107,19 +107,19 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getResultList(kosmos.framework.sqlclient.orm.OrmSelectParameter)
 	 */
 	@Override
-	public <E> List<E> getResultList(OrmQueryParameter<E> condition) {
-		FreeQueryParameter parameter = createParameter(condition);
+	public <E> List<E> getResultList(OrmSelectParameter<E> condition) {
+		FreeSelectParameter parameter = createParameter(condition);
 		return internalQuery.getResultList(parameter);
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#update(kosmos.framework.sqlclient.orm.OrmQueryParameter, java.util.Map)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#update(kosmos.framework.sqlclient.orm.OrmSelectParameter, java.util.Map)
 	 */
 	@Override
-	public int update(OrmUpdateParameter<?> condition) {
+	public int update(OrmUpsertParameter<?> condition) {
 		
 		String sql = sb.createUpdate(condition.getEntityClass(),condition.getConditions(), condition.getCurrentValues());		
 		final FreeUpdateParameter parameter = new FreeUpdateParameter();
@@ -136,10 +136,10 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#delete(kosmos.framework.sqlclient.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#delete(kosmos.framework.sqlclient.orm.OrmSelectParameter)
 	 */
 	@Override
-	public int delete(OrmUpdateParameter<?> condition) {
+	public int delete(OrmUpsertParameter<?> condition) {
 		String sql = sb.createDelete(condition.getEntityClass(),condition.getConditions());
 		FreeUpdateParameter parameter =new FreeUpdateParameter();
 		parameter.setSql(sql);
@@ -169,7 +169,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @param hints the hints 
 	 * @param engine the engine
 	 */
-	private void setHint(Map<String,Object> hints,FreeParameter parameter){
+	private void setHint(Map<String,Object> hints,FreeQueryParameter parameter){
 		for(Map.Entry<String, Object> e: hints.entrySet()){
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}
@@ -180,7 +180,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @param condition
 	 * @param parameter
 	 */
-	private void setCondition(OrmParameter<?> condition , final FreeParameter parameter){
+	private void setCondition(OrmQueryParameter<?> condition , final FreeQueryParameter parameter){
 		sb.setConditionParameters(condition.getConditions(), new Bindable(){
 			public void setParameter(String key , Object value){
 				parameter.getParam().put(key, value);
@@ -189,11 +189,11 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.orm.OrmQueryParameter, kosmos.framework.sqlclient.free.QueryCallback)
+	 * @see kosmos.framework.sqlclient.orm.strategy.InternalOrmQuery#getFetchResult(kosmos.framework.sqlclient.orm.OrmSelectParameter, kosmos.framework.sqlclient.free.QueryCallback)
 	 */
 	@Override
-	public <E> List<E> getFetchResult(OrmQueryParameter<E> condition) {
-		FreeQueryParameter parameter = createParameter(condition);
+	public <E> List<E> getFetchResult(OrmSelectParameter<E> condition) {
+		FreeSelectParameter parameter = createParameter(condition);
 		return internalQuery.getFetchResult(parameter);
 	}
 	
@@ -202,9 +202,9 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @param condition the condition
 	 * @return the parameter
 	 */
-	private <E> FreeQueryParameter createParameter(OrmQueryParameter<E> condition){
+	private <E> FreeSelectParameter createParameter(OrmSelectParameter<E> condition){
 		String sql = sb.createSelect(condition);
-		final FreeQueryParameter parameter = new FreeQueryParameter();
+		final FreeSelectParameter parameter = new FreeSelectParameter();
 		parameter.setSql(sql);
 		parameter.setResultType(condition.getEntityClass());
 		parameter.setQueryId(condition.getEntityClass().getName()+".select");

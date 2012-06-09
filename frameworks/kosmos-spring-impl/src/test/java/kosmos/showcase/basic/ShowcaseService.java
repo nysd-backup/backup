@@ -9,8 +9,8 @@ import java.util.List;
 import javax.persistence.LockModeType;
 
 import kosmos.framework.service.base.AbstractCoreService;
-import kosmos.framework.sqlclient.orm.OrmQuery;
-import kosmos.framework.sqlclient.orm.OrmUpdate;
+import kosmos.framework.sqlclient.orm.OrmSelect;
+import kosmos.framework.sqlclient.orm.OrmUpsert;
 import kosmos.framework.sqlclient.orm.PersistenceManager;
 import kosmos.showcase.entity.GeneratedChildEntity;
 import kosmos.showcase.entity.GeneratedEntity;
@@ -41,7 +41,7 @@ public class ShowcaseService extends AbstractCoreService{
 	public List<GeneratedEntity> search(List<String> attrList) {
 		
 		//検索
-		OrmQuery<GeneratedEntity> query = createOrmQuery(GeneratedEntity.class);
+		OrmSelect<GeneratedEntity> query = createOrmSelect(GeneratedEntity.class);
 		query.contains(GeneratedEntity.ATTR, attrList).setMaxResults(LIMIT+1);
 		List<GeneratedEntity> result = query.getResultList();
 		
@@ -61,7 +61,7 @@ public class ShowcaseService extends AbstractCoreService{
 	public void update(List<GeneratedEntity> updateTarget) {
 		
 		for(GeneratedEntity e : updateTarget){
-			GeneratedEntity result = createOrmQuery(GeneratedEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find(e.getPk());			
+			GeneratedEntity result = createOrmSelect(GeneratedEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find(e.getPk());			
 			long generatedId = -1;
 			e.setPk(String.valueOf(generatedId));
 			persister.persist(e, null);
@@ -72,7 +72,7 @@ public class ShowcaseService extends AbstractCoreService{
 				persister.merge(updating, result, null);
 				
 				//子テーブルの履歴番号を落とす
-				OrmUpdate<GeneratedChildEntity> update = createOrmUpdate(GeneratedChildEntity.class);
+				OrmUpsert<GeneratedChildEntity> update = createOrmUpsert(GeneratedChildEntity.class);
 				update.eq(GeneratedChildEntity.PK,e.getPk()).eq(GeneratedChildEntity.ATTR2, 1L).update();
 			}			
 		}
@@ -88,7 +88,7 @@ public class ShowcaseService extends AbstractCoreService{
 		List<GeneratedEntity> insertable = new ArrayList<GeneratedEntity>();
 		
 		for(GeneratedEntity e : updateTarget){
-			GeneratedEntity result = createOrmQuery(GeneratedEntity.class).find(e.getPk());			
+			GeneratedEntity result = createOrmSelect(GeneratedEntity.class).find(e.getPk());			
 			if(result == null){
 				insertable.add(e);
 			}else{

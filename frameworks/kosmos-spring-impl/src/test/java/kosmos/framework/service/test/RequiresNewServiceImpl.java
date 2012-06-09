@@ -16,7 +16,7 @@ import kosmos.framework.core.message.MessageResult;
 import kosmos.framework.service.core.activation.ServiceLocator;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.service.test.entity.TestEntity;
-import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmSelect;
 import kosmos.framework.sqlclient.orm.OrmQueryFactory;
 
 import org.eclipse.persistence.config.QueryHints;
@@ -46,7 +46,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	private MessageBuilder builder;
 	
 	public String test() {
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);		
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContext)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
@@ -54,7 +54,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public String crushException() {
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");

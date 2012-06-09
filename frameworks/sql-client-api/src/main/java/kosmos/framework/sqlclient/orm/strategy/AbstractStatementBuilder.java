@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import kosmos.framework.sqlclient.orm.FixString;
-import kosmos.framework.sqlclient.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.orm.OrmSelectParameter;
 import kosmos.framework.sqlclient.orm.SortKey;
 import kosmos.framework.sqlclient.orm.WhereCondition;
 import kosmos.framework.sqlclient.orm.WhereOperand;
@@ -22,10 +22,10 @@ import kosmos.framework.sqlclient.orm.WhereOperand;
 public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	
 	/**
-	 * @see kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder#createSelect(kosmos.framework.sqlclient.orm.OrmQueryParameter)
+	 * @see kosmos.framework.sqlclient.orm.strategy.SQLStatementBuilder#createSelect(kosmos.framework.sqlclient.orm.OrmSelectParameter)
 	 */
 	@Override
-	public String createSelect(OrmQueryParameter<?> condition){
+	public String createSelect(OrmSelectParameter<?> condition){
 		StringBuilder builder = createPrefix(condition.getEntityClass());		
 		builder.append(generateWhere(condition.getConditions())).append(generateOrderBy(condition.getSortKeys()));
 		return afterCreateSelect(builder,condition).toString();
@@ -36,7 +36,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition the condition
 	 * @return query;
 	 */
-	protected StringBuilder afterCreateSelect(StringBuilder query, OrmQueryParameter<?> condition){
+	protected StringBuilder afterCreateSelect(StringBuilder query, OrmSelectParameter<?> condition){
 		return query;
 	}
 	

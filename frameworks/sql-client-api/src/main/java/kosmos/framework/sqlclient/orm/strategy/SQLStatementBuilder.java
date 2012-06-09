@@ -6,7 +6,7 @@ package kosmos.framework.sqlclient.orm.strategy;
 import java.util.List;
 import java.util.Map;
 
-import kosmos.framework.sqlclient.orm.OrmQueryParameter;
+import kosmos.framework.sqlclient.orm.OrmSelectParameter;
 import kosmos.framework.sqlclient.orm.WhereCondition;
 
 
@@ -24,7 +24,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createSelect(OrmQueryParameter<?> condition);
+	public String createSelect(OrmSelectParameter<?> condition);
 	
 	/**
 	 * Creates the SQL statement.

@@ -19,10 +19,10 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @version　 created.
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractFreeQuery {
+public abstract class AbstractFreeSelect {
 	
 	/** the delegate */
-	private FreeQueryParameter condition = null;
+	private FreeSelectParameter condition = null;
 
 	/** the internal query */
 	private InternalQuery internalQuery = null;
@@ -30,7 +30,7 @@ public abstract class AbstractFreeQuery {
 	/**
 	 * @return the condition
 	 */
-	public FreeQueryParameter getParameter(){
+	public FreeSelectParameter getParameter(){
 		return this.condition;
 	}
 	
@@ -44,8 +44,8 @@ public abstract class AbstractFreeQuery {
 	/**
 	 *　Constructor 
 	 */
-	public AbstractFreeQuery(){
-		condition = new FreeQueryParameter();
+	public AbstractFreeSelect(){
+		condition = new FreeSelectParameter();
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public abstract class AbstractFreeQuery {
 	 * @param arg1 the param
 	 * @return self
 	 */
-	public <T extends AbstractFreeQuery> T setBranchParameter(String arg0, Object arg1) {
+	public <T extends AbstractFreeSelect> T setBranchParameter(String arg0, Object arg1) {
 		condition.getBranchParam().put(arg0, arg1);
 		return (T)this;
 	}
@@ -95,7 +95,7 @@ public abstract class AbstractFreeQuery {
 	 * @param arg0 the start position that starts with 1
 	 * @return self
 	 */
-	public <T extends AbstractFreeQuery> T setFirstResult(int arg0) {
+	public <T extends AbstractFreeSelect> T setFirstResult(int arg0) {
 		condition.setFirstResult(arg0);
 		return (T)this;
 	}
@@ -105,7 +105,7 @@ public abstract class AbstractFreeQuery {
 	 * @param arg0 the size to get
 	 * @return self
 	 */
-	public <T extends AbstractFreeQuery> T setMaxResults(int arg0) {
+	public <T extends AbstractFreeSelect> T setMaxResults(int arg0) {
 		condition.setMaxSize(arg0);
 		return (T)this;
 	}
@@ -116,7 +116,7 @@ public abstract class AbstractFreeQuery {
 	 * @param arg1 the param
 	 * @return self
 	 */
-	public <T extends AbstractFreeQuery> T setParameter(String arg0, Object arg1) {
+	public <T extends AbstractFreeSelect> T setParameter(String arg0, Object arg1) {
 		condition.getParam().put(arg0, arg1);
 		return (T)this;
 	}
@@ -127,7 +127,7 @@ public abstract class AbstractFreeQuery {
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public <T extends AbstractFreeQuery> T setHint(String arg0, Object arg1) {
+	public <T extends AbstractFreeSelect> T setHint(String arg0, Object arg1) {
 		condition.getHints().put(arg0,arg1);
 		return (T)this;
 	}

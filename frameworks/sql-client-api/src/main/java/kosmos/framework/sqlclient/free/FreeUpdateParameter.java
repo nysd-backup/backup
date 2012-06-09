@@ -10,6 +10,6 @@ package kosmos.framework.sqlclient.free;
  * @author yoshida-n
  * @version	created.
  */
-public class FreeUpdateParameter extends FreeParameter{
+public class FreeUpdateParameter extends FreeQueryParameter{
 
 }

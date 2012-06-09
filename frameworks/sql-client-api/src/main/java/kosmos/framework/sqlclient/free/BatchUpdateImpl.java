@@ -38,10 +38,10 @@ public class BatchUpdateImpl implements BatchUpdate{
 	}
 
 	/**
-	 * @see kosmos.framework.sqlclient.free.BatchUpdate#addBatch(kosmos.framework.sqlclient.free.AbstractNativeUpdate)
+	 * @see kosmos.framework.sqlclient.free.BatchUpdate#addBatch(kosmos.framework.sqlclient.free.AbstractNativeUpsert)
 	 */
 	@Override
-	public void addBatch(AbstractNativeUpdate parameter) {
+	public void addBatch(AbstractNativeUpsert parameter) {
 		addBatch(parameter.getParameter());
 	}
 

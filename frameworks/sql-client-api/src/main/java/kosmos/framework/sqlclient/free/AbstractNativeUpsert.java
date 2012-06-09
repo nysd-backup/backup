@@ -4,15 +4,15 @@
 package kosmos.framework.sqlclient.free;
 
 
+
+
 /**
- * NamedUpdate.
+ * The native updater.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractNamedUpdate extends AbstractFreeUpdate{
-	
-
-
+public abstract class AbstractNativeUpsert extends AbstractFreeUpsert{
 	
 }
+

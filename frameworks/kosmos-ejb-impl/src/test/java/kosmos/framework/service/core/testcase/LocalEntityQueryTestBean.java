@@ -24,9 +24,9 @@ import kosmos.framework.service.core.entity.TestEntity;
 import kosmos.framework.service.core.services.RequiresNewService;
 import kosmos.framework.service.core.transaction.ServiceContext;
 import kosmos.framework.sqlclient.exception.UniqueConstraintException;
-import kosmos.framework.sqlclient.orm.OrmQuery;
+import kosmos.framework.sqlclient.orm.OrmSelect;
 import kosmos.framework.sqlclient.orm.OrmQueryFactory;
-import kosmos.framework.sqlclient.orm.OrmUpdate;
+import kosmos.framework.sqlclient.orm.OrmUpsert;
 
 import org.eclipse.persistence.config.QueryHints;
 
@@ -66,7 +66,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 		
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);	
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
 		List<TestEntity> result = getOneRecord(query);
@@ -77,7 +77,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		per.getEntityManager().detach(first);
 		first.setAttr("100");
 		
-		OrmQuery<TestEntity> forres = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class);
 		List<TestEntity> updated = getOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
 		
@@ -89,7 +89,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		//更新前取征E
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		List<TestEntity> result = getOneRecord(query);	
 		assertEquals(1,result.size());
 		
@@ -98,7 +98,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		first.setAttr("100");
 	
 		//更新結果
-		OrmQuery<TestEntity> forres = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class);
 		TestEntity entity = forres.eq(ITestEntity.TEST, "2").getSingleResult();
 		assertEquals("100",entity.getAttr());
 		
@@ -114,11 +114,11 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
 		//更新
-		OrmUpdate<TestEntity> update = ormQueryFactory.createUpdate(TestEntity.class);
+		OrmUpsert<TestEntity> update = ormQueryFactory.createUpsert(TestEntity.class);
 		update.eq(ITestEntity.TEST, "2").set(ITestEntity.ATTR, "AAA").update();
 		
 		//検索
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(ITestEntity.TEST, "2").getSingleResult();
@@ -136,7 +136,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).desc(ITestEntity.TEST);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).desc(ITestEntity.TEST);
 		TestEntity result = query.getSingleResult();
 		assertEquals("2",result.getAttr());
 		
@@ -150,7 +150,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void getSingleResultWithAsc(){
 		setUpData("TEST.xls");
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).asc(ITestEntity.TEST);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).asc(ITestEntity.TEST);
 		TestEntity result = query.getSingleResult();
 		assertEquals("3",result.getAttr());
 		
@@ -166,7 +166,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).desc(ITestEntity.TEST);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).desc(ITestEntity.TEST);
 		query.setFirstResult(1);
 		TestEntity result = query.getSingleResult();
 		assertEquals("3",result.getAttr());
@@ -182,7 +182,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		query.setFirstResult(1);
 		List<TestEntity> result = query.getResultList();
 		assertEquals(1,result.size());
@@ -211,7 +211,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		t.setTest("902").setAttr("902").setAttr2(900);
 		per.getEntityManager().persist(t);
 		
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).desc(ITestEntity.TEST);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).desc(ITestEntity.TEST);
 		query.contains(ITestEntity.TEST, Arrays.asList("0","1,","2","900","901","902"));
 		query.setFirstResult(1);
 		query.setMaxResults(2);
@@ -239,7 +239,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //	public void nodataError(){
 //		try{	
 //			OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
-//			OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).enableNoDataError();
+//			OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).enableNoDataError();
 //			query.eq(ITestEntity.TEST, "AGA").getSingleResult();
 //			context.setRollbackOnly();
 //			fail();
@@ -259,12 +259,12 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void find(){	
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		TestEntity result = query.find("1");
 		per.getEntityManager().detach(result);
 		result.setAttr("1100");
 		
-		OrmQuery<TestEntity> query2 = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query2 = ormQueryFactory.createSelect(TestEntity.class);
 		result = query2.find("1");
 		assertEquals("3",result.getAttr());
 		context.setRollbackOnly();
@@ -278,11 +278,11 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");	
 			OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		TestEntity result = query.find("1");
 		result.setAttr("1100");
 		
-		OrmQuery<TestEntity> query2 = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query2 = ormQueryFactory.createSelect(TestEntity.class);
 		result = query2.find("1");
 		assertEquals("1100",result.getAttr());
 		context.setRollbackOnly();
@@ -295,7 +295,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //	public void findNodataError(){
 //		try{	OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 //
-//			OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+//			OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 //			query.enableNoDataError();
 //			query.find("AA");
 //			fail();
@@ -313,7 +313,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //	public void findAnyNodataError(){
 //		try{	OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 //
-//			OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+//			OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 //			query.enableNoDataError();
 //			query.eq(ITestEntity.TEST, "aaa");
 //			query.findAny();
@@ -333,7 +333,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void exists(){
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 		setUpData("TEST.xls");
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);		
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);		
 		assertTrue(query.getSingleResult() != null);
 		context.setRollbackOnly();
 	}
@@ -346,7 +346,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 			OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		assertFalse(query.find("AGA") != null);
 		context.setRollbackOnly();
 	}
@@ -359,7 +359,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");	
 			OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		assertTrue(query.find("1") != null);
 		context.setRollbackOnly();
 	}
@@ -423,7 +423,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void versionNoError(){	OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 	setUpData("TEST.xls");
 		
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		final TestEntity result = query.find("1");
 		result.setVersion(2);
 		try{
@@ -445,7 +445,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		
 			OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
 
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
 		final TestEntity result = query.find("1");
 		result.setVersion(2);
 		
@@ -490,7 +490,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		impl.setSuppressOptimisticLockError();
 		
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
-		ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
+		ormQueryFactory.createSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 	
 		assertEquals("OK",service.test());	
 		
@@ -506,7 +506,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
-		ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
+		ormQueryFactory.createSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		try{
 			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
@@ -539,7 +539,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();		
-		ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
+		ormQueryFactory.createSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ).find("1");
 
 		//Springと異なり、自律トランザクション先のEntityManagerがrollbackOnlyでもExceptionはスローされない。
 		assertEquals("NG",service.crushException());
@@ -559,7 +559,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();		
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		
 		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
@@ -594,7 +594,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();		
-		OrmQuery<TestEntity> query = ormQueryFactory.createQuery(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		query.setHint(QueryHints.HINT, "/* TEST */");
 		
@@ -619,7 +619,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());
 		per.getEntityManager().persist(entity);
 		
-		OrmQuery<DateEntity> query = ormQueryFactory.createQuery(DateEntity.class);
+		OrmSelect<DateEntity> query = ormQueryFactory.createSelect(DateEntity.class);
 		assertFalse(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").getSingleResult()!=null);
 		context.setRollbackOnly();
 	}
@@ -628,7 +628,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	/**
 	 * @return
 	 */
-	private List<TestEntity> getOneRecord(OrmQuery<TestEntity> query ){	
+	private List<TestEntity> getOneRecord(OrmSelect<TestEntity> query ){	
 		query.between(ITestEntity.TEST, "0", "30").eq(ITestEntity.TEST,"2").gtEq(ITestEntity.TEST, "0").ltEq(ITestEntity.TEST, "30").lt(ITestEntity.TEST, "30").gt(ITestEntity.TEST, "0");		
 		query.between(ITestEntity.ATTR, "0", "20").eq(ITestEntity.ATTR,"2").gtEq(ITestEntity.ATTR, "0").ltEq(ITestEntity.ATTR, "20").lt(ITestEntity.ATTR, "20").gt(ITestEntity.ATTR, "0");
 		query.between(ITestEntity.ATTR2, 0, 100).eq(ITestEntity.ATTR2,2).gtEq(ITestEntity.ATTR2, 0).ltEq(ITestEntity.ATTR2, 100).lt(ITestEntity.ATTR2, 100).gt(ITestEntity.ATTR2, 0);		
