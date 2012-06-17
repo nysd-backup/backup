@@ -1,14 +1,14 @@
 ﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>kosmos.framework</groupId>
+	<groupId>alpha</groupId>
 	<artifactId>framework-base</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>フレームワーク</name>
 
 	<parent>
-		<groupId>kosmos</groupId>
+		<groupId>alpha</groupId>
 		<artifactId>base</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
@@ -81,13 +81,13 @@
 				<module>sql-engine</module>
 				<module>sql-client-api</module>
 				<module>sql-client-impl</module>			
-				<module>jpql-client-impl</module>				
-				<module>kosmos-core</module>			
-				<module>kosmos-platform-api</module>
-				<module>kosmos-spring-impl</module>	
-				<module>kosmos-ejb-impl</module>	
-				<module>kosmos-web</module>		
-				<module>kosmos-web-spring</module>													
+				<module>sql-client-elink-impl</module>				
+				<module>alpha-core</module>			
+				<module>alpha-platform-api</module>
+				<module>alpha-spring-impl</module>				
+				<module>alpha-web</module>		
+				<module>alpha-web-spring</module>	
+				<module>alpha-ejb-impl</module>													
 			</modules>
 		</profile>
 	</profiles>
