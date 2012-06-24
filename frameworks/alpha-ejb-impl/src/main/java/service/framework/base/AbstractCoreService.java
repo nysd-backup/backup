@@ -4,22 +4,20 @@
 package service.framework.base;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.persistence.EntityManager;
 
-import client.sql.elink.EntityManagerProvider;
+import service.client.messaging.MessageClientFactory;
+import service.framework.core.activation.ServiceLocator;
+import service.framework.core.activation.ServiceLocatorImpl;
 import client.sql.free.AbstractNativeSelect;
 import client.sql.free.AbstractNativeUpsert;
 import client.sql.free.QueryFactory;
 import client.sql.orm.OrmQueryFactory;
 import client.sql.orm.OrmSelect;
 import client.sql.orm.OrmUpdate;
-
 import core.base.AbstractEntity;
-
-
-import service.client.messaging.MessageClientFactory;
-import service.framework.base.AbstractService;
-import service.framework.core.activation.ServiceLocator;
 
 
 /**
@@ -31,14 +29,14 @@ import service.framework.core.activation.ServiceLocator;
  */
 public abstract class AbstractCoreService extends AbstractService{
 
+	@Resource
+	private EJBContext context;
+
 	/** ORMクエリファクトリ */
 	private OrmQueryFactory ormQueryFactory;
 	
 	/** クエリファクトリ */
 	private QueryFactory queryFactory;
-	
-	/** 永続化処理 */
-	private EntityManager em;
 	
 	/** 非同期メッセージクライアントファクトリ */
 	private MessageClientFactory messageClientFactory;
@@ -49,11 +47,29 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	@PostConstruct
 	public void postConstruct(){
-		ormQueryFactory = ServiceLocator.createDefaultOrmQueryFactory();
-		queryFactory = ServiceLocator.createDefaultQueryFactory();
-		em = ServiceLocator.lookupByInterface(EntityManagerProvider.class).getEntityManager();
+		ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory(getEntityManager());
+		queryFactory = ServiceLocatorImpl.createDefaultQueryFactory(getEntityManager());		
 		messageClientFactory = ServiceLocator.createDefaultMessageClientFactory();
 	}
+	
+	/**
+	 * @see service.framework.base.AbstractService#isRollbackOnly()
+	 */
+	@Override
+	protected boolean isRollbackOnly(){
+		return super.isRollbackOnly() || context.getRollbackOnly();
+	}
+	
+	/**
+	 * Gets the EntityManager.
+	 * 
+	 * <pre>
+	 * 	@PersistenceContext(unitName="default")
+	 *  private EntityManager em;
+	 * </pre>
+	 * @return EntityManager 
+	 */
+	protected abstract EntityManager getEntityManager();
 	
 	/**
 	 * P2P用非同期処理.
@@ -111,7 +127,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	@SuppressWarnings("unchecked")
 	protected <V extends AbstractEntity,T extends OrmSelect<V>> T createOrmSelect(Class<V> entityClass){
-		OrmSelect<V> query = ormQueryFactory.createSelect(entityClass);		
+		OrmSelect<V> query = ormQueryFactory.createSelect(entityClass,getEntityManager());		
 		return (T)query;
 	}
 	
@@ -131,7 +147,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	@SuppressWarnings("unchecked")
 	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createOrmUpdate(Class<V> entityClass){
-		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass);		
+		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass,getEntityManager());		
 		return (T)query;
 	}
 	
@@ -166,7 +182,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	protected <T extends AbstractNativeSelect> T createSelect(Class<T> queryClass){
-		return queryFactory.createSelect(queryClass);
+		T query = queryFactory.createSelect(queryClass,getEntityManager());
+		return query;
 	}
 	
 	/**
@@ -184,7 +201,8 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return アップデータ
 	 */
 	protected <T extends AbstractNativeUpsert> T createUpsert(Class<T> updateClass){
-		return queryFactory.createUpsert(updateClass);
+		T query = queryFactory.createUpsert(updateClass,getEntityManager());
+		return query;
 	}
 
 	/**
@@ -198,7 +216,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @param entity
 	 */
 	protected void persist(AbstractEntity entity){
-		em.persist(entity);
+		getEntityManager().persist(entity);
 	}
 	
 	/**
@@ -212,7 +230,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @param entity 更新対象エンティティ
 	 */
 	protected void remove(AbstractEntity entity){
-		em.remove(entity);
+		getEntityManager().remove(entity);
 	}
 	
 	/**
@@ -220,7 +238,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @param entity 更新対象エンティティ
 	 */
 	protected void detach(AbstractEntity entity){
-		em.detach(entity);
+		getEntityManager().detach(entity);
 	}
 	
 	/**
@@ -228,7 +246,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * 楽観ロックエラーやSQL実行エラーなどはこのタイミングで発生する。
 	 */
 	protected void flush() {
-		em.flush();
+		getEntityManager().flush();
 	}
 		
 }

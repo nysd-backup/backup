@@ -7,10 +7,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.ejb.embeddable.EJBContainer;
-
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -42,14 +40,9 @@ public abstract class ServiceUnit extends Assert{
 		prop.put("org.glassfish.ejb.embedded.glassfish.instance.root", "C:/Project/Personal/glassfishv3/glassfish/domains/domain1");
 		container = EJBContainer.createEJBContainer(prop);
 		
-		Properties properties = new Properties();
-	     properties.put("java.naming.factory.initial", "com.sun.enterprise.naming.impl.SerialInitContextFactory");
-	     properties.put("java.naming.factory.url.pkgs", "com.sun.enterprise.naming");
-	     properties.put("java.naming.factory.state", "com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl");
-	     properties.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
-	     properties.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
 		
-		new StubServiceLocator(properties);
+		
+		new StubServiceLocator();
 		
 		try{
 			Class<?> clazz = Class.forName(CachableConst.class.getName());					

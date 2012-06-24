@@ -33,13 +33,5 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     </bean>
 	
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
- 
-    <!-- テスト用サービス -->
-  <bean id="constLoader" class="framework.adapter.service.sqlengine.ConstLoaderImpl" scope="singleton">
-		<property name="classNames" value="framework.service.test.CachableConst" />
-	</bean>	
-	<bean id="jpaQueryFactory" class="service.query.impl.JPAQueryFactory" scope="prototype" >
-		<property name="entityManagerProvider" ref="entityManagerProvider"/>
-		<property name="queryBuilder" ref="queryBuilder"/>
-	</bean>
+
 </beans>

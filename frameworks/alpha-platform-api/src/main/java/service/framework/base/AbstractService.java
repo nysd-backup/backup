@@ -263,8 +263,7 @@ public abstract class AbstractService {
 	 * @return true:ロールバック状態
 	 */
 	protected boolean isRollbackOnly(){
-		ServiceContext context = ServiceContext.getCurrentInstance();
-		return context.getCurrentUnitOfWork().isRollbackOnly();
+		return ServiceContext.getCurrentInstance().isRollbackOnly();
 	}
 	
 	/**

@@ -16,7 +16,6 @@ public class ServiceTestContextImpl extends ServiceContextImpl{
 	private boolean suppressOptimisticLockError = false;
 	
 	public void refleshTransactionScope(){
-		super.endUnitOfWork();
 		suppressOptimisticLockError = false;
 	}
 	

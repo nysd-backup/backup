@@ -22,7 +22,7 @@ import service.framework.core.activation.ServiceLocator;
 public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	private LocalEntityQueryTestBean bean(){
-		return ServiceLocator.lookup(LocalEntityQueryTestBean.class.getSimpleName());
+		return ServiceLocator.getService(LocalEntityQueryTestBean.class.getSimpleName());
 	}
 	
 	/**

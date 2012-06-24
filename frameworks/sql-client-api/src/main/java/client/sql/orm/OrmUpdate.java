@@ -2,6 +2,8 @@ package client.sql.orm;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import client.sql.orm.strategy.InternalOrmQuery;
 
 
@@ -24,9 +26,10 @@ public class OrmUpdate<T> {
 	/**
 	 * @param entityClass the entity class
 	 */
-	OrmUpdate(Class<T> entityClass,InternalOrmQuery internalQuery){
+	OrmUpdate(Class<T> entityClass,InternalOrmQuery internalQuery,EntityManager em){
 		this.condition = new OrmUpdateParameter<T>(entityClass);
 		this.internalQuery = internalQuery;
+		this.condition.setEntityManager(em);
 	}
 
 	/**

@@ -63,7 +63,7 @@ public class MessageListenerImpl implements MessageListener{
 	 */
 	protected Object invoke(InvocationParameter dto) throws Throwable{
 
-		Object service = ServiceLocator.lookup(dto.getServiceName());					
+		Object service = ServiceLocator.getService(dto.getServiceName());				
 		Method m = null;
 		if(dto.getParameterTypeNames() == null){
 			m = service.getClass().getMethod(dto.getMethodName());

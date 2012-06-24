@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PessimisticLockException;
 
 import org.eclipse.persistence.config.QueryHints;
@@ -42,7 +41,7 @@ import core.message.MessageResult;
 @Service
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Transactional(propagation=Propagation.REQUIRES_NEW)
-public class RequiresNewServiceImpl implements RequiresNewService{
+public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 
 	@Resource
 	private OrmQueryFactory ormQueryFactory;
@@ -50,7 +49,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	@Autowired
 	private MessageBuilder builder;
 	
-	@PersistenceContext(unitName="oracle")
+	@Autowired
 	private EntityManager per;
 	
 	@PostConstruct

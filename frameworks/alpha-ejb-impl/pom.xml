@@ -15,14 +15,16 @@
 
 	<dependencies>		
 		<dependency>
-		    <groupId>com.sun.jersey</groupId>
-		    <artifactId>jersey-server</artifactId>
-		    <version>1.5</version>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.5</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.sun.jersey</groupId>
-		    <artifactId>jersey-json</artifactId>
-		    <version>1.5</version>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.5</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 		    <groupId>alpha</groupId>
@@ -81,34 +83,21 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>test</scope>
-		</dependency>				
+		</dependency>			
+		<dependency>
+			<groupId>org.glassfish.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+  			<version>3.1</version>
+			<scope>test</scope>					
+		</dependency>
+		<dependency>
+		    <groupId>javax</groupId>
+		    <artifactId>javaee-api</artifactId>
+		    <version>${javaee.version}</version>
+		    <scope>provided</scope>
+		</dependency>			
 	</dependencies>
 	
-	<profiles>
-		<profile>
-			<id>test</id>
-			<activation><activeByDefault>true</activeByDefault></activation>
-			<dependencies>
-				<!-- for test -->
-				<dependency>
-				<groupId>org.glassfish.extras</groupId>
-				<artifactId>glassfish-embedded-all</artifactId>
-    			<version>3.1</version>
-				<scope>test</scope>					
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>deployTo</id>
-			<dependencies>	
-				<dependency>
-				    <groupId>javax</groupId>
-				    <artifactId>javaee-api</artifactId>
-				    <version>${javaee.version}</version>
-				    <scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
+	
 
 </project>

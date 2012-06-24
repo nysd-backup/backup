@@ -3,31 +3,17 @@
  */
 package client.sql.orm.strategy;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.NonUniqueResultException;
-
-
-import org.apache.commons.lang.StringUtils;
-
-import client.sql.ReflectionUtils;
 import client.sql.free.FreeQueryParameter;
 import client.sql.free.FreeSelectParameter;
 import client.sql.free.FreeUpsertParameter;
 import client.sql.free.strategy.InternalQuery;
-import client.sql.orm.FastEntity;
 import client.sql.orm.FixString;
 import client.sql.orm.OrmQueryParameter;
 import client.sql.orm.OrmSelectParameter;
 import client.sql.orm.OrmUpdateParameter;
-import client.sql.orm.WhereCondition;
-import client.sql.orm.WhereOperand;
-import client.sql.orm.strategy.InternalOrmQuery;
-import client.sql.orm.strategy.SQLStatementBuilder;
 import client.sql.orm.strategy.SQLStatementBuilder.Bindable;
 
 
@@ -40,7 +26,7 @@ import client.sql.orm.strategy.SQLStatementBuilder.Bindable;
 public class InternalOrmQueryImpl implements InternalOrmQuery{
 	
 	/** the SQLStatementBuilder */
-	private SQLStatementBuilder sb = new SQLStatementBuilderImpl();
+	private SQLStatementBuilder sb = null;
 	
 	/** the internal query */
 	private InternalQuery internalQuery;
@@ -63,51 +49,18 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @see client.sql.orm.strategy.InternalOrmQuery#find(java.lang.Class, java.util.Map, java.lang.Object[])
 	 */
 	@Override
-	public <E> E find(OrmSelectParameter<E> context,Object... pks) {
-		
-		OrmSelectParameter<E> newContext = new OrmSelectParameter<E>(context.getEntityClass());
-
-		//高速エンティティ
-		if(FastEntity.class.isAssignableFrom(context.getEntityClass())){
-			
-			FastEntity entity = (FastEntity)ReflectionUtils.newInstance(context.getEntityClass());
-			int i = 0;
-			for(String e: entity.toPrimaryKeys().keySet()){
-				newContext.getConditions().add(new WhereCondition(e,i,WhereOperand.Equal,pks[i]));
-				i++;
-			}
-		//通常エンティティ	
+	public <E> E find(OrmSelectParameter<E> context,Object... pks) {		
+		Object v = pks;
+		if( pks.length == 1){
+			v = pks[0];
+		}
+		E result = null;
+		if(context.getLockModeType() != null){
+			result = (E)context.getEntityManager().find(context.getEntityClass(),v,context.getLockModeType(),context.getHints());
 		}else{
-			List<Method> ms = ReflectionUtils.getAnotatedGetter(context.getEntityClass(), Id.class);
-			if(ms.size() != pks.length){
-				throw new IllegalArgumentException("invalid primary key count");
-			}		
-			for(int i = 0 ; i < ms.size(); i++){
-				Object pk = pks[i];
-				Method f = ms.get(i);
-				Column col = f.getAnnotation(Column.class);
-				String name = col.name();
-				if(StringUtils.isEmpty(name)){
-					name = ReflectionUtils.getPropertyNameFromGetter(f);
-				}
-				newContext.getConditions().add(new WhereCondition(name,i,WhereOperand.Equal,pk));
-			}
+			result = (E)context.getEntityManager().find(context.getEntityClass(),v,context.getHints()); 
 		}
-
-		newContext.setFirstResult(context.getFirstResult());
-		newContext.setMaxSize(2);
-		newContext.setLockModeType(context.getLockModeType());
-		for(Map.Entry<String, Object> h : context.getHints().entrySet()){
-			newContext.setHint(h.getKey(), h.getValue());
-		}		
-		
-		List<E> resultList = getResultList(newContext);
-		if(resultList.isEmpty()){
-			return null;
-		}else if(resultList.size() > 1){
-			throw new NonUniqueResultException("too many rows entity = " + context.getEntityClass() + " :pkvalue = " + pks );
-		}
-		return resultList.get(0);
+		return result;
 	}
 
 	/**
@@ -123,19 +76,16 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @see client.sql.orm.strategy.InternalOrmQuery#update(client.sql.orm.OrmSelectParameter, java.util.Map)
 	 */
 	@Override
-	public int update(OrmUpdateParameter<?> condition) {
-		
+	public int update(OrmUpdateParameter<?> condition) {		
 		String sql = sb.createUpdate(condition.getEntityClass(),condition.getConditions(), condition.getCurrentValues());		
-		final FreeUpsertParameter parameter = new FreeUpsertParameter();
-		parameter.setSql(sql);
-		parameter.setQueryId(condition.getEntityClass().getName()+".update");
-		setCondition(condition,parameter);
+		FreeUpsertParameter parameter = createParameter(condition,sql,condition.getEntityClass().getName()+".update");			
 		
-		//set statement
-		setUpdateValule(parameter,condition.getCurrentValues());
-		
-		setHint(condition.getHints(),parameter);
-		
+		// for set statement
+		for(Map.Entry<String, Object> v: condition.getCurrentValues().entrySet()){
+			if(!(v.getValue() instanceof FixString)){
+				parameter.getParam().put(v.getKey(),v.getValue());
+			}
+		}
 		return internalQuery.executeUpdate(parameter);
 	}
 
@@ -145,26 +95,55 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	@Override
 	public int delete(OrmUpdateParameter<?> condition) {
 		String sql = sb.createDelete(condition.getEntityClass(),condition.getConditions());
-		FreeUpsertParameter parameter =new FreeUpsertParameter();
-		parameter.setSql(sql);
-		parameter.setQueryId(condition.getEntityClass().getName()+".delete");
-		setCondition(condition,parameter);
-		setHint(condition.getHints(),parameter);
+		FreeUpsertParameter parameter = createParameter(condition,sql,condition.getEntityClass().getName()+".delete");	
 		return internalQuery.executeUpdate(parameter);
+	}
+
+	/**
+	 * @see client.sql.orm.strategy.InternalOrmQuery#getFetchResult(client.sql.orm.OrmSelectParameter, client.sql.free.QueryCallback)
+	 */
+	@Override
+	public <E> List<E> getFetchResult(OrmSelectParameter<E> condition) {
+		FreeSelectParameter parameter = createParameter(condition);
+		return internalQuery.getFetchResult(parameter);
 	}
 	
 	/**
-	 * Sets the updating value.
-	 * 
-	 * @param parameter the parameter to
-	 * @param bind the bind
+	 * Creates the updating parameter
+	 * @param condition
+	 * @param sql
+	 * @param sqlId
+	 * @return
 	 */
-	private void setUpdateValule(FreeUpsertParameter parameter, Map<String,Object> bind){
-		for(Map.Entry<String, Object> v: bind.entrySet()){
-			if(!(v.getValue() instanceof FixString)){
-				parameter.getParam().put(v.getKey(),v.getValue());
-			}
-		}
+	private <E> FreeUpsertParameter createParameter(OrmUpdateParameter<E> condition,String sql,String sqlId){
+		FreeUpsertParameter parameter = new FreeUpsertParameter();
+		parameter.setEntityManager(condition.getEntityManager());
+		parameter.setSql(sql);
+		parameter.setQueryId(sqlId);
+		setCondition(condition,parameter);
+		setHint(condition.getHints(),parameter);
+		return parameter;
+		
+	}
+	
+	/**
+	 * Creates the selecting parameter
+	 * @param condition the condition
+	 * @return the parameter
+	 */
+	private <E> FreeSelectParameter createParameter(OrmSelectParameter<E> condition){
+		String sql = sb.createSelect(condition);
+		final FreeSelectParameter parameter = new FreeSelectParameter();		
+		parameter.setEntityManager(condition.getEntityManager());
+		parameter.setLockMode(condition.getLockModeType());
+		parameter.setSql(sql);
+		parameter.setResultType(condition.getEntityClass());
+		parameter.setQueryId(condition.getEntityClass().getName()+".select");
+		setCondition(condition,parameter);
+		setHint(condition.getHints(),parameter);
+		parameter.setFirstResult( condition.getFirstResult());			
+		parameter.setMaxSize(condition.getMaxSize());
+		return parameter;
 	}
 	
 	/**
@@ -190,39 +169,6 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 				parameter.getParam().put(key, value);
 			}
 		});
-	}
-
-	/**
-	 * @see client.sql.orm.strategy.InternalOrmQuery#getFetchResult(client.sql.orm.OrmSelectParameter, client.sql.free.QueryCallback)
-	 */
-	@Override
-	public <E> List<E> getFetchResult(OrmSelectParameter<E> condition) {
-		FreeSelectParameter parameter = createParameter(condition);
-		return internalQuery.getFetchResult(parameter);
-	}
-	
-	/**
-	 * Creates the selecting parameter
-	 * @param condition the condition
-	 * @return the parameter
-	 */
-	private <E> FreeSelectParameter createParameter(OrmSelectParameter<E> condition){
-		String sql = sb.createSelect(condition);
-		final FreeSelectParameter parameter = new FreeSelectParameter();
-		parameter.setSql(sql);
-		parameter.setResultType(condition.getEntityClass());
-		parameter.setQueryId(condition.getEntityClass().getName()+".select");
-	
-		sb.setConditionParameters(condition.getConditions(),new Bindable(){
-			public void setParameter(String key , Object value){
-				parameter.getParam().put(key, value);
-			}
-		});
-
-		setHint(condition.getHints(),parameter);
-		parameter.setFirstResult( condition.getFirstResult());			
-		parameter.setMaxSize(condition.getMaxSize());
-		return parameter;
 	}
 
 

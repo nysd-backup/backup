@@ -3,8 +3,9 @@
  */
 package service.framework.core.transaction;
 
-import core.exception.PoorImplementationException;
-import service.framework.core.transaction.ServiceContext;
+import java.util.Stack;
+
+
 
 /**
  * the context.
@@ -14,18 +15,61 @@ import service.framework.core.transaction.ServiceContext;
  */
 public class ServiceContextImpl extends ServiceContext{
 
+	private Stack<InternalUnitOfWork> unitOfWorkStack = new Stack<InternalUnitOfWork>();;
+	
 	/**
-	 * @see service.framework.core.transaction.TransactionManagingContext#startUnitOfWork()
+	 * @see service.framework.core.transaction.ServiceContext#setRollbackOnly()
 	 */
 	@Override
-	public void startUnitOfWork(){
-		//EJBの場合、トランザクション境界の判定ができないため、トランザクション境界に限らず常に1つのNamedInternalUnitOfWorkを使用する。
-		//従って自律トランザクションのサービスでは絶対にContextにaddMessageしたりsetRollbatkOnlyToCurrentTransactionは絶対に使用してはならない。
-		//代わりにSessionContext#setRollbackOnlyを使用するかExceptionをスローすること	
-		if(unitOfWorkStack.size() >= 1){
-			throw new PoorImplementationException("cannot start next unitOfwork in EJB");
-		}
-		unitOfWorkStack.push(createInternalUnitOfWork());
+	public void setRollbackOnly(){
+		getCurrentUnitOfWork().setRollbackOnly();
 	}
 	
+	/**
+	 * @see service.framework.core.transaction.ServiceContext#isRollbackOnly()
+	 */
+	@Override
+	public boolean isRollbackOnly(){
+		return getCurrentUnitOfWork().isRollbackOnly();
+	}
+
+	/**
+	 * @return current unitOfWorkStack
+	 */
+	public InternalUnitOfWork getCurrentUnitOfWork(){
+		return unitOfWorkStack.peek();
+	}
+	
+	/**
+	 * Start unit of work.
+	 */
+	public void startUnitOfWork(){
+		unitOfWorkStack.push(new InternalUnitOfWork());
+	}
+	
+	/**
+	 * Finish unit of work.
+	 */
+	public void endUnitOfWork(){
+		unitOfWorkStack.pop();
+	}
+
+	/**
+	 * @see service.framework.core.transaction.ServiceContext#initialize()
+	 */
+	@Override
+	public void initialize(){
+		super.initialize();
+		unitOfWorkStack = new Stack<InternalUnitOfWork>();		
+	}
+	
+	/**
+	 * @see service.framework.core.transaction.ServiceContext#release()
+	 */
+	@Override
+	public void release(){	
+		unitOfWorkStack.clear();
+		unitOfWorkStack = null;
+		super.release();				
+	}
 }

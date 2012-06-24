@@ -60,11 +60,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 	
-	<bean id="clientQueryFactory" parent="queryFactory" scope="prototype" />
-	
-		<!-- エンティティマネージャの提供-->
-	<bean id="entityManagerProvider" class="service.core.EntityManagerProviderImpl" scope="prototype" />
-	
 	<context:component-scan base-package="service.test">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />		

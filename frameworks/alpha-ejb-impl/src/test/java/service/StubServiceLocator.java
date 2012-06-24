@@ -20,10 +20,9 @@ import service.framework.core.transaction.ServiceContext;
  * @version	created.
  */
 public class StubServiceLocator extends ServiceLocatorImpl{
-
-	public StubServiceLocator(Properties remotingProperties) {
-		super(remotingProperties);	
-		delegate = this;
+	
+	static {
+		delegate = new StubServiceLocator();
 	}
 	
 	/**
@@ -33,19 +32,19 @@ public class StubServiceLocator extends ServiceLocatorImpl{
 	public ServiceContext createServiceContext() {
 		return new ServiceTestContextImpl();
 	}
-
+	
 	/**
-	 * @see service.framework.core.activation.ServiceLocatorImpl#lookup(java.lang.String, java.util.Properties)
+	 * @see service.framework.core.activation.ServiceLocatorImpl#lookup(java.lang.String)
 	 */
 	@Override
-	protected Object lookup(String serviceName, Properties prop){
+	public Object lookup(String serviceName){
 		
 		String test = String.format("java:global/test/test-classes/%s",serviceName);		
 		String format = String.format("java:global/test/classes/%s",serviceName);		
 		try{
-			return lookupFormat(test,prop);
+			return lookupFormat(test);
 		}catch(Exception e){
-			return lookupFormat(format,prop);
+			return lookupFormat(format);
 		}
 
 	}
@@ -55,15 +54,24 @@ public class StubServiceLocator extends ServiceLocatorImpl{
 	 * @param prop
 	 * @return
 	 */
-	private Object lookupFormat(String format, Properties prop){
+	private Object lookupFormat(String format){
+		Properties properties = new Properties();
+	    properties.put("java.naming.factory.initial", "com.sun.enterprise.naming.impl.SerialInitContextFactory");
+	    properties.put("java.naming.factory.url.pkgs", "com.sun.enterprise.naming");
+	    properties.put("java.naming.factory.state", "com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl");
+	    properties.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
+	    properties.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
+		
 		try{		
-			if(prop == null){				
-				return new InitialContext().lookup(format);
-			}else{
-				return new InitialContext(prop).lookup(format);
-			}
+			return new InitialContext(properties).lookup(format);
+			
 		}catch(NamingException ne){
-			throw new IllegalArgumentException("Failed to load service ", ne);
+			
+			try{
+				return new InitialContext().lookup(format);
+			}catch(NamingException ee){
+				throw new IllegalArgumentException("Failed to load service ", ne);
+			}
 		}
 	}
 	

@@ -5,26 +5,19 @@ package service.testcase;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
-
-import client.sql.free.NativeResult;
-import client.sql.free.QueryCallback;
-import client.sql.free.QueryFactory;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
 
 import service.CachableConst;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
-import service.framework.core.activation.ServiceLocatorImpl;
 import service.query.SampleNativeQuery;
 import service.query.SampleNativeQueryConst;
 import service.query.SampleNativeResult;
 import service.query.SampleNativeUpdate;
+import client.sql.free.NativeResult;
+import client.sql.free.QueryCallback;
+import client.sql.orm.OrmSelect;
 
 
 
@@ -36,21 +29,12 @@ import service.query.SampleNativeUpdate;
  */
 public class LocalNativeQueryTestBean extends BaseCase{
 	
-	private QueryFactory queryFactory = null;
-	
-	private OrmQueryFactory ormQueryFactory = null;
-	
-	@PostConstruct
-	public void construct(){
-		queryFactory = ServiceLocatorImpl.createDefaultQueryFactory();
-		ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
-	}
 	/**
 	 * 通常検索
 	 */
 	public void select(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);		
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);		
 		query.setTest("1");
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals("3",result.get(0).getAttr());
@@ -61,7 +45,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	 */
 	public void selectIfAttr(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setAttr("1000");
 		query.setTest("1");
 		
@@ -78,7 +62,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	
 	public void selectIfAttr2(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setAttr2(500).setTest("1").setArc("500");
 		
 		List<SampleNativeResult> result = query.getResultList();
@@ -92,7 +76,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 //	
 //	public void nodataError(){
 //		setUpData("TEST.xls");
-//		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class).enableNoDataError();
+//		SampleNativeQuery query = createSelect(SampleNativeQuery.class).enableNoDataError();
 //		query.setAttr2(500).setTest("1").setArc("500");
 //		
 //		try{
@@ -110,7 +94,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 //	
 //	public void exists(){
 //		setUpData("TEST.xls");
-//		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+//		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 //		query.setAttr2(500).setTest("1");
 //		assertTrue(query.exists());
 //		context.setRollbackOnly();	
@@ -121,7 +105,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	 */	
 	public void getSingleResult(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setAttr2(500).setTest("1");
 		SampleNativeResult e = query.getSingleResult();
 		assertEquals("1",e.getTest());
@@ -136,7 +120,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		TestEntity entity = new TestEntity();
 		entity.setTest("1000").setAttr("aa").setAttr2(111);
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class).setMaxResults(2);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class).setMaxResults(2);
 		List<SampleNativeResult> e = query.getResultList();
 		assertEquals(2,e.size());
 		e.get(0);
@@ -153,18 +137,18 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		TestEntity f = new TestEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
-		per.getEntityManager().persist(f);
+		persist(f);
 		
 		TestEntity s = new TestEntity();
 		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
-		per.getEntityManager().persist(s);
+		persist(s);
 		
 		TestEntity t = new TestEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
-		per.getEntityManager().persist(t);
-		per.getEntityManager().flush();
+		persist(t);
+		flush();
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);		
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);		
 		query.setFirstResult(1);
 		query.setMaxResults(2);
 		List<SampleNativeResult> result = query.getResultList();
@@ -182,7 +166,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constTest(){
 	
 		setUpData("TEST.xls");
-		SampleNativeQueryConst c = queryFactory.createSelect(SampleNativeQueryConst.class);
+		SampleNativeQueryConst c = createSelect(SampleNativeQueryConst.class);
 		c.setTest("1");
 		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
@@ -197,7 +181,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constAttr(){
 	
 		setUpData("TEST.xls");
-		SampleNativeQueryConst c = queryFactory.createSelect(SampleNativeQueryConst.class);
+		SampleNativeQueryConst c = createSelect(SampleNativeQueryConst.class);
 		c.setTest("2");
 		c.setAttr(CachableConst.TARGET_TEST_1_OK);
 		List<SampleNativeResult> e = c.getResultList();
@@ -212,11 +196,11 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = ormQueryFactory.createSelect(TestEntity.class);
+		OrmSelect<TestEntity> eq = createOrmSelect(TestEntity.class);
 		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
-		per.getEntityManager().flush();
+		flush();
 		
-		SampleNativeQueryConst c = queryFactory.createSelect(SampleNativeQueryConst.class);
+		SampleNativeQueryConst c = createSelect(SampleNativeQueryConst.class);
 		c.setArc(CachableConst.TARGET_INT);		
 		List<SampleNativeResult> e = c.getResultList();
 		assertEquals(1,e.size());
@@ -231,9 +215,9 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setFirstResult(10).setMaxResults(100);
-		assertEquals(2,query.count());
+		assertEquals(2L,query.count());
 		context.setRollbackOnly();	
 	}
 	
@@ -245,11 +229,11 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setMaxResults(1);
 		NativeResult result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
-		assertTrue(result.isLimited());
+		assertEquals(true,result.isLimited());
 		assertEquals(1,result.getResultList().size());
 		context.setRollbackOnly();	
 	}
@@ -262,10 +246,10 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class);
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setMaxResults(100);
 		long count = query.getFetchResult(new CallbackImpl());		
-		assertEquals(2,count);
+		assertEquals(2L,count);
 		context.setRollbackOnly();	
 	}
 	
@@ -291,13 +275,13 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	 
 	public void updateConstTest(){
 		setUpData("TEST.xls");
-		SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class);
+		SampleNativeUpdate update = createUpsert(SampleNativeUpdate.class);
 		update.setTest("1");
 		update.setAttr2set(900);
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = ormQueryFactory.createSelect(TestEntity.class);
+		OrmSelect<TestEntity> e = createOrmSelect(TestEntity.class);
 		TestEntity res = e.eq(ITestEntity.TEST, "1").getSingleResult();
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
@@ -311,14 +295,14 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	 
 	public void updateConstAttr(){
 		setUpData("TEST.xls");
-		SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class);
+		SampleNativeUpdate update = createUpsert(SampleNativeUpdate.class);
 		update.setTest("2");
 		update.setAttr(CachableConst.TARGET_TEST_1_OK);
 		update.setAttr2set(900);
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = ormQueryFactory.createSelect(TestEntity.class);
+		OrmSelect<TestEntity> e = createOrmSelect(TestEntity.class);
 		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
@@ -332,16 +316,16 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = ormQueryFactory.createSelect(TestEntity.class);
+		OrmSelect<TestEntity> eq = createOrmSelect(TestEntity.class);
 		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
 		
-		SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class);
+		SampleNativeUpdate update = createUpsert(SampleNativeUpdate.class);
 		update.setArc(CachableConst.TARGET_INT);		
 		update.setAttr2set(900);
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = ormQueryFactory.createSelect(TestEntity.class);
+		OrmSelect<TestEntity> e = createOrmSelect(TestEntity.class);
 		
 		//NativeUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E

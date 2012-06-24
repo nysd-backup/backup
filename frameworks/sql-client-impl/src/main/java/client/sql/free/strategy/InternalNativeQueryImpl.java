@@ -3,16 +3,9 @@
  */
 package client.sql.free.strategy;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-
-import client.sql.ConnectionProvider;
-import client.sql.EngineHints;
-import client.sql.free.FreeQueryParameter;
-import client.sql.free.FreeSelectParameter;
-import client.sql.free.FreeUpsertParameter;
-import client.sql.free.NativeResult;
-import client.sql.free.strategy.InternalQuery;
 
 import sqlengine.executer.RecordFilter;
 import sqlengine.facade.QueryParameter;
@@ -20,6 +13,11 @@ import sqlengine.facade.QueryResult;
 import sqlengine.facade.SQLEngineFacade;
 import sqlengine.facade.SQLParameter;
 import sqlengine.facade.UpdateParameter;
+import client.sql.EngineHints;
+import client.sql.free.FreeQueryParameter;
+import client.sql.free.FreeSelectParameter;
+import client.sql.free.FreeUpsertParameter;
+import client.sql.free.NativeResult;
 
 
 
@@ -31,19 +29,9 @@ import sqlengine.facade.UpdateParameter;
  */
 public class InternalNativeQueryImpl implements InternalQuery{
 	
-	/** the ConnectionProvider */
-	private ConnectionProvider cs;
-	
 	/** the facade of SQLEngine */
 	private SQLEngineFacade facade;
-	
-	/**
-	 * @param cs the cs to set
-	 */
-	public void setConnectionProvider(ConnectionProvider cs){
-		this.cs = cs;
-	}
-	
+
 	/**
 	 * @param facade the facade to set
 	 */
@@ -56,7 +44,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public NativeResult getTotalResult(FreeSelectParameter param){
-		QueryResult result = facade.executeTotalQuery(createQueryParameter(param), cs.getConnection());
+		QueryResult result = facade.executeTotalQuery(createQueryParameter(param), getConnection(param));
 		return new NativeResult(result.isLimited(), result.getResultList(), result.getHitCount());
 	}
 	
@@ -65,7 +53,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public <T> List<T> getFetchResult(FreeSelectParameter param){
-		return facade.executeFetch(createQueryParameter(param), cs.getConnection());		
+		return facade.executeFetch(createQueryParameter(param), getConnection(param));		
 	}
 	
 	/**
@@ -73,7 +61,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public long count(FreeSelectParameter param){
-		return facade.executeCount(createParameter(new QueryParameter(),param), cs.getConnection());
+		return facade.executeCount(createParameter(new QueryParameter(),param), getConnection(param));
 	}
 
 	/**
@@ -81,7 +69,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public <T> List<T> getResultList(FreeSelectParameter param){
-		return facade.executeQuery(createQueryParameter(param), cs.getConnection());		
+		return facade.executeQuery(createQueryParameter(param), getConnection(param));	
 	}
 	
 	/**
@@ -103,14 +91,14 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public int executeUpdate(FreeUpsertParameter param){
-		return facade.executeUpdate(createParameter(new UpdateParameter(),param), cs.getConnection());
+		return facade.executeUpdate(createParameter(new UpdateParameter(),param), getConnection(param));
 	}
 	
 	/**
 	 * @return the parameter
 	 */
 	private QueryParameter createQueryParameter(final FreeSelectParameter param){
-		QueryParameter parameter = createParameter(new QueryParameter(),param);		
+		QueryParameter parameter = createParameter(new QueryParameter(),param);
 		parameter.setMaxSize(param.getMaxSize());
 		parameter.setFirstResult(param.getFirstResult());
 		parameter.setResultType(param.getResultType());
@@ -165,7 +153,15 @@ public class InternalNativeQueryImpl implements InternalQuery{
 			ep.setUseRowSql(p.isUseRowSql());		
 			engineParams.add(ep);
 		}				
-		return facade.executeBatch(engineParams, cs.getConnection());
+		return facade.executeBatch(engineParams, getConnection(param.get(0)));
+	}
+	
+	/**
+	 * @param param
+	 * @return
+	 */
+	private Connection getConnection(FreeQueryParameter param){
+		return param.getEntityManager().unwrap(Connection.class);
 	}
 
 }

@@ -5,13 +5,14 @@ package service.core.query;
 
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
 import javax.persistence.TransactionRequiredException;
 
-
+import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import service.framework.core.activation.ServiceLocator;
 import service.test.DupplicateService;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
@@ -29,19 +30,17 @@ import service.test.entity.ITestEntity;
 		"/META-INF/context/readonlyConnectionApplicationContext.xml"}		
 )
 public class DuplicateConnectionLocalEntityQueryTest extends ServiceUnit implements ITestEntity{
-
-	@Autowired
-	private DupplicateService service;
 	
 	/**
 	 * 条件追加
 	 * @throws SQLException 
 	 */
+	@Ignore
 	@Test
 	public void normal(){	
 		
 		setUpData("TEST.xls");
-		int[] res = service.test();		
+		int[] res = ServiceLocator.getService(DupplicateService.class).test();		
 		assertEquals(0,res[0]);
 		assertEquals(3,res[1]);
 	}
@@ -54,11 +53,17 @@ public class DuplicateConnectionLocalEntityQueryTest extends ServiceUnit impleme
 	public void failpersist(){	
 		
 		try{
-			service.fail();	
+			ServiceLocator.getService(DupplicateService.class).fail();	
 			fail();
 		}catch(TransactionRequiredException tre){
 			tre.printStackTrace();
 		}
+	}
+
+	@Override
+	protected EntityManager getEntityManager() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

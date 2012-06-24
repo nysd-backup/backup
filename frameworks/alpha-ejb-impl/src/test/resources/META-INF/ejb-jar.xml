@@ -10,7 +10,7 @@
 			<ejb-name>LocalNativeQueryTestBean</ejb-name>
 			<!-- local-beanは必須 -->
 			<local-bean/>
-			<ejb-class>service.framework.core.testcase.LocalNativeQueryTestBean</ejb-class>
+			<ejb-class>service.testcase.LocalNativeQueryTestBean</ejb-class>
 			<session-type>Stateless</session-type>					
 		</session>  			
   	</enterprise-beans>

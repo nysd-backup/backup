@@ -12,8 +12,6 @@ package client.sql.orm;
  */
 public class OrmUpdateParameter<T> extends OrmQueryParameter<T>{
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * @param entityClass the entityClass to set
 	 */

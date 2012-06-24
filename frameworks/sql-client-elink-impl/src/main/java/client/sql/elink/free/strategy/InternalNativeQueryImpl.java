@@ -11,28 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-
 
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
-import org.eclipse.persistence.internal.databaseaccess.DatabaseAccessor;
-import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
-import org.eclipse.persistence.internal.sessions.AbstractSession;
 import org.eclipse.persistence.queries.ScrollableCursor;
-import org.eclipse.persistence.sessions.server.ClientSession;
-
-import client.sql.elink.EntityManagerProvider;
-import client.sql.elink.free.LazyList;
-import client.sql.elink.free.SQLExceptionHandlerImpl;
-import client.sql.free.FreeQueryParameter;
-import client.sql.free.FreeSelectParameter;
-import client.sql.free.FreeUpsertParameter;
-import client.sql.free.NativeResult;
-import client.sql.free.ResultSetFilter;
-import client.sql.free.strategy.InternalQuery;
 
 import sqlengine.builder.SQLBuilder;
 import sqlengine.exception.ExceptionHandler;
@@ -45,6 +28,14 @@ import sqlengine.facade.QueryResult;
 import sqlengine.facade.SQLEngineFacade;
 import sqlengine.facade.UpdateParameter;
 import sqlengine.facade.impl.SQLEngineFacadeImpl;
+import client.sql.elink.free.LazyList;
+import client.sql.elink.free.SQLExceptionHandlerImpl;
+import client.sql.free.FreeQueryParameter;
+import client.sql.free.FreeSelectParameter;
+import client.sql.free.FreeUpsertParameter;
+import client.sql.free.NativeResult;
+import client.sql.free.ResultSetFilter;
+import client.sql.free.strategy.InternalQuery;
 
 
 /**
@@ -58,10 +49,7 @@ import sqlengine.facade.impl.SQLEngineFacadeImpl;
  * @version	created.
  */
 public class InternalNativeQueryImpl implements InternalQuery {
-	
-	/** the EntityManager */
-	private EntityManager em;
-	
+		
 	/** the <code>SQLBuilder</code> */
 	private SQLBuilder builder;
 
@@ -83,14 +71,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	public void setSqlEngineFacade(SQLEngineFacade facade){
 		this.facade = facade;
 	}
-	
-	/**
-	 * @param em the em to set
-	 */
-	public void setEntityManagerProvider(EntityManagerProvider em){
-		this.em = em.getEntityManager();
-	}
-	
+
 	/**
 	 * @param builder the builder to set
 	 */
@@ -214,7 +195,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	protected Query createQuery(FreeSelectParameter param) {
 		List<Object> bindList = new ArrayList<Object>();
 		String executingSql = buildSql(bindList,param);		
-		Query query = param.getName() != null ? createNamedQuery(executingSql, param) : em.createNativeQuery(executingSql);
+		Query query = param.getName() != null ? createNamedQuery(executingSql, param) : param.getEntityManager().createNativeQuery(executingSql);
 		return bindParmaeterToQuery(query, bindList);			
 	}
 	
@@ -252,7 +233,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		
 		//countの場合は範囲設定無効とする。
 		executingSql = builder.setCount(executingSql);
-		Query query = param.getName() != null ? createNamedQuery(executingSql,param) : em.createNativeQuery(executingSql);
+		Query query = param.getName() != null ? createNamedQuery(executingSql,param) : param.getEntityManager().createNativeQuery(executingSql);
 		query = bindParmaeterToQuery(query, bindList);	
 		
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
@@ -270,10 +251,10 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		List<Object> bindList = new ArrayList<Object>();
 		Query query = null;
 		if(param.getName() != null){
-			query = em.createNamedQuery(param.getName());			
+			query = param.getEntityManager().createNamedQuery(param.getName());			
 		}else {
 			String executingSql = buildSql(bindList,param);
-			query = em.createNativeQuery(executingSql);
+			query = param.getEntityManager().createNativeQuery(executingSql);
 		}
 		query = bindParmaeterToQuery(query, bindList);			
 		
@@ -291,7 +272,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @return the query
 	 */
 	protected Query createNamedQuery(String executingQuery,FreeSelectParameter param){
-		Query query = em.createNamedQuery(executingQuery);
+		Query query = param.getEntityManager().createNamedQuery(executingQuery);
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
 		}		
@@ -359,10 +340,12 @@ public class InternalNativeQueryImpl implements InternalQuery {
 			engineParams.add(ep);
 		}		
 		
-		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();		
-		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
-		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
-		Connection con = accessor.getConnection();
+//		EntityManagerImpl impl = (EntityManagerImpl)param.get(0).getEntityManager().getDelegate();		
+//		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
+//		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
+//		Connection con = accessor.getConnection();
+		
+		Connection con = param.get(0).getEntityManager().unwrap(Connection.class);
 		
 		return facade.executeBatch(engineParams, con);
 		

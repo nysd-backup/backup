@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 
 import javax.ejb.Asynchronous;
 
-import service.framework.core.async.AbstractAsyncServiceFactory;
-
 
 
 /**

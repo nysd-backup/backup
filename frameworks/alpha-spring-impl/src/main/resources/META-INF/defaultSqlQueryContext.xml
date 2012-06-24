@@ -15,11 +15,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 
-	<!-- 
-		以下のbeanの定義が別コンテキストに必要
-			・txConnectionProvider → ConnectionProviderを実装したクラス
-			・　
-	 -->
 	<!-- SQL作成 -->
   	<bean id="sqlBuilder" class="sqlengine.builder.impl.SQLBuilderProxyImpl" />	
 
@@ -36,11 +31,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<!-- 内部クエリ -->
 	<bean id="internalNativeQuery" class="client.sql.free.strategy.InternalNativeQueryImpl" scope="prototype" >
-		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>	
-		<property name="connectionProvider" ref="txConnectionProvider"/>	
+		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>		
 	</bean>
 	
-	<bean id="batchUpdateFactory" class="client.sql.free.BatchUpdateFactoryImpl" scope="prototype" >
+	<bean id="batchUpdateFactory" class="client.sql.free.BatchUpsertFactoryImpl" scope="prototype" >
 		<property name="internalQuery" ref="internalNativeQuery"/>	
 	</bean>
 	
@@ -49,9 +43,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="internalNativeQuery" ref="internalNativeQuery"/>			
 	</bean>
 	
+	<bean id="statementBuilder" class="client.sql.orm.strategy.SQLStatementBuilderImpl" scope="singleton" />
+	
 	<!-- ORM内部クエリ -->
 	<bean id="internalOrmQuery" class="client.sql.orm.strategy.InternalOrmQueryImpl" scope="prototype" >
-		<property name="internalQuery" ref="internalNativeQuery"/>			
+		<property name="internalQuery" ref="internalNativeQuery"/>	
+		<property name="sqlStatementBuilder" ref="statementBuilder"/>		
 	</bean>
 	
 	<!-- ORM内部クエリファクトリ -->

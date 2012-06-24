@@ -13,8 +13,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
-
-
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.AbstractDataSet;
@@ -33,19 +31,15 @@ import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import client.sql.elink.EntityManagerProvider;
-
+import service.framework.core.activation.ServiceLocator;
+import service.framework.core.activation.ServiceLocatorImpl;
+import sqlengine.builder.ConstCache;
 import core.logics.log.LogWriter;
 import core.logics.log.LogWriterFactory;
-
-import service.framework.core.activation.ServiceLocator;
-import service.framework.core.activation.SpringServiceLocator;
-import sqlengine.builder.ConstCache;
 
 
 /**
@@ -62,11 +56,13 @@ public abstract class ServiceUnit extends Assert{
 	protected static final LogWriter LOG = LogWriterFactory.getLog(LogWriter.class);
 	
 	/** サービスロケータ */
-	protected static SpringServiceLocator locator = null;
+	protected static ServiceLocator locator = null;
 	
 	protected IDatabaseConnection connection = null;
 
 	protected ServiceTestContextImpl context = null;
+	
+	protected abstract EntityManager getEntityManager();
 
 	@org.junit.Before
 	public void before(){
@@ -88,7 +84,6 @@ public abstract class ServiceUnit extends Assert{
 	public void setApplicationContext(final ApplicationContext applicationContext){
 		
 		locator = createLocator(applicationContext);
-		locator.construct();	
 		
 		context = new ServiceTestContextImpl();	
 		context.initialize();	
@@ -120,21 +115,17 @@ public abstract class ServiceUnit extends Assert{
 	 * @param applicationContext
 	 * @return
 	 */
-	protected SpringServiceLocator createLocator(final ApplicationContext applicationContext){
-		return new SpringServiceLocator() {
-			public void destroy() {}
-			public void construct() {
-				context = ConfigurableApplicationContext.class.cast(applicationContext);
-				delegate = this;
-			}
-		};
+	protected ServiceLocator createLocator(final ApplicationContext applicationContext){
+		ServiceLocatorImpl locator = new ServiceLocatorImpl(applicationContext);
+		ServiceLocatorImpl.setDelegate(locator);
+		return locator;
 	}
 	
 	/**
 	 * @param dataPath チE�EタのセチE��アチE�E
 	 */
 	protected void setUpData(String dataPath){
-		EntityManager em = ((EntityManagerProvider)(ServiceLocator.lookup("entityManagerProvider"))).getEntityManager();
+		EntityManager em = getEntityManager();
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
 		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
@@ -155,7 +146,7 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	protected void setUpDataForceCommit(String dataPath){
 	
-		EntityManager em =  ((EntityManagerProvider)(ServiceLocator.lookup("entityManagerProvider"))).getEntityManager();		
+		EntityManager em = getEntityManager();		
 		EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
 		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();

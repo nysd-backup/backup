@@ -1,15 +1,15 @@
 package service.test;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import client.sql.elink.EntityManagerProvider;
 
 import service.test.entity.TestEntity;
 
@@ -19,8 +19,9 @@ import service.test.entity.TestEntity;
 @Transactional(propagation=Propagation.REQUIRED)
 public class MockService2Impl implements MockService2{
 
-	@Autowired
-	private EntityManagerProvider per;
+	@PersistenceContext(unitName="oracle")
+	private EntityManager em;
+	
 	
 	@Override
 	@Rollback(false)
@@ -29,7 +30,7 @@ public class MockService2Impl implements MockService2{
 		e.setTest("10");
 		e.setAttr("aaa");
 		e.setAttr2(2);
-		per.getEntityManager().persist(e);
+		em.persist(e);
 	}
 
 }

@@ -3,8 +3,6 @@
  */
 package service.client.messaging;
 
-import service.client.messaging.AbstractMessageProducer;
-import service.client.messaging.InvocationParameter;
 import service.framework.core.activation.ServiceLocator;
 
 /**
@@ -22,7 +20,7 @@ public class TopicProducerDelegate extends AbstractMessageProducer{
 	protected Object invoke(InvocationParameter dto, String destinationName)
 			throws Throwable {
 		
-		ServiceLocator.lookupByInterface(JmsProducer.class).publish(dto, destinationName);
+		ServiceLocator.getService(JmsProducer.class).publish(dto, destinationName);
 		return null;
 	}
 

@@ -5,21 +5,19 @@ package service.test;
 
 import java.util.Locale;
 
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import client.sql.elink.EntityManagerProvider;
-
+import service.framework.core.transaction.ServiceContext;
+import service.test.entity.TestEntity;
 import core.message.MessageBean;
 import core.message.MessageBuilder;
 import core.message.MessageResult;
-
-import service.framework.core.transaction.ServiceContext;
-import service.test.entity.TestEntity;
 
 
 /**
@@ -35,8 +33,8 @@ public class RequireServiceImpl implements RequireService {
 	@Autowired
 	private MessageBuilder builder;
 	
-	@Autowired
-	private EntityManagerProvider ema;
+	@PersistenceContext(unitName="oracle")
+	private EntityManager em;
 	
 	/**
 	 * @see service.framework.test.RequireService#test()
@@ -55,8 +53,8 @@ public class RequireServiceImpl implements RequireService {
 	public int persist() {
 		TestEntity e = new TestEntity();
 		e.setTest("105").setAttr("aaa").setAttr2(2222);
-		ema.getEntityManager().persist(e);
-		ema.getEntityManager().flush();
+		em.persist(e);
+		em.flush();
 		return 1;
 	}
 	

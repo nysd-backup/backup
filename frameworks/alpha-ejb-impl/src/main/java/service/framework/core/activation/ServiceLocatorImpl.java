@@ -8,15 +8,30 @@ import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 
-import client.sql.elink.EntityManagerProvider;
+import service.client.messaging.MessageClientFactory;
+import service.client.messaging.MessageClientFactoryImpl;
+import service.client.messaging.QueueProducerDelegate;
+import service.client.messaging.TopicProducerDelegate;
+import service.framework.core.advice.InternalPerfInterceptor;
+import service.framework.core.advice.InternalSQLBuilderInterceptor;
+import service.framework.core.advice.ProxyFactory;
+import service.framework.core.async.AsyncService;
+import service.framework.core.async.AsyncServiceFactory;
+import service.framework.core.async.AsyncServiceFactoryImpl;
+import service.framework.core.async.AsyncServiceImpl;
+import service.framework.core.exception.ServiceException;
+import service.framework.core.transaction.ServiceContext;
+import service.framework.core.transaction.ServiceContextImpl;
+import sqlengine.builder.SQLBuilder;
+import sqlengine.builder.impl.SQLBuilderProxyImpl;
 import client.sql.elink.free.strategy.InternalNamedQueryImpl;
 import client.sql.elink.free.strategy.InternalNativeQueryImpl;
 import client.sql.elink.orm.strategy.InternalOrmQueryImpl;
 import client.sql.free.QueryFactory;
 import client.sql.free.strategy.InternalQuery;
 import client.sql.orm.OrmQueryFactory;
-
 import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
 import core.logics.log.impl.DefaultFaultNotifier;
@@ -26,24 +41,6 @@ import core.message.impl.DefaultExceptionMessageFactoryImpl;
 import core.message.impl.MessageBuilderImpl;
 
 
-import service.client.messaging.MessageClientFactory;
-import service.client.messaging.MessageClientFactoryImpl;
-import service.client.messaging.QueueProducerDelegate;
-import service.client.messaging.TopicProducerDelegate;
-import service.framework.core.activation.ServiceLocator;
-import service.framework.core.advice.InternalPerfInterceptor;
-import service.framework.core.advice.InternalSQLBuilderInterceptor;
-import service.framework.core.advice.ProxyFactory;
-import service.framework.core.async.AsyncServiceFactory;
-import service.framework.core.async.AsyncServiceFactoryImpl;
-import service.framework.core.exception.ServiceException;
-import service.framework.core.transaction.ServiceContext;
-import service.framework.core.transaction.ServiceContextImpl;
-import sqlengine.builder.SQLBuilder;
-import sqlengine.builder.impl.SQLBuilderProxyImpl;
-
-
-
 /**
  * A service locator.
  *
@@ -51,66 +48,33 @@ import sqlengine.builder.impl.SQLBuilderProxyImpl;
  * @version 2011/08/31 created.
  */
 public class ServiceLocatorImpl extends ServiceLocator{
-
+	
 	/** the JNDI prefix */
 	private static final String PREFIX = "java:module";
 	
-	/** the remoting properties */
-	private final Properties remotingProperties;
-	
 	/**
-	 * @param componentBuilder the componentBuilder to set
-	 * @param remotingProperties the remotingProperties to set
+	 * @param delegatingLocator the delegatingLocator
 	 */
-	public ServiceLocatorImpl(Properties remotingProperties){
-		this.remotingProperties = remotingProperties;
-		delegate = this;
+	public void setDelegate(ServiceLocatorImpl delegatingLocator){
+		delegate = delegatingLocator;
 	}
 	
 	/**
-	 * @see service.framework.core.activation.ServiceLocator#lookupComponentByInterface(java.lang.Class)
+	 * @see service.framework.core.activation.ServiceLocator#lookup(java.lang.String)
 	 */
 	@Override
-	public <T> T lookupComponentByInterface(Class<T> clazz) {
-		return clazz.cast(lookup(clazz.getSimpleName() + "Impl",null));
+	public Object lookup(String serviceName) {
+		return lookup(serviceName,null);
 	}
 
 	/**
-	 * @see service.framework.core.activation.ServiceLocator#lookupComponent(java.lang.String)
+	 * @see service.framework.core.activation.ServiceLocator#lookup(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T lookupComponent(String name) {
-		return (T)lookup(name,null);
+	public Object lookup(Class<?> ifType) {
+		return ifType.cast(lookup(ifType.getSimpleName() + "Impl"));
 	}
 
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#lookupRemoteComponent(java.lang.Class)
-	 */
-	@Override
-	public <T> T lookupRemoteComponent(Class<T> serviceType) {
-	     Object service = lookup(serviceType.getSimpleName() , remotingProperties);
-	     return serviceType.cast(service);
-	}
-	
-	/**
-	 * @param serviceName the name of service
-	 * @param prop the properties to look up
-	 * @return the service
-	 */
-	protected Object lookup(String serviceName, Properties prop){
-		
-		try{			
-			String format = String.format("%s/%s",PREFIX , serviceName);		
-			if(prop == null){				
-				return new InitialContext().lookup(format);
-			}else{
-				return new InitialContext(prop).lookup(format);
-			}
-		}catch(NamingException ne){
-			throw new IllegalArgumentException("Failed to load service ", ne);
-		}
-	}
 
 	/**
 	 * @see service.framework.core.activation.ServiceLocator#createServiceContext()
@@ -184,12 +148,12 @@ public class ServiceLocatorImpl extends ServiceLocator{
 		return new DefaultExceptionMessageFactoryImpl();
 	}
 	
-	
 	/**
-	 * @see service.framework.core.define.ComponentBuilder#createQueryFactory()
+	 * Creates the query factory.
+	 * @param em the em to set
+	 * @return query factory
 	 */
-	@Override
-	public QueryFactory createQueryFactory() {
+	public QueryFactory createQueryFactory(EntityManager em) {
 
 		//インターセプターを設定する
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
@@ -197,9 +161,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 		
 		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
 		named.setSqlBuilder(builder);
-		named.setEntityManagerProvider(createEntityManagerProvider());
-		
-		ntv.setEntityManagerProvider(createEntityManagerProvider());				
+				
 		ntv.setSqlBuilder(builder);
 		
 		InternalQuery namedQuery =  ProxyFactory.create(InternalQuery.class, named, new InternalPerfInterceptor(),"*");		
@@ -213,34 +175,62 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 	
 	/**
-	 * @see service.framework.core.define.ComponentBuilder#createOrmQueryFactory()
+	 * Creates the query factory.
+	 * @param em the em to set
+	 * @return query factory
 	 */
-	@Override
-	public OrmQueryFactory createOrmQueryFactory() {
-		
+	public OrmQueryFactory createOrmQueryFactory(EntityManager em) {
+
 		OrmQueryFactory impl = new OrmQueryFactory();
 		
-		InternalOrmQueryImpl dao = new InternalOrmQueryImpl();
-		EntityManagerProvider provider = createEntityManagerProvider();
+		InternalOrmQueryImpl dao = new InternalOrmQueryImpl();		
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
-		named.setEntityManagerProvider(provider);
-		
+	
 		//インターセプターを設定する
 		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
 		named.setSqlBuilder(builder);
-		dao.setInternalNamedQuery(named);
-		dao.setEntityManagerProvider(provider);	
+		dao.setInternalNamedQuery(named);		
 		impl.setInternalOrmQuery(dao);
 		return impl;
 	}
-	
+
 	/**
-	 * @return EntityManagerProvider
+	 * @return the OrmQueryWrapperFactory
 	 */
-	protected EntityManagerProvider createEntityManagerProvider() {
-		return lookupByInterface(EntityManagerProvider.class);
+	public static OrmQueryFactory createDefaultOrmQueryFactory(EntityManager em){
+		return ((ServiceLocatorImpl)delegate).createOrmQueryFactory(em);
 	}
 	
+	/**
+	 * @return the QueryFactory
+	 */
+	public static QueryFactory createDefaultQueryFactory(EntityManager em){
+		return ((ServiceLocatorImpl)delegate).createQueryFactory(em);
+	}
+	
+	@Override
+	public AsyncService createAsyncService() {
+		return new AsyncServiceImpl();
+	}
+	
+	/**
+	 * @param serviceName the name of service
+	 * @param prop the properties to look up
+	 * @return the service
+	 */
+	private Object lookup(String serviceName, Properties prop){
+		
+		try{			
+			String format = String.format("%s/%s",PREFIX , serviceName);		
+			if(prop == null){				
+				return new InitialContext().lookup(format);
+			}else{
+				return new InitialContext(prop).lookup(format);
+			}
+		}catch(NamingException ne){
+			throw new IllegalArgumentException("Failed to load service ", ne);
+		}
+	}
 
 }
 

@@ -5,6 +5,7 @@ package client.sql.free;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -21,13 +22,21 @@ import client.sql.free.strategy.InternalQuery;
  * @version　 created.
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractFreeSelect {
+public abstract class AbstractFreeSelect{
 	
 	/** the delegate */
 	private FreeSelectParameter condition = null;
 
 	/** the internal query */
 	private InternalQuery internalQuery = null;
+	
+	/**
+	 * @param em the em to set
+	 */
+	public <T extends AbstractFreeSelect> T setEntityManager(EntityManager em){
+		this.condition.setEntityManager(em);
+		return (T)this;
+	}
 	
 	/**
 	 * @return the condition
@@ -63,9 +72,9 @@ public abstract class AbstractFreeSelect {
 	 * @param arg1 the param
 	 * @return self
 	 */
-	public <T extends AbstractFreeSelect> T setBranchParameter(String arg0, Object arg1) {
+	public AbstractFreeSelect setBranchParameter(String arg0, Object arg1) {
 		condition.getBranchParam().put(arg0, arg1);
-		return (T)this;
+		return this;
 	}
 
 	/**
@@ -118,9 +127,9 @@ public abstract class AbstractFreeSelect {
 	 * @param arg1 the param
 	 * @return self
 	 */
-	public <T extends AbstractFreeSelect> T setParameter(String arg0, Object arg1) {
+	public AbstractFreeSelect setParameter(String arg0, Object arg1) {
 		condition.getParam().put(arg0, arg1);
-		return (T)this;
+		return this;
 	}
 
 	/**

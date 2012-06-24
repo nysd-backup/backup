@@ -9,7 +9,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>__oracleXA</jta-data-source>
     <properties>
-	    <property name="eclipselink.exception-handler" value="service.framework.core.DumyExceptionHandler"/>      	 
+	    <property name="eclipselink.exception-handler" value="service.DumyExceptionHandler"/>      	 
  	    <property name="eclipselink.logging.level" value="ALL" />
 	    <property name="eclipselink.ddl-generation" value="none"/>
 	    <property name="eclipselink.jdbc.connections.min" value="4"/>

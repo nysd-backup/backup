@@ -3,6 +3,7 @@ package client.sql.orm;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
 import client.sql.free.QueryCallback;
@@ -28,9 +29,10 @@ public class OrmSelect<T>{
 	/**
 	 * @param entityClass the entity class
 	 */
-	OrmSelect(Class<T> entityClass,InternalOrmQuery internalQuery){
+	OrmSelect(Class<T> entityClass,InternalOrmQuery internalQuery,EntityManager em){
 		this.condition = new OrmSelectParameter<T>(entityClass);
 		this.internalQuery = internalQuery;
+		this.condition.setEntityManager(em);
 	}
 	
 	/**

@@ -3,6 +3,8 @@
  */
 package client.sql.orm;
 
+import javax.persistence.EntityManager;
+
 import client.sql.orm.strategy.InternalOrmQuery;
 
 
@@ -24,7 +26,6 @@ public class OrmQueryFactory {
 		this.internalOrmQuery = internalOrmQuery;
 	}
 
-	
 	/**
 	 * Creates the query.
 	 * 
@@ -32,8 +33,8 @@ public class OrmQueryFactory {
 	 * @param entityClass the entityClass
 	 * @return self
 	 */
-	public <T> OrmSelect<T> createSelect(Class<T> entityClass){
-		return new OrmSelect<T>(entityClass,internalOrmQuery);
+	public <T> OrmSelect<T> createSelect(Class<T> entityClass, EntityManager em){
+		return new OrmSelect<T>(entityClass,internalOrmQuery,em);
 	}
 	
 	/**
@@ -43,8 +44,8 @@ public class OrmQueryFactory {
 	 * @param entityClass the entityClass
 	 * @return self
 	 */
-	public <T> OrmUpdate<T> createUpdate(Class<T> entityClass){
-		return new OrmUpdate<T>(entityClass,internalOrmQuery);
+	public <T> OrmUpdate<T> createUpdate(Class<T> entityClass, EntityManager em){
+		return new OrmUpdate<T>(entityClass,internalOrmQuery,em);			
 	}
 
 }

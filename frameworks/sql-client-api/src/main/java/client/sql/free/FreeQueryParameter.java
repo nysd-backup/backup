@@ -9,13 +9,15 @@ import java.util.Map;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import client.sql.QueryParameter;
+
 /**
  * The free parameter.
  *
  * @author yoshida-n
  * @version	created.
  */
-public abstract class FreeQueryParameter {
+public abstract class FreeQueryParameter extends QueryParameter{
 	
 	/** the queryId */
 	private String queryId = null;

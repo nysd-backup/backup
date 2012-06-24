@@ -18,7 +18,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 			
+	<tx:annotation-driven/>
+			
 	<!--  このように自分でtransactionAdvisorを指定する場合、tx:annotation-divenを使用するとAdviceが二つになってしまうため禁止 -->
+	<!-- 
 	<bean id="transactionAttributeSource" class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
 	<bean id="txAdvice" class="service.framework.core.transaction.ContextControllableTransactionInterceptor" >
 		<property name="transactionAttributeSource" ref="transactionAttributeSource"/>	
@@ -26,6 +29,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
 		<property name="transactionInterceptor" ref="txAdvice"/>
 	</bean>
+	-->
 
 	<!-- メッセージ作成-->
 	<bean id="messageBuilder" class="core.message.impl.MessageBuilderImpl"/>

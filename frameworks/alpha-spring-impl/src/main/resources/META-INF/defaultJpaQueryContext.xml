@@ -15,23 +15,16 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 
-	<!-- 
-		以下のbeanの定義が別コンテキストに必要
-			・entityManagerProvider	→ EntityManagerProviderを実装したクラス
-	 -->
-
 	<!-- SQL作成 -->
   	<bean id="sqlBuilder" class="sqlengine.builder.impl.SQLBuilderProxyImpl" />
   	
   	<!-- 内部Namedクエリ -->
 	<bean id="internalNamedQuery" class="client.sql.elink.free.strategy.InternalNamedQueryImpl" scope="prototype" >
-		<property name="entityManagerProvider" ref="entityManagerProvider"/>
 		<property name="sqlBuilder" ref="sqlBuilder"/>			
 	</bean>	
 	
 	<!-- 内部Nativeクエリ -->
-	<bean id="internalNativeQuery" class="client.sql.elink.free.strategy.InternalNativeQueryImpl" scope="prototype" >
-		<property name="entityManagerProvider" ref="entityManagerProvider"/>
+	<bean id="internalNativeQuery" class="client.sql.elink.free.strategy.InternalNativeQueryImpl" scope="prototype" >		
 		<property name="sqlBuilder" ref="sqlBuilder"/>			
 	</bean>
 	
@@ -41,10 +34,13 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="internalNamedQuery" ref="internalNamedQuery"/>			
 	</bean>
 	
+		
+	<bean id="statementBuilder" class="client.sql.elink.orm.strategy.JPQLStatementBuilderImpl" scope="singleton" />
+	
 	<!-- ORM内部クエリ -->
-	<bean id="internalOrmQuery" class="client.sql.elink.orm.strategy.InternalOrmQueryImpl" scope="prototype" >
-		<property name="entityManagerProvider" ref="entityManagerProvider"/>
-		<property name="internalNamedQuery" ref="internalNamedQuery"/>		
+	<bean id="internalOrmQuery" class="client.sql.orm.strategy.InternalOrmQueryImpl" scope="prototype" >
+		<property name="internalQuery" ref="internalNamedQuery"/>		
+		<property name="sqlStatementBuilder" ref="statementBuilder"/>		
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->

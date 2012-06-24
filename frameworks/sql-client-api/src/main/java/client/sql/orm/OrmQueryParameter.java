@@ -3,7 +3,6 @@
  */
 package client.sql.orm;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,6 +12,8 @@ import java.util.Map;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import client.sql.QueryParameter;
+
 
 /**
  * The condition to execute SQL.
@@ -20,10 +21,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class OrmQueryParameter<T> implements Serializable{
+public abstract class OrmQueryParameter<T> extends QueryParameter{
 
-	private static final long serialVersionUID = 1L;
-
+	
 	/** the entityClass */
 	private final Class<T> entityClass;
 	

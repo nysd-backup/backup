@@ -9,7 +9,6 @@ import java.lang.reflect.Proxy;
 import service.framework.core.activation.ServiceLocator;
 
 
-
 /**
  * The factory to create asynchronous services.
  * Creates a service as a dynamic proxy service.
@@ -24,7 +23,7 @@ public abstract class AbstractAsyncServiceFactory implements AsyncServiceFactory
 	 */
 	@Override
 	public <T> T create(Class<T> serviceType){
-		T service = ServiceLocator.lookupByInterface(serviceType);
+		T service = ServiceLocator.getService(serviceType);
 		//Future<V>を直接返却するAsyncronousサービス以外はプロキシを使用する。
 		if( service != null && serviceType.getAnnotation(getAnnotation()) == null){
 			return serviceType.cast(Proxy.newProxyInstance(serviceType.getClassLoader(), new Class[]{serviceType}, 
@@ -32,7 +31,7 @@ public abstract class AbstractAsyncServiceFactory implements AsyncServiceFactory
 		}
 		return service;
 	}
-
+	
 	/**
 	 * @return the annotation that indicates 'AsyncService'
 	 */

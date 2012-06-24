@@ -6,9 +6,6 @@ package core.base;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import client.sql.orm.FastEntity;
-
-
 
 /**
  * The base of an entity.
@@ -16,7 +13,7 @@ import client.sql.orm.FastEntity;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class AbstractEntity extends AbstractBean implements FastEntity{
+public abstract class AbstractEntity extends AbstractBean{
 
 	private static final long serialVersionUID = 1L;
 

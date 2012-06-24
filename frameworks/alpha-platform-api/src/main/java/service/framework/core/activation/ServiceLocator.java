@@ -5,14 +5,11 @@ package service.framework.core.activation;
 
 import java.lang.reflect.InvocationHandler;
 
-import client.sql.free.QueryFactory;
-import client.sql.orm.OrmQueryFactory;
-
-import core.activation.ComponentLocator;
-
 import service.client.messaging.MessageClientFactory;
+import service.framework.core.async.AsyncService;
 import service.framework.core.async.AsyncServiceFactory;
 import service.framework.core.transaction.ServiceContext;
+import core.activation.ComponentLocator;
 
 
 
@@ -40,24 +37,49 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public abstract InvocationHandler createSender();
 	
 	/**
-	 * @return the <code>QueryFactory</code>
-	 */
-	public abstract QueryFactory createQueryFactory();
-	
-	/**
 	 * @return the <code>AsyncServiceFactory</code>
 	 */
 	public abstract AsyncServiceFactory createAsyncServiceFactory();
 	
 	/**
-	 * @return the <code>OrmQueryWrapperFactory</code>
+	 * @return the <code>AsyncService</code>
 	 */
-	public abstract OrmQueryFactory createOrmQueryFactory();
+	public abstract AsyncService createAsyncService();
 	
 	/**
 	 * @return the ServiceContext
 	 */
 	public abstract ServiceContext createServiceContext();
+	
+	/**
+	 * @param serviceName the serviceName to lookup 
+	 * @return the service
+	 */
+	public abstract Object lookup(String serviceName);
+	
+	/**
+	 * @param serviceName the serviceName to lookup 
+	 * @return the service
+	 */
+	public abstract Object lookup(Class<?> ifType);
+	
+	/**
+	 * @param serviceName the serviceName to lookup
+	 * @return the service
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getService(String serviceName){
+		return (T)getDelegate().lookup(serviceName);
+	}
+	
+	/**
+	 * @param serviceType the serviceType to lookup
+	 * @return the service
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getService(Class<T> serviceType){
+		return (T)getDelegate().lookup(serviceType);
+	}
 	
 	/**
 	 * @return the MessageClientFactory
@@ -79,26 +101,19 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public static InvocationHandler createDefaultSender(){
 		return getDelegate().createSender();
 	}
-	
-	/**
-	 * @return the QueryFactory
-	 */
-	public static QueryFactory createDefaultQueryFactory(){
-		return getDelegate().createQueryFactory();
-	}
-	
-	/**
-	 * @return the OrmQueryWrapperFactory
-	 */
-	public static OrmQueryFactory createDefaultOrmQueryFactory(){
-		return getDelegate().createOrmQueryFactory();
-	}
-	
+
 	/**
 	 * @return the AsyncServiceFactory
 	 */
 	public static AsyncServiceFactory createDefaultAsyncServiceFactory(){
 		return getDelegate().createAsyncServiceFactory();
+	}
+	
+	/**
+	 * @return the AsyncService
+	 */
+	public static AsyncService createDefaultAsyncService(){
+		return getDelegate().createAsyncService();
 	}
 	
 	/**

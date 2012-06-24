@@ -3,6 +3,7 @@
  */
 package client.sql.free;
 
+import javax.persistence.EntityManager;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
 
@@ -46,7 +47,7 @@ public class QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <T extends AbstractFreeSelect> T createSelect(Class<T> clazz){
+	public <T extends AbstractFreeSelect> T createSelect(Class<T> clazz,EntityManager em){
 		T instance = null;
 		try{
 			instance = clazz.newInstance();
@@ -54,6 +55,7 @@ public class QueryFactory {
 			throw new IllegalStateException(e);
 		}
 		instance.getParameter().setQueryId(clazz.getSimpleName());
+		instance.getParameter().setEntityManager(em);
 		boolean namedQuery = instance instanceof AbstractNamedSelect;
 		if(namedQuery){
 			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
@@ -98,7 +100,7 @@ public class QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <T extends AbstractFreeUpsert> T createUpsert(Class<T> clazz){
+	public <T extends AbstractFreeUpsert> T createUpsert(Class<T> clazz,EntityManager em){
 		T instance = null;
 		try{
 			instance = clazz.newInstance();
@@ -107,7 +109,7 @@ public class QueryFactory {
 		}
 		boolean namedQuery = instance instanceof AbstractNamedUpsert;
 		instance.getParameter().setQueryId(clazz.getSimpleName());
-		
+		instance.getParameter().setEntityManager(em);
 		if(namedQuery){
 			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
 			if(nq == null){

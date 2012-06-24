@@ -3,8 +3,6 @@
  */
 package service.client.messaging;
 
-import service.client.messaging.AbstractMessageProducer;
-import service.client.messaging.InvocationParameter;
 import service.framework.core.activation.ServiceLocator;
 
 /**
@@ -22,7 +20,7 @@ public class QueueProducerDelegate extends AbstractMessageProducer{
 	protected Object invoke(InvocationParameter dto, String destinationName)
 			throws Throwable {
 		
-		ServiceLocator.lookupByInterface(JmsProducer.class).send(dto, destinationName);
+		ServiceLocator.getService(JmsProducer.class).send(dto, destinationName);
 		return null;
 	}
 

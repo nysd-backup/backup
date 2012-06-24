@@ -12,9 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import client.sql.orm.FastEntity;
 import client.sql.orm.Metadata;
 import client.sql.orm.Pair;
-
 import core.base.AbstractEntity;
 
 
@@ -28,7 +28,7 @@ import core.base.AbstractEntity;
 @Generated("kosmos.tool.entity-generator")
 @Entity
 @Table(name="TESTCOMP")
-public class Testcomp extends AbstractEntity {
+public class Testcomp extends AbstractEntity implements FastEntity{
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 1L;

@@ -3,42 +3,149 @@
  */
 package service.framework.core.activation;
 
+import java.lang.reflect.InvocationHandler;
+
+import org.springframework.context.ApplicationContext;
+
+import service.client.messaging.MessageClientFactory;
+import service.framework.core.async.AsyncService;
+import service.framework.core.async.AsyncServiceFactory;
+import service.framework.core.transaction.ServiceContext;
+import service.framework.core.transaction.ServiceContextImpl;
+import client.sql.free.QueryFactory;
+import core.exception.BusinessException;
+import core.logics.log.FaultNotifier;
+import core.message.ExceptionMessageFactory;
+import core.message.MessageBuilder;
+
 
 /**
- * Initialize the new context for AP container.
- * 
- * <pre>
- * Use this to separate the context between WEB and AP
- * </pre>
+ * The service locator using Spring
  *
- * @author yoshida-n
+ * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServiceLocatorImpl extends SpringServiceLocator{
-
+public class ServiceLocatorImpl extends ServiceLocator{
+	
+	/** the context */
+	protected ApplicationContext context = null;
+	
 	/**
-	 * @param resource the external resource
+	 * @param context the context
 	 */
-	public void construct(String resource) {		
-		initialize(resource);
+	public ServiceLocatorImpl(ApplicationContext context){
+		this.context = context;
 	}
 	
 	/**
-	 * @see service.framework.core.activation.SpringServiceLocator#construct()
+	 * @param delegatingLocator the delegatingLocator to set
+	 */
+	public static void setDelegate(ServiceLocatorImpl delegatingLocator){
+		delegate = delegatingLocator;
+	}
+	
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#lookupComponentByInterface(java.lang.Class)
 	 */
 	@Override
-	public void construct() {		
-		throw new UnsupportedOperationException();
+	public Object lookup(Class<?> clazz) {
+		return context.getBean(clazz);
 	}
 
 	/**
-	 * @see service.framework.core.activation.SpringServiceLocator#destroy()
+	 * @see service.framework.core.activation.ServiceLocator#lookupComponent(java.lang.String)
 	 */
 	@Override
-	public void destroy() {
-		terminate();
+	public Object lookup(String serviceName) {
+		return context.getBean(serviceName);
+	}
+	
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createServiceContext()
+	 */
+	@Override
+	public ServiceContext createServiceContext() {
+		return new ServiceContextImpl();
+	}
+	
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#getMessageBuilder()
+	 */
+	@Override
+	public MessageBuilder createMessageBuilder(){
+		return MessageBuilder.class.cast(lookup(MessageBuilder.class));
 	}
 
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createMessageClientFactory()
+	 */
+	@Override
+	public MessageClientFactory createMessageClientFactory() {
+		return MessageClientFactory.class.cast(lookup(MessageClientFactory.class));
+	}
 
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createPublisher()
+	 */
+	@Override
+	public InvocationHandler createPublisher() {
+		return InvocationHandler.class.cast(lookup("topicProducer"));
+	}
+
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createSender()
+	 */
+	@Override
+	public InvocationHandler createSender() {
+		return InvocationHandler.class.cast(lookup("queueProducer"));
+	}
+
+	/**
+	 * @return query factory
+	 */
+	public QueryFactory createQueryFactory() {
+		return QueryFactory.class.cast(lookup(QueryFactory.class));
+	}
+
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createAsyncServiceFactory()
+	 */
+	@Override
+	public AsyncServiceFactory createAsyncServiceFactory() {
+		return AsyncServiceFactory.class.cast(lookup(AsyncServiceFactory.class));
+	}
+
+	/**
+	 * @see core.activation.ComponentLocator#createBusinessException()
+	 */
+	@Override
+	public BusinessException createBusinessException(){
+		return new BusinessException();
+	}
+	
+	/**
+	 * @see core.activation.ComponentLocator#createFaultNotifier()
+	 */
+	@Override
+	public FaultNotifier createFaultNotifier(){
+		return FaultNotifier.class.cast(lookup(FaultNotifier.class));
+	}
+
+	/**
+	 * @see core.activation.ComponentLocator#createExceptionMessageFactory()
+	 */
+	@Override
+	public ExceptionMessageFactory createExceptionMessageFactory() {
+		return ExceptionMessageFactory.class.cast(lookup(ExceptionMessageFactory.class));
+	}
+
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createAsyncService()
+	 */
+	@Override
+	public AsyncService createAsyncService() {
+		throw new UnsupportedOperationException();
+	}
+	
 
 }

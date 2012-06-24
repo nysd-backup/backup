@@ -4,6 +4,8 @@
 package service.core.remote;
 
 
+import javax.persistence.EntityManager;
+
 import org.junit.Ignore;
 
 import service.test.ServiceUnit;
@@ -17,6 +19,12 @@ import service.test.ServiceUnit;
  */
 @Ignore
 public class RemotingTest extends ServiceUnit{
+
+	@Override
+	protected EntityManager getEntityManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * RMI

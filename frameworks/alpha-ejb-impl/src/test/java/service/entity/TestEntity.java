@@ -11,6 +11,8 @@ import javax.persistence.Version;
 
 import org.junit.Ignore;
 
+import core.base.AbstractEntity;
+
 
 /**
  * function.
@@ -21,8 +23,13 @@ import org.junit.Ignore;
 @Ignore
 @Entity
 @Table(name="testa")
-public class TestEntity {
+public class TestEntity extends AbstractEntity{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column
 	private String test;
@@ -96,4 +103,5 @@ public class TestEntity {
 	public int getVersion() {
 		return version;
 	}
+
 }

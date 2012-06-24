@@ -20,6 +20,8 @@ public class EngineHints extends PersistenceHints {
 
 	/** the jdbc fetch size for 'SQLEngine' */
 	public static final String SQLENGINE_JDBC_FETCHSIZE = "sqlengine.jdbc.fetchsize";
+	
+	public static final String BSQLENGINE_BATCH_INERT = "sqlengine.batch.insert";
 
 	/**
 	 * Sets the jdbc timeout.

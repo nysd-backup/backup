@@ -8,11 +8,9 @@ import java.sql.Connection;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.persistence.EntityManager;
-
-
+import javax.persistence.PersistenceContext;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -27,7 +25,7 @@ import org.eclipse.persistence.internal.sessions.AbstractSession;
 import org.eclipse.persistence.sessions.server.ClientSession;
 import org.junit.Assert;
 
-import client.sql.elink.EntityManagerProvider;
+import service.framework.base.AbstractCoreService;
 
 
 
@@ -37,19 +35,35 @@ import client.sql.elink.EntityManagerProvider;
  * @author yoshida-n
  * @version	created.
  */
-public class BaseCase extends Assert{
+public class BaseCase extends AbstractCoreService{
 
 	@Resource
 	protected SessionContext context;
 
-	@EJB
-	protected EntityManagerProvider per;
+	@PersistenceContext(unitName="default")
+	protected EntityManager em;
+	
+	@Override
+	protected EntityManager getEntityManager(){
+		return em;
+	}
 	
 	private IDatabaseConnection connection = null;
 	
+	protected void assertEquals(Object expected , Object actual){
+		Assert.assertEquals(expected, actual);
+	}
+	
+	protected void assertNotEquals(Object expected , Object actual){
+		Assert.assertNotSame(expected, actual);
+	}
+	
+	protected void fail(){
+		Assert.fail();
+	}
+	
 	protected void setUpData(String dataPath){
-		try{
-			EntityManager em = per.getEntityManager();		
+		try{			
 			em.createNativeQuery("SELECT * FROM DUAL").getSingleResult();
 			EntityManagerImpl impl = (EntityManagerImpl)em.getDelegate();
 			ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
@@ -89,4 +103,5 @@ public class BaseCase extends Assert{
 			throw new RuntimeException(e);
 		}
 	}
+
 }

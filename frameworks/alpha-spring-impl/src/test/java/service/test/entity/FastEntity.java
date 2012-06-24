@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import client.sql.orm.Pair;
-
 import core.base.AbstractEntity;
 
 
@@ -26,7 +25,7 @@ import core.base.AbstractEntity;
  */
 @Entity
 @Table(name="fast")
-public class FastEntity extends AbstractEntity{
+public class FastEntity extends AbstractEntity implements client.sql.orm.FastEntity{
 
 	private static final long serialVersionUID = 1L;
 

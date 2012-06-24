@@ -4,6 +4,8 @@
 package service.core.jms;
 
 
+import javax.persistence.EntityManager;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,12 @@ public class QueueTest extends ServiceUnit{
 	public void topicSend(){
 		MockService service = messageClientFactory.createPublisher(MockService.class);
 		service.exec("TEST");		
+	}
+
+
+	@Override
+	protected EntityManager getEntityManager() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

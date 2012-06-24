@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import service.framework.core.transaction.ServiceContext;
+import service.framework.core.transaction.ServiceContextImpl;
 
 /**
  * function.
@@ -11,13 +11,12 @@ import service.framework.core.transaction.ServiceContext;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServiceTestContextImpl extends ServiceContext{
+public class ServiceTestContextImpl extends ServiceContextImpl{
 
 	//JPA専用、JPA以外の場合はこれを使用せずヒントを使用する
 	private boolean suppressOptimisticLockError = false;
 	
 	public void refleshTransactionScope(){
-		super.endUnitOfWork();
 		suppressOptimisticLockError = false;
 	}
 	

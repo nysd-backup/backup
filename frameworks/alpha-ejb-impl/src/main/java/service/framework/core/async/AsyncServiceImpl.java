@@ -8,7 +8,6 @@ import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 
 import service.framework.core.activation.ServiceLocator;
-import service.framework.core.async.AsyncService;
 
 
 
@@ -27,7 +26,7 @@ public class AsyncServiceImpl implements AsyncService{
 	 */
 	public Future<Object> execute(Object proxy, Method method , Object args) throws Exception{	
 		
-		Object service = ServiceLocator.lookupByInterface(method.getDeclaringClass());
+		Object service = ServiceLocator.getService(method.getDeclaringClass());
 		
 		Object value  = null;
 		if(method.getParameterTypes() == null || method.getParameterTypes().length == 0){

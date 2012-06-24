@@ -4,19 +4,18 @@
 package service.framework.base;
 
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+import service.client.messaging.MessageClientFactory;
 import client.sql.free.AbstractNativeSelect;
 import client.sql.free.AbstractNativeUpsert;
 import client.sql.free.QueryFactory;
 import client.sql.orm.OrmQueryFactory;
 import client.sql.orm.OrmSelect;
 import client.sql.orm.OrmUpdate;
-
 import core.base.AbstractEntity;
-
-import service.client.messaging.MessageClientFactory;
-import service.framework.base.AbstractService;
 
 
 /**
@@ -39,6 +38,11 @@ public abstract class AbstractCoreService extends AbstractService{
 	/** 非同期メッセージクライアントファクトリ */
 	@Autowired
 	private MessageClientFactory messageClientFactory;
+	
+	/**
+	 * @return the entity manager
+	 */
+	protected abstract EntityManager getEntityManger();
 	
 	/**
 	 * P2P用非同期処理.
@@ -96,7 +100,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	@SuppressWarnings("unchecked")
 	protected <V extends AbstractEntity,T extends OrmSelect<V>> T createOrmSelect(Class<V> entityClass){
-		OrmSelect<V> query = ormQueryFactory.createSelect(entityClass);		
+		OrmSelect<V> query = ormQueryFactory.createSelect(entityClass,getEntityManger());		
 		return (T)query;
 	}
 	
@@ -127,7 +131,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 */
 	@SuppressWarnings("unchecked")
 	protected <V extends AbstractEntity,T extends OrmUpdate<V>> T createOrmUpdate(Class<V> entityClass){
-		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass);		
+		OrmUpdate<V> query = ormQueryFactory.createUpdate(entityClass,getEntityManger());		
 		return (T)query;
 	}
 	
@@ -162,7 +166,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return クエリ
 	 */
 	protected <T extends AbstractNativeSelect> T createSelect(Class<T> queryClass){
-		return queryFactory.createSelect(queryClass);
+		return queryFactory.createSelect(queryClass,getEntityManger());		
 	}
 	
 	/**
@@ -190,7 +194,7 @@ public abstract class AbstractCoreService extends AbstractService{
 	 * @return アップデータ
 	 */
 	protected <T extends AbstractNativeUpsert> T createUpsert(Class<T> updateClass){
-		return queryFactory.createUpsert(updateClass);
+		return queryFactory.createUpsert(updateClass,getEntityManger());
 	}
 	
 }

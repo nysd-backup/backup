@@ -21,8 +21,6 @@ import client.sql.PersistenceHints;
  */
 public class OrmSelectParameter<T> extends OrmQueryParameter<T>{
 
-	private static final long serialVersionUID = 1L;
-
 	/** the max size to be able to search */
 	private int maxSize = 0;
 	

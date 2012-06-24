@@ -10,7 +10,7 @@ package service.test;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface RequiresNewService {
+public interface RequiresNewNativeService {
 
 	public String test();
 	

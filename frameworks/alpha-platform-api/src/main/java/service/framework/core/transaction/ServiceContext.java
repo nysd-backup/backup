@@ -4,7 +4,6 @@
 package service.framework.core.transaction;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,7 +17,7 @@ import core.message.MessageResult;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServiceContext {
+public abstract class ServiceContext {
 	
 	private Locale locale;
 	
@@ -28,15 +27,9 @@ public class ServiceContext {
 	/** the requestId */
 	private String requestId = null;
 
-	/** true:any transaction is failed. */
-	private boolean anyTransactionFailed = false;
-	
+	/** the messageList */
 	private List<MessageResult> messageList = new ArrayList<MessageResult>();
 
-	
-	/** the stack of unit of work */
-	protected LinkedList<InternalUnitOfWork> unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
-	
 
 	/** the thread local instance*/
 	private static ThreadLocal<ServiceContext> instance = new ThreadLocal<ServiceContext>(){
@@ -63,62 +56,17 @@ public class ServiceContext {
 	public static ServiceContext getCurrentInstance(){
 		return instance.get();
 	}
-	
-
-	/**
-	 * Set the current transaction to rolling back.
-	 */
-	public void setRollbackOnlyToCurrentTransaction(){
-		getCurrentUnitOfWork().setRollbackOnly();
-		setAnyTransactionFailed();
-	}
-	
-	/**
-	 * start unit of work.
-	 */
-	public void startUnitOfWork(){
-		unitOfWorkStack.push(createInternalUnitOfWork());
-	}
-	
-	/**
-	 * end unit of work.
-	 */
-	public void endUnitOfWork(){
-		unitOfWorkStack.pop();
-	}
-	
-	/**
-	 * @return the unit of work of current transaction
-	 */
-	public InternalUnitOfWork getCurrentUnitOfWork(){
-		return unitOfWorkStack.peek();
-	}
-
+		
 	/**
 	 * Adds the messages 
 	 * @param message the message
 	 */
 	public void addMessage(MessageResult message){
 		if(message.getLevel() >= MessageLevel.E.ordinal()){
-			setRollbackOnlyToCurrentTransaction();
+			setRollbackOnly();
 		}		
-		addMessageInternal(message);
+		messageList.add(message);
 	}
-	
-	/**
-	 * set anyTransactionFailed to true. 
-	 */
-	protected void setAnyTransactionFailed(){
-		anyTransactionFailed = true;
-	}
-	
-	/**
-	 * @return the anyTransactionFailed
-	 */
-	public boolean isAnyTransactionFailed(){
-		return anyTransactionFailed;
-	}
-	
 	
 	/**
 	 * @param requestId
@@ -168,15 +116,13 @@ public class ServiceContext {
 	public void initialize(){
 		release();
 		setCurrentInstance(this);
-		startUnitOfWork();
+		
 	}
 	
 	/**
 	 * Releases the context.
 	 */
-	public void release(){
-		anyTransactionFailed = false;
-		unitOfWorkStack = new LinkedList<InternalUnitOfWork>();
+	public void release(){			
 		locale = null;
 		callStackLevel = 0;
 		requestId = null;	
@@ -199,20 +145,14 @@ public class ServiceContext {
 		this.locale = locale;
 	}
 
-	/** 
-	 * @return the internal unit of work
+	/**
+	 * Set the current transaction to rolling back.
 	 */
-	protected InternalUnitOfWork createInternalUnitOfWork(){
-		return new InternalUnitOfWork();
-	}
+	public abstract void setRollbackOnly();
 	
 	/**
-	 * Adds the message to the context. 
-	 * @param message the message
+	 * @return true:rollback only
 	 */
-	protected void addMessageInternal(MessageResult message){
-		messageList.add(message);
-	}
-
+	public abstract boolean isRollbackOnly();
 
 }

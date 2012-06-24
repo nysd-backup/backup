@@ -25,7 +25,7 @@ public class AsyncServiceProxy implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
-		AsyncService executor = ServiceLocator.lookupByInterface(AsyncService.class);
+		AsyncService executor = ServiceLocator.createDefaultAsyncService();
 
 		Future<Object> futureResult = executor.execute(proxy, method, args);
 		

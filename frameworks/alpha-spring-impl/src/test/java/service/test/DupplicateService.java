@@ -6,17 +6,14 @@ package service.test;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-
-
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import client.sql.elink.EntityManagerProvider;
+import service.test.entity.TestEntity;
 import client.sql.orm.OrmQueryFactory;
 import client.sql.orm.OrmSelect;
-
-import service.test.entity.TestEntity;
 
 /**
  * function.
@@ -25,21 +22,16 @@ import service.test.entity.TestEntity;
  * @version	created.
  */
 @Transactional
-@Service
 public class DupplicateService {
 
 	@Resource
 	private OrmQueryFactory ormQueryFactory;
-	
-	@Resource
-	private OrmQueryFactory readOnlyOrmQueryFactory;
 
-	@Resource
-	private EntityManagerProvider entityManagerProvider;
+	@PersistenceContext(unitName="oracle")
+	private EntityManager em;
 	
-	@Resource
-	private EntityManagerProvider readOnlyEntityManagerProvider;
-	
+	@PersistenceContext(unitName="readOnlyOracle")
+	private EntityManager rem;
 	
 	/**
 	 * 成功
@@ -54,17 +46,17 @@ public class DupplicateService {
 		e.setTest("aaa");
 		e.setAttr("aaaa");
 		e.setAttr2(100);
-		entityManagerProvider.getEntityManager().persist(e);
-		entityManagerProvider.getEntityManager().flush();
+		em.persist(e);
+		em.flush();
 			
 		//読み込み専用
-		OrmSelect<TestEntity> query = readOnlyOrmQueryFactory.createSelect(TestEntity.class);	
+		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,rem);	
 		List<TestEntity> result = query.getResultList();
 		System.out.println(result.size());
 		res[0] = result.size();
 		
 		//両用で取得
-		OrmSelect<TestEntity> wquery =ormQueryFactory.createSelect(TestEntity.class);	
+		OrmSelect<TestEntity> wquery = ormQueryFactory.createSelect(TestEntity.class,em);	
 		List<TestEntity> wresult = wquery.getResultList();
 		System.out.println(wresult.size());
 		res[1] = wresult.size();
@@ -81,8 +73,8 @@ public class DupplicateService {
 		e2.setTest("aaab");
 		e2.setAttr("aaaa");
 		e2.setAttr2(100);
-		readOnlyEntityManagerProvider.getEntityManager().persist(e2);
-		readOnlyEntityManagerProvider.getEntityManager().flush();
+		rem.persist(e2);
+		rem.flush();
 	}
 	
 }

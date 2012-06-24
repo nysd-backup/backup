@@ -1,20 +1,15 @@
 package service.services;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import client.sql.elink.EntityManagerProvider;
-
 import service.entity.TestEntity;
+import service.testcase.BaseCase;
 
 
 
 
 @Stateless
-public class MockService2Impl implements MockService2{
-
-	@EJB
-	private EntityManagerProvider per;
+public class MockService2Impl extends BaseCase implements MockService2{
 	
 	@Override
 	public void exec(String v) {
@@ -22,7 +17,7 @@ public class MockService2Impl implements MockService2{
 		e.setTest("10");
 		e.setAttr("aaa");
 		e.setAttr2(2);
-		per.getEntityManager().persist(e);
+		persist(e);
 	}
 
 }

@@ -32,22 +32,19 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
-
-	<bean id="txConnectionProvider" class="service.client.sql.TxDataSourceConnectionProviderImpl" scope="prototype" >
-		<property name="dataSource" ref="dataSource"/>
-	</bean>
 	
 	<context:component-scan base-package="service.core.services">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />		
 	</context:component-scan>
 	
-	<bean class="service.test.RequiresNewServiceImpl" scope="prototype" />
-	<bean class="service.test.RequiresNewReadOnlyServiceImpl" scope="prototype" />
+	<bean class="service.test.RequiresNewNativeServiceImpl" scope="prototype" />
+	<bean class="service.test.RequiresNewNativeReadOnlyServiceImpl" scope="prototype" />
 	
 	
 	<!-- 永続化エンジン -->
-	<bean id="persistenceManager" class="client.sql.orm.PersistenceManagerImpl" scope="prototype">
+	<bean id="txEntityManager" class="service.core.TxEntityManagerImpl" scope="prototype">
+		<property name="dataSource" ref="dataSource"/>
 		<property name="internalQuery" ref="internalNativeQuery"/>				
 	</bean>
 	<bean id="batchUpdateFactory" class="client.sql.free.BatchUpsertFactoryImpl">

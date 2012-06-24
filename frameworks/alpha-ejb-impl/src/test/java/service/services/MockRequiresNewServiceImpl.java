@@ -6,11 +6,10 @@ package service.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import client.sql.elink.EntityManagerProvider;
-
 import service.entity.TestEntity;
 import service.framework.core.transaction.ServiceContext;
 import service.framework.core.transaction.ServiceContextImpl;
+import service.testcase.BaseCase;
 
 
 
@@ -22,10 +21,7 @@ import service.framework.core.transaction.ServiceContextImpl;
  * @version 2011/08/31 created.
  */
 @Stateless
-public class MockRequiresNewServiceImpl implements MockRequiresNewService{
-
-	@EJB
-	private EntityManagerProvider per;
+public class MockRequiresNewServiceImpl extends BaseCase implements MockRequiresNewService{
 	
 	@EJB
 	private MockService2 s2;
@@ -37,9 +33,9 @@ public class MockRequiresNewServiceImpl implements MockRequiresNewService{
 		e.setTest("1");
 		e.setAttr("aaa");
 		e.setAttr2(2);
-		per.getEntityManager().persist(e);
+		em.persist(e);
 		if( v.equals("AA")){
-			((ServiceContextImpl)ServiceContext.getCurrentInstance()).setRollbackOnlyToCurrentTransaction();
+			((ServiceContextImpl)ServiceContext.getCurrentInstance()).setRollbackOnly();
 		}
 		return v;
 	}

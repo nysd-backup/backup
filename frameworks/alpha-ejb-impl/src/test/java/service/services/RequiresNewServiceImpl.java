@@ -5,30 +5,23 @@ package service.services;
 
 import java.util.Locale;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-
-
 import org.eclipse.persistence.config.QueryHints;
-
-import client.sql.elink.EntityManagerProvider;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
-
-import core.exception.BusinessException;
-import core.message.MessageBean;
-import core.message.MessageResult;
 
 import service.entity.TestEntity;
 import service.framework.core.activation.ServiceLocator;
-import service.framework.core.activation.ServiceLocatorImpl;
 import service.framework.core.transaction.ServiceContext;
 import service.framework.core.transaction.ServiceContextImpl;
+import service.testcase.BaseCase;
+import client.sql.orm.OrmSelect;
+import core.exception.BusinessException;
+import core.message.MessageBean;
+import core.message.MessageResult;
 
 
 /**
@@ -39,20 +32,18 @@ import service.framework.core.transaction.ServiceContextImpl;
  */
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-public class RequiresNewServiceImpl implements RequiresNewService{
+public class RequiresNewServiceImpl extends BaseCase implements RequiresNewService{
 
-	public String test() {
-		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
+	public String test() {		
+		OrmSelect<TestEntity> query = createOrmSelect(TestEntity.class);
 		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
 	}
 
 	@Override
-	public String crushException() {
-		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();	
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class);
+	public String crushException() {		
+		OrmSelect<TestEntity> query = createOrmSelect(TestEntity.class);
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
@@ -80,11 +71,11 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	public void callTwoServices() {
 		
 		//業務例外化
-		RequireService service = ServiceLocator.lookupByInterface(RequireService.class);
+		RequireService service = ServiceLocator.getService(RequireService.class);
 		service.addMessage();
 		
 		//永続化
-		RequireService service2 = ServiceLocator.lookupByInterface(RequireService.class);
+		RequireService service2 = ServiceLocator.getService(RequireService.class);
 		state= service2.persist();		
 		
 		rollbackOnly = ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
@@ -112,19 +103,15 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 		throw new BusinessException("error");
 	}
 	
-	@EJB
-	private EntityManagerProvider per;
-
 	@Override
-	public void persist() {
-		OrmQueryFactory ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory();	
-		TestEntity result = ormQueryFactory.createSelect(TestEntity.class).find("1");
+	public void persist() {		
+		TestEntity result = createOrmSelect(TestEntity.class).find("1");
 		if(result == null){
 			TestEntity e = new TestEntity();
 			e.setTest("1");
 			e.setAttr("aa");
 			e.setAttr2(22);
-			per.getEntityManager().persist(e);
+			persist(e);
 		}
 	}
 

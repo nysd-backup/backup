@@ -8,20 +8,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import client.sql.elink.EntityManagerProvider;
+import sqlengine.builder.ConstAccessor;
+import sqlengine.builder.SQLBuilder;
+import sqlengine.builder.impl.ConstAccessorImpl;
 import client.sql.free.FreeQueryParameter;
 import client.sql.free.FreeSelectParameter;
 import client.sql.free.FreeUpsertParameter;
 import client.sql.free.NativeResult;
 import client.sql.free.strategy.InternalQuery;
-
-
-import sqlengine.builder.ConstAccessor;
-import sqlengine.builder.SQLBuilder;
-import sqlengine.builder.impl.ConstAccessorImpl;
 
 
 
@@ -36,21 +32,11 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	/** the pattern */
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
 	
-	/** the EntityManager */
-	private EntityManager em;
-
 	/** the <code>SQLBuilder</code> */
 	private SQLBuilder builder;
 	
 	/** the <code>ConstAccessor</code> */
 	private ConstAccessor accessor = new ConstAccessorImpl();
-
-	/**
-	 * @param em the em to set
-	 */
-	public void setEntityManagerProvider(EntityManagerProvider em){
-		this.em = em.getEntityManager();
-	}
 	
 	/**
 	 * @param builder the builder to set
@@ -124,18 +110,18 @@ public class InternalNamedQueryImpl implements InternalQuery{
 		if( param.getName() == null){				
 			//解析未使用
 			if( param.isUseRowSql() ){					
-				query = em.createQuery(executingSql);			
+				query = param.getEntityManager().createQuery(executingSql);			
 				for(Map.Entry<String, Object> p : param.getParam().entrySet()){
 					query.setParameter(p.getKey(), p.getValue());				
 				}
 			}else{				
 				executingSql = builder.build(param.getQueryId(), executingSql);
 				executingSql = builder.evaluate(executingSql, param.getBranchParam(),param.getQueryId());	
-				query = setParameters(executingSql,param.getParam(),em.createQuery(executingSql));	
+				query = setParameters(executingSql,param.getParam(),param.getEntityManager().createQuery(executingSql));	
 			}
 		//名前付きクエリ
 		}else {
-			query = setParameters(executingSql,param.getParam(), em.createNamedQuery(param.getName()));
+			query = setParameters(executingSql,param.getParam(), param.getEntityManager().createNamedQuery(param.getName()));
 		}
 		return query;
 	}

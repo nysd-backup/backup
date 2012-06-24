@@ -3,6 +3,8 @@
  */
 package client.sql.free;
 
+import javax.persistence.EntityManager;
+
 import client.sql.free.strategy.InternalQuery;
 
 
@@ -12,6 +14,7 @@ import client.sql.free.strategy.InternalQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
+@SuppressWarnings("unchecked")
 public abstract class AbstractFreeUpsert {
 	
 	/** the query */
@@ -20,6 +23,14 @@ public abstract class AbstractFreeUpsert {
 	/** the internal query */
 	private InternalQuery internalQuery;
 	
+	/**
+	 * @param em the em to set
+	 */	
+	public <T extends AbstractFreeUpsert> T setEntityManager(EntityManager em){
+		this.parameter.setEntityManager(em);
+		return (T)this;
+	}
+
 	/**
 	 * @return the parameter
 	 */
@@ -76,9 +87,9 @@ public abstract class AbstractFreeUpsert {
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public AbstractFreeUpsert setHint(String arg0, Object arg1) {
+	public <T extends AbstractFreeUpsert> T  setHint(String arg0, Object arg1) {
 		parameter.getHints().put(arg0,arg1);
-		return this;
+		return (T)this;
 	}
 
 	/**

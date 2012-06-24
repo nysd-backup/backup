@@ -5,7 +5,6 @@
     <project>alpha-core</project>
     <project>alpha-platform-api</project>
     <project>sql-client-api</project>
-    <project>sql-client-elink-impl</project>
     <project>sql-engine</project>
   </projects>
   <buildSpec>
