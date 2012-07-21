@@ -31,9 +31,6 @@ public abstract class FreeQueryParameter extends QueryParameter{
 	/** the parameter for <code>PreparedStatement</code> */
 	private Map<String,Object> param = new HashMap<String,Object>();
 		
-	/** the parameter for analyze the template */
-	private Map<String,Object> branchParam = new HashMap<String,Object>();
-	
 	/** the JPA hint */
 	private Map<String,Object> hints = new HashMap<String,Object>();
 	
@@ -44,7 +41,7 @@ public abstract class FreeQueryParameter extends QueryParameter{
 	 * @param sql the sql to set
 	 */
 	public void setSql(String sql){
-		this.useRowSql = sql.charAt(0) != '@';
+		this.useRowSql = sql == null || sql.isEmpty() || sql.charAt(0) != '@';
 		this.sql = sql;
 	}
 
@@ -67,20 +64,6 @@ public abstract class FreeQueryParameter extends QueryParameter{
 	 */
 	public void setParam(Map<String,Object> param) {
 		this.param = param;
-	}
-
-	/**
-	 * @return the branchParam
-	 */
-	public Map<String,Object> getBranchParam() {
-		return branchParam;
-	}
-
-	/**
-	 * @param branchParam the branchParam to set
-	 */
-	public void setBranchParam(Map<String,Object> branchParam) {
-		this.branchParam = branchParam;
 	}
 
 	/**

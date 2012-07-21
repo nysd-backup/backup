@@ -6,7 +6,9 @@ package service.core.query;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -34,9 +36,9 @@ import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
 import service.test.entity.Testcomp;
 import service.test.entity.TestcompPK;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
-import client.sql.orm.OrmUpdate;
+import client.sql.orm.CriteriaModifyQuery;
+import client.sql.orm.CriteriaQueryFactory;
+import client.sql.orm.CriteriaReadQuery;
 
 
 /**
@@ -50,7 +52,7 @@ import client.sql.orm.OrmUpdate;
 public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@Resource
-	private OrmQueryFactory ormQueryFactory;
+	private CriteriaQueryFactory ormQueryFactory;
 
 	@PersistenceContext(unitName="oracle")
 	private EntityManager per;
@@ -61,9 +63,10 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void allCondition() throws SQLException{	
+					
 		setUpData("TEST.xls");
-		
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);	
+
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);	
 		
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
@@ -75,7 +78,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		per.detach(first);
 		first.setAttr("100");
 		
-		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> forres = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		List<TestEntity> updated = getOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
@@ -88,7 +91,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void disableDetach(){
 		setUpData("TEST.xls");
 		//更新前取征E
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		List<TestEntity> result = getOneRecord(query);	
 		assertEquals(1,result.size());
@@ -98,7 +101,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		first.setAttr("100");
 	
 		//更新結果
-		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> forres = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		TestEntity entity = forres.eq(TEST, "2").getSingleResult();
 		assertEquals("100",entity.getAttr());
@@ -113,12 +116,12 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		setUpData("TEST.xls");
 		
 		//更新
-		OrmUpdate<TestEntity> update = ormQueryFactory.createUpdate(TestEntity.class,per);
+		CriteriaModifyQuery<TestEntity> update = ormQueryFactory.createModifyQuery(TestEntity.class,per);
 		
 		update.eq(TEST, "2").set(ATTR, "AAA").update();
 		
 		//検索
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);		
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(TEST, "2").getSingleResult();
@@ -139,18 +142,15 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		per.flush();
 		
 		//検索
-		OrmSelect<Testcomp> query = ormQueryFactory.createSelect(Testcomp.class,per);		
+		CriteriaReadQuery<Testcomp> query = ormQueryFactory.createReadQuery(Testcomp.class,per);		
 		
 		Testcomp r = query.eq(Testcomp.PK1, "1").getSingleResult();
 		assertEquals("aaa",r.getValue());
 		
-		//主キー検索
-		OrmSelect<Testcomp> query2 = ormQueryFactory.createSelect(Testcomp.class,per);
-		
 		TestcompPK pk = new TestcompPK();
 		pk.setPk1("1");
 		pk.setPk2("2");
-		Testcomp test = query2.find(pk);
+		Testcomp test = per.find(Testcomp.class,pk);
 		assertEquals("aaa",test.getValue());
 	}
 	
@@ -175,12 +175,13 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		per.flush();
 		
 		//検索
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		List<TestEntity> result = query.getResultList();
 		result.get(0).setAttr("100");
 		result.get(1).setAttr("20");
 		result.get(2).setAttr("aaaa");
+
 		per.flush();
 	}
 	
@@ -190,7 +191,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getSingleResultWithDesc(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).desc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).desc(TEST);
 		
 		TestEntity result = query.getSingleResult();
 		assertEquals("2",result.getAttr());
@@ -202,7 +203,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getSingleResultWithAsc(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).asc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).asc(TEST);
 		
 		TestEntity result = query.getSingleResult();
 		assertEquals("3",result.getAttr());
@@ -215,7 +216,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getSingleResultSetFirstWithDesc(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).desc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).desc(TEST);
 		
 		query.setFirstResult(1);
 		TestEntity result = query.getSingleResult();
@@ -228,7 +229,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getResultSetFirst(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		query.setFirstResult(1);
 		List<TestEntity> result = query.getResultList();
@@ -255,7 +256,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		t.setTest("902").setAttr("902").setAttr2(900);
 		per.persist(t);
 		
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).desc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).desc(TEST);
 		
 		query.contains(TEST, Arrays.asList("0","1,","2","900","901","902"));
 		query.setFirstResult(1);
@@ -281,7 +282,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void nodataError(){
 //		try{
-//			OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).enableNoDataError();
+//			CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).enableNoDataError();
 //			query.eq(TEST, "AGA").getSingleResult();
 //			fail();
 //		}catch(UnexpectedNoDataFoundException une){
@@ -297,15 +298,12 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void find(){	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		TestEntity result = query.find("1");
+			
+		TestEntity result = per.find(TestEntity.class,"1");
 		per.detach(result);
 		result.setAttr("1100");
-		
-		OrmSelect<TestEntity> query2 = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		result = query2.find("1");
+
+		result = per.find(TestEntity.class,"1");
 		assertEquals("3",result.getAttr());
 		
 	}
@@ -317,14 +315,11 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void findDisableDetach(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		TestEntity result = query.find("1");
+	
+		TestEntity result = per.find(TestEntity.class,"1");
 		result.setAttr("1100");
-		
-		OrmSelect<TestEntity> query2 = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		result = query2.find("1");
+
+		result = per.find(TestEntity.class,"1");
 		assertEquals("1100",result.getAttr());
 	}
 
@@ -334,7 +329,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void findNodataError(){
 //		try{
-//			OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+//			CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 //			query.enableNoDataError();
 //			query.find("AA");
 //			fail();
@@ -350,7 +345,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void findAnyNodataError(){
 //		try{
-//			OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+//			CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 //			query.enableNoDataError();
 //			query.eq(TEST, "aaa");
 //			query.findAny();
@@ -387,6 +382,33 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
+	 * 一意制紁E��ラー
+	 */
+	@Test	
+	public void uniqueConstraintError2(){		
+		TestEntity entity = new TestEntity();
+		entity.setTest("1");
+		entity.setAttr("aaa");
+		entity.setAttr2(30);
+		
+		TestEntity entity2 = new TestEntity();
+		entity2.setTest("1");
+		entity2.setAttr("aaa");
+		entity2.setAttr2(30);
+		
+		per.persist(entity2);
+		per.persist(entity);
+		try{
+			per.flush();
+			fail();
+		}catch(PersistenceException de){
+			SQLException sqle = (SQLException)de.getCause().getCause();
+			assertEquals("1",String.valueOf(sqle.getErrorCode()));
+		}
+	
+	}
+	
+	/**
 	 * 一意制紁E��ラー無要E
 	 */
 	@Test	
@@ -402,7 +424,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		entity.setTest("1");
 		entity.setAttr("aaa");
 		entity.setAttr2(30);
-		
+		per.setProperty("aaa", true);
 		per.persist(entity);	
 		per.flush();
 		
@@ -412,7 +434,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		entity2.setTest("530");
 		entity2.setAttr("aaa");
 		entity2.setAttr2(30);
-	
+		
 		per.persist(entity2);	
 
 	}
@@ -423,9 +445,8 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test	
 	public void versionNoError(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		final TestEntity result = query.find("1");
+	
+		final TestEntity result = per.find(TestEntity.class,"1");
 		result.setVersion(2);
 		try{
 			per.flush();
@@ -445,9 +466,8 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		impl.setSuppressOptimisticLockError();
 		
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		final TestEntity result = query.find("1");
+	
+		final TestEntity result = per.find(TestEntity.class,"1");
 		result.setVersion(2);
 		
 		
@@ -468,12 +488,12 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		impl.setValidOptimisticLockError();
 		
 		//バ�Eジョン番号を指定しなぁE��め更新成功
-		TestEntity res2 = query.find("2");
+		TestEntity res2 = per.find(TestEntity.class,"2");
 		assertEquals(0,res2.getVersion());
 		res2.setAttr("aa");
 		per.flush();
 
-		assertEquals("aa", query.find("2").getAttr());
+		assertEquals("aa", per.find(TestEntity.class,"2").getAttr());
 	}
 	
 	/**
@@ -488,9 +508,9 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		
 		setUpDataForceCommit("TEST.xls");
 		
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		
 		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
@@ -506,10 +526,9 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
-
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
 		try{
@@ -533,9 +552,9 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
 		try{
@@ -573,9 +592,9 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		RequiresNewReadOnlyService service = ServiceLocator.getService(RequiresNewReadOnlyService.class);
 		
 		try{
@@ -598,7 +617,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void queryPessimisticLockError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
 		
 		query.eq(ITestEntity.TEST,"1");
 		
@@ -628,7 +647,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		impl.setSuppressOptimisticLockError();
 	
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
 		
 		query.eq(ITestEntity.TEST,"1");
 		query.setHint(QueryHints.HINT, "/* TEST */");
@@ -650,7 +669,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());	
 		per.persist(entity);
 		
-		OrmSelect<DateEntity> query = ormQueryFactory.createSelect(DateEntity.class,per);
+		CriteriaReadQuery<DateEntity> query = ormQueryFactory.createReadQuery(DateEntity.class,per);
 		
 		DateEntity e = query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").getSingleResult();
 		assertNull(e);
@@ -661,7 +680,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	/**
 	 * @return
 	 */
-	private List<TestEntity> getOneRecord(OrmSelect<TestEntity> query ){	
+	private List<TestEntity> getOneRecord(CriteriaReadQuery<TestEntity> query ){	
 		query.between(TEST, "0", "30").eq(TEST,"2").gtEq(TEST, "0").ltEq(TEST, "30").lt(TEST, "30").gt(TEST, "0");		
 		query.between(ATTR, "0", "20").eq(ATTR,"2").gtEq(ATTR, "0").ltEq(ATTR, "20").lt(ATTR, "20").gt(ATTR, "0");
 		query.between(ATTR2, 0, 100).eq(ATTR2,2).gtEq(ATTR2, 0).ltEq(ATTR2, 100).lt(ATTR2, 100).gt(ATTR2, 0);		

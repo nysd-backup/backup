@@ -3,6 +3,7 @@
  */
 package service.entity;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Generated;
@@ -15,7 +16,6 @@ import javax.persistence.Table;
 import client.sql.orm.FastEntity;
 import client.sql.orm.Metadata;
 import client.sql.orm.Pair;
-import core.base.AbstractEntity;
 
 
 
@@ -28,11 +28,8 @@ import core.base.AbstractEntity;
 @Generated("kosmos.tool.entity-generator")
 @Entity
 @Table(name="TESTCOMP")
-public class Testcomp extends AbstractEntity implements FastEntity{
+public class Testcomp implements FastEntity{
 
-	/** serialVersionUID */
-	private static final long serialVersionUID = 1L;
-	
 	/** PK1 */
 	public static final Metadata<Testcomp, java.lang.String> PK1 = new Metadata<Testcomp, java.lang.String>("PK1");
 	
@@ -117,7 +114,7 @@ public class Testcomp extends AbstractEntity implements FastEntity{
 	 */
 	@Override
 	public Map<String, Object> toPrimaryKeys() {
-		Map<String,Object> map = createMap();
+		Map<String,Object> map = new LinkedHashMap<String,Object>();
 		map.put(PK1.name(),pk1);
 		map.put(PK2.name(),pk2);
 		return map;
@@ -128,7 +125,7 @@ public class Testcomp extends AbstractEntity implements FastEntity{
 	 */
 	@Override
 	public Map<String, Object> toAttributes() {
-		Map<String,Object> map = createMap();
+		Map<String,Object> map = new LinkedHashMap<String,Object>();
 		map.put(VALUE.name(),value);
 		return map;
 	}

@@ -26,8 +26,8 @@ import service.test.entity.IDateEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
 import client.sql.free.QueryFactory;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
+import client.sql.orm.CriteriaQueryFactory;
+import client.sql.orm.CriteriaReadQuery;
 
 
 /**
@@ -43,7 +43,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	private QueryFactory queryFactory;
 	
 	@Resource
-	private OrmQueryFactory ormQueryFactory;
+	private CriteriaQueryFactory ormQueryFactory;
 	
 	@PersistenceContext(unitName="oracle")
 	private EntityManager per;
@@ -59,7 +59,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void select(){
 		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 		query.setEntityManager(per);
 		query.setHint(QueryHints.HINT,"/*+ hint */");
 		query.setTest("1");
@@ -79,7 +79,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void selectIfAttr(){
 		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 		query.setEntityManager(per);
 		query.setAttr("1000");
 		query.setTest("1");
@@ -96,7 +96,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void selectIfAttr2(){
 		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 		query.setEntityManager(per);
 		query.setAttr2(500).setTest("1").setArc("500");
 		
@@ -110,7 +110,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void nodataError(){
 //		setUpData("TEST.xls");
-//		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class).enableNoDataError();
+//		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class).enableNoDataError();
 //		query.setAttr2(500).setTest("1").setArc("500");
 //		
 //		try{
@@ -127,7 +127,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 //	@Test
 //	public void exists(){
 //		setUpData("TEST.xls");
-//		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+//		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 //		query.setAttr2(500).setTest("1");
 //		assertTrue(query.exists());
 //	}
@@ -140,7 +140,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 //		
 //		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
 //		
-//		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+//		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 //		query.setTest("200");
 //		assertFalse(query.exists(mh.createMessage(1,"test")));
 //		
@@ -157,7 +157,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 //		
 //		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
 //
-//		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+//		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 //		query.setAttr2(500).setTest("200");
 //		query.throwIfExists(mh.createMessage(1, "test"));
 //		
@@ -179,7 +179,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 //		setUpData("TEST.xls");
 //		assertFalse(MessageLevel.getCurrentInstance().isRollbackOnly());
 //
-//		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+//		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 //		query.setAttr2(500).setTest("1");
 //		query.throwIfEmpty(mh.createMessage(1, "test"));
 //		
@@ -198,7 +198,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getSingleResult(){
 		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 		query.setEntityManager(per);
 		query.setAttr2(500).setTest("1");
 		TestEntity e = query.getSingleResult();
@@ -213,7 +213,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		TestEntity entity = new TestEntity();
 		entity.setTest("1000").setAttr("aa").setAttr2(111);
 		setUpData("TEST.xls");
-		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per).setMaxResults(2);
+		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per).setMaxResults(2);
 		query.setEntityManager(per);
 		List<TestEntity> e = query.getResultList();
 		assertEquals(2,e.size());
@@ -238,7 +238,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		t.setTest("902").setAttr("902").setAttr2(900);
 		per.persist(t);
 		
-		SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);		
+		SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);		
 		query.setEntityManager(per);
 		query.setFirstResult(1);
 		query.setMaxResults(2);
@@ -272,7 +272,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 //		con.createStatement().execute("SELECT * FROM TESTA WHERE TEST = '1' FOR UPDATE NOWAIT");
 //		
 //		try{
-//			SampleNamedQuery query = queryFactory.createSelect(SampleNamedQuery.class,per);
+//			SampleNamedQuery query = queryFactory.createReadQuery(SampleNamedQuery.class,per);
 //			query.setTest("1");
 //			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint("javax.persistence.lock.timeout", "0");
 //			query.getResultList();
@@ -292,7 +292,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	public void constTest(){
 	
 		setUpData("TEST.xls");
-		SampleNamedQueryConst c = queryFactory.createSelect(SampleNamedQueryConst.class,per);
+		SampleNamedQueryConst c = queryFactory.createReadQuery(SampleNamedQueryConst.class,per);
 		c.setEntityManager(per);
 		c.setTest("1");
 		List<TestEntity> e = c.getResultList();
@@ -307,7 +307,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	public void constAttr(){
 	
 		setUpData("TEST.xls");
-		SampleNamedQueryConst c = queryFactory.createSelect(SampleNamedQueryConst.class,per);
+		SampleNamedQueryConst c = queryFactory.createReadQuery(SampleNamedQueryConst.class,per);
 		c.setEntityManager(per);
 		c.setTest("2");
 		c.setAttr(CachableConst.TARGET_TEST_1_OK);
@@ -322,11 +322,11 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> eq = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		eq.eq(TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
 		
-		SampleNamedQueryConst c = queryFactory.createSelect(SampleNamedQueryConst.class,per);
+		SampleNamedQueryConst c = queryFactory.createReadQuery(SampleNamedQueryConst.class,per);
 		c.setEntityManager(per);
 		c.setArc(CachableConst.TARGET_INT);		
 		List<TestEntity> e = c.getResultList();
@@ -344,7 +344,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		e2.setAttr("aa").setTest("1");
 		per.persist(e2);
 		
-		SampleNamedUpdate update = queryFactory.createUpsert(SampleNamedUpdate.class,per);//.setProviderHint(QueryHints.MAINTAIN_CACHE, HintValues.TRUE);		
+		SampleNamedUpdate update = queryFactory.createModifyQuery(SampleNamedUpdate.class,per);//.setProviderHint(QueryHints.MAINTAIN_CACHE, HintValues.TRUE);		
 		update.setTest("1");
 		update.setDateCol(new Date());
 		update.setAttr2set(900);
@@ -352,7 +352,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(1,count);
 
 		//e2が永続化コンチE��ストに入ったままなので、JPQLアチE�EチE�Eトを実行する�Eで更新
-		OrmSelect<DateEntity> e = ormQueryFactory.createSelect(DateEntity.class,per);
+		CriteriaReadQuery<DateEntity> e = ormQueryFactory.createReadQuery(DateEntity.class,per);
 		
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		DateEntity res = e.eq(IDateEntity.TEST, "1").getSingleResult();
@@ -370,7 +370,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		e2.setAttr(CachableConst.TARGET_TEST_1_OK).setTest("2");
 		per.persist(e2);
 		
-		SampleNamedUpdate update = queryFactory.createUpsert(SampleNamedUpdate.class,per);
+		SampleNamedUpdate update = queryFactory.createModifyQuery(SampleNamedUpdate.class,per);
 		update.setTest("2");
 		update.setAttr(CachableConst.TARGET_TEST_1_OK);
 		update.setAttr2set(900);
@@ -378,7 +378,7 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<DateEntity> e = ormQueryFactory.createSelect(DateEntity.class,per);
+		CriteriaReadQuery<DateEntity> e = ormQueryFactory.createReadQuery(DateEntity.class,per);
 		
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		DateEntity res = e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
@@ -396,18 +396,18 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		e2.setAttr(CachableConst.TARGET_TEST_1_OK).setTest("2").setDateCol(new Date());
 		per.persist(e2);
 		
-		OrmSelect<DateEntity> eq = ormQueryFactory.createSelect(DateEntity.class,per);
+		CriteriaReadQuery<DateEntity> eq = ormQueryFactory.createReadQuery(DateEntity.class,per);
 		
 		eq.eq(IDateEntity.TEST, "2").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
 		
-		SampleNamedUpdate update = queryFactory.createUpsert(SampleNamedUpdate.class,per);
+		SampleNamedUpdate update = queryFactory.createModifyQuery(SampleNamedUpdate.class,per);
 		update.setArc(CachableConst.TARGET_INT);		
 		update.setAttr2set(900);
 		update.setDateCol(new Date());
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<DateEntity> e = ormQueryFactory.createSelect(DateEntity.class,per);
+		CriteriaReadQuery<DateEntity> e = ormQueryFactory.createReadQuery(DateEntity.class,per);
 		
 		//NamedUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E

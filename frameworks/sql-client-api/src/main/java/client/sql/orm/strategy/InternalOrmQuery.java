@@ -5,8 +5,8 @@ package client.sql.orm.strategy;
 
 import java.util.List;
 
-import client.sql.orm.OrmSelectParameter;
-import client.sql.orm.OrmUpdateParameter;
+import client.sql.orm.CriteriaReadQueryParameter;
+import client.sql.orm.CriteriaModifyQueryParameter;
 
 
 
@@ -25,24 +25,14 @@ public interface InternalOrmQuery {
 	 * @param set the updating target
 	 * @return the updated count
 	 */
-	public int update(OrmUpdateParameter<?> parameter);
+	public int update(CriteriaModifyQueryParameter<?> parameter);
 	
 	/** 
 	 * Deletes the table.
 	 * 
 	 * @param condition the condition
 	 */
-	public int delete(OrmUpdateParameter<?> parameter);
-	
-	/**
-	 * Finds by primary keys.
-	 * 
-	 * @param <E> the type
-	 * @param parameter the parameter
-	 * @param pks the primary keys
-	 * @return the result
- 	 */
-	public <E> E find(OrmSelectParameter<E> parameter,Object... pks);
+	public int delete(CriteriaModifyQueryParameter<?> parameter);
 	
 	/**
 	 * Searches the records.
@@ -51,7 +41,7 @@ public interface InternalOrmQuery {
 	 * @param parameter the parameter
 	 * @return the result
 	 */
- 	public <E> List<E> getResultList(OrmSelectParameter<E> parameter);
+ 	public <E> List<E> getResultList(CriteriaReadQueryParameter<E> parameter);
  	
  	
  	/**
@@ -61,6 +51,6 @@ public interface InternalOrmQuery {
  	 * @param callback the callback to execute
  	 * @return the result
  	 */
- 	public <E> List<E> getFetchResult(OrmSelectParameter<E> parameter);
+ 	public <E> List<E> getFetchResult(CriteriaReadQueryParameter<E> parameter);
  
 }

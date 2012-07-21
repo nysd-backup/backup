@@ -16,14 +16,14 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="sqlBuilder" class="sqlengine.builder.impl.SQLBuilderProxyImpl" />	
+  	<bean id="sqlBuilder" class="sqlengine.builder.impl.QueryBuilderProxyImpl" />	
 
 	<!-- Statement作成 -->
 	<bean id="statementProvider" class="sqlengine.builder.impl.StatementProviderImpl"/>		  	
 
 	<bean id="sqlExceptionHandler" class="client.sql.free.SQLExceptionHandlerImpl"/>
 
-	<bean id="sqlEngineFacade" class="sqlengine.facade.impl.SQLEngineFacadeImpl">
+	<bean id="queryExecutor" class="sqlengine.facade.impl.QueryExecutorImpl">
 		<property name="sqlBuilder" ref="sqlBuilder"/>
 		<property name="provider" ref="statementProvider"/>
 		<property name="exceptionHandler" ref="sqlExceptionHandler" />
@@ -31,10 +31,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<!-- 内部クエリ -->
 	<bean id="internalNativeQuery" class="client.sql.free.strategy.InternalNativeQueryImpl" scope="prototype" >
-		<property name="sqlEngineFacade" ref="sqlEngineFacade"/>		
+		<property name="queryExecutor" ref="queryExecutor"/>		
 	</bean>
 	
-	<bean id="batchUpdateFactory" class="client.sql.free.BatchUpsertFactoryImpl" scope="prototype" >
+	<bean id="batchUpdateFactory" class="client.sql.free.BatchModifyQueryFactoryImpl" scope="prototype" >
 		<property name="internalQuery" ref="internalNativeQuery"/>	
 	</bean>
 	
@@ -52,7 +52,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 	
 	<!-- ORM内部クエリファクトリ -->
-	<bean id="ormQueryFactory" class="client.sql.orm.OrmQueryFactory" scope="prototype">
+	<bean id="ormQueryFactory" class="client.sql.orm.CriteriaQueryFactory" scope="prototype">
 		<property name="internalOrmQuery" ref="internalOrmQuery" />
 	</bean>
 	

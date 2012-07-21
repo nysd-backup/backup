@@ -47,7 +47,7 @@ public class QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <T extends AbstractFreeSelect> T createSelect(Class<T> clazz,EntityManager em){
+	public <T extends AbstractFreeReadQuery> T createReadQuery(Class<T> clazz,EntityManager em){
 		T instance = null;
 		try{
 			instance = clazz.newInstance();
@@ -56,7 +56,7 @@ public class QueryFactory {
 		}
 		instance.getParameter().setQueryId(clazz.getSimpleName());
 		instance.getParameter().setEntityManager(em);
-		boolean namedQuery = instance instanceof AbstractNamedSelect;
+		boolean namedQuery = instance instanceof AbstractNamedReadQuery;
 		if(namedQuery){
 			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
 			if(nq == null){
@@ -82,7 +82,7 @@ public class QueryFactory {
 	 * @param clazz the class
 	 * @param instance the instance
 	 */
-	private void setAnonymousQuery(Class<?> clazz, AbstractFreeSelect instance){		
+	private void setAnonymousQuery(Class<?> clazz, AbstractFreeReadQuery instance){		
 		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
 		if(aq != null){
 			instance.getParameter().setResultType(aq.resultClass());
@@ -100,14 +100,14 @@ public class QueryFactory {
 	 * @param query the class of the query
 	 * @return the query
 	 */
-	public <T extends AbstractFreeUpsert> T createUpsert(Class<T> clazz,EntityManager em){
+	public <T extends AbstractFreeModifyQuery> T createModifyQuery(Class<T> clazz,EntityManager em){
 		T instance = null;
 		try{
 			instance = clazz.newInstance();
 		}catch(Exception e){
 			throw new IllegalStateException(e);
 		}
-		boolean namedQuery = instance instanceof AbstractNamedUpsert;
+		boolean namedQuery = instance instanceof AbstractNamedModifyQuery;
 		instance.getParameter().setQueryId(clazz.getSimpleName());
 		instance.getParameter().setEntityManager(em);
 		if(namedQuery){
@@ -136,7 +136,7 @@ public class QueryFactory {
 	 * @param clazz the class
 	 * @param instance the instance
 	 */
-	private void setAnonymousUpdate(Class<?> clazz, AbstractFreeUpsert instance){		
+	private void setAnonymousUpdate(Class<?> clazz, AbstractFreeModifyQuery instance){		
 		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
 		if(aq != null){		
 			instance.getParameter().setSql(aq.query());

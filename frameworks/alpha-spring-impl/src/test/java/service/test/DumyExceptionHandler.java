@@ -3,12 +3,14 @@
  */
 package service.test;
 
-import javax.persistence.PessimisticLockException;
+import java.util.Map;
 
+import javax.persistence.PessimisticLockException;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.ExceptionHandler;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
+import org.eclipse.persistence.internal.jpa.QueryHintsHandler;
 
 import service.framework.core.transaction.ServiceContext;
 
@@ -21,9 +23,11 @@ import service.framework.core.transaction.ServiceContext;
  */
 public class DumyExceptionHandler implements ExceptionHandler{
 
+	@SuppressWarnings({"unchecked","unused"})
 	protected Object handleOptimisticLockException(OptimisticLockException e){
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
 		
+		Map<String,Object> hints = (Map<String,Object>)e.getQuery().getProperty(QueryHintsHandler.QUERY_HINT_PROPERTY);
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
 		}else{
@@ -31,10 +35,10 @@ public class DumyExceptionHandler implements ExceptionHandler{
 		}
 		return null;
 	}
-	
+	@SuppressWarnings({"unchecked","unused"})
 	protected Object handleDatabaseException(DatabaseException e){
 		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-
+		Map<String,Object> hints = (Map<String,Object>)e.getQuery().getProperty(QueryHintsHandler.QUERY_HINT_PROPERTY);
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
 		}else{
@@ -44,8 +48,8 @@ public class DumyExceptionHandler implements ExceptionHandler{
 	}
 	
 	protected Object handlePessimisticLockException(PessimisticLockException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-		
+		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();	
+
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
 		}else{

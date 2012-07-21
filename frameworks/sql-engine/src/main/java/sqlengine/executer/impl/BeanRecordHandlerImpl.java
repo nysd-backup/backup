@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-import sqlengine.exception.SQLEngineException;
+import sqlengine.exception.QueryException;
 import sqlengine.executer.RecordHandler;
 import sqlengine.executer.TypeConverter;
 
@@ -61,7 +61,7 @@ public class BeanRecordHandlerImpl implements RecordHandler {
 		try{
 			row = (T)type.newInstance();
 		}catch(Exception e){
-			throw new SQLEngineException(e);
+			throw new QueryException(e);
 		}
 		
 		//データ取得
@@ -80,7 +80,7 @@ public class BeanRecordHandlerImpl implements RecordHandler {
 				} catch(SQLException sqle){
 					throw sqle;
 				} catch (Exception e) {
-					throw new SQLEngineException(e);
+					throw new QueryException(e);
 				}
 			}
 		}

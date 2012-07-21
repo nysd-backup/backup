@@ -3,101 +3,137 @@
  */
 package sqlengine.facade;
 
-import sqlengine.executer.RecordFilter;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * The query parameter.
+ * The base of the parameter
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@SuppressWarnings("rawtypes")
-public class QueryParameter extends SQLParameter{
+public abstract class QueryParameter{
 	
-	/** マックス件数 */
-	private int maxSize = 0;
+	/** the parameter */
+	private Map<String,Object> parameter = new HashMap<String,Object>();
 	
-	/** the start position */
-	private int firstResult = 0;
+	/** the sqlId */
+	private String sqlId = null;
 	
-	/** the result type */
-	private Class resultType = null;
+	/** the SQL */
+	private String sql = null;
 	
-	/** the filter for one record */
-	private RecordFilter filter;	
+	/** the comment */
+	private StringBuilder comment = new StringBuilder();
 	
-	/** the fetchSize */
-	private int fetchSize;
+	/** the use row sql */
+	private boolean useRowSql = false;
+	
+	/** the timeout */
+	private int timeoutSeconds = 0;
+
+	/**
+	 * @param comment the comment to set
+	 */
+	public void addComment(String comment){
+		this.comment.append(comment); 
+	}
 	
 	/**
-	 * @param maxSize the maxSize to set
+	 * @return the comment
 	 */
-	public void setMaxSize(int maxSize) {
-		this.maxSize = maxSize;
+	public String getComment(){
+		return this.comment.toString();
 	}
 
 	/**
-	 * @return the maxSize
+	 * @param sql the sql to set
 	 */
-	public int getMaxSize() {
-		return maxSize;
+	public void setSql(String sql) {
+		this.sql = sql;
 	}
 
 	/**
-	 * @param filter the filter to set
+	 * @return the sql
 	 */
-	public void setFilter(RecordFilter filter) {
-		this.filter = filter;
+	public String getSql() {
+		return sql;
 	}
 
 	/**
-	 * @return the filter
+	 * @param sqlId the sqlId to set
 	 */
-	public RecordFilter getFilter() {
-		return filter;
+	public void setSqlId(String sqlId) {
+		this.sqlId = sqlId;
 	}
 
 	/**
-	 * @param resultType the resultType to set
+	 * @return the sqlId
 	 */
-	public void setResultType(Class resultType) {
-		this.resultType = resultType;
+	public String getSqlId() {
+		return sqlId;
 	}
-
-	/**
-	 * @return the resultType
-	 */
-	public Class getResultType() {
-		return resultType;
-	}
-
-	/**
-	 * @param firstResult the firstResult to set
-	 */
-	public void setFirstResult(int firstResult) {
-		this.firstResult = firstResult;
-	}
-
-	/**
-	 * @return the firstResult
-	 */
-	public int getFirstResult() {
-		return firstResult;
-	}
-
-	/**
-	 * @return the fetchSize
-	 */
-	public int getFetchSize() {
-		return fetchSize;
-	}
-
-	/**
-	 * @param fetchSize the fetchSize to set
-	 */
-	public void setFetchSize(int fetchSize) {
-		this.fetchSize = fetchSize;
-	}
-
 	
+	/**
+	 * @param useRowSql the useRowSql to set
+	 */
+	public void setUseRowSql(boolean useRowSql) {
+		this.useRowSql = useRowSql;
+	}
+
+	/**
+	 * @return the useRowSql
+	 */
+	public boolean isUseRowSql() {
+		return useRowSql;
+	}
+
+	/**
+	 * @param timeoutSeconds the timeoutSeconds to set
+	 */
+	public void setTimeoutSeconds(int timeoutSeconds) {
+		this.timeoutSeconds = timeoutSeconds;
+	}
+
+	/**
+	 * @return the timeoutSeconds
+	 */
+	public int getTimeoutSeconds() {
+		return timeoutSeconds;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+	
+	
+	/**
+	 * @param param the param to set 
+	 */
+	public void setAllParameter(Map<String,Object> param){
+		this.parameter = param;
+	}
+	
+	/**
+	 * @param name パラメータ名
+	 * @param param 値
+	 */
+	public void putParameter(String name,Object param) {
+		parameter.put(name, param);
+	}
+	
+	/**
+	 * @return the parameter
+	 */
+	public Map<String,Object> getParameter() {
+		return parameter;
+	}
+
 }

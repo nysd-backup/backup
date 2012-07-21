@@ -17,7 +17,7 @@ import service.query.SampleNativeResult;
 import service.query.SampleNativeUpdate;
 import client.sql.free.NativeResult;
 import client.sql.free.QueryCallback;
-import client.sql.orm.OrmSelect;
+import client.sql.orm.CriteriaReadQuery;
 
 
 
@@ -196,7 +196,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = createOrmSelect(TestEntity.class);
+		CriteriaReadQuery<TestEntity> eq = createOrmSelect(TestEntity.class);
 		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
 		flush();
 		
@@ -281,7 +281,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = createOrmSelect(TestEntity.class);
+		CriteriaReadQuery<TestEntity> e = createOrmSelect(TestEntity.class);
 		TestEntity res = e.eq(ITestEntity.TEST, "1").getSingleResult();
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
@@ -302,7 +302,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = createOrmSelect(TestEntity.class);
+		CriteriaReadQuery<TestEntity> e = createOrmSelect(TestEntity.class);
 		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
@@ -316,7 +316,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = createOrmSelect(TestEntity.class);
+		CriteriaReadQuery<TestEntity> eq = createOrmSelect(TestEntity.class);
 		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
 		
 		SampleNativeUpdate update = createUpsert(SampleNativeUpdate.class);
@@ -325,7 +325,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = createOrmSelect(TestEntity.class);
+		CriteriaReadQuery<TestEntity> e = createOrmSelect(TestEntity.class);
 		
 		//NativeUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E

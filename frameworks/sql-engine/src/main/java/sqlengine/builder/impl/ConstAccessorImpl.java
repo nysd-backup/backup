@@ -5,7 +5,7 @@ package sqlengine.builder.impl;
 
 import sqlengine.builder.ConstAccessor;
 import sqlengine.builder.ConstCache;
-import sqlengine.exception.SQLEngineException;
+import sqlengine.exception.QueryException;
 
 /**
  * Gets the constant.
@@ -39,7 +39,7 @@ public class ConstAccessorImpl implements ConstAccessor {
 				value[0] = ConstCache.get(fieldName);
 				return value;
 			} else {
-				throw new SQLEngineException("[Poor Implementation ] No cache was found . key = " + fieldName);
+				throw new QueryException("[Poor Implementation ] No cache was found . key = " + fieldName);
 			}
 		}
 		return new Object[0];

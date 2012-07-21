@@ -10,12 +10,9 @@ import org.springframework.context.ApplicationContext;
 import service.client.messaging.MessageClientFactory;
 import service.framework.core.async.AsyncService;
 import service.framework.core.async.AsyncServiceFactory;
-import service.framework.core.transaction.ServiceContext;
-import service.framework.core.transaction.ServiceContextImpl;
 import client.sql.free.QueryFactory;
 import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
-import core.message.ExceptionMessageFactory;
 import core.message.MessageBuilder;
 
 
@@ -40,7 +37,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	/**
 	 * @param delegatingLocator the delegatingLocator to set
 	 */
-	public static void setDelegate(ServiceLocatorImpl delegatingLocator){
+	public static void setDelegate(ServiceLocator delegatingLocator){
 		delegate = delegatingLocator;
 	}
 	
@@ -58,14 +55,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	@Override
 	public Object lookup(String serviceName) {
 		return context.getBean(serviceName);
-	}
-	
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createServiceContext()
-	 */
-	@Override
-	public ServiceContext createServiceContext() {
-		return new ServiceContextImpl();
 	}
 	
 	/**
@@ -130,15 +119,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	public FaultNotifier createFaultNotifier(){
 		return FaultNotifier.class.cast(lookup(FaultNotifier.class));
 	}
-
-	/**
-	 * @see core.activation.ComponentLocator#createExceptionMessageFactory()
-	 */
-	@Override
-	public ExceptionMessageFactory createExceptionMessageFactory() {
-		return ExceptionMessageFactory.class.cast(lookup(ExceptionMessageFactory.class));
-	}
-
+	
 	/**
 	 * @see service.framework.core.activation.ServiceLocator#createAsyncService()
 	 */

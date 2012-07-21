@@ -22,22 +22,19 @@ import service.framework.core.async.AsyncServiceFactory;
 import service.framework.core.async.AsyncServiceFactoryImpl;
 import service.framework.core.async.AsyncServiceImpl;
 import service.framework.core.exception.ServiceException;
-import service.framework.core.transaction.ServiceContext;
-import service.framework.core.transaction.ServiceContextImpl;
-import sqlengine.builder.SQLBuilder;
-import sqlengine.builder.impl.SQLBuilderProxyImpl;
+import sqlengine.builder.QueryBuilder;
+import sqlengine.builder.impl.QueryBuilderProxyImpl;
 import client.sql.elink.free.strategy.InternalNamedQueryImpl;
 import client.sql.elink.free.strategy.InternalNativeQueryImpl;
-import client.sql.elink.orm.strategy.InternalOrmQueryImpl;
+import client.sql.elink.orm.strategy.JPQLStatementBuilderImpl;
 import client.sql.free.QueryFactory;
 import client.sql.free.strategy.InternalQuery;
-import client.sql.orm.OrmQueryFactory;
+import client.sql.orm.CriteriaQueryFactory;
+import client.sql.orm.strategy.InternalOrmQueryImpl;
 import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
 import core.logics.log.impl.DefaultFaultNotifier;
-import core.message.ExceptionMessageFactory;
 import core.message.MessageBuilder;
-import core.message.impl.DefaultExceptionMessageFactoryImpl;
 import core.message.impl.MessageBuilderImpl;
 
 
@@ -75,15 +72,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 		return ifType.cast(lookup(ifType.getSimpleName() + "Impl"));
 	}
 
-
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createServiceContext()
-	 */
-	@Override
-	public ServiceContext createServiceContext() {
-		return new ServiceContextImpl();
-	}
-	
 	/**
 	 * @see service.framework.core.define.ComponentBuilder#createAsyncServiceFactory()
 	 */
@@ -139,14 +127,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	public FaultNotifier createFaultNotifier() {
 		return new DefaultFaultNotifier();
 	}
-
-	/**
-	 * @see core.activation.ComponentLocator#createExceptionMessageFactory()
-	 */
-	@Override
-	public ExceptionMessageFactory createExceptionMessageFactory() {
-		return new DefaultExceptionMessageFactoryImpl();
-	}
 	
 	/**
 	 * Creates the query factory.
@@ -159,7 +139,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
 		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
 		
-		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
+		QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, new QueryBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
 		named.setSqlBuilder(builder);
 				
 		ntv.setSqlBuilder(builder);
@@ -179,17 +159,17 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 * @param em the em to set
 	 * @return query factory
 	 */
-	public OrmQueryFactory createOrmQueryFactory(EntityManager em) {
+	public CriteriaQueryFactory createOrmQueryFactory(EntityManager em) {
 
-		OrmQueryFactory impl = new OrmQueryFactory();
+		CriteriaQueryFactory impl = new CriteriaQueryFactory();
 		
 		InternalOrmQueryImpl dao = new InternalOrmQueryImpl();		
-		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
-	
+		InternalNamedQueryImpl named = new InternalNamedQueryImpl();	
 		//インターセプターを設定する
-		SQLBuilder builder = ProxyFactory.create(SQLBuilder.class, new SQLBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
+		QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, new QueryBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
 		named.setSqlBuilder(builder);
-		dao.setInternalNamedQuery(named);		
+		dao.setInternalQuery(named);		
+		dao.setSqlStatementBuilder(new JPQLStatementBuilderImpl());
 		impl.setInternalOrmQuery(dao);
 		return impl;
 	}
@@ -197,7 +177,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	/**
 	 * @return the OrmQueryWrapperFactory
 	 */
-	public static OrmQueryFactory createDefaultOrmQueryFactory(EntityManager em){
+	public static CriteriaQueryFactory createDefaultOrmQueryFactory(EntityManager em){
 		return ((ServiceLocatorImpl)delegate).createOrmQueryFactory(em);
 	}
 	
@@ -231,6 +211,5 @@ public class ServiceLocatorImpl extends ServiceLocator{
 			throw new IllegalArgumentException("Failed to load service ", ne);
 		}
 	}
-
 }
 

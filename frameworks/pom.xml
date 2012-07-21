@@ -45,7 +45,7 @@
 	<properties>
 		<framework.version>1.0.0-SNAPSHOT</framework.version>		
 		<javaee.version>6.0</javaee.version>
-		<jersey.version>1.5</jersey.version>			
+		<jersey.version>1.8</jersey.version>			
 		<aspectj.version>1.5.4</aspectj.version>
 		<org.springframework.version>3.0.6.RELEASE</org.springframework.version>	
 		<cglib.version>2.2</cglib.version>
@@ -85,9 +85,11 @@
 				<module>alpha-core</module>			
 				<module>alpha-platform-api</module>
 				<module>alpha-spring-impl</module>				
+			<!--
 				<module>alpha-web</module>		
 				<module>alpha-web-spring</module>	
 				<module>alpha-ejb-impl</module>													
+			-->	
 			</modules>
 		</profile>
 	</profiles>

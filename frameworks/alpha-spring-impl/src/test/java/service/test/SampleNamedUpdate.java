@@ -5,7 +5,7 @@ package service.test;
 
 import java.util.Date;
 
-import client.sql.free.AbstractNamedUpsert;
+import client.sql.free.AbstractNamedModifyQuery;
 import client.sql.free.AnonymousQuery;
 
 
@@ -18,7 +18,7 @@ import client.sql.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_UPDATE.sql")
-public class SampleNamedUpdate extends AbstractNamedUpsert{
+public class SampleNamedUpdate extends AbstractNamedModifyQuery{
 
 	public enum Bind {
 		test,
@@ -36,8 +36,7 @@ public class SampleNamedUpdate extends AbstractNamedUpsert{
 	/**
 	 * @param value
 	 */
-	public SampleNamedUpdate setTest(Object value){
-		setBranchParameter(Branch.test.name(), value);
+	public SampleNamedUpdate setTest(Object value){		
 		setParameter(Bind.test.name(), value);
 		return this;
 	}
@@ -46,8 +45,7 @@ public class SampleNamedUpdate extends AbstractNamedUpsert{
 	 * @param value
 	 */
 	public SampleNamedUpdate setAttr(Object value){
-		setParameter(Bind.attr.name(), value);
-		setBranchParameter(Branch.attr.name(), value);
+		setParameter(Bind.attr.name(), value);		
 		return this;
 	}
 
@@ -56,7 +54,7 @@ public class SampleNamedUpdate extends AbstractNamedUpsert{
 	 * @param value
 	 */
 	public SampleNamedUpdate setAttr2(Object value){
-		setBranchParameter(Branch.attr2.name(), value);
+		setParameter(Branch.attr2.name(), value);
 		return this;
 	}
 	
@@ -64,7 +62,7 @@ public class SampleNamedUpdate extends AbstractNamedUpsert{
 	 * @param value
 	 */
 	public SampleNamedUpdate setArc(Object value){
-		setBranchParameter(Branch.arc.name(), value);
+		setParameter(Branch.arc.name(), value);
 		return this;
 	}
 	

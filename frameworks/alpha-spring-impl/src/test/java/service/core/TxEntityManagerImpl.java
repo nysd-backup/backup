@@ -5,9 +5,11 @@ package service.core;
 
 import java.sql.Connection;
 
+import javax.sql.DataSource;
+
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
-import client.sql.orm.JTAEntityManagerImpl;
+import client.sql.orm.EntityManagerImpl;
 
 
 /**
@@ -21,14 +23,20 @@ import client.sql.orm.JTAEntityManagerImpl;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class TxEntityManagerImpl extends JTAEntityManagerImpl{
+public class TxEntityManagerImpl extends EntityManagerImpl{
+	
+	private DataSource dataSource;
+	
+	public void setDataSource(DataSource dataSource){
+		this.dataSource = dataSource;
+	}
 
 	/**
 	 * @see client.sql.orm.JTAEntityManagerImpl#getConnection()
 	 */
 	@Override
 	public Connection getConnection() {	
-		return DataSourceUtils.getConnection(getDataSoure());
+		return DataSourceUtils.getConnection(dataSource);
 	}
 
 }

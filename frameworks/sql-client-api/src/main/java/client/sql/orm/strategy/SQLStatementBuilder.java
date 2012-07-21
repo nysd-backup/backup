@@ -6,8 +6,8 @@ package client.sql.orm.strategy;
 import java.util.List;
 import java.util.Map;
 
-import client.sql.orm.OrmSelectParameter;
-import client.sql.orm.WhereCondition;
+import client.sql.orm.CriteriaReadQueryParameter;
+import client.sql.orm.ExtractionCriteria;
 
 
 
@@ -26,7 +26,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createSelect(OrmSelectParameter<?> condition);
+	public String createSelect(CriteriaReadQueryParameter<?> condition);
 	
 	/**
 	 * Creates the SQL statement.
@@ -42,7 +42,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createUpdate(Class<?> entityClass,List<WhereCondition> where, Map<String,Object> set);
+	public String createUpdate(Class<?> entityClass,List<ExtractionCriteria> where, Map<String,Object> set);
 	
 	/**
 	 * Creates the SQL statement.
@@ -50,14 +50,14 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createDelete(Class<?> entityClass, List<WhereCondition> where);
+	public String createDelete(Class<?> entityClass, List<ExtractionCriteria> where);
 	
 	/**
 	 * 
 	 * @param filterString
 	 * @param easyParams
 	 */
-	public void setConditionParameters( List<WhereCondition> condition , Bindable bindable);
+	public void setConditionParameters( List<ExtractionCriteria> condition , Bindable bindable);
 	
 	public static interface Bindable {
 		

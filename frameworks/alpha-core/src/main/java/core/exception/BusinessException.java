@@ -3,7 +3,7 @@
  */
 package core.exception;
 
-import java.io.Serializable;
+import java.util.List;
 
 import core.message.MessageResult;
 
@@ -26,7 +26,7 @@ public class BusinessException extends RuntimeException{
 	private static final long serialVersionUID = 4928387597757529973L;
 
 	/** the messageList */
-	private MessageResult[] messageList = null;
+	private List<MessageResult> messageList = null;
 	
 	/**
 	 * @param message the message
@@ -51,31 +51,16 @@ public class BusinessException extends RuntimeException{
 	}
 	
 	/**
-	 * @param replyData the replyData to set
-	 * @param message the message
-	 */
-	public BusinessException(String message,Serializable replyData){
-		this(message);
-	}
-	
-	/**
-	 * @param replyData the replyData to set
-	 */
-	public BusinessException(Serializable replyData){
-		this(null,replyData);
-	}
-
-	/**
 	 * @param messageList the messageList to set
 	 */
-	public void setMessageList(MessageResult[] messageList) {
+	public void setMessageList(List<MessageResult> messageList) {
 		this.messageList = messageList;
 	}
 
 	/**
 	 * @return the messageList
 	 */
-	public MessageResult[] getMessageList() {
+	public List<MessageResult> getMessageList() {
 		return messageList;
 	}
 

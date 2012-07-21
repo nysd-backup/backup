@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import client.sql.orm.FixString;
-import client.sql.orm.OrmSelectParameter;
+import client.sql.orm.CriteriaReadQueryParameter;
 import client.sql.orm.SortKey;
-import client.sql.orm.WhereCondition;
-import client.sql.orm.WhereOperand;
+import client.sql.orm.ExtractionCriteria;
+import client.sql.orm.ComparingOperand;
 
 
 
@@ -24,10 +24,10 @@ import client.sql.orm.WhereOperand;
 public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	
 	/**
-	 * @see client.sql.orm.strategy.SQLStatementBuilder#createSelect(client.sql.orm.OrmSelectParameter)
+	 * @see client.sql.orm.strategy.SQLStatementBuilder#createSelect(client.sql.orm.CriteriaReadQueryParameter)
 	 */
 	@Override
-	public String createSelect(OrmSelectParameter<?> condition){
+	public String createSelect(CriteriaReadQueryParameter<?> condition){
 		StringBuilder builder = createPrefix(condition.getEntityClass());		
 		builder.append(generateWhere(condition.getConditions())).append(generateOrderBy(condition.getSortKeys()));
 		return afterCreateSelect(builder,condition).toString();
@@ -38,7 +38,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition the condition
 	 * @return query;
 	 */
-	protected StringBuilder afterCreateSelect(StringBuilder query, OrmSelectParameter<?> condition){
+	protected StringBuilder afterCreateSelect(StringBuilder query, CriteriaReadQueryParameter<?> condition){
 		return query;
 	}
 	
@@ -46,7 +46,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @see client.sql.orm.strategy.SQLStatementBuilder#createUpdate(java.lang.Class, java.lang.String, java.lang.String, java.util.List, java.util.Collection)
 	 */
 	@Override
-	public String createUpdate(Class<?> entityClass,List<WhereCondition> where, Map<String,Object> set) {
+	public String createUpdate(Class<?> entityClass,List<ExtractionCriteria> where, Map<String,Object> set) {
 		StringBuilder builder = createUpdatePrefix(entityClass);
 		builder.append(generateSet(set));
 		builder.append(generateWhere(where));
@@ -105,15 +105,15 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition　the condition
 	 * @return the statement
 	 */
-	protected String generateWhere(List<WhereCondition> wheres){		
+	protected String generateWhere(List<ExtractionCriteria> wheres){		
 		if( wheres == null || wheres.isEmpty()){
 			return "";
 		}
 		StringBuilder builder = new StringBuilder();
 		
 		boolean first=true;
-		for(WhereCondition where :wheres){	
-			WhereOperand operand = where.getOperand();
+		for(ExtractionCriteria where :wheres){	
+			ComparingOperand operand = where.getOperand();
 			if( first ){
 				builder.append("\n where ");
 				first = false;
@@ -122,7 +122,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 			}
 
 			// BETWEEN
-			if(operand == WhereOperand.Between) {
+			if(operand == ComparingOperand.Between) {
 				Object toValue = where.getToValue();
 				String to = null;
 				if(toValue instanceof FixString){
@@ -140,7 +140,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 				builder.append(String.format("e.%s%s %s and %s ",where.getColName(),operand.getOperand(),from,to));
 				
 			// IN句	
-			}else if (operand == WhereOperand.IN){
+			}else if (operand == ComparingOperand.IN){
 				StringBuilder in = new StringBuilder();
 				Object value = where.getValue();
 				if(value instanceof List){
@@ -203,10 +203,10 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition the condition
 	 * @param delegate the delegate
 	 */
-	public void setConditionParameters(List<WhereCondition> baseCondition ,Bindable delegate){
+	public void setConditionParameters(List<ExtractionCriteria> baseCondition ,Bindable delegate){
 	
-		for(WhereCondition cond : baseCondition){
-			if(WhereOperand.IN == cond.getOperand()){
+		for(ExtractionCriteria cond : baseCondition){
+			if(ComparingOperand.IN == cond.getOperand()){
 				Object value = cond.getValue();
 				if( value instanceof List ){
 					List<?> val = List.class.cast(value);
@@ -220,7 +220,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 				}else {
 					delegate.setParameter(String.format("%s_%d", cond.getColName(),cond.getBindCount()),value);
 				}
-			}else if( WhereOperand.Between == cond.getOperand()){
+			}else if( ComparingOperand.Between == cond.getOperand()){
 				Object toValue = cond.getToValue();
 				Object fromValue = cond.getValue();
 				if(!(toValue instanceof FixString)){

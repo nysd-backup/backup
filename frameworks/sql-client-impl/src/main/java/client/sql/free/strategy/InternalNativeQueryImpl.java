@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sqlengine.executer.RecordFilter;
+import sqlengine.facade.QueryExecutor;
 import sqlengine.facade.QueryParameter;
 import sqlengine.facade.QueryResult;
-import sqlengine.facade.SQLEngineFacade;
-import sqlengine.facade.SQLParameter;
-import sqlengine.facade.UpdateParameter;
+import sqlengine.facade.SelectParameter;
+import sqlengine.facade.UpsertParameter;
 import client.sql.EngineHints;
+import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.FreeQueryParameter;
-import client.sql.free.FreeSelectParameter;
-import client.sql.free.FreeUpsertParameter;
+import client.sql.free.FreeReadQueryParameter;
 import client.sql.free.NativeResult;
 
 
@@ -30,29 +30,29 @@ import client.sql.free.NativeResult;
 public class InternalNativeQueryImpl implements InternalQuery{
 	
 	/** the facade of SQLEngine */
-	private SQLEngineFacade facade;
+	private QueryExecutor facade;
 
 	/**
 	 * @param facade the facade to set
 	 */
-	public void setSqlEngineFacade(SQLEngineFacade facade){
+	public void setQueryExecutor(QueryExecutor facade){
 		this.facade = facade;
 	}
 	
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeSelectParameter param){
+	public NativeResult getTotalResult(FreeReadQueryParameter param){
 		QueryResult result = facade.executeTotalQuery(createQueryParameter(param), getConnection(param));
 		return new NativeResult(result.isLimited(), result.getResultList(), result.getHitCount());
 	}
 	
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getFetchResult(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getFetchResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public <T> List<T> getFetchResult(FreeSelectParameter param){
+	public <T> List<T> getFetchResult(FreeReadQueryParameter param){
 		return facade.executeFetch(createQueryParameter(param), getConnection(param));		
 	}
 	
@@ -60,15 +60,15 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see client.sql.free.strategy.InternalQuery#count()
 	 */
 	@Override
-	public long count(FreeSelectParameter param){
-		return facade.executeCount(createParameter(new QueryParameter(),param), getConnection(param));
+	public long count(FreeReadQueryParameter param){
+		return facade.executeCount(createParameter(new SelectParameter(),param), getConnection(param));
 	}
 
 	/**
 	 * @see client.sql.free.strategy.InternalQuery#getResultList()
 	 */
 	@Override
-	public <T> List<T> getResultList(FreeSelectParameter param){
+	public <T> List<T> getResultList(FreeReadQueryParameter param){
 		return facade.executeQuery(createQueryParameter(param), getConnection(param));	
 	}
 	
@@ -76,7 +76,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see client.sql.free.strategy.InternalQuery#getSingleResult()
 	 */
 	@Override
-	public <T> T getSingleResult(FreeSelectParameter param){
+	public <T> T getSingleResult(FreeReadQueryParameter param){
 		param.setMaxSize(1);
 		List<T> result = getResultList(param);
 		if(result.isEmpty()){
@@ -90,15 +90,15 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see client.sql.free.strategy.InternalQuery#executeUpdate()
 	 */
 	@Override
-	public int executeUpdate(FreeUpsertParameter param){
-		return facade.executeUpdate(createParameter(new UpdateParameter(),param), getConnection(param));
+	public int executeUpdate(FreeModifyQueryParameter param){
+		return facade.executeUpsert(createParameter(new UpsertParameter(),param), getConnection(param));
 	}
 	
 	/**
 	 * @return the parameter
 	 */
-	private QueryParameter createQueryParameter(final FreeSelectParameter param){
-		QueryParameter parameter = createParameter(new QueryParameter(),param);
+	private SelectParameter createQueryParameter(final FreeReadQueryParameter param){
+		SelectParameter parameter = createParameter(new SelectParameter(),param);
 		parameter.setMaxSize(param.getMaxSize());
 		parameter.setFirstResult(param.getFirstResult());
 		parameter.setResultType(param.getResultType());
@@ -125,14 +125,13 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @param parameter the parameter
 	 * @return the result
 	 */
-	private <S extends SQLParameter> S createParameter(S parameter,FreeQueryParameter param){
+	private <S extends QueryParameter> S createParameter(S parameter,FreeQueryParameter param){
 		parameter.setSqlId(param.getQueryId());
 		parameter.setSql(param.getSql());		
 
 		if(param.getHints().containsKey(EngineHints.SQLENGINE_JDBC_TIMEOUT)){
 			parameter.setTimeoutSeconds((Integer)param.getHints().get(EngineHints.SQLENGINE_JDBC_TIMEOUT));
-		}
-		parameter.setAllBranchParameter(param.getBranchParam());
+		}	
 		parameter.setUseRowSql(param.isUseRowSql());
 		parameter.setAllParameter(param.getParam());
 		return parameter;
@@ -142,12 +141,11 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @see client.sql.free.strategy.InternalQuery#executeBatch(java.util.List)
 	 */
 	@Override
-	public int[] executeBatch(List<FreeUpsertParameter> param) {
-		List<UpdateParameter> engineParams = new ArrayList<UpdateParameter>();
+	public int[] executeBatch(List<FreeModifyQueryParameter> param) {
+		List<UpsertParameter> engineParams = new ArrayList<UpsertParameter>();
 		for(FreeQueryParameter p: param){
-			UpdateParameter ep = new UpdateParameter();
+			UpsertParameter ep = new UpsertParameter();
 			ep.setAllParameter(p.getParam());
-			ep.setAllBranchParameter(p.getBranchParam());
 			ep.setSqlId(p.getQueryId());
 			ep.setSql(p.getSql());
 			ep.setUseRowSql(p.isUseRowSql());		

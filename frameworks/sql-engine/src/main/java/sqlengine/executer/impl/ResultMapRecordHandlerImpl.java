@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-import sqlengine.exception.SQLEngineException;
+import sqlengine.exception.QueryException;
 import sqlengine.executer.RecordHandler;
 import sqlengine.executer.TypeConverter;
 
@@ -61,7 +61,7 @@ public class ResultMapRecordHandlerImpl implements RecordHandler{
 		try {
 			row = (T)type.newInstance();
 		} catch (Exception e1) {
-			throw new SQLEngineException(e1);
+			throw new QueryException(e1);
 		}
 		
 		//データ取得
@@ -76,7 +76,7 @@ public class ResultMapRecordHandlerImpl implements RecordHandler{
 			}catch(SQLException sqle){
 				throw sqle;
 			} catch (Exception e) {
-				throw new SQLEngineException(String.format("label = %s : type = %d ",label,typeMap.get(javaLabel)),e);
+				throw new QueryException(String.format("label = %s : type = %d ",label,typeMap.get(javaLabel)),e);
 			}
 		}
 		

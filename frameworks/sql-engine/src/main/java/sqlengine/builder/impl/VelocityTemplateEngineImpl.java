@@ -19,7 +19,7 @@ import org.apache.velocity.app.Velocity;
 
 import sqlengine.builder.ConstAccessor;
 import sqlengine.builder.TemplateEngine;
-import sqlengine.exception.SQLEngineException;
+import sqlengine.exception.QueryException;
 
 
 /**
@@ -166,7 +166,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 		try {
 			Velocity.evaluate(context, writer, "", rowString);
 		} catch (Exception e) {
-			throw new SQLEngineException(e);
+			throw new QueryException(e);
 		}
 		writer.flush();
 		// エスケープしても"\#'となるのでそれでも"#'に戻す
@@ -174,7 +174,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 		try {
 			writer.close();
 		} catch (IOException e) {
-			throw new SQLEngineException(e);
+			throw new QueryException(e);
 		}
 		return sql;
 	}

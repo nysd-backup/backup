@@ -3,7 +3,9 @@
  */
 package service.services;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -16,9 +18,8 @@ import org.eclipse.persistence.config.QueryHints;
 import service.entity.TestEntity;
 import service.framework.core.activation.ServiceLocator;
 import service.framework.core.transaction.ServiceContext;
-import service.framework.core.transaction.ServiceContextImpl;
+import service.framework.core.transaction.autonomous.ServiceContextImpl;
 import service.testcase.BaseCase;
-import client.sql.orm.OrmSelect;
 import core.exception.BusinessException;
 import core.message.MessageBean;
 import core.message.MessageResult;
@@ -35,18 +36,21 @@ import core.message.MessageResult;
 public class RequiresNewServiceImpl extends BaseCase implements RequiresNewService{
 
 	public String test() {		
-		OrmSelect<TestEntity> query = createOrmSelect(TestEntity.class);
-		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
 		return "OK";
 	}
 
 	@Override
 	public String crushException() {		
-		OrmSelect<TestEntity> query = createOrmSelect(TestEntity.class);
+	
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
-			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
+			Map<String,Object> hints = new HashMap<String,Object>();
+			hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+			em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}
@@ -105,7 +109,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	
 	@Override
 	public void persist() {		
-		TestEntity result = createOrmSelect(TestEntity.class).find("1");
+		TestEntity result = em.find(TestEntity.class,"1");
 		if(result == null){
 			TestEntity e = new TestEntity();
 			e.setTest("1");

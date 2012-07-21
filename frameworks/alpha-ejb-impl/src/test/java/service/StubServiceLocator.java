@@ -9,7 +9,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import service.framework.core.activation.ServiceLocatorImpl;
-import service.framework.core.transaction.ServiceContext;
 
 
 
@@ -23,14 +22,6 @@ public class StubServiceLocator extends ServiceLocatorImpl{
 	
 	static {
 		delegate = new StubServiceLocator();
-	}
-	
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createContext()
-	 */
-	@Override
-	public ServiceContext createServiceContext() {
-		return new ServiceTestContextImpl();
 	}
 	
 	/**

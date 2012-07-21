@@ -18,7 +18,7 @@
   	<!--単体テストではこの定義必須 -->
   	<interceptors>
   		<interceptor>
-  			<interceptor-class>service.framework.core.transaction.ContextControllableTransactionInterceptor</interceptor-class>
+  			<interceptor-class>service.framework.core.transaction.autonomous.ContextControllableTransactionInterceptor</interceptor-class>
   		</interceptor>	  		
   	</interceptors>
   	
@@ -26,7 +26,7 @@
 	       <interceptor-binding>
 	         <ejb-name>*</ejb-name>
 	         <interceptor-order>
-		         <interceptor-class>service.framework.core.transaction.ContextControllableTransactionInterceptor</interceptor-class>
+		         <interceptor-class>service.framework.core.transaction.autonomous.ContextControllableTransactionInterceptor</interceptor-class>
 	         </interceptor-order> 
 	      </interceptor-binding>
     </assembly-descriptor>

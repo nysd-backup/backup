@@ -21,7 +21,7 @@ public class MessageResult implements Serializable{
 	private List<ClientBean> clientBean = new ArrayList<ClientBean>();
 	
 	/** the message code */
-	private int code;
+	private String code;
 	
 	/** the message level */
 	private int level;
@@ -35,14 +35,14 @@ public class MessageResult implements Serializable{
 	/**
 	 * @return the code
 	 */
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
 	/**
 	 * @param code the code to set
 	 */
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

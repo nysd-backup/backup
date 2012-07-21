@@ -29,6 +29,9 @@ public abstract class ServiceContext {
 
 	/** the messageList */
 	private List<MessageResult> messageList = new ArrayList<MessageResult>();
+	
+	/** flag of error message */
+	private boolean hasErroMessage = false;
 
 
 	/** the thread local instance*/
@@ -63,7 +66,7 @@ public abstract class ServiceContext {
 	 */
 	public void addMessage(MessageResult message){
 		if(message.getLevel() >= MessageLevel.E.ordinal()){
-			setRollbackOnly();
+			setRollbackOnly();			
 		}		
 		messageList.add(message);
 	}
@@ -126,7 +129,6 @@ public abstract class ServiceContext {
 		locale = null;
 		callStackLevel = 0;
 		requestId = null;	
-		messageList.clear();
 		messageList = new ArrayList<MessageResult>();
 		setCurrentInstance(null);
 	}
@@ -144,7 +146,21 @@ public abstract class ServiceContext {
 	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
+	
+	/**
+	 * @return has error message
+	 */
+	public boolean hasErrorMessage() {
+		return hasErroMessage;
+	}
 
+	/**
+	 * @param hasErrorMessage the hasErrorMessage to set
+	 */
+	protected void setHasErrorMessage(boolean hasErrorMessage){
+		this.hasErroMessage = hasErrorMessage;
+	}
+	
 	/**
 	 * Set the current transaction to rolling back.
 	 */

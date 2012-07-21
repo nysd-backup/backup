@@ -38,7 +38,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	 * @see sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, sqlengine.executer.RecordFilter, int, int)
 	 */
 	@Override
-	public QueryResult getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize,int firstResult)
+	public QueryResult getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize,int offset)
 	throws SQLException{ 
 
 		int hitCount = 0;
@@ -53,7 +53,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 					limitted = true;	
 					if(resultSet.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
 						resultSet.last();
-						hitCount = resultSet.getRow() - firstResult;						
+						hitCount = resultSet.getRow() - offset;						
 						break;
 					}else{
 						continue;

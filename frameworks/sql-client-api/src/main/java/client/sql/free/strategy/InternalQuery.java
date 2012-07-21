@@ -5,8 +5,8 @@ package client.sql.free.strategy;
 
 import java.util.List;
 
-import client.sql.free.FreeSelectParameter;
-import client.sql.free.FreeUpsertParameter;
+import client.sql.free.FreeReadQueryParameter;
+import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.NativeResult;
 
 
@@ -28,42 +28,42 @@ public interface InternalQuery {
 	 * 
 	 * @return the updated count
 	 */
-	int executeUpdate(FreeUpsertParameter param);
+	int executeUpdate(FreeModifyQueryParameter param);
 	
 	/**
 	 * Updates the table.
 	 * 
 	 * @return the each updated count
 	 */
-	int[] executeBatch(List<FreeUpsertParameter> param);
+	int[] executeBatch(List<FreeModifyQueryParameter> param);
 
 	/**
 	 * @return the total result
 	 */
-	NativeResult getTotalResult(FreeSelectParameter param);
+	NativeResult getTotalResult(FreeReadQueryParameter param);
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>
 	 */
-	<T> List<T> getFetchResult(FreeSelectParameter param);
+	<T> List<T> getFetchResult(FreeReadQueryParameter param);
 
 	/**
 	 * @return the hit count.
 	 */
-	long count(FreeSelectParameter param);
+	long count(FreeReadQueryParameter param);
 
 	/**
 	 * Selects the table.
 	 * 
 	 * @return the found data.
 	 */
-	<T> List<T> getResultList(FreeSelectParameter param);
+	<T> List<T> getResultList(FreeReadQueryParameter param);
 
 	/**
 	 * Selects the table.
 	 * 
 	 * @return the found one record.
 	 */
-	<T> T getSingleResult(FreeSelectParameter param);
+	<T> T getSingleResult(FreeReadQueryParameter param);
 
 }

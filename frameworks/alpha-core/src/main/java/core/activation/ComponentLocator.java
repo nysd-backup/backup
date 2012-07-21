@@ -5,7 +5,6 @@ package core.activation;
 
 import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
-import core.message.ExceptionMessageFactory;
 import core.message.MessageBuilder;
 
 
@@ -32,11 +31,6 @@ public abstract class ComponentLocator {
 	public abstract FaultNotifier createFaultNotifier();	
 	
 	/**
-	 * @return the ExceptionMessageFactory
-	 */
-	public abstract ExceptionMessageFactory createExceptionMessageFactory();	
-	
-	/**
 	 * @return the BusinessException
 	 */
 	public abstract BusinessException createBusinessException();
@@ -60,13 +54,6 @@ public abstract class ComponentLocator {
 	 */
 	public static FaultNotifier createDefaultFaultNotifier(){
 		return delegate.createFaultNotifier();
-	}
-	
-	/**
-	 * @return the ExceptionMessageFactry
-	 */
-	public static ExceptionMessageFactory createDefaultExceptionMessageFactory(){
-		return delegate.createExceptionMessageFactory();
 	}
 	
 }

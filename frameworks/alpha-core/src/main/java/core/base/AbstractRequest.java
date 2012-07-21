@@ -14,6 +14,8 @@ public abstract class AbstractRequest extends AbstractBean{
 	private static final long serialVersionUID = 1L;
 	
 	private String requestId = null;
+	
+	private int invocationSource = -1;
 
 	/**
 	 * @return
@@ -27,6 +29,20 @@ public abstract class AbstractRequest extends AbstractBean{
 	 */
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
+	}
+
+	/**
+	 * @return the invocationSource
+	 */
+	public int getInvocationSource() {
+		return invocationSource;
+	}
+
+	/**
+	 * @param invocationSource the invocationSource to set
+	 */
+	public void setInvocationSource(int invocationSource) {
+		this.invocationSource = invocationSource;
 	}
 
 }

@@ -9,7 +9,9 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -25,7 +27,6 @@ import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import service.core.TxEntityManagerImpl;
 import service.framework.core.activation.ServiceLocator;
 import service.test.RequiresNewNativeReadOnlyService;
 import service.test.RequiresNewNativeService;
@@ -37,9 +38,10 @@ import service.test.entity.IFastEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
 import client.sql.exception.UniqueConstraintException;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
-import client.sql.orm.OrmUpdate;
+import client.sql.orm.EntityManagerImpl;
+import client.sql.orm.CriteriaQueryFactory;
+import client.sql.orm.CriteriaReadQuery;
+import client.sql.orm.CriteriaModifyQuery;
 
 
 /**
@@ -53,10 +55,10 @@ import client.sql.orm.OrmUpdate;
 public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@Resource
-	private OrmQueryFactory ormQueryFactory;
+	private CriteriaQueryFactory ormQueryFactory;
 
 	@Resource(name="txEntityManager")
-	private TxEntityManagerImpl per;
+	private EntityManagerImpl per;
 	
 	@Override
 	protected EntityManager getEntityManager() {
@@ -109,7 +111,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void allCondition() throws SQLException{	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);	
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);	
 		
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
@@ -117,7 +119,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	
 		assertEquals(1,result.size());
 		
-		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> forres = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		List<TestEntity> updated = getOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
@@ -134,7 +136,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		per.persist(e);
 		per.persist(e.clone().setTest("2"));
 		
-		OrmSelect<FastEntity> query = ormQueryFactory.createSelect(FastEntity.class,per);	
+		CriteriaReadQuery<FastEntity> query = ormQueryFactory.createReadQuery(FastEntity.class,per);	
 		
 		query.setHint(QueryHints.HINT,"/*+ HINT */");		
 		query.between(IFastEntity.TEST, "0", "30").eq(IFastEntity.TEST,"2").gtEq(IFastEntity.TEST, "0").ltEq(IFastEntity.TEST, "30").lt(IFastEntity.TEST, "30").gt(IFastEntity.TEST, "0");		
@@ -201,9 +203,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		FastEntity updatable = e.clone().setTest("2").setAttr(null);
 		per.merge(updatable,e.clone().setTest("2"));
 		
-		FastEntity ef = ormQueryFactory.createSelect(FastEntity.class,per).find("1");
+		FastEntity ef = per.find(FastEntity.class,"1");
 		assertNotNull(ef.getAttr());
-		ef = ormQueryFactory.createSelect(FastEntity.class,per).find("2");
+		ef = per.find(FastEntity.class,"2");
 		assertNull(ef.getAttr());
 	}
 	
@@ -214,7 +216,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void allConditionFixValue() throws SQLException{	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);	
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);	
 		
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
@@ -222,7 +224,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	
 		assertEquals(1,result.size());
 		
-		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> forres = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		List<TestEntity> updated = getFixOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
@@ -235,7 +237,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void disableDetach(){
 		setUpData("TEST.xls");
 		//更新前取征E
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		List<TestEntity> result = getOneRecord(query);	
 		assertEquals(1,result.size());
@@ -245,7 +247,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		per.merge( first.clone().setAttr("100"),first);
 	
 		//更新結果
-		OrmSelect<TestEntity> forres = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> forres = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		TestEntity entity = forres.eq(TEST, "2").getSingleResult();
 		assertEquals("100",entity.getAttr());
@@ -260,11 +262,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		setUpData("TEST.xls");
 		
 		//更新
-		OrmUpdate<TestEntity> update = ormQueryFactory.createUpdate(TestEntity.class,per);	
+		CriteriaModifyQuery<TestEntity> update = ormQueryFactory.createModifyQuery(TestEntity.class,per);	
 		update.eq(TEST, "2").set(ATTR, "AAA").update();
 		
 		//検索
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);		
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
 		TestEntity entity = query.eq(TEST, "2").getSingleResult();
@@ -283,11 +285,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		setUpData("TEST.xls");
 		
 		//更新
-		OrmUpdate<TestEntity> update = ormQueryFactory.createUpdate(TestEntity.class,per);
+		CriteriaModifyQuery<TestEntity> update = ormQueryFactory.createModifyQuery(TestEntity.class,per);
 		update.eqFix(TEST, "'2'").setFix(ATTR, "'AAA'").update();
 		
 		//検索
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);		
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);		
 		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
@@ -301,7 +303,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getSingleResultWithDesc(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).desc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).desc(TEST);
 		
 		TestEntity result = query.getSingleResult();
 		assertEquals("2",result.getAttr());
@@ -313,7 +315,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getSingleResultWithAsc(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).asc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).asc(TEST);
 		
 		TestEntity result = query.getSingleResult();
 		assertEquals("3",result.getAttr());
@@ -326,7 +328,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getSingleResultSetFirstWithDesc(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).desc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).desc(TEST);
 		
 		query.setFirstResult(1);
 		TestEntity result = query.getSingleResult();
@@ -339,7 +341,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void getResultSetFirst(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);
 		
 		query.setFirstResult(1);
 		List<TestEntity> result = query.getResultList();
@@ -366,7 +368,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		t.setTest("902").setAttr("902").setAttr2(900);
 		per.persist(t);
 		
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).desc(TEST);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).desc(TEST);
 		
 		query.contains(TEST, Arrays.asList("0","1,","2","900","901","902"));
 		query.setFirstResult(1);
@@ -392,12 +394,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void find(){	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		TestEntity result = query.find("1");
 
-		OrmSelect<TestEntity> query2 = ormQueryFactory.createSelect(TestEntity.class,per);
-		result = query2.find("1");
+		TestEntity result = per.find(TestEntity.class,"1");
+		result = per.find(TestEntity.class,"1");
 		assertEquals("3",result.getAttr());
 		
 	}
@@ -409,14 +408,11 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void findDisableDetach(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		TestEntity result = query.find("1");
+		TestEntity result = per.find(TestEntity.class,"1");
 		TestEntity updatable = result.clone();
 		per.merge(updatable.setAttr("1100"), result);
 		
-		OrmSelect<TestEntity> query2 = ormQueryFactory.createSelect(TestEntity.class,per);
-		result = query2.find("1");
+		result = per.find(TestEntity.class,"1");
 		assertEquals("1100",result.getAttr());
 	}
 	
@@ -448,9 +444,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test	
 	public void versionNoError(){
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		
-		TestEntity result = query.find("1");
+		TestEntity result = per.find(TestEntity.class,"1");
 		TestEntity updatable = result.clone();
 		updatable.setVersion(2);
 		try{
@@ -485,9 +479,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void findWithLockNoWaitError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		RequiresNewNativeService service = ServiceLocator.getService(RequiresNewNativeService.class);
 		
 		try{
@@ -511,9 +505,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void crushExceptionInAutonomousTransaction(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		
 		RequiresNewNativeService service = ServiceLocator.getService(RequiresNewNativeService.class);
 		
@@ -544,9 +538,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	@Test
 	public void crushExceptionInReadOnlyAutonomousTransaction(){	
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
-		
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 
 		RequiresNewNativeReadOnlyService service = ServiceLocator.getService(RequiresNewNativeReadOnlyService.class);
 		
@@ -563,7 +557,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void queryPessimisticLockError(){	
 		
 		setUpDataForceCommit("TEST.xls");
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per).setLockMode(LockModeType.PESSIMISTIC_READ);
 		
 		query.eq(ITestEntity.TEST,"1");
 		
@@ -592,7 +586,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());
 		per.persist(entity);
 		
-		OrmSelect<DateEntity> query = ormQueryFactory.createSelect(DateEntity.class,per);
+		CriteriaReadQuery<DateEntity> query = ormQueryFactory.createReadQuery(DateEntity.class,per);
 		
 		assertNull(query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").getSingleResult());
 	}
@@ -600,7 +594,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	/**
 	 * @return
 	 */
-	private List<TestEntity> getOneRecord(OrmSelect<TestEntity> query ){	
+	private List<TestEntity> getOneRecord(CriteriaReadQuery<TestEntity> query ){	
 		query.between(TEST, "0", "30").eq(TEST,"2").gtEq(TEST, "0").ltEq(TEST, "30").lt(TEST, "30").gt(TEST, "0");		
 		query.between(ATTR, "0", "20").eq(ATTR,"2").gtEq(ATTR, "0").ltEq(ATTR, "20").lt(ATTR, "20").gt(ATTR, "0");
 		query.between(ATTR2, 0, 100).eq(ATTR2,2).gtEq(ATTR2, 0).ltEq(ATTR2, 100).lt(ATTR2, 100).gt(ATTR2, 0);		
@@ -611,7 +605,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	/**
 	 * @return
 	 */
-	private List<TestEntity> getFixOneRecord(OrmSelect<TestEntity> query ){	
+	private List<TestEntity> getFixOneRecord(CriteriaReadQuery<TestEntity> query ){	
 		query.between(TEST, "0", "30").eqFix(TEST,"2").gtEqFix(TEST, "0").ltEqFix(TEST, "30").ltFix(TEST, "30").gtFix(TEST, "0");		
 		query.between(ATTR, "0", "20").eqFix(ATTR,"2").gtEqFix(ATTR, "0").ltEqFix(ATTR, "20").ltFix(ATTR, "20").gtFix(ATTR, "0");
 		query.between(ATTR2, 0, 100).eqFix(ATTR2,"2").gtEqFix(ATTR2, "0").ltEqFix(ATTR2, "100").ltFix(ATTR2, "100").gtFix(ATTR2, "0");		

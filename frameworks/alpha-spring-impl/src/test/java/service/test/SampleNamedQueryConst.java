@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import client.sql.free.AbstractNamedSelect;
+import client.sql.free.AbstractNamedReadQuery;
 import client.sql.free.AnonymousQuery;
 
 /**
@@ -13,7 +13,7 @@ import client.sql.free.AnonymousQuery;
  * @version 2011/08/31 created.
  */
 @AnonymousQuery(query="@/sql/SAMPLE_QUERY_CONST.sql")
-public class SampleNamedQueryConst extends AbstractNamedSelect{
+public class SampleNamedQueryConst extends AbstractNamedReadQuery{
 
 	public enum Bind {
 		test,
@@ -38,7 +38,7 @@ public class SampleNamedQueryConst extends AbstractNamedSelect{
 	 * @param value
 	 */
 	public SampleNamedQueryConst setTest(Object value){
-		setBranchParameter(Branch.test.name(), value);
+		//setBranchParameter(Branch.test.name(), value);
 		setParameter(Bind.test.name(), value);
 		return this;
 	}
@@ -48,7 +48,7 @@ public class SampleNamedQueryConst extends AbstractNamedSelect{
 	 */
 	public SampleNamedQueryConst setAttr(Object value){
 		setParameter(Bind.attr.name(), value);
-		setBranchParameter(Branch.attr.name(), value);
+		//setBranchParameter(Branch.attr.name(), value);
 		return this;
 	}
 
@@ -57,7 +57,7 @@ public class SampleNamedQueryConst extends AbstractNamedSelect{
 	 * @param value
 	 */
 	public SampleNamedQueryConst setAttr2(Object value){
-		setBranchParameter(Branch.attr2.name(), value);
+		setParameter(Branch.attr2.name(), value);
 		return this;
 	}
 	
@@ -65,7 +65,7 @@ public class SampleNamedQueryConst extends AbstractNamedSelect{
 	 * @param value
 	 */
 	public SampleNamedQueryConst setArc(Object value){
-		setBranchParameter(Branch.arc.name(), value);
+		setParameter(Branch.arc.name(), value);
 		return this;
 	}
 

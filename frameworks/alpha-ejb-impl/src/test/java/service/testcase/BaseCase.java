@@ -25,7 +25,6 @@ import org.eclipse.persistence.internal.sessions.AbstractSession;
 import org.eclipse.persistence.sessions.server.ClientSession;
 import org.junit.Assert;
 
-import service.framework.base.AbstractCoreService;
 
 
 

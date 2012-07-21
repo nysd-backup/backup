@@ -11,8 +11,6 @@ import javax.persistence.Version;
 
 import org.junit.Ignore;
 
-import core.base.AbstractEntity;
-
 
 /**
  * function.
@@ -23,12 +21,7 @@ import core.base.AbstractEntity;
 @Ignore
 @Entity
 @Table(name="testa")
-public class TestEntity extends AbstractEntity{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class TestEntity{
 
 	@Id
 	@Column

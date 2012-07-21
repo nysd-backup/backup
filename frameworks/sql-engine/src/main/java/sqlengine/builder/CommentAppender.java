@@ -3,7 +3,7 @@
  */
 package sqlengine.builder;
 
-import sqlengine.facade.SQLParameter;
+import sqlengine.facade.QueryParameter;
 
 /**
  * Adds the comment to the specified SQL.
@@ -17,5 +17,5 @@ public interface CommentAppender {
 	 * @param param the parameters
 	 * @param sql the SQL
 	 */
-	String setExternalString(SQLParameter param , String sql);
+	String setExternalString(QueryParameter param , String sql);
 }

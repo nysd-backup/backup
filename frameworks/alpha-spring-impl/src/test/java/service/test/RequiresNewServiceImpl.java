@@ -3,10 +3,11 @@
  */
 package service.test;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
@@ -21,12 +22,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import service.core.TxEntityManagerImpl;
 import service.framework.core.activation.ServiceLocator;
 import service.framework.core.transaction.ServiceContext;
 import service.test.entity.TestEntity;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
+import client.sql.orm.EntityManagerImpl;
 import core.exception.BusinessException;
 import core.message.MessageBean;
 import core.message.MessageBuilder;
@@ -44,9 +43,6 @@ import core.message.MessageResult;
 @Transactional(propagation=Propagation.REQUIRES_NEW)
 public class RequiresNewServiceImpl implements RequiresNewService{
 
-	@Resource
-	private OrmQueryFactory ormQueryFactory;
-	
 	@Autowired
 	private MessageBuilder builder;
 	
@@ -56,23 +52,25 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	@PostConstruct
 	protected void postConstruct(){
 		if( per == null){
-			per = new TxEntityManagerImpl();
+			per = new EntityManagerImpl();
 		}
 	}
 	
 	public String test() {
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
-		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		rollbackOnly =  TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 		return "OK";
 	}
 
 	@Override
-	public String crushException() {
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,per);
+	public String crushException() {		
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
-			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0).find("1");
+			Map<String,Object> hints = new HashMap<String,Object>();
+			hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+			per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}

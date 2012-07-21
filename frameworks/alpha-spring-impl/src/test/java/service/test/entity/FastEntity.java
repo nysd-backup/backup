@@ -3,6 +3,7 @@
  */
 package service.test.entity;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -12,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import client.sql.orm.Pair;
-import core.base.AbstractEntity;
 
 
 
@@ -25,9 +25,7 @@ import core.base.AbstractEntity;
  */
 @Entity
 @Table(name="fast")
-public class FastEntity extends AbstractEntity implements client.sql.orm.FastEntity{
-
-	private static final long serialVersionUID = 1L;
+public class FastEntity implements client.sql.orm.FastEntity{
 
 	@Id
 	@Column
@@ -114,7 +112,12 @@ public class FastEntity extends AbstractEntity implements client.sql.orm.FastEnt
 	 */
 	@Override
 	public FastEntity clone(){
-		return (FastEntity)super.clone();
+		FastEntity entity = new FastEntity();
+		entity.test = test;
+		entity.attr = attr;
+		entity.attr2 = attr2;
+		entity.version = version;
+		return entity;
 	}
 
 	/**
@@ -130,7 +133,7 @@ public class FastEntity extends AbstractEntity implements client.sql.orm.FastEnt
 	 */
 	@Override
 	public Map<String, Object> toPrimaryKeys() {
-		Map<String,Object> map = createMap();
+		Map<String,Object> map = new LinkedHashMap<String,Object>();
 		map.put("test", test);
 		return map;
 	}
@@ -140,7 +143,7 @@ public class FastEntity extends AbstractEntity implements client.sql.orm.FastEnt
 	 */
 	@Override
 	public Map<String, Object> toAttributes() {
-		Map<String,Object> map = createMap();
+		Map<String,Object> map = new LinkedHashMap<String,Object>();
 		map.put("attr", attr);
 		map.put("attr2", attr2);
 		map.put("version", version);

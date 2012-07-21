@@ -16,8 +16,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import service.core.TxEntityManagerImpl;
 import service.test.CachableConst;
+import service.test.SampleBatchUpdate;
 import service.test.SampleNativeQuery;
 import service.test.SampleNativeQueryConst;
 import service.test.SampleNativeResult;
@@ -25,13 +25,14 @@ import service.test.SampleNativeUpdate;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import client.sql.free.BatchUpsert;
-import client.sql.free.BatchUpsertFactory;
+import client.sql.free.BatchModifyQuery;
+import client.sql.free.BatchModifyQueryFactory;
 import client.sql.free.NativeResult;
 import client.sql.free.QueryCallback;
 import client.sql.free.QueryFactory;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
+import client.sql.orm.EntityManagerImpl;
+import client.sql.orm.CriteriaQueryFactory;
+import client.sql.orm.CriteriaReadQuery;
 
 
 /**
@@ -47,13 +48,13 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	private QueryFactory queryFactory;
 	
 	@Resource
-	private OrmQueryFactory ormQueryFactory;
+	private CriteriaQueryFactory ormQueryFactory;
 
 	@Autowired
-	private TxEntityManagerImpl pm;
+	private EntityManagerImpl pm;
 	
 	@Autowired
-	private BatchUpsertFactory buf;
+	private BatchModifyQueryFactory buf;
 	
 	@Override
 	protected EntityManager getEntityManager() {
@@ -86,7 +87,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void select(){
 		
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		query.setTest("1");
 		
@@ -105,7 +106,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test
 	public void selectIfAttr(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		query.setAttr("1000");
 		query.setTest("1");
@@ -122,7 +123,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test
 	public void selectIfAttr2(){
 		setUpData("TEST.xls");
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		query.setAttr2(500).setTest("1").setArc("500");
 		
@@ -149,7 +150,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		t.setTest("902").setAttr("902").setAttr2(900);
 		pm.persist(t);
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);	
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);	
 		query.setEntityManager(pm);
 		query.setFirstResult(1);
 		query.setMaxResults(2);
@@ -167,7 +168,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void constTest(){
 	
 		setUpData("TEST.xls");
-		SampleNativeQueryConst c = queryFactory.createSelect(SampleNativeQueryConst.class,pm);
+		SampleNativeQueryConst c = queryFactory.createReadQuery(SampleNativeQueryConst.class,pm);
 		c.setEntityManager(pm);
 		c.setTest("1");
 		List<SampleNativeResult> e = c.getResultList();
@@ -182,7 +183,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void constAttr(){
 	
 		setUpData("TEST.xls");
-		SampleNativeQueryConst c = queryFactory.createSelect(SampleNativeQueryConst.class,pm);
+		SampleNativeQueryConst c = queryFactory.createReadQuery(SampleNativeQueryConst.class,pm);
 		c.setEntityManager(pm);
 		c.setTest("2");
 		c.setAttr(CachableConst.TARGET_TEST_1_OK);
@@ -197,13 +198,13 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = ormQueryFactory.createSelect(TestEntity.class,pm);
+		CriteriaReadQuery<TestEntity> eq = ormQueryFactory.createReadQuery(TestEntity.class,pm);
 		TestEntity entity = eq.eq(TEST, "1").getSingleResult();
 		TestEntity updatable = entity.clone();
 		updatable.setAttr2(CachableConst.TARGET_INT);
 		pm.merge(updatable, entity );
 		
-		SampleNativeQueryConst c = queryFactory.createSelect(SampleNativeQueryConst.class,pm);
+		SampleNativeQueryConst c = queryFactory.createReadQuery(SampleNativeQueryConst.class,pm);
 		c.setEntityManager(pm);
 		c.setArc(CachableConst.TARGET_INT);		
 		List<SampleNativeResult> e = c.getResultList();
@@ -218,7 +219,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		assertEquals(2,query.count());
 	}
@@ -229,14 +230,14 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test 
 	public void updateConstTest(){
 		setUpData("TEST.xls");
-		SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class,pm);
+		SampleNativeUpdate update = queryFactory.createModifyQuery(SampleNativeUpdate.class,pm);
 		update.setEntityManager(pm);
 		update.setTest("1");
 		update.setAttr2set(900);
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = ormQueryFactory.createSelect(TestEntity.class,pm);
+		CriteriaReadQuery<TestEntity> e = ormQueryFactory.createReadQuery(TestEntity.class,pm);
 		TestEntity res = e.eq(TEST, "1").getSingleResult();
 		assertEquals(900,res.getAttr2());
 		
@@ -249,23 +250,23 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void batchUpdate(){
 		setUpData("TEST.xls");
 		
-		BatchUpsert batcher = buf.createBatchUpdate();
+		BatchModifyQuery batcher = buf.createBatchUpdate();
 		for(int i = 1  ; i <= 31; i++){
-			SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class,pm);
+			SampleBatchUpdate update = queryFactory.createModifyQuery(SampleBatchUpdate.class,pm);
 			update.setEntityManager(pm);
-			update.setTest("1");	
+			update.setAttr("3");	
 			update.setAttr2set(900+i);			
 			batcher.addBatch(update);
 		}
-		int[] res= batcher.executeBatch();
+		int[] res= batcher.modify();
 		assertEquals(31,res.length);
 		for(int r : res){
 			assertEquals(-2,r);
 		}
 		
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,pm);
+		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,pm);
 		TestEntity findedEntity = query.eq(TEST, "1").getSingleResult();
-		assertEquals(931,findedEntity.getAttr2());
+		assertEquals(901,findedEntity.getAttr2());
 		
 	}
 	
@@ -275,7 +276,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	@Test 
 	public void updateConstAttr(){
 		setUpData("TEST.xls");
-		SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class,pm);
+		SampleNativeUpdate update = queryFactory.createModifyQuery(SampleNativeUpdate.class,pm);
 		update.setEntityManager(pm);
 		update.setTest("2");
 		update.setAttr(CachableConst.TARGET_TEST_1_OK);
@@ -283,7 +284,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = ormQueryFactory.createSelect(TestEntity.class,pm);
+		CriteriaReadQuery<TestEntity> e = ormQueryFactory.createReadQuery(TestEntity.class,pm);
 		TestEntity res = e.eq(ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 		assertEquals(900,res.getAttr2());
 		
@@ -296,20 +297,20 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		OrmSelect<TestEntity> eq = ormQueryFactory.createSelect(TestEntity.class,pm);
+		CriteriaReadQuery<TestEntity> eq = ormQueryFactory.createReadQuery(TestEntity.class,pm);
 		TestEntity found = eq.eq(TEST, "1").getSingleResult();
 		TestEntity entity = found.clone();
 		entity.setAttr2(CachableConst.TARGET_INT);
 		pm.merge(entity, found);
 		
-		SampleNativeUpdate update = queryFactory.createUpsert(SampleNativeUpdate.class,pm);
+		SampleNativeUpdate update = queryFactory.createModifyQuery(SampleNativeUpdate.class,pm);
 		update.setEntityManager(pm);
 		update.setArc(CachableConst.TARGET_INT);		
 		update.setAttr2set(900);
 		int count = update.update();
 		assertEquals(1,count);
 		
-		OrmSelect<TestEntity> e = ormQueryFactory.createSelect(TestEntity.class,pm);
+		CriteriaReadQuery<TestEntity> e = ormQueryFactory.createReadQuery(TestEntity.class,pm);
 		TestEntity res = e.eq(ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 
 		assertEquals(900,res.getAttr2());
@@ -324,7 +325,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		query.setMaxResults(1);
 		NativeResult result = query.getTotalResult();
@@ -341,7 +342,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		
 		setUpData("TEST.xls");
 		
-		SampleNativeQuery query = queryFactory.createSelect(SampleNativeQuery.class,pm);
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		long count = query.getFetchResult(new CallbackImpl());		
 		assertEquals(2,count);

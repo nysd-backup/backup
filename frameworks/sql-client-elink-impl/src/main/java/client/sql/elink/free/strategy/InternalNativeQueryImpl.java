@@ -17,22 +17,22 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
-import sqlengine.builder.SQLBuilder;
+import sqlengine.builder.QueryBuilder;
 import sqlengine.exception.ExceptionHandler;
 import sqlengine.executer.RecordFilter;
 import sqlengine.executer.RecordHandlerFactory;
 import sqlengine.executer.ResultSetHandler;
 import sqlengine.executer.impl.RecordHandlerFactoryImpl;
 import sqlengine.executer.impl.ResultSetHandlerImpl;
+import sqlengine.facade.QueryExecutor;
 import sqlengine.facade.QueryResult;
-import sqlengine.facade.SQLEngineFacade;
-import sqlengine.facade.UpdateParameter;
-import sqlengine.facade.impl.SQLEngineFacadeImpl;
+import sqlengine.facade.UpsertParameter;
+import sqlengine.facade.impl.QueryExecutorImpl;
 import client.sql.elink.free.LazyList;
 import client.sql.elink.free.SQLExceptionHandlerImpl;
+import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.FreeQueryParameter;
-import client.sql.free.FreeSelectParameter;
-import client.sql.free.FreeUpsertParameter;
+import client.sql.free.FreeReadQueryParameter;
 import client.sql.free.NativeResult;
 import client.sql.free.ResultSetFilter;
 import client.sql.free.strategy.InternalQuery;
@@ -50,8 +50,8 @@ import client.sql.free.strategy.InternalQuery;
  */
 public class InternalNativeQueryImpl implements InternalQuery {
 		
-	/** the <code>SQLBuilder</code> */
-	private SQLBuilder builder;
+	/** the <code>QueryBuilder</code> */
+	private QueryBuilder builder;
 
 	/** the ResultSetHandler */
 	private ResultSetHandler handler = new ResultSetHandlerImpl();
@@ -63,19 +63,19 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	private ExceptionHandler exceptionHandler = new SQLExceptionHandlerImpl();
 	
 	/** the engine facade */
-	private SQLEngineFacade facade = new SQLEngineFacadeImpl();
+	private QueryExecutor queryExecutor = new QueryExecutorImpl();
 	
 	/**
 	 * @param facade the facade to set
 	 */
-	public void setSqlEngineFacade(SQLEngineFacade facade){
-		this.facade = facade;
+	public void setQueryExecutor(QueryExecutor queryExecutor){
+		this.queryExecutor = queryExecutor;
 	}
 
 	/**
 	 * @param builder the builder to set
 	 */
-	public void setSqlBuilder(SQLBuilder builder){
+	public void setSqlBuilder(QueryBuilder builder){
 		this.builder = builder;
 	}
 	
@@ -101,26 +101,16 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	}
 
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getResultList(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getResultList(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public <T> List<T> getResultList(FreeSelectParameter parameter) {
-		Query query = mapping(parameter,createQuery(parameter));	
-		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
-		ResultSet rs = cursor.getResultSet();
+	public <T> List<T> getResultList(FreeReadQueryParameter parameter) {
 		
-		try {
-			final ResultSetFilter filter = parameter.getFilter();
-			RecordFilter recordFilter = null;
-			if(filter != null){
-				recordFilter = new RecordFilter(){
-					@Override
-					public <K> K edit(K data) {
-						return filter.edit(data);
-					}					
-				};
-			}			
-			return handler.getResultList(rs, parameter.getResultType(), recordFilter);
+		RecordFilter filter = createRecordFilter(parameter);
+		Query query = mapping(parameter,createQuery(parameter));	
+		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();	
+		try {			
+			return handler.getResultList(cursor.getResultSet(), parameter.getResultType(), filter);
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
@@ -132,36 +122,27 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see client.sql.internal.free.AbstractInternalQuery#getSingleResult()
 	 */
 	@Override
-	public <T> T getSingleResult(FreeSelectParameter parameter) {
+	public <T> T getSingleResult(FreeReadQueryParameter parameter) {
 		parameter.setMaxSize(1);
 		List<T> result = getResultList(parameter);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(final FreeSelectParameter parameter) {
+	public NativeResult getTotalResult(final FreeReadQueryParameter parameter) {
 
+		RecordFilter filter = createRecordFilter(parameter);
 		Query query = mapping(parameter,createQuery(parameter));
 		query.setMaxResults(0);
 		
-		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
-		ResultSet rs = cursor.getResultSet();
 		QueryResult result;
-		try {
-			final ResultSetFilter filter = parameter.getFilter();
-			RecordFilter recordFilter = null;
-			if(filter != null){
-				recordFilter = new RecordFilter(){
-					@Override
-					public <K> K edit(K data) {
-						return filter.edit(data);
-					}					
-				};
-			}			
-			result = handler.getResultList(rs, parameter.getResultType(),recordFilter,parameter.getMaxSize(),parameter.getFirstResult());
+		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();		
+		try {		
+			ResultSet rs = cursor.getResultSet();
+			result = handler.getResultList(rs, parameter.getResultType(),filter,parameter.getMaxSize(),parameter.getFirstResult());
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
@@ -176,7 +157,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List getFetchResult(FreeSelectParameter parameter) {
+	public List getFetchResult(FreeReadQueryParameter parameter) {
 		Query query = mapping(parameter,createQuery(parameter));		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
@@ -192,7 +173,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * 
 	 * @return the query
 	 */
-	protected Query createQuery(FreeSelectParameter param) {
+	protected Query createQuery(FreeReadQueryParameter param) {
 		List<Object> bindList = new ArrayList<Object>();
 		String executingSql = buildSql(bindList,param);		
 		Query query = param.getName() != null ? createNamedQuery(executingSql, param) : param.getEntityManager().createNativeQuery(executingSql);
@@ -205,7 +186,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @param query the query
 	 * @return the query
 	 */
-	protected Query mapping(FreeSelectParameter parameter,Query query){
+	protected Query mapping(FreeReadQueryParameter parameter,Query query){
 				
 		for(Map.Entry<String, Object> h : parameter.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
@@ -226,7 +207,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see client.sql.free.strategy.InternalQuery#count()
 	 */
 	@Override
-	public long count(FreeSelectParameter param){		
+	public long count(FreeReadQueryParameter param){		
 
 		List<Object> bindList = new ArrayList<Object>();
 		String executingSql = buildSql(bindList,param);
@@ -247,7 +228,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see client.sql.free.strategy.InternalQuery#executeUpdate()
 	 */
 	@Override
-	public int executeUpdate(FreeUpsertParameter param) {
+	public int executeUpdate(FreeModifyQueryParameter param) {
 		List<Object> bindList = new ArrayList<Object>();
 		Query query = null;
 		if(param.getName() != null){
@@ -271,7 +252,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * 
 	 * @return the query
 	 */
-	protected Query createNamedQuery(String executingQuery,FreeSelectParameter param){
+	protected Query createNamedQuery(String executingQuery,FreeReadQueryParameter param){
 		Query query = param.getEntityManager().createNamedQuery(executingQuery);
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
@@ -296,7 +277,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		String str = param.getSql();	
 		if(!param.isUseRowSql()){
 			str = builder.build(param.getQueryId(), str);
-			str = builder.evaluate(str, param.getBranchParam(),param.getQueryId());
+			str = builder.evaluate(str, param.getParam(),param.getQueryId());
 		}			
 		str = builder.replaceToPreparedSql(str, Arrays.asList(param.getParam()),Arrays.asList(bindList), param.getQueryId());			
 		return str;
@@ -316,20 +297,37 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		}		
 		return query;
 	}
+	
+	/**
+	 * @param parameter
+	 * @return
+	 */
+	private RecordFilter createRecordFilter(FreeReadQueryParameter parameter){
+		final ResultSetFilter filter = parameter.getFilter();
+		RecordFilter recordFilter = null;
+		if(filter != null){
+			recordFilter = new RecordFilter(){
+				@Override
+				public <K> K edit(K data) {
+					return filter.edit(data);
+				}					
+			};
+		}			
+		return recordFilter;
+	}
 
 	/**
 	 * @see client.sql.free.strategy.InternalQuery#executeBatch(java.util.List)
 	 */
 	@Override
-	public int[] executeBatch(List<FreeUpsertParameter> param) {
+	public int[] executeBatch(List<FreeModifyQueryParameter> param) {
 		
 		//TODO 要検証		
 		
-		List<UpdateParameter> engineParams = new ArrayList<UpdateParameter>();
+		List<UpsertParameter> engineParams = new ArrayList<UpsertParameter>();
 		for(FreeQueryParameter p: param){
-			UpdateParameter ep = new UpdateParameter();
-			ep.setAllParameter(p.getParam());
-			ep.setAllBranchParameter(p.getBranchParam());
+			UpsertParameter ep = new UpsertParameter();
+			ep.setAllParameter(p.getParam());		
 			ep.setSqlId(p.getQueryId());
 			ep.setSql(p.getSql());
 			ep.setUseRowSql(p.isUseRowSql());	
@@ -340,14 +338,9 @@ public class InternalNativeQueryImpl implements InternalQuery {
 			engineParams.add(ep);
 		}		
 		
-//		EntityManagerImpl impl = (EntityManagerImpl)param.get(0).getEntityManager().getDelegate();		
-//		ClientSession session = (ClientSession)((AbstractSession)impl.getActiveSession()).getParent();
-//		DatabaseAccessor accessor = (DatabaseAccessor)session.getAccessor();
-//		Connection con = accessor.getConnection();
-		
 		Connection con = param.get(0).getEntityManager().unwrap(Connection.class);
 		
-		return facade.executeBatch(engineParams, con);
+		return queryExecutor.executeBatch(engineParams, con);
 		
 	}
 

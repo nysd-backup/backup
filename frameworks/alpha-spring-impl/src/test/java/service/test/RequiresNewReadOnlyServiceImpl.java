@@ -3,8 +3,10 @@
  */
 package service.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
@@ -18,8 +20,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import service.test.entity.TestEntity;
-import client.sql.orm.OrmQueryFactory;
-import client.sql.orm.OrmSelect;
 
 
 /**
@@ -32,9 +32,6 @@ import client.sql.orm.OrmSelect;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Transactional(propagation=Propagation.REQUIRES_NEW,readOnly=true)
 public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyService{
-
-	@Resource
-	private OrmQueryFactory ormQueryFactory;
 	
 	@PersistenceContext(unitName="oracle")
 	private EntityManager em;
@@ -45,19 +42,19 @@ public class RequiresNewReadOnlyServiceImpl implements RequiresNewReadOnlyServic
 	}
 	
 	public String test() {
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,em);
-		query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
-		query.find("1");
+		Map<String,Object> hints = new HashMap<String,Object>();
+		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		return "OK";
 	}
 
 	@Override
-	public String crushException() {
-		OrmSelect<TestEntity> query = ormQueryFactory.createSelect(TestEntity.class,em);	
+	public String crushException() {	
 		try{
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
-			query.setLockMode(LockModeType.PESSIMISTIC_READ).setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT, 0);
-			query.find("1");
+			Map<String,Object> hints = new HashMap<String,Object>();
+			hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
+			em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}

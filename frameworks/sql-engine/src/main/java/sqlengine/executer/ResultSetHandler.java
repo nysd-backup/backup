@@ -33,12 +33,12 @@ public interface ResultSetHandler {
 	 * @param rs the rs
 	 * @param resultType the resultType
 	 * @param maxSize the maxSize
-	 * @param firstResult the firstResult
+	 * @param offset the firstResult
 	 * @param filter the filter for ResultSet
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize,int firstResult)
+	QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize,int offset)
 	throws SQLException ;
 	
 	/**

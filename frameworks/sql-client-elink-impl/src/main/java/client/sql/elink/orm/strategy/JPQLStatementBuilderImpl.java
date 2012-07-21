@@ -6,7 +6,7 @@ package client.sql.elink.orm.strategy;
 import java.util.List;
 import java.util.Map;
 
-import client.sql.orm.WhereCondition;
+import client.sql.orm.ExtractionCriteria;
 import client.sql.orm.strategy.AbstractStatementBuilder;
 
 
@@ -32,7 +32,7 @@ public class JPQLStatementBuilderImpl extends AbstractStatementBuilder{
 	 * @see client.sql.orm.strategy.SQLStatementBuilder#createDelete(java.lang.Class, java.lang.String, java.util.List)
 	 */
 	@Override
-	public String createDelete(Class<?> entityClass,List<WhereCondition> where){
+	public String createDelete(Class<?> entityClass,List<ExtractionCriteria> where){
 		StringBuilder builder = new StringBuilder("delete e from ");
 		builder.append(entityClass.getSimpleName()).append(" e ");
 		builder.append(generateWhere(where));

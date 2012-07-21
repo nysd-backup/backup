@@ -11,11 +11,11 @@ import java.util.regex.Pattern;
 import javax.persistence.Query;
 
 import sqlengine.builder.ConstAccessor;
-import sqlengine.builder.SQLBuilder;
+import sqlengine.builder.QueryBuilder;
 import sqlengine.builder.impl.ConstAccessorImpl;
 import client.sql.free.FreeQueryParameter;
-import client.sql.free.FreeSelectParameter;
-import client.sql.free.FreeUpsertParameter;
+import client.sql.free.FreeReadQueryParameter;
+import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.NativeResult;
 import client.sql.free.strategy.InternalQuery;
 
@@ -32,8 +32,8 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	/** the pattern */
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
 	
-	/** the <code>SQLBuilder</code> */
-	private SQLBuilder builder;
+	/** the <code>QueryBuilder</code> */
+	private QueryBuilder builder;
 	
 	/** the <code>ConstAccessor</code> */
 	private ConstAccessor accessor = new ConstAccessorImpl();
@@ -41,7 +41,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	/**
 	 * @param builder the builder to set
 	 */
-	public void setSqlBuilder(SQLBuilder builder){
+	public void setSqlBuilder(QueryBuilder builder){
 		this.builder = builder;
 	}
 
@@ -53,19 +53,19 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 	
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#count(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#count(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public long count(FreeSelectParameter param){
+	public long count(FreeReadQueryParameter param){
 		throw new UnsupportedOperationException();
 	}	
 	
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getResultList(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getResultList(client.sql.free.FreeReadQueryParameter)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> getResultList(FreeSelectParameter param){
+	public <T> List<T> getResultList(FreeReadQueryParameter param){
 		Query query = createQuery(param);
 		query = mapping( param , query );
 		if(param.getLockMode() != null){
@@ -75,11 +75,11 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getSingleResult(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getSingleResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getSingleResult(FreeSelectParameter param){
+	public <T> T getSingleResult(FreeReadQueryParameter param){
 		Query query = createQuery(param);
 		query = mapping( param , query );
 		if(param.getLockMode() != null){
@@ -89,10 +89,10 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 	
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#executeUpdate(client.sql.free.FreeUpsertParameter)
+	 * @see client.sql.free.strategy.InternalQuery#executeUpdate(client.sql.free.FreeModifyQueryParameter)
 	 */
 	@Override
-	public int executeUpdate(FreeUpsertParameter param) {
+	public int executeUpdate(FreeModifyQueryParameter param) {
 		Query query = createQuery(param);
 		query = mapping(param,query);
 		return query.executeUpdate();
@@ -116,7 +116,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 				}
 			}else{				
 				executingSql = builder.build(param.getQueryId(), executingSql);
-				executingSql = builder.evaluate(executingSql, param.getBranchParam(),param.getQueryId());	
+				executingSql = builder.evaluate(executingSql, param.getParam(),param.getQueryId());	
 				query = setParameters(executingSql,param.getParam(),param.getEntityManager().createQuery(executingSql));	
 			}
 		//名前付きクエリ
@@ -185,18 +185,18 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	}
 
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeSelectParameter param){
+	public NativeResult getTotalResult(FreeReadQueryParameter param){
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * @see client.sql.free.strategy.InternalQuery#getFetchResult(client.sql.free.FreeSelectParameter)
+	 * @see client.sql.free.strategy.InternalQuery#getFetchResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public <T> List<T> getFetchResult(FreeSelectParameter param){
+	public <T> List<T> getFetchResult(FreeReadQueryParameter param){
 		throw new UnsupportedOperationException();
 	}
 
@@ -204,7 +204,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	 * @see client.sql.free.strategy.InternalQuery#executeBatch(java.util.List)
 	 */
 	@Override
-	public int[] executeBatch(List<FreeUpsertParameter> param) {
+	public int[] executeBatch(List<FreeModifyQueryParameter> param) {
 		throw new UnsupportedOperationException();
 	}
 

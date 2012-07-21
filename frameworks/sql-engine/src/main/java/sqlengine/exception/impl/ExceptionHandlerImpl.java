@@ -6,7 +6,7 @@ package sqlengine.exception.impl;
 import java.sql.SQLException;
 
 import sqlengine.exception.ExceptionHandler;
-import sqlengine.exception.SQLEngineException;
+import sqlengine.exception.QueryException;
 
 
 /**
@@ -22,7 +22,7 @@ public class ExceptionHandlerImpl implements ExceptionHandler{
 	 */
 	@Override
 	public RuntimeException rethrow(SQLException e) {
-		return new SQLEngineException(e);
+		return new QueryException(e);
 	}
 
 }

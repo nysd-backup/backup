@@ -3,6 +3,8 @@
  */
 package core.exception;
 
+import core.message.MessageResult;
+
 
 /**
  * The system exception.
@@ -15,11 +17,7 @@ public class SystemException extends RuntimeException{
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4928387597757529973L;
 	
-	/** the message code */
-	private String messageId = null;
-	
-	/** the binding arguments */
-	private Object[] args;
+	private MessageResult messaegResult;
 	
 	public SystemException(){
 		
@@ -29,9 +27,8 @@ public class SystemException extends RuntimeException{
 	 * @param messageId the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String messageId , Object... args){
-		this.messageId = messageId;
-		this.args = args;
+	public SystemException(MessageResult messaegResult){
+		this.messaegResult = messaegResult;
 	}
 	
 	/**
@@ -40,33 +37,25 @@ public class SystemException extends RuntimeException{
 	 * @param messageId the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String message , Throwable cause , String messageId , Object... args){
+	public SystemException(String message , Throwable cause ,MessageResult messaegResult){
 		super(message,cause);
-		this.messageId = messageId;
-		this.args = args;
+		this.messaegResult = messaegResult;
 	}
 	/**
 	 * @param message the message
 	 * @param messageId the message code
 	 * @param args the arguments
 	 */
-	public SystemException(String message , String messageId , Object... args){
+	public SystemException(String message , MessageResult messaegResult){
 		super(message);
-		this.messageId = messageId;
-		this.args = args;
+		this.messaegResult = messaegResult;
 	}
 	
 	/**
 	 * @return the message code
 	 */
-	public String getMessageId(){
-		return this.messageId;
+	public MessageResult getMessageResult(){
+		return this.messaegResult;
 	}
 	
-	/**
-	 * @return the arguments
-	 */
-	public Object[] getArgs(){
-		return this.args;
-	}
 }

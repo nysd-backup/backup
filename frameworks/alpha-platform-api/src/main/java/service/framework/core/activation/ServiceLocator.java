@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationHandler;
 import service.client.messaging.MessageClientFactory;
 import service.framework.core.async.AsyncService;
 import service.framework.core.async.AsyncServiceFactory;
-import service.framework.core.transaction.ServiceContext;
 import core.activation.ComponentLocator;
 
 
@@ -45,11 +44,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 * @return the <code>AsyncService</code>
 	 */
 	public abstract AsyncService createAsyncService();
-	
-	/**
-	 * @return the ServiceContext
-	 */
-	public abstract ServiceContext createServiceContext();
 	
 	/**
 	 * @param serviceName the serviceName to lookup 
@@ -115,14 +109,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public static AsyncService createDefaultAsyncService(){
 		return getDelegate().createAsyncService();
 	}
-	
-	/**
-	 * @return the ServiceContext
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends ServiceContext> T createDefaultServiceContext(){
-		return (T)getDelegate().createServiceContext();
-	}		
 	
 	/**
 	 * @return

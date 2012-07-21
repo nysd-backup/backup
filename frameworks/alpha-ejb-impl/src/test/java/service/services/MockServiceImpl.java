@@ -16,7 +16,7 @@ import javax.ejb.Stateless;
 public class MockServiceImpl implements MockService{
 	
 	//@Resource
-	//private OrmQueryFactory ormQueryFactory;
+	//private CriteriaQueryFactory ormQueryFactory;
 	
 	@EJB
 	private MockRequiresNewService ms;
@@ -29,7 +29,7 @@ public class MockServiceImpl implements MockService{
 		ms.exec(v);
 		m2.exec("100");
 		
-		//OrmSelect<NotTestEntity> eq = ormQueryFactory.createQuery(NotTestEntity.class);		
+		//CriteriaReadQuery<NotTestEntity> eq = ormQueryFactory.createQuery(NotTestEntity.class);		
 		return v;
 	}
 

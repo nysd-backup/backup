@@ -40,11 +40,11 @@ public class MessageBuilderImpl implements MessageBuilder{
 		String message = bundle.getString(String.valueOf(bean.getMessageId()));
 		String[] splited = message.split(",");
 		MessageResult result = new MessageResult();
-		result.setCode(Integer.parseInt(splited[0]));
+		result.setCode(splited[0]);
 		result.setMessage(MessageFormat.format(splited[1], bean.getArguments()));
 		result.setLevel(MessageLevel.valueOf(splited[2]).ordinal());
-		if(splited.length > 2){
-			result.setShouldNotify(Boolean.parseBoolean(splited[2]));
+		if(splited.length > 3){
+			result.setShouldNotify(Boolean.parseBoolean(splited[3]));
 		}
 		result.setClientBean(bean.getClientBean());
 		return result;

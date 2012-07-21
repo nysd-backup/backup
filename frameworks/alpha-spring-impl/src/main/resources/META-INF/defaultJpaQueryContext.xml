@@ -16,7 +16,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="sqlBuilder" class="sqlengine.builder.impl.SQLBuilderProxyImpl" />
+  	<bean id="sqlBuilder" class="sqlengine.builder.impl.QueryBuilderProxyImpl" />
   	
   	<!-- 内部Namedクエリ -->
 	<bean id="internalNamedQuery" class="client.sql.elink.free.strategy.InternalNamedQueryImpl" scope="prototype" >
@@ -44,7 +44,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="client.sql.orm.OrmQueryFactory" scope="prototype">	
+	<bean id="ormQueryFactory" class="client.sql.orm.CriteriaQueryFactory" scope="prototype">	
 		<property name="internalOrmQuery" ref="internalOrmQuery" />
 	</bean>
  

@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import sqlengine.exception.SQLEngineException;
+import sqlengine.exception.QueryException;
 import sqlengine.executer.RecordHandler;
 import sqlengine.executer.TypeConverter;
 
@@ -66,7 +66,7 @@ public class MapRecordHandlerImpl implements RecordHandler{
 			try {
 				row = (T)resultType.newInstance();
 			} catch (Exception e) {
-				throw new SQLEngineException(e);
+				throw new QueryException(e);
 			}
 		}
 		
@@ -82,7 +82,7 @@ public class MapRecordHandlerImpl implements RecordHandler{
 			}catch(SQLException sqle){
 				throw sqle;
 			} catch (Exception e) {
-				throw new SQLEngineException(String.format("label = %s : type = %s",label,String.class.getName()),e);
+				throw new QueryException(String.format("label = %s : type = %s",label,String.class.getName()),e);
 			}
 		}
 		

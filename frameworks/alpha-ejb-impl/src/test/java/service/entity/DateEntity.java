@@ -12,8 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import core.base.AbstractEntity;
-
 
 /**
  * function.
@@ -23,13 +21,7 @@ import core.base.AbstractEntity;
  */
 @Entity
 @Table(name="testB")
-public class DateEntity extends AbstractEntity{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class DateEntity{
 	@Id
 	@Column
 	private String test;

@@ -7,9 +7,9 @@ package service;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 
-import client.sql.elink.customizer.JPQLExceptionHandlerImpl;
-
 import service.framework.core.transaction.ServiceContext;
+import service.framework.core.transaction.autonomous.ServiceContextImpl;
+import client.sql.elink.customizer.JPQLExceptionHandlerImpl;
 
 
 /**
@@ -23,9 +23,9 @@ public class DumyExceptionHandler extends JPQLExceptionHandlerImpl{
 	//TODO ここで判定するにはDat
 	
 	protected Object handleOptimisticLockException(OptimisticLockException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
 
-		if( context.isSuppressOptimisticLockError() ){
+		if( "IGNORE_TEST".equals(context.getRequestId()) ){
 			System.out.println("ロック連番");
 		}else{
 			throw e;
@@ -42,9 +42,8 @@ public class DumyExceptionHandler extends JPQLExceptionHandlerImpl{
 			try{
 				return super.handleException(exception);
 			}catch(RuntimeException uce){
-				ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
-
-				if( context.isSuppressOptimisticLockError() ){
+				ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
+				if( "IGNORE_TEST".equals(context.getRequestId()) ){
 					System.out.println("ロック連番");
 				}else{
 					throw uce;

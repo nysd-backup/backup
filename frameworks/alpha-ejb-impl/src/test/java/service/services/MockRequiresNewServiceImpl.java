@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 
 import service.entity.TestEntity;
 import service.framework.core.transaction.ServiceContext;
-import service.framework.core.transaction.ServiceContextImpl;
+import service.framework.core.transaction.autonomous.ServiceContextImpl;
 import service.testcase.BaseCase;
 
 
