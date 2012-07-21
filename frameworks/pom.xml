@@ -88,8 +88,9 @@
 			<!--
 				<module>alpha-web</module>		
 				<module>alpha-web-spring</module>	
-				<module>alpha-ejb-impl</module>													
 			-->	
+				<module>alpha-ejb-impl</module>													
+		
 			</modules>
 		</profile>
 	</profiles>

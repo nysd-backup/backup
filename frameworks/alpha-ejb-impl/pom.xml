@@ -29,8 +29,12 @@
 		<dependency>
 		    <groupId>alpha</groupId>
 		    <artifactId>sql-client-api</artifactId>
+		    <version>${framework.version}</version>		    
+		</dependency>		
+		<dependency>
+		    <groupId>alpha</groupId>
+		    <artifactId>sql-client-impl</artifactId>
 		    <version>${framework.version}</version>
-		    <scope>compile</scope>
 		</dependency>							
 		<dependency>
 		    <groupId>alpha</groupId>

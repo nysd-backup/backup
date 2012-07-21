@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package service.client.messaging;
+package service.framework.core.messaging;
 
 import java.lang.reflect.Method;
 
@@ -12,6 +12,7 @@ import javax.jms.ObjectMessage;
 import core.logics.log.FaultNotifier;
 import core.message.MessageLevel;
 
+import service.client.messaging.InvocationParameter;
 import service.framework.core.activation.ServiceLocator;
 
 

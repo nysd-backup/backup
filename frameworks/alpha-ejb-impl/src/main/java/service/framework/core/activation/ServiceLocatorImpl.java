@@ -10,18 +10,13 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import service.client.messaging.MessageClientFactory;
-import service.client.messaging.MessageClientFactoryImpl;
-import service.client.messaging.QueueProducerDelegate;
-import service.client.messaging.TopicProducerDelegate;
+import service.client.messaging.MessageProducerImpl;
 import service.framework.core.advice.InternalPerfInterceptor;
 import service.framework.core.advice.InternalSQLBuilderInterceptor;
 import service.framework.core.advice.ProxyFactory;
 import service.framework.core.async.AsyncService;
-import service.framework.core.async.AsyncServiceFactory;
-import service.framework.core.async.AsyncServiceFactoryImpl;
 import service.framework.core.async.AsyncServiceImpl;
-import service.framework.core.exception.ServiceException;
+import service.framework.core.exception.BusinessException;
 import sqlengine.builder.QueryBuilder;
 import sqlengine.builder.impl.QueryBuilderProxyImpl;
 import client.sql.elink.free.strategy.InternalNamedQueryImpl;
@@ -31,7 +26,6 @@ import client.sql.free.QueryFactory;
 import client.sql.free.strategy.InternalQuery;
 import client.sql.orm.CriteriaQueryFactory;
 import client.sql.orm.strategy.InternalOrmQueryImpl;
-import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
 import core.logics.log.impl.DefaultFaultNotifier;
 import core.message.MessageBuilder;
@@ -73,35 +67,23 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 
 	/**
-	 * @see service.framework.core.define.ComponentBuilder#createAsyncServiceFactory()
-	 */
-	@Override
-	public AsyncServiceFactory createAsyncServiceFactory() {
-		return new AsyncServiceFactoryImpl();
-	}
-
-	/**
-	 * @see service.framework.core.define.ComponentBuilder#createPublisher()
+	 * @see service.framework.core.activation.ServiceLocator#createPublisher()
 	 */
 	@Override
 	public InvocationHandler createPublisher() {
-		return new TopicProducerDelegate();
+		MessageProducerImpl sender = new MessageProducerImpl();
+		sender.setConnectionFactoryName("jms/topic/DefaultXAConFactory");
+		return sender;
 	}
 
 	/**
-	 * @see service.framework.core.define.ComponentBuilder#createSender()
+	 * @see service.framework.core.activation.ServiceLocator#createSender()
 	 */
 	@Override
-	public InvocationHandler createSender() {
-		return new QueueProducerDelegate();
-	}
-
-	/**
-	 * @see service.framework.core.define.ComponentBuilder#createMessagingClientFactory()
-	 */
-	@Override
-	public MessageClientFactory createMessageClientFactory() {
-		return new MessageClientFactoryImpl();
+	public InvocationHandler createSender() {		
+		MessageProducerImpl sender = new MessageProducerImpl();
+		sender.setConnectionFactoryName("jms/queue/DefaultXAConFactory");
+		return sender;
 	}
 
 	/**
@@ -116,8 +98,8 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 * @see core.activation.ComponentLocator#createBusinessException()
 	 */
 	@Override
-	public BusinessException createBusinessException() {
-		return new ServiceException();
+	public core.exception.BusinessException createBusinessException() {
+		return new BusinessException();
 	}
 
 	/**
@@ -159,7 +141,7 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 * @param em the em to set
 	 * @return query factory
 	 */
-	public CriteriaQueryFactory createOrmQueryFactory(EntityManager em) {
+	public CriteriaQueryFactory createCriteriaQueryFactory(EntityManager em) {
 
 		CriteriaQueryFactory impl = new CriteriaQueryFactory();
 		
@@ -177,8 +159,8 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	/**
 	 * @return the OrmQueryWrapperFactory
 	 */
-	public static CriteriaQueryFactory createDefaultOrmQueryFactory(EntityManager em){
-		return ((ServiceLocatorImpl)delegate).createOrmQueryFactory(em);
+	public static CriteriaQueryFactory createDefaultCriteriaQueryFactory(EntityManager em){
+		return ((ServiceLocatorImpl)delegate).createCriteriaQueryFactory(em);
 	}
 	
 	/**
@@ -199,16 +181,25 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 * @return the service
 	 */
 	private Object lookup(String serviceName, Properties prop){
-		
+		InitialContext context = null;
 		try{			
 			String format = String.format("%s/%s",PREFIX , serviceName);		
 			if(prop == null){				
-				return new InitialContext().lookup(format);
+				context = new InitialContext(); 				
 			}else{
-				return new InitialContext(prop).lookup(format);
+				context = new InitialContext(prop); 		
 			}
+			return context.lookup(format);
 		}catch(NamingException ne){
 			throw new IllegalArgumentException("Failed to load service ", ne);
+		}finally{
+			if(context != null){
+				try {
+					context.close();
+				} catch (NamingException e) {					
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

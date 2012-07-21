@@ -9,7 +9,6 @@ import javax.ejb.EJBContext;
 import javax.persistence.EntityManager;
 
 import service.client.messaging.MessageClientFactory;
-import service.framework.core.activation.ServiceLocator;
 import service.framework.core.activation.ServiceLocatorImpl;
 import service.framework.core.transaction.ServiceContext;
 import client.sql.free.AbstractNativeModifyQuery;
@@ -47,9 +46,9 @@ public abstract class AbstractCoreService {
 	 */
 	@PostConstruct
 	public void postConstruct(){
-		ormQueryFactory = ServiceLocatorImpl.createDefaultOrmQueryFactory(getEntityManager());
+		ormQueryFactory = ServiceLocatorImpl.createDefaultCriteriaQueryFactory(getEntityManager());
 		queryFactory = ServiceLocatorImpl.createDefaultQueryFactory(getEntityManager());		
-		messageClientFactory = ServiceLocator.createDefaultMessageClientFactory();
+		messageClientFactory = new MessageClientFactory();
 	}
 	
 	/**

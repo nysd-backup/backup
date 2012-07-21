@@ -12,7 +12,7 @@ import service.framework.core.activation.ServiceLocator;
 
 
 /**
- * An asynchoronous service.
+ * An asynchronous service.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

@@ -7,9 +7,7 @@ import java.lang.reflect.InvocationHandler;
 
 import org.springframework.context.ApplicationContext;
 
-import service.client.messaging.MessageClientFactory;
 import service.framework.core.async.AsyncService;
-import service.framework.core.async.AsyncServiceFactory;
 import client.sql.free.QueryFactory;
 import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
@@ -66,14 +64,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	}
 
 	/**
-	 * @see service.framework.core.activation.ServiceLocator#createMessageClientFactory()
-	 */
-	@Override
-	public MessageClientFactory createMessageClientFactory() {
-		return MessageClientFactory.class.cast(lookup(MessageClientFactory.class));
-	}
-
-	/**
 	 * @see service.framework.core.activation.ServiceLocator#createPublisher()
 	 */
 	@Override
@@ -94,14 +84,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 */
 	public QueryFactory createQueryFactory() {
 		return QueryFactory.class.cast(lookup(QueryFactory.class));
-	}
-
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createAsyncServiceFactory()
-	 */
-	@Override
-	public AsyncServiceFactory createAsyncServiceFactory() {
-		return AsyncServiceFactory.class.cast(lookup(AsyncServiceFactory.class));
 	}
 
 	/**
