@@ -3,8 +3,8 @@
  */
 package sqlengine.builder;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The cache of the constant to bind to SQL.
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConstCache {
 
 	/** the cache */
-	private static final Map<String,Object> cache = new ConcurrentHashMap<String,Object>();
+	private static final Map<String,Object> cache = new HashMap<String,Object>();
 	
 	/**
 	 * Adds the value to cache.

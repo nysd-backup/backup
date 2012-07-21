@@ -1,11 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>kosmos</groupId>
+	<groupId>alpha</groupId>
 	<artifactId>base</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>ベース</name>
+	
+	<!--
+	<distributionManagement>
+		<repository>
+			<id>internal-repo</id>
+			<name>internal release repositry</name>
+			<url>http://10.23.25.2:8090/archiva/repository/internal</url>
+		</repository>	
+		<snapshotRepository>
+			<id>internal-repo-snapshot</id>
+			<name>internal release repositry snapshot</name>
+			<url>http://10.23.25.2:8090/archiva/repository/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>	
+	-->
+	<distributionManagement>	
+		<snapshotRepository>
+			<id>kzemi-snapshot</id>
+			<name>internal release repositry snapshot</name>
+			<url>http://10.173.159.99/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	
 	<build>
 		<plugins>
