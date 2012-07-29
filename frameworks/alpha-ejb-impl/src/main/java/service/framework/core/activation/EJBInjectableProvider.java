@@ -30,11 +30,10 @@ public class EJBInjectableProvider implements InjectableProvider<EJB, Type>{
 	    	return null;	
 	    }
 	
-	    Class<?> c = (Class<?>)type;	
-        final Object o = ServiceLocator.getService(c);		 	
+	    final Class<?> c = (Class<?>)type;			 	
         return new Injectable<Object>() {
         	public Object getValue() {
-        		return o;	
+        		return ServiceLocator.getService(c);	
            }
         };	
 	}

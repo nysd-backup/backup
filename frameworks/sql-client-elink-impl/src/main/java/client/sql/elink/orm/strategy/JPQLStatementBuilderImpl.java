@@ -6,6 +6,7 @@ package client.sql.elink.orm.strategy;
 import java.util.List;
 import java.util.Map;
 
+import client.sql.orm.CriteriaReadQueryParameter;
 import client.sql.orm.ExtractionCriteria;
 import client.sql.orm.strategy.AbstractStatementBuilder;
 
@@ -26,13 +27,22 @@ public class JPQLStatementBuilderImpl extends AbstractStatementBuilder{
 	@Override
 	protected StringBuilder createPrefix(Class<?> entityClass) {
 		return new StringBuilder(String.format("select e from %s e",entityClass.getSimpleName()));
+	}	
+
+	/**
+	 * @see client.sql.orm.strategy.AbstractStatementBuilder#createSuffix(java.lang.StringBuilder, client.sql.orm.CriteriaReadQueryParameter)
+	 */
+	@Override
+	protected StringBuilder createSuffix(StringBuilder query,
+			CriteriaReadQueryParameter<?> condition) {
+		return query;
 	}
 
 	/**
 	 * @see client.sql.orm.strategy.SQLStatementBuilder#createDelete(java.lang.Class, java.lang.String, java.util.List)
 	 */
 	@Override
-	public String createDelete(Class<?> entityClass,List<ExtractionCriteria> where){
+	public String createDelete(Class<?> entityClass,List<ExtractionCriteria<?>> where){
 		StringBuilder builder = new StringBuilder("delete e from ");
 		builder.append(entityClass.getSimpleName()).append(" e ");
 		builder.append(generateWhere(where));
@@ -54,5 +64,4 @@ public class JPQLStatementBuilderImpl extends AbstractStatementBuilder{
 	public String createInsert(Class<?> entityClass, Map<String,Object> values) {
 		throw new UnsupportedOperationException();
 	}
-
 }

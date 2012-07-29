@@ -6,13 +6,15 @@ package client.sql.orm;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import client.sql.free.FreeQueryParameter;
+
 /**
  * The condition.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ExtractionCriteria {
+public class ExtractionCriteria<T> {
 	
 	/** the column name */
 	private final String colName; 
@@ -24,21 +26,8 @@ public class ExtractionCriteria {
 	private final ComparingOperand operand;
 	
 	/** the binding value */
-	private final Object value;
-	
-	/** the binding value for 'between' */
-	private final Object toValue;
+	private final T value;
 
-	/**
-	 * @param colName the colName
-	 * @param bindCount the bindCount
-	 * @param operand the operand
-	 * @param value the value
-	 */
-	public ExtractionCriteria(String colName , int bindCount ,ComparingOperand operand , Object value){
-		this(colName,bindCount,operand,value,null);
-	}
-	
 	/**
 	 * @param colName the colName
 	 * @param bindCount the bindCount
@@ -46,25 +35,17 @@ public class ExtractionCriteria {
 	 * @param value the from value
 	 * @param toValue the to value 
 	 */
-	public ExtractionCriteria(String colName , int bindCount ,ComparingOperand operand , Object value , Object toValue){
+	public ExtractionCriteria(String colName , int bindCount ,ComparingOperand operand , T value){
 		this.colName = colName;
 		this.bindCount = bindCount;
 		this.operand = operand;
 		this.value = value;
-		this.toValue = toValue;
-	}
-
-	/**
-	 * @return the toValue
-	 */
-	public Object getToValue() {
-		return toValue;
 	}
 
 	/**
 	 * @return the value
 	 */
-	public Object getValue() {
+	public T getValue() {
 		return value;
 	}
 
@@ -95,5 +76,24 @@ public class ExtractionCriteria {
 	@Override
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
+	
+	/**
+	 * Returns the expression
+	 * @param tableAlias the alias
+	 * @return expression
+	 */
+	public String getExpression(String tableAlias){
+		String name = tableAlias == null ? colName : tableAlias + "." + colName;
+		return operand.getExpression(name, colName+"_" + bindCount, value);
+	}
+	
+	/**
+	 * Sets the parameter 
+	 * @param tableAlias the alias
+	 * @return expression
+	 */
+	public void accept(FreeQueryParameter delegate){
+		operand.acceptBindable(delegate, colName + "_" + bindCount, value);
 	}
 }

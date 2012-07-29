@@ -1,5 +1,6 @@
 package client.sql.orm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -63,19 +64,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> eq(Metadata<T, V> column, V value){
-		return setOperand(column.name(), value, ComparingOperand.Equal);
-	}
-	
-	/**
-	 * Adds '='.
-	 * 
-	 * @param <V> the type
-	 * @param column the column to add to
-	 * @param value the value to be added
-	 * @return self
-	 */
-	public <V> CriteriaModifyQuery<T> eqFix(Metadata<T, V> column, String value){
-		return setOperand(column.name(), new FixString(value), ComparingOperand.Equal);
+		return setExpression(column.name(), ComparingOperand.Equal,value);
 	}
 
 	/**
@@ -87,20 +76,9 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> gt(Metadata<T, V> column, V value){
-		return setOperand(column.name(), value, ComparingOperand.GreaterThan);
+		return setExpression(column.name(), ComparingOperand.GreaterThan,value);
 	}
-	
-	/**
-	 * Adds '>'.
-	 * 
-	 * @param <V> the type
-	 * @param column the column to add to
-	 * @param value the value to be added
-	 * @return self
-	 */
-	public <V> CriteriaModifyQuery<T> gtFix(Metadata<T, V> column, String value){
-		return setOperand(column.name(), new FixString(value), ComparingOperand.GreaterThan);
-	}
+
 	/**
 	 * Adds '<'.
 	 * 
@@ -110,21 +88,9 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> lt(Metadata<T, V> column, V value){
-		return setOperand(column.name(), value, ComparingOperand.LessThan);
+		return setExpression(column.name(), ComparingOperand.LessThan,value);
 	}
-	
-	/**
-	 * Adds '<'.
-	 * 
-	 * @param <V> the type
-	 * @param column the column to add to
-	 * @param value the value to be added
-	 * @return self
-	 */
-	public <V> CriteriaModifyQuery<T> ltFix(Metadata<T, V> column, String value){
-		return setOperand(column.name(), new FixString(value), ComparingOperand.LessThan);
-	}
-	
+
 	/**
 	 * Adds '>='.
 	 * 
@@ -134,21 +100,9 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> gtEq(Metadata<T, V> column, V value){
-		return setOperand(column.name(), value, ComparingOperand.GreaterEqual);
+		return setExpression(column.name(), ComparingOperand.GreaterEqual,value);
 	}
-	
-	/**
-	 * Adds '>='.
-	 * 
-	 * @param <V> the type
-	 * @param column the column to add to
-	 * @param value the value to be added
-	 * @return self
-	 */
-	public <V> CriteriaModifyQuery<T> gtEqFix(Metadata<T, V> column, String value){
-		return setOperand(column.name(), new FixString(value), ComparingOperand.GreaterEqual);
-	}
-	
+
 	/**
 	 * Adds '<='.
 	 * 
@@ -158,19 +112,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> ltEq(Metadata<T, V> column, V value){
-		return setOperand(column.name(), value, ComparingOperand.LessEqual);
-	}
-	
-	/**
-	 * Adds '<='.
-	 * 
-	 * @param <V> the type
-	 * @param column the column to add to
-	 * @param value the value to be added
-	 * @return self
-	 */
-	public <V> CriteriaModifyQuery<T> ltEqFix(Metadata<T, V> column, String value){
-		return setOperand(column.name(), new FixString(value), ComparingOperand.LessEqual);
+		return setExpression(column.name(), ComparingOperand.LessEqual,value);
 	}
 
 	/**
@@ -183,7 +125,10 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> between(Metadata<T, V> column, V from , V to){
-		condition.getConditions().add(new ExtractionCriteria(column.name(),condition.getConditions().size()+1,ComparingOperand.Between,from,to));
+		List<V> values = new ArrayList<V>();
+		values.add(from);
+		values.add(to);
+		setExpression(column.name(),ComparingOperand.Between,values);
 		return this;
 	}
 
@@ -196,7 +141,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> contains(Metadata<T, V> column, List<V> value){
-		condition.getConditions().add(new ExtractionCriteria(column.name(),condition.getConditions().size()+1,ComparingOperand.IN,value));
+		setExpression(column.name(),ComparingOperand.IN,value);
 		return this;
 	}
 	/**
@@ -211,20 +156,6 @@ public class CriteriaModifyQuery<T> {
 		set(column.name(), value);
 		return this;
 	}
-	
-	/**
-	 * Adds value to update.
-	 * 
-	 * @param <V> the type
-	 * @param column the column to add to
-	 * @param value the value to be added
-	 * @return self
-	 */
-	public <V> CriteriaModifyQuery<T> setFix(Metadata<T, V> column, String value){
-		set(column.name(), new FixString(value));
-		return this;
-	}
-	
 	
 	/**
 	 * Deletes the data.
@@ -242,8 +173,8 @@ public class CriteriaModifyQuery<T> {
 	 * @param operand the operand
 	 * @return self
 	 */
-	public CriteriaModifyQuery<T> setOperand(String column, Object value,ComparingOperand operand) {
-		condition.getConditions().add(new ExtractionCriteria(column,condition.getConditions().size()+1,operand,value));
+	public CriteriaModifyQuery<T> setExpression(String column,ComparingOperand operand,Object value) {
+		condition.getConditions().add(new ExtractionCriteria<Object>(column,condition.getConditions().size()+1,operand,value));
 		return this;
 	}
 	

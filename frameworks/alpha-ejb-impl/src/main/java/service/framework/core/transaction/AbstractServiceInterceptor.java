@@ -20,10 +20,10 @@ public abstract class AbstractServiceInterceptor {
 	 * @throws Throwable the exception
 	 */
 	@AroundInvoke
-	public Object around(InvocationContext ic) throws Throwable {	
+	public Object around(InvocationContext ic) throws Exception {	
 		ServiceContext context = ServiceContext.getCurrentInstance();		
 		if(context == null){
-			return invokeFirst(ic);
+			return invokeRoot(ic);
 		}else {
 			return invoke(ic);
 		}
@@ -36,7 +36,7 @@ public abstract class AbstractServiceInterceptor {
 	 * @return
 	 * @throws Throwable
 	 */
-	protected abstract Object invokeFirst(InvocationContext ic) throws Throwable;
+	protected abstract Object invokeRoot(InvocationContext ic) throws Exception;
 	
 	/**
 	 * Invokes the service.
@@ -44,6 +44,6 @@ public abstract class AbstractServiceInterceptor {
 	 * @return
 	 * @throws Throwable
 	 */
-	protected abstract Object invoke(InvocationContext ic) throws Throwable;
+	protected abstract Object invoke(InvocationContext ic) throws Exception;
 
 }

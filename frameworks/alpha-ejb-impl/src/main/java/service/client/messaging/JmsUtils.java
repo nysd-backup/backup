@@ -3,6 +3,8 @@
  */
 package service.client.messaging;
 
+import java.io.Serializable;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -22,11 +24,11 @@ public abstract class JmsUtils {
 	/**
 	 * Send the message.
 	 * @param factory the XA connection factory.
-	 * @param dto the DTO
+	 * @param data the data to send
 	 * @param destinationName the name of destination
 	 * @throws JMSException the exception
 	 */
-	public static void sendMessage(ConnectionFactory factory ,InvocationParameter dto, Destination destination) throws JMSException{
+	public static void sendMessage(ConnectionFactory factory ,Serializable data, Destination destination) throws JMSException{
 		Connection connection = null;
 		Session session = null;		
 		MessageProducer sender = null;
@@ -40,7 +42,7 @@ public abstract class JmsUtils {
 			// MessageProducerを作成
 			sender = session.createProducer(destination);
 			// メッセージを作成
-			ObjectMessage message = session.createObjectMessage(dto);
+			ObjectMessage message = session.createObjectMessage(data);
 			connection.start();
 			sender.send(message);
 		} finally {

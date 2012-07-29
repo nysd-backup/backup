@@ -24,7 +24,7 @@ public class ServiceContextImpl extends ServiceContext{
 	 */
 	@Override
 	public void setRollbackOnly(){
-		setHasErrorMessage(true);
+		setFailed(true);
 		getCurrentUnitOfWork().setRollbackOnly();
 	}
 	

@@ -31,7 +31,7 @@ public abstract class ServiceContext {
 	private List<MessageResult> messageList = new ArrayList<MessageResult>();
 	
 	/** flag of error message */
-	private boolean hasErroMessage = false;
+	private boolean failed = false;
 
 
 	/** the thread local instance*/
@@ -148,17 +148,17 @@ public abstract class ServiceContext {
 	}
 	
 	/**
-	 * @return has error message
+	 * @return failed
 	 */
-	public boolean hasErrorMessage() {
-		return hasErroMessage;
+	public boolean isFailed() {
+		return failed;
 	}
 
 	/**
-	 * @param hasErrorMessage the hasErrorMessage to set
+	 * @param failed the failed to set
 	 */
-	protected void setHasErrorMessage(boolean hasErrorMessage){
-		this.hasErroMessage = hasErrorMessage;
+	protected void setFailed(boolean failed){
+		this.failed = failed;
 	}
 	
 	/**

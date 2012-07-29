@@ -31,7 +31,7 @@ public abstract class CriteriaQueryParameter<T> extends QueryParameter{
 	private Map<String,Object> hints = new HashMap<String,Object>();
 	
 	/** the conditions */
-	private List<ExtractionCriteria> conditions = new ArrayList<ExtractionCriteria>();
+	private List<ExtractionCriteria<?>> conditions = new ArrayList<ExtractionCriteria<?>>();
 	
 	/** the updating values */
 	private Map<String,Object> values = new LinkedHashMap<String,Object>();
@@ -68,7 +68,7 @@ public abstract class CriteriaQueryParameter<T> extends QueryParameter{
 	/**
 	 * @return the conditions
 	 */
-	public List<ExtractionCriteria> getConditions() {
+	public List<ExtractionCriteria<?>> getConditions() {
 		return conditions;
 	}
 	

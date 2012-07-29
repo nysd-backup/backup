@@ -6,11 +6,10 @@ package client.sql.orm.strategy;
 import java.util.List;
 import java.util.Map;
 
-import client.sql.orm.FixString;
 import client.sql.orm.CriteriaReadQueryParameter;
-import client.sql.orm.SortKey;
 import client.sql.orm.ExtractionCriteria;
-import client.sql.orm.ComparingOperand;
+import client.sql.orm.FixString;
+import client.sql.orm.SortKey;
 
 
 
@@ -30,7 +29,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	public String createSelect(CriteriaReadQueryParameter<?> condition){
 		StringBuilder builder = createPrefix(condition.getEntityClass());		
 		builder.append(generateWhere(condition.getConditions())).append(generateOrderBy(condition.getSortKeys()));
-		return afterCreateSelect(builder,condition).toString();
+		return createSuffix(builder,condition).toString();
 	}
 	
 	/**
@@ -38,15 +37,13 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition the condition
 	 * @return query;
 	 */
-	protected StringBuilder afterCreateSelect(StringBuilder query, CriteriaReadQueryParameter<?> condition){
-		return query;
-	}
+	protected abstract StringBuilder createSuffix(StringBuilder query, CriteriaReadQueryParameter<?> condition);
 	
 	/**
 	 * @see client.sql.orm.strategy.SQLStatementBuilder#createUpdate(java.lang.Class, java.lang.String, java.lang.String, java.util.List, java.util.Collection)
 	 */
 	@Override
-	public String createUpdate(Class<?> entityClass,List<ExtractionCriteria> where, Map<String,Object> set) {
+	public String createUpdate(Class<?> entityClass,List<ExtractionCriteria<?>> where, Map<String,Object> set) {
 		StringBuilder builder = createUpdatePrefix(entityClass);
 		builder.append(generateSet(set));
 		builder.append(generateWhere(where));
@@ -75,25 +72,22 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 */
 	protected String generateSet(Map<String,Object> set){
 		if( set == null || set.isEmpty()){
-			throw new IllegalArgumentException("set parameter is required");
+			throw new IllegalArgumentException("updating value is required");
 		}
 		StringBuilder builder = new StringBuilder();
 		boolean first=true;
 		for(Map.Entry<String, Object> e :set.entrySet()){	
 			Object value = e.getValue();
 			if( first ){			
-				if( value instanceof FixString){
-					builder.append("\n set e.").append(e.getKey()).append(" = ").append(value.toString());
-				}else{
-					builder.append("\n set e.").append(e.getKey()).append(" = :").append(e.getKey());
-				}
+				builder.append("\n set e.");
 				first = false;
+			}else{				
+				builder.append("\n , e.");
+			}
+			if( value instanceof FixString){
+				builder.append(e.getKey()).append(" = ").append(value.toString());
 			}else{
-				if( value instanceof FixString){
-					builder.append("\n , e.").append(e.getKey()).append(" = ").append(value.toString());
-				}else{
-					builder.append("\n , e.").append(e.getKey()).append(" = :").append(e.getKey());
-				}			
+				builder.append(e.getKey()).append(" = :").append(e.getKey());
 			}
 		}
 		return builder.toString();
@@ -105,67 +99,21 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 	 * @param condition　the condition
 	 * @return the statement
 	 */
-	protected String generateWhere(List<ExtractionCriteria> wheres){		
+	protected String generateWhere(List<ExtractionCriteria<?>> wheres){		
 		if( wheres == null || wheres.isEmpty()){
 			return "";
 		}
 		StringBuilder builder = new StringBuilder();
 		
 		boolean first=true;
-		for(ExtractionCriteria where :wheres){	
-			ComparingOperand operand = where.getOperand();
+		for(ExtractionCriteria<?> where :wheres){			
 			if( first ){
 				builder.append("\n where ");
 				first = false;
 			}else {
 				builder.append("\n and ");
 			}
-
-			// BETWEEN
-			if(operand == ComparingOperand.Between) {
-				Object toValue = where.getToValue();
-				String to = null;
-				if(toValue instanceof FixString){
-					to = toValue.toString();
-				}else{
-					to = String.format(":%s%d_to ",where.getColName(),where.getBindCount());	
-				}
-				Object fromValue = where.getValue();
-				String from = null;
-				if(fromValue instanceof FixString){
-					from = fromValue.toString();	
-				}else{
-					from = String.format(":%s%d",where.getColName(),where.getBindCount());					
-				}				
-				builder.append(String.format("e.%s%s %s and %s ",where.getColName(),operand.getOperand(),from,to));
-				
-			// IN句	
-			}else if (operand == ComparingOperand.IN){
-				StringBuilder in = new StringBuilder();
-				Object value = where.getValue();
-				if(value instanceof List){
-					List<?> val = List.class.cast(where.getValue());
-					for(int i = 0 ; i <val.size(); i++){
-						in.append(":").append(where.getColName()).append("_").append(where.getBindCount()).append("_").append(i).append(",");
-					}
-					if(in.length() > 0){
-						in = new StringBuilder(in.substring(0,in.length()-1));
-					}				
-				}else if( value instanceof FixString){
-					in.append(value.toString());
-				}else{
-					in.append(":").append(where.getColName());
-				}
-				
-				builder.append(String.format("e.%s IN(%s) ",where.getColName(),in));
-			}else {
-				Object value = where.getValue();
-				if(value instanceof FixString){
-					builder.append(String.format("e.%s%s%s",where.getColName(),operand.getOperand(),value.toString()));
-				}else{
-					builder.append(String.format("e.%s%s:%s%d ",where.getColName(),operand.getOperand(),where.getColName(),where.getBindCount()));								
-				}
-			}
+			builder.append(where.getExpression("e"));
 		}
 		return builder.toString();
 	}
@@ -196,47 +144,4 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 		}
 		return builder.toString();
 	}
-
-	/**
-	 * Set the parameter to delegate.
-	 * 
-	 * @param condition the condition
-	 * @param delegate the delegate
-	 */
-	public void setConditionParameters(List<ExtractionCriteria> baseCondition ,Bindable delegate){
-	
-		for(ExtractionCriteria cond : baseCondition){
-			if(ComparingOperand.IN == cond.getOperand()){
-				Object value = cond.getValue();
-				if( value instanceof List ){
-					List<?> val = List.class.cast(value);
-					int cnt = -1;
-					for(Object v : val){
-						cnt++;
-						delegate.setParameter(String.format("%s_%d_%d", cond.getColName(),cond.getBindCount(),cnt),v);
-					}
-				}else if( value instanceof FixString){
-					continue;
-				}else {
-					delegate.setParameter(String.format("%s_%d", cond.getColName(),cond.getBindCount()),value);
-				}
-			}else if( ComparingOperand.Between == cond.getOperand()){
-				Object toValue = cond.getToValue();
-				Object fromValue = cond.getValue();
-				if(!(toValue instanceof FixString)){
-					delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
-				}
-				if(!(fromValue instanceof FixString)){
-					delegate.setParameter(String.format( "%s%d_to",cond.getColName(),cond.getBindCount()), cond.getToValue());	
-				}				
-				
-			}else{
-				Object value = cond.getValue();
-				if(!(value instanceof FixString)){
-					delegate.setParameter(String.format("%s%d", cond.getColName(), cond.getBindCount()),cond.getValue());
-				}
-			}			
-		}
-	}
-	
 }

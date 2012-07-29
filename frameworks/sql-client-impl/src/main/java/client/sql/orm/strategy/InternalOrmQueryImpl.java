@@ -6,15 +6,15 @@ package client.sql.orm.strategy;
 import java.util.List;
 import java.util.Map;
 
+import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.FreeQueryParameter;
 import client.sql.free.FreeReadQueryParameter;
-import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.strategy.InternalQuery;
-import client.sql.orm.FixString;
+import client.sql.orm.CriteriaModifyQueryParameter;
 import client.sql.orm.CriteriaQueryParameter;
 import client.sql.orm.CriteriaReadQueryParameter;
-import client.sql.orm.CriteriaModifyQueryParameter;
-import client.sql.orm.strategy.SQLStatementBuilder.Bindable;
+import client.sql.orm.ExtractionCriteria;
+import client.sql.orm.FixString;
 
 
 /**
@@ -146,11 +146,9 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 	 * @param parameter
 	 */
 	private void setCondition(CriteriaQueryParameter<?> condition , final FreeQueryParameter parameter){
-		sb.setConditionParameters(condition.getConditions(), new Bindable(){
-			public void setParameter(String key , Object value){
-				parameter.getParam().put(key, value);
-			}
-		});
+		for(ExtractionCriteria<?> criteria :condition.getConditions()){
+			criteria.accept(parameter);
+		}
 	}
 
 

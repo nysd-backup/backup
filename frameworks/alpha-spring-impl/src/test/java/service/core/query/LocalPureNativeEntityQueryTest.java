@@ -38,10 +38,12 @@ import service.test.entity.IFastEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
 import client.sql.exception.UniqueConstraintException;
-import client.sql.orm.EntityManagerImpl;
+import client.sql.orm.ComparingOperand;
+import client.sql.orm.CriteriaModifyQuery;
 import client.sql.orm.CriteriaQueryFactory;
 import client.sql.orm.CriteriaReadQuery;
-import client.sql.orm.CriteriaModifyQuery;
+import client.sql.orm.EntityManagerImpl;
+import client.sql.orm.FixString;
 
 
 /**
@@ -286,7 +288,8 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		//更新
 		CriteriaModifyQuery<TestEntity> update = ormQueryFactory.createModifyQuery(TestEntity.class,per);
-		update.eqFix(TEST, "'2'").setFix(ATTR, "'AAA'").update();
+		update.setExpression(TEST.name(), ComparingOperand.Equal, new FixString("'2'"))
+		.set(ATTR.name(), new FixString("'AAA'")).update();
 		
 		//検索
 		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);		
@@ -606,9 +609,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	 * @return
 	 */
 	private List<TestEntity> getFixOneRecord(CriteriaReadQuery<TestEntity> query ){	
-		query.between(TEST, "0", "30").eqFix(TEST,"2").gtEqFix(TEST, "0").ltEqFix(TEST, "30").ltFix(TEST, "30").gtFix(TEST, "0");		
-		query.between(ATTR, "0", "20").eqFix(ATTR,"2").gtEqFix(ATTR, "0").ltEqFix(ATTR, "20").ltFix(ATTR, "20").gtFix(ATTR, "0");
-		query.between(ATTR2, 0, 100).eqFix(ATTR2,"2").gtEqFix(ATTR2, "0").ltEqFix(ATTR2, "100").ltFix(ATTR2, "100").gtFix(ATTR2, "0");		
+		query.between(TEST, "0", "30").setExpression(TEST.name(),ComparingOperand.Equal,new FixString("2")).setExpression(TEST.name(), ComparingOperand.GreaterEqual,new FixString("0")).setExpression(TEST.name(), ComparingOperand.LessEqual, new FixString("30")).setExpression(TEST.name(), ComparingOperand.LessThan, new FixString("30")).setExpression(TEST.name(), ComparingOperand.GreaterThan, new FixString("0"));		
+		query.between(ATTR, "0", "20").setExpression(ATTR.name(),ComparingOperand.Equal,new FixString("2")).setExpression(ATTR.name(),ComparingOperand.GreaterEqual,  new FixString("0")).setExpression(ATTR.name(), ComparingOperand.LessEqual, new FixString("20")).setExpression(ATTR.name(), ComparingOperand.LessThan,   new FixString("20")).setExpression(ATTR.name(), ComparingOperand.GreaterThan,  new FixString("0"));
+		query.between(ATTR2, 0, 100).setExpression(ATTR2.name(),ComparingOperand.Equal,new FixString("2")).setExpression(ATTR2.name(), ComparingOperand.GreaterEqual, new FixString("0")).setExpression(ATTR2.name(), ComparingOperand.LessEqual, new FixString("100")).setExpression(ATTR2.name(), ComparingOperand.LessThan,   new FixString("100")).setExpression(ATTR2.name(), ComparingOperand.GreaterThan,  new FixString("0"));		
 		query.contains(TEST, Arrays.asList("2","2","2"));
 		return query.getResultList();
 	}

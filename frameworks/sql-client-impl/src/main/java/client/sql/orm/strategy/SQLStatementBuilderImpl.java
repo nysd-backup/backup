@@ -30,7 +30,7 @@ public class SQLStatementBuilderImpl extends AbstractStatementBuilder{
 	 * @see client.sql.orm.strategy.AbstractStatementBuilder#afterCreateSelect(java.lang.StringBuilder, client.sql.orm.CriteriaReadQueryParameter)
 	 */
 	@Override
-	protected StringBuilder afterCreateSelect(StringBuilder query,CriteriaReadQueryParameter<?> condition){
+	protected StringBuilder createSuffix(StringBuilder query,CriteriaReadQueryParameter<?> condition){
 		//悲観ロックの追加
 		LockModeType lockModeType = condition.getLockModeType();
 		if(LockModeType.PESSIMISTIC_READ == lockModeType){			
@@ -115,7 +115,7 @@ public class SQLStatementBuilderImpl extends AbstractStatementBuilder{
 	 * @see client.sql.orm.strategy.SQLStatementBuilder#createDelete(java.lang.Class, java.lang.String, java.util.List)
 	 */
 	@Override
-	public String createDelete(Class<?> entityClass,List<ExtractionCriteria> where){
+	public String createDelete(Class<?> entityClass,List<ExtractionCriteria<?>> where){
 		StringBuilder builder = new StringBuilder("delete from ");
 		builder.append(entityClass.getAnnotation(Table.class).name()).append(" ");
 		return builder.append(generateWhere(where)).toString();

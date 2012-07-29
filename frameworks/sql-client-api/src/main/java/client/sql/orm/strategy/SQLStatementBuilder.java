@@ -42,7 +42,7 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createUpdate(Class<?> entityClass,List<ExtractionCriteria> where, Map<String,Object> set);
+	public String createUpdate(Class<?> entityClass,List<ExtractionCriteria<?>> where, Map<String,Object> set);
 	
 	/**
 	 * Creates the SQL statement.
@@ -50,22 +50,6 @@ public interface SQLStatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public String createDelete(Class<?> entityClass, List<ExtractionCriteria> where);
-	
-	/**
-	 * 
-	 * @param filterString
-	 * @param easyParams
-	 */
-	public void setConditionParameters( List<ExtractionCriteria> condition , Bindable bindable);
-	
-	public static interface Bindable {
-		
-		/**
-		 * @param key
-		 * @param value
-		 */
-		public void setParameter(String key , Object value);
-	}
+	public String createDelete(Class<?> entityClass, List<ExtractionCriteria<?>> where);
 
 }

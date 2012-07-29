@@ -28,7 +28,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 	 * @see service.framework.core.transaction.noautonomous.SimpleInterceptor#invoke(javax.interceptor.InvocationContext)
 	 */
 	@Override
-	protected Object invoke(InvocationContext ic) throws Throwable {
+	protected Object invoke(InvocationContext ic) throws Exception {
 		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
 		boolean isTransactionBorder = false;
 		TransactionAttribute attribute = ic.getMethod().getDeclaringClass().getAnnotation(TransactionAttribute.class);

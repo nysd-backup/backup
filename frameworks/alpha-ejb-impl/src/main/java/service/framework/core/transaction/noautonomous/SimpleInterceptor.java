@@ -9,11 +9,13 @@ import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.interceptor.InvocationContext;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.MDC;
+
 import service.framework.core.transaction.AbstractServiceInterceptor;
-import service.framework.core.transaction.MessageContext;
 import service.framework.core.transaction.ServiceContext;
-import core.base.AbstractRequest;
-import core.base.AbstractResponse;
+import core.base.CorrelativeRequest;
+import core.base.CorrelativeResponse;
 import core.exception.BusinessException;
 import core.message.MessageResult;
 
@@ -27,36 +29,30 @@ import core.message.MessageResult;
  * @version	created.
  */
 public class SimpleInterceptor extends AbstractServiceInterceptor{
-	
-	/** called by EJB local call under this */
-	public static final int INVOCATION_EJB = 0;
-	
-	/** called by RS client */
-	public static final int INVOCATION_RS = 1;
-	
-	/** called by WS client */
-	public static final int INVOCATION_WS = 2;
-	
-	/** called by MDB */
-	public static final int INVOCATION_MDB = 3;	
 
 	@Resource
 	private EJBContext sessionContext;
 
 	/**
-	 * @see service.framework.core.transaction.AbstractServiceInterceptor#invokeFirst(javax.interceptor.InvocationContext)
+	 * @see service.framework.core.transaction.AbstractServiceInterceptor#invokeRoot(javax.interceptor.InvocationContext)
 	 */
 	@Override
-	protected Object invokeFirst(InvocationContext ic) throws Throwable {
+	protected Object invokeRoot(InvocationContext ic) throws Exception {
 		ServiceContext context = createServiceContext();
-		try{			
-			int invocationSource = getInvocationSource(ic.getParameters());			
+		try{					
+			if(ic.getParameters() != null && ic.getParameters()[0] instanceof CorrelativeRequest){
+				CorrelativeRequest request = (CorrelativeRequest)ic.getParameters()[0];
+				String requestId = request.getCorrelationId();
+				if(StringUtils.isNotEmpty(requestId)){
+					MDC.put("correlationId", requestId);
+				}
+			}
 			context.initialize();						
 			Object returnValue = ic.proceed();		
 			if(context.isRollbackOnly() && !sessionContext.getRollbackOnly()){
 				sessionContext.setRollbackOnly();				
 			}							
-			return editResponse(invocationSource, returnValue, context);
+			return editResponse( returnValue, context);
 		}catch(BusinessException be){
 			List<MessageResult> result = be.getMessageList();
 			if(result != null && !result.isEmpty()){
@@ -66,7 +62,8 @@ public class SimpleInterceptor extends AbstractServiceInterceptor{
 			}
 			throw be;
 		}finally{				
-			context.release();					
+			context.release();		
+			MDC.remove("correlationId");
 		}
 	}
 	
@@ -77,35 +74,15 @@ public class SimpleInterceptor extends AbstractServiceInterceptor{
 	 * @param context the context
 	 * @return the edited returnValue
 	 */
-	protected Object editResponse(int invocationSource , Object returnValue, ServiceContext context){
-		//EJB local call
-		if(invocationSource <= INVOCATION_EJB){
-			if(returnValue != null && returnValue instanceof AbstractResponse){
-				AbstractResponse retValue = (AbstractResponse)returnValue;
-				retValue.setMessageResult(context.getMessageList());
-				retValue.setFail(context.hasErrorMessage());		
-			}
-		//Web Service or Message Driven Call	
-		}else {
-			if(!context.getMessageList().isEmpty()){
-				new MessageContext(context.getMessageList());			
-			}
+	protected Object editResponse(Object returnValue, ServiceContext context){
+		
+		if(returnValue != null && returnValue instanceof CorrelativeResponse){
+			CorrelativeResponse retValue = (CorrelativeResponse)returnValue;
+			retValue.setMessages(context.getMessageList());
+			retValue.setFailed(context.isFailed());		
 		}
+
 		return returnValue;
-	}
-	
-	/**
-	 * Gets the invocation source
-	 * @param request the request
-	 * @return the invocation source
-	 */
-	protected int getInvocationSource(Object[] request){
-		if(request != null && request.length > 0 && request[0] instanceof AbstractRequest){
-			AbstractRequest req = (AbstractRequest)request[0];
-			return req.getInvocationSource();
-		}else {
-			return INVOCATION_EJB;
-		}
 	}
 	
 	/**
@@ -119,7 +96,7 @@ public class SimpleInterceptor extends AbstractServiceInterceptor{
 	 * @see service.framework.core.transaction.AbstractServiceInterceptor#invoke(javax.interceptor.InvocationContext)
 	 */
 	@Override
-	protected Object invoke(InvocationContext ic) throws Throwable {
+	protected Object invoke(InvocationContext ic) throws Exception {
 		return ic.proceed();
 	}
 

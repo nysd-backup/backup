@@ -18,6 +18,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 import javax.persistence.RollbackException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
@@ -56,6 +62,22 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@PersistenceContext(unitName="oracle")
 	private EntityManager per;
+	
+	@Test
+	public void test() throws Exception{
+		CriteriaBuilder b = per.getCriteriaBuilder();
+		CriteriaQuery<TestEntity> q = b.createQuery(TestEntity.class);
+		Root<TestEntity> root = q.from(TestEntity.class);
+		q.select(root);
+		Predicate pre1 = b.equal(root.get("test"), "1");
+		Predicate pre2 = b.notEqual(root.get("test"), "1");
+		Expression<Integer> i = root.get("version");
+		Expression<Integer> sum = b.sum(i, 1);
+		Predicate pre3 = b.equal(root.get("version"), sum);
+		q.where(b.and(pre1,pre2,pre3));
+		TypedQuery<TestEntity> t = per.createQuery(q);
+		t.getResultList();		
+	}
 	
 	/**
 	 * 条件追加
