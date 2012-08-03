@@ -51,6 +51,13 @@ public class BusinessException extends RuntimeException{
 	}
 	
 	/**
+	 * @param messageResult the messageResult to set
+	 */
+	public BusinessException(List<MessageResult> messageResult){
+		this.messageList = messageResult;
+	}
+	
+	/**
 	 * @param messageList the messageList to set
 	 */
 	public void setMessageList(List<MessageResult> messageList) {

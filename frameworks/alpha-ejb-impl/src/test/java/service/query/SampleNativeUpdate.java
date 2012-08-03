@@ -4,7 +4,6 @@
 package service.query;
 
 import client.sql.free.AbstractNativeModifyQuery;
-import client.sql.free.AnonymousQuery;
 
 /**
  * function.
@@ -12,8 +11,11 @@ import client.sql.free.AnonymousQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@AnonymousQuery(query="@/sql/SAMPLE_NATIVE_UPDATE.sql")
 public class SampleNativeUpdate extends AbstractNativeModifyQuery{
+	
+	public SampleNativeUpdate(){
+		getParameter().setSql("@/sql/SAMPLE_NATIVE_UPDATE.sql");
+	}
 
 	public enum Bind {
 		test,

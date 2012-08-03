@@ -3,6 +3,7 @@
  */
 package service.core.query;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -61,7 +62,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		setUpData("TEST.xls");
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,per);		
 		query.setEntityManager(per);
-		query.setTest("1");
+		query.setTest("1");		
 		List<SampleNativeResult> result = query.getResultList();
 		assertEquals("3",result.get(0).getAttr());
 				
@@ -76,6 +77,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,per);
 		query.setEntityManager(per);
 		query.setAttr("1000");
+		query.setAttrs(Arrays.asList("1000","1000","1000"));
 		query.setTest("1");
 		
 		List<SampleNativeResult> result = query.getResultList();

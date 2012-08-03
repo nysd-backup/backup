@@ -4,6 +4,7 @@
 package service.core.query;
 
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -109,6 +110,7 @@ public class LocalPureNativeQueryTest extends ServiceUnit implements ITestEntity
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,pm);
 		query.setEntityManager(pm);
 		query.setAttr("1000");
+		query.setAttrs(Arrays.asList("1000","1000","1000"));
 		query.setTest("1");
 		
 		List<SampleNativeResult> result = query.getResultList();

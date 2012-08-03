@@ -4,7 +4,6 @@
 package service.query;
 
 import client.sql.free.AbstractNativeReadQuery;
-import client.sql.free.AnonymousQuery;
 
 /**
  * function.
@@ -12,8 +11,12 @@ import client.sql.free.AnonymousQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@AnonymousQuery(query="@/sql/SAMPLE_NATIVE_QUERY.sql",resultClass=SampleNativeResult.class)
 public class SampleNativeQuery extends AbstractNativeReadQuery{
+	
+	public SampleNativeQuery(){
+		getParameter().setSql("@/sql/SAMPLE_NATIVE_QUERY.sql");
+		getParameter().setResultType(SampleNativeResult.class);
+	}
 
 	public enum Bind {
 		test,

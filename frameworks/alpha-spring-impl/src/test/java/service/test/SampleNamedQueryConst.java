@@ -4,7 +4,6 @@
 package service.test;
 
 import client.sql.free.AbstractNamedReadQuery;
-import client.sql.free.AnonymousQuery;
 
 /**
  * function.
@@ -12,8 +11,11 @@ import client.sql.free.AnonymousQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@AnonymousQuery(query="@/sql/SAMPLE_QUERY_CONST.sql")
 public class SampleNamedQueryConst extends AbstractNamedReadQuery{
+	
+	public SampleNamedQueryConst(){
+		getParameter().setSql("@/sql/SAMPLE_QUERY_CONST.sql");
+	}
 
 	public enum Bind {
 		test,

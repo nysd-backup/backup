@@ -159,14 +159,13 @@ public class QueryBuilderImpl implements QueryBuilder{
 							StringBuilder questions = new StringBuilder(question);
 							binds.add(list.get(0));
 							// リストの番目以降に追加
-							for (int j = 1; j < list.size(); i++) {
+							for (int j = 1; j < list.size(); j++) {
 								questions.append(",?");
 								binds.add(list.get(j));
 							}
 							question = questions.toString();
 						}else{
-							binds.add(list.get(0));
-							for (int j = 1; j < list.size(); i++) {
+							for (int j = 0; j < list.size(); j++) {
 								binds.add(list.get(j));
 							}
 						}						

@@ -59,38 +59,18 @@ public class QueryFactory {
 		boolean namedQuery = instance instanceof AbstractNamedReadQuery;
 		if(namedQuery){
 			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
-			if(nq == null){
-				setAnonymousQuery(clazz,instance);
-			}else{		
+			if(nq != null){				
 				instance.getParameter().setName(nq.name());
 				instance.getParameter().setSql(nq.query());
 				for(QueryHint hints : nq.hints()){
 					instance.setHint(hints.name(), hints.value());
-				}
-				
+				}				
 			}
 			instance.setInternalQuery(internalNamedQuery);
 		}else{
-			setAnonymousQuery(clazz,instance);
 			instance.setInternalQuery(internalNativeQuery);;
 		}		
 		return instance;
-	}
-	
-	/**
-	 * Sets the anonymous query.
-	 * @param clazz the class
-	 * @param instance the instance
-	 */
-	private void setAnonymousQuery(Class<?> clazz, AbstractFreeReadQuery instance){		
-		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
-		if(aq != null){
-			instance.getParameter().setResultType(aq.resultClass());
-			instance.getParameter().setSql(aq.query());
-			for(QueryHint hints : aq.hints()){
-				instance.setHint(hints.name(), hints.value());
-			}
-		}
 	}
 	
 	/**
@@ -112,9 +92,7 @@ public class QueryFactory {
 		instance.getParameter().setEntityManager(em);
 		if(namedQuery){
 			NamedQuery nq = clazz.getAnnotation(NamedQuery.class);
-			if(nq == null){
-				setAnonymousUpdate(clazz,instance);
-			}else{		
+			if(nq != null){	
 				instance.getParameter().setName(nq.name());
 				instance.getParameter().setSql(nq.query());
 				for(QueryHint hints : nq.hints()){
@@ -124,25 +102,9 @@ public class QueryFactory {
 			}
 			instance.setInternalQuery(internalNamedQuery);
 		}else{
-			setAnonymousUpdate(clazz,instance);
 			instance.setInternalQuery(internalNativeQuery);;
 		}		
 		return instance;		
 	}
 	
-
-	/**
-	 * Sets the anonymous query.
-	 * @param clazz the class
-	 * @param instance the instance
-	 */
-	private void setAnonymousUpdate(Class<?> clazz, AbstractFreeModifyQuery instance){		
-		AnonymousQuery aq = clazz.getAnnotation(AnonymousQuery.class);	
-		if(aq != null){		
-			instance.getParameter().setSql(aq.query());
-			for(QueryHint hints : aq.hints()){
-				instance.setHint(hints.name(), hints.value());
-			}
-		}
-	}
 }

@@ -10,6 +10,9 @@ where
 --% if( $attr )
 	and attr = :attr
 --% end
+--% if( $attrs) 
+	and attr in (:attrs)
+--% end
 --% if( $attr2 > 499.999 && ! $version && $arc == "500" )
 	and version = '5'
 --% end
