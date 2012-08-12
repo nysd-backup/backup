@@ -10,7 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.InvocationContext;
 
 import service.framework.core.transaction.ServiceContext;
-import service.framework.core.transaction.noautonomous.SimpleInterceptor;
+import service.framework.core.transaction.simple.SimpleInterceptor;
 
 
 /**
@@ -25,7 +25,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 	private EJBContext sessionContext;
 
 	/**
-	 * @see service.framework.core.transaction.noautonomous.SimpleInterceptor#invoke(javax.interceptor.InvocationContext)
+	 * @see service.framework.core.transaction.simple.SimpleInterceptor#invoke(javax.interceptor.InvocationContext)
 	 */
 	@Override
 	protected Object invoke(InvocationContext ic) throws Exception {
@@ -61,7 +61,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 	}
 	
 	/**
-	 * @see service.framework.core.transaction.noautonomous.SimpleInterceptor#createServiceContext()
+	 * @see service.framework.core.transaction.simple.SimpleInterceptor#createServiceContext()
 	 */
 	@Override
 	protected ServiceContext createServiceContext(){

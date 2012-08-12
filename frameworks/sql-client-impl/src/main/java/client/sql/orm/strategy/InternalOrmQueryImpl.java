@@ -15,6 +15,8 @@ import client.sql.orm.CriteriaQueryParameter;
 import client.sql.orm.CriteriaReadQueryParameter;
 import client.sql.orm.ExtractionCriteria;
 import client.sql.orm.FixString;
+import client.sql.orm.strategy.InternalOrmQuery;
+import client.sql.orm.strategy.SQLStatementBuilder;
 
 
 /**

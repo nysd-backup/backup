@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package service.framework.core.transaction.noautonomous;
+package service.framework.core.transaction.simple;
 
 import java.util.List;
 
