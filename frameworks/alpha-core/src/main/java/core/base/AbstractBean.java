@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * function.
+ * Base of the java bean.
  *
  * @author yoshida-n
  * @version	created.

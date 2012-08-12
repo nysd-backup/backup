@@ -4,11 +4,10 @@
 package core.exception;
 
 /**
- * A exception that represent the poor implementation.
+ * An exception that represent the poor implementation.
  * 
  * <pre>
- * your codes have any bugs when this exception is thrown.
- * see your code.
+ * There are bugs when this exception is thrown.
  * </pre>
  * 
  * @author yoshida-n
