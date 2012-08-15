@@ -42,7 +42,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 			}
 		}
 		if(isTransactionBorder){
-			context.startUnitOfWork();
+			context.newTransactionScope();
 		}
 		try{		
 			return ic.proceed();
@@ -54,7 +54,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 						sessionContext.setRollbackOnly();				
 					}
 				}finally{
-					context.endUnitOfWork();
+					context.removeTransactionScope();
 				}
 			}
 		}

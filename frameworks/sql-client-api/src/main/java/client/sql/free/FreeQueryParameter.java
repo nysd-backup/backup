@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import client.sql.QueryParameter;
 
 /**
- * The free parameter.
+ * The query parameter.
  *
  * @author yoshida-n
  * @version	created.

@@ -8,10 +8,8 @@ import javax.persistence.EntityManager;
 import client.sql.orm.strategy.InternalOrmQuery;
 
 
-
-
 /**
- * The ORM Updater.
+ * The Query Object.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -64,7 +62,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> eq(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.Equal,value);
+		return addCriteria(column.name(), ComparingOperand.Equal,value);
 	}
 
 	/**
@@ -76,7 +74,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> gt(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.GreaterThan,value);
+		return addCriteria(column.name(), ComparingOperand.GreaterThan,value);
 	}
 
 	/**
@@ -88,7 +86,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> lt(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.LessThan,value);
+		return addCriteria(column.name(), ComparingOperand.LessThan,value);
 	}
 
 	/**
@@ -100,7 +98,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> gtEq(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.GreaterEqual,value);
+		return addCriteria(column.name(), ComparingOperand.GreaterEqual,value);
 	}
 
 	/**
@@ -112,7 +110,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> ltEq(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.LessEqual,value);
+		return addCriteria(column.name(), ComparingOperand.LessEqual,value);
 	}
 
 	/**
@@ -128,7 +126,7 @@ public class CriteriaModifyQuery<T> {
 		List<V> values = new ArrayList<V>();
 		values.add(from);
 		values.add(to);
-		setExpression(column.name(),ComparingOperand.Between,values);
+		addCriteria(column.name(),ComparingOperand.Between,values);
 		return this;
 	}
 
@@ -141,9 +139,23 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> contains(Metadata<T, V> column, List<V> value){
-		setExpression(column.name(),ComparingOperand.IN,value);
+		addCriteria(column.name(),ComparingOperand.IN,value);
 		return this;
 	}
+	
+	/**
+	 * Adds 'LIKE'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> CriteriaModifyQuery<T> like(Metadata<T, V> column, V value){
+		addCriteria(column.name(),ComparingOperand.LIKE,value);
+		return this;
+	}
+	
 	/**
 	 * Adds value to update.
 	 * 
@@ -173,7 +185,7 @@ public class CriteriaModifyQuery<T> {
 	 * @param operand the operand
 	 * @return self
 	 */
-	public CriteriaModifyQuery<T> setExpression(String column,ComparingOperand operand,Object value) {
+	public CriteriaModifyQuery<T> addCriteria(String column,ComparingOperand operand,Object value) {
 		condition.getConditions().add(new ExtractionCriteria<Object>(column,condition.getConditions().size()+1,operand,value));
 		return this;
 	}

@@ -11,10 +11,8 @@ import client.sql.free.QueryCallback;
 import client.sql.orm.strategy.InternalOrmQuery;
 
 
-
-
 /**
- * The ORM query.
+ * The Query Object.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -100,7 +98,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public <V> CriteriaReadQuery<T> eq(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.Equal,value);
+		return addCriteria(column.name(), ComparingOperand.Equal,value);
 	}
 	
 	/**
@@ -112,7 +110,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public <V> CriteriaReadQuery<T> gt(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.GreaterThan,value);
+		return addCriteria(column.name(), ComparingOperand.GreaterThan,value);
 	}
 	
 	/**
@@ -124,7 +122,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public <V> CriteriaReadQuery<T> lt(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.LessThan,value);
+		return addCriteria(column.name(), ComparingOperand.LessThan,value);
 	}
 	
 	/**
@@ -136,7 +134,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public <V> CriteriaReadQuery<T> gtEq(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.GreaterEqual,value);
+		return addCriteria(column.name(), ComparingOperand.GreaterEqual,value);
 	}
 	
 	/**
@@ -148,7 +146,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public <V> CriteriaReadQuery<T> ltEq(Metadata<T, V> column, V value){
-		return setExpression(column.name(), ComparingOperand.LessEqual,value);
+		return addCriteria(column.name(), ComparingOperand.LessEqual,value);
 	}
 
 	/**
@@ -164,7 +162,7 @@ public class CriteriaReadQuery<T>{
 		List<V> values = new ArrayList<V>();
 		values.add(from);
 		values.add(to);
-		setExpression(column.name(),ComparingOperand.Between,values);
+		addCriteria(column.name(),ComparingOperand.Between,values);
 		return this;
 	}
 
@@ -177,7 +175,20 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public <V> CriteriaReadQuery<T> contains(Metadata<T, V> column, List<V> value){
-		setExpression(column.name(),ComparingOperand.IN,value);
+		addCriteria(column.name(),ComparingOperand.IN,value);
+		return this;
+	}
+	
+	/**
+	 * Adds 'LIKE'.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> CriteriaReadQuery<T> like(Metadata<T, V> column, V value){
+		addCriteria(column.name(),ComparingOperand.LIKE,value);
 		return this;
 	}
 	
@@ -248,7 +259,7 @@ public class CriteriaReadQuery<T>{
 	 * @param operand the operand
 	 * @return
 	 */
-	public CriteriaReadQuery<T> setExpression(String column, ComparingOperand operand,Object value) {
+	public CriteriaReadQuery<T> addCriteria(String column, ComparingOperand operand,Object value) {
 		condition.getConditions().add(new ExtractionCriteria<Object>(column,condition.getConditions().size()+1,operand,value));
 		return this;
 	}

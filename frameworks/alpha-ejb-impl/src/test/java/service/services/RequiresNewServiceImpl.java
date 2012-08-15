@@ -39,7 +39,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
+		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).isRollbackOnly();
 		return "OK";
 	}
 
@@ -65,7 +65,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		MessageBean bean = new MessageBean("100");
 		MessageResult message = ServiceLocator.createDefaultMessageBuilder().load(bean,Locale.getDefault());
 		ServiceContext.getCurrentInstance().addMessage(message);	
-		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
+		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).isRollbackOnly();
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		RequireService service2 = ServiceLocator.getService(RequireService.class);
 		state= service2.persist();		
 		
-		rollbackOnly = ((ServiceContextImpl)ServiceContext.getCurrentInstance()).getCurrentUnitOfWork().isRollbackOnly();
+		rollbackOnly = ((ServiceContextImpl)ServiceContext.getCurrentInstance()).isRollbackOnly();
 		
 	}
 	

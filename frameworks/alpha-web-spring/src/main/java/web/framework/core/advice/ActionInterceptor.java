@@ -14,16 +14,12 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import service.framework.core.activation.ServiceLocator;
 import service.framework.core.transaction.ServiceContext;
+import service.framework.core.transaction.ServiceContextImpl;
 import core.exception.BusinessException;
 import core.logics.utility.StringUtils;
 import core.message.ClientBean;
-import core.message.ExceptionMessageFactory;
-import core.message.MessageBean;
-import core.message.MessageBuilder;
 import core.message.MessageResult;
 
 /**
@@ -34,12 +30,9 @@ import core.message.MessageResult;
  */
 public class ActionInterceptor{
 
-	@Autowired
-	private MessageBuilder mb;
-	
-	@Autowired
-	private ExceptionMessageFactory emf;
-	
+	//@Autowired
+	//private MessageBuilder mb;
+
 	/**
 	 * @param invocation
 	 * @return
@@ -47,7 +40,7 @@ public class ActionInterceptor{
 	 */
 	public Object around(ProceedingJoinPoint invocation) throws Throwable {
 
-		ServiceContext serviceContext = ServiceLocator.createDefaultServiceContext();
+		ServiceContext serviceContext = new ServiceContextImpl();
 		serviceContext.initialize();
 		serviceContext.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
 		try{
@@ -59,10 +52,10 @@ public class ActionInterceptor{
 			Object ret = invocation.proceed();
 			
 			//メッセージをJSFに連携する
-			commitMessage(FacesContext.getCurrentInstance(),serviceContext);
+			boolean disableNavigation = commitMessage(FacesContext.getCurrentInstance(),serviceContext);
 			
 			//エラーレベル以上のメッセージが存在していたら画面遷移禁止
-			return serviceContext.isAnyTransactionFailed() ? null : ret;
+			return disableNavigation ? null : ret;
 	
 		}catch(Throwable t){
 			handleThrowable(FacesContext.getCurrentInstance(),serviceContext,t);
@@ -85,8 +78,8 @@ public class ActionInterceptor{
 			return;
 		}else{
 			//業務例外以外はRuntimeException/Errorがスロー
-			MessageBean message = emf.getBizMessageFrom(t);
-			ServiceContext.getCurrentInstance().addMessage(mb.load(message,fc.getViewRoot().getLocale()));
+			//MessageBean message = emf.getBizMessageFrom(t);
+			//ServiceContext.getCurrentInstance().addMessage(mb.load(message,fc.getViewRoot().getLocale()));
 
 			//メッセージをJSFに連携する
 			commitMessage(fc,sc);
@@ -96,15 +89,18 @@ public class ActionInterceptor{
 	/**
 	 * @param context
 	 */
-	private void commitMessage(FacesContext fc,ServiceContext context ){
+	private boolean commitMessage(FacesContext fc,ServiceContext context ){
 		List<MessageResult> messages = context.getMessageList();	
+		boolean disableNavigation = false;
 		for(MessageResult m: messages){
 						
 			FacesMessage.Severity severity = null;
 			if(m.getLevel() == FacesMessage.SEVERITY_FATAL.getOrdinal()){
 				severity = FacesMessage.SEVERITY_FATAL;
+				disableNavigation = true;
 			}else if(m.getLevel() == FacesMessage.SEVERITY_ERROR.getOrdinal()){
 				severity = FacesMessage.SEVERITY_ERROR;
+				disableNavigation = true;
 			}else if(m.getLevel() == FacesMessage.SEVERITY_WARN.getOrdinal()){
 				severity = FacesMessage.SEVERITY_WARN;
 			}else if(m.getLevel() == FacesMessage.SEVERITY_INFO.getOrdinal()){
@@ -142,6 +138,8 @@ public class ActionInterceptor{
 		}
 		//追加したら削除
 		messages.clear();
+		
+		return disableNavigation;
 	}
 	
 	/**

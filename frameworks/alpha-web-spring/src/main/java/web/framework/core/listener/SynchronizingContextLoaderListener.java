@@ -5,11 +5,10 @@ package web.framework.core.listener;
 
 import javax.servlet.ServletContextEvent;
 
-
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import service.framework.core.activation.ExternalServiceLocatorImpl;
+import service.framework.core.activation.ServiceLocatorImpl;
 
 /**
  * function.
@@ -19,8 +18,6 @@ import service.framework.core.activation.ExternalServiceLocatorImpl;
  */
 public class SynchronizingContextLoaderListener extends ContextLoaderListener{
 	
-	private ExternalServiceLocatorImpl locator = null;
-
 	/**
 	 * @see org.springframework.web.context.ContextLoaderListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
@@ -28,8 +25,8 @@ public class SynchronizingContextLoaderListener extends ContextLoaderListener{
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
 		
-		locator = new ExternalServiceLocatorImpl();
-		locator.construct(WebApplicationContextUtils.getWebApplicationContext(event.getServletContext()));
+		ServiceLocatorImpl locator = new ServiceLocatorImpl(WebApplicationContextUtils.getWebApplicationContext(event.getServletContext()));
+		ServiceLocatorImpl.setDelegate(locator);
 	}
 	
 	/**
@@ -37,12 +34,8 @@ public class SynchronizingContextLoaderListener extends ContextLoaderListener{
 	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
-		super.contextDestroyed(event);
-		if(locator != null){
-			locator.destroy();
-			locator = null;
-		}
+		ServiceLocatorImpl.setDelegate(null);	
+		super.contextDestroyed(event);	
 	}
-
 
 }

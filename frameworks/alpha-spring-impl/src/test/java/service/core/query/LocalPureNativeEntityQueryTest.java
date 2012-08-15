@@ -288,7 +288,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		
 		//更新
 		CriteriaModifyQuery<TestEntity> update = ormQueryFactory.createModifyQuery(TestEntity.class,per);
-		update.setExpression(TEST.name(), ComparingOperand.Equal, new FixString("'2'"))
+		update.addCriteria(TEST.name(), ComparingOperand.Equal, new FixString("'2'"))
 		.set(ATTR.name(), new FixString("'AAA'")).update();
 		
 		//検索
@@ -609,9 +609,9 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	 * @return
 	 */
 	private List<TestEntity> getFixOneRecord(CriteriaReadQuery<TestEntity> query ){	
-		query.between(TEST, "0", "30").setExpression(TEST.name(),ComparingOperand.Equal,new FixString("2")).setExpression(TEST.name(), ComparingOperand.GreaterEqual,new FixString("0")).setExpression(TEST.name(), ComparingOperand.LessEqual, new FixString("30")).setExpression(TEST.name(), ComparingOperand.LessThan, new FixString("30")).setExpression(TEST.name(), ComparingOperand.GreaterThan, new FixString("0"));		
-		query.between(ATTR, "0", "20").setExpression(ATTR.name(),ComparingOperand.Equal,new FixString("2")).setExpression(ATTR.name(),ComparingOperand.GreaterEqual,  new FixString("0")).setExpression(ATTR.name(), ComparingOperand.LessEqual, new FixString("20")).setExpression(ATTR.name(), ComparingOperand.LessThan,   new FixString("20")).setExpression(ATTR.name(), ComparingOperand.GreaterThan,  new FixString("0"));
-		query.between(ATTR2, 0, 100).setExpression(ATTR2.name(),ComparingOperand.Equal,new FixString("2")).setExpression(ATTR2.name(), ComparingOperand.GreaterEqual, new FixString("0")).setExpression(ATTR2.name(), ComparingOperand.LessEqual, new FixString("100")).setExpression(ATTR2.name(), ComparingOperand.LessThan,   new FixString("100")).setExpression(ATTR2.name(), ComparingOperand.GreaterThan,  new FixString("0"));		
+		query.between(TEST, "0", "30").addCriteria(TEST.name(),ComparingOperand.Equal,new FixString("2")).addCriteria(TEST.name(), ComparingOperand.GreaterEqual,new FixString("0")).addCriteria(TEST.name(), ComparingOperand.LessEqual, new FixString("30")).addCriteria(TEST.name(), ComparingOperand.LessThan, new FixString("30")).addCriteria(TEST.name(), ComparingOperand.GreaterThan, new FixString("0"));		
+		query.between(ATTR, "0", "20").addCriteria(ATTR.name(),ComparingOperand.Equal,new FixString("2")).addCriteria(ATTR.name(),ComparingOperand.GreaterEqual,  new FixString("0")).addCriteria(ATTR.name(), ComparingOperand.LessEqual, new FixString("20")).addCriteria(ATTR.name(), ComparingOperand.LessThan,   new FixString("20")).addCriteria(ATTR.name(), ComparingOperand.GreaterThan,  new FixString("0"));
+		query.between(ATTR2, 0, 100).addCriteria(ATTR2.name(),ComparingOperand.Equal,new FixString("2")).addCriteria(ATTR2.name(), ComparingOperand.GreaterEqual, new FixString("0")).addCriteria(ATTR2.name(), ComparingOperand.LessEqual, new FixString("100")).addCriteria(ATTR2.name(), ComparingOperand.LessThan,   new FixString("100")).addCriteria(ATTR2.name(), ComparingOperand.GreaterThan,  new FixString("0"));		
 		query.contains(TEST, Arrays.asList("2","2","2"));
 		return query.getResultList();
 	}

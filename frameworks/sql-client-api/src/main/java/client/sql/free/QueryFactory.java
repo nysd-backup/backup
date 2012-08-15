@@ -10,10 +10,8 @@ import javax.persistence.QueryHint;
 import client.sql.free.strategy.InternalQuery;
 
 
-
-
 /**
- * The factor to create query.
+ * The factory to create query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

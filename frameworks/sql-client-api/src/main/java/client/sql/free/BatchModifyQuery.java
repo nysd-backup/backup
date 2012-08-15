@@ -8,16 +8,26 @@ import client.sql.free.FreeModifyQueryParameter;
 
 
 /**
- * function.
+ * BatchModifyQuery.
  *
  * @author yoshida-n
  * @version	created.
  */
 public interface BatchModifyQuery {
 
+	/**
+	 * @param parameter the parameter to add
+	 */
 	public void addBatch(FreeModifyQueryParameter parameter);
 
-	public void addBatch(AbstractNativeModifyQuery parameter);
+	/**
+	 * @param query the query holding parameter.
+	 */
+	public void addBatch(AbstractNativeModifyQuery query);
 	
+	/**
+	 * Executes batch update.
+	 * @return result
+	 */
 	public int[] modify();
 }

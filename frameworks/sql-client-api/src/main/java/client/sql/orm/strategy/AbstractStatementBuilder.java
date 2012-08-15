@@ -12,8 +12,6 @@ import client.sql.orm.FixString;
 import client.sql.orm.SortKey;
 
 
-
-
 /**
  * The statement builder.
  *

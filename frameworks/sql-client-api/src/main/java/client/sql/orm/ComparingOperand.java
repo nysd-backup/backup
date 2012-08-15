@@ -48,7 +48,7 @@ public enum ComparingOperand {
 		}
 		
 		@Override
-		public void acceptBindable(FreeQueryParameter delegate,String bindName,Object value){
+		public void setParameter(FreeQueryParameter delegate,String bindName,Object value){
 			@SuppressWarnings("unchecked")
 			List<Object> values = (List<Object>)value;
 			Object from = values.get(0);
@@ -68,7 +68,7 @@ public enum ComparingOperand {
 			return String.format(" %s %s ",colName,getOperand());
 		}
 		@Override
-		public void acceptBindable(FreeQueryParameter delegate,String bindName,Object value){			
+		public void setParameter(FreeQueryParameter delegate,String bindName,Object value){			
 		}
 	},
 	/** IS NULL */
@@ -78,7 +78,7 @@ public enum ComparingOperand {
 			return String.format(" %s %s ",colName,getOperand());
 		}
 		@Override
-		public void acceptBindable(FreeQueryParameter delegate,String bindName,Object value){			
+		public void setParameter(FreeQueryParameter delegate,String bindName,Object value){			
 		}
 	},
 	/** IN */
@@ -96,7 +96,7 @@ public enum ComparingOperand {
 			return String.format(" %s %s(%s) ",colName,getOperand(),in.toString());
 		}
 		@Override
-		public void acceptBindable(FreeQueryParameter delegate,String bindName,Object value){	
+		public void setParameter(FreeQueryParameter delegate,String bindName,Object value){	
 			List<?> val = List.class.cast(value);		
 			int cnt = -1;
 			for(Object v : val){
@@ -105,7 +105,9 @@ public enum ComparingOperand {
 			}
 			
 		}
-	};
+	},
+	/** LIKE */
+	LIKE("LIKE");
 
 	/** the operand */
 	private String operand = null;
@@ -132,7 +134,7 @@ public enum ComparingOperand {
 		}			
 	}
 	
-	public void acceptBindable(FreeQueryParameter delegate,String bindName,Object value){
+	public void setParameter(FreeQueryParameter delegate,String bindName,Object value){
 		if(!(value instanceof FixString)){
 			delegate.getParam().put(bindName, value);
  		}

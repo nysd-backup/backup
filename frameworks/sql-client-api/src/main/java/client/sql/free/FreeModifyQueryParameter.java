@@ -5,7 +5,7 @@ package client.sql.free;
 
 
 /**
- * function.
+ * FreeModifyQueryParameter.
  *
  * @author yoshida-n
  * @version	created.

@@ -11,8 +11,6 @@ import client.sql.orm.ExtractionCriteria;
 import client.sql.orm.strategy.AbstractStatementBuilder;
 
 
-
-
 /**
  * The builder to create the JPQL statement.
  *

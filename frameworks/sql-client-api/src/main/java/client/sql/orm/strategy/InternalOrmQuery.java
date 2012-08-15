@@ -11,7 +11,7 @@ import client.sql.orm.CriteriaModifyQueryParameter;
 
 
 /**
- * function.
+ * Internal Query Object.
  *
  * @author yoshida-n
  * @version	created.

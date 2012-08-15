@@ -6,7 +6,7 @@ package client.sql.free;
 import javax.persistence.LockModeType;
 
 /**
- * The query parameter.
+ * The read-query parameter.
  * 
  * @author yoshida-n
  * @version	created.

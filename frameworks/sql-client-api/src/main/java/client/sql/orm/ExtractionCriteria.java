@@ -94,6 +94,6 @@ public class ExtractionCriteria<T> {
 	 * @return expression
 	 */
 	public void accept(FreeQueryParameter delegate){
-		operand.acceptBindable(delegate, colName + "_" + bindCount, value);
+		operand.setParameter(delegate, colName + "_" + bindCount, value);
 	}
 }

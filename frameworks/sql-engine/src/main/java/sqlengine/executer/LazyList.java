@@ -16,7 +16,7 @@ import sqlengine.exception.ExceptionHandler;
 
 
 /**
- * The list holiding the <code>ResultSet</code> so as to get next record only when the get(i) is called.
+ * The list holding the <code>ResultSet</code> so as to get next record only when the get(i) is called.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.

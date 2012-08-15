@@ -17,7 +17,7 @@ import service.framework.core.transaction.ServiceContext;
  */
 public class ServiceContextImpl extends ServiceContext{
 
-	private Stack<InternalUnitOfWork> unitOfWorkStack = new Stack<InternalUnitOfWork>();;
+	private Stack<TransactionScope> transactionScopes = new Stack<TransactionScope>();;
 	
 	/**
 	 * @see service.framework.core.transaction.ServiceContext#setRollbackOnly()
@@ -25,7 +25,7 @@ public class ServiceContextImpl extends ServiceContext{
 	@Override
 	public void setRollbackOnly(){
 		setFailed(true);
-		getCurrentUnitOfWork().setRollbackOnly();
+		getCurrentTransactionScope().setRollbackOnly();
 	}
 	
 	/**
@@ -33,28 +33,28 @@ public class ServiceContextImpl extends ServiceContext{
 	 */
 	@Override
 	public boolean isRollbackOnly(){
-		return getCurrentUnitOfWork().isRollbackOnly();
+		return getCurrentTransactionScope().isRollbackOnly();
 	}
 
 	/**
 	 * @return current unitOfWorkStack
 	 */
-	public InternalUnitOfWork getCurrentUnitOfWork(){
-		return unitOfWorkStack.peek();
+	public TransactionScope getCurrentTransactionScope(){
+		return transactionScopes.peek();
 	}
 	
 	/**
 	 * Start unit of work.
 	 */
-	public void startUnitOfWork(){
-		unitOfWorkStack.push(new InternalUnitOfWork());
+	public void newTransactionScope(){
+		transactionScopes.push(new TransactionScope());
 	}
 	
 	/**
-	 * Finish unit of work.
+	 * Finish the transaction.
 	 */
-	public void endUnitOfWork(){
-		unitOfWorkStack.pop();
+	public void removeTransactionScope(){
+		transactionScopes.pop();
 	}
 
 	/**
@@ -63,8 +63,8 @@ public class ServiceContextImpl extends ServiceContext{
 	@Override
 	public void initialize(){
 		super.initialize();
-		unitOfWorkStack = new Stack<InternalUnitOfWork>();		
-		startUnitOfWork();
+		transactionScopes = new Stack<TransactionScope>();		
+		newTransactionScope();
 	}
 	
 	/**
@@ -72,8 +72,8 @@ public class ServiceContextImpl extends ServiceContext{
 	 */
 	@Override
 	public void release(){	
-		unitOfWorkStack.clear();
-		unitOfWorkStack = null;
+		transactionScopes.clear();
+		transactionScopes = null;
 		super.release();				
 	}
 }
