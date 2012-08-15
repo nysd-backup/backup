@@ -7,6 +7,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>フレームワーク</name>
 
+
 	<parent>
 		<groupId>alpha</groupId>
 		<artifactId>base</artifactId>
