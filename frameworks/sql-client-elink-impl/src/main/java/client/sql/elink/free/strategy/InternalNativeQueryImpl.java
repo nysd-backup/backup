@@ -17,6 +17,7 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
+import sqlengine.builder.PreparedQuery;
 import sqlengine.builder.QueryBuilder;
 import sqlengine.exception.ExceptionHandler;
 import sqlengine.executer.RecordFilter;
@@ -142,7 +143,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();		
 		try {		
 			ResultSet rs = cursor.getResultSet();
-			result = handler.getResultList(rs, parameter.getResultType(),filter,parameter.getMaxSize(),parameter.getFirstResult());
+			result = handler.getResultList(rs, parameter.getResultType(),filter,parameter.getMaxSize());
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
@@ -174,10 +175,9 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @return the query
 	 */
 	protected Query createQuery(FreeReadQueryParameter param) {
-		List<Object> bindList = new ArrayList<Object>();
-		String executingSql = buildSql(bindList,param);		
-		Query query = param.getName() != null ? createNamedQuery(executingSql, param) : param.getEntityManager().createNativeQuery(executingSql);
-		return bindParmaeterToQuery(query, bindList);			
+		PreparedQuery preparedQuery = prepare(param);		
+		Query query = param.getName() != null ? createNamedQuery(preparedQuery.getStatement(), param) : param.getEntityManager().createNativeQuery(preparedQuery.getStatement());
+		return bindParmaeterToQuery(query, preparedQuery.getFirstList());			
 	}
 	
 	/**
@@ -209,13 +209,12 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	@Override
 	public long count(FreeReadQueryParameter param){		
 
-		List<Object> bindList = new ArrayList<Object>();
-		String executingSql = buildSql(bindList,param);
+		PreparedQuery preparedQuery = prepare(param);
 		
 		//countの場合は範囲設定無効とする。
-		executingSql = builder.setCount(executingSql);
+		String executingSql = String.format("select count(*) from (%s)",preparedQuery.getStatement());
 		Query query = param.getName() != null ? createNamedQuery(executingSql,param) : param.getEntityManager().createNativeQuery(executingSql);
-		query = bindParmaeterToQuery(query, bindList);	
+		query = bindParmaeterToQuery(query, preparedQuery.getFirstList());	
 		
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
@@ -228,16 +227,18 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see client.sql.free.strategy.InternalQuery#executeUpdate()
 	 */
 	@Override
-	public int executeUpdate(FreeModifyQueryParameter param) {
-		List<Object> bindList = new ArrayList<Object>();
+	public int executeUpdate(FreeModifyQueryParameter param) {	
 		Query query = null;
 		if(param.getName() != null){
-			query = param.getEntityManager().createNamedQuery(param.getName());			
+			query = param.getEntityManager().createNamedQuery(param.getName());	
+			for(Map.Entry<String, Object> p : param.getParam().entrySet()){
+				query.setParameter(p.getKey(),p.getValue());
+			}
 		}else {
-			String executingSql = buildSql(bindList,param);
-			query = param.getEntityManager().createNativeQuery(executingSql);
-		}
-		query = bindParmaeterToQuery(query, bindList);			
+			PreparedQuery preparedQuery = prepare(param);
+			query = param.getEntityManager().createNativeQuery(preparedQuery.getStatement());
+			query = bindParmaeterToQuery(query, preparedQuery.getFirstList());		
+		}			
 		
 		for(Map.Entry<String, Object> h : param.getHints().entrySet()){		
 			query.setHint(h.getKey(), h.getValue());
@@ -273,14 +274,13 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @return the SQL
 	 */
 	@SuppressWarnings("unchecked")
-	protected String buildSql(List<Object> bindList, FreeQueryParameter param){
+	protected PreparedQuery prepare(FreeQueryParameter param){
 		String str = param.getSql();	
 		if(!param.isUseRowSql()){
 			str = builder.build(param.getQueryId(), str);
 			str = builder.evaluate(str, param.getParam(),param.getQueryId());
 		}			
-		str = builder.replaceToPreparedSql(str, Arrays.asList(param.getParam()),Arrays.asList(bindList), param.getQueryId());			
-		return str;
+		return builder.prepare(str, Arrays.asList(param.getParam()),param.getQueryId());			
 	}
 	
 	/**

@@ -18,15 +18,6 @@ import sqlengine.facade.QueryResult;
  * @version 2011/08/31 created.
  */
 public interface ResultSetHandler {
-	
-	/**
-	 * Skips the cursor to specified position.
-	 * 
-	 * @param rs the ResultSet
-	 * @param firstResult the firstResult
-	 * @throws SQLException the exception
-	 */
-	void skip(ResultSet rs , int firstResult) throws SQLException;
 
 	/**
 	 * @param <T>　the type
@@ -38,7 +29,7 @@ public interface ResultSetHandler {
 	 * @return the result
 	 * @throws SQLException the exception
 	 */
-	QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize,int offset)
+	QueryResult getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter,int maxSize)
 	throws SQLException ;
 	
 	/**

@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import sqlengine.builder.DatabaseConfig;
+import sqlengine.builder.PreparedQuery;
 import sqlengine.builder.QueryBuilder;
 import sqlengine.builder.StatementProvider;
 import sqlengine.builder.impl.QueryBuilderProxyImpl;
@@ -27,10 +27,12 @@ import sqlengine.executer.RecordHandler;
 import sqlengine.executer.RecordHandlerFactory;
 import sqlengine.executer.ResultSetHandler;
 import sqlengine.executer.Selector;
+import sqlengine.executer.TypeConverter;
 import sqlengine.executer.Updater;
 import sqlengine.executer.impl.RecordHandlerFactoryImpl;
 import sqlengine.executer.impl.ResultSetHandlerImpl;
 import sqlengine.executer.impl.SelectorImpl;
+import sqlengine.executer.impl.TypeConverterImpl;
 import sqlengine.executer.impl.UpdaterImpl;
 import sqlengine.facade.QueryExecutor;
 import sqlengine.facade.QueryParameter;
@@ -68,6 +70,8 @@ public class QueryExecutorImpl implements QueryExecutor{
 	
 	/** the updater*/
 	private Updater updater = new UpdaterImpl();
+	
+	private TypeConverter converter = new TypeConverterImpl();
 	
 	/**
 	 * @param exceptionHandler the exceptionHandler to set
@@ -125,17 +129,17 @@ public class QueryExecutorImpl implements QueryExecutor{
 	@Override
 	public long executeCount(SelectParameter param,Connection con) {
 		
-		List<Object> bindList = new ArrayList<Object>();	
-		String query = sqlBuilder.setCount(createSQL(param,bindList));
+		PreparedQuery preparedQuery = prepare(param);		
+		String query = String.format("select count(*) from (%s)",preparedQuery.getStatement());
 		
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
-
 		try{
-
-			DatabaseConfig config  = createDatabaseConfig(0,param.getFetchSize(),param.getTimeoutSeconds());
-			stmt = provider.buildStatement(param.getSqlId(),con, query, bindList, config);			
-			rs= selector.select(stmt);
+		
+			stmt = provider.createStatement(param.getSqlId(),con, query);			
+			configure(stmt,0,param.getFetchSize(),param.getTimeoutSeconds());
+			setParameter(stmt, preparedQuery.getFirstList());	
+			rs= selector.select(stmt,0);
 			
 			List<HashMap> decimal = resultSetHandler.getResultList(rs, HashMap.class,null);
 			Iterator itr = decimal.get(0).values().iterator();
@@ -157,18 +161,17 @@ public class QueryExecutorImpl implements QueryExecutor{
 	 */
 	@Override
 	public <T> List<T> executeQuery(SelectParameter param , Connection con){	
-	
-		List<Object> bindList = new ArrayList<Object>();	
-		String query = createSQL(param,bindList);
+
+		PreparedQuery preparedQuery = prepare(param);		
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
-			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;
-			DatabaseConfig config  = createDatabaseConfig(maxRows,param.getFetchSize(),param.getTimeoutSeconds());
-			stmt = provider.buildStatement(param.getSqlId(),con, query, bindList,config);		
-			rs = selector.select(stmt);
-			resultSetHandler.skip(rs,param.getFirstResult());
-			
+			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;			
+			stmt = provider.createStatement(param.getSqlId(),con, preparedQuery.getStatement());
+			configure(stmt,maxRows,param.getFetchSize(),param.getTimeoutSeconds());
+			setParameter(stmt,preparedQuery.getBindList().get(0));						
+			rs = selector.select(stmt,param.getFirstResult());
+
 			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter());
 			
 		}catch(SQLException sqle){
@@ -184,17 +187,15 @@ public class QueryExecutorImpl implements QueryExecutor{
 	@Override
 	public <T> List<T> executeFetch(SelectParameter param,Connection con) {
 
-		List<Object> bindList = new ArrayList<Object>();	
-		String query = createSQL(param,bindList);
-
+		PreparedQuery preparedQuery = prepare(param);		
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
 		try{							
 			int maxRows = param.getMaxSize() != 0 ? param.getFirstResult() + param.getMaxSize() : 0;
-			DatabaseConfig config  = createDatabaseConfig(maxRows,param.getFetchSize(),param.getTimeoutSeconds());
-			stmt = provider.buildStatement(param.getSqlId(),con, query, bindList,config);	
-			rs = selector.select(stmt);
-			resultSetHandler.skip(rs,param.getFirstResult());			
+			stmt = provider.createStatement(param.getSqlId(),con, preparedQuery.getStatement());
+			configure(stmt,maxRows,param.getFetchSize(),param.getTimeoutSeconds());
+			setParameter(stmt,preparedQuery.getFirstList());						
+			rs = selector.select(stmt,param.getFirstResult());
 			
 			//ResultFetch用オブジェクトに返却
 			RecordHandler handler = recordHandlerFactory.create(param.getResultType(), rs);								
@@ -210,18 +211,17 @@ public class QueryExecutorImpl implements QueryExecutor{
 	 */
 	@Override
 	public QueryResult executeTotalQuery(SelectParameter param,Connection con) {
-		List<Object> bindList = new ArrayList<Object>();			
-		String query = createSQL(param,bindList);
+		PreparedQuery preparedQuery = prepare(param);
 		PreparedStatement stmt = null;		
 		ResultSet rs = null;
 		try{									
+						
+			stmt = provider.createStatement(param.getSqlId(),con, preparedQuery.getStatement());
+			configure(stmt,0,param.getFetchSize(),param.getTimeoutSeconds());
+			setParameter(stmt,preparedQuery.getFirstList());				
+			rs = selector.select(stmt,param.getFirstResult());			
 			
-			DatabaseConfig config  = createDatabaseConfig(0,param.getFetchSize(),param.getTimeoutSeconds());
-			stmt = provider.buildStatement(param.getSqlId() ,con, query, bindList,config);
-			rs = selector.select(stmt);
-			resultSetHandler.skip(rs,param.getFirstResult());
-			
-			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter(), param.getMaxSize(),param.getFirstResult());
+			return resultSetHandler.getResultList(rs, param.getResultType(),param.getFilter(), param.getMaxSize());
 		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
 		}finally{
@@ -237,13 +237,14 @@ public class QueryExecutorImpl implements QueryExecutor{
 	public int executeUpsert(UpsertParameter param, Connection con) {
 		
 		//SQL生成
-		List<Object> bindList = new ArrayList<Object>();			
-		String executingSql = createSQL(param,bindList);
+		PreparedQuery preparedQuery = prepare(param);
 		PreparedStatement stmt = null;
 		
-		try{
-			DatabaseConfig config  = createDatabaseConfig(0,0,param.getTimeoutSeconds());
-			stmt = provider.buildStatement(param.getSqlId(),con, executingSql, bindList,config);	
+		try{			
+			stmt = provider.createStatement(param.getSqlId(),con, preparedQuery.getStatement());
+			configure(stmt,0,0,param.getTimeoutSeconds());
+			setParameter(stmt,preparedQuery.getFirstList());			
+			
 			return updater.update(stmt);
 		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);
@@ -267,24 +268,20 @@ public class QueryExecutorImpl implements QueryExecutor{
 			executingSql = sqlBuilder.build(base.getSqlId(), executingSql);					
 		}				
 	
-		List<List<Object>> bindList = new ArrayList<List<Object>>();
 		List<Map<String,Object>> parameters = new ArrayList<Map<String,Object>>();
 		for(UpsertParameter p : param){
-			bindList.add(new ArrayList<Object>());
 			parameters.add(p.getParameter());
 		}
-		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, parameters,bindList,base.getSqlId());						
+		PreparedQuery preparedQuery = sqlBuilder.prepare(executingSql, parameters,base.getSqlId());						
 		PreparedStatement stmt = null;
 		
 		try{
-			//ステートメント
-			DatabaseConfig config  = createDatabaseConfig(0,0,base.getTimeoutSeconds());
-			stmt = provider.createStatement(base.getSqlId(),con, executingSql, config);	
-			
+			//ステートメント			
+			stmt = provider.createStatement(base.getSqlId(),con, preparedQuery.getStatement());
+			configure(stmt,0,0,base.getTimeoutSeconds());
 			//バインド変数追加、バッチ実行
-			for(int i = 0 ; i < bindList.size(); i++){
-				List<Object> bind = bindList.get(i);
-				provider.setBindParameter(stmt, bind);
+			for(List<Object> bind : preparedQuery.getBindList()){
+				setParameter(stmt, bind);
 				stmt.addBatch();
 			}
 			return updater.batchUpdate(stmt);
@@ -296,8 +293,6 @@ public class QueryExecutorImpl implements QueryExecutor{
 		}
 	}
 
-
-	
 	/**
 	 * Creates the SQL.
 	 * 
@@ -307,27 +302,14 @@ public class QueryExecutorImpl implements QueryExecutor{
 	 * @return the query
 	 */
 	@SuppressWarnings("unchecked")
-	private String createSQL(QueryParameter param, List<Object> bindList){
-		String executingSql = buildSql(param);
-		executingSql = sqlBuilder.replaceToPreparedSql(executingSql, Arrays.asList(param.getParameter()), Arrays.asList(bindList),param.getSqlId());				
-		return executingSql;	
-	}
-	
-	/**
-	 * Builds the SQL.
-	 * @param param the parameter
-	 * @return the SQL
-	 */
-	private String buildSql(QueryParameter param){
+	private PreparedQuery prepare(QueryParameter param){
 		String executingSql  = param.getSql();
 		if(!param.isUseRowSql()){
 			executingSql = sqlBuilder.build(param.getSqlId(), executingSql);		
 			executingSql = sqlBuilder.evaluate(executingSql, param.getParameter(),param.getSqlId());
 		}						
-		return executingSql;
+		return sqlBuilder.prepare(executingSql, Arrays.asList(param.getParameter()), param.getSqlId());				
 	}
-	
-	
 
 	/**
 	 * Close.
@@ -361,18 +343,35 @@ public class QueryExecutorImpl implements QueryExecutor{
 	}
 	
 	/**
-	 * Creates the database config.
+	 * Configures the statement.
 	 * @param maxRows max rows
 	 * @param fetchSize fetch size
 	 * @param timeout query timeout
-	 * @return config
 	 */
-	protected DatabaseConfig createDatabaseConfig(int maxRows ,int fetchSize , int timeout){
-		DatabaseConfig config = new DatabaseConfig();
-		config.setFetchSize(fetchSize);
-		config.setMaxRows(maxRows);
-		config.setQueryTimeout(timeout);
-		return config;
+	protected void configure(Statement stmt,int maxRows ,int fetchSize , int timeout)
+	throws SQLException{
+		if(maxRows > 0){
+			stmt.setMaxRows(maxRows);
+		}
+		if(fetchSize > 0){
+			stmt.setFetchSize(fetchSize);
+		}
+		if(timeout > 0){
+			stmt.setQueryTimeout(timeout);
+		}
+	}
+	
+	/**
+	 * Set parameters to the statement.
+	 * @param statement the statement
+	 * @param bind the bind target
+	 * @throws SQLException
+	 */
+	private void setParameter(PreparedStatement statement, List<Object> bind) throws SQLException{
+		for(int i = 0 ; i < bind.size() ; i++){
+			Object value = bind.get(i);				
+			converter.setParameter(i+1, value, statement);			
+		}		
 	}
 
 }

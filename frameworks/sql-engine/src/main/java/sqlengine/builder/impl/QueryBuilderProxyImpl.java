@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import sqlengine.builder.PreparedQuery;
 import sqlengine.builder.QueryBuilder;
 
 
@@ -73,20 +74,11 @@ public class QueryBuilderProxyImpl implements QueryBuilder{
 	}
 
 	/**
-	 * @see sqlengine.builder.QueryBuilder#replaceToPreparedSql(java.lang.String, java.util.Map, java.util.List, java.lang.String)
+	 * @see sqlengine.builder.QueryBuilder#prepare(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public String replaceToPreparedSql(String originalSql, List<Map<String, Object>> parameter,
-			List<List<Object>> bindList, String queryId) {
-		return delegate.replaceToPreparedSql(originalSql, parameter, bindList, queryId);
-	}
-
-	/**
-	 * @see sqlengine.builder.QueryBuilder#setCount(java.lang.String)
-	 */
-	@Override
-	public String setCount(String sql) {
-		return delegate.setCount(sql);
+	public PreparedQuery prepare(String originalSql, List<Map<String, Object>> parameter,String queryId) {
+		return delegate.prepare(originalSql, parameter, queryId);
 	}
 
 }

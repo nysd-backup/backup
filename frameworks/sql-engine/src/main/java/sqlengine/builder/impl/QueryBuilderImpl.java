@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import sqlengine.builder.ConstAccessor;
+import sqlengine.builder.PreparedQuery;
 import sqlengine.builder.QueryBuilder;
 import sqlengine.builder.TemplateEngine;
 import sqlengine.exception.QueryException;
@@ -99,23 +101,18 @@ public class QueryBuilderImpl implements QueryBuilder{
 	}
 
 	/**
-	 * @see sqlengine.builder.QueryBuilder#setCount(java.lang.String)
+	 * @see sqlengine.builder.QueryBuilder#prepare(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public String setCount(String sql) {
-		return String.format("select count(*) from (%s)",sql);
-	}
+	public PreparedQuery prepare(String sql , List<Map<String,Object>> params ,String sqlId){
 
-	/**
-	 * @see sqlengine.builder.QueryBuilder#replaceToPreparedSql(java.lang.String, java.util.Map, java.util.List, java.lang.String)
-	 */
-	@Override
-	public String replaceToPreparedSql(String sql , List<Map<String,Object>> params ,List<List<Object>> bindList,String sqlId){
-
-		if(params.isEmpty() || bindList.isEmpty()){
+		List<List<Object>> bindList = new ArrayList<List<Object>>();
+		if(params.isEmpty()){
 			throw new IllegalArgumentException("parameter is required");
 		}
-		
+		for(int i = 0; i <params.size();i++){
+			bindList.add(new ArrayList<Object>());
+		}
 		final StringBuffer buff = new StringBuffer(sql.length());
 
 		// バインド変数を検索
@@ -128,7 +125,7 @@ public class QueryBuilderImpl implements QueryBuilder{
 			String question = null;
 			
 			for(int i = 0 ; i < params.size(); i ++){
-				Map<String,Object> map = params.get(i);
+				Map<String,Object> map = params.get(i);				
 				List<Object> binds = bindList.get(i);
 				
 				Object variable = null;
@@ -192,9 +189,9 @@ public class QueryBuilderImpl implements QueryBuilder{
 		
 		match.appendTail(buff);
 		
-		String firingSql = buff.toString();
-
-		return firingSql;
+		String preparedSql = buff.toString();
+		return new PreparedQuery(preparedSql,bindList);
+		
 	}
 
 }

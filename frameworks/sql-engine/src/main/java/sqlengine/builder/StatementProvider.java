@@ -5,8 +5,6 @@ package sqlengine.builder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Provides the <code>Statement</code>
@@ -25,25 +23,6 @@ public interface StatementProvider {
 	 * @param sql the SQL
 	 * @return the statement
 	 */
-	PreparedStatement createStatement(String sqlId,Connection con ,String sql ,DatabaseConfig config);
-	
-	/**
-	 * Creates the statement.
-	 * For {@link PreparedStatement#executeBatch()}.
-	 * 
-	 * @param sqlId the queryId
-	 * @param con the connection
-	 * @param sql the SQL
-	 * @return the statement
-	 */
-	PreparedStatement buildStatement(String sqlId,Connection con ,String sql ,List<Object> bindList ,DatabaseConfig config) throws SQLException;
-	
-	/**
-	 * Binds the parameter to statement.
-	 * 
-	 * @param statement the statement
-	 * @param bind the binding value
-	 */
-	void setBindParameter(PreparedStatement statement , List<Object> bind ) throws SQLException;
+	PreparedStatement createStatement(String sqlId,Connection con ,String sql);
 
 }

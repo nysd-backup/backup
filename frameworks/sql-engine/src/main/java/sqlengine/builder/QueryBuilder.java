@@ -41,16 +41,8 @@ public interface QueryBuilder {
 	 * @param queryId the queryId
 	 * @return the replaced SQL
 	 */
-	String replaceToPreparedSql(String originalSql,List<Map<String,Object>> parameter,List<List<Object>> bindList, String queryId);
+	PreparedQuery prepare(String originalSql,List<Map<String,Object>> parameter, String queryId);
 
-	
-	/**
-	 * Convert the SQL to get count.
-	 * 
-	 * @param sql the SQL
-	 * @return the SQL
-	 */
-	String setCount(String sql);
 }
 
 

@@ -21,7 +21,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			<aop:around pointcut-ref="sqlBuilderPtct" method="around"/>
 		</aop:aspect>
 		<aop:aspect id="stmtBuilderAspect" ref="stmtBuilderAdvice">	
-			<aop:pointcut expression="execution(* sqlengine.builder.QueryBuilder.replaceToPreparedSql(..))" id="stmtBuilderPtct"/>	
+			<aop:pointcut expression="execution(* sqlengine.builder.QueryBuilder.prepare(..))" id="stmtBuilderPtct"/>	
 			<aop:around pointcut-ref="stmtBuilderPtct" method="around"/>
 		</aop:aspect>
 	</aop:config>

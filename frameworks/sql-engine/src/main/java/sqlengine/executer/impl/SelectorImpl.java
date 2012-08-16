@@ -20,12 +20,24 @@ import sqlengine.executer.Selector;
  */
 public class SelectorImpl implements Selector{
 
+
 	/**
-	 * @see sqlengine.executer.Selector#select(java.sql.PreparedStatement)
+	 * @see sqlengine.executer.Selector#select(java.sql.PreparedStatement, int)
 	 */
 	@Override
-	public ResultSet select(PreparedStatement stmt) throws SQLException {
-		return stmt.executeQuery();
+	public ResultSet select(PreparedStatement stmt,int startPosition) throws SQLException {
+		ResultSet rs =  stmt.executeQuery();
+		if(startPosition <= 0){
+			return rs;
+		}
+		if(rs.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE ){
+			rs.absolute(startPosition);
+		}else{
+			for(int i=0; i < startPosition;i++){
+				rs.next();
+			}
+		}		
+		return rs;
 	}
 
 }

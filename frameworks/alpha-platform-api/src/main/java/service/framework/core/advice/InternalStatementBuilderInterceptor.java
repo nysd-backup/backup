@@ -44,7 +44,7 @@ public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 		if(ignoreList.contains(contextInvoker.getArgs()[0])){
 			return contextInvoker.proceed();
 		}else{
-			if(contextInvoker.getArgs().length == 4 ){		
+			if(contextInvoker.getArgs().length == 3 ){		
 				Object value = contextInvoker.proceed();
 				List<List<Object>> bindList = (List<List<Object>>)contextInvoker.getArgs()[2];
 				StringBuilder builder = new StringBuilder();

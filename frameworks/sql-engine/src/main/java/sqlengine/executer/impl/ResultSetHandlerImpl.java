@@ -38,13 +38,14 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	 * @see sqlengine.executer.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, sqlengine.executer.RecordFilter, int, int)
 	 */
 	@Override
-	public QueryResult getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize,int offset)
+	public QueryResult getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize)
 	throws SQLException{ 
 
 		int hitCount = 0;
 		List<Object> result = new ArrayList<Object>();			
 		boolean limitted = false;
 		RecordHandler handler = factory.create(resultType, resultSet);
+		int startPosition = resultSet.getRow();		
 		while (resultSet.next()) {
 			hitCount++;			
 			//最大件数超過していたら終了
@@ -53,7 +54,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 					limitted = true;	
 					if(resultSet.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
 						resultSet.last();
-						hitCount = resultSet.getRow() - offset;						
+						hitCount = resultSet.getRow() - startPosition;						
 						break;
 					}else{
 						continue;
@@ -92,22 +93,6 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 			result.add(row);
 		}
 		return result;
-	}
-
-	/**
-	 * @see sqlengine.executer.ResultSetHandler#skip(java.sql.ResultSet, int)
-	 */
-	@Override
-	public void skip(ResultSet rs, int firstResult) throws SQLException {
-		if(firstResult > 0 ){	
-			if(rs.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE ){
-				rs.absolute(firstResult);
-			}else{
-				for(int i=0; i < firstResult;i++){
-					rs.next();
-				}
-			}				
-		}
 	}
 	
 }
