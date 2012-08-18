@@ -7,7 +7,7 @@ import java.util.List;
 
 import client.sql.free.FreeReadQueryParameter;
 import client.sql.free.FreeModifyQueryParameter;
-import client.sql.free.NativeResult;
+import client.sql.free.HitData;
 
 
 
@@ -40,7 +40,7 @@ public interface InternalQuery {
 	/**
 	 * @return the total result
 	 */
-	NativeResult getTotalResult(FreeReadQueryParameter param);
+	HitData getTotalResult(FreeReadQueryParameter param);
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>

@@ -151,7 +151,7 @@ public abstract class AbstractCoreService{
 	 *  
 	 * ◆総件数取得検索（ページング用など）
 	 * OrderQuery query = createQuery(OrderQuery.class);
-	 * TotalResult result = query.setOrderCount(10).setOrderCategory("A").getTotalResult();
+	 * TotalData result = query.setOrderCount(10).setOrderCategory("A").getTotalResult();
 	 * boolean limited = result.isLimited();	--上限件数を超過していた場合のみtrue	
 	 * List&ltOrderResult&gt = result.getResultList();	--条件件数までのデータのみ格納
 	 * long hitCount = result.getHitCount();--実際にヒットした件数

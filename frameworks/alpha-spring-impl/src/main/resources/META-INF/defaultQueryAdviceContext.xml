@@ -17,16 +17,16 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<aop:config>
 		<aop:aspect id="sqlBuilderAspect" ref="sqlBuilderAdvice">	
-			<aop:pointcut expression="execution(* sqlengine.builder.QueryBuilder.evaluate(..))" id="sqlBuilderPtct"/>	
+			<aop:pointcut expression="execution(* sqlengine.strategy.QueryBuilder.evaluate(..))" id="sqlBuilderPtct"/>	
 			<aop:around pointcut-ref="sqlBuilderPtct" method="around"/>
 		</aop:aspect>
 		<aop:aspect id="stmtBuilderAspect" ref="stmtBuilderAdvice">	
-			<aop:pointcut expression="execution(* sqlengine.builder.QueryBuilder.prepare(..))" id="stmtBuilderPtct"/>	
+			<aop:pointcut expression="execution(* sqlengine.strategy.QueryBuilder.prepare(..))" id="stmtBuilderPtct"/>	
 			<aop:around pointcut-ref="stmtBuilderPtct" method="around"/>
 		</aop:aspect>
 	</aop:config>
 
-	<bean id="sqlBuilderLog" class="service.framework.core.advice.InternalSQLBuilderInterceptor" />
+	<bean id="sqlBuilderLog" class="service.framework.core.advice.InternalQueryBuilderInterceptor" />
 	<bean id="sqlBuilderAdvice" class="service.framework.core.advice.DelegatingInterceptor">
 		<property name="internal" ref="sqlBuilderLog"/>
 	</bean>	

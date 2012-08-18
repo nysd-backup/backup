@@ -39,6 +39,13 @@ public abstract class AbstractFreeModifyQuery {
 	}
 	
 	/**
+	 * @param format the format string
+	 */
+	public void wrapClause(String format){
+		this.parameter.setWrapClause(format);
+	}
+	
+	/**
 	 * @return the internalQuery
 	 */
 	protected InternalQuery getInternalQuery(){

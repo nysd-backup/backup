@@ -23,7 +23,7 @@ import service.test.SampleNativeUpdate;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import client.sql.free.NativeResult;
+import client.sql.free.HitData;
 import client.sql.free.QueryCallback;
 import client.sql.free.QueryFactory;
 import client.sql.orm.CriteriaQueryFactory;
@@ -235,7 +235,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,per);
 		query.setEntityManager(per);
 		query.setMaxResults(1);
-		NativeResult result = query.getTotalResult();
+		HitData result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertTrue(result.isLimited());
 		assertEquals(1,result.getResultList().size());

@@ -19,7 +19,7 @@ public abstract class AbstractNativeReadQuery extends AbstractFreeReadQuery{
 	 * Gets the total result.
 	 * @return the result
 	 */
-	public NativeResult getTotalResult() {
+	public HitData getTotalResult() {
 		return getInternalQuery().getTotalResult(getParameter());
 	}
 	

@@ -16,22 +16,22 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="sqlBuilder" class="sqlengine.builder.impl.QueryBuilderProxyImpl" />	
+  	<bean id="queryBuilder" class="sqlengine.strategy.impl.QueryBuilderProxyImpl" />	
 
 	<!-- Statement作成 -->
-	<bean id="statementProvider" class="sqlengine.builder.impl.StatementProviderImpl"/>		  	
+	<bean id="statementProvider" class="sqlengine.strategy.impl.StatementProviderImpl"/>		  	
 
 	<bean id="sqlExceptionHandler" class="client.sql.free.SQLExceptionHandlerImpl"/>
 
-	<bean id="queryExecutor" class="sqlengine.facade.impl.QueryExecutorImpl">
-		<property name="sqlBuilder" ref="sqlBuilder"/>
+	<bean id="queryService" class="sqlengine.service.impl.QueryServiceImpl">
+		<property name="queryBuilder" ref="queryBuilder"/>
 		<property name="provider" ref="statementProvider"/>
 		<property name="exceptionHandler" ref="sqlExceptionHandler" />
 	</bean>
 	
 	<!-- 内部クエリ -->
 	<bean id="internalNativeQuery" class="client.sql.free.strategy.InternalNativeQueryImpl" scope="prototype" >
-		<property name="queryExecutor" ref="queryExecutor"/>		
+		<property name="queryService" ref="queryService"/>		
 	</bean>
 	
 	<bean id="batchUpdateFactory" class="client.sql.free.BatchModifyQueryFactoryImpl" scope="prototype" >

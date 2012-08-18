@@ -16,7 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
-import sqlengine.builder.ConstCache;
+import sqlengine.domain.ConstantCache;
 
 
 /**
@@ -52,10 +52,10 @@ public abstract class ServiceUnit extends Assert{
 					continue;
 				}
 				Object value = f.get(null);
-				if( ConstCache.containsKey(f.getName())){
+				if( ConstantCache.containsKey(f.getName())){
 					throw new IllegalArgumentException(" duplicate filed name = " + f.getName());
 				}else{
-					ConstCache.put(f.getName(), value);
+					ConstantCache.put(f.getName(), value);
 				}
 			}
 		}catch(Exception e){
@@ -68,7 +68,7 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	@AfterClass
     public static void close() throws Exception {
-		ConstCache.destroy();
+		ConstantCache.destroy();
 		container.close();
 	}
 

@@ -16,16 +16,16 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="sqlBuilder" class="sqlengine.builder.impl.QueryBuilderProxyImpl" />
+  	<bean id="queryBuilder" class="sqlengine.strategy.impl.QueryBuilderProxyImpl" />
   	
   	<!-- 内部Namedクエリ -->
 	<bean id="internalNamedQuery" class="client.sql.elink.free.strategy.InternalNamedQueryImpl" scope="prototype" >
-		<property name="sqlBuilder" ref="sqlBuilder"/>			
+		<property name="queryBuilder" ref="queryBuilder"/>			
 	</bean>	
 	
 	<!-- 内部Nativeクエリ -->
 	<bean id="internalNativeQuery" class="client.sql.elink.free.strategy.InternalNativeQueryImpl" scope="prototype" >		
-		<property name="sqlBuilder" ref="sqlBuilder"/>			
+		<property name="queryBuilder" ref="queryBuilder"/>			
 	</bean>
 	
 	<!-- クエリファクトリ開発者 -->

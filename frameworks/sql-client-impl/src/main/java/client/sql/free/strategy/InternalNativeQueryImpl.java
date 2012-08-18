@@ -7,17 +7,17 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import sqlengine.executer.RecordFilter;
-import sqlengine.facade.QueryExecutor;
-import sqlengine.facade.QueryParameter;
-import sqlengine.facade.QueryResult;
-import sqlengine.facade.SelectParameter;
-import sqlengine.facade.UpsertParameter;
+import sqlengine.domain.TotalData;
+import sqlengine.service.QueryService;
+import sqlengine.service.QueryRequest;
+import sqlengine.service.ReadingRequest;
+import sqlengine.service.ModifyingRequest;
+import sqlengine.strategy.RecordFilter;
 import client.sql.EngineHints;
 import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.FreeQueryParameter;
 import client.sql.free.FreeReadQueryParameter;
-import client.sql.free.NativeResult;
+import client.sql.free.HitData;
 
 
 
@@ -29,23 +29,23 @@ import client.sql.free.NativeResult;
  */
 public class InternalNativeQueryImpl implements InternalQuery{
 	
-	/** the facade of SQLEngine */
-	private QueryExecutor facade;
+	/** the gateway of SQLEngine */
+	private QueryService gateway;
 
 	/**
-	 * @param facade the facade to set
+	 * @param gateway the gateway to set
 	 */
-	public void setQueryExecutor(QueryExecutor facade){
-		this.facade = facade;
+	public void setQueryService(QueryService gateway){
+		this.gateway = gateway;
 	}
 	
 	/**
 	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeReadQueryParameter param){
-		QueryResult result = facade.executeTotalQuery(createQueryParameter(param), getConnection(param));
-		return new NativeResult(result.isLimited(), result.getResultList(), result.getHitCount());
+	public HitData getTotalResult(FreeReadQueryParameter param){
+		TotalData result = gateway.executeTotalQuery(createQueryParameter(param), getConnection(param));
+		return new HitData(result.isLimited(), result.getResultList(), result.getHitCount());
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public <T> List<T> getFetchResult(FreeReadQueryParameter param){
-		return facade.executeFetch(createQueryParameter(param), getConnection(param));		
+		return gateway.executeFetch(createQueryParameter(param), getConnection(param));		
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public long count(FreeReadQueryParameter param){
-		return facade.executeCount(createParameter(new SelectParameter(),param), getConnection(param));
+		return gateway.executeCount(createParameter(new ReadingRequest(),param), getConnection(param));
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public <T> List<T> getResultList(FreeReadQueryParameter param){
-		return facade.executeQuery(createQueryParameter(param), getConnection(param));	
+		return gateway.executeQuery(createQueryParameter(param), getConnection(param));	
 	}
 	
 	/**
@@ -91,14 +91,14 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public int executeUpdate(FreeModifyQueryParameter param){
-		return facade.executeUpsert(createParameter(new UpsertParameter(),param), getConnection(param));
+		return gateway.executeUpsert(createParameter(new ModifyingRequest(),param), getConnection(param));
 	}
 	
 	/**
 	 * @return the parameter
 	 */
-	private SelectParameter createQueryParameter(final FreeReadQueryParameter param){
-		SelectParameter parameter = createParameter(new SelectParameter(),param);
+	private ReadingRequest createQueryParameter(final FreeReadQueryParameter param){
+		ReadingRequest parameter = createParameter(new ReadingRequest(),param);
 		parameter.setMaxSize(param.getMaxSize());
 		parameter.setFirstResult(param.getFirstResult());
 		parameter.setResultType(param.getResultType());
@@ -125,9 +125,10 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 * @param parameter the parameter
 	 * @return the result
 	 */
-	private <S extends QueryParameter> S createParameter(S parameter,FreeQueryParameter param){
+	private <S extends QueryRequest> S createParameter(S parameter,FreeQueryParameter param){
 		parameter.setSqlId(param.getQueryId());
-		parameter.setSql(param.getSql());		
+		parameter.setSql(param.getSql());	
+		parameter.setWrapClause(param.getWrapClause());
 
 		if(param.getHints().containsKey(EngineHints.SQLENGINE_JDBC_TIMEOUT)){
 			parameter.setTimeoutSeconds((Integer)param.getHints().get(EngineHints.SQLENGINE_JDBC_TIMEOUT));
@@ -142,16 +143,16 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	 */
 	@Override
 	public int[] executeBatch(List<FreeModifyQueryParameter> param) {
-		List<UpsertParameter> engineParams = new ArrayList<UpsertParameter>();
+		List<ModifyingRequest> engineParams = new ArrayList<ModifyingRequest>();
 		for(FreeQueryParameter p: param){
-			UpsertParameter ep = new UpsertParameter();
+			ModifyingRequest ep = new ModifyingRequest();
 			ep.setAllParameter(p.getParam());
 			ep.setSqlId(p.getQueryId());
 			ep.setSql(p.getSql());
 			ep.setUseRowSql(p.isUseRowSql());		
 			engineParams.add(ep);
 		}				
-		return facade.executeBatch(engineParams, getConnection(param.get(0)));
+		return gateway.executeBatch(engineParams, getConnection(param.get(0)));
 	}
 	
 	/**

@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import service.framework.core.activation.ServiceLocator;
 import service.framework.core.activation.ServiceLocatorImpl;
-import sqlengine.builder.ConstCache;
+import sqlengine.domain.ConstantCache;
 import core.logics.log.LogWriter;
 import core.logics.log.LogWriterFactory;
 
@@ -97,10 +97,10 @@ public abstract class ServiceUnit extends Assert{
 					continue;
 				}
 				Object value = f.get(null);
-				if( ConstCache.containsKey(f.getName())){
+				if( ConstantCache.containsKey(f.getName())){
 					throw new IllegalArgumentException(" duplicate filed name = " + f.getName());
 				}else{
-					ConstCache.put(f.getName(), value);
+					ConstantCache.put(f.getName(), value);
 				}
 			}
 		}catch(Exception e){
@@ -218,7 +218,7 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	@After
 	public void afterTest(){
-		ConstCache.destroy();
+		ConstantCache.destroy();
 		context.release();
 		
 	}

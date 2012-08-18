@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
 
 import javax.persistence.Query;
 
-import sqlengine.builder.ConstAccessor;
-import sqlengine.builder.QueryBuilder;
-import sqlengine.builder.impl.ConstAccessorImpl;
+import sqlengine.strategy.ConstantAccessor;
+import sqlengine.strategy.QueryBuilder;
+import sqlengine.strategy.impl.ConstantAccessorImpl;
 import client.sql.free.FreeQueryParameter;
 import client.sql.free.FreeReadQueryParameter;
 import client.sql.free.FreeModifyQueryParameter;
-import client.sql.free.NativeResult;
+import client.sql.free.HitData;
 import client.sql.free.strategy.InternalQuery;
 
 
@@ -35,20 +35,20 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	/** the <code>QueryBuilder</code> */
 	private QueryBuilder builder;
 	
-	/** the <code>ConstAccessor</code> */
-	private ConstAccessor accessor = new ConstAccessorImpl();
+	/** the <code>ConstantAccessor</code> */
+	private ConstantAccessor accessor = new ConstantAccessorImpl();
 	
 	/**
 	 * @param builder the builder to set
 	 */
-	public void setSqlBuilder(QueryBuilder builder){
+	public void setQueryBuilder(QueryBuilder builder){
 		this.builder = builder;
 	}
 
 	/**
 	 * @param accessor the accessor to set
 	 */
-	public void setConstAccessor(ConstAccessor accessor){
+	public void setConstAccessor(ConstantAccessor accessor){
 		this.accessor = accessor;
 	}
 	
@@ -188,7 +188,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(FreeReadQueryParameter param){
+	public HitData getTotalResult(FreeReadQueryParameter param){
 		throw new UnsupportedOperationException();
 	}
 

@@ -12,13 +12,13 @@ import javax.persistence.EntityManager;
 
 import service.client.messaging.MessageProducerImpl;
 import service.framework.core.advice.InternalPerfInterceptor;
-import service.framework.core.advice.InternalSQLBuilderInterceptor;
+import service.framework.core.advice.InternalQueryBuilderInterceptor;
 import service.framework.core.advice.ProxyFactory;
 import service.framework.core.async.AsyncService;
 import service.framework.core.async.AsyncServiceImpl;
 import service.framework.core.exception.BusinessException;
-import sqlengine.builder.QueryBuilder;
-import sqlengine.builder.impl.QueryBuilderProxyImpl;
+import sqlengine.strategy.QueryBuilder;
+import sqlengine.strategy.impl.QueryBuilderProxyImpl;
 import client.sql.elink.free.strategy.InternalNamedQueryImpl;
 import client.sql.elink.free.strategy.InternalNativeQueryImpl;
 import client.sql.elink.orm.strategy.JPQLStatementBuilderImpl;
@@ -121,10 +121,9 @@ public class ServiceLocatorImpl extends ServiceLocator{
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
 		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
 		
-		QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, new QueryBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
-		named.setSqlBuilder(builder);
-				
-		ntv.setSqlBuilder(builder);
+		QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, new QueryBuilderProxyImpl(), new InternalQueryBuilderInterceptor(),"evaluate");		
+		named.setQueryBuilder(builder);				
+		ntv.setQueryBuilder(builder);
 		
 		InternalQuery namedQuery =  ProxyFactory.create(InternalQuery.class, named, new InternalPerfInterceptor(),"*");		
 		InternalQuery nativeQuery =  ProxyFactory.create(InternalQuery.class, ntv, new InternalPerfInterceptor(),"*");		
@@ -148,8 +147,8 @@ public class ServiceLocatorImpl extends ServiceLocator{
 		InternalOrmQueryImpl dao = new InternalOrmQueryImpl();		
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();	
 		//インターセプターを設定する
-		QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, new QueryBuilderProxyImpl(), new InternalSQLBuilderInterceptor(),"evaluate");		
-		named.setSqlBuilder(builder);
+		QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, new QueryBuilderProxyImpl(), new InternalQueryBuilderInterceptor(),"evaluate");		
+		named.setQueryBuilder(builder);
 		dao.setInternalQuery(named);		
 		dao.setSqlStatementBuilder(new JPQLStatementBuilderImpl());
 		impl.setInternalOrmQuery(dao);

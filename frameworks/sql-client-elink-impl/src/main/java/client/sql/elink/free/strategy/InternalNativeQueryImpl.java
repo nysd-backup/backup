@@ -17,24 +17,24 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
-import sqlengine.builder.PreparedQuery;
-import sqlengine.builder.QueryBuilder;
+import sqlengine.domain.PreparedQuery;
+import sqlengine.domain.TotalData;
 import sqlengine.exception.ExceptionHandler;
-import sqlengine.executer.RecordFilter;
-import sqlengine.executer.RecordHandlerFactory;
-import sqlengine.executer.ResultSetHandler;
-import sqlengine.executer.impl.RecordHandlerFactoryImpl;
-import sqlengine.executer.impl.ResultSetHandlerImpl;
-import sqlengine.facade.QueryExecutor;
-import sqlengine.facade.QueryResult;
-import sqlengine.facade.UpsertParameter;
-import sqlengine.facade.impl.QueryExecutorImpl;
+import sqlengine.service.QueryService;
+import sqlengine.service.ModifyingRequest;
+import sqlengine.service.impl.QueryServiceImpl;
+import sqlengine.strategy.QueryBuilder;
+import sqlengine.strategy.RecordFilter;
+import sqlengine.strategy.RecordHandlerFactory;
+import sqlengine.strategy.ResultSetHandler;
+import sqlengine.strategy.impl.RecordHandlerFactoryImpl;
+import sqlengine.strategy.impl.ResultSetHandlerImpl;
 import client.sql.elink.free.LazyList;
 import client.sql.elink.free.SQLExceptionHandlerImpl;
 import client.sql.free.FreeModifyQueryParameter;
 import client.sql.free.FreeQueryParameter;
 import client.sql.free.FreeReadQueryParameter;
-import client.sql.free.NativeResult;
+import client.sql.free.HitData;
 import client.sql.free.ResultSetFilter;
 import client.sql.free.strategy.InternalQuery;
 
@@ -63,20 +63,20 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	/** the ExceptionHandler */
 	private ExceptionHandler exceptionHandler = new SQLExceptionHandlerImpl();
 	
-	/** the engine facade */
-	private QueryExecutor queryExecutor = new QueryExecutorImpl();
+	/** the engine gateway */
+	private QueryService queryService = new QueryServiceImpl();
 	
 	/**
-	 * @param facade the facade to set
+	 * @param gateway the gateway to set
 	 */
-	public void setQueryExecutor(QueryExecutor queryExecutor){
-		this.queryExecutor = queryExecutor;
+	public void setQueryService(QueryService queryService){
+		this.queryService = queryService;
 	}
 
 	/**
 	 * @param builder the builder to set
 	 */
-	public void setSqlBuilder(QueryBuilder builder){
+	public void setQueryBuilder(QueryBuilder builder){
 		this.builder = builder;
 	}
 	
@@ -133,13 +133,13 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 * @see client.sql.free.strategy.InternalQuery#getTotalResult(client.sql.free.FreeReadQueryParameter)
 	 */
 	@Override
-	public NativeResult getTotalResult(final FreeReadQueryParameter parameter) {
+	public HitData getTotalResult(final FreeReadQueryParameter parameter) {
 
 		RecordFilter filter = createRecordFilter(parameter);
 		Query query = mapping(parameter,createQuery(parameter));
 		query.setMaxResults(0);
 		
-		QueryResult result;
+		TotalData result;
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();		
 		try {		
 			ResultSet rs = cursor.getResultSet();
@@ -149,7 +149,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		}finally{
 			cursor.close();
 		}
-		return new NativeResult(result.isLimited(),result.getResultList(),result.getHitCount());
+		return new HitData(result.isLimited(),result.getResultList(),result.getHitCount());
 		
 	}
 	
@@ -176,7 +176,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	 */
 	protected Query createQuery(FreeReadQueryParameter param) {
 		PreparedQuery preparedQuery = prepare(param);		
-		Query query = param.getName() != null ? createNamedQuery(preparedQuery.getStatement(), param) : param.getEntityManager().createNativeQuery(preparedQuery.getStatement());
+		Query query = param.getName() != null ? createNamedQuery(preparedQuery.getQueryStatement(), param) : param.getEntityManager().createNativeQuery(preparedQuery.getQueryStatement());
 		return bindParmaeterToQuery(query, preparedQuery.getFirstList());			
 	}
 	
@@ -210,9 +210,8 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	public long count(FreeReadQueryParameter param){		
 
 		PreparedQuery preparedQuery = prepare(param);
-		
 		//countの場合は範囲設定無効とする。
-		String executingSql = String.format("select count(*) from (%s)",preparedQuery.getStatement());
+		String executingSql = preparedQuery.getQueryStatement();
 		Query query = param.getName() != null ? createNamedQuery(executingSql,param) : param.getEntityManager().createNativeQuery(executingSql);
 		query = bindParmaeterToQuery(query, preparedQuery.getFirstList());	
 		
@@ -236,7 +235,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 			}
 		}else {
 			PreparedQuery preparedQuery = prepare(param);
-			query = param.getEntityManager().createNativeQuery(preparedQuery.getStatement());
+			query = param.getEntityManager().createNativeQuery(preparedQuery.getQueryStatement());
 			query = bindParmaeterToQuery(query, preparedQuery.getFirstList());		
 		}			
 		
@@ -280,7 +279,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 			str = builder.build(param.getQueryId(), str);
 			str = builder.evaluate(str, param.getParam(),param.getQueryId());
 		}			
-		return builder.prepare(str, Arrays.asList(param.getParam()),param.getQueryId());			
+		return builder.prepare(str, Arrays.asList(param.getParam()),param.getWrapClause(),param.getQueryId());			
 	}
 	
 	/**
@@ -324,9 +323,9 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		
 		//TODO 要検証		
 		
-		List<UpsertParameter> engineParams = new ArrayList<UpsertParameter>();
+		List<ModifyingRequest> engineParams = new ArrayList<ModifyingRequest>();
 		for(FreeQueryParameter p: param){
-			UpsertParameter ep = new UpsertParameter();
+			ModifyingRequest ep = new ModifyingRequest();
 			ep.setAllParameter(p.getParam());		
 			ep.setSqlId(p.getQueryId());
 			ep.setSql(p.getSql());
@@ -340,7 +339,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		
 		Connection con = param.get(0).getEntityManager().unwrap(Connection.class);
 		
-		return queryExecutor.executeBatch(engineParams, con);
+		return queryService.executeBatch(engineParams, con);
 		
 	}
 

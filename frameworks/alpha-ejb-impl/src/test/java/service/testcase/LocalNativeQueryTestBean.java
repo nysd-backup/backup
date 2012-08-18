@@ -15,7 +15,7 @@ import service.query.SampleNativeQuery;
 import service.query.SampleNativeQueryConst;
 import service.query.SampleNativeResult;
 import service.query.SampleNativeUpdate;
-import client.sql.free.NativeResult;
+import client.sql.free.HitData;
 import client.sql.free.QueryCallback;
 import client.sql.orm.CriteriaReadQuery;
 
@@ -231,7 +231,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setMaxResults(1);
-		NativeResult result = query.getTotalResult();
+		HitData result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertEquals(true,result.isLimited());
 		assertEquals(1,result.getResultList().size());

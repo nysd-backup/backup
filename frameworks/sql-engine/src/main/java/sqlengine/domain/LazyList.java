@@ -1,23 +1,23 @@
 /**
  * Copyright 2011 the original author
  */
-package client.sql.elink.free;
+package sqlengine.domain;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-
-import org.eclipse.persistence.queries.ScrollableCursor;
-
 import sqlengine.exception.ExceptionHandler;
 import sqlengine.strategy.RecordHandler;
 
 
+
 /**
- * The list holiding the <code>ResultSet</code> so as to get next record only when the get(i) is called.
+ * The list holding the <code>ResultSet</code> so as to get next record only when the get(i) is called.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
@@ -25,23 +25,23 @@ import sqlengine.strategy.RecordHandler;
 public class LazyList<E> implements List<E>{
 
 	/** the iterator to fetch */
-	private final ResultSetIterator itr;
+	private final Cursor itr;
 
-	/**
-	 * @param cursor the cursor
-	 * @param rs the rs
-	 * @param handler the handler
-	 */
-	public LazyList(ScrollableCursor cursor ,RecordHandler handler,ExceptionHandler exceptionHandler){
-		this.itr = new ResultSetIterator(cursor,handler,exceptionHandler);
-	}
-	
 	/**
 	 * @see java.lang.Object#finalize()
 	 */
 	@Override
 	public void finalize(){
 		itr.close();
+	}
+	
+	/**
+	 * @param rs the rs
+	 * @param handler the handler
+	 * @param exceptionHandler the exceptionHandler
+	 */
+	public LazyList(ResultSet rs, RecordHandler handler,ExceptionHandler exceptionHandler){
+		this.itr = new Cursor(rs, handler,exceptionHandler);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class LazyList<E> implements List<E>{
 	 */
 	@Override
 	public boolean isEmpty() {
-		throw new UnsupportedOperationException();	
+		throw new UnsupportedOperationException();				
 	}
 
 	/**
@@ -228,33 +228,62 @@ public class LazyList<E> implements List<E>{
 		throw new UnsupportedOperationException();
 	}
 	
-	
-	private class ResultSetIterator implements Iterator<E>{
+	private class Cursor implements Iterator<E>{
+
+		/** the result set */
+		private final ResultSet rs;
 		
-		/** the cursor */
-		private final ScrollableCursor cursor;
- 		
+		/** the record handler */
 		private final RecordHandler handler;
-
+		
 		private final ExceptionHandler exceptionHandler;
-				
-		public ResultSetIterator(ScrollableCursor cursor,RecordHandler handler,ExceptionHandler exceptionHandler){
-			this.cursor = cursor;
+		
+		public Cursor(ResultSet rs ,RecordHandler handler,ExceptionHandler exceptionHandler){
+			this.rs = rs;
 			this.handler = handler;
-			this.exceptionHandler = exceptionHandler;
+			this.exceptionHandler =exceptionHandler ;
 		}
-
+		
+		/**
+		 * Closes the statement and result set
+		 */
+		public void close(){
+	
+			if(rs != null){
+				Statement stmt = null;
+				try{
+					stmt = rs.getStatement();
+				} catch (SQLException e) {
+				}
+				try{
+					if(!rs.isClosed()){
+						rs.close();
+					}
+				} catch (SQLException e) {
+				}finally{
+					try{
+						if(stmt != null && !stmt.isClosed()){
+							stmt.close();
+						}
+					}catch(SQLException sqle){
+					}					
+				}
+			}
+			
+		}
+		
 		/**
 		 * @see java.util.Iterator#hasNext()
 		 */
 		@Override
-		public boolean hasNext() {
+		public boolean hasNext() {			
+			
 			try{
-				boolean result = cursor.getResultSet().next();
-				if(!result){					
-					close();					
+				boolean hasNext = rs.next();
+				if(!hasNext){
+					close();
 				}
-				return result;
+				return hasNext;
 			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
@@ -274,7 +303,7 @@ public class LazyList<E> implements List<E>{
 		@Override
 		public E next() {
 			try{
-				return (E)handler.getRecord(cursor.getResultSet());
+				return (E)handler.getRecord(rs);
 			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
@@ -293,13 +322,6 @@ public class LazyList<E> implements List<E>{
 		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();			
-		}
-		
-		/**
-		 * Close the cursor
-		 */
-		public void close(){
-			cursor.close();
 		}
 		
 	}

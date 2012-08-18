@@ -87,6 +87,7 @@ public abstract class AbstractFreeReadQuery{
 	 * @return the hit count
 	 */
 	public long count() {
+		condition.setWrapClause("select count(*) from (%s)");
 		return internalQuery.count(condition);
 	}
 

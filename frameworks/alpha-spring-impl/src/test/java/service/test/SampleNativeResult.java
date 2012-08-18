@@ -5,7 +5,7 @@ package service.test;
 
 import java.util.HashMap;
 
-import sqlengine.executer.AccessorDeclared;
+import sqlengine.domain.AccessorDeclared;
 
 
 
