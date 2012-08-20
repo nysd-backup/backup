@@ -36,7 +36,7 @@ public abstract class QueryRequest{
 	private int timeoutSeconds = 0;
 	
 	/** the wrappng clause */
-	private String wrapClause = null;
+	private String wrappingClause = null;
 
 	/**
 	 * @param comment the comment to set
@@ -142,15 +142,15 @@ public abstract class QueryRequest{
 	/**
 	 * @return the wrapClause
 	 */
-	public String getWrapClause() {
-		return wrapClause;
+	public String getWrappingClause() {
+		return wrappingClause;
 	}
 
 	/**
 	 * @param wrapClause the wrapClause to set
 	 */
-	public void setWrapClause(String wrapClause) {
-		this.wrapClause = wrapClause;
+	public void setWrappingClause(String wrappingClause) {
+		this.wrappingClause = wrappingClause;
 	}
 
 }

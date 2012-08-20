@@ -26,7 +26,7 @@ public abstract class FreeQueryParameter extends QueryParameter{
 	private String sql = null;
 	
 	/** the SQL to wrap */
-	private String wrapClause = null;
+	private String wrappingClause = null;
 	
 	/** if true dont analyze the template*/
 	private boolean useRowSql = true;
@@ -129,15 +129,15 @@ public abstract class FreeQueryParameter extends QueryParameter{
 	/**
 	 * @return the wrapClause
 	 */
-	public String getWrapClause() {
-		return wrapClause;
+	public String getWrappingClause() {
+		return wrappingClause;
 	}
 
 	/**
 	 * @param wrapClause the wrapClause to set
 	 */
-	public void setWrapClause(String wrapClause) {
-		this.wrapClause = wrapClause;
+	public void setWrappingClause(String wrappingClause) {
+		this.wrappingClause = wrappingClause;
 	}
 
 }

@@ -128,7 +128,7 @@ public class InternalNativeQueryImpl implements InternalQuery{
 	private <S extends QueryRequest> S createParameter(S parameter,FreeQueryParameter param){
 		parameter.setSqlId(param.getQueryId());
 		parameter.setSql(param.getSql());	
-		parameter.setWrapClause(param.getWrapClause());
+		parameter.setWrappingClause(param.getWrappingClause());
 
 		if(param.getHints().containsKey(EngineHints.SQLENGINE_JDBC_TIMEOUT)){
 			parameter.setTimeoutSeconds((Integer)param.getHints().get(EngineHints.SQLENGINE_JDBC_TIMEOUT));

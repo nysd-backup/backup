@@ -39,10 +39,12 @@ public abstract class AbstractFreeModifyQuery {
 	}
 	
 	/**
+	 * Sets the wrapping clause.
 	 * @param format the format string
 	 */
-	public void wrapClause(String format){
-		this.parameter.setWrapClause(format);
+	public <T extends AbstractFreeModifyQuery> T setWrappingClause(String format){
+		this.parameter.setWrappingClause(format);
+		return (T)this;
 	}
 	
 	/**

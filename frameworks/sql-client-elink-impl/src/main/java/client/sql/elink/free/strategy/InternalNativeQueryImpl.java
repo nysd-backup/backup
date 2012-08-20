@@ -279,7 +279,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 			str = builder.build(param.getQueryId(), str);
 			str = builder.evaluate(str, param.getParam(),param.getQueryId());
 		}			
-		return builder.prepare(str, Arrays.asList(param.getParam()),param.getWrapClause(),param.getQueryId());			
+		return builder.prepare(str, Arrays.asList(param.getParam()),param.getWrappingClause(),param.getQueryId());			
 	}
 	
 	/**

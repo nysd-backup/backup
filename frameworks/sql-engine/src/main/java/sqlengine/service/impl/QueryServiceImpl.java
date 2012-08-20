@@ -256,7 +256,7 @@ public class QueryServiceImpl implements QueryService{
 		for(ModifyingRequest p : param){
 			parameters.add(p.getParameter());
 		}
-		PreparedQuery preparedQuery = queryBuilder.prepare(executingSql, parameters,base.getWrapClause(),base.getSqlId());						
+		PreparedQuery preparedQuery = queryBuilder.prepare(executingSql, parameters,base.getWrappingClause(),base.getSqlId());						
 		StatementWrapper stmt = null;
 		
 		try{
@@ -287,7 +287,7 @@ public class QueryServiceImpl implements QueryService{
 			executingSql = queryBuilder.build(param.getSqlId(), executingSql);		
 			executingSql = queryBuilder.evaluate(executingSql, param.getParameter(),param.getSqlId());
 		}						
-		return queryBuilder.prepare(executingSql, Arrays.asList(param.getParameter()),param.getWrapClause(), param.getSqlId());				
+		return queryBuilder.prepare(executingSql, Arrays.asList(param.getParameter()),param.getWrappingClause(), param.getSqlId());				
 	}
 
 	/**

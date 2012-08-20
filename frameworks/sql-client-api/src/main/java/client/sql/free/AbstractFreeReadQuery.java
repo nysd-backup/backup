@@ -83,11 +83,21 @@ public abstract class AbstractFreeReadQuery{
 	}
 	
 	/**
+	 * Sets the wrapping clause
+	 * @param format the caluse
+	 * @return self
+	 */
+	public <T extends AbstractFreeReadQuery> T setWrappingClause(String format){
+		condition.setWrappingClause(format);
+		return (T)this;
+	}
+	
+	/**
 	 * Gets the hit count
 	 * @return the hit count
 	 */
 	public long count() {
-		condition.setWrapClause("select count(*) from (%s)");
+		condition.setWrappingClause("select count(*) from (%s)");
 		return internalQuery.count(condition);
 	}
 
