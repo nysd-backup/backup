@@ -5,7 +5,19 @@
 	<artifactId>framework-base</artifactId>
 	<packaging>pom</packaging>
 	<version>1.1.0-SNAPSHOT</version>
-	<name>フレームワーク</name>
+	<name>Alpha Framework</name>
+	
+	<scm>
+	    <developerConnection>scm:git:git@github.com:judas-i/personal-remote.git</developerConnection>
+	    <url>https://github.com/judas-i/personal-remote/tree/master/frameworks</url>
+	</scm>
+	
+	<distributionManagement>
+    <site>
+      <id>hirobiro.dip.jp.javastudy.pomstudy</id>
+      <url>file://c:/report/${project.groupId}/${project.artifactId}/${project.version}/</url>
+    </site>
+    </distributionManagement>
 
 	<parent>
 		<groupId>alpha</groupId>
@@ -13,6 +25,67 @@
 		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 	
+	<build>
+		<plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-site-plugin</artifactId>
+	        <version>3.1</version>
+	        <configuration>
+	          <locales>en</locales>
+	          <inputEncoding>UTF-8</inputEncoding>
+	          <outputEncoding>UTF-8</outputEncoding>
+	           	<reportPlugins>
+		            <plugin>
+		              <groupId>org.apache.maven.plugins</groupId>
+		              <artifactId>maven-project-info-reports-plugin</artifactId>
+		              <version>2.4</version>
+		              <configuration>
+		                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+		                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>		               
+		                <webAccessUrl>${project.scm.url}</webAccessUrl>
+		              </configuration>
+		              <!-- simpler configuration without reportSets available for usual cases -->
+		              <reports>
+		              	<report>index</report>
+		                <report>dependencies</report>
+		                <report>modules</report>	
+		                <report>scm</report>	                
+		              </reports>
+		            </plugin>
+		            <!--
+		             <plugin>		           
+		              <groupId>org.apache.maven.plugins</groupId>
+		              <artifactId>maven-javadoc-plugin</artifactId>
+		              <version>2.8</version>
+	              		<configuration>
+                		<docencoding>UTF-8</docencoding>
+						<charset>UTF-8</charset>
+						<encoding>UTF-8</encoding>
+            		  </configuration>	              
+		            </plugin>
+		            
+		            <plugin>
+		               <artifactId>maven-surefire-report-plugin</artifactId>		               
+		               <version>2.12.2</version>
+		              	<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-only</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+		            </plugin>	
+		            <plugin>
+				        <groupId>org.codehaus.mojo</groupId>
+				        <artifactId>cobertura-maven-plugin</artifactId>
+				    </plugin>
+				       -->      
+         		</reportPlugins>
+	        </configuration>
+	      </plugin>
+	   </plugins>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
