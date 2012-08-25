@@ -1,0 +1,80 @@
+Complex Read Query
+
+* SQL
+
++-----------------------------------------
+select 
+	  o.item_code		as item_code	--@String
+	, sum(od.sales_price)	as total_price	--@java.math.BigDecimal
+from
+	  order o
+	, order_detail od
+where
+	o.customer_code = :customerCode
+--% if($fromDate && $toDate)
+and 
+	od.order_date between :fromDate and :toDate
+--% end
+and	
+	od.slip_number = od.slipNumber	
+group by 
+	  od.item_code
++-----------------------------------------
+
+* Auto generated argument bean for SQL 
+
++-----------------------------------------
+public class OrderReadQuery extends AbstractNativeReadQuery {
+	
+	public OrderReadQuery() {
+		setSql("@query/Sel_order.sql);
+		setResultType(OrderReadResult.class);
+	}
+	
+	public OrderReadQuery setCustomerCode(Object customerCode){
+		setParameter("customerCode",customerCode);
+		return this;
+	}
+	
+	public OrderReadQuery setToDate(Object toDate){
+		setParameter("toDate",toDate);
+		return this;
+	}
+	
+	public OrderReadQuery setFromDate(Object fromDate){
+		setParameter("fromDate",fromDate);
+		return this;
+	}
+
+}
++-----------------------------------------
+
+* Auto generated result bean for SQL 
+
++-----------------------------------------
+public class OrderReadResult extends LinkedHashMap<String,Object> {
+	
+	public String getItemCode() {
+		return (String)get("itemCode");	
+	}
+	
+	public java.math.BigDecimal getTotalPrice() {
+		return (java.math.BigDecimal)get("totalPrice");	
+	}
+}
++-----------------------------------------
+
+* Client Code
+
++-----------------------------------------
+//@Autowired or ServiceLocator.getQueryFactory() is required.
+private QueryFactory factory;
+
+private EntityManager em;
+
+public void serviceMethod() {
+	OrderReadQuery query = factory.createReadQuery(OrderReadQuery.class,em);
+	List<OrderReadResult) result = query.setCustomerCode("CST001")
+		.setFromDate("20130331").setToDate("20120405").getResultList();
+}
++-----------------------------------------

@@ -145,6 +145,9 @@
 		<poi.version>3.2-FINAL</poi.version>
 		<slf4j.version>1.5.6</slf4j.version>
 		
+		<!-- other -->
+		<project.url>file:///C:/Project/Personal/workspace/gitrepository/personal-remote/frameworks/t</project.url>
+		
 	</properties>
 
 	<profiles>

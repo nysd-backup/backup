@@ -5,7 +5,7 @@
 		<menu name="How to use">
 			<item name="Get start" href="getstart.html"/>
 			<item name="Configuration" href="configuration.html"/>
-			<item name="Showcase" href="showcase.html"/>
+			<item name="Showcase" href="showcase.html"/>				
 		</menu>
 	</body>
 </project>

@@ -1,0 +1,31 @@
+Asynchronous Execution(EJB only)
+
+ This is the Future pattern and using EJB's 'Asynchronous' annotation.
+
+* Client Code
+
++-----------------------------------------
+private AsyncFactory factory;
+
+@PostConsrtuct
+public void construct() {
+	factory = ServiceLocator.getAsyncFactory();
+}
+
+public void serviceMethod() {
+	AnyService service = facotry.createAsyncService(AnyService.class);
+	AnyResult result = service.serviceMethod();
+	
+	//proceed right after invoking the service.serviceMethod().
+	
+	//wait for the asynchronous thread here.
+	String item = result.getItem();
+	
+}
++-----------------------------------------
+ 
+ AnyService and AnyResult can be POJO.
+ 
+  
+	
+	

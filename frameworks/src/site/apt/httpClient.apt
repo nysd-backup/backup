@@ -1,0 +1,41 @@
+HTTP Client
+
+* Server side service
+
+ Must be based on Jerser's specification.
+ 
++-----------------------------------------
+@Path("/item")
+public class AnyService {
+
+	@Cosumes("text/xml");
+	@GET
+	public Item find(@QueryParam("itemCode") String itemCode){
+		//process
+	}
+	
+	@Produces("text/xml")
+	@POST
+	public void update(Items updateTarget){
+		//process
+	}
+}
++-----------------------------------------
+
+* Client Code
+
++-----------------------------------------
+//@Autowired or ServiceLocator.getHTTPClientFactory() is required.
+private HTTPClientFactory factory;
+
+public void serviceMethod() {
+	
+	//find resource from the external server
+	AnyService service = factory.createService(AnyService.class);	
+	Item item = service.find("ITEM001");
+
+	//update resources
+	Items items = new Items(new Item(),new Item());
+	service.update(items);
+}
++-----------------------------------------

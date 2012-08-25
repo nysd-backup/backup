@@ -1,8 +1,7 @@
 Introduction
 
- Alpha Framework extends Java EE 6.
+ 1. Works not only on EJB3.1 but also on Spring Framework 3.0.
  
- Works not only on EJB3.1 but also on Spring Framework 3.0.
+ 2. Almost all the behavior is alternative. Developer can customize easily.
  
- Almost all the behavior is alternative. User can customize easily.
- 
+ 3. Provies simple API for developers.
