@@ -44,8 +44,3 @@ Showcase
  {{{./messageControl.html}By Message}} | Error level messages make current transaction to be rolled back.
 *-----+------+
  {{{./exceptionControl.html}By Exceptionl}} | Exception make current transaction to be rolled back.
-*-----+------+
- {{{./flagControl.html}Force Rollback}} | Enable to make current tansaction to be rolled back.
-*-----+------+
-
-	 

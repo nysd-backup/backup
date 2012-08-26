@@ -2,6 +2,8 @@ Complex Read Query(JPQL)
 
 * JPQL
 
+ condition branch is based on the 'Velocity'.
+
 +-----------------------------------------
 select 
 	 e

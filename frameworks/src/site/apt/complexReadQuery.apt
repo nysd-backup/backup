@@ -1,6 +1,8 @@
 Complex Read Query
 
 * SQL
+ 
+ condition branch is based on the 'Velocity'.
 
 +-----------------------------------------
 select 

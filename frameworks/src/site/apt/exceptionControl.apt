@@ -1,0 +1,40 @@
+Transaction Control by Exception
+
+ BusinessException and SystemException is sub class of RuntimeException.
+
+* Throw the business exception.
+
+	Use service.framework.core.exception.BusinessException on EJB.
+	
+	Use core.exception.BusinessException on SpringFramework.
+
++-----------------------------------------
+//@Autowired or ServiceLocator.getMessageBuilder() is required.
+private MessageBuilder builder;
+
+public Reply serviceMethod() {
+
+	MessageArgument ma1 = new MessageArgument("KEY_OF_MSG",100,200,...);
+	Message message1 = builder.createMessge(ma);
+	
+	MessageArgument ma2 = new MessageArgument("KEY_OF_MSG",100,200,...);
+	Message message2 = builder.createMessge(ma);
+
+	throw new BusinessException(message1,message2,...);
+}
++-----------------------------------------
+
+* Throw the system exception.
+
++-----------------------------------------
+//@Autowired or ServiceLocator.getMessageBuilder() is required.
+private MessageBuilder builder;
+
+public Reply serviceMethod() {
+
+	MessageArgument ma = new MessageArgument("KEY_OF_MSG",100,200,...);
+	Message message = builder.createMessge(ma);
+	
+	throw new SystemException(message);
+}
++-----------------------------------------

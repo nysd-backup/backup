@@ -2,6 +2,8 @@ Complex Modify Query(JPQL)
 
 * JPQL
 
+ condition branch is based on the 'Velocity'.
+
 +-----------------------------------------
 update 
 	OrderEntity e
