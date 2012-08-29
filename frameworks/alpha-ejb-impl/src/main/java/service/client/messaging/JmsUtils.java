@@ -28,7 +28,7 @@ public abstract class JmsUtils {
 	 * @param destinationName the name of destination
 	 * @throws JMSException the exception
 	 */
-	public static void sendMessage(ConnectionFactory factory ,Serializable data, Destination destination) throws JMSException{
+	public static void sendMessage(ConnectionFactory factory ,Serializable data, Destination destination,EJBMessagingProperty property) throws JMSException{
 		Connection connection = null;
 		Session session = null;		
 		MessageProducer sender = null;

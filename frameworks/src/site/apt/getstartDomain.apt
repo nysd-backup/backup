@@ -226,9 +226,4 @@ Domain Layer
 		<property name="dataSource" ref="dataSource"/>
 		<property name="internalQuery" ref="internalNativeQuery"/>				
 </bean>
-
-<!-- batchUpdateFactory setting if needed -->
-<bean id="batchUpdateFactory" class="client.sql.free.BatchModifyQueryFactoryImpl">
-	<property name="internalQuery" ref="internalNativeQuery"/>		
-</bean>
 +---------------------------------------

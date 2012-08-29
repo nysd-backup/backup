@@ -31,12 +31,13 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 			throw new IllegalStateException("EJBMessagingProperty is required");
 		}
 		
-		ConnectionFactory factory = EJBMessagingProperty.class.cast(property).getConnectionFactory();
+		EJBMessagingProperty ejbProp = EJBMessagingProperty.class.cast(property);
+		ConnectionFactory factory = ejbProp.getConnectionFactory();
 		if(factory == null){
 			throw new IllegalArgumentException("ConnectionFactory is required");
 		}
 		Destination destination = createDestination(destinationName);
-		JmsUtils.sendMessage(factory, dto, destination);
+		JmsUtils.sendMessage(factory, dto, destination,ejbProp);
 		return null;
 	}
 	
