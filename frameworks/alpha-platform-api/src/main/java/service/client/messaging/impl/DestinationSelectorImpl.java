@@ -1,12 +1,17 @@
 /**
  * Copyright 2011 the original author
  */
-package service.client.messaging;
+package service.client.messaging.impl;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
+
+import service.client.messaging.DestinationPrefix;
+import service.client.messaging.DestinationSelector;
+import service.client.messaging.MessagingProperty;
 
 /**
  * A selector for JMS destination from name of package. 
@@ -19,6 +24,8 @@ import java.util.regex.Pattern;
  * @version 2011/08/31 created.
  */
 public class DestinationSelectorImpl implements DestinationSelector{
+	
+	public static final String DESTIONATION_ALIAS = "alpha.destination.alias";
 	
 	/** the pattern */
 	private Pattern pattern;
@@ -34,7 +41,12 @@ public class DestinationSelectorImpl implements DestinationSelector{
 	 * @see service.client.messaging.DestinationSelector#createDestinationName(java.lang.reflect.Method, java.io.Serializable[])
 	 */
 	@Override
-	public String createDestinationName(Method target,Serializable[] parameter) {
+	public String createDestinationName(Method target,MessagingProperty property) {
+		
+		String alias = property.getDynamicDestinatonName();
+		if(StringUtils.isNotEmpty(alias)){
+			return alias;
+		}
 		
 		//正規表現指定の場合
 		String dst = target.getDeclaringClass().getPackage().getName().replace('.', '/');
@@ -46,7 +58,7 @@ public class DestinationSelectorImpl implements DestinationSelector{
 		}
 		
 		//プリフィクス指定の場合
-		Prefix prefix = target.getAnnotation(Prefix.class);
+		DestinationPrefix prefix = target.getAnnotation(DestinationPrefix.class);
 		if( prefix != null){
 			return String.format("jms/%s/%s/%s/%s",prefix,dst,target.getDeclaringClass().getSimpleName(),target.getName());
 		}else{

@@ -20,13 +20,30 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	/** the selector for JMS destination */
 	private DestinationSelector destinationSelector;
 	
+	/** the hint */
+	private MessagingProperty property = new MessagingProperty();
+	
 	/**
 	 * @param selecter the selector to set
 	 */
 	public void setDestinationSelector(DestinationSelector selector){
 		this.destinationSelector = selector;
 	}
+	
+	/**
+	 * @param property the property to set
+	 */
+	public void setProperty(MessagingProperty property){
+		this.property = property;
+	}
 
+	/**
+	 * @return the property
+	 */
+	protected MessagingProperty getProperty(){
+		return property;
+	}
+	
 	/**
 	 * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
 	 */
@@ -58,7 +75,7 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 		//宛先生成
 		String dst = String.format("%s.%s", method.getDeclaringClass().getName(),method.getName());
 		if(destinationSelector != null){
-			dst = destinationSelector.createDestinationName(method,serial);
+			dst = destinationSelector.createDestinationName(method,property);
 		}
 	
 		return invoke(dto,dst);

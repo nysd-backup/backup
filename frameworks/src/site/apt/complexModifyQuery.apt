@@ -3,6 +3,8 @@ Complex Modify Query
 * SQL
 
  condition branch is based on the 'Velocity'.
+ 
+ SQL is prefered to locate under 'src/main/resources/META-INF'
 
 +-----------------------------------------
 update 
@@ -21,6 +23,7 @@ where
 public class OrderModifyQuery extends AbstractNativeModifyQuery {
 	
 	public OrderModifyQuery() {
+		//'@' means classpath location
 		setSql("@query/Upd_order.sql);
 	}
 	

@@ -1,7 +1,13 @@
 Introduction
 
- 1. Works not only on EJB3.1 but also on Spring Framework 3.0.
+ 1. Alpha Framework extends JavaEE 6.
+
+ 2. Domain Logic works not only on EJB 3.x but also on Spring Framework 3.x.
  
- 2. Almost all the behavior is alternative. Developer can customize easily.
+ 3. Presentation layer woks on JSF 2.x.
  
- 3. Provies simple API for developers.
+ 4. Enable to mix Domain Logic in presentation layer.
+ 
+ 5. Almost all the behavior of Alpha Framework is alternative, so that developer can customize easily.
+ 
+ 6. Provies simple API for developers.

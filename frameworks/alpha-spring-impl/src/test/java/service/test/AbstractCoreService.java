@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import service.client.messaging.MessageClientFactory;
+import service.client.messaging.MessagingProperty;
 import client.sql.free.AbstractNativeModifyQuery;
 import client.sql.free.AbstractNativeReadQuery;
 import client.sql.free.QueryFactory;
@@ -58,7 +59,7 @@ public abstract class AbstractCoreService{
 	 * @return サービス
 	 */
 	protected <T> T createSender(Class<T> serviceType){
-		return messageClientFactory.createSender(serviceType);
+		return messageClientFactory.createSender(serviceType,new MessagingProperty());
 	}
 	
 	/**
@@ -76,7 +77,7 @@ public abstract class AbstractCoreService{
 	 * @return サービス
 	 */
 	protected <T> T createPublisher(Class<T> serviceType){
-		return messageClientFactory.createPublisher(serviceType);
+		return messageClientFactory.createPublisher(serviceType,new MessagingProperty());
 	}
 	
 	/**

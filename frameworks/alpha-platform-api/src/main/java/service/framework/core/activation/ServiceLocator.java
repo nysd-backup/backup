@@ -3,8 +3,7 @@
  */
 package service.framework.core.activation;
 
-import java.lang.reflect.InvocationHandler;
-
+import service.client.messaging.MessageClientFactory;
 import service.framework.core.async.AsyncService;
 import core.activation.ComponentLocator;
 
@@ -17,16 +16,11 @@ import core.activation.ComponentLocator;
  * @version 2011/08/31 created.
  */
 public abstract class ServiceLocator extends ComponentLocator{
-
-	/**
-	 * @return the JMS publisher
-	 */
-	public abstract InvocationHandler createPublisher();
 	
 	/**
-	 * @return the JMS sender
+	 * @return the MessageClientFactoryImpl
 	 */
-	public abstract InvocationHandler createSender();
+	public abstract MessageClientFactory createMessageClientFactory();
 	
 	/**
 	 * @return the <code>AsyncService</code>
@@ -62,26 +56,19 @@ public abstract class ServiceLocator extends ComponentLocator{
 	public static <T> T getService(Class<T> serviceType){
 		return (T)getDelegate().lookup(serviceType);
 	}
-	
-	/**
-	 * @return the InvocationHandler
-	 */
-	public static InvocationHandler createDefaultPublisher(){
-		return getDelegate().createPublisher();
-	}
-	
-	/**
-	 * @return the InvocationHandler
-	 */
-	public static InvocationHandler createDefaultSender(){
-		return getDelegate().createSender();
-	}
-	
+
 	/**
 	 * @return the AsyncService
 	 */
 	public static AsyncService createDefaultAsyncService(){
 		return getDelegate().createAsyncService();
+	}
+	
+	/**
+	 * @return the MessageClientFactoryImpl
+	 */
+	public static MessageClientFactory createDefaultMessageClientFactory() {
+		return getDelegate().createMessageClientFactory();
 	}
 	
 	/**

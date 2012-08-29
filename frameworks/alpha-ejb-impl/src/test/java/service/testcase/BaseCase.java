@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
+import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -41,6 +42,12 @@ public class BaseCase extends AbstractCoreService{
 
 	@PersistenceContext(unitName="default")
 	protected EntityManager em;
+	
+	@Resource(mappedName="javax/jms/DefaultQueueConnectionFactory")
+	private ConnectionFactory queueConnectionFactory;
+	
+	@Resource(mappedName="javax/jms/DefaultTopicConnectionFactory")
+	private ConnectionFactory topicConnectionFactory;
 	
 	@Override
 	protected EntityManager getEntityManager(){
@@ -101,6 +108,22 @@ public class BaseCase extends AbstractCoreService{
 		} catch (Exception e) {			
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * @see service.testcase.AbstractCoreService#getQueueConnectionFactory()
+	 */
+	@Override
+	protected ConnectionFactory getQueueConnectionFactory() {
+		return queueConnectionFactory;
+	}
+
+	/**
+	 * @see service.testcase.AbstractCoreService#getTopicConnectionFactory()
+	 */
+	@Override
+	protected ConnectionFactory getTopicConnectionFactory() {
+		return topicConnectionFactory;
 	}
 
 }

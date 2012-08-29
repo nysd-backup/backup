@@ -3,6 +3,8 @@ Complex Read Query
 * SQL
  
  condition branch is based on the 'Velocity'.
+ 
+ SQL is prefered to locate under 'src/main/resources/META-INF'
 
 +-----------------------------------------
 select 
@@ -29,6 +31,7 @@ group by
 public class OrderReadQuery extends AbstractNativeReadQuery {
 	
 	public OrderReadQuery() {
+		//'@' means classpath location
 		setSql("@query/Sel_order.sql);
 		setResultType(OrderReadResult.class);
 	}
@@ -80,3 +83,23 @@ public void serviceMethod() {
 		.setFromDate("20130331").setToDate("20120405").getResultList();
 }
 +-----------------------------------------
+
+* Other API of ReadQuery
+
+*-----+------+
+<<API>> | <<Description>> 
+*-----+------+
+ setMaxSize | Limit size to get result.
+*-----+------+
+ setFirstResult | Starting point to seek over zero is allowed.
+*-----+------+
+ setHint | JPA vendor's hint.
+*-----+------+
+ setFilter | Filter that handles record. it is called per ResultSet#next.
+*-----+------+
+ getSingleResult | Get only first result.
+*-----+------+
+ getFethResult | Get cursor for ResultSet.
+*-----+------+
+ count | count of specified query.
+*-----+------+

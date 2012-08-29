@@ -1,8 +1,10 @@
-Messaging Client
+Messaging
 
-* Consuming Service
+* EJB
+ 
+** Consuming Service
 
- Consuming Service can be POJO , SessionBean , Service managed by Spring Framework.
+ Consuming Service can be SessionBean.
 
 +-----------------------------------------
 package jp.co;
@@ -16,7 +18,7 @@ public class AnyService {
 }
 +-----------------------------------------
 
-* Message Driven Bean
+** Message Driven Bean
  
 +-----------------------------------------
 
@@ -45,7 +47,7 @@ public class DefaultTopic() extends DefaultMessageListenerImpl{
 }
 +----------------------------------------- 
 
-* Client Code (EJB)
+** Client Code
 
  Default destination is 'jms/queue or topic/package name of service'.
  
@@ -75,7 +77,25 @@ public void serviceMethod() {
 }
 +-----------------------------------------
 
-* Client Code (Spring Framework)
+* Spring Framework
+
+** Consuming Service
+
+ Consuming Service can be manabed Service
+
++-----------------------------------------
+package jp.co;
+
+@Service
+public class AnyService {
+
+	public void serviceMethod(AnyParameter parameter ){
+		//process
+	}
+}
++-----------------------------------------
+
+** Client Code
 
 +-----------------------------------------
 @Autowired
@@ -94,7 +114,7 @@ public void serviceMethod() {
 }
 +-----------------------------------------
 
- ApplicationContext.xml
+** applicationContext.xml
 
 +-----------------------------------------
 
@@ -180,6 +200,17 @@ public void serviceMethod() {
 	<property name="destinationSelecter" ref="destinationSelecter"/>
 	<property name="jmsTemplate" ref="jmsTopicTemplate"/>
 </bean>
+
+<!-- Consuming -->
+<bean id="messageListener" class="service.framework.core.messaging.DefaultMessageListenerImpl" />
+<jms:listener-container 
+	acknowledge="transacted"
+	connection-factory="jmsQueueConnectionFactory"
+	destination-type="queue"		
+	destination-resolver="jmsDestinationResolver"
+	transaction-manager="transactionManager">
+	<jms:listener destination="jms/ObjectQueueJndiName"  ref="messageListener"/>
+</jms:listener-container>
 	
 +-----------------------------------------
 

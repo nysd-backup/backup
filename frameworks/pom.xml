@@ -11,13 +11,6 @@
 	    <developerConnection>scm:git:git@github.com:judas-i/personal-remote.git</developerConnection>
 	    <url>https://github.com/judas-i/personal-remote/tree/master/frameworks</url>
 	</scm>
-	
-	<distributionManagement>
-    <site>
-      <id>hirobiro.dip.jp.javastudy.pomstudy</id>
-      <url>file://c:/report/${project.groupId}/${project.artifactId}/${project.version}/</url>
-    </site>
-    </distributionManagement>
 
 	<parent>
 		<groupId>alpha</groupId>
@@ -53,18 +46,25 @@
 		                <report>scm</report>	                
 		              </reports>
 		            </plugin>
-		        <!--
+		      <!--
 		             <plugin>		           
 		              <groupId>org.apache.maven.plugins</groupId>
 		              <artifactId>maven-javadoc-plugin</artifactId>
 		              <version>2.8</version>
-	              		<configuration>
-                		<docencoding>UTF-8</docencoding>
-						<charset>UTF-8</charset>
-						<encoding>UTF-8</encoding>
-            		  </configuration>	              
-		            </plugin>
-		            
+		               <reportSets>
+				          <reportSet>
+				            <id>html</id>
+				           	<configuration>
+	                			<docencoding>UTF-8</docencoding>
+								<charset>UTF-8</charset>
+								<encoding>UTF-8</encoding>
+            				</configuration>	              
+				            <reports>
+				              <report>javadoc</report>
+				            </reports>
+				          </reportSet>
+				       </reportSets>	              		
+		            </plugin>		            
 		            <plugin>
 		               <artifactId>maven-surefire-report-plugin</artifactId>		               
 		               <version>2.12.2</version>

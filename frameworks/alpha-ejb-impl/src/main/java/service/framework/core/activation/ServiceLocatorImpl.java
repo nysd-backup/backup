@@ -3,14 +3,16 @@
  */
 package service.framework.core.activation;
 
-import java.lang.reflect.InvocationHandler;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
+import service.client.messaging.MessageClientFactory;
 import service.client.messaging.MessageProducerImpl;
+import service.client.messaging.impl.DestinationSelectorImpl;
+import service.client.messaging.impl.MessageClientFactoryImpl;
 import service.framework.core.advice.InternalPerfInterceptor;
 import service.framework.core.advice.InternalQueryBuilderInterceptor;
 import service.framework.core.advice.ProxyFactory;
@@ -64,26 +66,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	@Override
 	public Object lookup(Class<?> ifType) {
 		return ifType.cast(lookup(ifType.getSimpleName() + "Impl"));
-	}
-
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createPublisher()
-	 */
-	@Override
-	public InvocationHandler createPublisher() {
-		MessageProducerImpl sender = new MessageProducerImpl();
-		sender.setConnectionFactoryName("jms/topic/DefaultXAConFactory");
-		return sender;
-	}
-
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createSender()
-	 */
-	@Override
-	public InvocationHandler createSender() {		
-		MessageProducerImpl sender = new MessageProducerImpl();
-		sender.setConnectionFactoryName("jms/queue/DefaultXAConFactory");
-		return sender;
 	}
 
 	/**
@@ -172,6 +154,19 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	@Override
 	public AsyncService createAsyncService() {
 		return new AsyncServiceImpl();
+	}
+	
+	/**
+	 * @see service.framework.core.activation.ServiceLocator#createMessageClientFactory()
+	 */
+	@Override
+	public MessageClientFactory createMessageClientFactory() {
+		MessageClientFactoryImpl factory = new MessageClientFactoryImpl();
+		MessageProducerImpl producer =  new MessageProducerImpl();		
+		producer.setDestinationSelector(new DestinationSelectorImpl());
+		factory.setQueueProducer(producer);
+		factory.setTopicProducer(producer);
+		return factory;
 	}
 	
 	/**

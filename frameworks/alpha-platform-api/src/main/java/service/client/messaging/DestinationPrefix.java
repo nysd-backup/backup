@@ -13,7 +13,7 @@ package service.client.messaging;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public @interface Prefix {
+public @interface DestinationPrefix {
 
 	/** the prefix */
 	String value();

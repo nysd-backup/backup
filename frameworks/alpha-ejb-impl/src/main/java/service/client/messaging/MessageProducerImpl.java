@@ -17,14 +17,7 @@ import javax.naming.NamingException;
  */
 public class MessageProducerImpl extends AbstractMessageProducer{
 	
-	private String connectionFactoryName;
-	
-	/**
-	 * @param conenctionFactoryName the conenctionFactoryName to set
-	 */
-	public void setConnectionFactoryName(String conenctionFactoryName){
-		this.connectionFactoryName = conenctionFactoryName;
-	}
+	public static final String CONNECTION_FACTORY = "alpha.messaging.factory";
 
 	/**
 	 * @see service.client.messaging.AbstractMessageProducer#invoke(service.client.messaging.InvocationParameter, java.lang.String)
@@ -32,7 +25,16 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	@Override
 	protected Object invoke(InvocationParameter dto, String destinationName)
 			throws Throwable {
-		ConnectionFactory factory = lookup(connectionFactoryName);
+		
+		MessagingProperty property = getProperty();
+		if(!(property instanceof EJBMessagingProperty)){
+			throw new IllegalStateException("EJBMessagingProperty is required");
+		}
+		
+		ConnectionFactory factory = EJBMessagingProperty.class.cast(property).getConnectionFactory();
+		if(factory == null){
+			throw new IllegalArgumentException("ConnectionFactory is required");
+		}
 		Destination destination = createDestination(destinationName);
 		JmsUtils.sendMessage(factory, dto, destination);
 		return null;

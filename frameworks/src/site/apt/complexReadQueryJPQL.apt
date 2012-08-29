@@ -4,6 +4,8 @@ Complex Read Query(JPQL)
 
  condition branch is based on the 'Velocity'.
 
+ JPQL is prefered to locate under 'src/main/resources/META-INF'
+
 +-----------------------------------------
 select 
 	 e
@@ -22,6 +24,7 @@ where
 public class OrderReadQuery extends AbstractNamedReadQuery {
 	
 	public OrderReadQuery() {
+		//'@' means classpath location
 		setSql("@query/Sel_order.jpql);
 		setResultType(OrderEntity.class);
 	}
@@ -47,3 +50,19 @@ public void serviceMethod() {
 	List<OrderEntity) result = query.setCustomerCode("CST001").getResultList();
 }
 +-----------------------------------------
+
+* Other API of ReadQuery
+
+*-----+------+
+<<API>> | <<Description>> 
+*-----+------+
+ setMaxSize | Limit size to get result.
+*-----+------+
+ setFirstResult | Starting point to seek over zero is allowed.
+*-----+------+
+ setHint | JPA vendor's hint.
+*-----+------+
+ setLockMode | javax.persistence.LockModeType to set.
+*-----+------+
+ count | count of specified query.
+*-----+------+

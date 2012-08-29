@@ -6,8 +6,10 @@ package service.testcase;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;
+import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
+import service.client.messaging.EJBMessagingProperty;
 import service.client.messaging.MessageClientFactory;
 import service.framework.core.activation.ServiceLocatorImpl;
 import service.framework.core.transaction.ServiceContext;
@@ -30,7 +32,7 @@ public abstract class AbstractCoreService {
 
 	@Resource
 	private EJBContext context;
-
+	
 	/** ORMクエリファクトリ */
 	private CriteriaQueryFactory ormQueryFactory;
 	
@@ -48,7 +50,7 @@ public abstract class AbstractCoreService {
 	public void postConstruct(){
 		ormQueryFactory = ServiceLocatorImpl.createDefaultCriteriaQueryFactory(getEntityManager());
 		queryFactory = ServiceLocatorImpl.createDefaultQueryFactory(getEntityManager());		
-		messageClientFactory = new MessageClientFactory();
+		messageClientFactory = ServiceLocatorImpl.createDefaultMessageClientFactory();
 	}
 	
 	/**
@@ -69,6 +71,10 @@ public abstract class AbstractCoreService {
 	 */
 	protected abstract EntityManager getEntityManager();
 	
+	protected abstract ConnectionFactory getQueueConnectionFactory();
+	
+	protected abstract ConnectionFactory getTopicConnectionFactory();
+	
 	/**
 	 * P2P用非同期処理.
 	 * 
@@ -84,7 +90,9 @@ public abstract class AbstractCoreService {
 	 * @return サービス
 	 */
 	protected <T> T createSender(Class<T> serviceType){
-		return messageClientFactory.createSender(serviceType);
+		EJBMessagingProperty property = new EJBMessagingProperty();
+		property.setConnectionFactory(getQueueConnectionFactory());
+		return messageClientFactory.createSender(serviceType,property);
 	}
 	
 	/**
@@ -102,7 +110,9 @@ public abstract class AbstractCoreService {
 	 * @return サービス
 	 */
 	protected <T> T createPublisher(Class<T> serviceType){
-		return messageClientFactory.createPublisher(serviceType);
+		EJBMessagingProperty property = new EJBMessagingProperty();
+		property.setConnectionFactory(getTopicConnectionFactory());
+		return messageClientFactory.createPublisher(serviceType,property);
 	}
 	
 	/**

@@ -3,6 +3,8 @@ Complex Modify Query(JPQL)
 * JPQL
 
  condition branch is based on the 'Velocity'.
+ 
+ JPQL is prefered to locate under 'src/main/resources/META-INF'
 
 +-----------------------------------------
 update 
@@ -21,6 +23,7 @@ where
 public class OrderModifyQuery extends AbstractNamedModifyQuery {
 	
 	public OrderModifyQuery() {
+		//'@' means classpath location
 		setSql("@query/Upd_order.jpql);
 	}
 	
@@ -51,3 +54,4 @@ public void serviceMethod() {
 			.setSalesPerson("PER002").modify();
 }
 +-----------------------------------------
+
