@@ -6,6 +6,7 @@ package service.core.jms;
 
 import javax.persistence.EntityManager;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -23,6 +24,7 @@ import service.test.ServiceUnit;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
+@Ignore
 @ContextConfiguration(locations = {"/META-INF/context/oracleAgentApplicationContext.xml","/META-INF/context/jmsApplicationContext.xml"})
 public class QueueTest extends ServiceUnit{
 	
