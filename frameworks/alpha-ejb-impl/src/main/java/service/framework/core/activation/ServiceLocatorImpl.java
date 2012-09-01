@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 
 import service.client.messaging.MessageClientFactory;
 import service.client.messaging.MessageProducerImpl;
-import service.client.messaging.impl.DestinationSelectorImpl;
 import service.client.messaging.impl.MessageClientFactoryImpl;
 import service.framework.core.advice.InternalPerfInterceptor;
 import service.framework.core.advice.InternalQueryBuilderInterceptor;
@@ -163,7 +162,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	public MessageClientFactory createMessageClientFactory() {
 		MessageClientFactoryImpl factory = new MessageClientFactoryImpl();
 		MessageProducerImpl producer =  new MessageProducerImpl();		
-		producer.setDestinationSelector(new DestinationSelectorImpl());
 		factory.setQueueProducer(producer);
 		factory.setTopicProducer(producer);
 		return factory;

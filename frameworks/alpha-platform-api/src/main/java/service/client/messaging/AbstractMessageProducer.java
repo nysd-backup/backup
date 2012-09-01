@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import service.client.messaging.impl.DestinationNameResolverImpl;
+
 
 
 /**
@@ -18,16 +20,21 @@ import java.lang.reflect.Method;
 public abstract class AbstractMessageProducer implements InvocationHandler{
 	
 	/** the selector for JMS destination */
-	private DestinationSelector destinationSelector;
+	private DestinationNameResolver destinationNameResolver = new DestinationNameResolverImpl();
 	
 	/** the hint */
 	private MessagingProperty property = new MessagingProperty();
 	
+	public static final String SERVICE_NAME = "alpha.mdb.serviceName";
+	
+	public static final String METHOD_NAME = "alpha.mdb.methodName";
+	
+	public static final String PARAMETER_TYPE_NAME = "alpha.mdb.parameterTypeName";
 	/**
-	 * @param selecter the selector to set
+	 * @param destinationNameResolver the destinationNameResolver to set
 	 */
-	public void setDestinationSelector(DestinationSelector selector){
-		this.destinationSelector = selector;
+	public void setDestinationNameResolver(DestinationNameResolver destinationNameResolver){
+		this.destinationNameResolver = destinationNameResolver;
 	}
 	
 	/**
@@ -59,26 +66,19 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 				serial[i] = Serializable.class.cast(args[i]);
 			}
 		}
-		InvocationParameter dto = new InvocationParameter();
-		dto.setServiceName(method.getDeclaringClass().getName());		
-		dto.setMethodName(method.getName());
-		dto.setParameter(serial);
+		property.addJMSProperty(SERVICE_NAME, method.getDeclaringClass().getName());
+		property.addJMSProperty(METHOD_NAME, method.getName());		
 		Class<?>[] clss = method.getParameterTypes();
 		if( clss != null){			
 			String[] names = new String[clss.length];
 			for(int i = 0 ; i < names.length; i++){
 				names[i] = clss[i].getName();
 			}
-			dto.setParameterTypeNames(names);
-		}
-		
-		//宛先生成
-		String dst = String.format("%s.%s", method.getDeclaringClass().getName(),method.getName());
-		if(destinationSelector != null){
-			dst = destinationSelector.createDestinationName(method,property);
+			property.addJMSProperty(PARAMETER_TYPE_NAME, names);		
 		}
 	
-		return invoke(dto,dst);
+		String dst = destinationNameResolver.createDestinationName(method,property);	
+		return invoke(serial,dst);
 	}
 	
 	/**
@@ -88,5 +88,5 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	 * @return the result
 	 * @throws Throwable　any error
 	 */
-	protected abstract Object invoke(InvocationParameter dto ,String destinationName) throws Throwable;
+	protected abstract Object invoke(Serializable parameter ,String destinationName) throws Throwable;
 }

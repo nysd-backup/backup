@@ -9,8 +9,8 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import service.client.messaging.EJBMessagingProperty;
 import service.client.messaging.MessageClientFactory;
+import service.client.messaging.MessagingProperty;
 import service.framework.core.activation.ServiceLocatorImpl;
 import service.framework.core.transaction.ServiceContext;
 import client.sql.free.AbstractNativeModifyQuery;
@@ -90,7 +90,7 @@ public abstract class AbstractCoreService {
 	 * @return サービス
 	 */
 	protected <T> T createSender(Class<T> serviceType){
-		EJBMessagingProperty property = new EJBMessagingProperty();
+		MessagingProperty property = new MessagingProperty();
 		property.setConnectionFactory(getQueueConnectionFactory());
 		return messageClientFactory.createSender(serviceType,property);
 	}
@@ -110,7 +110,7 @@ public abstract class AbstractCoreService {
 	 * @return サービス
 	 */
 	protected <T> T createPublisher(Class<T> serviceType){
-		EJBMessagingProperty property = new EJBMessagingProperty();
+		MessagingProperty property = new MessagingProperty();
 		property.setConnectionFactory(getTopicConnectionFactory());
 		return messageClientFactory.createPublisher(serviceType,property);
 	}

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import service.client.messaging.DestinationPrefix;
-import service.client.messaging.DestinationSelector;
+import service.client.messaging.DestinationNameResolver;
 import service.client.messaging.MessagingProperty;
 
 /**
@@ -23,9 +23,7 @@ import service.client.messaging.MessagingProperty;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DestinationSelectorImpl implements DestinationSelector{
-	
-	public static final String DESTIONATION_ALIAS = "alpha.destination.alias";
+public class DestinationNameResolverImpl implements DestinationNameResolver{
 	
 	/** the pattern */
 	private Pattern pattern;
@@ -38,12 +36,13 @@ public class DestinationSelectorImpl implements DestinationSelector{
 	}
 
 	/**
-	 * @see service.client.messaging.DestinationSelector#createDestinationName(java.lang.reflect.Method, java.io.Serializable[])
+	 * @see service.client.messaging.DestinationNameResolver#createDestinationName(java.lang.reflect.Method, java.io.Serializable[])
 	 */
 	@Override
 	public String createDestinationName(Method target,MessagingProperty property) {
 		
-		String alias = property.getDynamicDestinatonName();
+		//名称動的指定の場合
+		String alias = property.getDynamicDestinationName();
 		if(StringUtils.isNotEmpty(alias)){
 			return alias;
 		}

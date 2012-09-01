@@ -17,5 +17,5 @@ public interface FaultNotifier {
 	 * @param messege the message
 	 * @param level the level
 	 */
-	public void notify(int errorCode, String messege , int level);
+	public void notify(String errorCode, String messege , int level);
 }

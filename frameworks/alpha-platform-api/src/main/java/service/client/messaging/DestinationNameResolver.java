@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface DestinationSelector {
+public interface DestinationNameResolver {
 
 	/**
 	 * @param target the method to invoke

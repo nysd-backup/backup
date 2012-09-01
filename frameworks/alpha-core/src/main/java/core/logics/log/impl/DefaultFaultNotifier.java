@@ -24,7 +24,7 @@ public class DefaultFaultNotifier implements FaultNotifier {
 	 * @see core.logics.log.FaultNotifier#notify(int, java.lang.String, int)
 	 */
 	@Override
-	public void notify(int errorCode, String message, int level) {
+	public void notify(String errorCode, String message, int level) {
 		String m = String.format("[%d][%s]",errorCode,message);
 		if(MessageLevel.F.ordinal() == level){
 			logger.fatal(m);

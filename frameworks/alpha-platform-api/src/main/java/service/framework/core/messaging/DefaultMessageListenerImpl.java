@@ -9,11 +9,10 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import service.client.messaging.AbstractMessageProducer;
+import service.framework.core.activation.ServiceLocator;
 import core.logics.log.FaultNotifier;
 import core.message.MessageLevel;
-
-import service.client.messaging.InvocationParameter;
-import service.framework.core.activation.ServiceLocator;
 
 
 /**
@@ -40,19 +39,9 @@ public class DefaultMessageListenerImpl implements MessageListener{
 	 */
 	public void onMessage(Message arg0) {
 		
-		FaultNotifier notifier = ServiceLocator.createDefaultFaultNotifier();
-		
-		InvocationParameter dto  = null;
+		FaultNotifier notifier = ServiceLocator.createDefaultFaultNotifier();		
 		try{
-			ObjectMessage message = ObjectMessage.class.cast(arg0);		
-			dto = InvocationParameter.class.cast( message.getObject());
-		}catch(Throwable jmse){
-			notifyException(jmse,notifier);
-			throw new IllegalStateException(jmse);
-		}
-
-		try{
-			invoke(dto);	
+			invoke(arg0);	
 		} catch (Throwable e) {
 			handleThrowable(e,notifier);
 		}				
@@ -62,20 +51,26 @@ public class DefaultMessageListenerImpl implements MessageListener{
 	 * Invokes the service.
 	 * @param dto the dto 
 	 */
-	protected Object invoke(InvocationParameter dto) throws Throwable{
+	protected Object invoke(Message message) throws Throwable{
+		
+		String serviceName = message.getStringProperty(AbstractMessageProducer.SERVICE_NAME);
+		String methodName = message.getStringProperty(AbstractMessageProducer.METHOD_NAME);
+		String[] parameterTypeName = (String[])message.getObjectProperty(AbstractMessageProducer.PARAMETER_TYPE_NAME);
 
-		Object service = ServiceLocator.getService(dto.getServiceName());				
+		Object service = ServiceLocator.getService(serviceName);				
 		Method m = null;
-		if(dto.getParameterTypeNames() == null){
-			m = service.getClass().getMethod(dto.getMethodName());
+		if(parameterTypeName == null){
+			m = service.getClass().getMethod(methodName);
 		}else {
-			Class<?>[] clss = new Class[dto.getParameterTypeNames().length];
+			Class<?>[] clss = new Class[parameterTypeName.length];
 			for(int i = 0 ; i< clss.length; i++){
-				clss[i] = Class.forName(dto.getParameterTypeNames()[i]);
+				clss[i] = Class.forName(parameterTypeName[i]);
 			}
-			m = service.getClass().getMethod(dto.getMethodName(),clss);
+			m = service.getClass().getMethod(methodName,clss);
 		}		
-		return m.invoke(service, (Object[])dto.getParameter());
+		
+		ObjectMessage object = ObjectMessage.class.cast(message);		
+		return m.invoke(service, object.getObject());
 	}
 	
 	/**
@@ -99,6 +94,6 @@ public class DefaultMessageListenerImpl implements MessageListener{
 	 * @param notifier the notifier
 	 */
 	protected void notifyException(Throwable t ,FaultNotifier notifier){		
-		notifier.notify(99, "unknown error : " + t.getMessage(), MessageLevel.F.ordinal());
+		notifier.notify("99", "unknown error : " + t.getMessage(), MessageLevel.F.ordinal());
 	}	
 }

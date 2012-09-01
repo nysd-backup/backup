@@ -49,29 +49,37 @@ public class DefaultTopic() extends DefaultMessageListenerImpl{
 
 ** Client Code
 
- Default destination is 'jms/queue or topic/package name of service'.
+ Default destination is 'jms/package name of service'.
  
- Developer can change the destination of each services by using 'DestinationSelecter'
+ Developer can change the destination of each services by using 'DestinationNameResolver'
 
 +-----------------------------------------
 private MessagingClientFactory factory;
 
-@Resource("jndiName")
-private ConnectionFactory connectionFactory;
+@Resource(name="javax/jms/QueueConnectionFactory")
+private ConnectionFactory queueConnectionFactory;
+
+@Resource(name="javax/jms/TopicConnectionFactory")
+private ConnectionFactory topicConnectionFactory;
+
 
 @PostConstruct
 public void construct() {
-	factory = ServiceLocator.getMessagingClientFactory();
+	factory = ServiceLocator.createMessagingClientFactory();
 }
 
 public void serviceMethod() {
 	
+	MessagingProperty property = new MessagingProperty();
+	
 	//enqueue	
-	AnyService service = factory.createSender(AnyService.class,connectionFactory);	
+	property.setConnectionFactory(queueConnectionFactory);
+	AnyService service = factory.createSender(AnyService.class,property);	
 	service.serviceMethod(anyParameter);
 
 	//publish 
-	AnyService serviceForTopic = factory.createPublisher(AnyService.class,connectionFactory);
+	property.setConnectionFactory(topicConnectionFactory);
+	AnyService serviceForTopic = factory.createPublisher(AnyService.class,property.setConnectionFactory);
 	serviceForTopic(anyParameter);
 	
 }
@@ -103,18 +111,24 @@ private MessagingClientFactory factory;
 
 public void serviceMethod() {
 	
+	MessagingProperty property = new MessagingProperty();
+	
 	//enqueue	
-	AnyService service = factory.createSender(AnyService.class);	
+	property.setDynamicDestinationName("jms/DefaultQueue");
+	AnyService service = factory.createSender(AnyService.class,property);	
 	service.serviceMethod(anyParameter);
-
+	
 	//publish 
-	AnyService serviceForTopic = factory.createPublisher(AnyService.class);
+	property.setDynamicDestinationName("jms/DefaultTopic");
+	AnyService serviceForTopic = factory.createPublisher(AnyService.class,property);
 	serviceForTopic(anyParameter);
 	
 }
 +-----------------------------------------
 
 ** applicationContext.xml
+
+ sample looking up JNDI of glasfish.
 
 +-----------------------------------------
 
@@ -163,15 +177,12 @@ public void serviceMethod() {
     <property name="jndiTemplate" ref="jndiTemplate"/>
 	<property name="cache" value="true"/>
 </bean>
-      
-<bean id="destinationSelector" class="service.client.messaging.impl.DestinationSelectorImpl" />
-    
+       
 <!-- Messaging -->
 <bean id="messageClientFactory" class="service.client.messaging.impl.MessageClientFactoryImpl">
     <!-- Queue -->
     <property name="queueProducer">
-    	<bean id="queueProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">
-			<property name="destinationSelector" ref="destinationSelector"/>
+    	<bean id="queueProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">		
 			<property name="jmsTemplate">
 				<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
 			        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
@@ -190,7 +201,6 @@ public void serviceMethod() {
     	<!-- Topic -->
     	<property name="topicProducer">
     		<bean id="topicProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">
-			<property name="destinationSelector" ref="destinationSelector"/>
 			<property name="jmsTemplate">					  
 			    <bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
 			        <property name="connectionFactory" ref="jmsTopicConnectionFactory"/>
@@ -223,7 +233,18 @@ public void serviceMethod() {
 	
 +-----------------------------------------
 
+* Messaging Property
 
-
-
-
+*-----+------+
+<<Property>> | <<Description>> 
+*-----+------+
+JMSType | Specified JMSType
+*-----+------+
+JMSCorrelationID | Specified JMSCorrelationID
+*-----+------+
+ConnectionFactory | ConnectionFactory of JMS. On EJB this property is required.
+*-----+------+
+DynamicDestinationName | JNDI name of destination. 
+*-----+------+
+Property | Optional property of JMS. 
+*-----+------+

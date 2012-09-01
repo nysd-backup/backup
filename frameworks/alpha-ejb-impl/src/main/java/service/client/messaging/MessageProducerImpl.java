@@ -3,8 +3,15 @@
  */
 package service.client.messaging;
 
+import java.io.Serializable;
+
+import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -20,25 +27,63 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	public static final String CONNECTION_FACTORY = "alpha.messaging.factory";
 
 	/**
-	 * @see service.client.messaging.AbstractMessageProducer#invoke(service.client.messaging.InvocationParameter, java.lang.String)
+	 * @see service.client.messaging.AbstractMessageProducer#invoke(java.io.Serializable, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(InvocationParameter dto, String destinationName)
+	protected Object invoke(Serializable parameter, String destinationName)
 			throws Throwable {
 		
 		MessagingProperty property = getProperty();
-		if(!(property instanceof EJBMessagingProperty)){
-			throw new IllegalStateException("EJBMessagingProperty is required");
-		}
-		
-		EJBMessagingProperty ejbProp = EJBMessagingProperty.class.cast(property);
-		ConnectionFactory factory = ejbProp.getConnectionFactory();
+		ConnectionFactory factory = property.getConnectionFactory();
 		if(factory == null){
 			throw new IllegalArgumentException("ConnectionFactory is required");
 		}
 		Destination destination = createDestination(destinationName);
-		JmsUtils.sendMessage(factory, dto, destination,ejbProp);
+		sendMessage(factory, parameter, destination,property);
 		return null;
+	}
+	
+	/**
+	 * Send the message
+	 * @param factory the factory.
+	 * @param data the data
+	 * @param destination the destination
+	 * @param property the property
+	 * @throws JMSException
+	 */
+	protected void sendMessage(ConnectionFactory factory ,Serializable data, Destination destination,MessagingProperty property) throws JMSException{
+	
+		Connection connection = null;
+		Session session = null;		
+		MessageProducer sender = null;
+		try {
+			// コネクションを作成
+			connection = factory.createConnection();
+	
+			// セッションを作成
+			// グローバルトランザクション固定
+			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			// MessageProducerを作成
+			sender = session.createProducer(destination);			
+			// メッセージを作成
+			Message message = session.createObjectMessage(data);
+			JMSUtils.setPropertyAndHeader(property, message);			
+			connection.start();
+			sender.send(message);			
+		} finally {
+			// 接続を切断
+			if (sender != null) {
+				sender.close();
+			}
+			if (session != null) {
+				session.close();
+			}
+			if (connection != null) {
+				//XAコネクションファクトリ経由のコネクションであればクローズ可能
+				connection.close();
+			}
+			
+		}
 	}
 	
 	/**
