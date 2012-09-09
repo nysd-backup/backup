@@ -43,10 +43,10 @@ public class BaseCase extends AbstractCoreService{
 	@PersistenceContext(unitName="default")
 	protected EntityManager em;
 	
-	@Resource(mappedName="javax/jms/DefaultQueueConnectionFactory")
+//	@Resource(mappedName="javax/jms/DefaultQueueConnectionFactory")
 	private ConnectionFactory queueConnectionFactory;
 	
-	@Resource(mappedName="javax/jms/DefaultTopicConnectionFactory")
+//	@Resource(mappedName="javax/jms/DefaultTopicConnectionFactory")
 	private ConnectionFactory topicConnectionFactory;
 	
 	@Override

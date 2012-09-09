@@ -3,13 +3,12 @@
 	<body>
 		<menu ref="reports"/>
 		<menu name="How to use">
-			<item name="Get start" href="getstartDomain.html">
-				<item name="Domain" href="getstartDomain.html"/>
-				<item name="Web" href="getstartWeb.html"/>
+			<item name="Get start" href="getstart/domain.html">
+				<item name="Domain" href="getstart/Domain.html"/>
+				<item name="Web" href="getstart/web.html"/>
 			</item>
-			<item name="Showcase" href="showcase.html"/>
-			<item name="Configuration" href="configuration.html"/>	
-			<item name="Example" href="example.html"/>						
+			<item name="Showcase" href="showcase/showcase.html"/>
+			<item name="Configuration" href="configuration/configuration.html"/>					
 		</menu>
 	</body>
 </project>

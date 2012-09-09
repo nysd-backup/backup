@@ -15,8 +15,6 @@ import service.client.messaging.impl.MessageClientFactoryImpl;
 import service.framework.core.advice.InternalPerfInterceptor;
 import service.framework.core.advice.InternalQueryBuilderInterceptor;
 import service.framework.core.advice.ProxyFactory;
-import service.framework.core.async.AsyncService;
-import service.framework.core.async.AsyncServiceImpl;
 import service.framework.core.exception.BusinessException;
 import sqlengine.strategy.QueryBuilder;
 import sqlengine.strategy.impl.QueryBuilderProxyImpl;
@@ -148,11 +146,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	 */
 	public static QueryFactory createDefaultQueryFactory(EntityManager em){
 		return ((ServiceLocatorImpl)delegate).createQueryFactory(em);
-	}
-	
-	@Override
-	public AsyncService createAsyncService() {
-		return new AsyncServiceImpl();
 	}
 	
 	/**

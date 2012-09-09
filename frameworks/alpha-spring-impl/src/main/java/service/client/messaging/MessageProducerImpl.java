@@ -3,16 +3,14 @@
  */
 package service.client.messaging;
 
+import java.io.Serializable;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-
-import service.client.messaging.AbstractMessageProducer;
-import service.client.messaging.InvocationParameter;
 
 
 /**
@@ -41,7 +39,7 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	 * @param destinationName the destinationName
 	 * @return the template
 	 */
-	protected JmsTemplate getJmsTemplate(InvocationParameter dto , String destinationName){
+	protected JmsTemplate getJmsTemplate(Serializable parameter , String destinationName){
 		return template;
 	}
 	
@@ -49,22 +47,23 @@ public class MessageProducerImpl extends AbstractMessageProducer{
 	 * @see service.client.messaging.AbstractMessageProducer#invoke(service.client.messaging.InvocationParameter, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(InvocationParameter dto, String destinationName)
+	protected Object invoke(Serializable parameter, String destinationName)
 			throws Throwable {
 		
-		final InvocationParameter req = dto;
+		final Serializable param = parameter;
 		MessageCreator creater =new MessageCreator() {			
 			@Override
 			public Message createMessage(Session session) throws JMSException {
-				return session.createObjectMessage(req);
-				
+				Message message = session.createObjectMessage(param);
+				JMSUtils.setPropertyAndHeader(getProperty(), message);
+				return message;
 			}
 		};	
 		
 		if(destinationName == null ){
-			getJmsTemplate(dto,null).send(creater);
+			getJmsTemplate(param,null).send(creater);
 		}else{
-			getJmsTemplate(dto,destinationName).send(destinationName, creater);
+			getJmsTemplate(param,destinationName).send(destinationName, creater);
 		}
 		return null;
 	}

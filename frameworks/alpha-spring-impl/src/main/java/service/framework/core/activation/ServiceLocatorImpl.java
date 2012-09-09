@@ -6,7 +6,6 @@ package service.framework.core.activation;
 import org.springframework.context.ApplicationContext;
 
 import service.client.messaging.MessageClientFactory;
-import service.framework.core.async.AsyncService;
 import client.sql.free.QueryFactory;
 import core.exception.BusinessException;
 import core.logics.log.FaultNotifier;
@@ -83,14 +82,6 @@ public class ServiceLocatorImpl extends ServiceLocator{
 	@Override
 	public FaultNotifier createFaultNotifier(){
 		return FaultNotifier.class.cast(lookup(FaultNotifier.class));
-	}
-	
-	/**
-	 * @see service.framework.core.activation.ServiceLocator#createAsyncService()
-	 */
-	@Override
-	public AsyncService createAsyncService() {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

@@ -4,7 +4,6 @@
 package service.framework.core.activation;
 
 import service.client.messaging.MessageClientFactory;
-import service.framework.core.async.AsyncService;
 import core.activation.ComponentLocator;
 
 
@@ -21,11 +20,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	 * @return the MessageClientFactoryImpl
 	 */
 	public abstract MessageClientFactory createMessageClientFactory();
-	
-	/**
-	 * @return the <code>AsyncService</code>
-	 */
-	public abstract AsyncService createAsyncService();
 	
 	/**
 	 * @param serviceName the serviceName to lookup 
@@ -55,13 +49,6 @@ public abstract class ServiceLocator extends ComponentLocator{
 	@SuppressWarnings("unchecked")
 	public static <T> T getService(Class<T> serviceType){
 		return (T)getDelegate().lookup(serviceType);
-	}
-
-	/**
-	 * @return the AsyncService
-	 */
-	public static AsyncService createDefaultAsyncService(){
-		return getDelegate().createAsyncService();
 	}
 	
 	/**

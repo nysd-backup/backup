@@ -51,7 +51,7 @@ public class DefaultTopic() extends DefaultMessageListenerImpl{
 
  Default destination is 'jms/package name of service'.
  
- Developer can change the destination of each services by using 'DestinationNameResolver'
+ Developer can change the destination of each services by using 'DestinationNameResolver' or property 'DynamicDestinationName'.
 
 +-----------------------------------------
 private MessagingClientFactory factory;
@@ -244,7 +244,7 @@ JMSCorrelationID | Specified JMSCorrelationID
 *-----+------+
 ConnectionFactory | ConnectionFactory of JMS. On EJB this property is required.
 *-----+------+
-DynamicDestinationName | JNDI name of destination. 
+DynamicDestinationName | JNDI name of destination instead of 'jms/package name of service'. 
 *-----+------+
 Property | Optional property of JMS. 
 *-----+------+

@@ -69,15 +69,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
         <property name="jndiTemplate" ref="jndiTemplate"/>
         <property name="cache" value="true"/>
     </bean>
-      
-	<bean id="destinationSelector" class="service.client.messaging.impl.DestinationSelectorImpl" />
-    
+       
     <!-- Messaging -->
     <bean id="messageClientFactory" class="service.client.messaging.impl.MessageClientFactoryImpl">
     	<!-- Queue -->
     	<property name="queueProducer">
-	    	<bean id="queueProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">
-				<property name="destinationSelector" ref="destinationSelector"/>
+	    	<bean id="queueProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">				
 				<property name="jmsTemplate">
 					<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
 				        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
@@ -95,8 +92,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     	</property>
     	<!-- Topic -->
     	<property name="topicProducer">
-    		<bean id="topicProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">
-				<property name="destinationSelector" ref="destinationSelector"/>
+    		<bean id="topicProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">				
 				<property name="jmsTemplate">					  
 				    <bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
 				        <property name="connectionFactory" ref="jmsTopicConnectionFactory"/>

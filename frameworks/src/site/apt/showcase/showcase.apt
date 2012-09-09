@@ -1,19 +1,5 @@
 Showcase
 
-* Web 
-
-*-----+------+
-<<Function>> | <<Description>> 
-*-----+------+
- {{{./components.html}Components}} | UI components.
-*-----+------+
- {{{./navigation.html}Navigation}} | Navigate views.
-*-----+------+
- {{{./security.html}Security}} | Vulnerability management.
-*-----+------+
- {{{./invocation.html}Domain Logic Execution}} | Call local or remote domain logic.
-*-----+------+
-
 * Query
 
 *-----+------+
@@ -58,4 +44,18 @@ Showcase
  {{{./messageControl.html}By Message}} | Error level messages make current transaction to be rolled back.
 *-----+------+
  {{{./exceptionControl.html}By Exception}} | Exception make current transaction to be rolled back.
+*-----+------+
+
+* Web 
+
+*-----+------+
+<<Function>> | <<Description>> 
+*-----+------+
+ {{{./components.html}Components}} | UI components.
+*-----+------+
+ {{{./navigation.html}Navigation}} | Navigate views.
+*-----+------+
+ {{{./security.html}Security}} | Vulnerability management.
+*-----+------+
+ {{{./invocation.html}Domain Logic Execution}} | Call local or remote domain logic.
 *-----+------+
