@@ -1,0 +1,20 @@
+/**
+ * Copyright 2011 the original author
+ */
+package alpha.framework.domain.advice;
+
+/**
+ * The internal interceptor.
+ *
+ * @author yoshida-n
+ * @version	created.
+ */
+public interface InternalInterceptor {
+
+	/**
+	 * @param contextInvoker the invoker
+	 * @return the result
+	 * @throws Throwable the exception
+	 */
+	public Object around(InvocationAdapter contextInvoker) throws Throwable;
+}

@@ -1,0 +1,142 @@
+<%@ jet package="kosmos.tools.generator.entity.template" class="EntityTemplate"
+	imports=" kosmos.tools.generator.entity.model.* kosmos.tools.generator.* org.apache.commons.lang.*"%>
+<%
+	Table table = (Table)argument;
+	String basePkg = table.basePkgName;
+	basePkg = basePkg == null ? "" : basePkg;
+	String clsName = StringUtils.capitalize(Utils.toCamelCase(table.physicalName));
+%>
+/**
+ * Use is subject to license terms.
+ */
+package <%=basePkg%>entity;
+
+import kosmos.framework.base.AbstractEntity;
+import kosmos.framework.bean.Pair;
+import kosmos.framework.core.query.Metadata;
+import javax.annotation.Generated;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Map;
+
+/**
+ * <%= table.logicalName == null ? table.physicalName : table.logicalName %>エンティティ
+ *
+ * @author Tool Auto Making
+ */
+@Generated("kosmos.tool.entity-generator")
+@Entity
+@Table(name="<%=table.physicalName%>")
+public class <%= clsName %> extends AbstractEntity {
+
+	/** serialVersionUID */
+	private static final long serialVersionUID = 1L;
+	
+<%	for (Column column : table.columns) { %>
+	/** <%= column.logicalName == null ? column.physicalName : column.logicalName %> */
+	public static final Metadata<<%= clsName%>, <%=column.typeName.getName()%>> <%=column.physicalName%> = new Metadata<<%= clsName%>, <%=column.typeName.getName()%>>("<%=column.physicalName%>");
+	
+<%}%>	
+	
+<%	for (Column column : table.columns) { %>
+	/**
+	 * <%= column.logicalName == null ? column.physicalName : column.logicalName %>
+	 */
+	private <%= column.typeName.getName()%> <%=Utils.toCamelCase(column.physicalName)%> = null;
+<%}%>
+
+<%	for (Column column : table.columns) { %>
+	/**
+	 * @param <%= Utils.toCamelCase(column.physicalName) %> the <%= Utils.toCamelCase(column.physicalName) %> to set
+	 */
+	public void set<%=StringUtils.capitalize(Utils.toCamelCase(column.physicalName))%>(<%= column.typeName.getName()%> <%= Utils.toCamelCase(column.physicalName) %>){
+		this.<%= Utils.toCamelCase(column.physicalName) %> = <%= Utils.toCamelCase(column.physicalName) %>;
+	}
+	
+	/**
+	 * @return <%= Utils.toCamelCase(column.physicalName) %>
+	 */
+<%
+if (column.primaryKey){
+%>
+	@Id
+<%	} 
+if (column.versionManaged){
+%>
+	@javax.persistence.Version
+<%	} %>
+	@Column(name="<%=column.physicalName%>")	 
+	public <%= column.typeName.getName()%> get<%=StringUtils.capitalize(Utils.toCamelCase(column.physicalName))%>(){
+		return <%= Utils.toCamelCase(column.physicalName) %>;
+	}
+	
+<%}%>
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.FastEntity#getVersioningValue()
+	 */
+	@Override
+	public Pair<String> toVersioningValue() {	
+<%	
+	boolean version = false;
+	for (Column column : table.columns) { 
+		if(column.versionManaged){
+			version = true;
+%>			
+		return new Pair<String>(<%=column.physicalName%>.name(),<%=Utils.toCamelCase(column.physicalName)%>);
+<%
+			break;
+		}
+	}
+	if(!version){
+%>
+		return null;
+<%
+	}
+%>		
+	}
+	
+	/**
+	 * @see kosmos.framework.sqlclient.api.FastEntity#getPrimaryKeys()
+	 */
+	@Override
+	public Map<String, Object> toPrimaryKeys() {
+		Map<String,Object> map = createMap();
+<%	for (Column column : table.columns) { 
+		if(!column.primaryKey){
+			continue;
+		}
+%>
+		map.put(<%=column.physicalName%>.name(),<%=Utils.toCamelCase(column.physicalName)%>);
+<%}%>
+		return map;
+	}
+
+	/**
+	 * @see kosmos.framework.sqlclient.api.FastEntity#getAttributes()
+	 */
+	@Override
+	public Map<String, Object> toAttributes() {
+		Map<String,Object> map = createMap();
+<%	for (Column column : table.columns) { 
+		if(column.primaryKey){
+			continue;
+		}
+%>
+		map.put(<%=column.physicalName%>.name(),<%=Utils.toCamelCase(column.physicalName)%>);
+<%}%>
+		return map;
+	}
+	
+	/**
+	 * @see kosmos.framework.base.AbstractBean#clone()
+	 */
+	@Override
+	public <%= clsName %> clone() {
+		<%= clsName %> clone = new <%= clsName %>();<%	for (Column column : table.columns) { %>
+		clone.<%=Utils.toCamelCase(column.physicalName)%> = <%=Utils.toCamelCase(column.physicalName)%>;<%}%>		
+		return clone;
+	}
+}

@@ -29,8 +29,8 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		</aop:aspect>			
 	</aop:config>
 	<bean id="actionInterceptor" class="core.web.core.advice.ActionInterceptor"/>
-	<bean id="internalPerfInterceptor" class="service.framework.core.advice.InternalPerfInterceptor"/>
-	<bean id="perfInterceptor" class="service.framework.core.advice.DelegatingInterceptor">
+	<bean id="internalPerfInterceptor" class="alpha.domain.core.advice.InternalPerfInterceptor"/>
+	<bean id="perfInterceptor" class="alpha.domain.core.advice.DelegatingInterceptor">
 		<property name="internal" ref="internalPerfInterceptor"/>
 	</bean>
 </beans>

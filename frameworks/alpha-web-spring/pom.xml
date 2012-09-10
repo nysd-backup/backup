@@ -16,12 +16,12 @@
 	<dependencies>
 		<dependency>
 		    <groupId>alpha</groupId>
-		    <artifactId>alpha-core</artifactId>
+		    <artifactId>alpha-framework-core</artifactId>
 		    <version>${framework.version}</version>
 		</dependency>	
 		<dependency>
 		    <groupId>alpha</groupId>
-		    <artifactId>alpha-spring-impl</artifactId>
+		    <artifactId>alpha-domain-spring</artifactId>
 		    <version>${framework.version}</version>
 		</dependency>
 		<dependency>
