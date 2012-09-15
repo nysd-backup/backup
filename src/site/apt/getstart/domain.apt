@@ -19,32 +19,32 @@ Domain Layer
 +---------------------------------------
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-engine</artifactId>
+	    <artifactId>alpha-jdbc</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-api</artifactId>
+	    <artifactId>alpha-sqlclient-api</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-impl</artifactId>
+	    <artifactId>alpha-sqlclient-original</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-eclink-impl</artifactId>
+	    <artifactId>alpha-sqlclient-elink</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>alpha-platform-api</artifactId>
+	    <artifactId>alpha-domain-api</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>alpha-spring-impl</artifactId>
+	    <artifactId>alpha-domain-spring</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>		
 	
@@ -99,32 +99,27 @@ Domain Layer
 +---------------------------------------
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-engine</artifactId>
+	    <artifactId>alpha-jdbc</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-api</artifactId>
+	    <artifactId>alpha-sqlclient-api</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-impl</artifactId>
+	    <artifactId>alpha-sqlclient-elink</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-eclink-impl</artifactId>
+	    <artifactId>alpha-domain-api</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>alpha-platform-api</artifactId>
-	    <version>1.1.0-SNAPSHOT</version>
-	</dependency>	
-	<dependency>
-		<groupId>alpha</groupId>
-	    <artifactId>alpha-ejb-impl</artifactId>
+	    <artifactId>alpha-domain-ejb</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>		
 	
@@ -140,7 +135,7 @@ Domain Layer
 <interceptors>
 <interceptor>
 	<interceptor-class>
-  		service.framework.core.transaction.autonomous.ContextControllableTransactionInterceptor
+  		alpha.framework.domain.transaction.autonomous.ContextControllableTransactionInterceptor
   	</interceptor-class
 </interceptor>	  		
 </interceptors>
@@ -150,7 +145,7 @@ Domain Layer
 	<ejb-name>*ServiceImpl</ejb-name>
 	<interceptor-order>
 	<interceptor-class>
-		service.framework.core.transaction.autonomous.ContextControllableTransactionInterceptor
+		alpha.framework.domain.transaction.autonomous.ContextControllableTransactionInterceptor
 	</interceptor-class>
 	</interceptor-order> 
 </interceptor-binding>
@@ -173,27 +168,27 @@ Domain Layer
 +---------------------------------------
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-engine</artifactId>
+	    <artifactId>alpha-jdbc</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-api</artifactId>
+	    <artifactId>alpha-sqlclient-api</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>sql-client-impl</artifactId>
+	    <artifactId>alpha-sqlclient-original</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>		
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>alpha-platform-api</artifactId>
+	    <artifactId>alpha-domain-api</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 		<groupId>alpha</groupId>
-	    <artifactId>alpha-spring-impl</artifactId>
+	    <artifactId>alpha-domain-spring</artifactId>
 	    <version>1.1.0-SNAPSHOT</version>
 	</dependency>		
 	
@@ -221,9 +216,8 @@ Domain Layer
 <bean id="transactionManager"
 	class="org.springframework.transaction.jta.JtaTransactionManager"/>	
 	
-<!-- EntityManager settiong -->
-<bean id="txEntityManager" class="service.core.TxEntityManagerImpl" scope="prototype">
-		<property name="dataSource" ref="dataSource"/>
+<!-- EntityManager setting -->
+<bean id="txEntityManager" class="alpha.sqlclient.orm.EntityManagerImpl" scope="prototype">
 		<property name="internalQuery" ref="internalNativeQuery"/>				
 </bean>
 +---------------------------------------

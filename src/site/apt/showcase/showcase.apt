@@ -28,14 +28,6 @@ Showcase
  {{{./httpClient.html}HTTP Client}} | API for connecting to HTTP Server. 
 *-----+------+
 
-* Execution
-
-*-----+------+
-<<Function>> | <<Description>> 
-*-----+------+
- {{{./asyncService.html}Asynchronous Service}} | API for Asynchrnous execution using Future pattern.
-*-----+------+
-
 * Autonomous Transaction Control
 
 *-----+------+
