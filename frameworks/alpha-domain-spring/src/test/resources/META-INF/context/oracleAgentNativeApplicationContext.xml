@@ -47,7 +47,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="internalQuery" ref="internalNativeQuery"/>				
 	</bean>
-	<bean id="batchUpdateFactory" class="client.sql.free.BatchModifyQueryFactoryImpl">
+	<bean id="batchUpdateFactory" class="alpha.sqlclient.free.BatchModifyQueryFactoryImpl">
 		<property name="internalQuery" ref="internalNativeQuery"/>		
 	</bean>
  

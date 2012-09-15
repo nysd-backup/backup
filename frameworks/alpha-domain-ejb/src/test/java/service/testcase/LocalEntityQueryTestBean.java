@@ -20,15 +20,15 @@ import org.eclipse.persistence.config.QueryHints;
 
 import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.transaction.ServiceContext;
+import alpha.sqlclient.exception.UniqueConstraintException;
+import alpha.sqlclient.orm.CriteriaModifyQuery;
+import alpha.sqlclient.orm.CriteriaReadQuery;
 
 import service.entity.DateEntity;
 import service.entity.IDateEntity;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
 import service.services.RequiresNewService;
-import client.sql.exception.UniqueConstraintException;
-import client.sql.orm.CriteriaModifyQuery;
-import client.sql.orm.CriteriaReadQuery;
 
 
 /**

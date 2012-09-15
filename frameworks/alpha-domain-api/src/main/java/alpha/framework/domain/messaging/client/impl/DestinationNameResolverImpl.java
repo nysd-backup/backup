@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import alpha.framework.domain.messaging.client.DestinationNameResolver;
-import alpha.framework.domain.messaging.client.DestinationPrefix;
 import alpha.framework.domain.messaging.client.MessagingProperty;
 
 
@@ -57,13 +56,16 @@ public class DestinationNameResolverImpl implements DestinationNameResolver{
 			}
 		}
 		
-		//プリフィクス指定の場合
-		DestinationPrefix prefix = target.getAnnotation(DestinationPrefix.class);
-		if( prefix != null){
-			return String.format("jms/%s/%s/%s/%s",prefix,dst,target.getDeclaringClass().getSimpleName(),target.getName());
-		}else{
-			return String.format("jms/%s/%s/%s",dst,target.getDeclaringClass().getSimpleName(),target.getName());
-		}
+		//プリフィクス指定の場合	
+		String name = property.getDynamicDestinationName();
+		String prefix = property.getDestinationPrefix();
+		if(StringUtils.isNotEmpty(name)){
+			return String.format(name);
+		}else {
+			if(StringUtils.isNotEmpty(prefix)){
+				return String.format("jms/%s/%s/%s/%s",prefix,dst,target.getDeclaringClass().getSimpleName(),target.getName());		
+			}
+		}			
+		return String.format("jms/%s/%s/%s",dst,target.getDeclaringClass().getSimpleName(),target.getName());
 	}
-
 }

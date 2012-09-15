@@ -32,6 +32,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	-->
 
 	<!-- メッセージ作成-->
-	<bean id="messageBuilder" class="core.message.impl.MessageBuilderImpl"/>
+	<bean id="messageBuilder" class="alpha.framework.core.message.impl.MessageBuilderImpl"/>
 
 </beans>

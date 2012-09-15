@@ -8,6 +8,10 @@ import java.util.List;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
+import alpha.sqlclient.free.HitData;
+import alpha.sqlclient.free.QueryCallback;
+import alpha.sqlclient.orm.CriteriaReadQuery;
+
 import service.CachableConst;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
@@ -15,9 +19,6 @@ import service.query.SampleNativeQuery;
 import service.query.SampleNativeQueryConst;
 import service.query.SampleNativeResult;
 import service.query.SampleNativeUpdate;
-import client.sql.free.HitData;
-import client.sql.free.QueryCallback;
-import client.sql.orm.CriteriaReadQuery;
 
 
 

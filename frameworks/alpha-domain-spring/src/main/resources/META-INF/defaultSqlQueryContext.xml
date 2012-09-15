@@ -16,39 +16,39 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- 内部クエリ -->
-	<bean id="internalNativeQuery" class="client.sql.free.strategy.InternalNativeQueryImpl" scope="prototype" >
+	<bean id="internalNativeQuery" class="alpha.sqlclient.free.strategy.InternalNativeQueryImpl" scope="prototype" >
 		<property name="queryService">
-			<bean id="queryService" class="sqlengine.service.impl.QueryServiceImpl" scope="singleton">
+			<bean id="queryService" class="alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
 				<property name="queryBuilder">
-					<bean class="sqlengine.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>	
+					<bean class="alpha.jdbc.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>	
 				</property>
 				<property name="provider">
-					<bean class="sqlengine.strategy.impl.StatementProviderImpl" scope="singleton"/>		
+					<bean class="alpha.jdbc.strategy.impl.StatementProviderImpl" scope="singleton"/>		
 				</property>
 				<property name="exceptionHandler">
-					<bean class="client.sql.free.SQLExceptionHandlerImpl" scope="singleton"/>
+					<bean class="alpha.sqlclient.free.SQLExceptionHandlerImpl" scope="singleton"/>
 				</property>
 			</bean>
 		</property>		
 	</bean>
 	
 	<!--　バッチクエリファクトリ -->
-	<bean id="batchUpdateFactory" class="client.sql.free.BatchModifyQueryFactoryImpl" scope="prototype">
+	<bean id="batchUpdateFactory" class="alpha.sqlclient.free.BatchModifyQueryFactoryImpl" scope="prototype">
 		<property name="internalQuery" ref="internalNativeQuery"/>	
 	</bean>
 	
 	<!-- クエリファクトリ -->
-	<bean id="queryFactory" class="client.sql.free.QueryFactory" scope="prototype">
+	<bean id="queryFactory" class="alpha.sqlclient.free.QueryFactory" scope="prototype">
 		<property name="internalNativeQuery" ref="internalNativeQuery"/>			
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="ormQueryFactory" class="client.sql.orm.CriteriaQueryFactory" scope="prototype">
+	<bean id="ormQueryFactory" class="alpha.sqlclient.orm.CriteriaQueryFactory" scope="prototype">
 		<property name="internalOrmQuery">
-			<bean class="client.sql.orm.strategy.InternalOrmQueryImpl" scope="prototype" >
+			<bean class="alpha.sqlclient.orm.strategy.impl.InternalOrmQueryImpl" scope="prototype" >
 				<property name="internalQuery" ref="internalNativeQuery"/>	
 				<property name="sqlStatementBuilder" >
-					<bean class="client.sql.orm.strategy.SQLStatementBuilderImpl" scope="singleton" />
+					<bean class="alpha.sqlclient.orm.strategy.SQLStatementBuilderImpl" scope="singleton" />
 				</property>		
 			</bean>
 		</property>

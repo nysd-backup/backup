@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import client.sql.free.AbstractNativeModifyQuery;
+import alpha.sqlclient.free.AbstractNativeModifyQuery;
 
 /**
  * function.

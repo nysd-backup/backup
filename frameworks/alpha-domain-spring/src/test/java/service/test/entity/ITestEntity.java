@@ -3,7 +3,7 @@
  */
 package service.test.entity;
 
-import client.sql.orm.Metadata;
+import alpha.sqlclient.orm.Metadata;
 
 /**
  * function.

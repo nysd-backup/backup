@@ -32,6 +32,9 @@ import org.springframework.transaction.TransactionSystemException;
 
 import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.transaction.ServiceContext;
+import alpha.sqlclient.orm.CriteriaModifyQuery;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
 
 import service.test.RequiresNewReadOnlyService;
 import service.test.RequiresNewService;
@@ -43,9 +46,6 @@ import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
 import service.test.entity.Testcomp;
 import service.test.entity.TestcompPK;
-import client.sql.orm.CriteriaModifyQuery;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.CriteriaReadQuery;
 
 
 /**

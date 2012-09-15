@@ -17,6 +17,15 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import alpha.sqlclient.free.BatchModifyQuery;
+import alpha.sqlclient.free.BatchModifyQueryFactory;
+import alpha.sqlclient.free.HitData;
+import alpha.sqlclient.free.QueryCallback;
+import alpha.sqlclient.free.QueryFactory;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
+import alpha.sqlclient.orm.EntityManagerImpl;
+
 import service.test.CachableConst;
 import service.test.SampleBatchUpdate;
 import service.test.SampleNativeQuery;
@@ -26,14 +35,6 @@ import service.test.SampleNativeUpdate;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import client.sql.free.BatchModifyQuery;
-import client.sql.free.BatchModifyQueryFactory;
-import client.sql.free.HitData;
-import client.sql.free.QueryCallback;
-import client.sql.free.QueryFactory;
-import client.sql.orm.EntityManagerImpl;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.CriteriaReadQuery;
 
 
 /**

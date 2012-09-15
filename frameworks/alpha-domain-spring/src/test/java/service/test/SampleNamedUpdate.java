@@ -5,7 +5,8 @@ package service.test;
 
 import java.util.Date;
 
-import client.sql.free.AbstractNamedModifyQuery;
+import alpha.sqlclient.free.AbstractNamedModifyQuery;
+
 
 
 

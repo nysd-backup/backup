@@ -9,7 +9,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
-import client.sql.orm.EntityManagerImpl;
+import alpha.sqlclient.orm.EntityManagerImpl;
+
 
 
 /**
@@ -32,7 +33,7 @@ public class TxEntityManagerImpl extends EntityManagerImpl{
 	}
 
 	/**
-	 * @see client.sql.orm.JTAEntityManagerImpl#getConnection()
+	 * @see alpha.sqlclient.elink.orm.JTAEntityManagerImpl#getConnection()
 	 */
 	@Override
 	public Connection getConnection() {	

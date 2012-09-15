@@ -5,8 +5,11 @@ package alpha.framework.domain.messaging.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.jms.ConnectionFactory;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * MessagingProperty.
@@ -17,6 +20,8 @@ import javax.jms.ConnectionFactory;
 public class MessagingProperty{
 
 	private ConnectionFactory connectionFactory = null;
+	
+	private String destinationPrefix = null;
 	
 	private String dynamicDestinationName = null;
 	
@@ -102,6 +107,66 @@ public class MessagingProperty{
 	 */
 	public void setJMSProperty(Map<String,Object> jMSProperty) {
 		JMSProperty = jMSProperty;
+	}
+
+	/**
+	 * @return the destinationPrefix
+	 */
+	public String getDestinationPrefix() {
+		return destinationPrefix;
+	}
+
+	/**
+	 * @param destinationPrefix the destinationPrefix to set
+	 */
+	public void setDestinationPrefix(String destinationPrefix) {
+		this.destinationPrefix = destinationPrefix;
+	}
+	
+	/**
+	 * @param config the config to create
+	 * @return the property
+	 */
+	public static MessagingProperty createFrom(JMSConfig config){
+		MessagingProperty property = new MessagingProperty();
+		if(config != null){
+			property.setDestinationPrefix(config.destinationPrefix());
+			property.setDynamicDestinationName(config.destinationName());
+			property.setJMSType(config.jmsType());
+			Map<String,Object> prop = new HashMap<String,Object>();
+			for(JMSProperty p : config.property()){
+				prop.put(p.name(), p.value());
+			}
+			property.setJMSProperty(prop);
+		}
+		return property;
+	}
+	
+	/**
+	 * Override the property.
+	 * @param property the property
+	 */
+	public void override(MessagingProperty property){
+		if(StringUtils.isNotEmpty(property.getDestinationPrefix())){
+			setDestinationPrefix(property.getDestinationPrefix());
+		}
+		if(StringUtils.isNotEmpty(property.getDestinationPrefix())){
+			setDestinationPrefix(property.getDestinationPrefix());
+		}
+		if(property.getConnectionFactory() != null){
+			setConnectionFactory(property.getConnectionFactory());
+		}
+		if(StringUtils.isNotEmpty(property.getJMSCorrelationID())){
+			setJMSCorrelationID(property.getJMSCorrelationID());
+		}
+		if(StringUtils.isNotEmpty(property.getJMSType())){
+			setJMSType(property.getJMSType());
+		}
+		Map<String,Object> props = property.getJMSProperty();
+		for(Entry<String,Object> p : props.entrySet()){
+			this.JMSProperty.put(p.getKey(), p.getValue());
+		}
+		
 	}
 
 }

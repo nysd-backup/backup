@@ -9,8 +9,8 @@ import org.eclipse.persistence.exceptions.OptimisticLockException;
 
 import alpha.framework.domain.transaction.ServiceContext;
 import alpha.framework.domain.transaction.autonomous.ServiceContextImpl;
+import alpha.sqlclient.elink.customizer.JPQLExceptionHandlerImpl;
 
-import client.sql.elink.customizer.JPQLExceptionHandlerImpl;
 
 
 /**

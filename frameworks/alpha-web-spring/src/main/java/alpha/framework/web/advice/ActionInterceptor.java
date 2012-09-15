@@ -13,6 +13,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 import alpha.framework.core.exception.BusinessException;
@@ -20,7 +21,6 @@ import alpha.framework.core.message.Message;
 import alpha.framework.core.message.TargetClient;
 import alpha.framework.domain.transaction.ServiceContext;
 import alpha.framework.domain.transaction.ServiceContextImpl;
-import alpha.utility.StringUtils;
 
 
 /**

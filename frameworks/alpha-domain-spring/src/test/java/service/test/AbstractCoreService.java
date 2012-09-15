@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import alpha.framework.domain.messaging.client.MessageClientFactory;
 import alpha.framework.domain.messaging.client.MessagingProperty;
+import alpha.sqlclient.free.AbstractNativeModifyQuery;
+import alpha.sqlclient.free.AbstractNativeReadQuery;
+import alpha.sqlclient.free.QueryFactory;
+import alpha.sqlclient.orm.CriteriaModifyQuery;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
 
-import client.sql.free.AbstractNativeModifyQuery;
-import client.sql.free.AbstractNativeReadQuery;
-import client.sql.free.QueryFactory;
-import client.sql.orm.CriteriaModifyQuery;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.CriteriaReadQuery;
 
 
 /**

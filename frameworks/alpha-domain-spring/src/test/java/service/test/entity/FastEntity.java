@@ -12,7 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import client.sql.orm.Pair;
+import alpha.sqlclient.orm.Pair;
+
 
 
 
@@ -25,7 +26,7 @@ import client.sql.orm.Pair;
  */
 @Entity
 @Table(name="fast")
-public class FastEntity implements client.sql.orm.FastEntity{
+public class FastEntity implements alpha.sqlclient.orm.FastEntity{
 
 	@Id
 	@Column
@@ -121,7 +122,7 @@ public class FastEntity implements client.sql.orm.FastEntity{
 	}
 
 	/**
-	 * @see client.sql.orm.FastEntity#getVersioningValue()
+	 * @see alpha.sqlclient.elink.orm.FastEntity#getVersioningValue()
 	 */
 	@Override
 	public Pair<String> toVersioningValue() {
@@ -129,7 +130,7 @@ public class FastEntity implements client.sql.orm.FastEntity{
 	}
 
 	/**
-	 * @see client.sql.orm.FastEntity#getPrimaryKeys()
+	 * @see alpha.sqlclient.elink.orm.FastEntity#getPrimaryKeys()
 	 */
 	@Override
 	public Map<String, Object> toPrimaryKeys() {
@@ -139,7 +140,7 @@ public class FastEntity implements client.sql.orm.FastEntity{
 	}
 
 	/**
-	 * @see client.sql.orm.FastEntity#getAttributes()
+	 * @see alpha.sqlclient.elink.orm.FastEntity#getAttributes()
 	 */
 	@Override
 	public Map<String, Object> toAttributes() {

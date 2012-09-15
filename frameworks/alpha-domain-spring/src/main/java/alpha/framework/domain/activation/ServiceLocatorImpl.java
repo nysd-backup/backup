@@ -10,8 +10,8 @@ import alpha.framework.core.message.FaultLogger;
 import alpha.framework.core.message.MessageBuilder;
 import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.messaging.client.MessageClientFactory;
+import alpha.sqlclient.free.QueryFactory;
 
-import client.sql.free.QueryFactory;
 
 
 /**

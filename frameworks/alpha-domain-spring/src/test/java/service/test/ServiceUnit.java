@@ -36,9 +36,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import sqlengine.domain.ConstantCache;
 import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.activation.ServiceLocatorImpl;
+import alpha.jdbc.domain.ConstantCache;
 
 
 /**

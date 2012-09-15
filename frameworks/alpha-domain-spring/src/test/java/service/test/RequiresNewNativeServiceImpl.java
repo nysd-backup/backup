@@ -27,9 +27,9 @@ import alpha.framework.core.message.MessageArgument;
 import alpha.framework.core.message.MessageBuilder;
 import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.transaction.ServiceContext;
+import alpha.sqlclient.orm.EntityManagerImpl;
 
 import service.test.entity.TestEntity;
-import client.sql.orm.EntityManagerImpl;
 
 
 /**

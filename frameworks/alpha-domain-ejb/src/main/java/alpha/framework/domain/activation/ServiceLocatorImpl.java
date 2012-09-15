@@ -9,8 +9,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
-import sqlengine.strategy.QueryBuilder;
-import sqlengine.strategy.impl.QueryBuilderProxyImpl;
 import alpha.framework.core.message.FaultLogger;
 import alpha.framework.core.message.MessageBuilder;
 import alpha.framework.core.message.impl.FaultLoggerImpl;
@@ -22,13 +20,15 @@ import alpha.framework.domain.exception.BusinessException;
 import alpha.framework.domain.messaging.client.MessageClientFactory;
 import alpha.framework.domain.messaging.client.MessageProducerImpl;
 import alpha.framework.domain.messaging.client.impl.MessageClientFactoryImpl;
-import client.sql.elink.free.strategy.InternalNamedQueryImpl;
-import client.sql.elink.free.strategy.InternalNativeQueryImpl;
-import client.sql.elink.orm.strategy.JPQLStatementBuilderImpl;
-import client.sql.free.QueryFactory;
-import client.sql.free.strategy.InternalQuery;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.strategy.InternalOrmQueryImpl;
+import alpha.jdbc.strategy.QueryBuilder;
+import alpha.jdbc.strategy.impl.QueryBuilderProxyImpl;
+import alpha.sqlclient.elink.free.strategy.InternalNamedQueryImpl;
+import alpha.sqlclient.elink.free.strategy.InternalNativeQueryImpl;
+import alpha.sqlclient.elink.orm.strategy.JPQLStatementBuilderImpl;
+import alpha.sqlclient.free.QueryFactory;
+import alpha.sqlclient.free.strategy.InternalQuery;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.strategy.impl.InternalOrmQueryImpl;
 
 
 /**

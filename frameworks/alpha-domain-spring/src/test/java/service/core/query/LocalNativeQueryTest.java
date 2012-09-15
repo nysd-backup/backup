@@ -15,6 +15,12 @@ import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
+import alpha.sqlclient.free.HitData;
+import alpha.sqlclient.free.QueryCallback;
+import alpha.sqlclient.free.QueryFactory;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
+
 import service.test.CachableConst;
 import service.test.SampleNativeQuery;
 import service.test.SampleNativeQueryConst;
@@ -23,11 +29,6 @@ import service.test.SampleNativeUpdate;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import client.sql.free.HitData;
-import client.sql.free.QueryCallback;
-import client.sql.free.QueryFactory;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.CriteriaReadQuery;
 
 
 /**

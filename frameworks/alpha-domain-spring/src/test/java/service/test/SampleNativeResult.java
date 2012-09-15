@@ -5,7 +5,8 @@ package service.test;
 
 import java.util.HashMap;
 
-import sqlengine.domain.AccessorDeclared;
+import alpha.jdbc.domain.AccessorDeclared;
+
 
 
 

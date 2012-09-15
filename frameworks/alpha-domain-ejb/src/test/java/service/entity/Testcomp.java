@@ -13,9 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import client.sql.orm.FastEntity;
-import client.sql.orm.Metadata;
-import client.sql.orm.Pair;
+import alpha.sqlclient.orm.FastEntity;
+import alpha.sqlclient.orm.Metadata;
+import alpha.sqlclient.orm.Pair;
+
 
 
 
@@ -102,7 +103,7 @@ public class Testcomp implements FastEntity{
 	
 
 	/**
-	 * @see client.sql.api.FastEntity#getVersioningValue()
+	 * @see alpha.sqlclient.elink.api.FastEntity#getVersioningValue()
 	 */
 	@Override
 	public Pair<String> toVersioningValue() {	
@@ -110,7 +111,7 @@ public class Testcomp implements FastEntity{
 	}
 	
 	/**
-	 * @see client.sql.api.FastEntity#getPrimaryKeys()
+	 * @see alpha.sqlclient.elink.api.FastEntity#getPrimaryKeys()
 	 */
 	@Override
 	public Map<String, Object> toPrimaryKeys() {
@@ -121,7 +122,7 @@ public class Testcomp implements FastEntity{
 	}
 
 	/**
-	 * @see client.sql.api.FastEntity#getAttributes()
+	 * @see alpha.sqlclient.elink.api.FastEntity#getAttributes()
 	 */
 	@Override
 	public Map<String, Object> toAttributes() {

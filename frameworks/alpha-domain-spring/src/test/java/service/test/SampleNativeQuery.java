@@ -5,7 +5,8 @@ package service.test;
 
 import java.util.List;
 
-import client.sql.free.AbstractNativeReadQuery;
+import alpha.sqlclient.free.AbstractNativeReadQuery;
+
 
 /**
  * function.

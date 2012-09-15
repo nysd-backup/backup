@@ -16,6 +16,10 @@ import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
+import alpha.sqlclient.free.QueryFactory;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
+
 import service.test.CachableConst;
 import service.test.SampleNamedQuery;
 import service.test.SampleNamedQueryConst;
@@ -25,9 +29,6 @@ import service.test.entity.DateEntity;
 import service.test.entity.IDateEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import client.sql.free.QueryFactory;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.CriteriaReadQuery;
 
 
 /**

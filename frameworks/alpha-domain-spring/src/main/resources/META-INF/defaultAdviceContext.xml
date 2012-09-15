@@ -18,12 +18,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<aop:config>
 		<aop:aspect id="perfAspect" ref="perfInterceptor">	
-			<aop:pointcut expression="execution(* core..*.*(..)) and not execution(* alpha.domain.core.advice.*.*(..))" id="pointcut"/>	
+			<aop:pointcut expression="@annotation(org.springframework.stereotype.Service)" id="pointcut"/>	
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>
-	<bean id="internalPerfInterceptor" class="alpha.domain.core.advice.InternalPerfInterceptor"/>
-	<bean id="perfInterceptor" class="alpha.domain.core.advice.DelegatingInterceptor">
+	<bean id="internalPerfInterceptor" class="alpha.framework.domain.advice.InternalPerfInterceptor"/>
+	<bean id="perfInterceptor" class="alpha.framework.domain.advice.DelegatingInterceptor">
 		<property name="internal" ref="internalPerfInterceptor"/>
 	</bean>
 	

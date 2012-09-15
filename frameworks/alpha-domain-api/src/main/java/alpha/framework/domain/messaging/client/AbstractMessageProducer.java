@@ -24,7 +24,7 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	private DestinationNameResolver destinationNameResolver = new DestinationNameResolverImpl();
 	
 	/** the hint */
-	private MessagingProperty property = new MessagingProperty();
+	private MessagingProperty property = null;
 	
 	public static final String SERVICE_NAME = "alpha.mdb.serviceName";
 	
@@ -67,6 +67,9 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 				serial[i] = Serializable.class.cast(args[i]);
 			}
 		}
+		JMSConfig config = method.getAnnotation(JMSConfig.class);
+		MessagingProperty property = MessagingProperty.createFrom(config);
+		property.override(this.property);
 		property.addJMSProperty(SERVICE_NAME, method.getDeclaringClass().getName());
 		property.addJMSProperty(METHOD_NAME, method.getName());		
 		Class<?>[] clss = method.getParameterTypes();

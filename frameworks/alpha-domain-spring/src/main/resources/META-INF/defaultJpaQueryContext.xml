@@ -16,17 +16,17 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="queryBuilder" class="sqlengine.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>
+  	<bean id="queryBuilder" class="alpha.jdbc.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>
   	
   	<!-- 内部Namedクエリ -->
-	<bean id="internalNamedQuery" class="client.sql.elink.free.strategy.InternalNamedQueryImpl" scope="prototype" >
+	<bean id="internalNamedQuery" class="alpha.sqlclient.free.strategy.InternalNamedQueryImpl" scope="prototype" >
 		<property name="queryBuilder" ref="queryBuilder"/>			
 	</bean>	
 
 	<!-- クエリファクトリ開発者API -->
-	<bean id="queryFactory" class="client.sql.free.QueryFactory" scope="prototype" >
+	<bean id="queryFactory" class="alpha.sqlclient.free.QueryFactory" scope="prototype" >
 		<property name="internalNativeQuery">
-			<bean class="client.sql.elink.free.strategy.InternalNativeQueryImpl" scope="prototype" >		
+			<bean class="alpha.sqlclient.elink.free.strategy.InternalNativeQueryImpl" scope="prototype" >		
 				<property name="queryBuilder" ref="queryBuilder"/>			
 			</bean>
 		</property>		
@@ -34,12 +34,12 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="client.sql.orm.CriteriaQueryFactory" scope="prototype">	
+	<bean id="ormQueryFactory" class="alpha.sqlclient.orm.CriteriaQueryFactory" scope="prototype">	
 		<property name="internalOrmQuery">
-			<bean class="client.sql.orm.strategy.InternalOrmQueryImpl" scope="prototype" >
+			<bean class="alpha.sqlclient.orm.strategy.impl.InternalOrmQueryImpl" scope="prototype" >
 				<property name="internalQuery" ref="internalNamedQuery"/>		
 				<property name="sqlStatementBuilder">
-					<bean class="client.sql.elink.orm.strategy.JPQLStatementBuilderImpl" scope="singleton" />
+					<bean class="alpha.sqlclient.orm.strategy.JPQLStatementBuilderImpl" scope="singleton" />
 				</property>		
 			</bean>
 		</property>

@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import client.sql.free.AbstractNamedReadQuery;
+import alpha.sqlclient.free.AbstractNamedReadQuery;
 
 /**
  * function.

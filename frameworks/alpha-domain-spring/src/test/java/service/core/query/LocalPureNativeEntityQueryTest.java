@@ -28,6 +28,13 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
 import alpha.framework.domain.activation.ServiceLocator;
+import alpha.sqlclient.exception.UniqueConstraintException;
+import alpha.sqlclient.orm.ComparingOperand;
+import alpha.sqlclient.orm.CriteriaModifyQuery;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
+import alpha.sqlclient.orm.EntityManagerImpl;
+import alpha.sqlclient.orm.FixString;
 
 import service.test.RequiresNewNativeReadOnlyService;
 import service.test.RequiresNewNativeService;
@@ -38,13 +45,6 @@ import service.test.entity.IDateEntity;
 import service.test.entity.IFastEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import client.sql.exception.UniqueConstraintException;
-import client.sql.orm.ComparingOperand;
-import client.sql.orm.CriteriaModifyQuery;
-import client.sql.orm.CriteriaQueryFactory;
-import client.sql.orm.CriteriaReadQuery;
-import client.sql.orm.EntityManagerImpl;
-import client.sql.orm.FixString;
 
 
 /**

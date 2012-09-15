@@ -5,7 +5,8 @@ package service.entity;
 
 import java.util.Date;
 
-import client.sql.orm.Metadata;
+import alpha.sqlclient.orm.Metadata;
+
 
 
 

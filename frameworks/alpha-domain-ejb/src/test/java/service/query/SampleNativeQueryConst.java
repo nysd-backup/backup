@@ -3,7 +3,7 @@
  */
 package service.query;
 
-import client.sql.free.AbstractNativeReadQuery;
+import alpha.sqlclient.free.AbstractNativeReadQuery;
 
 /**
  * function.
