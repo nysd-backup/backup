@@ -6,12 +6,17 @@ package alpha.httpclient.handler;
 import org.apache.http.HttpResponse;
 
 /**
- * function.
+ * HttpCallback.
  *
  * @author yoshida-n
  * @version	created.
  */
 public interface HttpCallback {
 
+	/**
+	 * Calls back when receive the response. 
+	 * @param response
+	 */
 	public void callback(HttpResponse response);
+
 }

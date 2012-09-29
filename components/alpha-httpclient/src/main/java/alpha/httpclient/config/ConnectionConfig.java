@@ -3,17 +3,27 @@
  */
 package alpha.httpclient.config;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
- * function.
+ * Connection Configuration.
  *
  * @author yoshida-n
  * @version	created.
  */
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ConnectionConfig {
 
-	int socketTimeout() default 0;
+	/** timeout msec */
+	int socketTimeout() default -1;
 	
-	int connectionTimeout() default 0;
+	/** timeout msec */
+	int connectionTimeout() default -1;
+
+	/** pool connection */
+	boolean poolable() default false;
 	
-	boolean keepAlive() default false;
+	/** connection is keeping between request or thread */
+	KeepAliveScope scope() default KeepAliveScope.REQUEST;
 }

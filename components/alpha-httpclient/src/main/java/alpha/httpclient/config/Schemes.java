@@ -7,15 +7,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Scheme.
+ * Schemes.
  *
  * @author yoshida-n
  * @version	created.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SchemeConfig {
+public @interface Schemes {
 
-	String name();
-	
-	int port();
+	SchemeConfig[] schemes() default {};
 }

@@ -9,20 +9,35 @@ import alpha.httpclient.config.RequestProperty;
 import alpha.httpclient.core.HttpClientFactory;
 import alpha.httpclient.core.RequestDispatcher;
 import alpha.httpclient.handler.HttpInvocation;
+import alpha.httpclient.handler.impl.AsyncHttpClient;
 import alpha.httpclient.handler.impl.SyncHttpClient;
 
 /**
- * function.
+ * HttpClientFactoryImpl.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class HttpClientFactoryImpl implements HttpClientFactory{
 	
-	private HttpInvocation httpInvocation =new SyncHttpClient();
+	/** Synchronous */
+	private HttpInvocation syncHttpClient =new SyncHttpClient();
 	
-	public void setHttpInvocation(HttpInvocation httpInvocation){
-		this.httpInvocation = httpInvocation;
+	/** Asynchronous */
+	private HttpInvocation asyncHttpClient =new AsyncHttpClient();
+	
+	/**
+	 * @param syncHttpClient the syncHttpClient to set
+	 */
+	public void setSyncHttpClient(HttpInvocation syncHttpClient){
+		this.syncHttpClient = syncHttpClient;
+	}
+	
+	/**
+	 * @param asyncHttpClient the asyncHttpClient to set
+	 */
+	public void setAsyncHttpClient(HttpInvocation asyncHttpClient){
+		this.asyncHttpClient = asyncHttpClient;
 	}
 	
 	/**
@@ -31,9 +46,8 @@ public class HttpClientFactoryImpl implements HttpClientFactory{
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T createService(Class<T> serviceType, RequestProperty property) {
-		RequestDispatcher requestDispather = new RequestDispatcher();
-		requestDispather.setHttpInvocation(httpInvocation);
-		requestDispather.setRequestProperty(property);
+		RequestDispatcher requestDispather 
+			= new RequestDispatcher(property,syncHttpClient,asyncHttpClient);		
 		return (T) Proxy.newProxyInstance(serviceType.getClassLoader(), new Class[]{serviceType}, requestDispather);
 	}
 

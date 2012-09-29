@@ -48,27 +48,6 @@ public class LogUtils {
 	}
 
 	/**
-	 * @see alpha.framework.core.logging.NormalLogWriter#trace(java.lang.String)
-	 */
-	public static void trace(Logger logger,String message) {		
-		logger.trace(message);
-	}
-
-	/**
-	 * @see alpha.framework.core.logging.NormalLogWriter#debug(java.lang.String)
-	 */
-	public static void debug(Logger logger,String message) {
-		logger.debug(message);
-	}
-
-	/**
-	 * @see alpha.framework.core.logging.NormalLogWriter#info(java.lang.String)
-	 */
-	public static void info(Logger logger,String message) {
-		logger.info(message);
-	}
-
-	/**
 	 * @see alpha.framework.core.logging.LogWriter#error(java.lang.String)
 	 */
 	public static void error(Logger logger,String message) {
@@ -89,19 +68,4 @@ public class LogUtils {
 	public static void error(Logger logger,Throwable t) {
 		logger.error(fook()+t.getMessage(), t);
 	}
-
-	/**
-	 * @see alpha.framework.core.logging.LogWriter#warn(java.lang.String)
-	 */
-	public static void warn(Logger logger,String message) {
-		logger.warn(message);
-	}
-
-	/**
-	 * @see alpha.framework.core.logging.LogWriter#warn(java.lang.String, java.lang.Throwable)
-	 */
-	public static void warn(Logger logger,String message, Throwable t) {
-		logger.warn(message, t);
-	}
-
 }

@@ -7,15 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Scheme.
+ * Marking as asynchronous.
  *
  * @author yoshida-n
  * @version	created.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SchemeConfig {
+public @interface Asynchronous {
 
-	String name();
-	
-	int port();
 }

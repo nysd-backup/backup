@@ -4,45 +4,31 @@
 package alpha.httpclient.config;
 
 /**
- * function.
+ * Connection Property.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class ConnectionProperty {
 	
-	private int socketTimeout = -1;
+	/** keep connection between request or thread */
+	private KeepAliveScope keepAliveScope = KeepAliveScope.REQUEST;
 	
-	private int connectionTimeout = -1;
-	
-	private boolean poolable = true;
+//	/** pool connection *
+	private boolean poolable = false;
 
 	/**
-	 * @return the socketTimeout
+	 * @return the keepAliveScope
 	 */
-	public int getSocketTimeout() {
-		return socketTimeout;
+	public KeepAliveScope getKeepAliveScope() {
+		return keepAliveScope;
 	}
 
 	/**
-	 * @param socketTimeout the socketTimeout to set
+	 * @param keepAliveScope the keepAliveScope to set
 	 */
-	public void setSocketTimeout(int socketTimeout) {
-		this.socketTimeout = socketTimeout;
-	}
-
-	/**
-	 * @return the connectionTimeout
-	 */
-	public int getConnectionTimeout() {
-		return connectionTimeout;
-	}
-
-	/**
-	 * @param connectionTimeout the connectionTimeout to set
-	 */
-	public void setConnectionTimeout(int connectionTimeout) {
-		this.connectionTimeout = connectionTimeout;
+	public void setKeepAliveScope(KeepAliveScope keepAliveScope) {
+		this.keepAliveScope = keepAliveScope;
 	}
 
 	/**

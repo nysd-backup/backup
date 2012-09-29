@@ -3,11 +3,11 @@
  */
 package service.testcase;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import alpha.framework.domain.activation.ServiceLocator;
-
 import service.ServiceUnit;
+import alpha.framework.domain.activation.ServiceLocator;
 
 /**
  * function.
@@ -15,6 +15,7 @@ import service.ServiceUnit;
  * @author yoshida-n
  * @version	created.
  */
+@Ignore
 public class JMSTest extends ServiceUnit{
 	
 	private JMSTestBean bean(){

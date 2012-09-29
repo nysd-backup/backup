@@ -14,7 +14,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
 /**
- * function.
+ * XMLUtility.
  *
  * @author yoshida-n
  * @version	created.

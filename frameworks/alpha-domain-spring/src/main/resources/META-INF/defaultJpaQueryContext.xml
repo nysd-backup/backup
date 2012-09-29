@@ -19,7 +19,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
   	<bean id="queryBuilder" class="alpha.jdbc.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>
   	
   	<!-- 内部Namedクエリ -->
-	<bean id="internalNamedQuery" class="alpha.sqlclient.free.strategy.InternalNamedQueryImpl" scope="prototype" >
+	<bean id="internalNamedQuery" class="alpha.sqlclient.elink.free.strategy.InternalNamedQueryImpl" scope="prototype" >
 		<property name="queryBuilder" ref="queryBuilder"/>			
 	</bean>	
 
@@ -39,7 +39,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			<bean class="alpha.sqlclient.orm.strategy.impl.InternalOrmQueryImpl" scope="prototype" >
 				<property name="internalQuery" ref="internalNamedQuery"/>		
 				<property name="sqlStatementBuilder">
-					<bean class="alpha.sqlclient.orm.strategy.JPQLStatementBuilderImpl" scope="singleton" />
+					<bean class="alpha.sqlclient.elink.orm.strategy.JPQLStatementBuilderImpl" scope="singleton" />
 				</property>		
 			</bean>
 		</property>

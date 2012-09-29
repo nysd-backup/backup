@@ -22,20 +22,68 @@ public class AnyService {
 }
 +-----------------------------------------
 
-* Client Code
+* Client Code(Synchronous)
 
 +-----------------------------------------
-//@Autowired or ServiceLocator.getHTTPClientFactory() is required.
-private HTTPClientFactory factory;
+//@Autowired or ServiceLocator.getHttpClientFactory() is required.
+private HttpClientFactory factory;
 
 public void serviceMethod() {
 	
 	//find resource from the external server
-	AnyService service = factory.createService(AnyService.class);	
+	RequestProperty property = new RequestProperty();
+	property.setContextRoot("http://server.co.jp/resource/");
+	
+	AnyService service = factory.createService(AnyService.class,property);	
 	Item item = service.find("ITEM001");
 
 	//update resources
 	Items items = new Items(new Item(),new Item());
 	service.update(items);
+}
++-----------------------------------------
+
+* Client Code(Asynchronous)
+
++-----------------------------------------
+//@Autowired or ServiceLocator.getHttpClientFactory() is required.
+private HttpClientFactory factory;
+
+public void serviceMethod() {
+	
+	//this thread-local context has DefaulHttpAsyncClient.
+	HttpClientContext context = new HttpClientContext();
+	context.initialize();
+	
+	//find resource from the external server
+	RequestProperty property = new RequestProperty();
+	//set async mode dynamically. Annotation @Asynchronous is also available.
+	property.setAsynchronous();
+	property.setContextRoot("http://server.co.jp/resource/");
+
+	//asynchronous request.
+	AsyncHttpCallback<Item> callback = new AsyncHttpCallback<Item>();	
+	property.getExecutionProperty.setHttpCallback(callback);
+	AnyService service = factory.createService(AnyService.class,property);	
+	service.find("ITEM001");
+
+	AsyncHttpCallback<Item> callback2 = new AsyncHttpCallback<Item>();	
+	property.getExecutionProperty.setHttpCallback(callback);
+	AnyService service = factory.createService(AnyService.class,property);	
+	service.find("ITEM002");
+
+	AsyncHttpCallback<Item> callback3 = new AsyncHttpCallback<Item>();	
+	property.getExecutionProperty.setHttpCallback(callback);
+	AnyService service = factory.createService(AnyService.class,property);	
+	service.find("ITEM003");
+
+	//This is Future pattern. Wait requesting thread .
+	Item item = callback.get();
+	Item item2 = callback2.get();
+	Item item3 = callback3.get();
+
+	//release connection.
+	context.shutdown();
+
 }
 +-----------------------------------------

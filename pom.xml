@@ -204,6 +204,7 @@
 				<module>components/alpha-sqlclient-api</module>
 				<module>components/alpha-sqlclient-original</module>				
 				<module>components/alpha-sqlclient-elink</module>	
+				<module>components/alpha-httpclient</module>
 				<module>frameworks/alpha-framework-core</module>			
 				<module>frameworks/alpha-domain-api</module>
 				<module>frameworks/alpha-domain-spring</module>				

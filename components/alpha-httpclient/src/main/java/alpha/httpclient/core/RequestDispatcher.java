@@ -6,24 +6,36 @@ package alpha.httpclient.core;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import alpha.httpclient.config.HttpConfig;
+import alpha.httpclient.config.Asynchronous;
+import alpha.httpclient.config.ConnectionConfig;
+import alpha.httpclient.config.ProxyConfig;
 import alpha.httpclient.config.RequestProperty;
+import alpha.httpclient.config.Schemes;
 import alpha.httpclient.handler.HttpInvocation;
 
 /**
- * function.
+ * Dispathcer.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class RequestDispatcher implements InvocationHandler{
 	
-	private RequestProperty requestProperty;
+	private final RequestProperty requestProperty;
 	
-	private HttpInvocation httpInvocation;
+	private final HttpInvocation syncHttpClient;
 	
-	public void setRequestProperty(RequestProperty requestProperty){
-		this.requestProperty = requestProperty;
+	private final HttpInvocation asyncHttpClient;
+	
+	/**
+	 * @param property
+	 * @param sync
+	 * @param async
+	 */
+	public RequestDispatcher(RequestProperty property,HttpInvocation sync, HttpInvocation async){
+		this.requestProperty = property;
+		this.syncHttpClient = sync;
+		this.asyncHttpClient = async;
 	}
 
 	/**
@@ -32,25 +44,19 @@ public class RequestDispatcher implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
-		HttpConfig config = method.getDeclaringClass().getAnnotation(HttpConfig.class);
-		RequestProperty property = null;
-		if(config != null){
-			property = RequestProperty.create(config);
-		}else {
-			property = new RequestProperty();
-		}
+		Asynchronous async = method.getAnnotation(Asynchronous.class);
+		Schemes schemes = method.getAnnotation(Schemes.class);
+		ConnectionConfig con = method.getAnnotation(ConnectionConfig.class);
+		ProxyConfig proxyCon = method.getAnnotation(ProxyConfig.class);
+		RequestProperty property = RequestProperty.create(con,schemes,async,proxyCon);		
 		if(this.requestProperty != null){
 			property.override(this.requestProperty);
 		}
-		//request 
-		return httpInvocation.request(property, method, args);
-	}
-
-	/**
-	 * @param httpInvocation the httpInvocation to set
-	 */
-	public void setHttpInvocation(HttpInvocation httpInvocation) {
-		this.httpInvocation = httpInvocation;
+		if(property.getExecutionProperty().isAsynchronous()){
+			return asyncHttpClient.request(property, method, args);
+		}else{
+			return syncHttpClient.request(property, method, args);
+		}
 	}
 
 }

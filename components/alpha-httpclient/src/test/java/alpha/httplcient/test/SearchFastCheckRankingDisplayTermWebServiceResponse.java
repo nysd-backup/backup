@@ -1,3 +1,4 @@
+package alpha.httplcient.test;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
