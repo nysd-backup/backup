@@ -9,13 +9,14 @@ import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.interceptor.InvocationContext;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.MDC;
 
 import alpha.framework.core.base.CorrelativeRequest;
 import alpha.framework.core.base.CorrelativeResponse;
 import alpha.framework.core.exception.BusinessException;
 import alpha.framework.core.message.Message;
+import alpha.framework.domain.advice.InternalPerfInterceptor;
+import alpha.framework.domain.advice.InvocationAdapterImpl;
 import alpha.framework.domain.transaction.AbstractServiceInterceptor;
 import alpha.framework.domain.transaction.ServiceContext;
 
@@ -38,23 +39,51 @@ public class SimpleInterceptor extends AbstractServiceInterceptor{
 	 * @see alpha.framework.domain.transaction.AbstractServiceInterceptor#invokeRoot(javax.interceptor.InvocationContext)
 	 */
 	@Override
-	protected Object invokeRoot(InvocationContext ic) throws Exception {
+	protected Object invokeRoot(InvocationContext ic) throws Throwable {
 		ServiceContext context = createServiceContext();
-		try{					
-			if(ic.getParameters() != null && ic.getParameters()[0] instanceof CorrelativeRequest){
-				CorrelativeRequest request = (CorrelativeRequest)ic.getParameters()[0];
-				String requestId = request.getCorrelationId();
-				if(StringUtils.isNotEmpty(requestId)){
-					MDC.put("correlationId", requestId);
-				}
-			}
+		try{		
+			initialize(ic);
 			context.initialize();						
-			Object returnValue = ic.proceed();		
+			Object returnValue = proceed(ic);
 			if(context.isRollbackOnly() && !sessionContext.getRollbackOnly()){
 				sessionContext.setRollbackOnly();				
 			}							
 			return editResponse( returnValue, context);
-		}catch(BusinessException be){
+		}catch(RuntimeException be){
+			return handleException(be,context);
+		}finally{				
+			context.release();		
+			terminate();
+		}
+	}
+	
+	/**
+	 * Initialize the transaction.
+	 * @param ic
+	 */
+	protected void initialize(InvocationContext ic){
+		if(ic.getParameters() != null && ic.getParameters().length > 0 && ic.getParameters()[0] instanceof CorrelativeRequest){
+			CorrelativeRequest request = (CorrelativeRequest)ic.getParameters()[0];
+			MDC.put("correlationId", request.getCorrelationId());			
+		}
+	}
+	
+	/**
+	 * Terminate the Transaction
+	 */
+	public void terminate() {
+		MDC.remove("correlationId");
+	}
+	
+	/**
+	 * Handles the exception
+	 * @param e
+	 * @param context
+	 * @return
+	 */
+	protected Object handleException(RuntimeException e,ServiceContext context){
+		if(e instanceof BusinessException ){
+			BusinessException be = (BusinessException)e;
 			List<Message> result = be.getMessageList();
 			if(result != null && !result.isEmpty()){
 				result.addAll(context.getMessageList());
@@ -62,10 +91,10 @@ public class SimpleInterceptor extends AbstractServiceInterceptor{
 				be.setMessageList(context.getMessageList());
 			}
 			throw be;
-		}finally{				
-			context.release();		
-			MDC.remove("correlationId");
+		}else{
+			throw e;
 		}
+		
 	}
 	
 	/**
@@ -97,8 +126,17 @@ public class SimpleInterceptor extends AbstractServiceInterceptor{
 	 * @see alpha.framework.domain.transaction.AbstractServiceInterceptor#invoke(javax.interceptor.InvocationContext)
 	 */
 	@Override
-	protected Object invoke(InvocationContext ic) throws Exception {
-		return ic.proceed();
+	protected Object invoke(InvocationContext ic) throws Throwable {
+		return proceed(ic);
+	}
+	
+	/**
+	 * @param ic
+	 * @return
+	 * @throws Exception
+	 */
+	protected Object proceed(InvocationContext ic) throws Throwable{
+		return new InternalPerfInterceptor().around(new InvocationAdapterImpl(ic));
 	}
 
 }

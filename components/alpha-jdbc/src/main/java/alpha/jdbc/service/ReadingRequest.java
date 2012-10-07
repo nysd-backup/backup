@@ -14,7 +14,7 @@ import alpha.jdbc.strategy.RecordFilter;
 @SuppressWarnings("rawtypes")
 public class ReadingRequest extends QueryRequest{
 	
-	/** マックス件数 */
+	/** the max size */
 	private int maxSize = 0;
 	
 	/** the start position */

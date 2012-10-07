@@ -87,3 +87,8 @@ public void serviceMethod() {
 
 }
 +-----------------------------------------
+
+* RequestProperty
+
+ see alpha.httpclient.config.RequestProperty.
+

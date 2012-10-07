@@ -35,7 +35,7 @@ public abstract class QueryRequest{
 	/** the timeout */
 	private int timeoutSeconds = 0;
 	
-	/** the wrappng clause */
+	/** the wrapping clause */
 	private String wrappingClause = null;
 
 	/**

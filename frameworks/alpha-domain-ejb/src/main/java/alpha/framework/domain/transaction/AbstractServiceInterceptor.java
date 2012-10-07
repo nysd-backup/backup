@@ -22,7 +22,7 @@ public abstract class AbstractServiceInterceptor {
 	 * @throws Throwable the exception
 	 */
 	@AroundInvoke
-	public Object around(InvocationContext ic) throws Exception {	
+	public Object around(InvocationContext ic) throws Throwable {	
 		ServiceContext context = ServiceContext.getCurrentInstance();		
 		if(context == null){
 			return invokeRoot(ic);
@@ -38,7 +38,7 @@ public abstract class AbstractServiceInterceptor {
 	 * @return
 	 * @throws Throwable
 	 */
-	protected abstract Object invokeRoot(InvocationContext ic) throws Exception;
+	protected abstract Object invokeRoot(InvocationContext ic) throws Throwable;
 	
 	/**
 	 * Invokes the alpha.domain.
@@ -46,6 +46,6 @@ public abstract class AbstractServiceInterceptor {
 	 * @return
 	 * @throws Throwable
 	 */
-	protected abstract Object invoke(InvocationContext ic) throws Exception;
+	protected abstract Object invoke(InvocationContext ic) throws Throwable;
 
 }

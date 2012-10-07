@@ -29,7 +29,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 	 * @see alpha.framework.domain.transaction.simple.SimpleInterceptor#invoke(javax.interceptor.InvocationContext)
 	 */
 	@Override
-	protected Object invoke(InvocationContext ic) throws Exception {
+	protected Object invoke(InvocationContext ic) throws Throwable {
 		ServiceContextImpl context = (ServiceContextImpl)ServiceContext.getCurrentInstance();
 		boolean isTransactionBorder = false;
 		TransactionAttribute attribute = ic.getMethod().getDeclaringClass().getAnnotation(TransactionAttribute.class);
@@ -46,7 +46,7 @@ public class ContextControllableTransactionInterceptor extends SimpleInterceptor
 			context.newTransactionScope();
 		}
 		try{		
-			return ic.proceed();
+			return proceed(ic);
 		}finally{			
 			//Synchronization 			
 			if(isTransactionBorder){
