@@ -1,2 +1,3 @@
 /target
-/frameworks/alpha-ejb-impl/logs
+/tools
+/frameworks/alpha-domain-ejb/logs

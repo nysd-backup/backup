@@ -4,4 +4,4 @@ target
 .classpath
 *.jar
 logs
-*.log
+*.log*
