@@ -9,10 +9,9 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import alpha.framework.domain.activation.ServiceLocatorImpl;
-import alpha.framework.domain.messaging.client.MessageClientFactory;
-import alpha.framework.domain.messaging.client.MessagingProperty;
-import alpha.framework.domain.transaction.ServiceContext;
+import alpha.framework.domain.activation.AbstractEJBComponentFinder;
+import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.free.AbstractNativeModifyQuery;
 import alpha.sqlclient.free.AbstractNativeReadQuery;
 import alpha.sqlclient.free.QueryFactory;
@@ -39,26 +38,22 @@ public abstract class AbstractCoreService {
 	
 	/** クエリファクトリ */
 	private QueryFactory queryFactory;
-	
-	/** 非同期メッセージクライアントファクトリ */
-	private MessageClientFactory messageClientFactory;
-	
 	/**
 	 * 初期化処理後処理.
 	 * コンストラクタで初期化した場合、他のSessionBeanがまだ作成済みになっていないので生成できない。
 	 */
 	@PostConstruct
 	public void postConstruct(){
-		ormQueryFactory = ServiceLocatorImpl.createDefaultCriteriaQueryFactory(getEntityManager());
-		queryFactory = ServiceLocatorImpl.createDefaultQueryFactory(getEntityManager());		
-		messageClientFactory = ServiceLocatorImpl.createDefaultMessageClientFactory();
+		AbstractEJBComponentFinder finder = ServiceLocator.unwrap();		
+		ormQueryFactory = finder.getQueryFactoryProvider().createCriteriaQueryFactory();
+		queryFactory = finder.getQueryFactoryProvider().createQueryFactory();	
 	}
 	
 	/**
 	 * @see alpha.domain.framework.base.AbstractService#isRollbackOnly()
 	 */
 	protected boolean isRollbackOnly(){
-		return ServiceContext.getCurrentInstance().isRollbackOnly() || context.getRollbackOnly();
+		return DomainContext.getCurrentInstance().isRollbackOnly() || context.getRollbackOnly();
 	}
 	
 	/**
@@ -76,45 +71,45 @@ public abstract class AbstractCoreService {
 	
 	protected abstract ConnectionFactory getTopicConnectionFactory();
 	
-	/**
-	 * P2P用非同期処理.
-	 * 
-	 * <pre>	
-	 * OrderService alpha.domain = createSender(OrderService.class);
-	 * alpha.domain.cancelOrder(paramter.getOrderId());
-	 * 	
-	 * トランザクション中に上記のようにコーディングしておくと、
-	 * トランザクションコミット時に、待ち受けているMQのConsumerでOrderService#cancelメソッドが実行される。
-	 * </pre>
-	 * 
-	 * @param serviceType 実行対象クラス
-	 * @return サービス
-	 */
-	protected <T> T createSender(Class<T> serviceType){
-		MessagingProperty property = new MessagingProperty();
-		property.setConnectionFactory(getQueueConnectionFactory());
-		return messageClientFactory.createSender(serviceType,property);
-	}
-	
-	/**
-	 * M:N用非同期処理.
-	 * 
-	 * <pre>	
-	 * OrderService alpha.domain = createPublisher(OrderService.class);
-	 * alpha.domain.cancelOrder(paramter.getOrderId());
-	 * 	
-	 * トランザクション中に上記のようにコーディングしておくと、
-	 * トランザクションコミット時に、サブスクライブしているMQのConsumerでOrderService#cancelメソッドが実行される。
-	 * </pre>
-	 * 
-	 * @param serviceType 実行対象クラス
-	 * @return サービス
-	 */
-	protected <T> T createPublisher(Class<T> serviceType){
-		MessagingProperty property = new MessagingProperty();
-		property.setConnectionFactory(getTopicConnectionFactory());
-		return messageClientFactory.createPublisher(serviceType,property);
-	}
+//	/**
+//	 * P2P用非同期処理.
+//	 * 
+//	 * <pre>	
+//	 * OrderService alpha.domain = createSender(OrderService.class);
+//	 * alpha.domain.cancelOrder(paramter.getOrderId());
+//	 * 	
+//	 * トランザクション中に上記のようにコーディングしておくと、
+//	 * トランザクションコミット時に、待ち受けているMQのConsumerでOrderService#cancelメソッドが実行される。
+//	 * </pre>
+//	 * 
+//	 * @param serviceType 実行対象クラス
+//	 * @return サービス
+//	 */
+//	protected <T> T createSender(Class<T> serviceType){
+//		MessagingProperty property = new MessagingProperty();
+//		property.setConnectionFactory(getQueueConnectionFactory());
+//		return messageClientFactory.createSender(serviceType,property);
+//	}
+//	
+//	/**
+//	 * M:N用非同期処理.
+//	 * 
+//	 * <pre>	
+//	 * OrderService alpha.domain = createPublisher(OrderService.class);
+//	 * alpha.domain.cancelOrder(paramter.getOrderId());
+//	 * 	
+//	 * トランザクション中に上記のようにコーディングしておくと、
+//	 * トランザクションコミット時に、サブスクライブしているMQのConsumerでOrderService#cancelメソッドが実行される。
+//	 * </pre>
+//	 * 
+//	 * @param serviceType 実行対象クラス
+//	 * @return サービス
+//	 */
+//	protected <T> T createPublisher(Class<T> serviceType){
+//		MessagingProperty property = new MessagingProperty();
+//		property.setConnectionFactory(getTopicConnectionFactory());
+//		return messageClientFactory.createPublisher(serviceType,property);
+//	}
 	
 	/**
 	 * ORM用のクエリクラスを生成する.

@@ -16,6 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
+import alpha.framework.domain.activation.ComponentFinder;
+import alpha.framework.domain.activation.ServiceLocatorInitializer;
 import alpha.jdbc.domain.ConstantCache;
 
 
@@ -40,11 +42,9 @@ public abstract class ServiceUnit extends Assert{
 		prop.put(EJBContainer.APP_NAME, "test");
 		prop.put("org.glassfish.ejb.embedded.glassfish.instance.root", "C:/Project/Personal/glassfishv3/glassfish/domains/domain1");
 		container = EJBContainer.createEJBContainer(prop);
-		
-		
-		
-		new StubServiceLocator();
-		
+				
+		ComponentFinder finder = new StubComponentFinder();
+		new ServiceLocatorInitializer().initiazie(finder);
 		try{
 			Class<?> clazz = Class.forName(CachableConst.class.getName());					
 			Field[] fs = clazz.getFields();

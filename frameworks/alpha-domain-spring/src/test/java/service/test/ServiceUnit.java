@@ -36,8 +36,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.activation.ServiceLocatorImpl;
+import alpha.framework.domain.activation.ComponentFinderImpl;
+import alpha.framework.domain.activation.ServiceLocatorInitializer;
 import alpha.jdbc.domain.ConstantCache;
 
 
@@ -53,9 +53,6 @@ public abstract class ServiceUnit extends Assert{
 	
 	/** ログ */
 	protected static final Logger LOG = Logger.getLogger(ServiceUnit.class);
-	
-	/** サービスロケータ */
-	protected static ServiceLocator locator = null;
 	
 	protected IDatabaseConnection connection = null;
 
@@ -81,8 +78,8 @@ public abstract class ServiceUnit extends Assert{
 	 */
 	@Resource
 	public void setApplicationContext(final ApplicationContext applicationContext){
-		
-		locator = createLocator(applicationContext);
+
+		new ServiceLocatorInitializer().initiazie(new ComponentFinderImpl(applicationContext));
 		
 		context = new ServiceTestContextImpl();	
 		context.initialize();	
@@ -109,17 +106,7 @@ public abstract class ServiceUnit extends Assert{
 
 		beforeTest();
 	}
-	
-	/**
-	 * @param applicationContext
-	 * @return
-	 */
-	protected ServiceLocator createLocator(final ApplicationContext applicationContext){
-		ServiceLocatorImpl locator = new ServiceLocatorImpl(applicationContext);
-		ServiceLocatorImpl.setDelegate(locator);
-		return locator;
-	}
-	
+
 	/**
 	 * @param dataPath チE�EタのセチE��アチE�E
 	 */

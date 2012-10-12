@@ -10,8 +10,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import alpha.utility.LogUtils;
-
 
 /**
  * An advice for the SQL Builder.
@@ -22,7 +20,7 @@ import alpha.utility.LogUtils;
 public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private static final Logger LOG = Logger.getLogger(LogUtils.DEBUG +InternalQueryBuilderInterceptor.class.getName());
+	private static final Logger LOG = Logger.getLogger("DEBUG." +InternalQueryBuilderInterceptor.class.getName());
 	
 	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();

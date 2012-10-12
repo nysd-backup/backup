@@ -12,7 +12,7 @@ import org.eclipse.persistence.exceptions.ExceptionHandler;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 import org.eclipse.persistence.internal.jpa.QueryHintsHandler;
 
-import alpha.framework.domain.transaction.ServiceContext;
+import alpha.framework.domain.transaction.DomainContext;
 
 
 
@@ -26,7 +26,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 
 	@SuppressWarnings({"unchecked","unused"})
 	protected Object handleOptimisticLockException(OptimisticLockException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl context = (ServiceTestContextImpl)DomainContext.getCurrentInstance();
 		
 		Map<String,Object> hints = (Map<String,Object>)e.getQuery().getProperty(QueryHintsHandler.QUERY_HINT_PROPERTY);
 		if( context.isSuppressOptimisticLockError() ){
@@ -38,7 +38,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 	}
 	@SuppressWarnings({"unchecked","unused"})
 	protected Object handleDatabaseException(DatabaseException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl context = (ServiceTestContextImpl)DomainContext.getCurrentInstance();
 		Map<String,Object> hints = (Map<String,Object>)e.getQuery().getProperty(QueryHintsHandler.QUERY_HINT_PROPERTY);
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");
@@ -49,7 +49,7 @@ public class DumyExceptionHandler implements ExceptionHandler{
 	}
 	
 	protected Object handlePessimisticLockException(PessimisticLockException e){
-		ServiceTestContextImpl context = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();	
+		ServiceTestContextImpl context = (ServiceTestContextImpl)DomainContext.getCurrentInstance();	
 
 		if( context.isSuppressOptimisticLockError() ){
 			System.out.println("ロック連番");

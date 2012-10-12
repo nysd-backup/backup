@@ -21,12 +21,7 @@
 		    <groupId>alpha</groupId>
 		    <artifactId>alpha-sqlclient-api</artifactId>
 		    <version>${framework.version}</version>		    
-		</dependency>							
-		<dependency>
-		    <groupId>alpha</groupId>
-		    <artifactId>alpha-framework-core</artifactId>
-		    <version>${framework.version}</version>
-		</dependency>		
+		</dependency>								
 		<dependency>
 		    <groupId>alpha</groupId>
 		    <artifactId>alpha-domain-api</artifactId>

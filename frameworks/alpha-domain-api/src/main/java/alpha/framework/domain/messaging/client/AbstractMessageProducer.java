@@ -92,5 +92,5 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	 * @return the result
 	 * @throws Throwable　any error
 	 */
-	protected abstract Object invoke(Serializable parameter ,String destinationName) throws Throwable;
+	protected abstract Object invoke(Object parameter ,String destinationName) throws Throwable;
 }

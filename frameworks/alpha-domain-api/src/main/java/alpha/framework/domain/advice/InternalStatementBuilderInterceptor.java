@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import alpha.utility.LogUtils;
-
 
 
 
@@ -22,7 +20,7 @@ import alpha.utility.LogUtils;
  */
 public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 
-	private static final Logger LOG = Logger.getLogger(LogUtils.DEBUG + InternalStatementBuilderInterceptor.class.getName());
+	private static final Logger LOG = Logger.getLogger("DEBUG." + InternalStatementBuilderInterceptor.class.getName());
 
 	/** the list contains queryId */
 	private List<String> ignoreList = new ArrayList<String>();

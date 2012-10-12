@@ -20,7 +20,7 @@ import alpha.sqlclient.free.AbstractNamedModifyQuery;
 public class SampleNamedUpdate extends AbstractNamedModifyQuery{
 
 	public SampleNamedUpdate() {
-		getParameter().setSql("@/sql/SAMPLE_UPDATE.sql");
+		getParameter().setSql("@SAMPLE_UPDATE.sql");
 	}
 	
 	public enum Bind {

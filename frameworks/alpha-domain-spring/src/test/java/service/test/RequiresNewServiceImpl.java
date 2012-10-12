@@ -4,7 +4,6 @@
 package service.test;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +13,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PessimisticLockException;
 
 import org.eclipse.persistence.config.QueryHints;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -22,15 +20,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import alpha.framework.core.exception.BusinessException;
-import alpha.framework.core.message.Message;
-import alpha.framework.core.message.MessageArgument;
-import alpha.framework.core.message.MessageBuilder;
-import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.ServiceContext;
-import alpha.sqlclient.orm.EntityManagerImpl;
-
+import service.core.BusinessException;
 import service.test.entity.TestEntity;
+import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.transaction.DomainContext;
+import alpha.sqlclient.orm.EntityManagerImpl;
 
 
 /**
@@ -44,9 +38,6 @@ import service.test.entity.TestEntity;
 @Transactional(propagation=Propagation.REQUIRES_NEW)
 public class RequiresNewServiceImpl implements RequiresNewService{
 
-	@Autowired
-	private MessageBuilder builder;
-	
 	@PersistenceContext(unitName="oracle")
 	private EntityManager per;
 	
@@ -83,9 +74,7 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageArgument bean = new MessageArgument("100");
-		Message message = builder.load(bean,Locale.getDefault());
-		ServiceContext.getCurrentInstance().addMessage(message);
+		DomainContext.getCurrentInstance().addMessage( "100");
 		rollbackOnly =  TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 	}
 

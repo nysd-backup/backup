@@ -11,11 +11,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import alpha.framework.core.exception.BusinessException;
-import alpha.framework.domain.activation.ServiceLocator;
-
+import service.core.BusinessException;
 import service.test.RequiresNewService;
 import service.test.ServiceUnit;
+import alpha.framework.domain.activation.ServiceLocator;
 
 
 /**

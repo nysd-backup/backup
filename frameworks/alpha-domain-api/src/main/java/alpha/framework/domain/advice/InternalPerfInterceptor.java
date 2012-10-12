@@ -5,8 +5,7 @@ package alpha.framework.domain.advice;
 
 import org.apache.log4j.Logger;
 
-import alpha.framework.domain.transaction.ServiceContext;
-import alpha.utility.LogUtils;
+import alpha.framework.domain.transaction.DomainContext;
 
 /**
  * An intercepter to collect the performance log.
@@ -17,10 +16,10 @@ import alpha.utility.LogUtils;
 public class InternalPerfInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private static final Logger PERFLOG = Logger.getLogger(LogUtils.PERF +InternalPerfInterceptor.class.getName());
+	private static final Logger PERFLOG = Logger.getLogger("PERF." +InternalPerfInterceptor.class.getName());
 
 	/** the instance of logging */
-	private static final Logger LOG = Logger.getLogger(LogUtils.DEBUG +InternalPerfInterceptor.class.getName());
+	private static final Logger LOG = Logger.getLogger("DEBUG." +InternalPerfInterceptor.class.getName());
 		
 	/**
 	 * @see alpha.framework.domain.advice.InternalInterceptor#around(alpha.framework.domain.advice.InvocationAdapter)
@@ -42,7 +41,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 		
 		//性能
 		if(PERFLOG.isDebugEnabled()){
-			ServiceContext context = ServiceContext.getCurrentInstance();
+			DomainContext context = DomainContext.getCurrentInstance();
 			if(context == null){
 				return ic.proceed();
 			}else{

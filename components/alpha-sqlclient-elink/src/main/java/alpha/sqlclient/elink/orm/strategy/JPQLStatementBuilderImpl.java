@@ -42,7 +42,7 @@ public class JPQLStatementBuilderImpl extends AbstractStatementBuilder{
 	 */
 	@Override
 	public String createDelete(Class<?> entityClass,List<ExtractionCriteria<?>> where){
-		StringBuilder builder = new StringBuilder("delete e from ");
+		StringBuilder builder = new StringBuilder("delete from ");
 		builder.append(entityClass.getSimpleName()).append(" e ");
 		builder.append(generateWhere(where));
 		return builder.toString();

@@ -4,7 +4,6 @@
 package service.test;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -21,15 +20,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import alpha.framework.core.exception.BusinessException;
-import alpha.framework.core.message.Message;
-import alpha.framework.core.message.MessageArgument;
-import alpha.framework.core.message.MessageBuilder;
-import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.ServiceContext;
-import alpha.sqlclient.orm.EntityManagerImpl;
-
+import service.core.BusinessException;
 import service.test.entity.TestEntity;
+import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.transaction.DomainContext;
+import alpha.sqlclient.orm.EntityManagerImpl;
 
 
 /**
@@ -43,9 +38,6 @@ import service.test.entity.TestEntity;
 @Transactional(propagation=Propagation.REQUIRES_NEW)
 public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 
-	@Autowired
-	private MessageBuilder builder;
-	
 	@Autowired
 	private EntityManager per;
 	
@@ -83,9 +75,7 @@ public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 	 */
 	@Override
 	public void addMessage() {
-		MessageArgument bean = new MessageArgument("100");
-		Message message = builder.load(bean,Locale.getDefault());
-		ServiceContext.getCurrentInstance().addMessage(message);
+		DomainContext.getCurrentInstance().addMessage( "100");
 		rollbackOnly =  TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 	}
 

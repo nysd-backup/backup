@@ -15,7 +15,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import alpha.framework.domain.transaction.ServiceContext;
+import alpha.framework.domain.transaction.DomainContext;
 
 import service.test.entity.TestEntity;
 
@@ -47,7 +47,7 @@ public class MockRequiresNewServiceImpl implements MockRequiresNewService{
 		e.setAttr2(2);
 		em.persist(e);
 		if( v.equals("AA")){
-			ServiceContext.getCurrentInstance().setRollbackOnly();
+			DomainContext.getCurrentInstance().setRollbackOnly();
 		}
 		return v;
 	}

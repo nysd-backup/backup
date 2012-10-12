@@ -19,7 +19,7 @@ import javax.persistence.PessimisticLockException;
 import org.eclipse.persistence.config.QueryHints;
 
 import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.ServiceContext;
+import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.exception.UniqueConstraintException;
 import alpha.sqlclient.orm.CriteriaModifyQuery;
 import alpha.sqlclient.orm.CriteriaReadQuery;
@@ -377,7 +377,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void ignoreUniqueConstraintError(){
 		setUpData("TEST.xls");
 		//一意制紁E��効匁E
-		ServiceContext impl = ServiceContext.getCurrentInstance();
+		DomainContext impl = DomainContext.getCurrentInstance();
 		impl.setRequestId("IGNORE_TEST");
 	
 		TestEntity entity = new TestEntity();
@@ -422,7 +422,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void ignoreVersionNoError(){
 		setUpData("TEST.xls");
 		//ロチE��連番エラー無効匁E行単位�E更新をさせる場合、こぁE��るか自律トランザクションにする忁E��がある�E�E
-		ServiceContext impl = ServiceContext.getCurrentInstance();
+		DomainContext impl = DomainContext.getCurrentInstance();
 		impl.setRequestId("IGNORE_TEST");
 					
 
@@ -466,7 +466,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		service.persist();
 		
-		ServiceContext impl = ServiceContext.getCurrentInstance();
+		DomainContext impl = DomainContext.getCurrentInstance();
 		impl.setRequestId("IGNORE_TEST");
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
@@ -566,7 +566,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 
 	public void invalidQueryPessimisticLockError(){	
 		
-		ServiceContext impl = ServiceContext.getCurrentInstance();
+		DomainContext impl = DomainContext.getCurrentInstance();
 		impl.setRequestId("IGNORE_TEST");
 		
 		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);

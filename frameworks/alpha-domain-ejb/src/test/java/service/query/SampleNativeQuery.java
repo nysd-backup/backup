@@ -14,7 +14,7 @@ import alpha.sqlclient.free.AbstractNativeReadQuery;
 public class SampleNativeQuery extends AbstractNativeReadQuery{
 	
 	public SampleNativeQuery(){
-		getParameter().setSql("@/sql/SAMPLE_NATIVE_QUERY.sql");
+		getParameter().setSql("@SAMPLE_NATIVE_QUERY.sql");
 		getParameter().setResultType(SampleNativeResult.class);
 	}
 

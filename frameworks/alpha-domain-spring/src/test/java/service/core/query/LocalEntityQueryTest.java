@@ -31,7 +31,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.TransactionSystemException;
 
 import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.ServiceContext;
+import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.orm.CriteriaModifyQuery;
 import alpha.sqlclient.orm.CriteriaQueryFactory;
 import alpha.sqlclient.orm.CriteriaReadQuery;
@@ -438,7 +438,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void ignoreUniqueConstraintError(){
 		
 		//一意制紁E��効匁E
-		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)DomainContext.getCurrentInstance();
 		impl.setSuppressOptimisticLockError();
 		
 		setUpData("TEST.xls");
@@ -485,7 +485,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void ignoreVersionNoError(){
 		
 		//ロチE��連番エラー無効匁E行単位�E更新をさせる場合、こぁE��るか自律トランザクションにする忁E��がある�E�E
-		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)DomainContext.getCurrentInstance();
 		impl.setSuppressOptimisticLockError();
 		
 		setUpData("TEST.xls");
@@ -526,7 +526,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void invalidFindWithLockNoWaitError(){	
 		
-		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)DomainContext.getCurrentInstance();
 		impl.setSuppressOptimisticLockError();
 		
 		setUpDataForceCommit("TEST.xls");
@@ -666,7 +666,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void invalidQueryPessimisticLockError(){	
 		
-		ServiceTestContextImpl impl = (ServiceTestContextImpl)ServiceContext.getCurrentInstance();
+		ServiceTestContextImpl impl = (ServiceTestContextImpl)DomainContext.getCurrentInstance();
 		impl.setSuppressOptimisticLockError();
 	
 		setUpDataForceCommit("TEST.xls");

@@ -4,7 +4,6 @@
 package service.services;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.ejb.Stateless;
@@ -15,15 +14,11 @@ import javax.persistence.PessimisticLockException;
 
 import org.eclipse.persistence.config.QueryHints;
 
-import alpha.framework.core.exception.BusinessException;
-import alpha.framework.core.message.Message;
-import alpha.framework.core.message.MessageArgument;
-import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.ServiceContext;
-import alpha.framework.domain.transaction.autonomous.ServiceContextImpl;
-
 import service.entity.TestEntity;
 import service.testcase.BaseCase;
+import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.transaction.DomainContext;
+import alpha.framework.domain.transaction.autonomous.AutonomousTxContext;
 
 
 /**
@@ -40,7 +35,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly =  ((AutonomousTxContext)DomainContext.getCurrentInstance()).isRollbackOnly();
 		return "OK";
 	}
 
@@ -63,10 +58,8 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	 */
 	@Override
 	public void addMessage() {
-		MessageArgument bean = new MessageArgument("100");
-		Message message = ServiceLocator.createDefaultMessageBuilder().load(bean,Locale.getDefault());
-		ServiceContext.getCurrentInstance().addMessage(message);	
-		rollbackOnly =  ((ServiceContextImpl)ServiceContext.getCurrentInstance()).isRollbackOnly();
+		DomainContext.getCurrentInstance().addMessage("100");	
+		rollbackOnly =  ((AutonomousTxContext)DomainContext.getCurrentInstance()).isRollbackOnly();
 	}
 
 	/**
@@ -83,7 +76,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		RequireService service2 = ServiceLocator.getService(RequireService.class);
 		state= service2.persist();		
 		
-		rollbackOnly = ((ServiceContextImpl)ServiceContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly = ((AutonomousTxContext)DomainContext.getCurrentInstance()).isRollbackOnly();
 		
 	}
 	

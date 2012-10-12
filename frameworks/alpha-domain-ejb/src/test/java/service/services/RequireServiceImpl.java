@@ -3,17 +3,11 @@
  */
 package service.services;
 
-import java.util.Locale;
-
 import javax.ejb.Stateless;
-
-import alpha.framework.core.message.Message;
-import alpha.framework.core.message.MessageArgument;
-import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.ServiceContext;
 
 import service.entity.TestEntity;
 import service.testcase.BaseCase;
+import alpha.framework.domain.transaction.DomainContext;
 
 
 
@@ -32,9 +26,7 @@ public class RequireServiceImpl extends BaseCase implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		MessageArgument bean = new MessageArgument("100");
-		Message message = ServiceLocator.createDefaultMessageBuilder().load(bean,Locale.getDefault());
-		ServiceContext.getCurrentInstance().addMessage(message);
+		DomainContext.getCurrentInstance().addMessage("100");
 	}
 
 	/**

@@ -18,8 +18,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 	
 	<!-- コネクションが別セッションになるので非推奨、ただしjavaagentの設定は不要。 -->
-	
-	<import resource="classpath:META-INF/defaultServiceContext.xml"/>
+
 	<import resource="classpath:META-INF/defaultQueryContext.xml"/>
 	<import resource="classpath:META-INF/defaultQueryAdviceContext.xml"/>
 	<import resource="classpath:META-INF/defaultAdviceContext.xml"/>

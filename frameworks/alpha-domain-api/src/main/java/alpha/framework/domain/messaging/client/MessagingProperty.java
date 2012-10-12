@@ -21,6 +21,8 @@ public class MessagingProperty{
 
 	private ConnectionFactory connectionFactory = null;
 	
+	private Map<String,Object> clientOption = null;
+	
 	private String destinationPrefix = null;
 	
 	private String dynamicDestinationName = null;
@@ -168,5 +170,28 @@ public class MessagingProperty{
 		}
 		
 	}
+	
+	/**
+	 * @param key the key
+	 * @param value the value
+	 */
+	public void putClientOption(String key , Object value){
+		this.clientOption.put(key, value);
+	}
 
+	/**
+	 * @return the clientOption
+	 */
+	public Map<String, Object> getClientOption() {
+		return clientOption;
+	}
+
+	/**
+	 * @param clientOption the clientOption to set
+	 */
+	public void setClientOption(Map<String, Object> clientOption) {
+		this.clientOption = clientOption;
+	}
+
+	
 }

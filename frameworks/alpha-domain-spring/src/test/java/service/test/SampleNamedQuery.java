@@ -14,7 +14,7 @@ import alpha.sqlclient.free.AbstractNamedReadQuery;
 public class SampleNamedQuery extends AbstractNamedReadQuery{
 	
 	public SampleNamedQuery(){
-		getParameter().setSql("@/sql/SAMPLE_QUERY.sql");
+		getParameter().setSql("@SAMPLE_QUERY.sql");
 	}
 
 	public enum Bind {

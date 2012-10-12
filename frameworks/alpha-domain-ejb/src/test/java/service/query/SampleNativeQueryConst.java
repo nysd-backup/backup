@@ -14,7 +14,7 @@ import alpha.sqlclient.free.AbstractNativeReadQuery;
 public class SampleNativeQueryConst extends AbstractNativeReadQuery{
 	
 	public SampleNativeQueryConst(){
-		getParameter().setSql("@/sql/SAMPLE_NATIVE_QUERY_CONST.sql");
+		getParameter().setSql("@SAMPLE_NATIVE_QUERY_CONST.sql");
 		getParameter().setResultType(SampleNativeResult.class);
 	}
 

@@ -6,8 +6,8 @@ package service.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import alpha.framework.domain.transaction.ServiceContext;
-import alpha.framework.domain.transaction.autonomous.ServiceContextImpl;
+import alpha.framework.domain.transaction.DomainContext;
+import alpha.framework.domain.transaction.autonomous.AutonomousTxContext;
 
 import service.entity.TestEntity;
 import service.testcase.BaseCase;
@@ -36,7 +36,7 @@ public class MockRequiresNewServiceImpl extends BaseCase implements MockRequires
 		e.setAttr2(2);
 		em.persist(e);
 		if( v.equals("AA")){
-			((ServiceContextImpl)ServiceContext.getCurrentInstance()).setRollbackOnly();
+			((AutonomousTxContext)DomainContext.getCurrentInstance()).setRollbackOnly();
 		}
 		return v;
 	}

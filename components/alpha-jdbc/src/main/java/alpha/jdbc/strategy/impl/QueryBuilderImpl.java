@@ -31,6 +31,9 @@ import alpha.jdbc.strategy.TemplateEngine;
  */
 public class QueryBuilderImpl implements QueryBuilder{
 	
+	/** the classpath prefix */
+	private static final String CLASSPATH_PREFIX = "classpath:";
+	
 	/** the pattern for binding value. */
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-zA-Z0-9][a-zA-Z0-9_]*)");
 
@@ -41,7 +44,7 @@ public class QueryBuilderImpl implements QueryBuilder{
 	private ConstantAccessor accessor = new ConstantAccessorImpl();
 	
 	/** the root directory */
-	private String dirRoot = null;
+	private String dirRoot = CLASSPATH_PREFIX + "/query/";
 	
 	/**
 	 * @param accessor the accessor to set
@@ -75,17 +78,18 @@ public class QueryBuilderImpl implements QueryBuilder{
 			String filePath = matcher.group(1);
 			InputStream stream = null;
 			
-			if (dirRoot == null) {
-				stream = getClass().getResourceAsStream(filePath);	
-			} else {
+			if(dirRoot.startsWith(CLASSPATH_PREFIX)){
+				stream = getClass().getResourceAsStream(dirRoot.substring(CLASSPATH_PREFIX.length()) + filePath);	
+			}else{
 				try{
 					stream = new FileInputStream(new File(dirRoot,filePath));
 				}catch(FileNotFoundException fnfe){
 					throw new QueryException(fnfe);
 				}
 			}
+		
 			if (stream == null) {
-				throw new QueryException(String.format("file not found : sqlId = %s , filePath = %s",queryId, filePath));
+				throw new QueryException(String.format("file not found : sqlId = %s , filePath = %s",queryId, dirRoot +filePath));
 			}
 			return engine.load(stream);		
 		} else {

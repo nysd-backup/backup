@@ -14,7 +14,7 @@ import alpha.sqlclient.free.AbstractNativeModifyQuery;
 public class SampleNativeUpdate extends AbstractNativeModifyQuery{
 	
 	public SampleNativeUpdate(){
-		getParameter().setSql("@/sql/SAMPLE_NATIVE_UPDATE.sql");
+		getParameter().setSql("@SAMPLE_NATIVE_UPDATE.sql");
 	}
 
 	public enum Bind {

@@ -63,23 +63,17 @@
         </plugins>
 	</build>
 	<dependencies>
-		<!-- frameworks -->
-		<dependency>
-		    <groupId>alpha</groupId>
-		    <artifactId>alpha-sqlclient-api</artifactId>
-		    <version>${framework.version}</version>
-		    <scope>compile</scope>
-		</dependency>				
-		<dependency>
-		    <groupId>alpha</groupId>
-		    <artifactId>alpha-framework-core</artifactId>
-		    <version>${framework.version}</version>
-		</dependency>
+		<!-- frameworks -->				
 		<dependency>
 		    <groupId>alpha</groupId>
 		    <artifactId>alpha-domain-api</artifactId>
 		    <version>${framework.version}</version>
 		</dependency>	
+		<dependency>
+		    <groupId>alpha</groupId>
+		    <artifactId>alpha-sqlclient-api</artifactId>
+		    <version>${framework.version}</version>
+		</dependency>
 			
 		<!-- other -->
 		<dependency>
@@ -147,7 +141,7 @@
 		    <scope>compile</scope>
 		</dependency>
 		
-		<!-- for test -->
+		<!-- for test -->		
 		<dependency>
 			<groupId>org.glassfish.extras</groupId>
 			<artifactId>glassfish-embedded-all</artifactId>

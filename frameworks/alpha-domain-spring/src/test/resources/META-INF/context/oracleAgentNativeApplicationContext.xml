@@ -18,7 +18,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 	
-	<import resource="classpath:META-INF/defaultServiceContext.xml"/>
 	<import resource="classpath:META-INF/defaultSqlQueryContext.xml"/>
 	<import resource="classpath:META-INF/defaultQueryAdviceContext.xml"/>
 	<import resource="classpath:META-INF/defaultAdviceContext.xml"/>
@@ -38,6 +37,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			expression="org.springframework.stereotype.Service" />		
 	</context:component-scan>
 	
+	<bean class="service.test.TransactionVerifierImpl" scope="prototype" />
 	<bean class="service.test.RequiresNewNativeServiceImpl" scope="prototype" />
 	<bean class="service.test.RequiresNewNativeReadOnlyServiceImpl" scope="prototype" />
 	
