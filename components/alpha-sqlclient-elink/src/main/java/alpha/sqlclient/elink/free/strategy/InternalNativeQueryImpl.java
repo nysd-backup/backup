@@ -163,7 +163,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		Query query = mapping(parameter,createQuery(parameter));		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
-			return new LazyList(cursor, recordHandlerFactory.create(parameter.getResultType(), cursor.getResultSet()),exceptionHandler);
+			return new LazyList(cursor, recordHandlerFactory.create(parameter.getResultType(), cursor.getResultSet()),exceptionHandler,parameter.getFilter());
 		} catch (SQLException e) {
 			cursor.close();
 			throw exceptionHandler.rethrow(e);

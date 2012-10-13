@@ -103,7 +103,7 @@ public class ResultSetWrapper {
 	 */
 	public <T> LazyList<T> getLazyList(ExceptionHandler exceptionHandler, RecordHandlerFactory recordHandlerFactory,Class<T> resultType) throws SQLException {
 		RecordHandler recordHandler = recordHandlerFactory.create(resultType, resultSet);
-		return new LazyList<T>(resultSet,recordHandler,exceptionHandler);
+		return new LazyList<T>(resultSet,recordHandler,exceptionHandler,filter);
 	}
 	
 	/**

@@ -9,11 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-
 import org.eclipse.persistence.queries.ScrollableCursor;
 
 import alpha.jdbc.exception.ExceptionHandler;
 import alpha.jdbc.strategy.RecordHandler;
+import alpha.sqlclient.free.ResultSetFilter;
 
 
 
@@ -33,8 +33,8 @@ public class LazyList<E> implements List<E>{
 	 * @param rs the rs
 	 * @param handler the handler
 	 */
-	public LazyList(ScrollableCursor cursor ,RecordHandler handler,ExceptionHandler exceptionHandler){
-		this.itr = new ResultSetIterator(cursor,handler,exceptionHandler);
+	public LazyList(ScrollableCursor cursor ,RecordHandler handler,ExceptionHandler exceptionHandler,ResultSetFilter filter){
+		this.itr = new ResultSetIterator(cursor,handler,exceptionHandler,filter);
 	}
 	
 	/**
@@ -238,11 +238,15 @@ public class LazyList<E> implements List<E>{
 		private final RecordHandler handler;
 
 		private final ExceptionHandler exceptionHandler;
+		
+		private final ResultSetFilter filter;
 				
-		public ResultSetIterator(ScrollableCursor cursor,RecordHandler handler,ExceptionHandler exceptionHandler){
+		public ResultSetIterator(ScrollableCursor cursor,RecordHandler handler,ExceptionHandler exceptionHandler,
+				ResultSetFilter filter){
 			this.cursor = cursor;
 			this.handler = handler;
 			this.exceptionHandler = exceptionHandler;
+			this.filter = filter;					
 		}
 
 		/**
@@ -275,7 +279,8 @@ public class LazyList<E> implements List<E>{
 		@Override
 		public E next() {
 			try{
-				return (E)handler.getRecord(cursor.getResultSet());
+				E record = (E)handler.getRecord(cursor.getResultSet());
+				return filter != null ? filter.edit(record):record;
 			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);

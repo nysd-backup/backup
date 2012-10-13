@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import alpha.jdbc.exception.ExceptionHandler;
+import alpha.jdbc.strategy.RecordFilter;
 import alpha.jdbc.strategy.RecordHandler;
 
 
@@ -41,8 +42,8 @@ public class LazyList<E> implements List<E>{
 	 * @param handler the handler
 	 * @param exceptionHandler the exceptionHandler
 	 */
-	public LazyList(ResultSet rs, RecordHandler handler,ExceptionHandler exceptionHandler){
-		this.itr = new Cursor(rs, handler,exceptionHandler);
+	public LazyList(ResultSet rs, RecordHandler handler,ExceptionHandler exceptionHandler,RecordFilter filter){
+		this.itr = new Cursor(rs, handler,exceptionHandler,filter);
 	}
 	
 	/**
@@ -239,10 +240,13 @@ public class LazyList<E> implements List<E>{
 		
 		private final ExceptionHandler exceptionHandler;
 		
-		public Cursor(ResultSet rs ,RecordHandler handler,ExceptionHandler exceptionHandler){
+		private final RecordFilter filter;
+		
+		public Cursor(ResultSet rs ,RecordHandler handler,ExceptionHandler exceptionHandler,RecordFilter filter){
 			this.rs = rs;
 			this.handler = handler;
 			this.exceptionHandler =exceptionHandler ;
+			this.filter = filter;
 		}
 		
 		/**
@@ -304,7 +308,8 @@ public class LazyList<E> implements List<E>{
 		@Override
 		public E next() {
 			try{
-				return (E)handler.getRecord(rs);
+				E record = (E)handler.getRecord(rs);
+				return filter != null ? filter.edit(record):record;
 			}catch(SQLException t){
 				close();
 				throw exceptionHandler.rethrow(t);
