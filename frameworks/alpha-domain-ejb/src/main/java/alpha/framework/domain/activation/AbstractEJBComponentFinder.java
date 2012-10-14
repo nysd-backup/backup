@@ -17,10 +17,13 @@ import alpha.framework.domain.transaction.TxVerifier;
  */
 public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 
+	/** QueryFactoryProvider */
 	private QueryFactoryProvider queryFactoryProvider;
 	
+	/** MessageClientFactoryProvider */
 	private MessageClientFactoryProvider messageClientFactoryProvider; 
 	
+	/** TxVerifier*/
 	private TxVerifier txVerifier;
 	
 	/**
@@ -58,9 +61,10 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	}
 	
 	/**
-	 * @param serviceName
-	 * @param prop
-	 * @return
+	 * Lookup service by name.
+	 * @param serviceName the name of service
+	 * @param prop the property
+	 * @return bean
 	 */
 	protected abstract Object lookup(String serviceName, Properties prop);
 	

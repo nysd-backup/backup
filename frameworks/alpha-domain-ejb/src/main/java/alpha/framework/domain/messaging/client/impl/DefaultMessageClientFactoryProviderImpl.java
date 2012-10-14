@@ -5,7 +5,7 @@ import alpha.framework.domain.messaging.client.MessageClientFactoryProvider;
 import alpha.framework.domain.messaging.client.ObjectMessageProducer;
 
 /**
- * function.
+ * Default messaging client factory.
  *
  * @author yoshida-n
  * @version	created.

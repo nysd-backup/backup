@@ -12,8 +12,6 @@ import alpha.jdbc.domain.PreparedQuery;
 import alpha.jdbc.strategy.QueryBuilder;
 
 
-
-
 /**
  * SQLをキャッシュに保存する.
  *

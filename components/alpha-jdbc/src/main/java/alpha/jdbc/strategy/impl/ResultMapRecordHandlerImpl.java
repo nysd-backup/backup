@@ -12,8 +12,6 @@ import alpha.jdbc.strategy.RecordHandler;
 import alpha.jdbc.strategy.TypeConverter;
 
 
-
-
 /**
  * Gets the one record from ResultSet to map. 
  *

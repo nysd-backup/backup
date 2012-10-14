@@ -9,7 +9,7 @@ import javax.interceptor.InvocationContext;
 
 import alpha.framework.domain.advice.InternalPerfInterceptor;
 import alpha.framework.domain.advice.InvocationAdapterImpl;
-import alpha.framework.domain.transaction.AbstractSessionInterceptor;
+import alpha.framework.domain.transaction.AbstractTxInterceptor;
 import alpha.framework.domain.transaction.DomainContext;
 
 
@@ -22,13 +22,13 @@ import alpha.framework.domain.transaction.DomainContext;
  * @author yoshida-n
  * @version	created.
  */
-public class ConsecutiveTxInterceptor extends AbstractSessionInterceptor{
+public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 
 	@Resource
 	private EJBContext sessionContext;
 
 	/**
-	 * @see alpha.framework.domain.transaction.AbstractSessionInterceptor#invokeRoot(javax.interceptor.InvocationContext)
+	 * @see alpha.framework.domain.transaction.AbstractTxInterceptor#invokeRoot(javax.interceptor.InvocationContext)
 	 */
 	@Override
 	protected Object invokeRoot(InvocationContext ic) throws Throwable {
@@ -93,7 +93,7 @@ public class ConsecutiveTxInterceptor extends AbstractSessionInterceptor{
 	}
 
 	/**
-	 * @see alpha.framework.domain.transaction.AbstractSessionInterceptor#invoke(javax.interceptor.InvocationContext)
+	 * @see alpha.framework.domain.transaction.AbstractTxInterceptor#invoke(javax.interceptor.InvocationContext)
 	 */
 	@Override
 	protected Object invoke(InvocationContext ic) throws Throwable {

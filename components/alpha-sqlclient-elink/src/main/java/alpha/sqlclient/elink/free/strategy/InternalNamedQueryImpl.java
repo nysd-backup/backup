@@ -3,6 +3,7 @@
  */
 package alpha.sqlclient.elink.free.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -72,7 +73,16 @@ public class InternalNamedQueryImpl implements InternalQuery{
 		if(param.getLockMode() != null){
 			query.setLockMode(param.getLockMode());
 		}
-		return setRange(param.getFirstResult(),param.getMaxSize(),query).getResultList();
+		List<T> resultList = setRange(param.getFirstResult(),param.getMaxSize(),query).getResultList();		
+		if(param.getFilter() != null){
+			List<T> edited = new ArrayList<T>();
+			for(T res : resultList){
+				edited.add(param.getFilter().edit(res));
+			}
+			return edited;
+		}else {
+			return resultList;
+		}
 	}
 
 	/**
@@ -86,7 +96,11 @@ public class InternalNamedQueryImpl implements InternalQuery{
 		if(param.getLockMode() != null){
 			query.setLockMode(param.getLockMode());
 		}
-		return (T)setRange(param.getFirstResult(),1,query).getSingleResult();
+		T result =  (T)setRange(param.getFirstResult(),1,query).getSingleResult();
+		if(param.getFilter() != null && result != null){
+			result = param.getFilter().edit(result);
+		}
+		return result;
 	}
 	
 	/**

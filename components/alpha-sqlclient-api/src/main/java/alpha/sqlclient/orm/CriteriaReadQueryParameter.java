@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.LockModeType;
 
 import alpha.sqlclient.PersistenceHints;
+import alpha.sqlclient.free.ResultSetFilter;
 
 
 
@@ -33,6 +34,9 @@ public class CriteriaReadQueryParameter<T> extends CriteriaQueryParameter<T>{
 
 	/** the lock mode */
 	private LockModeType lockModeType;
+	
+	/** the filter */
+	private ResultSetFilter filter;
 
 	/**
 	 * @param lockModeType the lockModeType to set
@@ -95,6 +99,20 @@ public class CriteriaReadQueryParameter<T> extends CriteriaQueryParameter<T>{
 	 */
 	public int getFirstResult(){
 		return this.firstResult;
+	}
+
+	/**
+	 * @return the filter
+	 */
+	public ResultSetFilter getFilter() {
+		return filter;
+	}
+
+	/**
+	 * @param filter the filter to set
+	 */
+	public void setFilter(ResultSetFilter filter) {
+		this.filter = filter;
 	}
 
 }

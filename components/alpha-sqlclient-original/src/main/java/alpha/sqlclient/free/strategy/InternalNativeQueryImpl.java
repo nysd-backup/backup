@@ -21,8 +21,6 @@ import alpha.sqlclient.free.HitData;
 import alpha.sqlclient.free.strategy.InternalQuery;
 
 
-
-
 /**
  * The internal query for SQLEngine.
  *

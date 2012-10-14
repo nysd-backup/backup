@@ -6,7 +6,7 @@ package alpha.framework.domain.activation;
 import java.util.Properties;
 
 /**
- * function.
+ * ComponentFindeer 4 EJB.
  *
  * @author yoshida-n
  * @version	created.
@@ -14,16 +14,18 @@ import java.util.Properties;
 public interface EJBComponentFinder extends ComponentFinder{
 	
 	/**
-	 * @param name
-	 * @param prop
-	 * @return
+	 * Gets the bean by name.
+	 * @param name the name 
+	 * @param prop the property
+	 * @return bean
 	 */
 	<T> T getBean(String name, Properties prop);
 		
 	/**
-	 * @param requiredType
-	 * @param prop
-	 * @return
+	 * Gets the bean by type.
+	 * @param requiredType the type
+	 * @param prop the property
+	 * @return bean
 	 */
 	<T> T getBean(Class<T> requiredType, Properties prop);
 	

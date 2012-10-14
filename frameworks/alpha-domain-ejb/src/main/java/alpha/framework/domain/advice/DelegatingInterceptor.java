@@ -10,7 +10,6 @@ import alpha.framework.domain.advice.InternalInterceptor;
 import alpha.framework.domain.advice.InvocationAdapter;
 
 
-
 /**
  * DelegatingInterceptor.
  *
@@ -26,7 +25,9 @@ public class DelegatingInterceptor implements InvocationHandler{
 	private final String joinPointMethodName;
 	
 	/**
-	 * @param interceptor
+	 * @param target the target object
+	 * @param interceptor the intercepter
+	 * @param joinPointMethodName the method name
 	 */
 	public DelegatingInterceptor(Object target,InternalInterceptor interceptor,String joinPointMethodName){
 		this.interceptor = interceptor;

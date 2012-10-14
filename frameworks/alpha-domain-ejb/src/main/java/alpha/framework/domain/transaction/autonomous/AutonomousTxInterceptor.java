@@ -13,7 +13,6 @@ import alpha.framework.domain.transaction.DomainContext;
 import alpha.framework.domain.transaction.consecutive.ConsecutiveTxInterceptor;
 
 
-
 /**
  * The default interceptor.
  *

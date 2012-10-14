@@ -8,7 +8,6 @@ import javax.interceptor.InvocationContext;
 import alpha.framework.domain.advice.InvocationAdapter;
 
 
-
 /**
  * The wrapper of the joinPoint.
  *

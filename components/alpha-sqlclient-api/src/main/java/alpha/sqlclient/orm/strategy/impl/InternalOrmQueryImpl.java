@@ -121,6 +121,7 @@ public class InternalOrmQueryImpl implements InternalOrmQuery{
 		final FreeReadQueryParameter parameter = new FreeReadQueryParameter();		
 		parameter.setEntityManager(condition.getEntityManager());
 		parameter.setLockMode(condition.getLockModeType());
+		parameter.setFilter(condition.getFilter());
 		parameter.setSql(sql);
 		parameter.setResultType(condition.getEntityClass());
 		parameter.setQueryId(condition.getEntityClass().getName()+".select");

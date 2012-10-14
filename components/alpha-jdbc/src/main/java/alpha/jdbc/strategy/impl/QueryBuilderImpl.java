@@ -21,8 +21,6 @@ import alpha.jdbc.strategy.QueryBuilder;
 import alpha.jdbc.strategy.TemplateEngine;
 
 
-
-
 /**
  * Builds the SQL from the file.
  *

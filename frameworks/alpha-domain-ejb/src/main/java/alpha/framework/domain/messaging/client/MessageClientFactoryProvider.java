@@ -4,7 +4,7 @@
 package alpha.framework.domain.messaging.client;
 
 /**
- * function.
+ * Provides the factory of messaging client.
  *
  * @author yoshida-n
  * @version	created.
@@ -12,7 +12,7 @@ package alpha.framework.domain.messaging.client;
 public interface MessageClientFactoryProvider {
 
 	/**
-	 * @return
+	 * @return MessageClientFactory
 	 */
-	public MessageClientFactory getMessageClientFactory();
+	MessageClientFactory getMessageClientFactory();
 }

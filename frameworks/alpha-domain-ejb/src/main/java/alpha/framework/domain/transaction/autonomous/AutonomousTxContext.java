@@ -11,8 +11,6 @@ import alpha.framework.domain.transaction.DomainContext;
 import alpha.framework.domain.transaction.TxVerifier;
 
 
-
-
 /**
  * the context.
  *

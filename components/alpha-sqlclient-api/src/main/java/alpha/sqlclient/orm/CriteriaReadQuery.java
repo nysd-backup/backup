@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
 import alpha.sqlclient.free.QueryCallback;
+import alpha.sqlclient.free.ResultSetFilter;
 import alpha.sqlclient.orm.strategy.InternalOrmQuery;
 
 
@@ -33,6 +34,16 @@ public class CriteriaReadQuery<T>{
 		this.condition = new CriteriaReadQueryParameter<T>(entityClass);
 		this.internalQuery = internalQuery;
 		this.condition.setEntityManager(em);
+	}
+	
+	/**
+	 * Sets the filter 
+	 * @param filter filter 
+	 * @return self
+	 */
+	public CriteriaReadQuery<T> setFilter(ResultSetFilter filter){
+		condition.setFilter(filter);
+		return this;
 	}
 	
 	/**

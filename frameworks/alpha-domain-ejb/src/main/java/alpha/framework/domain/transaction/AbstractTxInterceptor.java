@@ -9,12 +9,12 @@ import javax.interceptor.InvocationContext;
 import alpha.framework.domain.transaction.DomainContext;
 
 /**
- * AbstractSessionInterceptor.
+ * AbstractTxInterceptor.
  *
  * @author yoshida-n
  * @version	created.
  */
-public abstract class AbstractSessionInterceptor {
+public abstract class AbstractTxInterceptor {
 	
 	/**
 	 * @param ic the context

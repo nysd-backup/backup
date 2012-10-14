@@ -8,7 +8,6 @@ import java.lang.reflect.Proxy;
 import alpha.framework.domain.advice.InternalInterceptor;
 
 
-
 /**
  * Binds the interceptor to target object without EJB container.
  *
