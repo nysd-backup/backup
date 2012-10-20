@@ -4,6 +4,7 @@
 package alpha.framework.domain.advice;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import alpha.framework.domain.advice.InternalInterceptor;
@@ -45,7 +46,12 @@ public class DelegatingInterceptor implements InvocationHandler{
 			
 			@Override
 			public Object proceed() throws Throwable {
-				return method.invoke(target, args);
+				try{
+					return method.invoke(target, args);
+				}catch(InvocationTargetException ite){
+					Throwable target = ite.getTargetException();
+					throw target;
+				}
 			}
 			
 			@Override

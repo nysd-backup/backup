@@ -6,8 +6,6 @@ package alpha.framework.domain.transaction;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import alpha.framework.domain.transaction.DomainContext;
-
 /**
  * AbstractTxInterceptor.
  *
@@ -22,12 +20,20 @@ public abstract class AbstractTxInterceptor {
 	 * @throws Throwable the exception
 	 */
 	@AroundInvoke
-	public Object around(InvocationContext ic) throws Throwable {	
+	public Object around(InvocationContext ic) throws Exception {	
 		DomainContext context = DomainContext.getCurrentInstance();		
-		if(context == null){
-			return invokeRoot(ic);
-		}else {
-			return invoke(ic);
+		try{
+			if(context == null){
+				return invokeRoot(ic);
+			}else {
+				return invoke(ic);
+			}
+		}catch(Throwable t){
+			if(t instanceof Error ){
+				throw (Error)t;
+			}else {
+				throw (Exception)t;
+			}
 		}
 	}
 	

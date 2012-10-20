@@ -20,10 +20,17 @@ import org.apache.log4j.Logger;
 public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private static final Logger LOG = Logger.getLogger("DEBUG." +InternalQueryBuilderInterceptor.class.getName());
+	private static final Logger LOG = Logger.getLogger("QUERY." +InternalQueryBuilderInterceptor.class.getName());
 	
 	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();
+	
+	/**
+	 * @return enabled
+	 */
+	public static boolean isEnabled(){
+		return LOG.isDebugEnabled();
+	}
 	
 	/**
 	 * @param ignoreList the ignoreList to set

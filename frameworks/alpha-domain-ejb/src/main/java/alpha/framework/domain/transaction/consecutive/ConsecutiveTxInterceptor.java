@@ -42,9 +42,9 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 				sessionContext.setRollbackOnly();				
 			}							
 			return editResponse( returnValue, context);
-		}catch(Exception e){
+		}catch(Throwable e){
 			sessionContext.setRollbackOnly();
-			return handleException(ic.getMethod().getReturnType(),e,context);
+			return handleException(ic.getMethod().getReturnType(),e,context);			
 		}finally{				
 			context.release();		
 			terminate();
@@ -70,7 +70,7 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 * @param context
 	 * @return
 	 */
-	protected Object handleException(Class<?> returnType ,Exception e,DomainContext context)throws Exception{
+	protected Object handleException(Class<?> returnType ,Throwable e,DomainContext context)throws Throwable{
 		throw e;
 	}
 	
@@ -106,7 +106,11 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 * @throws Exception
 	 */
 	protected Object proceed(InvocationContext ic) throws Throwable{
-		return new InternalPerfInterceptor().around(new InvocationAdapterImpl(ic));
+		if(InternalPerfInterceptor.isEnabled()){
+			return new InternalPerfInterceptor().around(new InvocationAdapterImpl(ic));
+		}else {
+			return ic.proceed();
+		}
 	}
 
 }

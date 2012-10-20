@@ -22,6 +22,13 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 	private static final Logger LOG = Logger.getLogger("DEBUG." +InternalPerfInterceptor.class.getName());
 		
 	/**
+	 * @return enabled
+	 */
+	public static boolean isEnabled(){
+		return PERFLOG.isInfoEnabled() || LOG.isTraceEnabled();
+	}
+	
+	/**
 	 * @see alpha.framework.domain.advice.InternalInterceptor#around(alpha.framework.domain.advice.InvocationAdapter)
 	 */
 	public Object around(InvocationAdapter ic) throws Throwable {
@@ -40,7 +47,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 		}
 		
 		//性能
-		if(PERFLOG.isDebugEnabled()){
+		if(PERFLOG.isInfoEnabled()){
 			DomainContext context = DomainContext.getCurrentInstance();
 			if(context == null){
 				return ic.proceed();
@@ -60,7 +67,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 					for (int i = 1; i < context.getCallStackLevel(); i++) {
 						builder.append("\t");
 					}
-					PERFLOG.debug(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getDeclaringTypeName(), ic.getMethodName()));
+					PERFLOG.info(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getDeclaringTypeName(), ic.getMethodName()));
 		
 					context.popCallStack();
 				}

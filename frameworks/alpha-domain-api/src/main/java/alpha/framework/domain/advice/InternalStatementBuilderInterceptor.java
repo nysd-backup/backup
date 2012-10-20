@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 
 
-
 /**
  * An advice for StatementBuilder.
  *
@@ -20,10 +19,17 @@ import org.apache.log4j.Logger;
  */
 public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 
-	private static final Logger LOG = Logger.getLogger("DEBUG." + InternalStatementBuilderInterceptor.class.getName());
+	private static final Logger LOG = Logger.getLogger("QUERY." + InternalStatementBuilderInterceptor.class.getName());
 
 	/** the list contains queryId */
 	private List<String> ignoreList = new ArrayList<String>();
+	
+	/**
+	 * @return enabled
+	 */
+	public static boolean isEnabled(){
+		return LOG.isDebugEnabled();
+	}
 	
 	/**
 	 * @param ignoreList the ignoreList to set
@@ -43,10 +49,12 @@ public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 			return contextInvoker.proceed();
 		}else{
 			Object value = contextInvoker.proceed();
-			String query = value.toString();
-			String[] splited = query.split(";");				
-			LOG.info(splited[0]);
-			LOG.debug(splited[1]);
+			if(LOG.isInfoEnabled()){
+				String query = value.toString();
+				String[] splited = query.split(";");				
+				LOG.info(splited[0]);
+				LOG.debug(splited[1]);
+			}
 			return value;			
 		}
 	}
