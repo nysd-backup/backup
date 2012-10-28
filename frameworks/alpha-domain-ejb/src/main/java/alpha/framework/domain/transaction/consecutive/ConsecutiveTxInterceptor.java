@@ -106,11 +106,26 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 * @throws Exception
 	 */
 	protected Object proceed(InvocationContext ic) throws Throwable{
-		if(InternalPerfInterceptor.isEnabled()){
-			return new InternalPerfInterceptor().around(new InvocationAdapterImpl(ic));
-		}else {
-			return ic.proceed();
+		try{
+			if(InternalPerfInterceptor.isEnabled()){
+				return new InternalPerfInterceptor().around(new InvocationAdapterImpl(ic));
+			}else {
+				return ic.proceed();
+			}
+		}catch(Exception e){
+			wrapByAppException(e);
+			return null;
 		}
+	}
+
+	/**
+	 * wrap by application exception if needed.
+	 * 
+	 * @param e 
+	 * @throws Exception
+	 */
+	protected void wrapByAppException(Exception e)throws Exception{
+		throw e;
 	}
 
 }

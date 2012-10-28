@@ -50,15 +50,14 @@ public class ObjectMessageProducer extends AbstractMessageProducer{
 	 * @see alpha.framework.domain.messaging.client.AbstractMessageProducer#invoke(java.lang.Object, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(Object parameter, String destinationName)
-			throws Throwable {
+	protected Object invoke(Object parameter, String destinationName,final MessagingProperty property){
 		
 		final Serializable param = (Serializable)parameter;
 		MessageCreator creater =new MessageCreator() {			
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				Message message = session.createObjectMessage(param);
-				JMSUtils.setPropertyAndHeader(getProperty(), message);
+				JMSUtils.setPropertyAndHeader(property, message);
 				return message;
 			}
 		};	

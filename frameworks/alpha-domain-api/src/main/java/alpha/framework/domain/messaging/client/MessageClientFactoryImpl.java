@@ -1,13 +1,10 @@
 /**
  * Copyright 2011 the original author
  */
-package alpha.framework.domain.messaging.client.impl;
+package alpha.framework.domain.messaging.client;
 
 import java.lang.reflect.Proxy;
 
-import alpha.framework.domain.messaging.client.AbstractMessageProducer;
-import alpha.framework.domain.messaging.client.MessageClientFactory;
-import alpha.framework.domain.messaging.client.MessagingProperty;
 
 
 /**

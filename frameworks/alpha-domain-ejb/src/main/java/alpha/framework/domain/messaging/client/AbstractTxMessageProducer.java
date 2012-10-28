@@ -21,26 +21,26 @@ import javax.naming.NamingException;
  * @version 2011/08/31 created.
  */
 public abstract class AbstractTxMessageProducer extends AbstractMessageProducer{
-	
-	public static final String CONNECTION_FACTORY = "alpha.messaging.factory";
 
 	/**
 	 * @see alpha.framework.domain.messaging.client.AbstractMessageProducer#invoke(java.io.Serializable, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(Object parameter, String destinationName)
-			throws Throwable {
+	protected Object invoke(Object parameter, String destinationName,MessagingProperty property) {
 		
-		MessagingProperty property = getProperty();
 		ConnectionFactory factory = property.getConnectionFactory();
 		if(factory == null){
 			throw new IllegalArgumentException("ConnectionFactory is required");
 		}
 		Destination destination = createDestination(destinationName);
 		
-		preProduce(parameter,destination,property);
+		Object data = preProduce(parameter,destination,property);
 		
-		produce(factory, parameter, destination,property);
+		try{
+			produce(factory, data, destination,property);
+		}catch(JMSException jmse){
+			throw new MessageClientException(jmse);
+		}
 		return null;
 	}
 	
@@ -50,8 +50,8 @@ public abstract class AbstractTxMessageProducer extends AbstractMessageProducer{
 	 * @param destination the destination
 	 * @param property the property
 	 */
-	protected void preProduce(Object data, Destination destination,MessagingProperty property) {
-		
+	protected Object preProduce(Object data, Destination destination,MessagingProperty property) {
+		return data;
 	}
 	
 	/**

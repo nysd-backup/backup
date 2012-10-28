@@ -14,6 +14,21 @@ import java.util.Properties;
 public interface EJBComponentFinder extends ComponentFinder{
 	
 	/**
+	 * Gets the resource by name.
+	 * @param name the name
+	 * @param prop the property
+	 * @return resource
+	 */
+	<T> T getResource(String name , Properties prop);
+	
+	/**
+	 * Gets the resource by name.
+	 * @param name the name
+	 * @return resource
+	 */
+	<T> T getResource(String name);
+	
+	/**
 	 * Gets the bean by name.
 	 * @param name the name 
 	 * @param prop the property

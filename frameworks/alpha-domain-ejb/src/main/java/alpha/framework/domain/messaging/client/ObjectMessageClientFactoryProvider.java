@@ -1,8 +1,6 @@
-package alpha.framework.domain.messaging.client.impl;
+package alpha.framework.domain.messaging.client;
 
 import alpha.framework.domain.messaging.client.MessageClientFactory;
-import alpha.framework.domain.messaging.client.MessageClientFactoryProvider;
-import alpha.framework.domain.messaging.client.ObjectMessageProducer;
 
 /**
  * Default messaging client factory.
@@ -10,7 +8,7 @@ import alpha.framework.domain.messaging.client.ObjectMessageProducer;
  * @author yoshida-n
  * @version	created.
  */
-public class DefaultMessageClientFactoryProviderImpl implements MessageClientFactoryProvider{
+public class ObjectMessageClientFactoryProvider implements MessageClientFactoryProvider{
 
 	/**
 	 * @see alpha.framework.domain.messaging.client.MessageClientFactoryProvider#getMessageClientFactory()

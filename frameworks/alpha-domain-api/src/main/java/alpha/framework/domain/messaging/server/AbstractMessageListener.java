@@ -5,14 +5,12 @@ package alpha.framework.domain.messaging.server;
 
 import java.lang.reflect.Method;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 
 import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.messaging.client.AbstractMessageProducer;
-
-
 
 /**
  * A listener for MDB and MDP.
@@ -26,12 +24,12 @@ import alpha.framework.domain.messaging.client.AbstractMessageProducer;
  *   - specifies the JNDI name of the connection factory that should create the JMS connection
  * destinationName 
  *   - specifies that we are listening for messages arriving at a destination with the JNDI name
- * </pre>
  *
- * @author	yoshida-n
- * @version 2011/08/31 created.
+ * @author yoshida-n
+ * @version	created.
  */
-public class ObjectMessageConsumerImpl implements MessageListener{
+public abstract class AbstractMessageListener implements MessageListener{
+
 
 	/**
 	 * @param arg0 the message
@@ -53,23 +51,24 @@ public class ObjectMessageConsumerImpl implements MessageListener{
 		
 		String serviceName = message.getStringProperty(AbstractMessageProducer.SERVICE_NAME);
 		String methodName = message.getStringProperty(AbstractMessageProducer.METHOD_NAME);
-		String[] parameterTypeName = (String[])message.getObjectProperty(AbstractMessageProducer.PARAMETER_TYPE_NAME);
 
 		Object service = ServiceLocator.getService(serviceName);				
-		Method m = null;
-		if(parameterTypeName == null){
-			m = service.getClass().getMethod(methodName);
-		}else {
-			Class<?>[] clss = new Class[parameterTypeName.length];
-			for(int i = 0 ; i< clss.length; i++){
-				clss[i] = Class.forName(parameterTypeName[i]);
+		Method[] ms = service.getClass().getDeclaredMethods();
+		Method target = null;
+		for(Method m : ms){
+			if(m.equals(methodName)){
+				target = m;
 			}
-			m = service.getClass().getMethod(methodName,clss);
-		}		
-		
-		ObjectMessage object = ObjectMessage.class.cast(message);		
-		return m.invoke(service, object.getObject());
+		}	
+		return target.invoke(service, getArguments(message,target.getParameterTypes()[0]));
 	}
+	
+	/**
+	 * Gets the arguments.
+	 * @param message the message
+	 * @return
+	 */
+	protected abstract Object getArguments(Message message,Class<?> type) throws JMSException;
 	
 	/**
 	 * Handles the exceptions and errors.

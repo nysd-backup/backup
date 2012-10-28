@@ -5,6 +5,9 @@ package alpha.framework.domain.activation;
 
 import java.util.Properties;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import alpha.framework.domain.messaging.client.MessageClientFactoryProvider;
 import alpha.framework.domain.query.QueryFactoryProvider;
 import alpha.framework.domain.transaction.TxVerifier;
@@ -27,12 +30,30 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	private TxVerifier txVerifier;
 	
 	/**
+	 * @see alpha.framework.domain.activation.EJBComponentFinder#getResource(java.lang.String, java.util.Properties)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getResource(String name, Properties prop){
+		return (T)lookup(name,prop);
+	}
+	
+	/**
+	 * @see alpha.framework.domain.activation.EJBComponentFinder#getResource(java.lang.String)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getResource(String name){
+		return (T)getResource(name,null);
+	}
+	
+	/**
 	 * @see alpha.framework.domain.activation.EJBComponentFinder#getBean(java.lang.String, java.util.Properties)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getBean(String name, Properties prop){
-		return (T)lookup(name,prop);
+		return (T)lookup(getPrefix() + name,prop);
 	}
 
 	/**
@@ -40,7 +61,7 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getBean(Class<T> requiredType, Properties prop){
-		return (T)lookup(requiredType.getSimpleName() + "Impl",prop);
+		return (T)getBean(requiredType.getSimpleName() + "Impl",prop);
 	}
 
 	/**
@@ -51,6 +72,11 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	public <T> T getBean(String name) {
 		return (T)getBean(name,null);
 	}
+	
+	/**
+	 * @return prefix
+	 */
+	protected abstract String getPrefix();
 
 	/**
 	 * @see alpha.framework.domain.activation.ComponentFinder#getBean(java.lang.Class)
@@ -66,7 +92,28 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	 * @param prop the property
 	 * @return bean
 	 */
-	protected abstract Object lookup(String serviceName, Properties prop);
+	protected Object lookup(String serviceName, Properties prop){
+		InitialContext context = null;
+		try{			
+			String format = serviceName;	
+			if(prop == null){				
+				context = new InitialContext(); 				
+			}else{
+				context = new InitialContext(prop); 		
+			}
+			return context.lookup(format);
+		}catch(NamingException ne){
+			throw new IllegalArgumentException("Failed to load alpha.domain ", ne);
+		}finally{
+			if(context != null){
+				try {
+					context.close();
+				} catch (NamingException e) {					
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	/**
 	 * @return the queryFactoryProvider

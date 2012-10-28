@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package alpha.framework.domain.messaging.client.impl;
+package alpha.framework.domain.messaging.client;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-import alpha.framework.domain.messaging.client.DestinationNameResolver;
-import alpha.framework.domain.messaging.client.MessagingProperty;
 
 
 /**

@@ -21,7 +21,7 @@ public class MessagingProperty{
 
 	private ConnectionFactory connectionFactory = null;
 	
-	private Map<String,Object> clientOption = null;
+	private Map<String,Object> clientOption = new HashMap<String,Object>();
 	
 	private String destinationPrefix = null;
 	
@@ -152,8 +152,8 @@ public class MessagingProperty{
 		if(StringUtils.isNotEmpty(property.getDestinationPrefix())){
 			setDestinationPrefix(property.getDestinationPrefix());
 		}
-		if(StringUtils.isNotEmpty(property.getDestinationPrefix())){
-			setDestinationPrefix(property.getDestinationPrefix());
+		if(StringUtils.isNotEmpty(property.getDynamicDestinationName())){
+			setDynamicDestinationName(property.getDynamicDestinationName());
 		}
 		if(property.getConnectionFactory() != null){
 			setConnectionFactory(property.getConnectionFactory());
@@ -163,6 +163,10 @@ public class MessagingProperty{
 		}
 		if(StringUtils.isNotEmpty(property.getJMSType())){
 			setJMSType(property.getJMSType());
+		}
+		Map<String,Object> copt = property.getClientOption();
+		for(Entry<String,Object> p : copt.entrySet()){
+			clientOption.put(p.getKey(), p.getValue());
 		}
 		Map<String,Object> props = property.getJMSProperty();
 		for(Entry<String,Object> p : props.entrySet()){

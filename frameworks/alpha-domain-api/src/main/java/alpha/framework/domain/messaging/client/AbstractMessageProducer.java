@@ -3,11 +3,9 @@
  */
 package alpha.framework.domain.messaging.client;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import alpha.framework.domain.messaging.client.impl.DestinationNameResolverImpl;
 
 
 
@@ -30,7 +28,6 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	
 	public static final String METHOD_NAME = "alpha.mdb.methodName";
 	
-	public static final String PARAMETER_TYPE_NAME = "alpha.mdb.parameterTypeName";
 	/**
 	 * @param destinationNameResolver the destinationNameResolver to set
 	 */
@@ -44,13 +41,6 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	public void setProperty(MessagingProperty property){
 		this.property = property;
 	}
-
-	/**
-	 * @return the property
-	 */
-	protected MessagingProperty getProperty(){
-		return property;
-	}
 	
 	/**
 	 * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
@@ -58,31 +48,13 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
-		Serializable[] serial = null;
-		if( args == null){
-			serial = new Serializable[0];
-		}else{
-			serial = new Serializable[args.length];
-			for(int i = 0 ; i < args.length; i++){
-				serial[i] = Serializable.class.cast(args[i]);
-			}
-		}
 		JMSConfig config = method.getAnnotation(JMSConfig.class);
 		MessagingProperty property = MessagingProperty.createFrom(config);
 		property.override(this.property);
 		property.addJMSProperty(SERVICE_NAME, method.getDeclaringClass().getName());
-		property.addJMSProperty(METHOD_NAME, method.getName());		
-		Class<?>[] clss = method.getParameterTypes();
-		if( clss != null){			
-			String[] names = new String[clss.length];
-			for(int i = 0 ; i < names.length; i++){
-				names[i] = clss[i].getName();
-			}
-			property.addJMSProperty(PARAMETER_TYPE_NAME, names);		
-		}
-	
+		property.addJMSProperty(METHOD_NAME, method.getName());			
 		String dst = destinationNameResolver.createDestinationName(method,property);	
-		return invoke(serial,dst);
+		return invoke(args[0],dst,property);
 	}
 	
 	/**
@@ -92,5 +64,5 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	 * @return the result
 	 * @throws Throwable　any error
 	 */
-	protected abstract Object invoke(Object parameter ,String destinationName) throws Throwable;
+	protected abstract Object invoke(Object parameter ,String destinationName,MessagingProperty property);
 }

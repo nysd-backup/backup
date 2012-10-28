@@ -9,7 +9,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import alpha.framework.domain.activation.UnifiedComponentFinderImpl;
-import alpha.framework.domain.messaging.client.impl.DefaultMessageClientFactoryProviderImpl;
+import alpha.framework.domain.messaging.client.ObjectMessageClientFactoryProvider;
 import alpha.framework.domain.query.impl.DefaultQueryFactoryProviderImpl;
 import alpha.framework.domain.transaction.TxVerifier;
 
@@ -33,7 +33,7 @@ public class StubComponentFinder extends UnifiedComponentFinderImpl{
 				return "100".equals(value.toString());
 			}
 		});		
-		setMessageClientFactoryProvider(new DefaultMessageClientFactoryProviderImpl());
+		setMessageClientFactoryProvider(new ObjectMessageClientFactoryProvider());
 	}
 
 	/**

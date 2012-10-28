@@ -29,7 +29,7 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>assess</id>
+			<id>ejbset</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
