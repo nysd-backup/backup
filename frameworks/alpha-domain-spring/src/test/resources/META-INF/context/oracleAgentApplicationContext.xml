@@ -17,6 +17,7 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
+	<tx:annotation-driven/>
 	
 	<!-- コネクションが別セッションにならないのでこちらを単体テストで使用する。javaagentの設定をテストクラス毎に実行するのはしんどい ので[java]→[Installed JREs]でデフォルトVM引数を変更する-->
 	
