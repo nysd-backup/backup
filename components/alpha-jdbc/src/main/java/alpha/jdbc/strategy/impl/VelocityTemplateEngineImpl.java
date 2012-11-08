@@ -132,15 +132,13 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 						continue;
 					}
 					// 定数置換
-					Object[] val = accessor.getConstTarget(token);
-					if (val.length > 0) {
-						Object o = val[0];					
+					if (accessor.isValidKey(token)) {
+						Object o = accessor.getConstTarget(token);				
 						if( o instanceof String){	
 							replaceString = replaceString.replace(token, "\"" + o.toString() + "\"");
 						}else{
 							replaceString = replaceString.replace(token,o.toString());
-						}
-				
+						}			
 					} else {
 						replaceString = replaceString.replace(token, "$" + token);
 					}

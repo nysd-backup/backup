@@ -110,6 +110,9 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		
 		RecordFilter filter = createRecordFilter(parameter);
 		Query query = mapping(parameter,createQuery(parameter));	
+		if(parameter.getMaxSize() > 0){
+			query.setMaxResults(parameter.getMaxSize());
+		}		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();	
 		try {			
 			return handler.getResultList(cursor.getResultSet(), parameter.getResultType(), filter);
@@ -137,9 +140,7 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	public HitData getTotalResult(final FreeReadQueryParameter parameter) {
 
 		RecordFilter filter = createRecordFilter(parameter);
-		Query query = mapping(parameter,createQuery(parameter));
-		query.setMaxResults(0);
-		
+		Query query = mapping(parameter,createQuery(parameter));		
 		TotalData result;
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();		
 		try {		
@@ -160,7 +161,10 @@ public class InternalNativeQueryImpl implements InternalQuery {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List getFetchResult(FreeReadQueryParameter parameter) {
-		Query query = mapping(parameter,createQuery(parameter));		
+		Query query = mapping(parameter,createQuery(parameter));	
+		if(parameter.getMaxSize() > 0){
+			query.setMaxResults(parameter.getMaxSize());
+		}		
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
 			return new LazyList(cursor, recordHandlerFactory.create(parameter.getResultType(), cursor.getResultSet()),exceptionHandler,parameter.getFilter());
@@ -195,10 +199,6 @@ public class InternalNativeQueryImpl implements InternalQuery {
 		if(parameter.getFirstResult() > 0){
 			query.setFirstResult(parameter.getFirstResult());
 		}
-		if(parameter.getMaxSize() > 0){
-			query.setMaxResults(parameter.getMaxSize());
-		}
-		
 		//ResultSetの取得を可能とする。
 		query.setHint(QueryHints.SCROLLABLE_CURSOR, HintValues.TRUE);
 		return query;

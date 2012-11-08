@@ -30,6 +30,122 @@ import service.query.SampleNativeUpdate;
  */
 public class LocalNativeQueryTestBean extends BaseCase{
 	
+	
+	public void paging() {
+		
+		em.createNativeQuery("delete from testa").executeUpdate();
+		for(int i = 0 ; i < 100; i ++){
+			TestEntity e = new TestEntity();
+			String v = i+"";
+			if( v.length() == 1) v = "0" +v;
+			e.setTest(v);
+			em.persist(e);
+		}
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30);
+		HitData data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		List<SampleNativeResult> resultList = data.getResultList();
+		assertEquals(30,resultList.size());
+		assertEquals("00",resultList.get(0).getTest());
+		assertEquals("29",resultList.get(29).getTest());
+		
+		query = createSelect(SampleNativeQuery.class);		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30).setFirstResult(30);
+		data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		resultList = data.getResultList();
+		assertEquals(30,resultList.size());
+		assertEquals("30",resultList.get(0).getTest());
+		assertEquals("59",resultList.get(29).getTest());
+		
+		query = createSelect(SampleNativeQuery.class);	
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30).setFirstResult(60);
+		data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		resultList = data.getResultList();
+		assertEquals(30,resultList.size());
+		assertEquals("60",resultList.get(0).getTest());
+		assertEquals("89",resultList.get(29).getTest());
+		
+		query = createSelect(SampleNativeQuery.class);	
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30).setFirstResult(90);
+		data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		resultList = data.getResultList();
+		assertEquals(10,resultList.size());
+		assertEquals("90",resultList.get(0).getTest());
+		assertEquals("99",resultList.get(9).getTest());
+		
+	}
+	
+	public void fetch() {
+		em.createNativeQuery("delete from testa").executeUpdate();
+		for(int i = 0 ; i < 100; i ++){
+			TestEntity e = new TestEntity();
+			String v = i+"";
+			if( v.length() == 1) v = "0" +v;
+			e.setTest(v);
+			em.persist(e);
+		}
+		SampleNativeQuery query = createSelect(SampleNativeQuery.class);		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30);
+		List<SampleNativeResult> result = query.getFetchResult();
+		int count = 0;
+		SampleNativeResult last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("29",last.getTest());
+		assertEquals(30,count);
+
+		
+		query = createSelect(SampleNativeQuery.class);		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setFirstResult(30).setMaxResults(30);
+		result = query.getFetchResult();
+		count = 0;
+		last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("59",last.getTest());
+		assertEquals(30,count);
+		
+		query = createSelect(SampleNativeQuery.class);		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setFirstResult(60).setMaxResults(30);
+		result = query.getFetchResult();
+		count = 0;
+		last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("89",last.getTest());
+		assertEquals(30,count);
+		
+		query = createSelect(SampleNativeQuery.class);		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setFirstResult(90).setMaxResults(30);
+		result = query.getFetchResult();
+		count = 0;
+		last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("99",last.getTest());
+		assertEquals(10,count);
+	}
+	
 	/**
 	 * 通常検索
 	 */

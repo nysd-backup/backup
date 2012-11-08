@@ -18,17 +18,16 @@ import javax.persistence.PessimisticLockException;
 
 import org.eclipse.persistence.config.QueryHints;
 
-import alpha.framework.domain.activation.ServiceLocator;
-import alpha.framework.domain.transaction.DomainContext;
-import alpha.sqlclient.exception.UniqueConstraintException;
-import alpha.sqlclient.orm.CriteriaModifyQuery;
-import alpha.sqlclient.orm.CriteriaReadQuery;
-
 import service.entity.DateEntity;
 import service.entity.IDateEntity;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
 import service.services.RequiresNewService;
+import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.transaction.DomainContext;
+import alpha.sqlclient.exception.UniqueConstraintException;
+import alpha.sqlclient.orm.CriteriaModifyQuery;
+import alpha.sqlclient.orm.CriteriaReadQuery;
 
 
 /**
@@ -40,8 +39,8 @@ import service.services.RequiresNewService;
 @Stateless
 public class LocalEntityQueryTestBean extends BaseCase {
 	
+	
 	public void duplicateError(){
-		
 		//1件目
 		TestEntity e = new TestEntity();
 		e.setAttr("attr");

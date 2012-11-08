@@ -77,7 +77,7 @@ public class ResultSetWrapper {
 	 * @return the total result
 	 * @throws SQLException
 	 */
-	public <T> TotalData loadIntoMemory(Class<T> type,int maxSize,ResultSetHandler handler)
+	public <T> TotalData loadIntoMemory(Class<T> type,ResultSetHandler handler,int maxSize)
 	throws SQLException {
 		return handler.getResultList(resultSet, type, filter, maxSize);
 	}

@@ -10,10 +10,16 @@ package alpha.jdbc.strategy;
  * @version 2011/08/31 created.
  */
 public interface ConstantAccessor {
+	
+	/**
+	 * @return true: the key is valide
+	 */
+	boolean isValidKey(String key);
 
 	/**
 	 * @param variableName the variableName
 	 * @return the value
 	 */
-	Object[] getConstTarget(String variableName);
+	Object getConstTarget(String variableName);
+
 }

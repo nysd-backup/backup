@@ -18,34 +18,18 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 	/** the instance of logging */
 	private static final Logger PERFLOG = Logger.getLogger("PERF." +InternalPerfInterceptor.class.getName());
 
-	/** the instance of logging */
-	private static final Logger LOG = Logger.getLogger("DEBUG." +InternalPerfInterceptor.class.getName());
-		
 	/**
 	 * @return enabled
 	 */
 	public static boolean isEnabled(){
-		return PERFLOG.isInfoEnabled() || LOG.isTraceEnabled();
+		return PERFLOG.isInfoEnabled();
 	}
 	
 	/**
 	 * @see alpha.framework.domain.advice.InternalInterceptor#around(alpha.framework.domain.advice.InvocationAdapter)
 	 */
 	public Object around(InvocationAdapter ic) throws Throwable {
-		
-		//パラメータ
-		if(LOG.isTraceEnabled()){
-			Object[] args = ic.getArgs();
-			if(args != null){
-				StringBuilder builder = new StringBuilder("show parameters ----\n");
-				for(Object arg : args){
-					builder.append((String.valueOf(arg))).append("\n");
-				}
-				builder.append("--------------------");
-				LOG.trace(String.format("\n%s.%s\n%s",ic.getDeclaringTypeName(),ic.getMethodName(),builder.toString()));
-			}
-		}
-		
+
 		//性能
 		if(PERFLOG.isInfoEnabled()){
 			DomainContext context = DomainContext.getCurrentInstance();

@@ -65,6 +65,18 @@ public class CriteriaModifyQuery<T> {
 	public <V> CriteriaModifyQuery<T> eq(Metadata<T, V> column, V value){
 		return addCriteria(column.name(), ComparingOperand.Equal,value);
 	}
+	
+	/**
+	 * Adds '!='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> CriteriaModifyQuery<T> ne(Metadata<T, V> column, V value){
+		return addCriteria(column.name(), ComparingOperand.NotEqual,value);
+	}
 
 	/**
 	 * Adds '>'.

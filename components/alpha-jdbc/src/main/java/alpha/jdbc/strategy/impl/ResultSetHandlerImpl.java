@@ -42,20 +42,20 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	public TotalData getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize)
 	throws SQLException{ 
 
-		int hitCount = 0;
 		List<Object> result = new ArrayList<Object>();			
 		boolean limitted = false;
 		RecordHandler handler = factory.create(resultType, resultSet);
-		int startPosition = resultSet.getRow();		
-		while (resultSet.next()) {
-			hitCount++;			
+		int hitCount = 0;
+		int startPosition = resultSet.getRow();
+		while (resultSet.next()) {	
+			hitCount++;
 			//最大件数超過していたら終了
 			if( !limitted ){
-				if(hitCount > maxSize && maxSize > 0){
+				if( maxSize > 0 && hitCount > maxSize){
 					limitted = true;	
 					if(resultSet.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
-						resultSet.last();
-						hitCount = resultSet.getRow() - startPosition;						
+						resultSet.last();	
+						hitCount = resultSet.getRow();
 						break;
 					}else{
 						continue;
@@ -71,7 +71,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 				result.add(row);
 			}			
 		}
-
+		hitCount = limitted ? hitCount:hitCount+startPosition;
 		return new TotalData(limitted, result, hitCount);
 	}
 

@@ -207,7 +207,7 @@ public class QueryServiceImpl implements QueryService{
 			rs = stmt.read(selector);
 			rs.setStartPosition(param.getFirstResult());
 			rs.setFilter(param.getFilter());							
-			return rs.loadIntoMemory(param.getResultType(),param.getMaxSize(),resultSetHandler);
+			return rs.loadIntoMemory(param.getResultType(),resultSetHandler,param.getMaxSize());
 			
 		}catch(SQLException sqle){
 			throw exceptionHandler.rethrow(sqle);

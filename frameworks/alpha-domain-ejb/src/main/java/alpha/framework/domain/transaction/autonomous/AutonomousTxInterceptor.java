@@ -45,7 +45,11 @@ public class AutonomousTxInterceptor extends ConsecutiveTxInterceptor {
 			context.newTransactionScope();
 		}
 		try{		
-			return proceed(ic);
+			Object retValue = proceed(ic);
+			if(isTransactionBorder){
+				finishTransactionBorder(retValue);
+			}
+			return retValue;
 		}finally{			
 			//Synchronization 			
 			if(isTransactionBorder){
@@ -58,6 +62,14 @@ public class AutonomousTxInterceptor extends ConsecutiveTxInterceptor {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Transaction border event.
+	 * @param retValue value to return
+	 */
+	protected void finishTransactionBorder(Object retValue){
+		
 	}
 	
 	/**

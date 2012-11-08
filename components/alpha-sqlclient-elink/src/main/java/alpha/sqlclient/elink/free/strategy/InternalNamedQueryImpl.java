@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import alpha.jdbc.strategy.ConstantAccessor;
@@ -96,11 +97,16 @@ public class InternalNamedQueryImpl implements InternalQuery{
 		if(param.getLockMode() != null){
 			query.setLockMode(param.getLockMode());
 		}
-		T result =  (T)setRange(param.getFirstResult(),1,query).getSingleResult();
-		if(param.getFilter() != null && result != null){
-			result = param.getFilter().edit(result);
+		try{
+			T result =  (T)setRange(param.getFirstResult(),1,query).getSingleResult();
+			if(param.getFilter() != null && result != null){
+				result = param.getFilter().edit(result);
+			}
+			return result;
+		}catch(NoResultException nre){
+			return null;
 		}
-		return result;
+		
 	}
 	
 	/**
@@ -157,11 +163,9 @@ public class InternalNamedQueryImpl implements InternalQuery{
 		while (match.find()) {
 			// マッチしたバインド変数名を取得(前後の空白、1文字目のコロンを除く)
 			String variableName = match.group(2);
-			Object[] value = accessor.getConstTarget(variableName);
-			
 			//定数
-			if( value.length > 0 ){
-				query.setParameter(variableName, value[0]);
+			if( accessor.isValidKey(variableName) ){
+				query.setParameter(variableName, accessor.getConstTarget(variableName));
 			//定数以外
 			}else{
 				if(param.containsKey(variableName)){				

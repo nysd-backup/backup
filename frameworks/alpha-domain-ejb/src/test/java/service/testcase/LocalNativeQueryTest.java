@@ -23,6 +23,22 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	private LocalNativeQueryTestBean bean(){
 		return ServiceLocator.getService(LocalNativeQueryTestBean.class.getSimpleName());
 	}
+	
+	/**
+	 * 通常検索
+	 */
+	@Test
+	public void paging(){
+		bean().paging();			
+	}
+	
+	/**
+	 * 通常検索
+	 */
+	@Test
+	public void fetch(){
+		bean().fetch();			
+	}
 
 	/**
 	 * 通常検索

@@ -208,11 +208,41 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>assess</id>
+			<id>ejbset</id>
 			<modules>							
 				<module>components</module>			
 				<module>frameworks</module>											
 			</modules>
+		</profile>
+		<profile>
+			<id>pack</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>../../alpha-domain-all/src/main/java</outputDirectory>
+									<resources>          
+										<resource>
+											<directory>src/main/java</directory>
+									 	</resource>
+									</resources>              
+								</configuration>            
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
+			
 		</profile>
 	</profiles>
 

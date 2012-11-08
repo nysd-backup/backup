@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -110,9 +111,6 @@ public class QueryBuilderImpl implements QueryBuilder{
 	public PreparedQuery prepare(String sql , List<Map<String,Object>> params ,String wrapClause,String sqlId){
 
 		List<List<Object>> bindList = new ArrayList<List<Object>>();
-		if(params.isEmpty()){
-			throw new IllegalArgumentException("parameter is required");
-		}
 		for(int i = 0; i <params.size();i++){
 			bindList.add(new ArrayList<Object>());
 		}
@@ -127,21 +125,9 @@ public class QueryBuilderImpl implements QueryBuilder{
 			String variableName = match.group(2);
 			String question = null;
 			
-			for(int i = 0 ; i < params.size(); i ++){
-				Map<String,Object> map = params.get(i);				
-				List<Object> binds = bindList.get(i);
-				
-				Object variable = null;
-				//パラメータがなければ定数キャッシュから取得する
-				if(!map.containsKey(variableName) ){
-					Object[] value = accessor.getConstTarget(variableName);		
-					if( value.length < 1){
-						throw new IllegalArgumentException("invalid parameter : name=" + variableName + " : batchIndex=" + i);
-					}
-					variable = value[0];				
-				}else{
-					variable =  map.get(variableName);	
-				}
+			for(int i = 0 ; i < params.size(); i ++){			
+				List<Object> binds = bindList.get(i);				
+				Object variable = getValue(params.get(i), variableName);
 	
 				//?は最初のリストで判定する
 				if(i == 0){
@@ -161,20 +147,20 @@ public class QueryBuilderImpl implements QueryBuilder{
 							// リストの番目以降に追加
 							for (int j = 1; j < list.size(); j++) {
 								questions.append(",?");
-								binds.add(list.get(j));
+								binds.add(convert(list.get(j),variableName,sqlId));
 							}
 							question = questions.toString();
 						}else{
 							for (int j = 0; j < list.size(); j++) {
-								binds.add(list.get(j));
+								binds.add(convert(list.get(j),variableName,sqlId));
 							}
 						}						
 					
 					}else {
-						binds.add(variable);
+						binds.add(convert(variable,variableName,sqlId));
 					}				
 				}else{
-					binds.add(variable);
+					binds.add(convert(variable,variableName,sqlId));
 				}
 
 			}
@@ -186,7 +172,7 @@ public class QueryBuilderImpl implements QueryBuilder{
 			if(parameterCount == -1 ){
 				parameterCount = bindList.get(i).size();
 			}else if(bindList.get(i).size() != parameterCount){
-				throw new IllegalArgumentException("batch parameter count must be same : current=" + bindList.get(i).size() + " : previous=" + parameterCount + " : batchIndex=" + i);				
+				throw new QueryException("batch parameter count must be same : current=" + bindList.get(i).size() + " : previous=" + parameterCount + " : batchIndex=" + i);				
 			}
 		}
 		
@@ -198,6 +184,37 @@ public class QueryBuilderImpl implements QueryBuilder{
 		}
 		return new PreparedQuery(preparedSql,bindList,sqlId);
 		
+	}
+	
+	/**
+	 * Gets the value 
+	 * @param paramMap
+	 * @param variableName
+	 * @return
+	 */
+	protected Object getValue(Map<String,Object> paramMap , String variableName){
+		//パラメータがなければ定数キャッシュから取得する
+		if(!paramMap.containsKey(variableName) ){
+			if(accessor.isValidKey(variableName)){
+				return accessor.getConstTarget(variableName);		
+			}else{
+				throw new QueryException("invalid parameter : name=" + variableName );
+			}
+		}else{
+			return paramMap.get(variableName);	
+		}
+	}
+	
+	/**
+	 * Convert value
+	 * @param value source value
+	 * @return converted value
+	 */
+	protected Object convert(Object value,String name, String sqlId){
+		if(value instanceof Boolean ){
+			return (Boolean)value ? BigDecimal.ONE.toString() : BigDecimal.ZERO.toString(); 
+		}
+		return value;
 	}
 
 }

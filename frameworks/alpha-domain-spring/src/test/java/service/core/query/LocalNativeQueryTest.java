@@ -15,12 +15,6 @@ import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import alpha.sqlclient.free.HitData;
-import alpha.sqlclient.free.QueryCallback;
-import alpha.sqlclient.free.QueryFactory;
-import alpha.sqlclient.orm.CriteriaQueryFactory;
-import alpha.sqlclient.orm.CriteriaReadQuery;
-
 import service.test.CachableConst;
 import service.test.SampleNativeQuery;
 import service.test.SampleNativeQueryConst;
@@ -29,6 +23,11 @@ import service.test.SampleNativeUpdate;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
+import alpha.sqlclient.free.HitData;
+import alpha.sqlclient.free.QueryCallback;
+import alpha.sqlclient.free.QueryFactory;
+import alpha.sqlclient.orm.CriteriaQueryFactory;
+import alpha.sqlclient.orm.CriteriaReadQuery;
 
 
 /**
@@ -336,6 +335,126 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		TestEntity res = e.eq(ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
 
 		assertEquals(900,res.getAttr2());
+	}
+	
+	/**
+	 * ページング
+	 */
+	@Test
+	public void paging() {
+		
+		getEntityManager().createNativeQuery("delete from testa").executeUpdate();
+		for(int i = 0 ; i < 100; i ++){
+			TestEntity e = new TestEntity();
+			String v = i+"";
+			if( v.length() == 1) v = "0" +v;
+			e.setTest(v);
+			getEntityManager().persist(e);
+		}
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30);
+		HitData data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		List<SampleNativeResult> resultList = data.getResultList();
+		assertEquals(30,resultList.size());
+		assertEquals("00",resultList.get(0).getTest());
+		assertEquals("29",resultList.get(29).getTest());
+		
+		query =  queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());				
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30).setFirstResult(30);
+		data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		resultList = data.getResultList();
+		assertEquals(30,resultList.size());
+		assertEquals("30",resultList.get(0).getTest());
+		assertEquals("59",resultList.get(29).getTest());
+		
+		query =  queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30).setFirstResult(60);
+		data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		resultList = data.getResultList();
+		assertEquals(30,resultList.size());
+		assertEquals("60",resultList.get(0).getTest());
+		assertEquals("89",resultList.get(29).getTest());
+		
+		query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30).setFirstResult(90);
+		data = query.getTotalResult();
+		assertEquals(100,data.getHitCount());
+		resultList = data.getResultList();
+		assertEquals(10,resultList.size());
+		assertEquals("90",resultList.get(0).getTest());
+		assertEquals("99",resultList.get(9).getTest());
+		
+	}
+
+	@Test
+	public void fetch() {
+		getEntityManager().createNativeQuery("delete from testa").executeUpdate();
+		for(int i = 0 ; i < 100; i ++){
+			TestEntity e = new TestEntity();
+			String v = i+"";
+			if( v.length() == 1) v = "0" +v;
+			e.setTest(v);
+			getEntityManager().persist(e);
+		}
+		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setMaxResults(30);
+		List<SampleNativeResult> result = query.getFetchResult();
+		int count = 0;
+		SampleNativeResult last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("29",last.getTest());
+		assertEquals(30,count);
+
+		
+		query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setFirstResult(30).setMaxResults(30);
+		result = query.getFetchResult();
+		count = 0;
+		last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("59",last.getTest());
+		assertEquals(30,count);
+		
+		query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setFirstResult(60).setMaxResults(30);
+		result = query.getFetchResult();
+		count = 0;
+		last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("89",last.getTest());
+		assertEquals(30,count);
+		
+		query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
+		query.getParameter().setSql("select * from testa order by test");
+		query.setFirstResult(90).setMaxResults(30);
+		result = query.getFetchResult();
+		count = 0;
+		last = null;
+		for(SampleNativeResult r : result){
+			count++;
+			last = r;
+		}
+		assertEquals("99",last.getTest());
+		assertEquals(10,count);
 	}
 
 }

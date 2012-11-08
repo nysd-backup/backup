@@ -20,7 +20,7 @@ import alpha.sqlclient.orm.strategy.InternalOrmQuery;
  * @version 2011/08/31 created.
  */
 public class CriteriaReadQuery<T>{
-	
+
 	/** the InternalOrmQuery */
 	private final InternalOrmQuery internalQuery ;
 	
@@ -111,6 +111,18 @@ public class CriteriaReadQuery<T>{
 	 */
 	public <V> CriteriaReadQuery<T> eq(Metadata<T, V> column, V value){
 		return addCriteria(column.name(), ComparingOperand.Equal,value);
+	}
+	
+	/**
+	 * Adds '!='.
+	 * 
+	 * @param <V> the type
+	 * @param column the column to add to
+	 * @param value the value to be added
+	 * @return self
+	 */
+	public <V> CriteriaReadQuery<T> ne(Metadata<T, V> column, V value){
+		return addCriteria(column.name(), ComparingOperand.NotEqual,value);
 	}
 	
 	/**

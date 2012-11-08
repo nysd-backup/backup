@@ -29,20 +29,26 @@ public class ConstantAccessorImpl implements ConstantAccessor {
 	 * @see alpha.jdbc.strategy.ConstantAccessor#getConstTarget(java.lang.String)
 	 */
 	@Override
-	public Object[] getConstTarget(String variableName) {
+	public Object getConstTarget(String variableName) {
 
 		// 定数値が指定されていた場合、定数値をバインド値に追加する
-		if (variableName.startsWith(constPrefix)) {
+		if (isValidKey(constPrefix)) {
 			String fieldName = variableName.substring(constPrefix.length());
 			if (ConstantCache.containsKey(fieldName)) {
-				Object[] value = new Object[1];
-				value[0] = ConstantCache.get(fieldName);
-				return value;
+				return ConstantCache.get(fieldName);
 			} else {
 				throw new QueryException("[Poor Implementation ] No cache was found . key = " + fieldName);
 			}
 		}
-		return new Object[0];
+		throw new QueryException("[Poor Implementation ] Illegal const key . key = " + variableName);
+	}
+
+	/**
+	 * @see alpha.jdbc.strategy.ConstantAccessor#isValidKey(java.lang.String)
+	 */
+	@Override
+	public boolean isValidKey(String key) {
+		return key.startsWith(constPrefix);
 	}
 
 }
