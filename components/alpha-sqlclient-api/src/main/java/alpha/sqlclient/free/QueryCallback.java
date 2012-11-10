@@ -10,6 +10,8 @@ package alpha.sqlclient.free;
  * @version	created.
  */
 public interface QueryCallback<T> {
+	
+	void initialize();
 
 	/**
 	 * Handles the one record.
@@ -17,5 +19,10 @@ public interface QueryCallback<T> {
 	 * @param rowIndex incremented count
 	 */
 	void handleRow(T oneRecord , long rowIndex);
+	
+	/**
+	 * Terminates the callback.
+	 */
+	void terminate();
 	
 }

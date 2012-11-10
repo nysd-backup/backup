@@ -3,8 +3,8 @@
  */
 package alpha.framework.domain.advice;
 
-import org.apache.log4j.Logger;
-
+import alpha.framework.domain.logging.DefaultPerfLoggerImpl;
+import alpha.framework.domain.logging.PerfLogger;
 import alpha.framework.domain.transaction.DomainContext;
 
 /**
@@ -16,13 +16,13 @@ import alpha.framework.domain.transaction.DomainContext;
 public class InternalPerfInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private static final Logger PERFLOG = Logger.getLogger("PERF." +InternalPerfInterceptor.class.getName());
+	private PerfLogger logger = new DefaultPerfLoggerImpl();
 
 	/**
 	 * @return enabled
 	 */
-	public static boolean isEnabled(){
-		return PERFLOG.isInfoEnabled();
+	public boolean isEnabled(){
+		return logger.isInfoEnabled();
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 	public Object around(InvocationAdapter ic) throws Throwable {
 
 		//性能
-		if(PERFLOG.isInfoEnabled()){
+		if(logger.isInfoEnabled()){
 			DomainContext context = DomainContext.getCurrentInstance();
 			if(context == null){
 				return ic.proceed();
@@ -51,7 +51,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 					for (int i = 1; i < context.getCallStackLevel(); i++) {
 						builder.append("\t");
 					}
-					PERFLOG.info(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getDeclaringTypeName(), ic.getMethodName()));
+					logger.info(String.format("msec %d:\t%s%s.%s", end, builder.toString(), ic.getDeclaringTypeName(), ic.getMethodName()));
 		
 					context.popCallStack();
 				}

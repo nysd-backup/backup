@@ -107,8 +107,9 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 */
 	protected Object proceed(InvocationContext ic) throws Throwable{
 		try{
-			if(InternalPerfInterceptor.isEnabled()){
-				return new InternalPerfInterceptor().around(new InvocationAdapterImpl(ic));
+			InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
+			if(interceptor.isEnabled()){
+				return interceptor.around(new InvocationAdapterImpl(ic));
 			}else {
 				return ic.proceed();
 			}

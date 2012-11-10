@@ -91,8 +91,9 @@ public class DefaultQueryFactoryProviderImpl implements QueryFactoryProvider{
 	protected InternalQuery createInternalNamedQuery(QueryBuilder builder){
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
 		named.setQueryBuilder(builder);				
-		if(InternalPerfInterceptor.isEnabled()){
-			return  ProxyFactory.create(InternalQuery.class, named, new InternalPerfInterceptor(),"*");	
+		InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
+		if(interceptor.isEnabled()){
+			return  ProxyFactory.create(InternalQuery.class, named, interceptor,"*");	
 		}else{
 			return named;
 		}
@@ -107,8 +108,9 @@ public class DefaultQueryFactoryProviderImpl implements QueryFactoryProvider{
 	protected InternalQuery createInternalNativeQuery(QueryBuilder builder){
 		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
 		ntv.setQueryBuilder(builder);
-		if(InternalPerfInterceptor.isEnabled()){
-			return ProxyFactory.create(InternalQuery.class, ntv, new InternalPerfInterceptor(),"*");
+		InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
+		if(interceptor.isEnabled()){
+			return ProxyFactory.create(InternalQuery.class, ntv, interceptor,"*");
 		}else{
 			return ntv;
 		}
@@ -133,8 +135,9 @@ public class DefaultQueryFactoryProviderImpl implements QueryFactoryProvider{
 	 */
 	protected QueryBuilder createQueryBuilder(){
 		QueryBuilder proxy =  new QueryBuilderProxyImpl();
-		if(InternalQueryBuilderInterceptor.isEnabled()){
-			QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, proxy, new InternalQueryBuilderInterceptor(),"evaluate");		
+		InternalQueryBuilderInterceptor interceptor = new InternalQueryBuilderInterceptor();
+		if(interceptor.isEnabled()){
+			QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, proxy, interceptor,"evaluate");		
 			return builder;
 		}else {
 			return proxy;

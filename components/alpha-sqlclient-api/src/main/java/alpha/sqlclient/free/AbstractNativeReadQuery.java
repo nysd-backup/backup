@@ -34,12 +34,17 @@ public abstract class AbstractNativeReadQuery extends AbstractFreeReadQuery{
 		Iterator<Object> iterator = lazyList.iterator();
 		long count = 0;
 		try{
+			callback.initialize();
 			while(iterator.hasNext()){	
 				((QueryCallback<Object>)callback).handleRow(iterator.next(), count);
 				count++;
 			}
 		}finally{
-			lazyList.clear();
+			try{
+				lazyList.clear();
+			}finally{
+				callback.terminate();
+			}
 		}
 		return count;
 	}

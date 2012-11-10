@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import alpha.framework.domain.logging.DefaultQueryLoggerImpl;
+import alpha.framework.domain.logging.QueryLogger;
 
 
 /**
@@ -20,16 +21,23 @@ import org.apache.log4j.Logger;
 public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private static final Logger LOG = Logger.getLogger("QUERY." +InternalQueryBuilderInterceptor.class.getName());
+	private QueryLogger logger = new DefaultQueryLoggerImpl();
 	
 	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();
 	
 	/**
+	 * @param logger the logger to set
+	 */
+	public void setQueryLogger(QueryLogger logger){
+		this.logger = logger;
+	}
+	
+	/**
 	 * @return enabled
 	 */
-	public static boolean isEnabled(){
-		return LOG.isDebugEnabled();
+	public boolean isEnabled(){
+		return logger.isDebugEnabled();
 	}
 	
 	/**
@@ -46,7 +54,7 @@ public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 	@Override
 	@SuppressWarnings("unchecked")
 	public Object around(InvocationAdapter contextInvoker) throws Throwable {				
-		if(LOG.isDebugEnabled() && !ignoreList.contains(contextInvoker.getArgs()[2])){						
+		if(logger.isDebugEnabled() && !ignoreList.contains(contextInvoker.getArgs()[2])){						
 			Map<String,Object> parameter = (Map<String,Object>)(contextInvoker.getArgs()[1]);
 			String previous = String.class.cast(contextInvoker.getArgs()[0]);
 			StringBuilder builder = new StringBuilder();
@@ -57,13 +65,13 @@ public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 					builder.append(v.getKey()).append("=").append(v.getValue()).append(" ");
 				}
 			}
-			LOG.debug(String.format("sql before prepared statement \n%s\n[%s]",previous,builder.toString()));				
+			logger.debug(String.format("sql before prepared statement \n%s\n[%s]",previous,builder.toString()));				
 		}
 		//変換後ログ
 		Object result = contextInvoker.proceed();
 		if(!ignoreList.contains(contextInvoker.getArgs()[2])){
 			String replaced = String.class.cast(result);	
-			LOG.debug(String.format("sql after evaluate \n%s\n",replaced));				
+			logger.debug(String.format("sql after evaluate \n%s\n",replaced));				
 		}
 		return result;
 	}

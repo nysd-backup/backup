@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import alpha.framework.domain.logging.DefaultQueryLoggerImpl;
+import alpha.framework.domain.logging.QueryLogger;
 
 
 
@@ -19,16 +20,24 @@ import org.apache.log4j.Logger;
  */
 public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 
-	private static final Logger LOG = Logger.getLogger("QUERY." + InternalStatementBuilderInterceptor.class.getName());
-
-	/** the list contains queryId */
+	/** the instance of logging */
+	private QueryLogger logger = new DefaultQueryLoggerImpl();
+	
+	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();
+	
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setQueryLogger(QueryLogger logger){
+		this.logger = logger;
+	}
 	
 	/**
 	 * @return enabled
 	 */
-	public static boolean isEnabled(){
-		return LOG.isDebugEnabled();
+	public boolean isEnabled(){
+		return logger.isDebugEnabled();
 	}
 	
 	/**
@@ -49,11 +58,11 @@ public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 			return contextInvoker.proceed();
 		}else{
 			Object value = contextInvoker.proceed();
-			if(LOG.isInfoEnabled()){
+			if(logger.isInfoEnabled()){
 				String query = value.toString();
 				String[] splited = query.split(";");				
-				LOG.info(splited[0]);
-				LOG.debug(splited[1]);
+				logger.info(splited[0]);
+				logger.debug(splited[1]);
 			}
 			return value;			
 		}
