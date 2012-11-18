@@ -40,6 +40,15 @@ import alpha.sqlclient.orm.CriteriaReadQuery;
 public class LocalEntityQueryTestBean extends BaseCase {
 	
 	
+	public void isNullisNotNull(){
+		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);
+		query.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR).getSingleResult();
+		
+		CriteriaModifyQuery<TestEntity> modifier = createOrmUpdate(TestEntity.class);
+		modifier.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR).set(ITestEntity.ATTR2, 100).update();
+	}
+	
+	
 	public void duplicateError(){
 		//1件目
 		TestEntity e = new TestEntity();

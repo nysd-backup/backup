@@ -13,7 +13,17 @@ package alpha.sqlclient.free;
 public class NativeReadQuery extends AbstractNativeReadQuery{
 
 	public NativeReadQuery(){
-		getParameter().setResultType(Record.class);
+		setResultType(Record.class);
+	}
+	
+	/**
+	 * Sets the result type.
+	 * @param resultType the result type
+	 * @return self
+	 */
+	public NativeReadQuery setResultType(Class<?> resultType){
+		getParameter().setResultType(resultType);
+		return this;
 	}
 	
 	/**

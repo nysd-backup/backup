@@ -3,6 +3,8 @@
  */
 package alpha.framework.domain.query.impl;
 
+import alpha.framework.domain.activation.EJBComponentFinder;
+import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.advice.InternalPerfInterceptor;
 import alpha.framework.domain.advice.InternalQueryBuilderInterceptor;
 import alpha.framework.domain.advice.ProxyFactory;
@@ -91,7 +93,8 @@ public class DefaultQueryFactoryProviderImpl implements QueryFactoryProvider{
 	protected InternalQuery createInternalNamedQuery(QueryBuilder builder){
 		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
 		named.setQueryBuilder(builder);				
-		InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
+		EJBComponentFinder finder = ServiceLocator.unwrap();
+		InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
 		if(interceptor.isEnabled()){
 			return  ProxyFactory.create(InternalQuery.class, named, interceptor,"*");	
 		}else{
@@ -108,7 +111,8 @@ public class DefaultQueryFactoryProviderImpl implements QueryFactoryProvider{
 	protected InternalQuery createInternalNativeQuery(QueryBuilder builder){
 		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
 		ntv.setQueryBuilder(builder);
-		InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
+		EJBComponentFinder finder = ServiceLocator.unwrap();
+		InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
 		if(interceptor.isEnabled()){
 			return ProxyFactory.create(InternalQuery.class, ntv, interceptor,"*");
 		}else{
@@ -143,5 +147,5 @@ public class DefaultQueryFactoryProviderImpl implements QueryFactoryProvider{
 			return proxy;
 		}
 	}
-
+	
 }

@@ -100,6 +100,26 @@ public class CriteriaReadQuery<T>{
 			return result.get(0);
 		}
 	}
+	
+	/**
+	 * Adds 'is null'
+	 * 
+	 * @param column the column to add to
+	 * @return self
+	 */
+	public CriteriaReadQuery<T> isNull(Metadata<T, ?> column){
+		return addCriteria(column.name(), ComparingOperand.IsNull,null);
+	}
+	
+	/**
+	 * Adds 'is not null'
+	 * 
+	 * @param column the column to add to
+	 * @return self
+	 */
+	public CriteriaReadQuery<T> isNotNull(Metadata<T, ?> column){
+		return addCriteria(column.name(), ComparingOperand.IsNotNull,null);
+	}
 
 	/**
 	 * Adds '='.

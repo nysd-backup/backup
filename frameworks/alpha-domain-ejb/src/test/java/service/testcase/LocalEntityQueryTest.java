@@ -31,6 +31,15 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	 * @throws SQLException 
 	 */
 	@Test
+	public void isNullisNotNull() throws SQLException{			
+		bean().isNullisNotNull();
+	}
+	
+	/**
+	 * 条件追加
+	 * @throws SQLException 
+	 */
+	@Test
 	public void allCondition() throws SQLException{			
 		bean().allCondition();
 	}

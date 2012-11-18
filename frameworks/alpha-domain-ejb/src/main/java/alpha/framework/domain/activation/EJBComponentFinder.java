@@ -5,6 +5,11 @@ package alpha.framework.domain.activation;
 
 import java.util.Properties;
 
+import alpha.framework.domain.advice.InternalPerfInterceptor;
+import alpha.framework.domain.messaging.client.MessageClientFactoryProvider;
+import alpha.framework.domain.query.QueryFactoryProvider;
+import alpha.framework.domain.transaction.TxVerifier;
+
 /**
  * ComponentFindeer 4 EJB.
  *
@@ -43,5 +48,27 @@ public interface EJBComponentFinder extends ComponentFinder{
 	 * @return bean
 	 */
 	<T> T getBean(Class<T> requiredType, Properties prop);
+	
+	/**
+	 * @return the queryFactoryProvider
+	 */
+	QueryFactoryProvider getQueryFactoryProvider();
+
+	/**
+	 * @return the txVerifier
+	 */
+	TxVerifier getTxVerifier();
+
+	/**
+	 * @return the messageClientFactoryProvider
+	 */
+	MessageClientFactoryProvider getMessageClientFactoryProvider();
+	
+	/**
+	 * @return the internaPerflInterceptor
+	 */
+	InternalPerfInterceptor getInternaPerflInterceptor();
+
+	
 	
 }

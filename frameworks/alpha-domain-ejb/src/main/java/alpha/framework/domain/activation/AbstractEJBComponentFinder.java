@@ -8,6 +8,7 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import alpha.framework.domain.advice.InternalPerfInterceptor;
 import alpha.framework.domain.messaging.client.MessageClientFactoryProvider;
 import alpha.framework.domain.query.QueryFactoryProvider;
 import alpha.framework.domain.transaction.TxVerifier;
@@ -28,6 +29,9 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	
 	/** TxVerifier*/
 	private TxVerifier txVerifier;
+	
+	/** the trace interceptor */
+	private InternalPerfInterceptor internaPerflInterceptor = new InternalPerfInterceptor();
 	
 	/**
 	 * @see alpha.framework.domain.activation.EJBComponentFinder#getResource(java.lang.String, java.util.Properties)
@@ -115,9 +119,11 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 		}
 	}
 	
+
 	/**
-	 * @return the queryFactoryProvider
+	 * @see alpha.framework.domain.activation.EJBComponentFinder#getQueryFactoryProvider()
 	 */
+	@Override
 	public QueryFactoryProvider getQueryFactoryProvider() {
 		return queryFactoryProvider;
 	}
@@ -130,8 +136,9 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	}
 
 	/**
-	 * @return the txVerifier
+	 * @see alpha.framework.domain.activation.EJBComponentFinder#getTxVerifier()
 	 */
+	@Override
 	public TxVerifier getTxVerifier() {
 		return txVerifier;
 	}
@@ -144,8 +151,9 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	}
 
 	/**
-	 * @return the messageClientFactoryProvider
+	 * @see alpha.framework.domain.activation.EJBComponentFinder#getMessageClientFactoryProvider()
 	 */
+	@Override
 	public MessageClientFactoryProvider getMessageClientFactoryProvider() {
 		return messageClientFactoryProvider;
 	}
@@ -156,6 +164,21 @@ public abstract class AbstractEJBComponentFinder implements EJBComponentFinder{
 	public void setMessageClientFactoryProvider(
 			MessageClientFactoryProvider messageClientFactoryProvider) {
 		this.messageClientFactoryProvider = messageClientFactoryProvider;
+	}
+
+	/**
+	 * @see alpha.framework.domain.activation.EJBComponentFinder#getInternaPerflInterceptor()
+	 */
+	@Override
+	public InternalPerfInterceptor getInternaPerflInterceptor() {
+		return internaPerflInterceptor;
+	}
+
+	/**
+	 * @param internaPerflInterceptor the internaPerflInterceptor to set
+	 */
+	public void setInternaPerflInterceptor(InternalPerfInterceptor internaPerflInterceptor) {
+		this.internaPerflInterceptor = internaPerflInterceptor;
 	}
 
 	

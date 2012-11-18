@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.interceptor.InvocationContext;
 
+import alpha.framework.domain.activation.EJBComponentFinder;
+import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.advice.InternalPerfInterceptor;
 import alpha.framework.domain.advice.InvocationAdapterImpl;
 import alpha.framework.domain.transaction.AbstractTxInterceptor;
@@ -107,7 +109,8 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 */
 	protected Object proceed(InvocationContext ic) throws Throwable{
 		try{
-			InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
+			EJBComponentFinder finder = ServiceLocator.unwrap();
+			InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
 			if(interceptor.isEnabled()){
 				return interceptor.around(new InvocationAdapterImpl(ic));
 			}else {
@@ -118,6 +121,7 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 			return null;
 		}
 	}
+	
 
 	/**
 	 * wrap by application exception if needed.
