@@ -3,14 +3,14 @@
  */
 package service.testcase;
 
+import java.sql.Connection;
 import java.util.List;
+
+import javax.persistence.Query;
 
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
-
-import alpha.sqlclient.free.HitData;
-import alpha.sqlclient.free.QueryCallback;
-import alpha.sqlclient.orm.CriteriaReadQuery;
+import org.eclipse.persistence.queries.ScrollableCursor;
 
 import service.CachableConst;
 import service.entity.ITestEntity;
@@ -19,6 +19,9 @@ import service.query.SampleNativeQuery;
 import service.query.SampleNativeQueryConst;
 import service.query.SampleNativeResult;
 import service.query.SampleNativeUpdate;
+import alpha.sqlclient.free.HitData;
+import alpha.sqlclient.free.QueryCallback;
+import alpha.sqlclient.orm.CriteriaReadQuery;
 
 
 
@@ -32,6 +35,14 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	
 	
 	public void paging() {
+		
+		for(int i = 0; i < 150; i++){
+			Query query = em.createNativeQuery("select 1 from dual");
+			query.setHint(QueryHints.SCROLLABLE_CURSOR, HintValues.TRUE);
+			ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
+			cursor.close();
+			em.unwrap(Connection.class);
+		}
 		
 		em.createNativeQuery("delete from testa").executeUpdate();
 		for(int i = 0 ; i < 100; i ++){

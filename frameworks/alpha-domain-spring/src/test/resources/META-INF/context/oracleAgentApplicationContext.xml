@@ -29,6 +29,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
  	-->
 	<context:load-time-weaver aspectj-weaving="autodetect" />	
 	
+
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	    <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
 	    <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
@@ -42,7 +43,11 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     <property name="showSql" value="true" />
   </bean>
   
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">      
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+      <!-- dataSourceの設定は必須ではないが、これを指定しないとExternalConnectionPoolではなくデフォルトのConnectionPoolが使用される。
+      	　　　ConnectionPoolだとScrollableCursorのclose時にconnectionsAvailableあたりの値がおかしくなっていずれコネクションが取得できなくなる。
+      	   org.eclipse.persistence.sessions.server.ConnectionPool#releaseConnectionとacquireConnection参照
+	 -->      
     	<property name="dataSource" ref="dataSource"/>
         <property name="persistenceUnitName" value="oracle" />    
         <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>      

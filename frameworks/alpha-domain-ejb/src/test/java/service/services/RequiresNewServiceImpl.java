@@ -16,7 +16,7 @@ import org.eclipse.persistence.config.QueryHints;
 
 import service.entity.TestEntity;
 import service.testcase.BaseCase;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.DomainContext;
 import alpha.framework.domain.transaction.autonomous.AutonomousTxContext;
 

@@ -7,7 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import service.ServiceUnit;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 
 /**
  * function.

@@ -23,7 +23,7 @@ import service.entity.IDateEntity;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
 import service.services.RequiresNewService;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.exception.UniqueConstraintException;
 import alpha.sqlclient.orm.CriteriaModifyQuery;

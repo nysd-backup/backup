@@ -59,6 +59,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void select(){
+		
 		setUpData("TEST.xls");
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,per);		
 		query.setEntityManager(per);

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import service.core.BusinessException;
 import service.test.RequiresNewService;
 import service.test.ServiceUnit;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 
 
 /**

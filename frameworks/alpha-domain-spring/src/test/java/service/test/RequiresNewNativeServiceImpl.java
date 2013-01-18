@@ -22,7 +22,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import service.core.BusinessException;
 import service.test.entity.TestEntity;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.orm.EntityManagerImpl;
 

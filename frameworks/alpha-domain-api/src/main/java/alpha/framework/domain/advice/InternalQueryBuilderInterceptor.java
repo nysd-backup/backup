@@ -54,7 +54,7 @@ public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 	@Override
 	@SuppressWarnings("unchecked")
 	public Object around(InvocationAdapter contextInvoker) throws Throwable {				
-		if(logger.isDebugEnabled() && !ignoreList.contains(contextInvoker.getArgs()[2])){						
+		if(logger.isTraceEnabled() && !ignoreList.contains(contextInvoker.getArgs()[2])){						
 			Map<String,Object> parameter = (Map<String,Object>)(contextInvoker.getArgs()[1]);
 			String previous = String.class.cast(contextInvoker.getArgs()[0]);
 			StringBuilder builder = new StringBuilder();
@@ -65,13 +65,13 @@ public class InternalQueryBuilderInterceptor implements InternalInterceptor{
 					builder.append(v.getKey()).append("=").append(v.getValue()).append(" ");
 				}
 			}
-			logger.debug(String.format("sql before prepared statement \n%s\n[%s]",previous,builder.toString()));				
+			logger.trace(String.format("sql before prepared statement \n%s\n[%s]",previous,builder.toString()));				
 		}
 		//変換後ログ
 		Object result = contextInvoker.proceed();
-		if(!ignoreList.contains(contextInvoker.getArgs()[2])){
+		if(logger.isTraceEnabled() && !ignoreList.contains(contextInvoker.getArgs()[2])){		
 			String replaced = String.class.cast(result);	
-			logger.debug(String.format("sql after evaluate \n%s\n",replaced));				
+			logger.trace(String.format("sql after evaluate \n%s\n",replaced));				
 		}
 		return result;
 	}

@@ -36,8 +36,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import alpha.framework.domain.activation.ComponentFinderImpl;
-import alpha.framework.domain.activation.ServiceLocatorInitializer;
+import alpha.framework.domain.registry.SpringComponentFinder;
+import alpha.framework.domain.registry.ServiceLocatorInitializer;
 import alpha.jdbc.domain.ConstantCache;
 
 
@@ -79,7 +79,7 @@ public abstract class ServiceUnit extends Assert{
 	@Resource
 	public void setApplicationContext(final ApplicationContext applicationContext){
 
-		new ServiceLocatorInitializer().initiazie(new ComponentFinderImpl(applicationContext));
+		new ServiceLocatorInitializer().initiazie(new SpringComponentFinder(applicationContext));
 		
 		context = new ServiceTestContextImpl();	
 		context.initialize();	

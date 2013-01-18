@@ -7,10 +7,10 @@ import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.interceptor.InvocationContext;
 
-import alpha.framework.domain.activation.EJBComponentFinder;
-import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.advice.InternalPerfInterceptor;
 import alpha.framework.domain.advice.InvocationAdapterImpl;
+import alpha.framework.domain.registry.EJBComponentFinder;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.AbstractTxInterceptor;
 import alpha.framework.domain.transaction.DomainContext;
 
@@ -46,7 +46,7 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 			return editResponse( returnValue, context);
 		}catch(Throwable e){
 			sessionContext.setRollbackOnly();
-			return handleException(ic.getMethod().getReturnType(),e,context);			
+			return handleException(ic.getParameters(),ic.getMethod().getReturnType(),e,context);			
 		}finally{				
 			context.release();		
 			terminate();
@@ -72,7 +72,7 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 * @param context
 	 * @return
 	 */
-	protected Object handleException(Class<?> returnType ,Throwable e,DomainContext context)throws Throwable{
+	protected Object handleException(Object[] parameters, Class<?> returnType ,Throwable e,DomainContext context)throws Throwable{
 		throw e;
 	}
 	
@@ -109,7 +109,7 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 */
 	protected Object proceed(InvocationContext ic) throws Throwable{
 		try{
-			EJBComponentFinder finder = ServiceLocator.unwrap();
+			EJBComponentFinder finder = ServiceLocator.getComponentFinder();
 			InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
 			if(interceptor.isEnabled()){
 				return interceptor.around(new InvocationAdapterImpl(ic));

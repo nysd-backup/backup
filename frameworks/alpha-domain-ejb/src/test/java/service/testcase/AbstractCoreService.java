@@ -9,8 +9,8 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import alpha.framework.domain.activation.AbstractEJBComponentFinder;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.UnifiedComponentFinder;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.free.AbstractNativeModifyQuery;
 import alpha.sqlclient.free.AbstractNativeReadQuery;
@@ -44,9 +44,9 @@ public abstract class AbstractCoreService {
 	 */
 	@PostConstruct
 	public void postConstruct(){
-		AbstractEJBComponentFinder finder = ServiceLocator.unwrap();		
-		ormQueryFactory = finder.getQueryFactoryProvider().createCriteriaQueryFactory();
-		queryFactory = finder.getQueryFactoryProvider().createQueryFactory();	
+		UnifiedComponentFinder finder = ServiceLocator.getComponentFinder();		
+		ormQueryFactory = finder.getQueryFactoryFinder().createCriteriaQueryFactory();
+		queryFactory = finder.getQueryFactoryFinder().createQueryFactory();	
 	}
 	
 	/**

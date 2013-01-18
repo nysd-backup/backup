@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.TransactionSystemException;
 
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.DomainContext;
 import alpha.sqlclient.orm.CriteriaModifyQuery;
 import alpha.sqlclient.orm.CriteriaQueryFactory;
@@ -86,7 +86,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void allCondition() throws SQLException{	
-					
+
 		setUpData("TEST.xls");
 
 		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,per);	

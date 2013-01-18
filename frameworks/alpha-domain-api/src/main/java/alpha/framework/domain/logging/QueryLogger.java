@@ -17,6 +17,11 @@ public interface QueryLogger {
 	void info(String message);
 	
 	/**
+	 * @param message the trace message
+	 */
+	void trace(String message);
+	
+	/**
 	 * @param message the debug message
 	 */
 	void debug(String message);
@@ -25,6 +30,11 @@ public interface QueryLogger {
 	 * @return true:info enabled
 	 */
 	boolean isInfoEnabled();
+	
+	/**
+	 * @return true:info enabled
+	 */
+	boolean isTraceEnabled();
 	
 	/**
 	 * @return true:debug enabled

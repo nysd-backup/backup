@@ -16,8 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
-import alpha.framework.domain.activation.ComponentFinder;
-import alpha.framework.domain.activation.ServiceLocatorInitializer;
+import alpha.framework.domain.registry.ComponentFinder;
+import alpha.framework.domain.registry.ServiceLocatorInitializer;
 import alpha.jdbc.domain.ConstantCache;
 
 

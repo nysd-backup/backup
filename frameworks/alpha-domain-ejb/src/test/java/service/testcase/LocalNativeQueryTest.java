@@ -6,7 +6,7 @@ package service.testcase;
 
 import org.junit.Test;
 
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 
 import service.ServiceUnit;
 import service.entity.ITestEntity;

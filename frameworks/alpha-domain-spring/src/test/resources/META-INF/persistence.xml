@@ -5,6 +5,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
    
   <!-- JTA/AspectJ使用 --> 
+  <!-- 
   <persistence-unit name="default" transaction-type="JTA">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>jdbc/__default</jta-data-source>
@@ -14,7 +15,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
     </properties>
   </persistence-unit>
  
-  <!-- ローカルリソース使用 -->
   <persistence-unit name="derby" transaction-type="RESOURCE_LOCAL">
    	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>  	
    	<class>framework.service.test.entity.TestEntity</class>	
@@ -32,7 +32,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
 			<property name="eclipselink.persistence-context.flush-mode" value="AUTO" /> 
      </properties>
   </persistence-unit> 	
-  
+  -->
   <!-- 単体テスト用Oracle -->
   <persistence-unit name="oracle" transaction-type="RESOURCE_LOCAL">
    	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>  	

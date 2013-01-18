@@ -40,7 +40,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 		if(logger.isInfoEnabled()){
 			DomainContext context = DomainContext.getCurrentInstance();
 			context.pushCallStack();		
-			long start = before(ic);
+			long start = before(ic,context.getCallStackLevel());
 			try {
 				return ic.proceed();
 	
@@ -58,7 +58,7 @@ public class InternalPerfInterceptor implements InternalInterceptor{
 	 * @param ic context
 	 * @return start time
 	 */
-	protected long before(InvocationAdapter ic){
+	protected long before(InvocationAdapter ic,int callStackLevel){
 		long start = System.currentTimeMillis();
 		return start;
 	}

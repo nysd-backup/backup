@@ -9,8 +9,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
-import alpha.framework.domain.activation.ServiceLocator;
 import alpha.framework.domain.messaging.client.AbstractMessageProducer;
+import alpha.framework.domain.registry.ServiceLocator;
 
 /**
  * A listener for MDB and MDP.

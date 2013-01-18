@@ -3,8 +3,8 @@
  */
 package alpha.framework.domain.transaction.consecutive;
 
-import alpha.framework.domain.activation.AbstractEJBComponentFinder;
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.UnifiedComponentFinder;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.framework.domain.transaction.DomainContext;
 import alpha.framework.domain.transaction.TxVerifier;
 
@@ -39,7 +39,7 @@ public class ConsecutiveTxContext extends DomainContext{
 	 */
 	@Override
 	protected TxVerifier getTxVerifier() {
-		AbstractEJBComponentFinder finder = ServiceLocator.unwrap();
+		UnifiedComponentFinder finder = ServiceLocator.getComponentFinder();
 		return finder.getTxVerifier();
 	}
 

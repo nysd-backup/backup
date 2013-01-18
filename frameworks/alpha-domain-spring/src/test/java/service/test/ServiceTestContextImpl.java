@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import alpha.framework.domain.transaction.ServiceContextImpl;
+import alpha.framework.domain.transaction.ServiceContext;
 
 /**
  * function.
@@ -11,7 +11,7 @@ import alpha.framework.domain.transaction.ServiceContextImpl;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ServiceTestContextImpl extends ServiceContextImpl{
+public class ServiceTestContextImpl extends ServiceContext{
 
 	//JPA専用、JPA以外の場合はこれを使用せずヒントを使用する
 	private boolean suppressOptimisticLockError = false;

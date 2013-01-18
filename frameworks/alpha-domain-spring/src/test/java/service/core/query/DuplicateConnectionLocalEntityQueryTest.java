@@ -12,7 +12,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 
 import service.test.DupplicateService;
 import service.test.ServiceUnit;

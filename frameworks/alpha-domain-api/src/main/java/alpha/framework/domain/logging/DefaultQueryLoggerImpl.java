@@ -48,4 +48,20 @@ public class DefaultQueryLoggerImpl implements QueryLogger{
 		return LOG.isDebugEnabled();
 	}
 
+	/**
+	 * @see alpha.framework.domain.logging.QueryLogger#trace(java.lang.String)
+	 */
+	@Override
+	public void trace(String message) {
+		LOG.trace(message);
+	}
+
+	/**
+	 * @see alpha.framework.domain.logging.QueryLogger#isTraceEnabled()
+	 */
+	@Override
+	public boolean isTraceEnabled() {
+		return LOG.isTraceEnabled();
+	}
+
 }

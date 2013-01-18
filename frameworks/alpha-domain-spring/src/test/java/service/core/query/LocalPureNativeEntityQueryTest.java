@@ -27,7 +27,7 @@ import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 import alpha.sqlclient.exception.UniqueConstraintException;
 import alpha.sqlclient.orm.ComparingOperand;
 import alpha.sqlclient.orm.CriteriaModifyQuery;

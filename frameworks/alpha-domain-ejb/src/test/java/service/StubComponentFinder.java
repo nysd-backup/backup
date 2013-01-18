@@ -8,9 +8,9 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import alpha.framework.domain.activation.UnifiedComponentFinderImpl;
-import alpha.framework.domain.messaging.client.ObjectMessageClientFactoryProvider;
-import alpha.framework.domain.query.impl.DefaultQueryFactoryProviderImpl;
+import alpha.framework.domain.messaging.client.ObjectMessageClientFactoryFiinder;
+import alpha.framework.domain.query.DefaultQueryFactoryFinder;
+import alpha.framework.domain.registry.UnifiedComponentFinder;
 import alpha.framework.domain.transaction.TxVerifier;
 
 
@@ -22,10 +22,10 @@ import alpha.framework.domain.transaction.TxVerifier;
  * @author yoshida-n
  * @version	created.
  */
-public class StubComponentFinder extends UnifiedComponentFinderImpl{
+public class StubComponentFinder extends UnifiedComponentFinder{
 	
 	public StubComponentFinder(){
-		setQueryFactoryProvider(new DefaultQueryFactoryProviderImpl());
+		setQueryFactoryFinder(new DefaultQueryFactoryFinder());
 		setTxVerifier(new TxVerifier() {
 			
 			@Override
@@ -33,11 +33,11 @@ public class StubComponentFinder extends UnifiedComponentFinderImpl{
 				return "100".equals(value.toString());
 			}
 		});		
-		setMessageClientFactoryProvider(new ObjectMessageClientFactoryProvider());
+		setMessageClientFactoryFinder(new ObjectMessageClientFactoryFiinder());
 	}
 
 	/**
-	 * @see alpha.framework.domain.activation.UnifiedComponentFinderImpl#getBean(java.lang.String)
+	 * @see alpha.framework.domain.registry.UnifiedComponentFinder#getBean(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

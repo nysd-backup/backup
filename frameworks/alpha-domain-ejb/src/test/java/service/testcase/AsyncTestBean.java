@@ -9,7 +9,7 @@ import java.util.concurrent.Future;
 
 import javax.ejb.Stateless;
 
-import alpha.framework.domain.activation.ServiceLocator;
+import alpha.framework.domain.registry.ServiceLocator;
 
 import service.services.AsyncSession;
 
