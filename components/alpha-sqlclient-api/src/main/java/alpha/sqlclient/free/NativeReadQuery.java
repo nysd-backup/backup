@@ -4,6 +4,7 @@
 package alpha.sqlclient.free;
 
 
+
 /**
  * Concrete native reading query.
  *
@@ -12,8 +13,21 @@ package alpha.sqlclient.free;
  */
 public class NativeReadQuery extends AbstractNativeReadQuery{
 
+	/**
+	 * Constructor
+	 */
 	public NativeReadQuery(){
 		setResultType(Record.class);
+	}
+	
+	/**
+	 * Set the parameters 
+	 * @param arguments the arguments
+	 * @return self
+	 */
+	public NativeReadQuery setArguments(Object arguments){
+		QueryUtils.setParameter(getParameter().getParam(), arguments);
+		return this;
 	}
 	
 	/**

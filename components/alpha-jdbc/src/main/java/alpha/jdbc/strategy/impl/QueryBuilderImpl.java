@@ -43,7 +43,7 @@ public class QueryBuilderImpl implements QueryBuilder{
 	private ConstantAccessor accessor = new ConstantAccessorImpl();
 	
 	/** the root directory */
-	private String dirRoot = CLASSPATH_PREFIX + "/query/";
+	private String dirRoot = CLASSPATH_PREFIX + "query/";
 	
 	/**
 	 * @param accessor the accessor to set
@@ -78,7 +78,7 @@ public class QueryBuilderImpl implements QueryBuilder{
 			InputStream stream = null;
 			
 			if(dirRoot.startsWith(CLASSPATH_PREFIX)){
-				stream = getClass().getResourceAsStream(dirRoot.substring(CLASSPATH_PREFIX.length()) + filePath);	
+				stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(dirRoot.substring(CLASSPATH_PREFIX.length()) + filePath);	
 			}else{
 				try{
 					stream = new FileInputStream(new File(dirRoot,filePath));

@@ -12,8 +12,21 @@ package alpha.sqlclient.free;
  */
 public class NamedReadQuery extends AbstractNamedReadQuery{
 
+	/**
+	 * Constructor
+	 */
 	public NamedReadQuery(){
 		setResultType(Record.class);
+	}
+	
+	/**
+	 * Set the parameters 
+	 * @param arguments the arguments
+	 * @return self
+	 */
+	public NamedReadQuery setArguments(Object arguments){
+		QueryUtils.setParameter(getParameter().getParam(), arguments);
+		return this;
 	}
 	
 	/**

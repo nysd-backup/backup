@@ -26,7 +26,7 @@ public class CriteriaModifyQuery<T> {
 	/**
 	 * @param entityClass the entity class
 	 */
-	CriteriaModifyQuery(Class<T> entityClass,InternalOrmQuery internalQuery,EntityManager em){
+	protected CriteriaModifyQuery(Class<T> entityClass,InternalOrmQuery internalQuery,EntityManager em){
 		this.condition = new CriteriaModifyQueryParameter<T>(entityClass);
 		this.internalQuery = internalQuery;
 		this.condition.setEntityManager(em);

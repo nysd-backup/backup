@@ -44,8 +44,8 @@ public class TypeConverterImpl implements TypeConverter{
 			return resultSet.getByte(columnLabel);		
 		}else if( byte[].class.equals(type)){
 			return resultSet.getBytes(columnLabel);		
-		}else if(Date.class.equals(type)|| Timestamp.class.equals(type)|| Time.class.equals(type)){
-			return new java.util.Date(resultSet.getTimestamp(columnLabel).getTime()); 		
+		}else if(Date.class.equals(type)|| Timestamp.class.equals(type)|| Time.class.equals(type) || java.util.Date.class.equals(type)){
+			return new java.util.Date(resultSet.getTimestamp(columnLabel).getTime()); 
 		}else if( Boolean.class.equals(type) || boolean.class.equals(type)){
 			return resultSet.getBoolean(columnLabel);
 		}else if( Double.class.equals(type) || double.class.equals(type)) {

@@ -134,6 +134,7 @@ public abstract class AbstractStatementBuilder implements SQLStatementBuilder{
 		for(SortKey sort :orderby){				
 			if( first ){
 				builder.append("\n order by ");
+				first = false;
 			}else {
 				builder.append("\n , ");
 			}

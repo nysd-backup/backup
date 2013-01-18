@@ -13,6 +13,16 @@ package alpha.sqlclient.free;
 public class NativeModifyQuery extends AbstractNativeModifyQuery{
 	
 	/**
+	 * Set the parameters 
+	 * @param arguments the arguments
+	 * @return self
+	 */
+	public NativeModifyQuery setArguments(Object arguments){
+		QueryUtils.setParameter(getParameter().getParam(), arguments);
+		return this;
+	}
+	
+	/**
 	 * @param queryId the queryId
 	 */
 	public void setQueryId(String queryId){

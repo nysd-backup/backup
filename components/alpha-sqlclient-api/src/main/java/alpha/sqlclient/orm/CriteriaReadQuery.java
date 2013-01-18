@@ -30,7 +30,7 @@ public class CriteriaReadQuery<T>{
 	/**
 	 * @param entityClass the entity class
 	 */
-	CriteriaReadQuery(Class<T> entityClass,InternalOrmQuery internalQuery,EntityManager em){
+	protected CriteriaReadQuery(Class<T> entityClass,InternalOrmQuery internalQuery,EntityManager em){
 		this.condition = new CriteriaReadQueryParameter<T>(entityClass);
 		this.internalQuery = internalQuery;
 		this.condition.setEntityManager(em);

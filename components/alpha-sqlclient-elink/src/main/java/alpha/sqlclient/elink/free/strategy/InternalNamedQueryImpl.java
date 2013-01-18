@@ -133,7 +133,7 @@ public class InternalNamedQueryImpl implements InternalQuery{
 			if( param.isUseRowSql() ){					
 				query = param.getEntityManager().createQuery(executingSql);			
 				for(Map.Entry<String, Object> p : param.getParam().entrySet()){
-					query.setParameter(p.getKey(), p.getValue());				
+					query.setParameter(p.getKey(), convert(p.getValue()));				
 				}
 			}else{				
 				executingSql = builder.build(param.getQueryId(), executingSql);
@@ -165,15 +165,25 @@ public class InternalNamedQueryImpl implements InternalQuery{
 			String variableName = match.group(2);
 			//定数
 			if( accessor.isValidKey(variableName) ){
-				query.setParameter(variableName, accessor.getConstTarget(variableName));
+				query.setParameter(variableName, convert(accessor.getConstTarget(variableName)));
 			//定数以外
 			}else{
 				if(param.containsKey(variableName)){				
-					query.setParameter(variableName, param.get(variableName));						
+					query.setParameter(variableName, convert(param.get(variableName)));						
 				}
 			}
 		}
 		return query;
+	}
+	
+	/**
+	 * Convert the value
+	 * @param value the value to add
+	 * @return the converted value
+	 */
+	protected Object convert(Object value){
+
+		return value;
 	}
 	
 	/**

@@ -329,17 +329,52 @@ public final class ObjectUtils implements Scopes.ObjectScope {
 			if ("class".equals(name)) {
 				continue; // No point in trying to set an object's class
 			}
-			// リストはコピーしない
-			if (Collection.class.isAssignableFrom(propertyDescriptor.getPropertyType())) {
-				continue;
+
+			if (propertyUtilsBean.isReadable(source, name) && propertyUtilsBean.isWriteable(dest, name)) {
+				try {
+					Object value = propertyUtilsBean.getSimpleProperty(source, name);
+					if (value == null) {
+						propertyUtilsBean.setSimpleProperty(dest, name, null);
+						continue;
+					}
+
+					BeanUtils.copyProperty(dest, name, value);
+				} catch (ConversionException e) {
+					continue;// Converterの変換エラーは無視する
+				} catch (Exception e) {
+					// noop
+				}
+			}
+		}
+
+		return dest;
+	}
+	
+	/**
+	 * コピー元のオブジェクトとコピーするプロパティを持つクラスを指定して、 生成したオブジェクトへコピーする
+	 * nullの場合はコピーしない。
+	 * 
+	 * @param <T> テンプレート
+	 * @param source コピー元オブジェクト
+	 * @param dest コピー先オブジェクト（生成しておく事）
+	 * @param sourceClass コピーするプロパティを持つクラス
+	 * @return 生成したオブジェクト
+	 */
+	public static <T> T mergeObject(Object source, T dest, Class<?> sourceClass) {
+		PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+
+		PropertyDescriptor[] propertyDescriptors = propertyUtilsBean.getPropertyDescriptors(sourceClass);
+
+		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+			String name = propertyDescriptor.getName();
+			if ("class".equals(name)) {
+				continue; // No point in trying to set an object's class
 			}
 
 			if (propertyUtilsBean.isReadable(source, name) && propertyUtilsBean.isWriteable(dest, name)) {
 				try {
 					Object value = propertyUtilsBean.getSimpleProperty(source, name);
-					// Longなどのラッパー型ではnullの場合デフォルト値で埋められるため、nullコピー
-					if (value == null && propertyDescriptor.getPropertyType().equals(Long.class)) {
-						propertyUtilsBean.setSimpleProperty(dest, name, null);
+					if (value == null) {
 						continue;
 					}
 

@@ -4,6 +4,7 @@
 package alpha.httpclient.handler;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.ws.rs.POST;
@@ -91,7 +92,7 @@ public abstract class AbstractHttpInvocation implements HttpInvocation{
 			httpMethod = new HttpPost(url);		
 			if(produce.value()[0].toLowerCase().contains("xml")){
 				String xml = XmlUtility.marshal(args[0]);
-				((HttpPost)httpMethod).setEntity(new StringEntity(xml));
+				((HttpPost)httpMethod).setEntity(new StringEntity(xml,Charset.forName("UTF-8")));
 			}
 		}
 		
