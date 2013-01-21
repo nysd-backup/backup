@@ -20,9 +20,9 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>								
-				<module>alpha-domain-api</module>
-				<module>alpha-domain-spring</module>				
-				<module>alpha-domain-ejb</module>												
+				<module>alpha-framework-api</module>
+				<module>alpha-spring</module>				
+				<module>alpha-ejb</module>												
 			</modules>
 		</profile>
 		<profile>
@@ -31,8 +31,8 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>							
-				<module>alpha-domain-api</module>				
-				<module>alpha-domain-ejb</module>																		
+				<module>alpha-framework-api</module>				
+				<module>alpha-ejb</module>																		
 			</modules>
 		</profile>
 	</profiles>	
