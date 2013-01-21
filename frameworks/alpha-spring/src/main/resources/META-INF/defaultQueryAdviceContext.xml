@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+	
+	<aop:config>
+		<aop:aspect id="sqlBuilderAspect" ref="sqlBuilderAdvice">	
+			<aop:pointcut expression="execution(* alpha.jdbc.strategy.QueryBuilder.evaluate(..))" id="sqlBuilderPtct"/>	
+			<aop:around pointcut-ref="sqlBuilderPtct" method="around"/>
+		</aop:aspect>
+		<aop:aspect id="stmtBuilderAspect" ref="stmtBuilderAdvice">	
+			<aop:pointcut expression="execution(* alpha.jdbc.strategy.QueryBuilder.prepare(..))" id="stmtBuilderPtct"/>	
+			<aop:around pointcut-ref="stmtBuilderPtct" method="around"/>
+		</aop:aspect>
+	</aop:config>
+
+	<bean id="sqlBuilderLog" class="alpha.framework.advice.InternalQueryBuilderInterceptor" />
+	<bean id="sqlBuilderAdvice" class="alpha.framework.advice.DelegatingInterceptor">
+		<property name="internal" ref="sqlBuilderLog"/>
+	</bean>	
+	<bean id="stmtBuilderLog" class="alpha.framework.advice.InternalStatementBuilderInterceptor"/>
+	<bean id="stmtBuilderAdvice" class="alpha.framework.advice.DelegatingInterceptor">
+		<property name="internal" ref="stmtBuilderLog"/>
+	</bean>	
+</beans>

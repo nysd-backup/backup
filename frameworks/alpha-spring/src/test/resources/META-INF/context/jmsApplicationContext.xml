@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/jms 
+http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+http://www.springframework.org/schema/jee 
+http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+
+	<!-- 単体テスト用ではJNDIルックアップでもJMSセッションのトランザクション管理が有効になる-->
+
+	<!-- JMS JNDI -->
+ 	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+        <property name="environment">
+            <props>
+            	
+                <prop key="java.naming.factory.initial">
+                    com.sun.enterprise.naming.SerialInitContextFactory
+                </prop>
+                <prop key="java.naming.factory.state">
+                    com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl
+                </prop>
+                <prop key="java.naming.factory.url.pkgs">
+                    com.sun.enterprise.naming
+                </prop>
+                <prop key="org.omg.CORBA.ORBInitialHost">
+                    localhost
+                </prop>
+                <prop key="org.omg.CORBA.ORBInitialPort">
+                    3700
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Connection Factory -->
+    <bean id="jmsQueueConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory">
+        	<bean id="internalJmsQueueConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		        <property name="jndiTemplate" ref="jndiTemplate"/>
+		        <property name="jndiName" value="javax/jms/DefaultQueueConnectionFactory"/>
+		    </bean>
+        </property>
+    </bean>
+    <bean id="jmsTopicConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory">
+        	<bean id="internalJmsTopicConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		        <property name="jndiTemplate" ref="jndiTemplate"/>
+		        <property name="jndiName" value="javax/jms/DefaultTopicConnectionFactory"/>
+		    </bean>
+        </property>
+    </bean>
+
+    <!-- JMS Destination Resolver -->
+    <bean id="jmsDestinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="cache" value="true"/>
+    </bean>
+       
+    <!-- Messaging -->
+    <bean id="messageClientFactory" class="alpha.framework.domain.messaging.client.impl.MessageClientFactoryImpl">
+    	<!-- Queue -->
+    	<property name="queueProducer">
+	    	<bean id="queueProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">				
+				<property name="jmsTemplate">
+					<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
+				        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
+				        <property name="destinationResolver" ref="jmsDestinationResolver"/>
+				        <property name="defaultDestination">
+				        	 <bean id="defaultQueueDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+						        <property name="jndiName" value="jms/DefaultQueue"/>
+						    </bean>
+				        </property>
+				        <property name="receiveTimeout" value="20000"/>
+				        <property name="sessionTransacted" value="true"/>
+				    </bean>    
+				</property>		
+			</bean>    	
+    	</property>
+    	<!-- Topic -->
+    	<property name="topicProducer">
+    		<bean id="topicProducer" class="alpha.framework.domain.messaging.client.MessageProducerImpl" scope="prototype">				
+				<property name="jmsTemplate">					  
+				    <bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
+				        <property name="connectionFactory" ref="jmsTopicConnectionFactory"/>
+				        <property name="destinationResolver" ref="jmsDestinationResolver"/>
+				        <property name="pubSubNoLocal" value="true"/>            
+				        <property name="defaultDestination">
+				        	 <bean id="defaultTopicDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+				        		<property name="jndiName" value="jms/DefaultTopic"/>
+				    		</bean>
+				        </property>
+				        <property name="pubSubDomain" value="true"/>
+				        <property name="receiveTimeout" value="20000"/>
+				        <property name="sessionTransacted" value="true"/>
+				    </bean>  
+				</property>
+			</bean>
+    	</property>
+    </bean>
+	
+	<!--  
+	<jms:listener-container 
+		cache="consumer" 
+		connection-factory="jmsQueueConnectionFactory"
+		destination-type="queue"
+		destination-resolver="desitinationResolver"
+		transaction-manager="transactionManager"	
+		task-executor="taskExecutor">
+		<jms:listener destination="/queue/TestQueue"  ref="sampleMessageReceiver" method="handleMessage"/>
+	</jms:listener-container>
+-->
+
+</beans>

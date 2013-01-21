@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<context:annotation-config/>
+	
+		<!--  このように自分でtransactionAdvisorを指定する場合、tx:annotation-divenを使用するとAdviceが二つになってしまうため禁止 -->
+	<!-- 
+	<bean id="transactionAttributeSource" class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+	<bean id="txAdvice" class="alpha.domain.core.transaction.ContextControllableTransactionInterceptor" >
+		<property name="transactionAttributeSource" ref="transactionAttributeSource"/>	
+	</bean>
+	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+		<property name="transactionInterceptor" ref="txAdvice"/>
+	</bean>
+	-->
+
+	<!-- 内部クエリ -->
+	<bean id="internalNativeQuery" class="alpha.query.free.strategy.InternalNativeQueryImpl" scope="prototype" >
+		<property name="queryService">
+			<bean id="queryService" class="alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
+				<property name="queryBuilder">
+					<bean class="alpha.jdbc.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>	
+				</property>
+				<property name="provider">
+					<bean class="alpha.jdbc.strategy.impl.StatementProviderImpl" scope="singleton"/>		
+				</property>
+				<property name="exceptionHandler">
+					<bean class="alpha.query.free.SQLExceptionHandlerImpl" scope="singleton"/>
+				</property>
+			</bean>
+		</property>		
+	</bean>
+	
+	<!--　バッチクエリファクトリ -->
+	<bean id="batchUpdateFactory" class="alpha.query.free.BatchModifyQueryFactoryImpl" scope="prototype">
+		<property name="internalQuery" ref="internalNativeQuery"/>	
+	</bean>
+	
+	<!-- クエリファクトリ -->
+	<bean id="queryFactory" class="alpha.query.free.QueryFactory" scope="prototype">
+		<property name="internalNativeQuery" ref="internalNativeQuery"/>			
+	</bean>
+	
+	<!-- ORMクエリファクトリ -->
+	<bean id="ormQueryFactory" class="alpha.query.criteria.CriteriaQueryFactory" scope="prototype">
+		<property name="internalOrmQuery">
+			<bean class="alpha.query.criteria.strategy.impl.SQLDataMapperImpl" scope="prototype" >
+				<property name="internalQuery" ref="internalNativeQuery"/>	
+			</bean>
+		</property>
+	</bean>
+	
+</beans>
