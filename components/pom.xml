@@ -22,9 +22,9 @@
 			<modules>						
 				<module>alpha-utility</module>		
 				<module>alpha-jdbc</module>			
-				<module>alpha-sqlclient-api</module>
-				<module>alpha-sqlclient-original</module>				
-				<module>alpha-sqlclient-elink</module>									
+				<module>alpha-query-api</module>
+				<module>alpha-query-original</module>				
+				<module>alpha-query-elink</module>									
 				<module>alpha-httpclient</module>										
 			</modules>
 		</profile>
@@ -35,8 +35,8 @@
 			</activation>
 			<modules>							
 				<module>alpha-jdbc</module>			
-				<module>alpha-sqlclient-api</module>			
-				<module>alpha-sqlclient-elink</module>																		
+				<module>alpha-query-api</module>			
+				<module>alpha-query-elink</module>																		
 			</modules>
 		</profile>
 	</profiles>	
