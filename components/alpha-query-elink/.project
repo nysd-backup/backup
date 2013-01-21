@@ -1,0 +1,16 @@
+<projectDescription>
+  <name>alpha-query-elink</name>
+  <comment>Gateway for the query execution with EclipseLink. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>alpha-jdbc</project>
+    <project>alpha-query-api</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
