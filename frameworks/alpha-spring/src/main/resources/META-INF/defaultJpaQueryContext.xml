@@ -16,30 +16,29 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="queryBuilder" class="alpha.jdbc.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>
+  	<bean id="queryLoader" class="alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>
   	
   	<!-- 内部Namedクエリ -->
-	<bean id="internalNamedQuery" class="alpha.query.elink.free.strategy.InternalNamedQueryImpl" scope="prototype" >
-		<property name="queryBuilder" ref="queryBuilder"/>			
+	<bean id="jpqlGateway" class="alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" >
+		<property name="queryLoader" ref="queryLoader"/>			
 	</bean>	
 
 	<!-- クエリファクトリ開発者API -->
 	<bean id="queryFactory" class="alpha.query.free.QueryFactory" scope="prototype" >
-		<property name="internalNativeQuery">
-			<bean class="alpha.query.elink.free.strategy.InternalNativeQueryImpl" scope="prototype" >		
-				<property name="queryBuilder" ref="queryBuilder"/>			
+		<property name="nativeGateway">
+			<bean class="alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" >		
+				<property name="queryLoader" ref="queryLoader"/>			
 			</bean>
 		</property>		
-		<property name="internalNamedQuery" ref="internalNamedQuery"/>			
+		<property name="jpqlGateway" ref="jpqlGateway"/>			
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
 	<bean id="ormQueryFactory" class="alpha.query.criteria.CriteriaQueryFactory" scope="prototype">	
-		<property name="internalOrmQuery">
-			<bean class="alpha.query.criteria.strategy.impl.JPQLDataMapperImpl" scope="prototype" >
-				<property name="internalQuery" ref="internalNamedQuery"/>			
-			</bean>
+		<property name="queryBuilderFactory">
+			<bean class="alpha.query.criteria.builder.JPQLQueryBuilderFactory" scope="singleton" />
 		</property>
+		<property name="persistenceGateway" ref="jpqlGateway"/>
 	</bean>
  
 </beans>

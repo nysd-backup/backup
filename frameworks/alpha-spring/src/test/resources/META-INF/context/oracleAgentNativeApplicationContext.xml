@@ -46,10 +46,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- 永続化エンジン -->
 	<bean id="txEntityManager" class="service.core.TxEntityManagerImpl" scope="prototype">
 		<property name="dataSource" ref="dataSource"/>
-		<property name="internalQuery" ref="internalNativeQuery"/>				
+		<property name="persistenceGateway" ref="nativeGateway"/>				
 	</bean>
 	<bean id="batchUpdateFactory" class="alpha.query.free.BatchModifyQueryFactoryImpl">
-		<property name="internalQuery" ref="internalNativeQuery"/>		
+		<property name="persistenceGateway" ref="nativeGateway"/>		
 	</bean>
  
 </beans>

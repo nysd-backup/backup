@@ -17,11 +17,11 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<aop:config>
 		<aop:aspect id="sqlBuilderAspect" ref="sqlBuilderAdvice">	
-			<aop:pointcut expression="execution(* alpha.jdbc.strategy.QueryBuilder.evaluate(..))" id="sqlBuilderPtct"/>	
+			<aop:pointcut expression="execution(* alpha.jdbc.strategy.QueryLoader.evaluate(..))" id="sqlBuilderPtct"/>	
 			<aop:around pointcut-ref="sqlBuilderPtct" method="around"/>
 		</aop:aspect>
 		<aop:aspect id="stmtBuilderAspect" ref="stmtBuilderAdvice">	
-			<aop:pointcut expression="execution(* alpha.jdbc.strategy.QueryBuilder.prepare(..))" id="stmtBuilderPtct"/>	
+			<aop:pointcut expression="execution(* alpha.jdbc.strategy.QueryLoader.prepare(..))" id="stmtBuilderPtct"/>	
 			<aop:around pointcut-ref="stmtBuilderPtct" method="around"/>
 		</aop:aspect>
 	</aop:config>

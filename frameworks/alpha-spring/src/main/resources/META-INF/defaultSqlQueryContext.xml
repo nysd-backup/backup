@@ -27,11 +27,11 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	-->
 
 	<!-- 内部クエリ -->
-	<bean id="internalNativeQuery" class="alpha.query.free.strategy.InternalNativeQueryImpl" scope="prototype" >
+	<bean id="nativeGateway" class="alpha.query.free.gateway.NativeGateway" scope="prototype" >
 		<property name="queryService">
 			<bean id="queryService" class="alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
 				<property name="queryBuilder">
-					<bean class="alpha.jdbc.strategy.impl.QueryBuilderProxyImpl" scope="singleton"/>	
+					<bean class="alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>	
 				</property>
 				<property name="provider">
 					<bean class="alpha.jdbc.strategy.impl.StatementProviderImpl" scope="singleton"/>		
@@ -45,21 +45,20 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<!--　バッチクエリファクトリ -->
 	<bean id="batchUpdateFactory" class="alpha.query.free.BatchModifyQueryFactoryImpl" scope="prototype">
-		<property name="internalQuery" ref="internalNativeQuery"/>	
+		<property name="persistenceGateway" ref="nativeGateway"/>	
 	</bean>
 	
 	<!-- クエリファクトリ -->
 	<bean id="queryFactory" class="alpha.query.free.QueryFactory" scope="prototype">
-		<property name="internalNativeQuery" ref="internalNativeQuery"/>			
+		<property name="nativeGateway" ref="nativeGateway"/>			
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="ormQueryFactory" class="alpha.query.criteria.CriteriaQueryFactory" scope="prototype">
-		<property name="internalOrmQuery">
-			<bean class="alpha.query.criteria.strategy.impl.SQLDataMapperImpl" scope="prototype" >
-				<property name="internalQuery" ref="internalNativeQuery"/>	
-			</bean>
+	<bean id="ormQueryFactory" class="alpha.query.criteria.CriteriaQueryFactory" scope="prototype">	
+		<property name="queryBuilderFactory">
+			<bean class="alpha.query.criteria.builder.SQLQueryBuilderFactory" scope="singleton" />
 		</property>
+		<property name="persistenceGateway" ref="nativeGateway"/>
 	</bean>
 	
 </beans>

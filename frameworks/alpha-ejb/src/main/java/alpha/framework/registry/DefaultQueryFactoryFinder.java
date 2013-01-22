@@ -6,15 +6,15 @@ package alpha.framework.registry;
 import alpha.framework.advice.InternalPerfInterceptor;
 import alpha.framework.advice.InternalQueryBuilderInterceptor;
 import alpha.framework.advice.ProxyFactory;
-import alpha.jdbc.strategy.QueryBuilder;
-import alpha.jdbc.strategy.impl.QueryBuilderProxyImpl;
+import alpha.jdbc.strategy.QueryLoader;
+import alpha.jdbc.strategy.impl.QueryLoaderProxyImpl;
 import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.strategy.DataMapper;
-import alpha.query.criteria.strategy.impl.JPQLDataMapperImpl;
-import alpha.query.elink.free.strategy.InternalNamedQueryImpl;
-import alpha.query.elink.free.strategy.InternalNativeQueryImpl;
+import alpha.query.criteria.builder.JPQLQueryBuilderFactory;
+import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.elink.free.gateway.EclipseLinkJpqlGateway;
+import alpha.query.elink.free.gateway.EclipseLinkNativeGateway;
 import alpha.query.free.QueryFactory;
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 /**
  * Provides the QueryFactory.
@@ -29,9 +29,9 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 */
 	@Override
 	public QueryFactory createQueryFactory() {
-		QueryBuilder builder = createQueryBuilder();		
-		InternalQuery namedQuery = createInternalNamedQuery(builder);
-		InternalQuery nativeQuery = createInternalNativeQuery(builder);
+		QueryLoader builder = createQueryLoader();		
+		PersistenceGateway namedQuery = createJpqlGateway(builder);
+		PersistenceGateway nativeQuery = createNativeGateway(builder);
 		return createQueryFactory(namedQuery,nativeQuery);	
 	}
 	
@@ -40,32 +40,10 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 */
 	@Override
 	public CriteriaQueryFactory createCriteriaQueryFactory() {
-		QueryBuilder builder = createQueryBuilder();
-		InternalQuery namedQuery = crateInternalOrmNamedQuery(builder);
-		DataMapper ormQuery = createInternalOrmQuery(namedQuery);
-		return createCriteriaQueryFactory(ormQuery);
-	}
-	
-	/**
-	 * Creates the internal query.
-	 * @param builder the builder
-	 * @return the query;
-	 */
-	protected InternalQuery crateInternalOrmNamedQuery(QueryBuilder builder){
-		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
-		named.setQueryBuilder(builder);
-		return named;
-	}
-	
-	/**
-	 * Creates the internal named Query.
-	 * @param namedQuery the namedQuery
-	 * @return the query;
-	 */
-	protected DataMapper createInternalOrmQuery(InternalQuery namedQuery){
-		JPQLDataMapperImpl query = new JPQLDataMapperImpl();	
-		query.setInternalQuery(namedQuery);		
-		return query;
+		QueryLoader loader = createQueryLoader();
+		PersistenceGateway gateway = createJpqlGateway(loader);
+		QueryBuilderFactory builderFactory = new JPQLQueryBuilderFactory();
+		return createCriteriaQueryFactory(builderFactory,gateway);
 	}
 	
 	/**
@@ -73,10 +51,11 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param ormQuery the ormQuery
 	 * @return CriteriaQueryFactory
 	 */
-	protected CriteriaQueryFactory createCriteriaQueryFactory(DataMapper ormQuery){
-		CriteriaQueryFactory impl = new CriteriaQueryFactory();
-		impl.setInternalOrmQuery(ormQuery);
-		return impl;
+	protected CriteriaQueryFactory createCriteriaQueryFactory(QueryBuilderFactory builderFactory,PersistenceGateway gateway){
+		CriteriaQueryFactory factory = new CriteriaQueryFactory();
+		factory.setPersistenceGateway(gateway);
+		factory.setQueryBuilderFactory(builderFactory);
+		return factory;
 	}
 	
 	/**
@@ -85,13 +64,13 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param builder the builder
 	 * @return the query
 	 */
-	protected InternalQuery createInternalNamedQuery(QueryBuilder builder){
-		InternalNamedQueryImpl named = new InternalNamedQueryImpl();
-		named.setQueryBuilder(builder);				
+	protected PersistenceGateway createJpqlGateway(QueryLoader builder){
+		EclipseLinkJpqlGateway named = new EclipseLinkJpqlGateway();
+		named.setQueryLoader(builder);				
 		EJBComponentFinder finder = ServiceLocator.getComponentFinder();
 		InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
 		if(interceptor.isEnabled()){
-			return  ProxyFactory.create(InternalQuery.class, named, interceptor,"*");	
+			return  ProxyFactory.create(PersistenceGateway.class, named, interceptor,"*");	
 		}else{
 			return named;
 		}
@@ -103,13 +82,13 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param builder the builder
 	 * @return the query
 	 */
-	protected InternalQuery createInternalNativeQuery(QueryBuilder builder){
-		InternalNativeQueryImpl ntv = new InternalNativeQueryImpl();
-		ntv.setQueryBuilder(builder);
+	protected PersistenceGateway createNativeGateway(QueryLoader builder){
+		EclipseLinkNativeGateway ntv = new EclipseLinkNativeGateway();
+		ntv.setQueryLoader(builder);
 		EJBComponentFinder finder = ServiceLocator.getComponentFinder();
 		InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
 		if(interceptor.isEnabled()){
-			return ProxyFactory.create(InternalQuery.class, ntv, interceptor,"*");
+			return ProxyFactory.create(PersistenceGateway.class, ntv, interceptor,"*");
 		}else{
 			return ntv;
 		}
@@ -121,22 +100,22 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param ntv the native query
 	 * @return the query factory
 	 */
-	protected QueryFactory createQueryFactory(InternalQuery named , InternalQuery ntv){
+	protected QueryFactory createQueryFactory(PersistenceGateway named , PersistenceGateway ntv){
 		QueryFactory nf = new QueryFactory();
-		nf.setInternalNativeQuery(ntv);
-		nf.setInternalNamedQuery(named);
+		nf.setNativeGateway(ntv);
+		nf.setJpqlGateway(named);
 		return nf;
 	}
 
 	/**
 	 * Creates the query builder.
-	 * @return the QueryBuilder
+	 * @return the QueryLoader
 	 */
-	protected QueryBuilder createQueryBuilder(){
-		QueryBuilder proxy =  new QueryBuilderProxyImpl();
+	protected QueryLoader createQueryLoader(){
+		QueryLoader proxy =  new QueryLoaderProxyImpl();
 		InternalQueryBuilderInterceptor interceptor = new InternalQueryBuilderInterceptor();
 		if(interceptor.isEnabled()){
-			QueryBuilder builder = ProxyFactory.create(QueryBuilder.class, proxy, interceptor,"evaluate");		
+			QueryLoader builder = ProxyFactory.create(QueryLoader.class, proxy, interceptor,"evaluate");		
 			return builder;
 		}else {
 			return proxy;
