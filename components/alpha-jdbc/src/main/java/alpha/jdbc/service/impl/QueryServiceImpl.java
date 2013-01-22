@@ -21,13 +21,13 @@ import alpha.jdbc.service.ModifyingRequest;
 import alpha.jdbc.service.QueryRequest;
 import alpha.jdbc.service.QueryService;
 import alpha.jdbc.service.ReadingRequest;
-import alpha.jdbc.strategy.QueryBuilder;
+import alpha.jdbc.strategy.QueryLoader;
 import alpha.jdbc.strategy.RecordHandlerFactory;
 import alpha.jdbc.strategy.ResultSetHandler;
 import alpha.jdbc.strategy.Selector;
 import alpha.jdbc.strategy.StatementProvider;
 import alpha.jdbc.strategy.Updater;
-import alpha.jdbc.strategy.impl.QueryBuilderProxyImpl;
+import alpha.jdbc.strategy.impl.QueryLoaderProxyImpl;
 import alpha.jdbc.strategy.impl.RecordHandlerFactoryImpl;
 import alpha.jdbc.strategy.impl.ResultSetHandlerImpl;
 import alpha.jdbc.strategy.impl.SelectorImpl;
@@ -51,8 +51,8 @@ public class QueryServiceImpl implements QueryService{
 	/** the ResultSetHandler */
 	private ResultSetHandler resultSetHandler = new ResultSetHandlerImpl();
 
-	/** the QueryBuilder */
-	private QueryBuilder queryBuilder = new QueryBuilderProxyImpl();
+	/** the QueryLoader */
+	private QueryLoader queryBuilder = new QueryLoaderProxyImpl();
 	
 	/** the StatementProvider */
 	private StatementProvider provider = new StatementProviderImpl();
@@ -97,7 +97,7 @@ public class QueryServiceImpl implements QueryService{
 	/**
 	 * @param queryBuilder the queryBuilder to set
 	 */
-	public void setQueryBuilder(QueryBuilder queryBuilder){
+	public void setQueryBuilder(QueryLoader queryBuilder){
 		this.queryBuilder = queryBuilder;
 	}
 

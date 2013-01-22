@@ -6,7 +6,7 @@ package alpha.query.free;
 import java.util.ArrayList;
 import java.util.List;
 
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -23,13 +23,13 @@ public class BatchModifyQueryImpl implements BatchModifyQuery{
 	private List<ModifyingConditions> parameters = new ArrayList<ModifyingConditions>();
 	
 	/** the internal query */
-	private InternalQuery internalQuery;
+	private PersistenceGateway gateway;
 	
 	/**
 	 * @param internalQuery the internalQuery to set
 	 */
-	BatchModifyQueryImpl(InternalQuery internalQuery){
-		this.internalQuery = internalQuery;
+	BatchModifyQueryImpl(PersistenceGateway gateway){
+		this.gateway = gateway;
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class BatchModifyQueryImpl implements BatchModifyQuery{
 	@Override
 	public int[] modify() {
 		try{
-			return internalQuery.executeBatch(parameters);
+			return gateway.executeBatch(parameters);
 		}finally{
 			parameters.clear();
 		}

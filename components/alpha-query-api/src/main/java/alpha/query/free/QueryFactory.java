@@ -5,7 +5,7 @@ package alpha.query.free;
 
 import javax.persistence.EntityManager;
 
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -18,23 +18,23 @@ import alpha.query.free.strategy.InternalQuery;
 public class QueryFactory {
 	
 	/** for native query */
-	private InternalQuery internalNativeQuery;
+	private PersistenceGateway nativeGateway;
 
 	/** for named query */
-	private InternalQuery internalNamedQuery;
+	private PersistenceGateway jpqlGateway;
 	
 	/**
-	 * @param internalQuery the internalQuery to set
+	 * @param nativeGateway the nativeGateway to set
 	 */
-	public void setInternalNativeQuery(InternalQuery internalNativeQuery){
-		this.internalNativeQuery = internalNativeQuery;
+	public void setNativeGateway(PersistenceGateway nativeGateway){
+		this.nativeGateway = nativeGateway;
 	}
 	
 	/**
-	 * @param internalNamedQuery the internalNamedQuery to set
+	 * @param jpqlGateway the jpqlGateway to set
 	 */
-	public void setInternalNamedQuery(InternalQuery internalNamedQuery){
-		this.internalNamedQuery = internalNamedQuery;
+	public void setJpqlGateway(PersistenceGateway jpqlGateway){
+		this.jpqlGateway = jpqlGateway;
 	}
 	
 	/**
@@ -55,9 +55,9 @@ public class QueryFactory {
 		instance.getParameter().setEntityManager(em);
 		boolean namedQuery = instance instanceof AbstractNamedReadQuery;
 		if(namedQuery){
-			instance.setInternalQuery(internalNamedQuery);
+			instance.setPersistenceGateway(jpqlGateway);
 		}else{
-			instance.setInternalQuery(internalNativeQuery);;
+			instance.setPersistenceGateway(nativeGateway);;
 		}		
 		return instance;
 	}
@@ -80,9 +80,9 @@ public class QueryFactory {
 		instance.getParameter().setQueryId(clazz.getSimpleName());
 		instance.getParameter().setEntityManager(em);
 		if(namedQuery){
-			instance.setInternalQuery(internalNamedQuery);
+			instance.setPersistenceGateway(jpqlGateway);
 		}else{
-			instance.setInternalQuery(internalNativeQuery);;
+			instance.setPersistenceGateway(nativeGateway);;
 		}		
 		return instance;		
 	}

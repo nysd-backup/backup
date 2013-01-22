@@ -20,7 +20,7 @@ public abstract class AbstractNativeReadQuery extends AbstractReadQuery{
 	 * @return the result
 	 */
 	public HitData getTotalResult() {
-		return getInternalQuery().getTotalResult(getParameter());
+		return getPersistenceGateway().getTotalResult(getParameter());
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public abstract class AbstractNativeReadQuery extends AbstractReadQuery{
 	 * @return the result holding ResultSet
 	 */
 	public <T> List<T> getFetchResult(){
-		return getInternalQuery().getFetchResult(getParameter());
+		return getPersistenceGateway().getFetchResult(getParameter());
 	}
 
 	/**

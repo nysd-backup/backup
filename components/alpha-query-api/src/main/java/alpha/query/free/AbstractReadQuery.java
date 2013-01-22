@@ -11,7 +11,7 @@ import javax.persistence.LockModeType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -30,7 +30,7 @@ public abstract class AbstractReadQuery{
 	private ReadingConditions condition = null;
 
 	/** the internal query */
-	private InternalQuery internalQuery = null;
+	private PersistenceGateway persistenceGateway = null;
 	
 	/**
 	 * @param em the em to set
@@ -50,8 +50,8 @@ public abstract class AbstractReadQuery{
 	/**
 	 * @return the internal query
 	 */
-	protected InternalQuery getInternalQuery(){
-		return this.internalQuery;
+	protected PersistenceGateway getPersistenceGateway(){
+		return this.persistenceGateway;
 	}
 	
 	/**
@@ -62,10 +62,10 @@ public abstract class AbstractReadQuery{
 	}
 	
 	/**
-	 * @param internalQuery
+	 * @param persistenceGateway the persistenceGateway to set
 	 */
-	public void setInternalQuery(InternalQuery internalQuery ){
-		this.internalQuery = internalQuery;
+	public void setPersistenceGateway(PersistenceGateway persistenceGateway ){
+		this.persistenceGateway = persistenceGateway;
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public abstract class AbstractReadQuery{
 	 * @return the result
 	 */
 	public <T> List<T> getResultList() {
-		return (List<T>)internalQuery.getResultList(condition);
+		return (List<T>)persistenceGateway.getResultList(condition);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public abstract class AbstractReadQuery{
 	 * @return the first result
 	 */
 	public <T> T getSingleResult() {
-		return (T)internalQuery.getSingleResult(condition);
+		return (T)persistenceGateway.getSingleResult(condition);
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public abstract class AbstractReadQuery{
 	 */
 	public long count() {
 		condition.setWrappingClause("select count(*) from (%s)");
-		return internalQuery.count(condition);
+		return persistenceGateway.count(condition);
 	}
 
 	/**

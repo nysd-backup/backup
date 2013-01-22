@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import alpha.query.criteria.strategy.DataMapper;
+import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -17,8 +18,11 @@ import alpha.query.criteria.strategy.DataMapper;
  */
 public class CriteriaModifyQuery<T> {
 	
-	/** the InternalOrmUpdate */
-	private final DataMapper internalQuery;
+	/** the QueryBuilderFactory */
+	private final QueryBuilderFactory builderFactory;
+	
+	/** the internalQuery */
+	private final PersistenceGateway persistenceGateway;
 	
 	/** the condition */
 	private CriteriaModifyingConditions<T> condition = null;
@@ -26,9 +30,10 @@ public class CriteriaModifyQuery<T> {
 	/**
 	 * @param entityClass the entity class
 	 */
-	protected CriteriaModifyQuery(Class<T> entityClass,DataMapper internalQuery,EntityManager em){
+	protected CriteriaModifyQuery(Class<T> entityClass,PersistenceGateway persistenceGateway,EntityManager em, QueryBuilderFactory builderFactory){
 		this.condition = new CriteriaModifyingConditions<T>(entityClass);
-		this.internalQuery = internalQuery;
+		this.builderFactory = builderFactory;
+		this.persistenceGateway = persistenceGateway;
 		this.condition.setEntityManager(em);
 	}
 
@@ -51,7 +56,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return the updated count
 	 */
 	public int update(){
-		return internalQuery.update(condition);
+		return persistenceGateway.executeUpdate(condition.buildUpdate(builderFactory.createBuilder()));
 	}
 	
 	/**
@@ -208,7 +213,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return the updated count
 	 */
 	public int delete(){
-		return internalQuery.delete(condition);
+		return persistenceGateway.executeUpdate(condition.buildDelete(builderFactory.createBuilder()));
 	}
 
 	/**

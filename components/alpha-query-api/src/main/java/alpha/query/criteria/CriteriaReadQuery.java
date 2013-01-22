@@ -7,9 +7,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
-import alpha.query.criteria.strategy.DataMapper;
+import alpha.query.criteria.builder.QueryBuilderFactory;
 import alpha.query.free.QueryCallback;
 import alpha.query.free.ResultSetFilter;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -21,8 +22,11 @@ import alpha.query.free.ResultSetFilter;
  */
 public class CriteriaReadQuery<T>{
 
-	/** the DataMapper */
-	private final DataMapper internalQuery ;
+	/** the QueryBuilderFactory */
+	private final QueryBuilderFactory builderFactory;
+	
+	/** the internalQuery */
+	private final PersistenceGateway persistenceGateway;
 	
 	/** the condition */
 	private CriteriaReadingConditions<T> condition = null;
@@ -30,9 +34,10 @@ public class CriteriaReadQuery<T>{
 	/**
 	 * @param entityClass the entity class
 	 */
-	protected CriteriaReadQuery(Class<T> entityClass,DataMapper internalQuery,EntityManager em){
+	protected CriteriaReadQuery(Class<T> entityClass,PersistenceGateway persistenceGateway,EntityManager em, QueryBuilderFactory builderFactory){
 		this.condition = new CriteriaReadingConditions<T>(entityClass);
-		this.internalQuery = internalQuery;
+		this.builderFactory = builderFactory;
+		this.persistenceGateway = persistenceGateway;
 		this.condition.setEntityManager(em);
 	}
 	
@@ -84,7 +89,7 @@ public class CriteriaReadQuery<T>{
 	 * @return the result
 	 */
 	public List<T> getResultList() {
-		return internalQuery.getResultList(condition);
+		return persistenceGateway.getResultList(condition.buildSelect(builderFactory.createBuilder()));
 	}
 
 	/**
@@ -292,7 +297,7 @@ public class CriteriaReadQuery<T>{
 	 * @return the result
 	 */
 	public List<T> getFetchResult(){
-		List<T> lazyList = internalQuery.getFetchResult(condition);
+		List<T> lazyList = persistenceGateway.getFetchResult(condition.buildSelect(builderFactory.createBuilder()));
 		return lazyList;
 	}
 	

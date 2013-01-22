@@ -5,7 +5,7 @@ package alpha.query.criteria;
 
 import java.util.Map;
 
-import alpha.query.criteria.strategy.QueryStatementBuilder;
+import alpha.query.criteria.builder.QueryBuilder;
 import alpha.query.free.ModifyingConditions;
 
 
@@ -28,7 +28,7 @@ public class CriteriaModifyingConditions<T> extends CriteriaConditions<T>{
 	 * Creates the update Statement
 	 * @return query string
 	 */
-	public ModifyingConditions buildUpdate(QueryStatementBuilder builder){
+	public ModifyingConditions buildUpdate(QueryBuilder builder){
 		String sql = builder.withUpdate(getEntityClass()).withSet(getCurrentValues()).withWhere(getConditions()).build();
 		ModifyingConditions conditions =createModifyingConditions(sql,getEntityClass().getSimpleName()+".delete");
 		//set
@@ -44,7 +44,7 @@ public class CriteriaModifyingConditions<T> extends CriteriaConditions<T>{
 	 * Creates the delete Statement
 	 * @return query string
 	 */
-	public ModifyingConditions buildDelete(QueryStatementBuilder builder){
+	public ModifyingConditions buildDelete(QueryBuilder builder){
 		String sql = builder.withDelete(getEntityClass()).withWhere(getConditions()).build();
 		return createModifyingConditions(sql,getEntityClass().getSimpleName()+".delete");
 	}
@@ -53,7 +53,7 @@ public class CriteriaModifyingConditions<T> extends CriteriaConditions<T>{
 	 * Creates the delete Statement
 	 * @return query string
 	 */
-	public ModifyingConditions buildInsert(QueryStatementBuilder builder){
+	public ModifyingConditions buildInsert(QueryBuilder builder){
 		String sql = builder.withInsert(getEntityClass(),getCurrentValues()).build();
 		return createModifyingConditions(sql,getEntityClass().getSimpleName()+".insert");
 	}

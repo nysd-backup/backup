@@ -33,10 +33,12 @@ import org.apache.commons.lang.StringUtils;
 import alpha.query.EngineHints;
 import alpha.query.PersistenceHints;
 import alpha.query.ReflectionUtils;
-import alpha.query.criteria.strategy.impl.SQLStatementBuilder;
+import alpha.query.criteria.builder.QueryBuilder;
+import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.criteria.builder.SQLQueryBuilderFactory;
 import alpha.query.free.ModifyingConditions;
 import alpha.query.free.ReadingConditions;
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 /**
@@ -52,13 +54,16 @@ import alpha.query.free.strategy.InternalQuery;
 public class EntityManagerImpl implements EntityManager{
 
 	/** the internal query */
-	private InternalQuery internalQuery;
+	private PersistenceGateway gateway;
 	
 	/** query hints */
 	private EngineHints hints = new EngineHints();
 	
 	/** the dataSource */
 	private Connection connectionWrapper;
+	
+	/** the builder factory */
+	private QueryBuilderFactory builderFactory = new SQLQueryBuilderFactory();
 	
 	/**
 	 * @param dataSource the dataSource to set
@@ -68,10 +73,17 @@ public class EntityManagerImpl implements EntityManager{
 	}
 
 	/**
-	 * @param internalQuery the internalQuery to set
+	 * @param gateway the gateway to set
 	 */
-	public void setInternalQuery(InternalQuery internalQuery){
-		this.internalQuery = internalQuery;
+	public void setPersistenceGateway(PersistenceGateway gateway){
+		this.gateway = gateway;	
+	}
+	
+	/**
+	 * @param builderFactory the builderFactory to set
+	 */
+	public void setQueryBuilderFactory(QueryBuilderFactory builderFactory){
+		this.builderFactory = builderFactory;
 	}
 
 	/**
@@ -84,7 +96,7 @@ public class EntityManagerImpl implements EntityManager{
 		for(Object e : entities){
 			params.add(createInsertingParameter(e));
 		}
-		internalQuery.executeBatch(params);
+		gateway.executeBatch(params);
 	}
 
 	/**
@@ -92,7 +104,7 @@ public class EntityManagerImpl implements EntityManager{
 	 */
 	@Override
 	public void persist(Object entity) {		
-		internalQuery.executeUpdate(createInsertingParameter(entity));
+		gateway.executeUpdate(createInsertingParameter(entity));
 	}
 	
 	/**
@@ -113,7 +125,7 @@ public class EntityManagerImpl implements EntityManager{
 				bindValues.put(getColumnName(m),value);		
 			}
 		}
-		SQLStatementBuilder builder = new SQLStatementBuilder();
+		QueryBuilder builder = builderFactory.createBuilder();
 		String sql = builder.withInsert(entity.getClass(), bindValues).build();
 		ModifyingConditions freeUpdateParameter = new ModifyingConditions();	
 		freeUpdateParameter.setEntityManager(this);
@@ -172,7 +184,7 @@ public class EntityManagerImpl implements EntityManager{
 			parameter.setEntityManager(this);
 			params.add(parameter);	
 		}
-		internalQuery.executeBatch(params);
+		gateway.executeBatch(params);
 	}
 	
 	
@@ -284,7 +296,7 @@ public class EntityManagerImpl implements EntityManager{
 				conditions.addAll(createPkWhere(where));		
 			}
 		}
-		SQLStatementBuilder builder = new SQLStatementBuilder();
+		QueryBuilder builder = builderFactory.createBuilder();
 		String sql = builder.withUpdate(entity.getClass()).withSet(setValues).withWhere(conditions).build();
 		ModifyingConditions parameter = new ModifyingConditions();
 		parameter.setSql(sql);
@@ -328,7 +340,7 @@ public class EntityManagerImpl implements EntityManager{
 			}		
 			conditions = createPkWhere(where);
 		}
-		SQLStatementBuilder builder = new SQLStatementBuilder();
+		QueryBuilder builder = builderFactory.createBuilder();
 		String sql = builder.withDelete(entity.getClass()).withWhere(conditions).build();
 		ModifyingConditions parameter = new ModifyingConditions();
 		parameter.setSql(sql);
@@ -367,7 +379,7 @@ public class EntityManagerImpl implements EntityManager{
 		setWhereCondition(parameter, conditions);
 		parameter.setEntityManager(this);
 		parameter.setHints(hints);
-		int result = internalQuery.executeUpdate(parameter);
+		int result = gateway.executeUpdate(parameter);
 		if(result == 0){
 			throw new OptimisticLockException(entity);
 		}
@@ -461,8 +473,8 @@ public class EntityManagerImpl implements EntityManager{
 		ormParam.setEntityManager(this);
 		ormParam.getHints().putAll(properties);
 	
-		ReadingConditions parameter = ormParam.buildSelect(new SQLStatementBuilder());;
-		List<T> resultList = internalQuery.getResultList(parameter);		
+		ReadingConditions parameter = ormParam.buildSelect(builderFactory.createBuilder());
+		List<T> resultList = gateway.getResultList(parameter);		
 		if(resultList.isEmpty()){
 			return null;
 		}else if(resultList.size() > 1){

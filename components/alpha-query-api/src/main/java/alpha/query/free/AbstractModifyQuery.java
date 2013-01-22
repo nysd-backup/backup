@@ -5,7 +5,7 @@ package alpha.query.free;
 
 import javax.persistence.EntityManager;
 
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -22,7 +22,7 @@ public abstract class AbstractModifyQuery {
 	private ModifyingConditions parameter;
 	
 	/** the internal query */
-	private InternalQuery internalQuery;
+	private PersistenceGateway persistenceGateway;
 	
 	/**
 	 * @param em the em to set
@@ -51,8 +51,8 @@ public abstract class AbstractModifyQuery {
 	/**
 	 * @return the internalQuery
 	 */
-	protected InternalQuery getInternalQuery(){
-		return this.internalQuery;
+	protected PersistenceGateway getPersistenceGateway(){
+		return this.persistenceGateway;
 	}
 	
 	/**
@@ -65,8 +65,8 @@ public abstract class AbstractModifyQuery {
 	/**
 	 * @param internalQuery
 	 */
-	public void setInternalQuery(InternalQuery internalQuery){
-		this.internalQuery = internalQuery;
+	public void setPersistenceGateway(PersistenceGateway persistenceGateway){
+		this.persistenceGateway = persistenceGateway;
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public abstract class AbstractModifyQuery {
 	 * @return the updated count
 	 */
 	public int update(){
-		return internalQuery.executeUpdate(parameter);
+		return persistenceGateway.executeUpdate(parameter);
 	}
 	
 }

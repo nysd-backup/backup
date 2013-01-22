@@ -3,7 +3,7 @@
  */
 package alpha.query.free;
 
-import alpha.query.free.strategy.InternalQuery;
+import alpha.query.free.gateway.PersistenceGateway;
 
 /**
  * BatchModifyQueryFactoryImpl.
@@ -14,20 +14,20 @@ import alpha.query.free.strategy.InternalQuery;
 public class BatchModifyQueryFactoryImpl implements BatchModifyQueryFactory{
 
 	/** the internalQuery */
-	private InternalQuery internalQuery;
+	private PersistenceGateway gateway;
 	
 	/**
 	 * @see alpha.query.free.BatchModifyQueryFactory#createBatchUpdate()
 	 */
 	@Override
 	public BatchModifyQuery createBatchUpdate(){
-		return new BatchModifyQueryImpl(internalQuery);
+		return new BatchModifyQueryImpl(gateway);
 	}
 
 	/**
-	 * @param internalQuery the internalQuery to set
+	 * @param gateway the gateway to set
 	 */
-	public void setInternalQuery(InternalQuery internalQuery) {
-		this.internalQuery = internalQuery;
+	public void setPersistenceGateway(PersistenceGateway gateway) {
+		this.gateway = gateway;
 	}
 }

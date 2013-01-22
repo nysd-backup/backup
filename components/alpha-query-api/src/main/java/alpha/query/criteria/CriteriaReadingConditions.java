@@ -10,7 +10,7 @@ import java.util.Map;
 import javax.persistence.LockModeType;
 
 import alpha.query.PersistenceHints;
-import alpha.query.criteria.strategy.QueryStatementBuilder;
+import alpha.query.criteria.builder.QueryBuilder;
 import alpha.query.free.ReadingConditions;
 import alpha.query.free.ResultSetFilter;
 
@@ -122,7 +122,7 @@ public class CriteriaReadingConditions<T> extends CriteriaConditions<T>{
 	 * Creates the update Statement
 	 * @return query string
 	 */
-	public ReadingConditions buildSelect(QueryStatementBuilder builder){
+	public ReadingConditions buildSelect(QueryBuilder builder){
 		int timeout = 0;
 		if(getHints().containsKey(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT)){
 			timeout = (Integer)getHints().get(PersistenceHints.PESSIMISTIC_LOCK_TIMEOUT);

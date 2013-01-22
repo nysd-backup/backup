@@ -5,7 +5,8 @@ package alpha.query.criteria;
 
 import javax.persistence.EntityManager;
 
-import alpha.query.criteria.strategy.DataMapper;
+import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -17,14 +18,24 @@ import alpha.query.criteria.strategy.DataMapper;
  */
 public class CriteriaQueryFactory {
 	
-	/** the DAO */
-	private DataMapper internalOrmQuery;
+	/** the QueryBuilderFactory */
+	private QueryBuilderFactory builderFactory;
+	
+	/** the QueryBuilderFactory */
+	private PersistenceGateway gateway;
 	
 	/**
-	 * @param internalOrmQuery the internalOrmQuery to set
+	 * @param builderFactory the builderFactory to set
 	 */
-	public void setInternalOrmQuery(DataMapper internalOrmQuery){
-		this.internalOrmQuery = internalOrmQuery;
+	public void setQueryBuilderFactory(QueryBuilderFactory builderFactory){
+		this.builderFactory = builderFactory;
+	}
+	
+	/**
+	 * @param internalQuery the internalQuery to set
+	 */
+	public void setPersistenceGateway(PersistenceGateway gateway){
+		this.gateway = gateway;
 	}
 
 	/**
@@ -35,7 +46,7 @@ public class CriteriaQueryFactory {
 	 * @return self
 	 */
 	public <T> CriteriaReadQuery<T> createReadQuery(Class<T> entityClass, EntityManager em){
-		return new CriteriaReadQuery<T>(entityClass,internalOrmQuery,em);
+		return new CriteriaReadQuery<T>(entityClass,gateway,em,builderFactory);
 	}
 	
 	/**
@@ -46,7 +57,7 @@ public class CriteriaQueryFactory {
 	 * @return self
 	 */
 	public <T> CriteriaModifyQuery<T> createModifyQuery(Class<T> entityClass, EntityManager em){
-		return new CriteriaModifyQuery<T>(entityClass,internalOrmQuery,em);			
+		return new CriteriaModifyQuery<T>(entityClass,gateway,em,builderFactory);			
 	}
 
 }

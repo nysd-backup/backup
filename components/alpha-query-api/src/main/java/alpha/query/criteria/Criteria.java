@@ -94,7 +94,7 @@ public class Criteria<T> {
 	 * @param tableAlias the alias
 	 * @return expression
 	 */
-	public void accept(Conditions delegate){
-		operand.setParameter(delegate, colName + "_" + bindCount, value);
+	public void accept(Conditions conditions){
+		operand.setParameter(conditions, colName + "_" + bindCount, value);
 	}
 }
