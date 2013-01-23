@@ -22,7 +22,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class CriteriaConditions<T>{
+public class BuildingProperties<T>{
 
 	/** the entityClass */
 	private final Class<T> entityClass;
@@ -56,7 +56,7 @@ public abstract class CriteriaConditions<T>{
 	/**
 	 * @param entityClass the entityClass
 	 */
-	public CriteriaConditions(Class<T> entityClass){
+	public BuildingProperties(Class<T> entityClass){
 		this.entityClass = entityClass;
 	}
 	

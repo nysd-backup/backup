@@ -33,9 +33,9 @@ import org.apache.commons.lang.StringUtils;
 import alpha.query.EngineHints;
 import alpha.query.PersistenceHints;
 import alpha.query.ReflectionUtils;
-import alpha.query.criteria.builder.QueryBuilder;
-import alpha.query.criteria.builder.QueryBuilderFactory;
-import alpha.query.criteria.builder.SQLQueryBuilderFactory;
+import alpha.query.criteria.statement.SQLBuilderFactory;
+import alpha.query.criteria.statement.StatementBuilder;
+import alpha.query.criteria.statement.StatementBuilderFactory;
 import alpha.query.free.ModifyingConditions;
 import alpha.query.free.ReadingConditions;
 import alpha.query.free.gateway.PersistenceGateway;
@@ -63,7 +63,7 @@ public class EntityManagerImpl implements EntityManager{
 	private Connection connectionWrapper;
 	
 	/** the builder factory */
-	private QueryBuilderFactory builderFactory = new SQLQueryBuilderFactory();
+	private StatementBuilderFactory builderFactory = new SQLBuilderFactory();
 	
 	/**
 	 * @param dataSource the dataSource to set
@@ -82,7 +82,7 @@ public class EntityManagerImpl implements EntityManager{
 	/**
 	 * @param builderFactory the builderFactory to set
 	 */
-	public void setQueryBuilderFactory(QueryBuilderFactory builderFactory){
+	public void setBuilderFactory(StatementBuilderFactory builderFactory){
 		this.builderFactory = builderFactory;
 	}
 
@@ -125,7 +125,7 @@ public class EntityManagerImpl implements EntityManager{
 				bindValues.put(getColumnName(m),value);		
 			}
 		}
-		QueryBuilder builder = builderFactory.createBuilder();
+		StatementBuilder builder = builderFactory.createBuilder();
 		String sql = builder.withInsert(entity.getClass(), bindValues).build();
 		ModifyingConditions freeUpdateParameter = new ModifyingConditions();	
 		freeUpdateParameter.setEntityManager(this);
@@ -296,7 +296,7 @@ public class EntityManagerImpl implements EntityManager{
 				conditions.addAll(createPkWhere(where));		
 			}
 		}
-		QueryBuilder builder = builderFactory.createBuilder();
+		StatementBuilder builder = builderFactory.createBuilder();
 		String sql = builder.withUpdate(entity.getClass()).withSet(setValues).withWhere(conditions).build();
 		ModifyingConditions parameter = new ModifyingConditions();
 		parameter.setSql(sql);
@@ -340,7 +340,7 @@ public class EntityManagerImpl implements EntityManager{
 			}		
 			conditions = createPkWhere(where);
 		}
-		QueryBuilder builder = builderFactory.createBuilder();
+		StatementBuilder builder = builderFactory.createBuilder();
 		String sql = builder.withDelete(entity.getClass()).withWhere(conditions).build();
 		ModifyingConditions parameter = new ModifyingConditions();
 		parameter.setSql(sql);
@@ -466,7 +466,7 @@ public class EntityManagerImpl implements EntityManager{
 			}
 		}
 
-		CriteriaReadingConditions<T> ormParam = new CriteriaReadingConditions<T>(entityClass);
+		ReadQueryBuilder<T> ormParam = new ReadQueryBuilder<T>(entityClass);
 		ormParam.setLockModeType(lockMode);
 		ormParam.setMaxSize(2);
 		ormParam.getConditions().addAll(condition);

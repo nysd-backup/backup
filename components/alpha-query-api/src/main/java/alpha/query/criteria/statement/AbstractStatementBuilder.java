@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package alpha.query.criteria.builder;
+package alpha.query.criteria.statement;
 
 import java.util.List;
 import java.util.Map;
@@ -17,15 +17,15 @@ import alpha.query.criteria.SortKey;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public abstract class AbstractQueryBuilder implements QueryBuilder{
+public abstract class AbstractStatementBuilder implements StatementBuilder{
 	
 	protected StringBuilder query = new StringBuilder();
 	
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withSet(java.util.Map)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withSet(java.util.Map)
 	 */
 	@Override
-	public QueryBuilder withSet(Map<String,Object> set){
+	public StatementBuilder withSet(Map<String,Object> set){
 		if( set == null || set.isEmpty()){
 			throw new IllegalArgumentException("updating value is required");
 		}
@@ -50,10 +50,10 @@ public abstract class AbstractQueryBuilder implements QueryBuilder{
 	}
 
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withOrderBy(java.util.List)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withOrderBy(java.util.List)
 	 */
 	@Override
-	public QueryBuilder withOrderBy(List<SortKey> orderby ){	
+	public StatementBuilder withOrderBy(List<SortKey> orderby ){	
 		if(orderby == null || orderby.isEmpty()){
 			return this;
 		}
@@ -75,10 +75,10 @@ public abstract class AbstractQueryBuilder implements QueryBuilder{
 	}
 	
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withWhere(java.util.List)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withWhere(java.util.List)
 	 */
 	@Override
-	public QueryBuilder withWhere(List<Criteria<?>> wheres){		
+	public StatementBuilder withWhere(List<Criteria<?>> wheres){		
 		if( wheres == null || wheres.isEmpty()){
 			return this;
 		}
@@ -99,7 +99,7 @@ public abstract class AbstractQueryBuilder implements QueryBuilder{
 	}
 
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#build()
+	 * @see alpha.query.criteria.statement.StatementBuilder#build()
 	 */
 	@Override
 	public String build() {

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
-import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.criteria.statement.StatementBuilderFactory;
 import alpha.query.free.QueryCallback;
 import alpha.query.free.ResultSetFilter;
 import alpha.query.free.gateway.PersistenceGateway;
@@ -22,23 +22,23 @@ import alpha.query.free.gateway.PersistenceGateway;
  */
 public class CriteriaReadQuery<T>{
 
-	/** the QueryBuilderFactory */
-	private final QueryBuilderFactory builderFactory;
+	/** the StatementBuilderFactory */
+	private final StatementBuilderFactory builderFactory;
 	
 	/** the internalQuery */
 	private final PersistenceGateway persistenceGateway;
 	
 	/** the condition */
-	private CriteriaReadingConditions<T> condition = null;
+	private ReadQueryBuilder<T> builder = null;
 	
 	/**
 	 * @param entityClass the entity class
 	 */
-	protected CriteriaReadQuery(Class<T> entityClass,PersistenceGateway persistenceGateway,EntityManager em, QueryBuilderFactory builderFactory){
-		this.condition = new CriteriaReadingConditions<T>(entityClass);
+	protected CriteriaReadQuery(Class<T> entityClass,PersistenceGateway persistenceGateway,EntityManager em, StatementBuilderFactory builderFactory){
+		this.builder = new ReadQueryBuilder<T>(entityClass);
 		this.builderFactory = builderFactory;
 		this.persistenceGateway = persistenceGateway;
-		this.condition.setEntityManager(em);
+		this.builder.setEntityManager(em);
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> setFilter(ResultSetFilter filter){
-		condition.setFilter(filter);
+		builder.setFilter(filter);
 		return this;
 	}
 	
@@ -60,7 +60,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> setHint(String arg0 , Object arg1){
-		condition.getHints().put(arg0, arg1);
+		builder.getHints().put(arg0, arg1);
 		return this;
 	}
 
@@ -70,7 +70,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> setMaxResults(int arg0){
-		condition.setMaxSize(arg0);
+		builder.setMaxSize(arg0);
 		return this;
 	}
 	
@@ -80,7 +80,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> setFirstResult(int arg0){
-		condition.setFirstResult(arg0);
+		builder.setFirstResult(arg0);
 		return this;
 	}
 	
@@ -89,7 +89,7 @@ public class CriteriaReadQuery<T>{
 	 * @return the result
 	 */
 	public List<T> getResultList() {
-		return persistenceGateway.getResultList(condition.buildSelect(builderFactory.createBuilder()));
+		return persistenceGateway.getResultList(builder.buildSelect(builderFactory.createBuilder()));
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> desc(Metadata<T,?> column){
-		condition.getSortKeys().add(new SortKey(false,column.name()));
+		builder.getSortKeys().add(new SortKey(false,column.name()));
 		return this;
 	}
 	
@@ -261,7 +261,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> asc(Metadata<T, ?> column){
-		condition.getSortKeys().add(new SortKey(true,column.name()));
+		builder.getSortKeys().add(new SortKey(true,column.name()));
 		return this;
 	}
 	
@@ -270,7 +270,7 @@ public class CriteriaReadQuery<T>{
 	 * @return self
 	 */
 	public CriteriaReadQuery<T> setLockMode(LockModeType type){
-		condition.setLockModeType(type);
+		builder.setLockModeType(type);
 		return this;
 	}
 	
@@ -297,7 +297,7 @@ public class CriteriaReadQuery<T>{
 	 * @return the result
 	 */
 	public List<T> getFetchResult(){
-		List<T> lazyList = persistenceGateway.getFetchResult(condition.buildSelect(builderFactory.createBuilder()));
+		List<T> lazyList = persistenceGateway.getFetchResult(builder.buildSelect(builderFactory.createBuilder()));
 		return lazyList;
 	}
 	
@@ -309,7 +309,7 @@ public class CriteriaReadQuery<T>{
 	 * @return
 	 */
 	public CriteriaReadQuery<T> addCriteria(String column, ComparingOperand operand,Object value) {
-		condition.getConditions().add(new Criteria<Object>(column,condition.getConditions().size()+1,operand,value));
+		builder.getConditions().add(new Criteria<Object>(column,builder.getConditions().size()+1,operand,value));
 		return this;
 	}
 	

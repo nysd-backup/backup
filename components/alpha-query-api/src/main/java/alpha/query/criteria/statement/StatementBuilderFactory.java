@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package alpha.query.criteria.builder;
+package alpha.query.criteria.statement;
 
 
 
@@ -11,7 +11,7 @@ package alpha.query.criteria.builder;
  * @author yoshida-n
  * @version	created.
  */
-public interface QueryBuilderFactory {
+public interface StatementBuilderFactory {
 
 	/**
 	 *　Updates the table.
@@ -20,6 +20,6 @@ public interface QueryBuilderFactory {
 	 * @param set the updating target
 	 * @return the updated count
 	 */
-	public QueryBuilder createBuilder();
+	public StatementBuilder createBuilder();
 
 }

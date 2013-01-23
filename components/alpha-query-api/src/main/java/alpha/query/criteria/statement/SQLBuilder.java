@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package alpha.query.criteria.builder;
+package alpha.query.criteria.statement;
 
 import java.util.Map;
 
@@ -9,29 +9,29 @@ import javax.persistence.LockModeType;
 import javax.persistence.Table;
 
 import alpha.query.criteria.FixString;
-import alpha.query.criteria.builder.AbstractQueryBuilder;
-import alpha.query.criteria.builder.QueryBuilder;
+import alpha.query.criteria.statement.AbstractStatementBuilder;
+import alpha.query.criteria.statement.StatementBuilder;
 
 /**
- * SQLQueryBuilder.
+ * SQLBuilder.
  *
  * @author yoshida-n
  * @version	created.
  */
-public class SQLQueryBuilder extends AbstractQueryBuilder{
+public class SQLBuilder extends AbstractStatementBuilder{
 	
 	/**
 	 * Constructor
 	 */
-	protected SQLQueryBuilder(){
+	protected SQLBuilder(){
 		
 	}
 	
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withLock(javax.persistence.LockModeType, long)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withLock(javax.persistence.LockModeType, long)
 	 */
 	@Override
-	public QueryBuilder withLock(LockModeType lock,long timeout){
+	public StatementBuilder withLock(LockModeType lock,long timeout){
 		if(LockModeType.PESSIMISTIC_READ == lock){
 			query.append("FOR UPDATE ");
 			if(timeout > 0){
@@ -44,38 +44,38 @@ public class SQLQueryBuilder extends AbstractQueryBuilder{
 	}
 	
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withSelect(java.lang.Class)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withSelect(java.lang.Class)
 	 */
 	@Override
-	public QueryBuilder withSelect(Class<?> entityClass) {
+	public StatementBuilder withSelect(Class<?> entityClass) {
 		String.format("select * from %s e",entityClass.getAnnotation(Table.class).name());
 		query.append(String.format("select * from %s e",entityClass.getAnnotation(Table.class).name()));
 		return this;
 	}	
 	
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withSelect(java.lang.Class)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withSelect(java.lang.Class)
 	 */
 	@Override
-	public QueryBuilder withDelete(Class<?> entityClass) {
+	public StatementBuilder withDelete(Class<?> entityClass) {
 		query.append(String.format("delete from %s e ",entityClass.getAnnotation(Table.class).name()));
 		return this;
 	}	
 	
 	/**
-	 * @see alpha.query.criteria.builder.QueryBuilder#withSelect(java.lang.Class)
+	 * @see alpha.query.criteria.statement.StatementBuilder#withSelect(java.lang.Class)
 	 */
 	@Override
-	public QueryBuilder withUpdate(Class<?> entityClass) {
+	public StatementBuilder withUpdate(Class<?> entityClass) {
 		query.append(String.format("update %s e ",entityClass.getAnnotation(Table.class).name()));
 		return this;
 	}	
 
 	/**
-	 * @see alpha.query.criteria.builder.SQLQueryBuilder#createInsert(java.lang.Class, java.util.Collection)
+	 * @see alpha.query.criteria.statement.SQLBuilder#createInsert(java.lang.Class, java.util.Collection)
 	 */
 	@Override
-	public QueryBuilder withInsert(Class<?> entityClass, Map<String,Object> keys) {
+	public StatementBuilder withInsert(Class<?> entityClass, Map<String,Object> keys) {
 		
 		StringBuilder builder = new StringBuilder("insert into ");
 		String tableName = entityClass.getAnnotation(Table.class).name();

@@ -5,7 +5,7 @@ package alpha.query.criteria;
 
 import javax.persistence.EntityManager;
 
-import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.criteria.statement.StatementBuilderFactory;
 import alpha.query.free.gateway.PersistenceGateway;
 
 
@@ -18,16 +18,16 @@ import alpha.query.free.gateway.PersistenceGateway;
  */
 public class CriteriaQueryFactory {
 	
-	/** the QueryBuilderFactory */
-	private QueryBuilderFactory builderFactory;
+	/** the StatementBuilderFactory */
+	private StatementBuilderFactory builderFactory;
 	
-	/** the QueryBuilderFactory */
+	/** the StatementBuilderFactory */
 	private PersistenceGateway gateway;
 	
 	/**
 	 * @param builderFactory the builderFactory to set
 	 */
-	public void setQueryBuilderFactory(QueryBuilderFactory builderFactory){
+	public void setBuilderFactory(StatementBuilderFactory builderFactory){
 		this.builderFactory = builderFactory;
 	}
 	

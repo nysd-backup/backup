@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package alpha.query.criteria.builder;
+package alpha.query.criteria.statement;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ import alpha.query.criteria.SortKey;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public interface QueryBuilder {
+public interface StatementBuilder {
 	
 	/**
 	 * Creates the lock statement
@@ -26,7 +26,7 @@ public interface QueryBuilder {
 	 * @param timeout lock time out
 	 * @return builder
 	 */
-	public QueryBuilder withLock(LockModeType lock,long timeout);
+	public StatementBuilder withLock(LockModeType lock,long timeout);
 
 	/**
 	 * Creates the delete statement.
@@ -34,7 +34,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withDelete(Class<?> entityClass);
+	public StatementBuilder withDelete(Class<?> entityClass);
 	
 	/**
 	 * Creates the update statement.
@@ -42,7 +42,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withUpdate(Class<?> entityClass);
+	public StatementBuilder withUpdate(Class<?> entityClass);
 	
 	/**
 	 * Creates the select statement.
@@ -50,7 +50,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withSelect(Class<?> entityClass);
+	public StatementBuilder withSelect(Class<?> entityClass);
 	
 	/**
 	 * Creates the insert statement.
@@ -58,7 +58,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withInsert(Class<?> entityClass,Map<String,Object> values);
+	public StatementBuilder withInsert(Class<?> entityClass,Map<String,Object> values);
 	
 	/**
 	 * Creates the where statement.
@@ -66,7 +66,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withWhere(List<Criteria<?>> criteria);
+	public StatementBuilder withWhere(List<Criteria<?>> criteria);
 	
 	/**
 	 * Creates the order by statement.
@@ -74,7 +74,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withOrderBy(List<SortKey> sortKey);
+	public StatementBuilder withOrderBy(List<SortKey> sortKey);
 	
 	/**
 	 * Creates the set statement.
@@ -82,7 +82,7 @@ public interface QueryBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public QueryBuilder withSet(Map<String,Object> set);
+	public StatementBuilder withSet(Map<String,Object> set);
 
 	/**
 	 * Creates the query

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.criteria.statement.StatementBuilderFactory;
 import alpha.query.free.gateway.PersistenceGateway;
 
 
@@ -18,23 +18,23 @@ import alpha.query.free.gateway.PersistenceGateway;
  */
 public class CriteriaModifyQuery<T> {
 	
-	/** the QueryBuilderFactory */
-	private final QueryBuilderFactory builderFactory;
+	/** the StatementBuilderFactory */
+	private final StatementBuilderFactory builderFactory;
 	
 	/** the internalQuery */
 	private final PersistenceGateway persistenceGateway;
 	
 	/** the condition */
-	private CriteriaModifyingConditions<T> condition = null;
+	private ModifyQueryBuilder<T> builder = null;
 	
 	/**
 	 * @param entityClass the entity class
 	 */
-	protected CriteriaModifyQuery(Class<T> entityClass,PersistenceGateway persistenceGateway,EntityManager em, QueryBuilderFactory builderFactory){
-		this.condition = new CriteriaModifyingConditions<T>(entityClass);
+	protected CriteriaModifyQuery(Class<T> entityClass,PersistenceGateway persistenceGateway,EntityManager em, StatementBuilderFactory builderFactory){
+		this.builder = new ModifyQueryBuilder<T>(entityClass);
 		this.builderFactory = builderFactory;
 		this.persistenceGateway = persistenceGateway;
-		this.condition.setEntityManager(em);
+		this.builder.setEntityManager(em);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public CriteriaModifyQuery<T> setHint(String arg0 , Object arg1){
-		condition.getHints().put(arg0, arg1);
+		builder.getHints().put(arg0, arg1);
 		return this;
 	}
 	
@@ -56,7 +56,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return the updated count
 	 */
 	public int update(){
-		return persistenceGateway.executeUpdate(condition.buildUpdate(builderFactory.createBuilder()));
+		return persistenceGateway.executeUpdate(builder.buildUpdate(builderFactory.createBuilder()));
 	}
 	
 	/**
@@ -213,7 +213,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return the updated count
 	 */
 	public int delete(){
-		return persistenceGateway.executeUpdate(condition.buildDelete(builderFactory.createBuilder()));
+		return persistenceGateway.executeUpdate(builder.buildDelete(builderFactory.createBuilder()));
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public CriteriaModifyQuery<T> addCriteria(String column,ComparingOperand operand,Object value) {
-		condition.getConditions().add(new Criteria<Object>(column,condition.getConditions().size()+1,operand,value));
+		builder.getConditions().add(new Criteria<Object>(column,builder.getConditions().size()+1,operand,value));
 		return this;
 	}
 	
@@ -235,7 +235,7 @@ public class CriteriaModifyQuery<T> {
 	 * @return self
 	 */
 	public <V> CriteriaModifyQuery<T> set(String column , Object value){
-		condition.getCurrentValues().put(column, value);
+		builder.getCurrentValues().put(column, value);
 		return this;
 	}
 }
