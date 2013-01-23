@@ -9,8 +9,8 @@ import alpha.framework.advice.ProxyFactory;
 import alpha.jdbc.strategy.QueryLoader;
 import alpha.jdbc.strategy.impl.QueryLoaderProxyImpl;
 import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.builder.JPQLQueryBuilderFactory;
-import alpha.query.criteria.builder.QueryBuilderFactory;
+import alpha.query.criteria.statement.JPQLBuilderFactory;
+import alpha.query.criteria.statement.StatementBuilderFactory;
 import alpha.query.elink.free.gateway.EclipseLinkJpqlGateway;
 import alpha.query.elink.free.gateway.EclipseLinkNativeGateway;
 import alpha.query.free.QueryFactory;
@@ -42,7 +42,7 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	public CriteriaQueryFactory createCriteriaQueryFactory() {
 		QueryLoader loader = createQueryLoader();
 		PersistenceGateway gateway = createJpqlGateway(loader);
-		QueryBuilderFactory builderFactory = new JPQLQueryBuilderFactory();
+		StatementBuilderFactory builderFactory = new JPQLBuilderFactory();
 		return createCriteriaQueryFactory(builderFactory,gateway);
 	}
 	
@@ -51,10 +51,10 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param ormQuery the ormQuery
 	 * @return CriteriaQueryFactory
 	 */
-	protected CriteriaQueryFactory createCriteriaQueryFactory(QueryBuilderFactory builderFactory,PersistenceGateway gateway){
+	protected CriteriaQueryFactory createCriteriaQueryFactory(StatementBuilderFactory builderFactory,PersistenceGateway gateway){
 		CriteriaQueryFactory factory = new CriteriaQueryFactory();
 		factory.setPersistenceGateway(gateway);
-		factory.setQueryBuilderFactory(builderFactory);
+		factory.setBuilderFactory(builderFactory);
 		return factory;
 	}
 	
