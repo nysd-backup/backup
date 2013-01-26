@@ -5,11 +5,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import alpha.httpclient.config.ConnectionConfig;
-import alpha.httpclient.config.KeepAliveScope;
-import alpha.httpclient.config.ProxyConfig;
-import alpha.httpclient.config.SchemeConfig;
-import alpha.httpclient.config.Schemes;
+import org.coder.alpha.httpclient.config.ConnectionConfig;
+import org.coder.alpha.httpclient.config.KeepAliveScope;
+import org.coder.alpha.httpclient.config.ProxyConfig;
+import org.coder.alpha.httpclient.config.SchemeConfig;
+import org.coder.alpha.httpclient.config.Schemes;
+
 
 /**
  * Copyright 2011 the original author

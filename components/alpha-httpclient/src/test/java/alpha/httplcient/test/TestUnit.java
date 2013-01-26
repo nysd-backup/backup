@@ -8,16 +8,16 @@ import org.apache.http.HttpResponse;
 import org.apache.http.conn.params.ConnRouteParams;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpConnectionParams;
+import org.coder.alpha.httpclient.config.KeepAliveScope;
+import org.coder.alpha.httpclient.config.RequestProperty;
+import org.coder.alpha.httpclient.context.HttpClientContext;
+import org.coder.alpha.httpclient.core.HttpClientFactory;
+import org.coder.alpha.httpclient.core.impl.HttpClientFactoryImpl;
+import org.coder.alpha.httpclient.handler.HttpAsyncCallback;
+import org.coder.alpha.httpclient.handler.HttpCallback;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import alpha.httpclient.config.KeepAliveScope;
-import alpha.httpclient.config.RequestProperty;
-import alpha.httpclient.context.HttpClientContext;
-import alpha.httpclient.core.HttpClientFactory;
-import alpha.httpclient.core.impl.HttpClientFactoryImpl;
-import alpha.httpclient.handler.HttpAsyncCallback;
-import alpha.httpclient.handler.HttpCallback;
 
 /**
  * Copyright 2011 the original author
