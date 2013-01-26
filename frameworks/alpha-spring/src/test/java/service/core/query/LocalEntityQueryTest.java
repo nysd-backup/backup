@@ -25,6 +25,11 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.query.criteria.CriteriaModifyQuery;
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
 import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,11 +45,6 @@ import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
 import service.test.entity.Testcomp;
 import service.test.entity.TestcompPK;
-import alpha.framework.registry.ServiceLocator;
-import alpha.framework.transaction.TransactionContext;
-import alpha.query.criteria.CriteriaModifyQuery;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
 
 
 /**

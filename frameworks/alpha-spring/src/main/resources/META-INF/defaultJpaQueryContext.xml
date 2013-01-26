@@ -16,17 +16,17 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="queryLoader" class="alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>
+  	<bean id="queryLoader" class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>
   	
   	<!-- 内部Namedクエリ -->
-	<bean id="jpqlGateway" class="alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" >
+	<bean id="jpqlGateway" class="org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" >
 		<property name="queryLoader" ref="queryLoader"/>			
 	</bean>	
 
 	<!-- クエリファクトリ開発者API -->
-	<bean id="queryFactory" class="alpha.query.free.QueryFactory" scope="prototype" >
+	<bean id="queryFactory" class="org.coder.alpha.query.free.QueryFactory" scope="prototype" >
 		<property name="nativeGateway">
-			<bean class="alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" >		
+			<bean class="org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" >		
 				<property name="queryLoader" ref="queryLoader"/>			
 			</bean>
 		</property>		
@@ -34,9 +34,9 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
-	<bean id="ormQueryFactory" class="alpha.query.criteria.CriteriaQueryFactory" scope="prototype">	
-		<property name="queryBuilderFactory">
-			<bean class="alpha.query.criteria.builder.JPQLQueryBuilderFactory" scope="singleton" />
+	<bean id="ormQueryFactory" class="org.coder.alpha.query.criteria.CriteriaQueryFactory" scope="prototype">	
+		<property name="builderFactory">
+			<bean class="org.coder.alpha.query.criteria.statement.JPQLBuilderFactory" scope="singleton" />
 		</property>
 		<property name="persistenceGateway" ref="jpqlGateway"/>
 	</bean>

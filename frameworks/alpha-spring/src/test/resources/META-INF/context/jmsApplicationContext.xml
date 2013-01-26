@@ -71,7 +71,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     </bean>
        
     <!-- Messaging -->
-    <bean id="messageClientFactory" class="alpha.framework.domain.messaging.client.impl.MessageClientFactoryImpl">
+    <bean id="messageClientFactory" class="org.coder.alpha.framework.domain.messaging.client.impl.MessageClientFactoryImpl">
     	<!-- Queue -->
     	<property name="queueProducer">
 	    	<bean id="queueProducer" class="service.client.messaging.MessageProducerImpl" scope="prototype">				
@@ -92,7 +92,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     	</property>
     	<!-- Topic -->
     	<property name="topicProducer">
-    		<bean id="topicProducer" class="alpha.framework.domain.messaging.client.MessageProducerImpl" scope="prototype">				
+    		<bean id="topicProducer" class="org.coder.alpha.framework.domain.messaging.client.MessageProducerImpl" scope="prototype">				
 				<property name="jmsTemplate">					  
 				    <bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
 				        <property name="connectionFactory" ref="jmsTopicConnectionFactory"/>

@@ -9,11 +9,11 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 import service.test.entity.TestEntity;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
 
 /**
  * function.

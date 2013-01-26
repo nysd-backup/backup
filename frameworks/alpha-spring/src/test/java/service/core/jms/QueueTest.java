@@ -6,14 +6,14 @@ package service.core.jms;
 
 import javax.persistence.EntityManager;
 
+import org.coder.alpha.framework.messaging.client.MessageClientFactory;
+import org.coder.alpha.framework.messaging.client.MessagingProperty;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
-import alpha.framework.messaging.client.MessageClientFactory;
-import alpha.framework.messaging.client.MessagingProperty;
 
 import service.test.MockService;
 import service.test.ServiceUnit;

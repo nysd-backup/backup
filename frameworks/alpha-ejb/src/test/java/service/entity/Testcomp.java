@@ -13,9 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import alpha.query.criteria.FastEntity;
-import alpha.query.criteria.Metadata;
-import alpha.query.criteria.Pair;
+import org.coder.alpha.query.criteria.FastEntity;
+import org.coder.alpha.query.criteria.Metadata;
+import org.coder.alpha.query.criteria.Pair;
+
 
 
 
@@ -132,7 +133,7 @@ public class Testcomp implements FastEntity{
 	}
 	
 	/**
-	 * @see alpha.framework.core.base.AbstractBean#clone()
+	 * @see org.coder.alpha.framework.core.base.AbstractBean#clone()
 	 */
 	@Override
 	public Testcomp clone() {

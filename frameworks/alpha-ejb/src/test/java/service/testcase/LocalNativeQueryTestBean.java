@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.free.HitData;
+import org.coder.alpha.query.free.QueryCallback;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
@@ -19,9 +22,6 @@ import service.query.SampleNativeQuery;
 import service.query.SampleNativeQueryConst;
 import service.query.SampleNativeResult;
 import service.query.SampleNativeUpdate;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.free.HitData;
-import alpha.query.free.QueryCallback;
 
 
 

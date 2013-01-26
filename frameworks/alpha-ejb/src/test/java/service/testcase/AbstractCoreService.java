@@ -9,15 +9,16 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import alpha.framework.registry.ServiceLocator;
-import alpha.framework.registry.UnifiedComponentFinder;
-import alpha.framework.transaction.TransactionContext;
-import alpha.query.criteria.CriteriaModifyQuery;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.free.AbstractNativeModifyQuery;
-import alpha.query.free.AbstractNativeReadQuery;
-import alpha.query.free.QueryFactory;
+import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.registry.UnifiedComponentFinder;
+import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.query.criteria.CriteriaModifyQuery;
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.free.AbstractNativeModifyQuery;
+import org.coder.alpha.query.free.AbstractNativeReadQuery;
+import org.coder.alpha.query.free.QueryFactory;
+
 
 
 

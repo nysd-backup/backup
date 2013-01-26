@@ -27,36 +27,36 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	-->
 
 	<!-- 内部クエリ -->
-	<bean id="nativeGateway" class="alpha.query.free.gateway.NativeGateway" scope="prototype" >
+	<bean id="nativeGateway" class="org.coder.alpha.query.free.gateway.NativeGateway" scope="prototype" >
 		<property name="queryService">
-			<bean id="queryService" class="alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
+			<bean id="queryService" class="org.coder.alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
 				<property name="queryBuilder">
-					<bean class="alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>	
+					<bean class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>	
 				</property>
 				<property name="provider">
-					<bean class="alpha.jdbc.strategy.impl.StatementProviderImpl" scope="singleton"/>		
+					<bean class="org.coder.alpha.jdbc.strategy.impl.StatementProviderImpl" scope="singleton"/>		
 				</property>
 				<property name="exceptionHandler">
-					<bean class="alpha.query.free.SQLExceptionHandlerImpl" scope="singleton"/>
+					<bean class="org.coder.alpha.query.free.SQLExceptionHandlerImpl" scope="singleton"/>
 				</property>
 			</bean>
 		</property>		
 	</bean>
 	
 	<!--　バッチクエリファクトリ -->
-	<bean id="batchUpdateFactory" class="alpha.query.free.BatchModifyQueryFactoryImpl" scope="prototype">
+	<bean id="batchUpdateFactory" class="org.coder.alpha.query.free.BatchModifyQueryFactoryImpl" scope="prototype">
 		<property name="persistenceGateway" ref="nativeGateway"/>	
 	</bean>
 	
 	<!-- クエリファクトリ -->
-	<bean id="queryFactory" class="alpha.query.free.QueryFactory" scope="prototype">
+	<bean id="queryFactory" class="org.coder.alpha.query.free.QueryFactory" scope="prototype">
 		<property name="nativeGateway" ref="nativeGateway"/>			
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
-	<bean id="ormQueryFactory" class="alpha.query.criteria.CriteriaQueryFactory" scope="prototype">	
-		<property name="queryBuilderFactory">
-			<bean class="alpha.query.criteria.builder.SQLQueryBuilderFactory" scope="singleton" />
+	<bean id="ormQueryFactory" class="org.coder.alpha.query.criteria.CriteriaQueryFactory" scope="prototype">	
+		<property name="builderFactory">
+			<bean class="org.coder.alpha.query.criteria.statement.SQLBuilderFactory" scope="singleton" />
 		</property>
 		<property name="persistenceGateway" ref="nativeGateway"/>
 	</bean>

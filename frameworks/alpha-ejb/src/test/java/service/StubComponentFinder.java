@@ -8,10 +8,11 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import alpha.framework.registry.DefaultQueryFactoryFinder;
-import alpha.framework.registry.ObjectMessageClientFactoryFiinder;
-import alpha.framework.registry.UnifiedComponentFinder;
-import alpha.framework.transaction.TxVerifier;
+import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
+import org.coder.alpha.framework.registry.ObjectMessageClientFactoryFiinder;
+import org.coder.alpha.framework.registry.UnifiedComponentFinder;
+import org.coder.alpha.framework.transaction.TxVerifier;
+
 
 
 
@@ -37,7 +38,7 @@ public class StubComponentFinder extends UnifiedComponentFinder{
 	}
 
 	/**
-	 * @see alpha.framework.registry.UnifiedComponentFinder#getBean(java.lang.String)
+	 * @see org.coder.alpha.framework.registry.UnifiedComponentFinder#getBean(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

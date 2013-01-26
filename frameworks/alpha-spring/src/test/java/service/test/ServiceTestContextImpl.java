@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import alpha.framework.transaction.ExternalTransactionContext;
+import org.coder.alpha.framework.transaction.ExternalTransactionContext;
 
 /**
  * function.
@@ -33,7 +33,7 @@ public class ServiceTestContextImpl extends ExternalTransactionContext{
 	}
 	
 	/**
-	 * @see alpha.framework.context.AbstractServiceContext#release()
+	 * @see org.coder.alpha.framework.context.AbstractServiceContext#release()
 	 */
 	public void release(){
 		super.release();		

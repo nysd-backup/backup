@@ -6,8 +6,9 @@ package service.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import alpha.framework.transaction.TransactionContext;
-import alpha.framework.transaction.autonomous.AutonomousTxContext;
+import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.framework.transaction.autonomous.AutonomousTxContext;
+
 
 import service.entity.TestEntity;
 import service.testcase.BaseCase;

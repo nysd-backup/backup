@@ -16,6 +16,11 @@ import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.query.criteria.CriteriaModifyQuery;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.exception.UniqueConstraintException;
 import org.eclipse.persistence.config.QueryHints;
 
 import service.entity.DateEntity;
@@ -23,11 +28,6 @@ import service.entity.IDateEntity;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
 import service.services.RequiresNewService;
-import alpha.framework.registry.ServiceLocator;
-import alpha.framework.transaction.TransactionContext;
-import alpha.query.criteria.CriteriaModifyQuery;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.exception.UniqueConstraintException;
 
 
 /**

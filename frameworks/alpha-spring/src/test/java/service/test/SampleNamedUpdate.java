@@ -5,7 +5,8 @@ package service.test;
 
 import java.util.Date;
 
-import alpha.query.free.AbstractNamedModifyQuery;
+import org.coder.alpha.query.free.AbstractNamedModifyQuery;
+
 
 
 

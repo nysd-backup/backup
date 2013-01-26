@@ -7,6 +7,7 @@ package service.test;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.coder.alpha.framework.transaction.TransactionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -15,7 +16,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import alpha.framework.transaction.TransactionContext;
 
 import service.test.entity.TestEntity;
 

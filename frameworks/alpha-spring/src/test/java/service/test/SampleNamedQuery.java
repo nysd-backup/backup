@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import alpha.query.free.AbstractNamedReadQuery;
+import org.coder.alpha.query.free.AbstractNamedReadQuery;
 
 /**
  * function.

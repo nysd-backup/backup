@@ -6,6 +6,7 @@ package service.core.query;
 
 import javax.persistence.EntityManager;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import service.core.BusinessException;
 import service.test.RequiresNewService;
 import service.test.ServiceUnit;
-import alpha.framework.registry.ServiceLocator;
 
 
 /**

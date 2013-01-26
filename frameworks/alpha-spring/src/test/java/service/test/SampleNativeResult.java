@@ -5,7 +5,8 @@ package service.test;
 
 import java.util.HashMap;
 
-import alpha.jdbc.domain.AccessorDeclared;
+import org.coder.alpha.jdbc.domain.AccessorDeclared;
+
 
 
 

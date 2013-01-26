@@ -5,9 +5,10 @@ package service.testcase;
 
 import javax.ejb.Stateless;
 
+import org.coder.alpha.framework.messaging.client.MessageClientFactoryImpl;
+import org.coder.alpha.framework.messaging.client.ObjectMessageProducer;
+
 import service.services.MockService;
-import alpha.framework.messaging.client.MessageClientFactoryImpl;
-import alpha.framework.messaging.client.ObjectMessageProducer;
 
 /**
  * function.

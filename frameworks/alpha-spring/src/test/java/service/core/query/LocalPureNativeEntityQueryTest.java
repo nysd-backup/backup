@@ -20,6 +20,14 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 import javax.sql.DataSource;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.query.criteria.ComparingOperand;
+import org.coder.alpha.query.criteria.CriteriaModifyQuery;
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.EntityManagerImpl;
+import org.coder.alpha.query.criteria.FixString;
+import org.coder.alpha.query.exception.UniqueConstraintException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
@@ -36,14 +44,6 @@ import service.test.entity.IDateEntity;
 import service.test.entity.IFastEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import alpha.framework.registry.ServiceLocator;
-import alpha.query.criteria.ComparingOperand;
-import alpha.query.criteria.CriteriaModifyQuery;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.criteria.EntityManagerImpl;
-import alpha.query.criteria.FixString;
-import alpha.query.exception.UniqueConstraintException;
 
 
 /**

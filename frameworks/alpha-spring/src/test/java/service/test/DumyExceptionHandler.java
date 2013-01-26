@@ -7,12 +7,12 @@ import java.util.Map;
 
 import javax.persistence.PessimisticLockException;
 
+import org.coder.alpha.framework.transaction.TransactionContext;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.ExceptionHandler;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 import org.eclipse.persistence.internal.jpa.QueryHintsHandler;
 
-import alpha.framework.transaction.TransactionContext;
 
 
 

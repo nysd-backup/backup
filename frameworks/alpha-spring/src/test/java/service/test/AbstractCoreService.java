@@ -6,16 +6,16 @@ package service.test;
 
 import javax.persistence.EntityManager;
 
+import org.coder.alpha.framework.messaging.client.MessageClientFactory;
+import org.coder.alpha.framework.messaging.client.MessagingProperty;
+import org.coder.alpha.query.criteria.CriteriaModifyQuery;
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.free.AbstractNativeModifyQuery;
+import org.coder.alpha.query.free.AbstractNativeReadQuery;
+import org.coder.alpha.query.free.QueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import alpha.framework.messaging.client.MessageClientFactory;
-import alpha.framework.messaging.client.MessagingProperty;
-import alpha.query.criteria.CriteriaModifyQuery;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.free.AbstractNativeModifyQuery;
-import alpha.query.free.AbstractNativeReadQuery;
-import alpha.query.free.QueryFactory;
 
 
 

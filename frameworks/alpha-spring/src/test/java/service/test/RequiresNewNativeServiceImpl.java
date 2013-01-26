@@ -11,6 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.query.criteria.EntityManagerImpl;
 import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -22,9 +25,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import service.core.BusinessException;
 import service.test.entity.TestEntity;
-import alpha.framework.registry.ServiceLocator;
-import alpha.framework.transaction.TransactionContext;
-import alpha.query.criteria.EntityManagerImpl;
 
 
 /**

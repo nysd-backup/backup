@@ -6,9 +6,9 @@ package service.testcase;
 import java.sql.SQLException;
 
 
+import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Test;
 
-import alpha.framework.registry.ServiceLocator;
 
 import service.ServiceUnit;
 import service.entity.ITestEntity;

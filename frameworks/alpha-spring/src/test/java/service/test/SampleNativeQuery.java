@@ -5,7 +5,8 @@ package service.test;
 
 import java.util.List;
 
-import alpha.query.free.AbstractNativeReadQuery;
+import org.coder.alpha.query.free.AbstractNativeReadQuery;
+
 
 
 /**

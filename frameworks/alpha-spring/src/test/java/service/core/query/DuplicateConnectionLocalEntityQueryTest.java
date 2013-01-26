@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import javax.persistence.EntityManager;
 import javax.persistence.TransactionRequiredException;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-import alpha.framework.registry.ServiceLocator;
 
 import service.test.DupplicateService;
 import service.test.ServiceUnit;

@@ -12,13 +12,13 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.framework.transaction.autonomous.AutonomousTxContext;
 import org.eclipse.persistence.config.QueryHints;
 
 import service.entity.TestEntity;
 import service.testcase.BaseCase;
-import alpha.framework.registry.ServiceLocator;
-import alpha.framework.transaction.TransactionContext;
-import alpha.framework.transaction.autonomous.AutonomousTxContext;
 
 
 /**

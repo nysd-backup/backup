@@ -6,12 +6,12 @@ package service.test;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.coder.alpha.framework.transaction.TransactionContext;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import service.test.entity.TestEntity;
-import alpha.framework.transaction.TransactionContext;
 
 
 /**

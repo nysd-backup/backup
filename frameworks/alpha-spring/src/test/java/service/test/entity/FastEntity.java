@@ -12,7 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import alpha.query.criteria.Pair;
+import org.coder.alpha.query.criteria.Pair;
+
 
 
 
@@ -26,7 +27,7 @@ import alpha.query.criteria.Pair;
  */
 @Entity
 @Table(name="fast")
-public class FastEntity implements alpha.query.criteria.FastEntity{
+public class FastEntity implements org.coder.alpha.query.criteria.FastEntity{
 
 	@Id
 	@Column

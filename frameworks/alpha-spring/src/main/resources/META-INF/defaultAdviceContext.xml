@@ -22,8 +22,8 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>
-	<bean id="internalPerfInterceptor" class="alpha.framework.advice.InternalPerfInterceptor"/>
-	<bean id="perfInterceptor" class="alpha.framework.advice.DelegatingInterceptor">
+	<bean id="internalPerfInterceptor" class="org.coder.alpha.framework.advice.InternalPerfInterceptor"/>
+	<bean id="perfInterceptor" class="org.coder.alpha.framework.advice.DelegatingInterceptor">
 		<property name="internal" ref="internalPerfInterceptor"/>
 	</bean>
 	

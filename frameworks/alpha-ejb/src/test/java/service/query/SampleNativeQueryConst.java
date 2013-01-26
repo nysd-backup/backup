@@ -3,7 +3,7 @@
  */
 package service.query;
 
-import alpha.query.free.AbstractNativeReadQuery;
+import org.coder.alpha.query.free.AbstractNativeReadQuery;
 
 /**
  * function.

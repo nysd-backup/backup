@@ -3,7 +3,7 @@
  */
 package service.test.entity;
 
-import alpha.query.criteria.Metadata;
+import org.coder.alpha.query.criteria.Metadata;
 
 /**
  * function.

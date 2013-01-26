@@ -14,6 +14,9 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
+import org.coder.alpha.framework.registry.ServiceLocatorInitializer;
+import org.coder.alpha.framework.registry.SpringComponentFinder;
+import org.coder.alpha.jdbc.domain.ConstantCache;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.AbstractDataSet;
@@ -36,9 +39,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import alpha.framework.registry.ServiceLocatorInitializer;
-import alpha.framework.registry.SpringComponentFinder;
-import alpha.jdbc.domain.ConstantCache;
 
 
 /**

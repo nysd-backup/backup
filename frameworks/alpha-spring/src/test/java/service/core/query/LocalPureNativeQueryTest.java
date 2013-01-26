@@ -11,6 +11,15 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
+import org.coder.alpha.query.criteria.CriteriaModifyQuery;
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.EntityManagerImpl;
+import org.coder.alpha.query.free.BatchModifyQuery;
+import org.coder.alpha.query.free.BatchModifyQueryFactory;
+import org.coder.alpha.query.free.HitData;
+import org.coder.alpha.query.free.QueryCallback;
+import org.coder.alpha.query.free.QueryFactory;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
@@ -27,15 +36,6 @@ import service.test.SampleNativeUpdate;
 import service.test.ServiceUnit;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import alpha.query.criteria.CriteriaModifyQuery;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.criteria.EntityManagerImpl;
-import alpha.query.free.BatchModifyQuery;
-import alpha.query.free.BatchModifyQueryFactory;
-import alpha.query.free.HitData;
-import alpha.query.free.QueryCallback;
-import alpha.query.free.QueryFactory;
 
 
 /**

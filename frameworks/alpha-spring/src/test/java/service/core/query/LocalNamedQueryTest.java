@@ -10,6 +10,9 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.coder.alpha.query.criteria.CriteriaQueryFactory;
+import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.free.QueryFactory;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
@@ -25,9 +28,6 @@ import service.test.entity.DateEntity;
 import service.test.entity.IDateEntity;
 import service.test.entity.ITestEntity;
 import service.test.entity.TestEntity;
-import alpha.query.criteria.CriteriaQueryFactory;
-import alpha.query.criteria.CriteriaReadQuery;
-import alpha.query.free.QueryFactory;
 
 
 /**

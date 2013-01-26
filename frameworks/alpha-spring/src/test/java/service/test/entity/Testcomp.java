@@ -13,8 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import alpha.query.criteria.Metadata;
-import alpha.query.criteria.Pair;
+import org.coder.alpha.query.criteria.Metadata;
+import org.coder.alpha.query.criteria.Pair;
+
 
 
 
@@ -28,7 +29,7 @@ import alpha.query.criteria.Pair;
 @Generated("kosmos.tool.entity-generator")
 @Entity
 @Table(name="TESTCOMP")
-public class Testcomp implements alpha.query.criteria.FastEntity , Cloneable{
+public class Testcomp implements org.coder.alpha.query.criteria.FastEntity , Cloneable{
 
 	/** PK1 */
 	public static final Metadata<Testcomp, java.lang.String> PK1 = new Metadata<Testcomp, java.lang.String>("pk1");
@@ -131,7 +132,7 @@ public class Testcomp implements alpha.query.criteria.FastEntity , Cloneable{
 	}
 	
 	/**
-	 * @see alpha.framework.core.base.AbstractBean#clone()
+	 * @see org.coder.alpha.framework.core.base.AbstractBean#clone()
 	 */
 	@Override
 	public Testcomp clone() {

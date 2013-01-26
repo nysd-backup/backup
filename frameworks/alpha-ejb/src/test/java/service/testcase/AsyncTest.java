@@ -3,11 +3,11 @@
  */
 package service.testcase;
 
+import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import service.ServiceUnit;
-import alpha.framework.registry.ServiceLocator;
 
 /**
  * function.

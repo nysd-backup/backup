@@ -10,15 +10,15 @@ import java.util.Map;
 
 import javax.ejb.embeddable.EJBContainer;
 
+import org.coder.alpha.framework.registry.ComponentFinder;
+import org.coder.alpha.framework.registry.ServiceLocatorInitializer;
+import org.coder.alpha.jdbc.domain.ConstantCache;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
-import alpha.framework.registry.ComponentFinder;
-import alpha.framework.registry.ServiceLocatorInitializer;
-import alpha.jdbc.domain.ConstantCache;
 
 
 

@@ -5,7 +5,8 @@ package service.test.entity;
 
 import java.util.Date;
 
-import alpha.query.criteria.Metadata;
+import org.coder.alpha.query.criteria.Metadata;
+
 
 
 

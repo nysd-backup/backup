@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import alpha.query.free.AbstractNativeModifyQuery;
+import org.coder.alpha.query.free.AbstractNativeModifyQuery;
 
 /**
  * function.
