@@ -11,7 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
-import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.query.ListReadQuery;
+import org.coder.alpha.query.criteria.query.SingleReadQuery;
 import org.coder.alpha.query.free.QueryFactory;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -322,9 +323,9 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		CriteriaReadQuery<TestEntity> eq = ormQueryFactory.createReadQuery(TestEntity.class,per);
-		
-		eq.eq(TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
+		SingleReadQuery<TestEntity> eq = ormQueryFactory.createSingleReadQuery(TestEntity.class,per);
+		eq.eq(TEST, "1");
+		eq.call().setAttr2(CachableConst.TARGET_INT);
 		
 		SampleNamedQueryConst c = queryFactory.createReadQuery(SampleNamedQueryConst.class,per);
 		c.setEntityManager(per);
@@ -352,10 +353,11 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		assertEquals(1,count);
 
 		//e2が永続化コンチE��ストに入ったままなので、JPQLアチE�EチE�Eトを実行する�Eで更新
-		CriteriaReadQuery<DateEntity> e = ormQueryFactory.createReadQuery(DateEntity.class,per);
+		SingleReadQuery<DateEntity> e = ormQueryFactory.createSingleReadQuery(DateEntity.class,per);
 		
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
-		DateEntity res = e.eq(IDateEntity.TEST, "1").getSingleResult();
+		e.eq(IDateEntity.TEST, "1");
+		DateEntity res = e.call();
 		assertEquals(900,res.getAttr2());
 		
 	}
@@ -378,10 +380,10 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		CriteriaReadQuery<DateEntity> e = ormQueryFactory.createReadQuery(DateEntity.class,per);
-		
+		ListReadQuery<DateEntity> e = ormQueryFactory.createListReadQuery(DateEntity.class,per);		
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
-		DateEntity res = e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
+		e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1);
+		DateEntity res = e.call().get(0);
 		assertEquals(900,res.getAttr2());
 		
 	}
@@ -396,9 +398,9 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		e2.setAttr(CachableConst.TARGET_TEST_1_OK).setTest("2").setDateCol(new Date());
 		per.persist(e2);
 		
-		CriteriaReadQuery<DateEntity> eq = ormQueryFactory.createReadQuery(DateEntity.class,per);
-		
-		eq.eq(IDateEntity.TEST, "2").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
+		SingleReadQuery<DateEntity> eq = ormQueryFactory.createSingleReadQuery(DateEntity.class,per);		
+		eq.eq(IDateEntity.TEST, "2");
+		eq.call().setAttr2(CachableConst.TARGET_INT);				
 		
 		SampleNamedUpdate update = queryFactory.createModifyQuery(SampleNamedUpdate.class,per);
 		update.setArc(CachableConst.TARGET_INT);		
@@ -407,13 +409,13 @@ public class LocalNamedQueryTest extends ServiceUnit implements ITestEntity{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		CriteriaReadQuery<DateEntity> e = ormQueryFactory.createReadQuery(DateEntity.class,per);
+		ListReadQuery<DateEntity> e = ormQueryFactory.createListReadQuery(DateEntity.class,per);
 		
 		//NamedUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
-		
-		DateEntity res = e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
+		e.eq(IDateEntity.ATTR, CachableConst.TARGET_TEST_1);
+		DateEntity res = e.call().get(0);
 		assertEquals(900,res.getAttr2());
 	}
 

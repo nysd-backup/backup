@@ -18,8 +18,9 @@ import javax.persistence.PessimisticLockException;
 
 import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.query.criteria.CriteriaModifyQuery;
-import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.query.ListReadQuery;
+import org.coder.alpha.query.criteria.query.SingleReadQuery;
+import org.coder.alpha.query.criteria.query.UpdateQuery;
 import org.coder.alpha.query.exception.UniqueConstraintException;
 import org.eclipse.persistence.config.QueryHints;
 
@@ -41,11 +42,12 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	
 	
 	public void isNullisNotNull(){
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);
-		query.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR).getSingleResult();
+		SingleReadQuery<TestEntity> query = createSingleReader(TestEntity.class);
+		query.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR).call();
 		
-		CriteriaModifyQuery<TestEntity> modifier = createOrmUpdate(TestEntity.class);
-		modifier.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR).set(ITestEntity.ATTR2, 100).update();
+		UpdateQuery<TestEntity> modifier = createUpdater(TestEntity.class);
+		modifier.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR);
+		modifier.set(ITestEntity.ATTR2, 100).call();
 	}
 	
 	
@@ -73,7 +75,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void allCondition(){
 		setUpData("TEST.xls");
 	
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);	
+		ListReadQuery<TestEntity> query = createListReader(TestEntity.class);	
 		query.setHint(QueryHints.HINT,"/*+ HINT */");
 		
 		List<TestEntity> result = getOneRecord(query);
@@ -84,7 +86,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		em.detach(first);
 		first.setAttr("100");
 		
-		CriteriaReadQuery<TestEntity> forres = createOrmSelect(TestEntity.class);
+		ListReadQuery<TestEntity> forres = createListReader(TestEntity.class);
 		List<TestEntity> updated = getOneRecord(forres);	
 		assertEquals("2",updated.get(0).getAttr());
 		
@@ -95,7 +97,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 		//更新前取征E
 
-		CriteriaReadQuery<TestEntity> query =createOrmSelect(TestEntity.class);
+		ListReadQuery<TestEntity> query =createListReader(TestEntity.class);
 		List<TestEntity> result = getOneRecord(query);	
 		assertEquals(1,result.size());
 		
@@ -104,8 +106,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		first.setAttr("100");
 	
 		//更新結果
-		CriteriaReadQuery<TestEntity> forres =createOrmSelect(TestEntity.class);
-		TestEntity entity = forres.eq(ITestEntity.TEST, "2").getSingleResult();
+		SingleReadQuery<TestEntity> forres =createSingleReader(TestEntity.class);
+		TestEntity entity = forres.eq(ITestEntity.TEST, "2").call();
 		assertEquals("100",entity.getAttr());
 		
 		context.setRollbackOnly();
@@ -119,14 +121,15 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 
 		//更新
-		CriteriaModifyQuery<TestEntity> update = createOrmUpdate(TestEntity.class);
-		update.eq(ITestEntity.TEST, "2").set(ITestEntity.ATTR, "AAA").update();
+		UpdateQuery<TestEntity> update = createUpdater(TestEntity.class);
+		update.eq(ITestEntity.TEST, "2");
+		update.set(ITestEntity.ATTR, "AAA").call();
 		
 		//検索
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);		
+		SingleReadQuery<TestEntity> query = createSingleReader(TestEntity.class);		
 		
 		//更新結果(NamedUpdate更新前に検索してぁE��ば永続化コンチE��スト�E更新前キャチE��ュが使用されるためrefleshする忁E��あり。今回はNamedUpdate実行してぁE��ぁE�Eでreflesh不要E��E
-		TestEntity entity = query.eq(ITestEntity.TEST, "2").getSingleResult();
+		TestEntity entity = query.eq(ITestEntity.TEST, "2").call();
 		assertEquals("AAA",entity.getAttr());
 		
 		context.setRollbackOnly();
@@ -137,11 +140,12 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	 * 1件取得　降頁E��ーチE
 	 */
 
-	public void getSingleResultWithDesc(){
+	public void callWithDesc(){
 		setUpData("TEST.xls");
 
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).desc(ITestEntity.TEST);
-		TestEntity result = query.getSingleResult();
+		SingleReadQuery<TestEntity> query = createSingleReader(TestEntity.class);
+		query.desc(ITestEntity.TEST);
+		TestEntity result = query.call();
 		assertEquals("2",result.getAttr());
 		
 		context.setRollbackOnly();
@@ -151,10 +155,11 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	 * 1件取得　昁E��E��ーチE
 	 */
 
-	public void getSingleResultWithAsc(){
+	public void callWithAsc(){
 		setUpData("TEST.xls");
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).asc(ITestEntity.TEST);
-		TestEntity result = query.getSingleResult();
+		SingleReadQuery<TestEntity> query = createSingleReader(TestEntity.class);
+		query.asc(ITestEntity.TEST);
+		TestEntity result = query.call();
 		assertEquals("3",result.getAttr());
 		
 		context.setRollbackOnly();
@@ -165,13 +170,14 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	 * 2件目取征E
 	 */
 
-	public void getSingleResultSetFirstWithDesc(){
+	public void callSetFirstWithDesc(){
 		setUpData("TEST.xls");
 		
 
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).desc(ITestEntity.TEST);
+		SingleReadQuery<TestEntity> query = createSingleReader(TestEntity.class);
+		query.desc(ITestEntity.TEST);
 		query.setFirstResult(1);
-		TestEntity result = query.getSingleResult();
+		TestEntity result = query.call();
 		assertEquals("3",result.getAttr());
 		
 		context.setRollbackOnly();
@@ -185,9 +191,9 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		setUpData("TEST.xls");
 		
 
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);
+		ListReadQuery<TestEntity> query = createListReader(TestEntity.class);
 		query.setFirstResult(1);
-		List<TestEntity> result = query.getResultList();
+		List<TestEntity> result = query.call();
 		assertEquals(1,result.size());
 		assertEquals("2",result.get(0).getAttr());
 		
@@ -214,11 +220,12 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		t.setTest("902").setAttr("902").setAttr2(900);
 		em.persist(t);
 		
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).desc(ITestEntity.TEST);
+		ListReadQuery<TestEntity> query = createListReader(TestEntity.class);
+		query.desc(ITestEntity.TEST);
 		query.contains(ITestEntity.TEST, Arrays.asList("0","1,","2","900","901","902"));
 		query.setFirstResult(1);
 		query.setMaxResults(2);
-		List<TestEntity> result = query.getResultList();
+		List<TestEntity> result = query.call();
 		assertEquals(2,result.size());
 		assertEquals("901",result.get(0).getAttr());
 		assertEquals(1,result.get(0).getVersion());	//忁E��楽観ロチE��番号は1からinsert
@@ -229,7 +236,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		em.flush();
 		
 		//楽観ロチE��番号インクリメント確誁E
-		result = query.getResultList();		
+		result = query.call();		
 		assertEquals(2,result.get(0).getVersion());
 		
 		context.setRollbackOnly();
@@ -242,8 +249,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //	public void nodataError(){
 //		try{	
 //			
-//			CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).enableNoDataError();
-//			query.eq(ITestEntity.TEST, "AGA").getSingleResult();
+//			ListReadQuery<TestEntity> query = createListReader(TestEntity.class).enableNoDataError();
+//			query.eq(ITestEntity.TEST, "AGA").call();
 //			context.setRollbackOnly();
 //			fail();
 //		}catch(UnexpectedNoDataFoundException une){
@@ -292,7 +299,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //	public void findNodataError(){
 //		try{	
 //
-//			CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);
+//			ListReadQuery<TestEntity> query = createListReader(TestEntity.class);
 //			query.enableNoDataError();
 //			query.find("AA");
 //			fail();
@@ -310,7 +317,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //	public void findAnyNodataError(){
 //		try{	
 //
-//			CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);
+//			ListReadQuery<TestEntity> query = createListReader(TestEntity.class);
 //			query.enableNoDataError();
 //			query.eq(ITestEntity.TEST, "aaa");
 //			query.findAny();
@@ -330,8 +337,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void exists(){
 		
 		setUpData("TEST.xls");
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class);		
-		assertEquals(true,query.getSingleResult() != null);
+		ListReadQuery<TestEntity> query = createListReader(TestEntity.class);		
+		assertEquals(true,query.call() != null);
 		context.setRollbackOnly();
 	}
 	
@@ -546,10 +553,11 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 				
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
+		ListReadQuery<TestEntity> query = createListReader(TestEntity.class);
+		query.setLockModeType(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		
-		query.getResultList();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
+		query.call();	//callめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
 		try{
 			service.test();			
 			fail();
@@ -581,11 +589,12 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		service.persist();
 		
 				
-		CriteriaReadQuery<TestEntity> query = createOrmSelect(TestEntity.class).setLockMode(LockModeType.PESSIMISTIC_READ);
+		ListReadQuery<TestEntity> query = createListReader(TestEntity.class);
+		query.setLockModeType(LockModeType.PESSIMISTIC_READ);
 		query.eq(ITestEntity.TEST,"1");
 		query.setHint(QueryHints.HINT, "/* TEST */");
 		
-		query.getResultList();			
+		query.call();			
 		assertEquals("OK",service.test());
 			
 	}
@@ -605,8 +614,8 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		entity.setTest("aa").setAttr("aaa").setAttr2(100).setDateCol(new Date());
 		em.persist(entity);
 		
-		CriteriaReadQuery<DateEntity> query = createOrmSelect(DateEntity.class);
-		assertEquals(false,query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").getSingleResult()!=null);
+		SingleReadQuery<DateEntity> query = createSingleReader(DateEntity.class);
+		assertEquals(false,query.eq(IDateEntity.DATE_COL, new Date()).eq(IDateEntity.TEST,"aaaa").call()!=null);
 		context.setRollbackOnly();
 	}
 
@@ -614,12 +623,12 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	/**
 	 * @return
 	 */
-	private List<TestEntity> getOneRecord(CriteriaReadQuery<TestEntity> query ){	
+	private List<TestEntity> getOneRecord(ListReadQuery<TestEntity> query ){	
 		query.between(ITestEntity.TEST, "0", "30").eq(ITestEntity.TEST,"2").gtEq(ITestEntity.TEST, "0").ltEq(ITestEntity.TEST, "30").lt(ITestEntity.TEST, "30").gt(ITestEntity.TEST, "0");		
 		query.between(ITestEntity.ATTR, "0", "20").eq(ITestEntity.ATTR,"2").gtEq(ITestEntity.ATTR, "0").ltEq(ITestEntity.ATTR, "20").lt(ITestEntity.ATTR, "20").gt(ITestEntity.ATTR, "0");
 		query.between(ITestEntity.ATTR2, 0, 100).eq(ITestEntity.ATTR2,2).gtEq(ITestEntity.ATTR2, 0).ltEq(ITestEntity.ATTR2, 100).lt(ITestEntity.ATTR2, 100).gt(ITestEntity.ATTR2, 0);		
 		query.contains(ITestEntity.TEST, Arrays.asList("2","2","2"));
-		return query.getResultList();
+		return query.call();
 	}
 	
 	

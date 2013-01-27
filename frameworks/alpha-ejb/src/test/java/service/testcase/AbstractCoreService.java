@@ -12,9 +12,10 @@ import javax.persistence.EntityManager;
 import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.registry.UnifiedComponentFinder;
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.query.criteria.CriteriaModifyQuery;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
-import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.query.ListReadQuery;
+import org.coder.alpha.query.criteria.query.SingleReadQuery;
+import org.coder.alpha.query.criteria.query.UpdateQuery;
 import org.coder.alpha.query.free.AbstractNativeModifyQuery;
 import org.coder.alpha.query.free.AbstractNativeReadQuery;
 import org.coder.alpha.query.free.QueryFactory;
@@ -131,8 +132,14 @@ public abstract class AbstractCoreService {
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V,T extends CriteriaReadQuery<V>> T createOrmSelect(Class<V> entityClass){
-		CriteriaReadQuery<V> query = ormQueryFactory.createReadQuery(entityClass,getEntityManager());		
+	protected <V,T extends ListReadQuery<V>> T createListReader(Class<V> entityClass){
+		ListReadQuery<V> query = ormQueryFactory.createListReadQuery(entityClass,getEntityManager());		
+		return (T)query;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <V,T extends SingleReadQuery<V>> T createSingleReader(Class<V> entityClass){
+		SingleReadQuery<V> query = ormQueryFactory.createSingleReadQuery(entityClass,getEntityManager());		
 		return (T)query;
 	}
 	
@@ -151,8 +158,8 @@ public abstract class AbstractCoreService {
 	 * @return クエリ
 	 */
 	@SuppressWarnings("unchecked")
-	protected <V,T extends CriteriaModifyQuery<V>> T createOrmUpdate(Class<V> entityClass){
-		CriteriaModifyQuery<V> query = ormQueryFactory.createModifyQuery(entityClass,getEntityManager());		
+	protected <V,T extends UpdateQuery<V>> T createUpdater(Class<V> entityClass){
+		UpdateQuery<V> query = ormQueryFactory.createUpdateQuery(entityClass,getEntityManager());		
 		return (T)query;
 	}
 	

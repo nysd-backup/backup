@@ -8,7 +8,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.query.ListReadQuery;
+import org.coder.alpha.query.criteria.query.SingleReadQuery;
 import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.QueryCallback;
 import org.eclipse.persistence.config.HintValues;
@@ -55,7 +56,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		SampleNativeQuery query = createSelect(SampleNativeQuery.class);		
 		query.getParameter().setSql("select * from testa order by test");
 		query.setMaxResults(30);
-		HitData data = query.getTotalResult();
+		HitData<SampleNativeResult> data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
 		List<SampleNativeResult> resultList = data.getResultList();
 		assertEquals(30,resultList.size());
@@ -324,8 +325,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		CriteriaReadQuery<TestEntity> eq = createOrmSelect(TestEntity.class);
-		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);
+		SingleReadQuery<TestEntity> eq = createSingleReader(TestEntity.class);
+		eq.eq(ITestEntity.TEST, "1").call().setAttr2(CachableConst.TARGET_INT);
 		flush();
 		
 		SampleNativeQueryConst c = createSelect(SampleNativeQueryConst.class);
@@ -359,7 +360,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setMaxResults(1);
-		HitData result = query.getTotalResult();
+		HitData<SampleNativeResult> result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertEquals(true,result.isLimited());
 		assertEquals(1,result.getResultList().size());
@@ -420,9 +421,9 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		update.setAttr2set(900);
 		int count = update.update();
 		assertEquals(1,count);
-		
-		CriteriaReadQuery<TestEntity> e = createOrmSelect(TestEntity.class);
-		TestEntity res = e.eq(ITestEntity.TEST, "1").getSingleResult();
+
+		SingleReadQuery<TestEntity> e = createSingleReader(TestEntity.class);
+		TestEntity res = e.eq(ITestEntity.TEST, "1").call();
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
 		
@@ -442,8 +443,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		CriteriaReadQuery<TestEntity> e = createOrmSelect(TestEntity.class);
-		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
+		ListReadQuery<TestEntity> e = createListReader(TestEntity.class);
+		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).call().get(0);
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
 		
@@ -456,8 +457,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		CriteriaReadQuery<TestEntity> eq = createOrmSelect(TestEntity.class);
-		eq.eq(ITestEntity.TEST, "1").getSingleResult().setAttr2(CachableConst.TARGET_INT);				
+		SingleReadQuery<TestEntity> eq = createSingleReader(TestEntity.class);
+		eq.eq(ITestEntity.TEST, "1").call().setAttr2(CachableConst.TARGET_INT);				
 		
 		SampleNativeUpdate update = createUpsert(SampleNativeUpdate.class);
 		update.setArc(CachableConst.TARGET_INT);		
@@ -465,13 +466,13 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		CriteriaReadQuery<TestEntity> e = createOrmSelect(TestEntity.class);
+		ListReadQuery<TestEntity> e = createListReader(TestEntity.class);
 		
 		//NativeUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		
-		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).getResultList().get(0);
+		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).call().get(0);
 
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	

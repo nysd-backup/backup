@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
-import org.coder.alpha.query.criteria.CriteriaReadQuery;
+import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 import service.test.entity.TestEntity;
@@ -50,14 +50,14 @@ public class DupplicateService {
 		em.flush();
 			
 		//読み込み専用
-		CriteriaReadQuery<TestEntity> query = ormQueryFactory.createReadQuery(TestEntity.class,rem);	
-		List<TestEntity> result = query.getResultList();
+		ListReadQuery<TestEntity> query = ormQueryFactory.createListReadQuery(TestEntity.class,rem);	
+		List<TestEntity> result = query.call();
 		System.out.println(result.size());
 		res[0] = result.size();
 		
 		//両用で取得
-		CriteriaReadQuery<TestEntity> wquery = ormQueryFactory.createReadQuery(TestEntity.class,em);	
-		List<TestEntity> wresult = wquery.getResultList();
+		ListReadQuery<TestEntity> wquery = ormQueryFactory.createListReadQuery(TestEntity.class,em);	
+		List<TestEntity> wresult = wquery.call();
 		System.out.println(wresult.size());
 		res[1] = wresult.size();
 		

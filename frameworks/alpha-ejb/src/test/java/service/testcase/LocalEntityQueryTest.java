@@ -69,7 +69,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getSingleResultWithDesc(){
 		
-		bean().getSingleResultWithDesc();
+		bean().callWithDesc();
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	 */
 	@Test
 	public void getSingleResultWithAsc(){
-		bean().getSingleResultWithAsc();
+		bean().callWithAsc();
 	}
 	
 
@@ -87,7 +87,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Test
 	public void getSingleResultSetFirstWithDesc(){
 		
-		bean().getSingleResultSetFirstWithDesc();
+		bean().callSetFirstWithDesc();
 	}
 	
 	/**
