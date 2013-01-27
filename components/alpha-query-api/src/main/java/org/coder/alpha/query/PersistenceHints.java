@@ -40,7 +40,8 @@ public class PersistenceHints extends HashMap<String,Object>{
 	 * @return lock timeout
 	 */
 	public int getLockTimeout(){
-		return (Integer)get(PESSIMISTIC_LOCK_TIMEOUT);
+		Object value = get(PESSIMISTIC_LOCK_TIMEOUT);
+		return value == null ? 0 : (Integer)value;
 	}
   
 }

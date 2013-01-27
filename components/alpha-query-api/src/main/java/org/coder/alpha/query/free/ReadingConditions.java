@@ -23,23 +23,23 @@ public class ReadingConditions extends Conditions{
 	private ResultSetFilter filter = null;
 
 	/** the max size */
-	private int maxSize = 0;
+	private int maxResults = 0;
 	
 	/** the start position */
 	private int firstResult = 0;
 	
 	/**
-	 * @return the maxSize
+	 * @return the maxResults
 	 */
-	public int getMaxSize() {
-		return maxSize;
+	public int getMaxResults() {
+		return maxResults;
 	}
 
 	/**
-	 * @param maxSize the maxSize to set
+	 * @param maxResults the maxResults to set
 	 */
-	public void setMaxSize(int maxSize) {
-		this.maxSize = maxSize;
+	public void setMaxResults(int maxResults) {
+		this.maxResults = maxResults;
 	}
 
 	/**

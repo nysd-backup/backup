@@ -32,12 +32,6 @@ import org.apache.commons.lang.StringUtils;
 import org.coder.alpha.query.EngineHints;
 import org.coder.alpha.query.PersistenceHints;
 import org.coder.alpha.query.ReflectionUtils;
-import org.coder.alpha.query.criteria.ComparingOperand;
-import org.coder.alpha.query.criteria.Criteria;
-import org.coder.alpha.query.criteria.FastEntity;
-import org.coder.alpha.query.criteria.FixString;
-import org.coder.alpha.query.criteria.Pair;
-import org.coder.alpha.query.criteria.ReadQueryBuilder;
 import org.coder.alpha.query.criteria.statement.SQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilder;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
@@ -171,7 +165,7 @@ public class EntityManagerImpl implements EntityManager{
 	 * @return the entity to update.
 	 */
 	public <T> T merge(T entity, T found) {
-		List<Criteria<?>> conditions = new ArrayList<Criteria<?>>();
+		List<Criteria> conditions = new ArrayList<Criteria>();
 		update(createUpdatingParameter(entity,found,hints,conditions),entity, hints,conditions);
 		return entity;
 	}
@@ -183,7 +177,7 @@ public class EntityManagerImpl implements EntityManager{
 	public void batchMerge(List<?> entities) {
 		List<ModifyingConditions> params = new ArrayList<ModifyingConditions>();
 		for(Object e : entities){
-			List<Criteria<?>> conditions = new ArrayList<Criteria<?>>();
+			List<Criteria> conditions = new ArrayList<Criteria>();
 			ModifyingConditions parameter = createUpdatingParameter(e,null,hints,conditions);
 			setWhereCondition(parameter, conditions);
 			parameter.setHints(hints);
@@ -202,7 +196,7 @@ public class EntityManagerImpl implements EntityManager{
 	 * @param conditions the where conditions
 	 * @return the parameter
 	 */
-	private <T> ModifyingConditions createUpdatingParameter(T entity,T found ,PersistenceHints hints,List<Criteria<?>> conditions){
+	private <T> ModifyingConditions createUpdatingParameter(T entity,T found ,PersistenceHints hints,List<Criteria> conditions){
 		Map<String,Object> setValues = new LinkedHashMap<String, Object>();
 		if(found != null){
 			if(entity instanceof FastEntity){
@@ -224,7 +218,7 @@ public class EntityManagerImpl implements EntityManager{
 					if(!ObjectUtils.equals(srcpks.get(e.getKey()),e.getValue())){
 						throw new IllegalArgumentException("primary key must not be change : src = " + src + " dst = " + dst);
 					}else{
-						conditions.add(new Criteria<Object>(e.getKey(), count++, ComparingOperand.Equal, e.getValue()));
+						conditions.add(new Criteria(e.getKey(), count++, ComparingOperand.Equal, e.getValue()));
 					}
 				}
 				//検索値と異なる値のみset句
@@ -275,7 +269,7 @@ public class EntityManagerImpl implements EntityManager{
 				Map<String,Object> dstpks = dst.toPrimaryKeys();
 				int count  = 0;
 				for(Map.Entry<String, Object> e: dstpks.entrySet()){
-					conditions.add(new Criteria<Object>(e.getKey(), count++, ComparingOperand.Equal, e.getValue()));
+					conditions.add(new Criteria(e.getKey(), count++, ComparingOperand.Equal, e.getValue()));
 				}
 				//全項目set句に含める
 				setValues.putAll(dst.toAttributes());						
@@ -316,16 +310,16 @@ public class EntityManagerImpl implements EntityManager{
 	 */
 	@Override
 	public void remove(Object entity) {
-		List<Criteria<?>> conditions = null;
+		List<Criteria> conditions = null;
 		if(entity instanceof FastEntity){
-			conditions = new ArrayList<Criteria<?>>();
+			conditions = new ArrayList<Criteria>();
 			int count = 0;
 			for(Map.Entry<String, Object> e: FastEntity.class.cast(entity).toPrimaryKeys().entrySet()){
-				conditions.add(new Criteria<Object>(e.getKey(), count++, ComparingOperand.Equal, e.getValue()));
+				conditions.add(new Criteria(e.getKey(), count++, ComparingOperand.Equal, e.getValue()));
 			}			
 			//楽観ロック番号
 			Pair<String> version = FastEntity.class.cast(entity).toVersioningValue();
-			conditions.add(new Criteria<Object>(version.getKey(), count++, ComparingOperand.Equal, version.getValue()));
+			conditions.add(new Criteria(version.getKey(), count++, ComparingOperand.Equal, version.getValue()));
 			
 		}else{
 			List<Method> ms = ReflectionUtils.getAnotatedGetter(entity.getClass(), Column.class);		
@@ -360,15 +354,15 @@ public class EntityManagerImpl implements EntityManager{
 	 * @param entity the entity
 	 * @return the condition
 	 */
-	private List<Criteria<?>> createPkWhere(List<Pair<Method>> where){
-		List<Criteria<?>> pkWhere = new ArrayList<Criteria<?>>();
+	private List<Criteria> createPkWhere(List<Pair<Method>> where){
+		List<Criteria> pkWhere = new ArrayList<Criteria>();
 		for(int i=0; i < where.size();i++){
 			Pair<Method> p = where.get(i);	
 			if( p.getValue() == null || (p.getValue() instanceof String && ((String)p.getValue()).isEmpty())){
 				throw new IllegalArgumentException("primary key must not be empty");
 			}
 			String name = getColumnName(p.getKey());
-			pkWhere.add(new Criteria<Object>(name,i, ComparingOperand.Equal, p.getValue()));
+			pkWhere.add(new Criteria(name,i, ComparingOperand.Equal, p.getValue()));
 		}
 		
 		return pkWhere;
@@ -381,7 +375,7 @@ public class EntityManagerImpl implements EntityManager{
 	 * @param sql
 	 * @param sqlId
 	 */
-	private void update(ModifyingConditions parameter, Object entity,PersistenceHints hints,List<Criteria<?>> conditions){		
+	private void update(ModifyingConditions parameter, Object entity,PersistenceHints hints,List<Criteria> conditions){		
 		setWhereCondition(parameter, conditions);
 		parameter.setEntityManager(this);
 		parameter.setHints(hints);
@@ -398,8 +392,8 @@ public class EntityManagerImpl implements EntityManager{
 	 * @param parameter
 	 * @param conditions
 	 */
-	private void setWhereCondition(final ModifyingConditions parameter,List<Criteria<?>> conditions){
-		for(Criteria<?> criteria :conditions){
+	private void setWhereCondition(final ModifyingConditions parameter,List<Criteria> conditions){
+		for(Criteria criteria :conditions){
 			criteria.accept(parameter);
 		}
 	}
@@ -444,14 +438,14 @@ public class EntityManagerImpl implements EntityManager{
 			pks = new Object[]{primaryKey};
 		}
 		
-		List<Criteria<Object>> condition = new ArrayList<Criteria<Object>>();
+		List<Criteria> condition = new ArrayList<Criteria>();
 		//高速エンティティ
 		if(FastEntity.class.isAssignableFrom(entityClass)){
 			
 			FastEntity entity = (FastEntity)ReflectionUtils.newInstance(entityClass);
 			int i = 0;
 			for(String e: entity.toPrimaryKeys().keySet()){
-				condition.add(new Criteria<Object>(e,i,ComparingOperand.Equal,pks[i]));
+				condition.add(new Criteria(e,i,ComparingOperand.Equal,pks[i]));
 				i++;
 			}
 		//通常エンティティ	
@@ -468,18 +462,24 @@ public class EntityManagerImpl implements EntityManager{
 				if(StringUtils.isEmpty(name)){
 					name = ReflectionUtils.getPropertyNameFromGetter(f);
 				}
-				condition.add(new Criteria<Object>(name,i,ComparingOperand.Equal,pk));
+				condition.add(new Criteria(name,i,ComparingOperand.Equal,pk));
 			}
 		}
 
-		ReadQueryBuilder<T> ormParam = new ReadQueryBuilder<T>(entityClass);
-		ormParam.setLockModeType(lockMode);
-		ormParam.setMaxSize(2);
-		ormParam.getConditions().addAll(condition);
-		ormParam.setEntityManager(this);
-		ormParam.getHints().putAll(properties);
-	
-		ReadingConditions parameter = ormParam.buildSelect(builderFactory.createBuilder());
+		StatementBuilder builder = builderFactory.createBuilder();
+		String sql = builder.withSelect(entityClass).withWhere(condition).withLock(lockMode,hints.getLockTimeout()).build();
+
+		ReadingConditions parameter = new ReadingConditions();
+		parameter.setResultType(entityClass);
+		parameter.setLockMode(lockMode);
+		parameter.setMaxResults(2);
+		parameter.setSql(sql);
+		parameter.setQueryId(entityClass.getSimpleName()+".select");
+		parameter.setEntityManager(this);
+		parameter.getHints().putAll(properties);
+		for(Criteria criteria : condition){
+			criteria.accept(parameter);
+		}
 		List<T> resultList = gateway.getResultList(parameter);		
 		if(resultList.isEmpty()){
 			return null;

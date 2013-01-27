@@ -108,7 +108,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 	public <T> List<T> getResultList(ReadingConditions parameter) {
 		
 		RecordFilter filter = createRecordFilter(parameter);
-		Query query = setRangeAndCursor(parameter.getFirstResult(),parameter.getMaxSize(),createQuery(parameter));	
+		Query query = setRangeAndCursor(parameter.getFirstResult(),parameter.getMaxResults(),createQuery(parameter));	
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();	
 		try {			
 			return handler.getResultList(cursor.getResultSet(), parameter.getResultType(), filter);
@@ -123,7 +123,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 	 * @see org.coder.alpha.query.elink.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.elink.free.ReadingConditions)
 	 */
 	@Override
-	public HitData getTotalResult(final ReadingConditions parameter) {
+	public <T> HitData<T> getTotalResult(final ReadingConditions parameter) {
 
 		RecordFilter filter = createRecordFilter(parameter);
 		Query query = setRangeAndCursor(parameter.getFirstResult(),0,createQuery(parameter));		
@@ -131,13 +131,14 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();		
 		try {		
 			ResultSet rs = cursor.getResultSet();
-			result = handler.getResultList(rs, parameter.getResultType(),filter,parameter.getMaxSize());
+			result = handler.getResultList(rs, parameter.getResultType(),filter,parameter.getMaxResults());
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
 			cursor.close();
 		}
-		return new HitData(result.isLimited(),result.getResultList(),result.getHitCount());
+		List<T> resultList = result.getResultList();
+		return new HitData<T>(result.isLimited(),resultList,result.getHitCount());
 		
 	}
 	
@@ -147,7 +148,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List getFetchResult(ReadingConditions parameter) {
-		Query query = setRangeAndCursor(parameter.getFirstResult(),parameter.getMaxSize(),createQuery(parameter));	
+		Query query = setRangeAndCursor(parameter.getFirstResult(),parameter.getMaxResults(),createQuery(parameter));	
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
 			return new LazyList(cursor, recordHandlerFactory.create(parameter.getResultType(), cursor.getResultSet()),exceptionHandler,parameter.getFilter());

@@ -42,7 +42,7 @@ public interface PersistenceGateway {
 	/**
 	 * @return the total result
 	 */
-	HitData getTotalResult(ReadingConditions param);
+	<T> HitData<T> getTotalResult(ReadingConditions param);
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>

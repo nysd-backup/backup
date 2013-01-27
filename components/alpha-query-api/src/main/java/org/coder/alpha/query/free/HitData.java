@@ -12,8 +12,7 @@ import java.util.List;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@SuppressWarnings("rawtypes")
-public class HitData implements Serializable {
+public class HitData<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +20,7 @@ public class HitData implements Serializable {
 	private final boolean limitedOver;
 	
 	/** the result */
-	private final List resultList;
+	private final List<T> resultList;
 	
 	/** the hit count */
 	private final int hitCount;
@@ -31,7 +30,7 @@ public class HitData implements Serializable {
 	 * @param result the result to set
 	 * @param hitCount the hitCount to set
 	 */
-	public HitData(boolean limitedOver , List result , int hitCount){
+	public HitData(boolean limitedOver , List<T> result , int hitCount){
 		this.limitedOver = limitedOver;
 		this.resultList = result;
 		this.hitCount = hitCount;
@@ -47,9 +46,8 @@ public class HitData implements Serializable {
 	/**
 	 * @return the result
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> List<T> getResultList(){
-		return (List<T>)this.resultList;
+	public List<T> getResultList(){
+		return this.resultList;
 	}
 	
 	/**

@@ -67,7 +67,7 @@ public interface StatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public StatementBuilder withWhere(List<Criteria<?>> criteria);
+	public StatementBuilder withWhere(List<Criteria> criteria);
 	
 	/**
 	 * Creates the order by statement.

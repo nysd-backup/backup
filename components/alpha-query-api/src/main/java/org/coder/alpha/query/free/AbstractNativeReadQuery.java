@@ -19,7 +19,7 @@ public abstract class AbstractNativeReadQuery extends AbstractReadQuery{
 	 * Gets the total result.
 	 * @return the result
 	 */
-	public HitData getTotalResult() {
+	public <T> HitData<T> getTotalResult() {
 		return getPersistenceGateway().getTotalResult(getParameter());
 	}
 	

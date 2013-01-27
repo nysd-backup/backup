@@ -121,7 +121,7 @@ public abstract class AbstractReadQuery{
 	 * @return self
 	 */
 	public <T extends AbstractReadQuery> T setMaxResults(int arg0) {
-		condition.setMaxSize(arg0);
+		condition.setMaxResults(arg0);
 		return (T)this;
 	}
 

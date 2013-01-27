@@ -44,9 +44,10 @@ public class NativeGateway implements PersistenceGateway{
 	 * @see org.coder.alpha.query.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.ReadingConditions)
 	 */
 	@Override
-	public HitData getTotalResult(ReadingConditions param){
+	public <T> HitData<T> getTotalResult(ReadingConditions param){
 		TotalData result = gateway.executeTotalQuery(createQueryParameter(param), getConnection(param));
-		return new HitData(result.isLimited(), result.getResultList(), result.getHitCount());
+		List<T> resultList = result.getResultList();
+		return new HitData<T>(result.isLimited(),resultList, result.getHitCount());
 	}
 	
 	/**
@@ -86,7 +87,7 @@ public class NativeGateway implements PersistenceGateway{
 	 */
 	private ReadingRequest createQueryParameter(final ReadingConditions param){
 		ReadingRequest parameter = createParameter(new ReadingRequest(),param);
-		parameter.setMaxSize(param.getMaxSize());
+		parameter.setMaxSize(param.getMaxResults());
 		parameter.setFirstResult(param.getFirstResult());
 		parameter.setResultType(param.getResultType());
 		

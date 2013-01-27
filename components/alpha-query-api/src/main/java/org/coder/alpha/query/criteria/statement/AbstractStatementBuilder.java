@@ -79,14 +79,14 @@ public abstract class AbstractStatementBuilder implements StatementBuilder{
 	 * @see org.coder.alpha.query.criteria.statement.StatementBuilder#withWhere(java.util.List)
 	 */
 	@Override
-	public StatementBuilder withWhere(List<Criteria<?>> wheres){		
+	public StatementBuilder withWhere(List<Criteria> wheres){		
 		if( wheres == null || wheres.isEmpty()){
 			return this;
 		}
 		StringBuilder builder = new StringBuilder();
 		
 		boolean first=true;
-		for(Criteria<?> where :wheres){			
+		for(Criteria where :wheres){			
 			if( first ){
 				builder.append("\n where ");
 				first = false;

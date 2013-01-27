@@ -15,7 +15,7 @@ import org.coder.alpha.query.free.Conditions;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class Criteria<T> {
+public class Criteria {
 	
 	/** the column name */
 	private final String colName; 
@@ -27,7 +27,7 @@ public class Criteria<T> {
 	private final ComparingOperand operand;
 	
 	/** the binding value */
-	private final T value;
+	private final Object value;
 
 	/**
 	 * @param colName the colName
@@ -36,7 +36,7 @@ public class Criteria<T> {
 	 * @param value the from value
 	 * @param toValue the to value 
 	 */
-	public Criteria(String colName , int bindCount ,ComparingOperand operand , T value){
+	public Criteria(String colName , int bindCount ,ComparingOperand operand , Object value){
 		this.colName = colName;
 		this.bindCount = bindCount;
 		this.operand = operand;
@@ -46,7 +46,7 @@ public class Criteria<T> {
 	/**
 	 * @return the value
 	 */
-	public T getValue() {
+	public Object getValue() {
 		return value;
 	}
 

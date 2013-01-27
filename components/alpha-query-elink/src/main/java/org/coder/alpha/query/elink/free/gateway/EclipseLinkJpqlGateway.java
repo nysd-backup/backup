@@ -68,7 +68,7 @@ public class EclipseLinkJpqlGateway implements PersistenceGateway{
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getResultList(ReadingConditions param){
-		Query query = setRangeAndLockMode(param.getLockMode(),param.getFirstResult(),param.getMaxSize(),createQuery(param));	
+		Query query = setRangeAndLockMode(param.getLockMode(),param.getFirstResult(),param.getMaxResults(),createQuery(param));	
 		List<T> resultList = query.getResultList();		
 		if(param.getFilter() != null){
 			List<T> edited = new ArrayList<T>();
@@ -168,7 +168,7 @@ public class EclipseLinkJpqlGateway implements PersistenceGateway{
 	 * @see org.coder.alpha.query.elink.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.elink.free.ReadingConditions)
 	 */
 	@Override
-	public HitData getTotalResult(ReadingConditions param){
+	public <T> HitData<T> getTotalResult(ReadingConditions param){
 		throw new UnsupportedOperationException();
 	}
 

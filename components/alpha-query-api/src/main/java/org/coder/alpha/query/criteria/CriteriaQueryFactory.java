@@ -5,10 +5,14 @@ package org.coder.alpha.query.criteria;
 
 import javax.persistence.EntityManager;
 
+import org.coder.alpha.query.criteria.query.DeleteQuery;
+import org.coder.alpha.query.criteria.query.FetchReadQuery;
+import org.coder.alpha.query.criteria.query.ListReadQuery;
+import org.coder.alpha.query.criteria.query.SingleReadQuery;
+import org.coder.alpha.query.criteria.query.TotalReadQuery;
+import org.coder.alpha.query.criteria.query.UpdateQuery;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
-
-
 
 
 /**
@@ -40,25 +44,69 @@ public class CriteriaQueryFactory {
 	}
 
 	/**
-	 * Creates the query.
+	 * Creates the reading query.
 	 * 
 	 * @param <T>　the type
 	 * @param entityClass the entityClass
-	 * @return self
+	 * @return query
 	 */
-	public <T> CriteriaReadQuery<T> createReadQuery(Class<T> entityClass, EntityManager em){
-		return new CriteriaReadQuery<T>(entityClass,gateway,em,builderFactory);
+	public <E> ListReadQuery<E> createListReadQuery(Class<E> entityClass, EntityManager em){
+		return new ListReadQuery<E>(entityClass,em,builderFactory,gateway);
 	}
 	
 	/**
-	 * Creates the updater.
+	 * Creates the reading query.
 	 * 
 	 * @param <T>　the type
 	 * @param entityClass the entityClass
-	 * @return self
+	 * @return query
 	 */
-	public <T> CriteriaModifyQuery<T> createModifyQuery(Class<T> entityClass, EntityManager em){
-		return new CriteriaModifyQuery<T>(entityClass,gateway,em,builderFactory);			
+	public <E> SingleReadQuery<E> createSingleReadQuery(Class<E> entityClass, EntityManager em){
+		return new SingleReadQuery<E>(entityClass,em,builderFactory,gateway);
+	}
+
+	/**
+	 * Creates the reading query.
+	 * 
+	 * @param <T>　the type
+	 * @param entityClass the entityClass
+	 * @return query
+	 */
+	public <E> FetchReadQuery<E> createFetchReadQuery(Class<E> entityClass, EntityManager em){
+		return new FetchReadQuery<E>(entityClass,em,builderFactory,gateway);
+	}
+	
+	/**
+	 * Creates the reading query.
+	 * 
+	 * @param <T>　the type
+	 * @param entityClass the entityClass
+	 * @return query
+	 */
+	public <E> TotalReadQuery<E> createTotalReadQuery(Class<E> entityClass, EntityManager em){
+		return new TotalReadQuery<E>(entityClass,em,builderFactory,gateway);
+	}
+
+	/**
+	 * Creates the deleting query.
+	 * 
+	 * @param <T>　the type
+	 * @param entityClass the entityClass
+	 * @return query
+	 */
+	public <E> DeleteQuery<E> createDeleteQuery(Class<E> entityClass, EntityManager em){
+		return new DeleteQuery<E>(entityClass,em,builderFactory,gateway);
+	}
+	
+	/**
+	 * Creates the updating query.
+	 * 
+	 * @param <T>　the type
+	 * @param entityClass the entityClass
+	 * @return query
+	 */
+	public <E> UpdateQuery<E> createUpdateQuery(Class<E> entityClass, EntityManager em){
+		return new UpdateQuery<E>(entityClass,em,builderFactory,gateway);
 	}
 
 }
