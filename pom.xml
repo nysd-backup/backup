@@ -11,20 +11,6 @@
 	    <developerConnection>scm:git:git@github.com:judas-i/personal-remote.git</developerConnection>
 	    <url>https://github.com/judas-i/personal-remote/tree/master/</url>
 	</scm>
-
-	<distributionManagement>	
-		<snapshotRepository>
-			<id>hosted-bne-snapshot</id>
-			<name>Assess Project Repository</name>
-			<url>${distribution.snapshot.url}</url>
-		</snapshotRepository>
-		<!--
-		<site>
-			<id>project-site</id>
-			<url>file:///\\10.23.25.2/htdocs/alpha</url>
-		</site>	
-		-->
-	</distributionManagement>
 	
 	<build>
 		<plugins>
