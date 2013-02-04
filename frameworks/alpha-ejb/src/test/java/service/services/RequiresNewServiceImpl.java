@@ -58,7 +58,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	 */
 	@Override
 	public void addMessage() {
-		TransactionContext.getCurrentInstance().addMessage("100");	
+		TransactionContext.getCurrentInstance().addMessage(new RollbackableImpl("100"));
 		rollbackOnly =  ((AutonomousTxContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
 	}
 

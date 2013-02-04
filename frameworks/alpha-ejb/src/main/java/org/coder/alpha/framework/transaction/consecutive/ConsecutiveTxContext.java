@@ -3,10 +3,7 @@
  */
 package org.coder.alpha.framework.transaction.consecutive;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
-import org.coder.alpha.framework.registry.UnifiedComponentFinder;
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.framework.transaction.TxVerifier;
 
 
 /**
@@ -34,14 +31,4 @@ public class ConsecutiveTxContext extends TransactionContext{
 	public boolean isRollbackOnly() {
 		return rollbackOnly;
 	}
-
-	/**
-	 * @see org.coder.alpha.framework.transaction.TransactionContext#getTxVerifier()
-	 */
-	@Override
-	protected TxVerifier getTxVerifier() {
-		UnifiedComponentFinder finder = ServiceLocator.getComponentFinder();
-		return finder.getTxVerifier();
-	}
-
 }

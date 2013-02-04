@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.coder.alpha.framework.logging.DefaultQueryLoggerImpl;
+import org.coder.alpha.framework.logging.DefaultQueryLogger;
 import org.coder.alpha.framework.logging.QueryLogger;
 
 
@@ -22,7 +22,7 @@ import org.coder.alpha.framework.logging.QueryLogger;
 public class InternalStatementBuilderInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	private QueryLogger logger = new DefaultQueryLoggerImpl();
+	private QueryLogger logger = new DefaultQueryLogger();
 	
 	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();

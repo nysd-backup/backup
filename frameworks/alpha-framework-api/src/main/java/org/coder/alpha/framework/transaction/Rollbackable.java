@@ -10,7 +10,7 @@ package org.coder.alpha.framework.transaction;
  * @author yoshida-n
  * @version	created.
  */
-public interface TxVerifier {
+public interface Rollbackable {
 
 	/**
 	 * Tests if the current transaction must be rolled back.
@@ -18,5 +18,13 @@ public interface TxVerifier {
 	 * @param value object
 	 * @return true:should rollback
 	 */
-	public boolean isRollbackRequired(Object value);
+	public boolean isRollbackRequired();
+	
+	
+	/**
+	 * Gets the source object
+	 * 
+	 * @return source
+	 */
+	public Object getSource();
 }

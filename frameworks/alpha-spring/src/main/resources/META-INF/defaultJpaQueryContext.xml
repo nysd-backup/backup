@@ -16,7 +16,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<context:annotation-config/>
 
 	<!-- SQL作成 -->
-  	<bean id="queryLoader" class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>
+  	<bean id="queryLoader" class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy" scope="singleton"/>
   	
   	<!-- 内部Namedクエリ -->
 	<bean id="jpqlGateway" class="org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" >

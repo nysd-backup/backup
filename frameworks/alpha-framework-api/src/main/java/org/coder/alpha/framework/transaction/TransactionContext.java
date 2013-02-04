@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 
-
-
-
 /**
  * The thread-local context.
  *
@@ -95,27 +92,22 @@ public abstract class TransactionContext {
 	}
 	
 	/**
-	 * @param message the message 
+	 * @param rollbackable the rollbackable object 
 	 */
-	public void addMessage(Object message){		
+	public void addMessage(Rollbackable rollbackable){		
 		//重複しているメッセージは追加しない
 		for(Object o : messageList){
-			if(o.equals(message)){
+			if(o.equals(rollbackable.getSource().toString())){
 				return;
 			}
 		}
-		messageList.add(message);
-		if(getTxVerifier().isRollbackRequired(message)){
+		messageList.add(rollbackable.getSource());
+		if(rollbackable.isRollbackRequired()){
 			setRollbackOnly();
 			setFailed(true);
 		}
 			
 	}	
-	
-	/**
-	 * @return TxVerifier
-	 */
-	protected abstract TxVerifier getTxVerifier();
 
 	/**
 	 * @return the globalMessageList

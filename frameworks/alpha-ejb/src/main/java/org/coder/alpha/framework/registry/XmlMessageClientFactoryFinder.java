@@ -1,7 +1,7 @@
 package org.coder.alpha.framework.registry;
 
 import org.coder.alpha.framework.messaging.client.MessageClientFactory;
-import org.coder.alpha.framework.messaging.client.MessageClientFactoryImpl;
+import org.coder.alpha.framework.messaging.client.DefaultMessageClientFactory;
 import org.coder.alpha.framework.messaging.client.XmlMessageProducer;
 
 
@@ -19,7 +19,7 @@ public class XmlMessageClientFactoryFinder implements MessageClientFactoryFinder
 	 */
 	@Override
 	public MessageClientFactory getMessageClientFactory() {
-		MessageClientFactoryImpl impl = new MessageClientFactoryImpl();
+		DefaultMessageClientFactory impl = new DefaultMessageClientFactory();
 		impl.setQueueProducer(new XmlMessageProducer());
 		impl.setTopicProducer(new XmlMessageProducer());
 		return impl;

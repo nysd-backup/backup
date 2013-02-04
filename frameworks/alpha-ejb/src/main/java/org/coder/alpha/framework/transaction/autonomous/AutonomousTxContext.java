@@ -5,10 +5,7 @@ package org.coder.alpha.framework.transaction.autonomous;
 
 import java.util.Stack;
 
-import org.coder.alpha.framework.registry.EJBComponentFinder;
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.framework.transaction.TxVerifier;
 
 
 
@@ -89,13 +86,5 @@ public class AutonomousTxContext extends TransactionContext{
 		transactionScopes = null;
 		super.release();				
 	}
-	
-	/**
-	 * @see org.coder.alpha.framework.transaction.TransactionContext#getTxVerifier()
-	 */
-	@Override
-	protected TxVerifier getTxVerifier() {
-		EJBComponentFinder finder = ServiceLocator.getComponentFinder();
-		return finder.getTxVerifier();
-	}
+
 }

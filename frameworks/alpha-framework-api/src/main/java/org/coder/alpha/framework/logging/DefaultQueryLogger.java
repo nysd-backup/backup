@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
  * @author yoshida-n
  * @version	created.
  */
-public class DefaultQueryLoggerImpl implements QueryLogger{
+public class DefaultQueryLogger implements QueryLogger{
 	
 	private static final Log LOG = LogFactory.getLog("QUERY." +QueryLogger.class);
 

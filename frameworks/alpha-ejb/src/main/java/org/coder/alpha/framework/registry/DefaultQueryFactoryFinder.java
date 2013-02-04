@@ -8,7 +8,7 @@ import org.coder.alpha.framework.advice.InternalQueryBuilderInterceptor;
 import org.coder.alpha.framework.advice.ProxyFactory;
 import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.jdbc.strategy.QueryLoader;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxyImpl;
+import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
@@ -114,7 +114,7 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @return the QueryLoader
 	 */
 	protected QueryLoader createQueryLoader(){
-		QueryLoader proxy =  new QueryLoaderProxyImpl();
+		QueryLoader proxy =  new QueryLoaderProxy();
 		InternalQueryBuilderInterceptor interceptor = new InternalQueryBuilderInterceptor();
 		if(interceptor.isEnabled()){
 			QueryLoader builder = ProxyFactory.create(QueryLoader.class, proxy, interceptor,"evaluate");		

@@ -13,7 +13,7 @@ import java.lang.reflect.Proxy;
  * @author	yoshida-n
  * @version 2011/08/31 created.
  */
-public class MessageClientFactoryImpl implements MessageClientFactory{
+public class DefaultMessageClientFactory implements MessageClientFactory{
 	
 	/** for queue */
 	private AbstractMessageProducer queueProducer;

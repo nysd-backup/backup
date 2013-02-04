@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 public abstract class AbstractMessageProducer implements InvocationHandler{
 	
 	/** the selector for JMS destination */
-	private DestinationNameResolver destinationNameResolver = new DestinationNameResolverImpl();
+	private DestinationNameResolver destinationNameResolver = new PackageDestinationNameResolver();
 	
 	/** the hint */
 	private MessagingProperty property = null;

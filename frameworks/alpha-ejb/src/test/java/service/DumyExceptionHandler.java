@@ -6,7 +6,7 @@ package service;
 
 import org.coder.alpha.framework.transaction.TransactionContext;
 import org.coder.alpha.framework.transaction.autonomous.AutonomousTxContext;
-import org.coder.alpha.query.elink.customizer.JPQLExceptionHandlerImpl;
+import org.coder.alpha.query.elink.customizer.JPQLExceptionHandler;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 
@@ -19,7 +19,7 @@ import org.eclipse.persistence.exceptions.OptimisticLockException;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DumyExceptionHandler extends JPQLExceptionHandlerImpl{
+public class DumyExceptionHandler extends JPQLExceptionHandler{
 
 	//TODO ここで判定するにはDat
 	

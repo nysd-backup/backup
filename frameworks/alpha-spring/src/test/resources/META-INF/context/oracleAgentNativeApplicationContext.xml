@@ -37,8 +37,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />		
 	</context:component-scan>
-	
-	<bean class="service.test.TransactionVerifierImpl" scope="prototype" />
+
 	<bean class="service.test.RequiresNewNativeServiceImpl" scope="prototype" />
 	<bean class="service.test.RequiresNewNativeReadOnlyServiceImpl" scope="prototype" />
 	
@@ -48,7 +47,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="persistenceGateway" ref="nativeGateway"/>				
 	</bean>
-	<bean id="batchUpdateFactory" class="org.coder.alpha.query.free.BatchModifyQueryFactoryImpl">
+	<bean id="batchUpdateFactory" class="org.coder.alpha.query.free.DefaultBatchModifyQueryFactory">
 		<property name="persistenceGateway" ref="nativeGateway"/>		
 	</bean>
  

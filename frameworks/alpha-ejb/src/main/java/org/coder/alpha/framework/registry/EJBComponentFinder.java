@@ -9,8 +9,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.coder.alpha.framework.advice.InternalPerfInterceptor;
-import org.coder.alpha.framework.registry.ComponentFinder;
-import org.coder.alpha.framework.transaction.TxVerifier;
 
 
 /**
@@ -22,13 +20,10 @@ import org.coder.alpha.framework.transaction.TxVerifier;
 public abstract class EJBComponentFinder implements ComponentFinder{
 	
 	/** QueryFactoryFinder */
-	private QueryFactoryFinder queryFactoryFinder;
+	private QueryFactoryFinder queryFactoryFinder = new DefaultQueryFactoryFinder();
 	
 	/** MessageClientFactoryFinder */
-	private MessageClientFactoryFinder messageClientFactoryFinder; 
-	
-	/** TxVerifier*/
-	private TxVerifier txVerifier;
+	private MessageClientFactoryFinder messageClientFactoryFinder = null; 
 	
 	/** the trace interceptor */
 	private InternalPerfInterceptor internaPerflInterceptor = new InternalPerfInterceptor();
@@ -145,20 +140,6 @@ public abstract class EJBComponentFinder implements ComponentFinder{
 	 */
 	public void setQueryFactoryFinder(QueryFactoryFinder queryFactoryFinder) {
 		this.queryFactoryFinder = queryFactoryFinder;
-	}
-
-	/**
-	 * @return the TxVerifier
-	 */
-	public TxVerifier getTxVerifier() {
-		return txVerifier;
-	}
-
-	/**
-	 * @param txVerifier the txVerifier to set
-	 */
-	public void setTxVerifier(TxVerifier txVerifier) {
-		this.txVerifier = txVerifier;
 	}
 
 	/**

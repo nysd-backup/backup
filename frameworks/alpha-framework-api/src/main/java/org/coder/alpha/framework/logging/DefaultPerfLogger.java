@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
  * @author yoshida-n
  * @version	created.
  */
-public class DefaultPerfLoggerImpl implements PerfLogger{
+public class DefaultPerfLogger implements PerfLogger{
 	
 	private static final Log LOG = LogFactory.getLog("PERF." +PerfLogger.class);
 

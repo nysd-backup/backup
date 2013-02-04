@@ -11,7 +11,6 @@ import javax.naming.NamingException;
 import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
 import org.coder.alpha.framework.registry.ObjectMessageClientFactoryFiinder;
 import org.coder.alpha.framework.registry.UnifiedComponentFinder;
-import org.coder.alpha.framework.transaction.TxVerifier;
 
 
 
@@ -26,14 +25,7 @@ import org.coder.alpha.framework.transaction.TxVerifier;
 public class StubComponentFinder extends UnifiedComponentFinder{
 	
 	public StubComponentFinder(){
-		setQueryFactoryFinder(new DefaultQueryFactoryFinder());
-		setTxVerifier(new TxVerifier() {
-			
-			@Override
-			public boolean isRollbackRequired(Object value) {
-				return "100".equals(value.toString());
-			}
-		});		
+		setQueryFactoryFinder(new DefaultQueryFactoryFinder());	
 		setMessageClientFactoryFinder(new ObjectMessageClientFactoryFiinder());
 	}
 

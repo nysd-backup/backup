@@ -5,7 +5,7 @@ package service.testcase;
 
 import javax.ejb.Stateless;
 
-import org.coder.alpha.framework.messaging.client.MessageClientFactoryImpl;
+import org.coder.alpha.framework.messaging.client.DefaultMessageClientFactory;
 import org.coder.alpha.framework.messaging.client.ObjectMessageProducer;
 
 import service.services.MockService;
@@ -20,7 +20,7 @@ import service.services.MockService;
 public class JMSTestBean extends BaseCase{
 
 	public void send(){
-		MessageClientFactoryImpl factory = new MessageClientFactoryImpl();
+		DefaultMessageClientFactory factory = new DefaultMessageClientFactory();
 		factory.setQueueProducer(new ObjectMessageProducer());
 		MockService mock = factory.createSender(MockService.class,null);
 		mock.exec("aaaa");
@@ -28,7 +28,7 @@ public class JMSTestBean extends BaseCase{
 	}
 	
 	public void publish(){
-		MessageClientFactoryImpl factory = new MessageClientFactoryImpl();
+		DefaultMessageClientFactory factory = new DefaultMessageClientFactory();
 		factory.setQueueProducer(new ObjectMessageProducer());
 		MockService mock = factory.createPublisher(MockService.class,null);
 		mock.exec("aaaa");

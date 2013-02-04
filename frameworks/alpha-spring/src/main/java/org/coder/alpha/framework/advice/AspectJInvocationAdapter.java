@@ -3,7 +3,9 @@
  */
 package org.coder.alpha.framework.advice;
 
-import javax.interceptor.InvocationContext;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+
 
 
 /**
@@ -12,15 +14,15 @@ import javax.interceptor.InvocationContext;
  * @author yoshida-n
  * @version	created.
  */
-public class InvocationAdapterImpl implements InvocationAdapter{
+public class AspectJInvocationAdapter implements InvocationAdapter{
 	
-	private InvocationContext context;
+	private ProceedingJoinPoint joinPoint;
 	
 	/**
 	 * @param joinPoint the joinPoint
 	 */
-	public InvocationAdapterImpl(InvocationContext context){
-		this.context = context;
+	public AspectJInvocationAdapter(ProceedingJoinPoint joinPoint){
+		this.joinPoint = joinPoint;
 	}
 
 	/**
@@ -28,7 +30,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	 */
 	@Override
 	public String getMethodName() {
-		return context.getMethod().getName();
+		return joinPoint.getSignature().getName();
 	}
 
 	/**
@@ -36,7 +38,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	 */
 	@Override
 	public Object[] getArgs() {
-		return context.getParameters();
+		return joinPoint.getArgs();
 	}
 
 	/**
@@ -44,15 +46,15 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	 */
 	@Override
 	public Object getThis() {
-		return context.getTarget();
+		return joinPoint.getThis();
 	}
 
 	/**
 	 * @see org.coder.alpha.framework.core.activation.InvocationAdapter#proceed()
 	 */
 	@Override
-	public Object proceed() throws Throwable {
-		return context.proceed();
+	public Object proceed() throws Throwable{
+		return joinPoint.proceed();
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class InvocationAdapterImpl implements InvocationAdapter{
 	 */
 	@Override
 	public String getDeclaringTypeName() {
-		return context.getMethod().getDeclaringClass().getName();
+		return joinPoint.getSignature().getDeclaringTypeName();
 	}
 
 }

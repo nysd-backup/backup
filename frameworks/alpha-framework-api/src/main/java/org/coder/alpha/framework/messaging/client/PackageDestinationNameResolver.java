@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DestinationNameResolverImpl implements DestinationNameResolver{
+public class PackageDestinationNameResolver implements DestinationNameResolver{
 	
 	/** the pattern */
 	private Pattern pattern;

@@ -31,20 +31,20 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="queryService">
 			<bean id="queryService" class="org.coder.alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
 				<property name="queryBuilder">
-					<bean class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxyImpl" scope="singleton"/>	
+					<bean class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy" scope="singleton"/>	
 				</property>
 				<property name="provider">
-					<bean class="org.coder.alpha.jdbc.strategy.impl.StatementProviderImpl" scope="singleton"/>		
+					<bean class="org.coder.alpha.jdbc.strategy.impl.DefaultStatementProvider" scope="singleton"/>		
 				</property>
 				<property name="exceptionHandler">
-					<bean class="org.coder.alpha.query.free.SQLExceptionHandlerImpl" scope="singleton"/>
+					<bean class="org.coder.alpha.query.free.NativeQueryExceptionHandler" scope="singleton"/>
 				</property>
 			</bean>
 		</property>		
 	</bean>
 	
 	<!--　バッチクエリファクトリ -->
-	<bean id="batchUpdateFactory" class="org.coder.alpha.query.free.BatchModifyQueryFactoryImpl" scope="prototype">
+	<bean id="batchUpdateFactory" class="org.coder.alpha.query.free.BatchModifyQueryFactory" scope="prototype">
 		<property name="persistenceGateway" ref="nativeGateway"/>	
 	</bean>
 	

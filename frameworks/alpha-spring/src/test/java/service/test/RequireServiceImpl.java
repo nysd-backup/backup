@@ -32,7 +32,7 @@ public class RequireServiceImpl implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		TransactionContext.getCurrentInstance().addMessage( "100");
+		TransactionContext.getCurrentInstance().addMessage( new RollbackableImpl("100"));
 	}
 
 	/**

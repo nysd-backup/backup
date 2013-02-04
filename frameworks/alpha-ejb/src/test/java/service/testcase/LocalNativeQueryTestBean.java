@@ -58,7 +58,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		query.setMaxResults(30);
 		HitData<SampleNativeResult> data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
-		List<SampleNativeResult> resultList = data.getResultList();
+		List<SampleNativeResult> resultList = data;
 		assertEquals(30,resultList.size());
 		assertEquals("00",resultList.get(0).getTest());
 		assertEquals("29",resultList.get(29).getTest());
@@ -68,7 +68,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		query.setMaxResults(30).setFirstResult(30);
 		data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
-		resultList = data.getResultList();
+		resultList = data;
 		assertEquals(30,resultList.size());
 		assertEquals("30",resultList.get(0).getTest());
 		assertEquals("59",resultList.get(29).getTest());
@@ -78,7 +78,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		query.setMaxResults(30).setFirstResult(60);
 		data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
-		resultList = data.getResultList();
+		resultList = data;
 		assertEquals(30,resultList.size());
 		assertEquals("60",resultList.get(0).getTest());
 		assertEquals("89",resultList.get(29).getTest());
@@ -88,7 +88,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		query.setMaxResults(30).setFirstResult(90);
 		data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
-		resultList = data.getResultList();
+		resultList = data;
 		assertEquals(10,resultList.size());
 		assertEquals("90",resultList.get(0).getTest());
 		assertEquals("99",resultList.get(9).getTest());
@@ -363,7 +363,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		HitData<SampleNativeResult> result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertEquals(true,result.isLimited());
-		assertEquals(1,result.getResultList().size());
+		assertEquals(1,result.size());
 		context.setRollbackOnly();	
 	}
 	

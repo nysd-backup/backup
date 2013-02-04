@@ -3,7 +3,7 @@
  */
 package org.coder.alpha.framework.advice;
 
-import org.coder.alpha.framework.logging.DefaultPerfLoggerImpl;
+import org.coder.alpha.framework.logging.DefaultPerfLogger;
 import org.coder.alpha.framework.logging.PerfLogger;
 import org.coder.alpha.framework.transaction.TransactionContext;
 
@@ -16,7 +16,7 @@ import org.coder.alpha.framework.transaction.TransactionContext;
 public class InternalPerfInterceptor implements InternalInterceptor{
 
 	/** the instance of logging */
-	protected PerfLogger logger = new DefaultPerfLoggerImpl();
+	protected PerfLogger logger = new DefaultPerfLogger();
 	
 	/**
 	 * @param logger the logger to set

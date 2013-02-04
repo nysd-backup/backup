@@ -32,7 +32,7 @@ public class DelegatingInterceptor{
 	 * @throws Throwable the exception
 	 */
 	public Object around(ProceedingJoinPoint invocation) throws Throwable {
-		return advice.around(new InvocationAdapterImpl(invocation));
+		return advice.around(new AspectJInvocationAdapter(invocation));
 	}
 
 }
