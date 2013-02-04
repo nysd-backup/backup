@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.coder.alpha.jdbc.domain.TotalData;
+import org.coder.alpha.jdbc.domain.TotalList;
 import org.coder.alpha.jdbc.service.ModifyingRequest;
 import org.coder.alpha.jdbc.service.QueryRequest;
 import org.coder.alpha.jdbc.service.QueryService;
@@ -18,7 +18,6 @@ import org.coder.alpha.query.free.Conditions;
 import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.ModifyingConditions;
 import org.coder.alpha.query.free.ReadingConditions;
-import org.coder.alpha.query.free.gateway.PersistenceGateway;
 
 
 
@@ -45,9 +44,10 @@ public class NativeGateway implements PersistenceGateway{
 	 */
 	@Override
 	public <T> HitData<T> getTotalResult(ReadingConditions param){
-		TotalData result = gateway.executeTotalQuery(createQueryParameter(param), getConnection(param));
-		List<T> resultList = result.getResultList();
-		return new HitData<T>(result.isLimited(),resultList, result.getHitCount());
+		TotalList<T> result = gateway.executeTotalQuery(createQueryParameter(param), getConnection(param));
+		HitData<T> data = new HitData<T>(result.isLimited(),result.getHitCount());
+		data.addAll(result);
+		return data;
 	}
 	
 	/**

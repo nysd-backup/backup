@@ -22,7 +22,7 @@ import org.coder.alpha.jdbc.strategy.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class BeanRecordHandlerImpl implements RecordHandler {
+public class BeanRecordHandler implements RecordHandler {
 
 	/** the type*/
 	private final Class<?> type;
@@ -45,7 +45,7 @@ public class BeanRecordHandlerImpl implements RecordHandler {
 	 * @param methodMap the setter methods
 	 * @param converter the converter
 	 */
-	public BeanRecordHandlerImpl(Class<?> type, String[] labels,String[] javaLabels , Map<String,Method> methodMap,TypeConverter converter){
+	public BeanRecordHandler(Class<?> type, String[] labels,String[] javaLabels , Map<String,Method> methodMap,TypeConverter converter){
 		this.type = type;
 		this.methodMap = methodMap;
 		this.labels = labels;

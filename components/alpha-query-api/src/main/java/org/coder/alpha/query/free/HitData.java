@@ -3,8 +3,7 @@
  */
 package org.coder.alpha.query.free;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The bean that is called only in WEB.
@@ -12,15 +11,12 @@ import java.util.List;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class HitData<T> implements Serializable {
+public class HitData<T> extends ArrayList<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	/** if true hit count is over the limit */
 	private final boolean limitedOver;
-	
-	/** the result */
-	private final List<T> resultList;
 	
 	/** the hit count */
 	private final int hitCount;
@@ -30,9 +26,8 @@ public class HitData<T> implements Serializable {
 	 * @param result the result to set
 	 * @param hitCount the hitCount to set
 	 */
-	public HitData(boolean limitedOver , List<T> result , int hitCount){
-		this.limitedOver = limitedOver;
-		this.resultList = result;
+	public HitData(boolean limitedOver ,int hitCount){
+		this.limitedOver = limitedOver;		
 		this.hitCount = hitCount;
 	}
 	
@@ -41,13 +36,6 @@ public class HitData<T> implements Serializable {
 	 */
 	public boolean isLimited(){
 		return this.limitedOver;
-	}
-	
-	/**
-	 * @return the result
-	 */
-	public List<T> getResultList(){
-		return this.resultList;
 	}
 	
 	/**

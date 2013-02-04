@@ -18,7 +18,7 @@ import org.coder.alpha.query.free.gateway.PersistenceGateway;
  * @author yoshida-n
  * @version	created.
  */
-public class BatchModifyQueryImpl implements BatchModifyQuery{
+public class DefaultBatchModifyQuery implements BatchModifyQuery{
 	
 	/** parameters */
 	private List<ModifyingConditions> parameters = new ArrayList<ModifyingConditions>();
@@ -29,7 +29,7 @@ public class BatchModifyQueryImpl implements BatchModifyQuery{
 	/**
 	 * @param internalQuery the internalQuery to set
 	 */
-	BatchModifyQueryImpl(PersistenceGateway gateway){
+	DefaultBatchModifyQuery(PersistenceGateway gateway){
 		this.gateway = gateway;
 	}
 

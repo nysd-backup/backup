@@ -51,7 +51,9 @@ public class CriteriaQueryFactory {
 	 * @return query
 	 */
 	public <E> ListReadQuery<E> createListReadQuery(Class<E> entityClass, EntityManager em){
-		return new ListReadQuery<E>(entityClass,em,builderFactory,gateway);
+		ListReadQuery<E> query = new ListReadQuery<E>(entityClass,em,gateway);
+		query.setStatementBuilderFactory(builderFactory);
+		return query;
 	}
 	
 	/**
@@ -62,7 +64,9 @@ public class CriteriaQueryFactory {
 	 * @return query
 	 */
 	public <E> SingleReadQuery<E> createSingleReadQuery(Class<E> entityClass, EntityManager em){
-		return new SingleReadQuery<E>(entityClass,em,builderFactory,gateway);
+		SingleReadQuery<E> query = new SingleReadQuery<E>(entityClass,em,gateway);
+		query.setStatementBuilderFactory(builderFactory);
+		return query;
 	}
 
 	/**
@@ -73,7 +77,9 @@ public class CriteriaQueryFactory {
 	 * @return query
 	 */
 	public <E> FetchReadQuery<E> createFetchReadQuery(Class<E> entityClass, EntityManager em){
-		return new FetchReadQuery<E>(entityClass,em,builderFactory,gateway);
+		FetchReadQuery<E> query = new FetchReadQuery<E>(entityClass,em,gateway);
+		query.setStatementBuilderFactory(builderFactory);
+		return query;
 	}
 	
 	/**
@@ -84,7 +90,9 @@ public class CriteriaQueryFactory {
 	 * @return query
 	 */
 	public <E> TotalReadQuery<E> createTotalReadQuery(Class<E> entityClass, EntityManager em){
-		return new TotalReadQuery<E>(entityClass,em,builderFactory,gateway);
+		TotalReadQuery<E> query =  new TotalReadQuery<E>(entityClass,em,gateway);
+		query.setStatementBuilderFactory(builderFactory);
+		return query;
 	}
 
 	/**
@@ -95,7 +103,9 @@ public class CriteriaQueryFactory {
 	 * @return query
 	 */
 	public <E> DeleteQuery<E> createDeleteQuery(Class<E> entityClass, EntityManager em){
-		return new DeleteQuery<E>(entityClass,em,builderFactory,gateway);
+		DeleteQuery<E> query = new DeleteQuery<E>(entityClass,em,gateway);
+		query.setStatementBuilderFactory(builderFactory);
+		return query;
 	}
 	
 	/**
@@ -106,7 +116,9 @@ public class CriteriaQueryFactory {
 	 * @return query
 	 */
 	public <E> UpdateQuery<E> createUpdateQuery(Class<E> entityClass, EntityManager em){
-		return new UpdateQuery<E>(entityClass,em,builderFactory,gateway);
+		UpdateQuery<E> query = new UpdateQuery<E>(entityClass,em,gateway);
+		query.setStatementBuilderFactory(builderFactory);
+		return query;
 	}
 
 }

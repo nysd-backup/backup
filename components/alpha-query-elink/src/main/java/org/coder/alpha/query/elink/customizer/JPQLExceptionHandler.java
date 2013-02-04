@@ -11,23 +11,14 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.ExceptionHandler;
 
 
-
-
 /**
  * Handles the JPQL exception.
  *
  * @author yoshida-n
  * @version	created.
  */
-public class JPQLExceptionHandlerImpl implements ExceptionHandler{
+public class JPQLExceptionHandler implements ExceptionHandler{
 	
-	/** 一意制約エラー */
-	private static final int uniqueErrorCode = 1;
-
-	/** デッドロック */
-	private static final int deadLockErrorcode = 60;
-	
-
 	/**
 	 * @see org.eclipse.persistence.exceptions.ExceptionHandler#handleException(java.lang.RuntimeException)
 	 */
@@ -44,10 +35,10 @@ public class JPQLExceptionHandlerImpl implements ExceptionHandler{
 				SQLException sqle = (SQLException)t;
 				int code = sqle.getErrorCode();
 				//一意制約エラー
-				if(code == uniqueErrorCode){
+				if(code == getUniqueErrorCode()){
 					throw new UniqueConstraintException(sqle);				
 				//デッドロック
-				}else if(code == deadLockErrorcode){
+				}else if(code == getDeadLockErrorCode()){
 					throw new DeadLockException(sqle);
 				}				
 			}
@@ -55,6 +46,20 @@ public class JPQLExceptionHandlerImpl implements ExceptionHandler{
 		}else{
 			throw exception;
 		}
+	}
+	
+	/**
+	 * @return the error code that represents dead lock
+	 */
+	protected int getDeadLockErrorCode(){
+		return 60;
+	}
+	
+	/**
+	 * @return the error code that represents unique constraint
+	 */
+	protected int getUniqueErrorCode(){
+		return 1;
 	}
 
 }

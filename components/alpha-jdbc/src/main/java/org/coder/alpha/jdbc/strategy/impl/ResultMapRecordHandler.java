@@ -5,16 +5,11 @@ package org.coder.alpha.jdbc.strategy.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.coder.alpha.jdbc.exception.QueryException;
 import org.coder.alpha.jdbc.strategy.RecordHandler;
 import org.coder.alpha.jdbc.strategy.TypeConverter;
-
-
 
 
 
@@ -24,16 +19,20 @@ import org.coder.alpha.jdbc.strategy.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class MapRecordHandlerImpl implements RecordHandler{
+@SuppressWarnings("rawtypes")
+public class ResultMapRecordHandler implements RecordHandler{
 	
 	/** the names of the column */
 	private final String[] labels;
 	
 	/** the names of the column */
 	private final String[] javaLabels;
-	
+
 	/** the result type */
-	private final Class<?> resultType;
+	private final Class<? extends Map> type;
+	
+	/** the result map */
+	private final Map<String,Class<?>> typeMap;
 	
 	/** the engine */
 	private TypeConverter converter;
@@ -44,32 +43,25 @@ public class MapRecordHandlerImpl implements RecordHandler{
 	 * @param types the types
 	 * @param converter the converter
 	 */
-	public MapRecordHandlerImpl(Class<?> resultType , String[] labels, String[] javaLabels, TypeConverter converter){
+	public ResultMapRecordHandler(Class<? extends Map> type , Map<String,Class<?>> typeMap,String[] labels, String[] javaLabels, TypeConverter converter){
 		this.labels = labels;
 		this.javaLabels = javaLabels;
-		this.resultType = resultType;
 		this.converter = converter;
+		this.type = type;
+		this.typeMap = typeMap;
 	}
 
 	/**
 	 * @see org.coder.alpha.jdbc.strategy.RecordHandler#getRecord(java.sql.ResultSet)
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getRecord(ResultSet resultSet) throws SQLException{
 		T row = null;
-		if(LinkedHashMap.class.equals(resultType)){
-			row = (T)new LinkedHashMap<String,Object>();			
-		}else if(HashMap.class.equals(resultType)){
-			row = (T)new HashMap<String,Object>();
-		}else if(TreeMap.class.equals(resultType)){
-			row = (T)new TreeMap<String,Object>();			
-		}else{
-			try {
-				row = (T)resultType.newInstance();
-			} catch (Exception e) {
-				throw new QueryException(e);
-			}
+		try {
+			row = (T)type.newInstance();
+		} catch (Exception e1) {
+			throw new QueryException(e1);
 		}
 		
 		//データ取得
@@ -79,12 +71,12 @@ public class MapRecordHandlerImpl implements RecordHandler{
 			String label = labels[i];
 			String javaLabel = javaLabels[i];
 			try{
-				Object value = converter.getParameter(Object.class, resultSet, label);
+				Object value = converter.getParameter(typeMap.get(javaLabel), resultSet, label);
 				((Map)row).put(javaLabel, value);
 			}catch(SQLException sqle){
 				throw sqle;
 			} catch (Exception e) {
-				throw new QueryException(String.format("label = %s : type = %s",label,String.class.getName()),e);
+				throw new QueryException(String.format("label = %s : type = %d ",label,typeMap.get(javaLabel)),e);
 			}
 		}
 		

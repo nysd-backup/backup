@@ -20,7 +20,7 @@ import org.coder.alpha.jdbc.strategy.Selector;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SelectorImpl implements Selector{
+public class DefaultSelector implements Selector{
 
 	/**
 	 * @see org.coder.alpha.jdbc.strategy.Selector#select(java.sql.PreparedStatement, int)

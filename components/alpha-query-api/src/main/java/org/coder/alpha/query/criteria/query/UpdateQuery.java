@@ -38,14 +38,20 @@ public class UpdateQuery<E> extends ModifyQuery<E>{
 	 * Constructor.
 	 * @param em the em to set
 	 * @param entityClass the entityClass
-	 * @param builderFactory the factory to set
 	 * @param gateway the gateway to set
 	 */
-	public UpdateQuery(Class<E> entityClass,EntityManager em,StatementBuilderFactory builderFactory,PersistenceGateway gateway) {
+	public UpdateQuery(Class<E> entityClass,EntityManager em,PersistenceGateway gateway) {
 		super(entityClass,em);
-		this.builderFactory = builderFactory;
 		this.gateway = gateway;
 	}
+	
+	/**
+	 * @param builderFactory the builderFactory to set
+	 */
+	public void setStatementBuilderFactory(StatementBuilderFactory builderFactory){
+		this.builderFactory = builderFactory;
+	}
+
 	
 	/**
 	 * Low level API for String-based object.

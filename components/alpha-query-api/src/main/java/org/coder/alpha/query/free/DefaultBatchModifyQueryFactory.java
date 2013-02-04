@@ -11,7 +11,7 @@ import org.coder.alpha.query.free.gateway.PersistenceGateway;
  * @author yoshida-n
  * @version	created.
  */
-public class BatchModifyQueryFactoryImpl implements BatchModifyQueryFactory{
+public class DefaultBatchModifyQueryFactory implements BatchModifyQueryFactory{
 
 	/** the internalQuery */
 	private PersistenceGateway gateway;
@@ -21,7 +21,7 @@ public class BatchModifyQueryFactoryImpl implements BatchModifyQueryFactory{
 	 */
 	@Override
 	public BatchModifyQuery createBatchUpdate(){
-		return new BatchModifyQueryImpl(gateway);
+		return new DefaultBatchModifyQuery(gateway);
 	}
 
 	/**

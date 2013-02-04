@@ -7,31 +7,29 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.ReadingConditions;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
 
 
 /**
- * function.
+ * SingleReadQuery.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class SingleReadQuery<E> extends ReadQuery<E,E>{
 	
+	/** the gateway */
 	private final PersistenceGateway gateway;
 	
 	/**
 	 * Constructor
 	 * @param entityClass the entityClass
 	 * @param em the entityManager
-	 * @param builderFactory the builderFactory
 	 * @param gateway the gateway
 	 */
-	public SingleReadQuery(Class<E> entityClass, EntityManager em,
-			StatementBuilderFactory builderFactory,PersistenceGateway gateway) {
-		super(entityClass, em, builderFactory);
+	public SingleReadQuery(Class<E> entityClass, EntityManager em,PersistenceGateway gateway) {
+		super(entityClass, em);
 		this.gateway = gateway;
 	}
 

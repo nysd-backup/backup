@@ -14,32 +14,41 @@ import org.coder.alpha.query.PersistenceHints;
 import org.coder.alpha.query.criteria.Criteria;
 import org.coder.alpha.query.criteria.Metadata;
 import org.coder.alpha.query.criteria.SortKey;
+import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.ReadingConditions;
 import org.coder.alpha.query.free.ResultSetFilter;
 
 /**
- * function.
+ * ReadQuery.
  *
  * @author yoshida-n
  * @version	created.
  */
 public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	
+	/** resultClass */
 	private final Class<E> entityClass;
-	
+
+	/** entity manager */
 	private final EntityManager em;
 	
-	private final StatementBuilderFactory builderFactory;
+	/** factory of statement builder */
+	private StatementBuilderFactory builderFactory = new JPQLBuilderFactory();
 	
+	/** lock type */
 	private LockModeType lockModeType = null;
 			
+	/** start position to search */
 	private int firstResult = -1;
 	
+	/** persistence hints */
 	private PersistenceHints hints = new PersistenceHints();
 	
+	/** filter of the result */
 	private ResultSetFilter filter = null;
 	
+	/** sorting keys */
 	private List<SortKey> sortKeys = new ArrayList<SortKey>();
 	
 	/**
@@ -47,16 +56,22 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param em
 	 * @param builderFactory
 	 */
-	public ReadQuery(Class<E> entityClass,EntityManager em, StatementBuilderFactory builderFactory){
+	public ReadQuery(Class<E> entityClass,EntityManager em){
 		this.entityClass = entityClass;
 		this.em = em;
+	}
+	
+	/**
+	 * @param builderFactory the builderFactory to set
+	 */
+	public void setStatementBuilderFactory(StatementBuilderFactory builderFactory){
 		this.builderFactory = builderFactory;
 	}
 	
 	/**
 	 * @param lockModeType
 	 */
-	public void setLockModeType(LockModeType lockModeType) {
+	public ReadQuery<E,T> setLockModeType(LockModeType lockModeType) {
 		this.lockModeType = lockModeType;
 		//ロック指定の場合はタイムアウト設定、先にタイムアウト設定されていた場合は何もしない
 		if(hints.getLockTimeout() <= 0){
@@ -64,6 +79,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 				hints.setLockTimeout(0);
 			}
 		}
+		return this;
 	}
 
 	/**

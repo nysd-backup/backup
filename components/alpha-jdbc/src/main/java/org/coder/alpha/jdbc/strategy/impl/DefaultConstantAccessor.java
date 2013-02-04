@@ -13,7 +13,7 @@ import org.coder.alpha.jdbc.strategy.ConstantAccessor;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ConstantAccessorImpl implements ConstantAccessor {
+public class DefaultConstantAccessor implements ConstantAccessor {
 
 	/** the prefix. */
 	private String constPrefix = "c_";

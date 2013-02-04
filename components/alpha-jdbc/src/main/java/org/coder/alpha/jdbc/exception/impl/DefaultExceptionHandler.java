@@ -17,7 +17,7 @@ import org.coder.alpha.jdbc.exception.QueryException;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ExceptionHandlerImpl implements ExceptionHandler{
+public class DefaultExceptionHandler implements ExceptionHandler{
 
 	/**
 	 * @see org.coder.alpha.jdbc.exception.ExceptionHandler#rethrow(java.sql.SQLException)

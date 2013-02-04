@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.coder.alpha.query.criteria.Criteria;
+import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilder;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.ModifyingConditions;
@@ -25,19 +26,24 @@ public class DeleteQuery<E> extends ModifyQuery<E>{
 	private PersistenceGateway gateway;
 	
 	/** the query builder factory */
-	private StatementBuilderFactory builderFactory;
+	private StatementBuilderFactory builderFactory = new JPQLBuilderFactory();
 	
 	/**
 	 * Constructor.
 	 * @param em the em to set
 	 * @param entityClass the entityClass
-	 * @param builderFactory the factory to set
 	 * @param gateway the gateway to set
 	 */
-	public DeleteQuery(Class<E> entityClass,EntityManager em,StatementBuilderFactory builderFactory,PersistenceGateway gateway) {
+	public DeleteQuery(Class<E> entityClass,EntityManager em,PersistenceGateway gateway) {
 		super(entityClass,em);
-		this.builderFactory = builderFactory;
 		this.gateway = gateway;
+	}
+	
+	/**
+	 * @param builderFactory the builderFactory to set
+	 */
+	public void setStatementBuilderFactory(StatementBuilderFactory builderFactory){
+		this.builderFactory = builderFactory;
 	}
 
 	/**

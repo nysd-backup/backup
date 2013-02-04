@@ -23,9 +23,9 @@ import org.coder.alpha.jdbc.strategy.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class StatementProviderImpl implements StatementProvider{
+public class DefaultStatementProvider implements StatementProvider{
 	
-	private TypeConverter converter = new TypeConverterImpl();
+	private TypeConverter converter = new DefaultTypeConverter();
 	
 	/** the resultSetType */
 	private int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;

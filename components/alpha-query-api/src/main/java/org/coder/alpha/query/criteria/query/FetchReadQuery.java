@@ -8,13 +8,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.QueryCallback;
 import org.coder.alpha.query.free.ReadingConditions;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
 
 /**
- * function.
+ * FetchReadQuery.
  *
  * @author yoshida-n
  * @version	created.
@@ -24,20 +23,16 @@ public class FetchReadQuery<E> extends ReadQuery<E,List<E>>{
 	/** the PersistenceGateway */
 	private PersistenceGateway gateway;
 	
-	
 	/**
 	 * Constructor
 	 * @param entityClass
 	 * @param em
-	 * @param builderFactory
 	 * @param gateway
 	 */
-	public FetchReadQuery(Class<E> entityClass, EntityManager em,
-			StatementBuilderFactory builderFactory,PersistenceGateway gateway) {
-		super(entityClass, em, builderFactory);
+	public FetchReadQuery(Class<E> entityClass, EntityManager em,PersistenceGateway gateway) {
+		super(entityClass, em);
 		this.gateway = gateway;
 	}
-
 	
 	/**
 	 * @see org.coder.alpha.query.criteria.query.ReadQuery#doCallInternal(org.coder.alpha.query.free.ReadingConditions)

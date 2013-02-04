@@ -19,7 +19,7 @@ import org.coder.alpha.jdbc.strategy.Updater;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class UpdaterImpl implements Updater{
+public class DefaultUpdater implements Updater{
 
 	/**
 	 * @see org.coder.alpha.jdbc.strategy.Updater#update(java.sql.PreparedStatement)

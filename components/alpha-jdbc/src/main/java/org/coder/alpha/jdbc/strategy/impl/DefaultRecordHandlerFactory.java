@@ -28,10 +28,10 @@ import org.coder.alpha.jdbc.strategy.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
+public class DefaultRecordHandlerFactory implements RecordHandlerFactory{
 
 	/** the converter. */
-	private TypeConverter converter = new TypeConverterImpl();
+	private TypeConverter converter = new DefaultTypeConverter();
 	
 	/**
 	 * @param converter the converter to set
@@ -68,11 +68,11 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 						types.put(StringUtils.uncapitalize(name.substring(start)), m.getReturnType());
 					}
 				}								
-				return new ResultMapRecordHandlerImpl((Class<? extends Map>)type, types, columnLabels, columnJavaLabels,converter);
+				return new ResultMapRecordHandler((Class<? extends Map>)type, types, columnLabels, columnJavaLabels,converter);
 	
 			//Plain			
 			}else{
-				return new MapRecordHandlerImpl(type, columnLabels, columnJavaLabels,converter);
+				return new MapRecordHandler(type, columnLabels, columnJavaLabels,converter);
 			}
 		//Bean	
 		}else{
@@ -90,7 +90,7 @@ public class RecordHandlerFactoryImpl implements RecordHandlerFactory{
 				columnLabels[i] = metaData.getColumnLabel(i + 1);
 				columnJavaLabels[i] =StringUtils.capitalize(toJavaString(columnLabels[i]));
 			}
-			return new BeanRecordHandlerImpl(type, columnLabels, columnJavaLabels, methodMap,converter);
+			return new BeanRecordHandler(type, columnLabels, columnJavaLabels, methodMap,converter);
 		}
 		
 	}

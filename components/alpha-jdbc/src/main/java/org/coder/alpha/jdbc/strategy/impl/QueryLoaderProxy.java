@@ -19,13 +19,13 @@ import org.coder.alpha.jdbc.strategy.QueryLoader;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class QueryLoaderProxyImpl implements QueryLoader{
+public class QueryLoaderProxy implements QueryLoader{
 	
 	/** SQLキャッシュ. */
 	private static final Map<String, String> CACHE = new ConcurrentHashMap<String, String>();
 
 	/** デリゲート. */
-	private QueryLoader delegate = new QueryLoaderImpl();
+	private QueryLoader delegate = new DefaultQueryLoader();
 	
 	/** キャッシュ使用有無. */
 	private boolean useCache = true;

@@ -29,7 +29,7 @@ import org.coder.alpha.jdbc.strategy.TemplateEngine;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class VelocityTemplateEngineImpl implements TemplateEngine{
+public class VelocityTemplateEngine implements TemplateEngine{
 
 	/** the encoding */
 	protected static final String CHARSET = "UTF-8";
@@ -50,7 +50,7 @@ public class VelocityTemplateEngineImpl implements TemplateEngine{
 	private static final Pattern multiLineCommentPattern = Pattern.compile("/\\*\\**[^+]([^/*][^*]*\\*+)*/", Pattern.MULTILINE);
 	
 	/** the accessor */
-	private ConstantAccessor accessor = new ConstantAccessorImpl();
+	private ConstantAccessor accessor = new DefaultConstantAccessor();
 	
 	/**
 	 * @param accessor the accessor to set

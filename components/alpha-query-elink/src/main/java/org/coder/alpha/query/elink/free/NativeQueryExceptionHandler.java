@@ -13,6 +13,6 @@ import org.coder.alpha.query.free.SQLExceptionHandler;
  * @author yoshida-n
  * @version	created.
  */
-public class SQLExceptionHandlerImpl extends SQLExceptionHandler implements ExceptionHandler{
+public class NativeQueryExceptionHandler extends SQLExceptionHandler implements ExceptionHandler{
 
 }

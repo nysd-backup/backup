@@ -29,7 +29,7 @@ import org.coder.alpha.jdbc.strategy.TemplateEngine;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class QueryLoaderImpl implements QueryLoader{
+public class DefaultQueryLoader implements QueryLoader{
 	
 	/** the classpath prefix */
 	private static final String CLASSPATH_PREFIX = "classpath:";
@@ -38,10 +38,10 @@ public class QueryLoaderImpl implements QueryLoader{
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-zA-Z0-9][a-zA-Z0-9_]*)");
 
 	/** the template engine */
-	private TemplateEngine engine = new VelocityTemplateEngineImpl();
+	private TemplateEngine engine = new VelocityTemplateEngine();
 	
 	/** the accessor */ 
-	private ConstantAccessor accessor = new ConstantAccessorImpl();
+	private ConstantAccessor accessor = new DefaultConstantAccessor();
 	
 	/** the root directory */
 	private String dirRoot = CLASSPATH_PREFIX + "query/";
@@ -49,7 +49,7 @@ public class QueryLoaderImpl implements QueryLoader{
 	/**
 	 * @param accessor the accessor to set
 	 */
-	public void setConstAccessor(ConstantAccessorImpl accessor){
+	public void setConstAccessor(DefaultConstantAccessor accessor){
 		this.accessor = accessor;
 	}
 	

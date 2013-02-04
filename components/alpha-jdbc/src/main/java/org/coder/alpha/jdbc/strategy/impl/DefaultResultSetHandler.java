@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.coder.alpha.jdbc.domain.TotalData;
+import org.coder.alpha.jdbc.domain.TotalList;
 import org.coder.alpha.jdbc.strategy.RecordFilter;
 import org.coder.alpha.jdbc.strategy.RecordHandler;
 import org.coder.alpha.jdbc.strategy.RecordHandlerFactory;
@@ -24,10 +24,10 @@ import org.coder.alpha.jdbc.strategy.ResultSetHandler;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class ResultSetHandlerImpl implements ResultSetHandler{
+public class DefaultResultSetHandler implements ResultSetHandler{
 	
 	/** the factory */
-	private RecordHandlerFactory factory = new RecordHandlerFactoryImpl();
+	private RecordHandlerFactory factory = new DefaultRecordHandlerFactory();
 	
 	/**
 	 * @param factory the factory to set
@@ -40,20 +40,19 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 	 * @see org.coder.alpha.jdbc.strategy.ResultSetHandler#getResultList(java.sql.ResultSet, java.lang.Class, org.coder.alpha.jdbc.strategy.RecordFilter, int, int)
 	 */
 	@Override
-	public TotalData getResultList(ResultSet resultSet, Class<?> resultType,RecordFilter filter, int maxSize)
+	public <T> TotalList<T> getResultList(ResultSet resultSet, Class<T> resultType,RecordFilter filter, int maxSize)
 	throws SQLException{ 
 
-		List<Object> result = new ArrayList<Object>();			
-		boolean limitted = false;
+		TotalList<T> result = new TotalList<T>();			
 		RecordHandler handler = factory.create(resultType, resultSet);
 		int hitCount = 0;
 		int startPosition = resultSet.getRow();
 		while (resultSet.next()) {	
 			hitCount++;
 			//最大件数超過していたら終了
-			if( !limitted ){
+			if( !result.isLimited() ){
 				if( maxSize > 0 && hitCount > maxSize){
-					limitted = true;	
+					result.limited();
 					if(resultSet.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
 						resultSet.last();	
 						hitCount = resultSet.getRow();
@@ -63,7 +62,7 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 					}
 				}
 				// 1行の情報カラム取得
-				Object row = handler.getRecord(resultSet);		
+				T row = handler.getRecord(resultSet);		
 			
 				//必要に応じて加工
 				if( filter != null){
@@ -72,8 +71,9 @@ public class ResultSetHandlerImpl implements ResultSetHandler{
 				result.add(row);
 			}			
 		}
-		hitCount = limitted ? hitCount:hitCount+startPosition;
-		return new TotalData(limitted, result, hitCount);
+		hitCount = result.isLimited() ? hitCount:hitCount+startPosition;
+		result.setHitCount(hitCount);
+		return result;
 	}
 
 	/**

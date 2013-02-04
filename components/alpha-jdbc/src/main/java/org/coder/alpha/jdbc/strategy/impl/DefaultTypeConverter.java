@@ -24,7 +24,7 @@ import org.coder.alpha.jdbc.strategy.TypeConverter;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class TypeConverterImpl implements TypeConverter{
+public class DefaultTypeConverter implements TypeConverter{
 
 	/**
 	 * @see org.coder.alpha.jdbc.strategy.TypeConverter#getParameter(java.lang.Class, java.sql.ResultSet, java.lang.String)

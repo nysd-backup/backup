@@ -6,7 +6,7 @@ package org.coder.alpha.jdbc.service;
 import java.sql.Connection;
 import java.util.List;
 
-import org.coder.alpha.jdbc.domain.TotalData;
+import org.coder.alpha.jdbc.domain.TotalList;
 
 
 
@@ -56,7 +56,7 @@ public interface QueryService {
 	 * @param con the connection
 	 * @return the result
 	 */
-	TotalData executeTotalQuery(ReadingRequest param , Connection con);
+	 <T> TotalList<T> executeTotalQuery(ReadingRequest param , Connection con);
 	
 	/**
 	 * Executes the UPDATE/DELETE/INSERT.

@@ -14,9 +14,9 @@ import org.coder.alpha.jdbc.domain.LazyList;
 import org.coder.alpha.jdbc.domain.PreparedQuery;
 import org.coder.alpha.jdbc.domain.ResultSetWrapper;
 import org.coder.alpha.jdbc.domain.StatementWrapper;
-import org.coder.alpha.jdbc.domain.TotalData;
+import org.coder.alpha.jdbc.domain.TotalList;
 import org.coder.alpha.jdbc.exception.ExceptionHandler;
-import org.coder.alpha.jdbc.exception.impl.ExceptionHandlerImpl;
+import org.coder.alpha.jdbc.exception.impl.DefaultExceptionHandler;
 import org.coder.alpha.jdbc.service.ModifyingRequest;
 import org.coder.alpha.jdbc.service.QueryRequest;
 import org.coder.alpha.jdbc.service.QueryService;
@@ -27,12 +27,12 @@ import org.coder.alpha.jdbc.strategy.ResultSetHandler;
 import org.coder.alpha.jdbc.strategy.Selector;
 import org.coder.alpha.jdbc.strategy.StatementProvider;
 import org.coder.alpha.jdbc.strategy.Updater;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxyImpl;
-import org.coder.alpha.jdbc.strategy.impl.RecordHandlerFactoryImpl;
-import org.coder.alpha.jdbc.strategy.impl.ResultSetHandlerImpl;
-import org.coder.alpha.jdbc.strategy.impl.SelectorImpl;
-import org.coder.alpha.jdbc.strategy.impl.StatementProviderImpl;
-import org.coder.alpha.jdbc.strategy.impl.UpdaterImpl;
+import org.coder.alpha.jdbc.strategy.impl.DefaultRecordHandlerFactory;
+import org.coder.alpha.jdbc.strategy.impl.DefaultResultSetHandler;
+import org.coder.alpha.jdbc.strategy.impl.DefaultSelector;
+import org.coder.alpha.jdbc.strategy.impl.DefaultStatementProvider;
+import org.coder.alpha.jdbc.strategy.impl.DefaultUpdater;
+import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
 
 
 
@@ -47,25 +47,25 @@ import org.coder.alpha.jdbc.strategy.impl.UpdaterImpl;
 public class QueryServiceImpl implements QueryService{
 
 	/** the ExceptionHandler */
-	private ExceptionHandler exceptionHandler = new ExceptionHandlerImpl();
+	private ExceptionHandler exceptionHandler = new DefaultExceptionHandler();
 	
 	/** the ResultSetHandler */
-	private ResultSetHandler resultSetHandler = new ResultSetHandlerImpl();
+	private ResultSetHandler resultSetHandler = new DefaultResultSetHandler();
 
 	/** the QueryLoader */
-	private QueryLoader queryBuilder = new QueryLoaderProxyImpl();
+	private QueryLoader queryBuilder = new QueryLoaderProxy();
 	
 	/** the StatementProvider */
-	private StatementProvider provider = new StatementProviderImpl();
+	private StatementProvider provider = new DefaultStatementProvider();
 	
 	/** the RecordHandlerFactory */
-	private RecordHandlerFactory recordHandlerFactory = new RecordHandlerFactoryImpl();
+	private RecordHandlerFactory recordHandlerFactory = new DefaultRecordHandlerFactory();
 	
 	/** the selector */
-	private Selector selector = new SelectorImpl();
+	private Selector selector = new DefaultSelector();
 	
 	/** the updater*/
-	private Updater updater = new UpdaterImpl();
+	private Updater updater = new DefaultUpdater();
 
 	/**
 	 * @param exceptionHandler the exceptionHandler to set
@@ -197,7 +197,7 @@ public class QueryServiceImpl implements QueryService{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public TotalData executeTotalQuery(ReadingRequest param,Connection con) {
+	public <T> TotalList<T> executeTotalQuery(ReadingRequest param,Connection con) {
 		PreparedQuery preparedQuery = prepare(param);
 		StatementWrapper stmt = null;		
 		ResultSetWrapper rs = null;

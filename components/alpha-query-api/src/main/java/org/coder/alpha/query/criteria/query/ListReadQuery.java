@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.ReadingConditions;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
 
@@ -32,9 +31,8 @@ public class ListReadQuery<E> extends ReadQuery<E,List<E>>{
 	 * @param builderFactory the builderFactory
 	 * @param gateway the gateway
 	 */
-	public ListReadQuery(Class<E> entityClass, EntityManager em,
-			StatementBuilderFactory builderFactory,PersistenceGateway gateway) {
-		super(entityClass, em, builderFactory);
+	public ListReadQuery(Class<E> entityClass, EntityManager em,PersistenceGateway gateway) {
+		super(entityClass, em);
 		this.gateway = gateway;
 	}
 	

@@ -5,7 +5,6 @@ package org.coder.alpha.query.criteria.query;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.ReadingConditions;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
@@ -18,6 +17,7 @@ import org.coder.alpha.query.free.gateway.PersistenceGateway;
  */
 public class TotalReadQuery<E> extends ReadQuery<E,HitData<E>>{
 	
+	/** the gateway */
 	private PersistenceGateway gateway;
 		
 	/** the maxSize */
@@ -27,12 +27,10 @@ public class TotalReadQuery<E> extends ReadQuery<E,HitData<E>>{
 	 * Constructor
 	 * @param entityClass
 	 * @param em
-	 * @param builderFactory
 	 * @param gateway
 	 */
-	public TotalReadQuery(Class<E> entityClass, EntityManager em,
-			StatementBuilderFactory builderFactory,PersistenceGateway gateway) {
-		super(entityClass, em, builderFactory);
+	public TotalReadQuery(Class<E> entityClass, EntityManager em,PersistenceGateway gateway) {
+		super(entityClass, em);
 		this.gateway = gateway;
 	}
 	

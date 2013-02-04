@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.persistence.Query;
 
 import org.coder.alpha.jdbc.domain.PreparedQuery;
-import org.coder.alpha.jdbc.domain.TotalData;
+import org.coder.alpha.jdbc.domain.TotalList;
 import org.coder.alpha.jdbc.exception.ExceptionHandler;
 import org.coder.alpha.jdbc.service.ModifyingRequest;
 import org.coder.alpha.jdbc.service.QueryService;
@@ -23,10 +23,11 @@ import org.coder.alpha.jdbc.strategy.QueryLoader;
 import org.coder.alpha.jdbc.strategy.RecordFilter;
 import org.coder.alpha.jdbc.strategy.RecordHandlerFactory;
 import org.coder.alpha.jdbc.strategy.ResultSetHandler;
-import org.coder.alpha.jdbc.strategy.impl.RecordHandlerFactoryImpl;
-import org.coder.alpha.jdbc.strategy.impl.ResultSetHandlerImpl;
+import org.coder.alpha.jdbc.strategy.impl.DefaultRecordHandlerFactory;
+import org.coder.alpha.jdbc.strategy.impl.DefaultResultSetHandler;
+import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
 import org.coder.alpha.query.elink.free.LazyList;
-import org.coder.alpha.query.elink.free.SQLExceptionHandlerImpl;
+import org.coder.alpha.query.elink.free.NativeQueryExceptionHandler;
 import org.coder.alpha.query.free.Conditions;
 import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.ModifyingConditions;
@@ -52,16 +53,16 @@ import org.eclipse.persistence.queries.ScrollableCursor;
 public class EclipseLinkNativeGateway implements PersistenceGateway {
 		
 	/** the <code>QueryLoader</code> */
-	private QueryLoader loader;
+	private QueryLoader loader = new QueryLoaderProxy();
 
 	/** the ResultSetHandler */
-	private ResultSetHandler handler = new ResultSetHandlerImpl();
+	private ResultSetHandler handler = new DefaultResultSetHandler();
 	
 	/** the RecordHandlerFactory */
-	private RecordHandlerFactory recordHandlerFactory = new RecordHandlerFactoryImpl();
+	private RecordHandlerFactory recordHandlerFactory = new DefaultRecordHandlerFactory();
 	
 	/** the ExceptionHandler */
-	private ExceptionHandler exceptionHandler = new SQLExceptionHandlerImpl();
+	private ExceptionHandler exceptionHandler = new NativeQueryExceptionHandler();
 	
 	/** the engine gateway */
 	private QueryService queryService = new QueryServiceImpl();
@@ -127,18 +128,21 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 
 		RecordFilter filter = createRecordFilter(parameter);
 		Query query = setRangeAndCursor(parameter.getFirstResult(),0,createQuery(parameter));		
-		TotalData result;
+		TotalList<T> result;
+		@SuppressWarnings("unchecked")
+		Class<T> resultType = (Class<T>)parameter.getResultType();
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();		
 		try {		
 			ResultSet rs = cursor.getResultSet();
-			result = handler.getResultList(rs, parameter.getResultType(),filter,parameter.getMaxResults());
+			result = handler.getResultList(rs, resultType,filter,parameter.getMaxResults());
 		}catch (SQLException e) {
 			throw exceptionHandler.rethrow(e);
 		}finally{
 			cursor.close();
 		}
-		List<T> resultList = result.getResultList();
-		return new HitData<T>(result.isLimited(),resultList,result.getHitCount());
+		HitData<T> data = new HitData<T>(result.isLimited(),result.getHitCount());
+		data.addAll(result);
+		return data;
 		
 	}
 	
