@@ -6,8 +6,8 @@ package org.coder.alpha.txscriptejb.domain;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.coder.alpha.txscriptejb.rowdatagateway.AbstractRowdataGateway;
-import org.coder.alpha.txscriptejb.rowdatagateway.RowdataGatewayFinder;
+import org.coder.alpha.txscriptejb.tableentity.AbstractTableEntity;
+import org.coder.alpha.txscriptejb.tableentity.TableEntityFinder;
 
 /**
  * Base of the BizLogic.
@@ -21,8 +21,8 @@ public abstract class AbstractBizLogic {
 	private EntityManager em;
 
 	
-	protected <T extends AbstractRowdataGateway> RowdataGatewayFinder<T> createFinder(Class<T> entityClass){
-		RowdataGatewayFinder<T> finder = new RowdataGatewayFinder<T>(em,entityClass);
+	protected <T extends AbstractTableEntity> TableEntityFinder<T> createTableEntityFinder(Class<T> entityClass){
+		TableEntityFinder<T> finder = new TableEntityFinder<T>(em,entityClass);
 		return finder;
 	}
 	

@@ -7,8 +7,8 @@ import java.util.Date;
 
 import javax.ejb.Stateless;
 
-import org.coder.alpha.txscriptejb.rowdatagateway.Order;
-import org.coder.alpha.txscriptejb.rowdatagateway.RowdataGatewayFinder;
+import org.coder.alpha.txscriptejb.tableentity.Order;
+import org.coder.alpha.txscriptejb.tableentity.TableEntityFinder;
 
 
 /**
@@ -21,11 +21,12 @@ import org.coder.alpha.txscriptejb.rowdatagateway.RowdataGatewayFinder;
 public class OrderBizLogic extends AbstractBizLogic{
 
 	/**
+	 * Persist
 	 * @param orderNo
 	 * @return
 	 */
 	public void persist(String orderNo){
-		RowdataGatewayFinder<Order> finder = createFinder(Order.class);
+		TableEntityFinder<Order> finder = createTableEntityFinder(Order.class);
 		Order order = finder.find(orderNo);
 		if(order == null){
 			order = finder.create();

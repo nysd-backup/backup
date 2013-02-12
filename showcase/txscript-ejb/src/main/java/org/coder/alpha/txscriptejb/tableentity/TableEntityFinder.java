@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.rowdatagateway;
+package org.coder.alpha.txscriptejb.tableentity;
 
 import javax.persistence.EntityManager;
 
@@ -12,13 +12,13 @@ import javax.persistence.EntityManager;
  * @author yoshida-n
  * @version	created.
  */
-public class RowdataGatewayFinder<T extends AbstractRowdataGateway> {
+public class TableEntityFinder<T extends AbstractTableEntity> {
 
 	private final EntityManager em;
 	
 	private final Class<T> entityClass;
 	
-	public RowdataGatewayFinder(EntityManager em , Class<T> entityClass){
+	public TableEntityFinder(EntityManager em , Class<T> entityClass){
 		this.em = em;
 		this.entityClass = entityClass;
 	}

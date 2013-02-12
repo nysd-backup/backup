@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.rowdatagateway;
+package org.coder.alpha.txscriptejb.tableentity;
 
 import javax.persistence.EntityManager;
 
@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class AbstractRowdataGateway {
+public abstract class AbstractTableEntity {
 
 	/** the em */
 	private EntityManager em;
