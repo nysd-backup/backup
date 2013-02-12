@@ -1,0 +1,21 @@
+<projectDescription>
+  <name>txscript-spring</name>
+  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>alpha-framework-api</project>
+    <project>alpha-httpclient</project>
+    <project>alpha-jdbc</project>
+    <project>alpha-query-api</project>
+    <project>alpha-query-elink</project>
+    <project>alpha-spring</project>
+    <project>alpha-utility</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
