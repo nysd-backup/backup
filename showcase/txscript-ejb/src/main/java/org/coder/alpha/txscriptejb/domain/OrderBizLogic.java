@@ -7,8 +7,8 @@ import java.util.Date;
 
 import javax.ejb.Stateless;
 
-import org.coder.alpha.txscriptejb.tableentity.Order;
-import org.coder.alpha.txscriptejb.tableentity.OrderFinder;
+import org.coder.alpha.txscriptejb.tablegateway.entity.Order;
+import org.coder.alpha.txscriptejb.tablegateway.repository.OrderRepository;
 
 
 /**
@@ -26,14 +26,14 @@ public class OrderBizLogic extends BizLogic{
 	 * @return
 	 */
 	public void persist(String orderNo){
-		OrderFinder finder = createTableFinder(OrderFinder.class);
-		Order order = finder.find(orderNo);
+		OrderRepository repository = createRepository(OrderRepository.class);
+		Order order = repository.find(orderNo);
 		if(order == null){
-			order = finder.create();
+			order = repository.create();
 			order.setCustomerCd("aaa");
 			order.setOrderDt(new Date());
 			order.setOrderNo(new Long(orderNo));
-			order.persist();
+			repository.persist(order);
 		}else{
 			order.setCustomerCd("aaa");
 			order.setOrderDt(new Date());

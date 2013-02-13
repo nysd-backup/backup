@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.tableentity;
+package org.coder.alpha.txscriptejb.tablegateway.entity;
 
 import java.util.Date;
 
@@ -23,7 +23,7 @@ import org.coder.alpha.query.criteria.Metadata;
  */
 @Entity
 @Table(name="ORD")
-public class Order extends TableEntity{
+public class Order{
 
 	public static final Metadata<Order,Long> ORDER_NO = new Metadata<Order,Long>("orderNo");
 	
