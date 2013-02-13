@@ -6,12 +6,12 @@ package org.coder.alpha.txscriptejb.tableentity;
 import javax.persistence.EntityManager;
 
 /**
- * Base of the rowdata gateway.
+ * TableEntity.
  *
  * @author yoshida-n
  * @version	created.
  */
-public abstract class AbstractTableEntity {
+public abstract class TableEntity {
 
 	/** the em */
 	private EntityManager em;

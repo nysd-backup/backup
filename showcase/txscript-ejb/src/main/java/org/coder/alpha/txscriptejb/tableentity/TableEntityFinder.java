@@ -12,15 +12,12 @@ import javax.persistence.EntityManager;
  * @author yoshida-n
  * @version	created.
  */
-public class TableEntityFinder<T extends AbstractTableEntity> {
+public abstract class TableEntityFinder<T extends TableEntity> {
 
-	private final EntityManager em;
+	private EntityManager em;
 	
-	private final Class<T> entityClass;
-	
-	public TableEntityFinder(EntityManager em , Class<T> entityClass){
+	public void setEntityManager(EntityManager em){
 		this.em = em;
-		this.entityClass = entityClass;
 	}
 	
 	/**
@@ -30,7 +27,7 @@ public class TableEntityFinder<T extends AbstractTableEntity> {
 	 * @return
 	 */
 	public T find(Object pk){
-		T entity = em.find(entityClass, pk);
+		T entity = em.find(getEntityClass(), pk);
 		entity.setEntityManager(em);
 		return entity;
 	}
@@ -44,11 +41,16 @@ public class TableEntityFinder<T extends AbstractTableEntity> {
 	public T create(){
 		T entity = null;
 		try{
-			entity = entityClass.newInstance();
+			entity = getEntityClass().newInstance();
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
 		entity.setEntityManager(em);
 		return entity;
 	}
+	
+	/**
+	 * Gets the entity class
+	 */
+	protected abstract Class<T> getEntityClass();
 }

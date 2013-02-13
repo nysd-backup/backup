@@ -23,7 +23,7 @@ import org.coder.alpha.query.criteria.Metadata;
  */
 @Entity
 @Table(name="ORD")
-public class Order extends AbstractTableEntity{
+public class Order extends TableEntity{
 
 	public static final Metadata<Order,Long> ORDER_NO = new Metadata<Order,Long>("orderNo");
 	

@@ -8,25 +8,25 @@ import java.util.Date;
 import javax.ejb.Stateless;
 
 import org.coder.alpha.txscriptejb.tableentity.Order;
-import org.coder.alpha.txscriptejb.tableentity.TableEntityFinder;
+import org.coder.alpha.txscriptejb.tableentity.OrderFinder;
 
 
 /**
- * BizLogic.
+ * OrderBizLogic.
  *
  * @author yoshida-n
  * @version	created.
  */
 @Stateless
-public class OrderBizLogic extends AbstractBizLogic{
-
+public class OrderBizLogic extends BizLogic{
+	
 	/**
 	 * Persist
 	 * @param orderNo
 	 * @return
 	 */
 	public void persist(String orderNo){
-		TableEntityFinder<Order> finder = createTableEntityFinder(Order.class);
+		OrderFinder finder = createTableFinder(OrderFinder.class);
 		Order order = finder.find(orderNo);
 		if(order == null){
 			order = finder.create();
