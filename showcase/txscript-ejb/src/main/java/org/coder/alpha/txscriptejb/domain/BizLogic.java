@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.coder.alpha.txscriptejb.tablegateway.repository.DefaultTableRepository;
+import org.coder.alpha.txscriptejb.datasource.repository.DefaultTableRepository;
 
 /**
  * Base of the BizLogic.

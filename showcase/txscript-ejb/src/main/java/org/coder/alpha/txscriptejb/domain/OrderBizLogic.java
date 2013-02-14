@@ -7,8 +7,8 @@ import java.util.Date;
 
 import javax.ejb.Stateless;
 
-import org.coder.alpha.txscriptejb.tablegateway.entity.Order;
-import org.coder.alpha.txscriptejb.tablegateway.repository.OrderRepository;
+import org.coder.alpha.txscriptejb.datasource.entity.Order;
+import org.coder.alpha.txscriptejb.datasource.repository.OrderRepository;
 
 
 /**

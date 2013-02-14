@@ -1,13 +1,9 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.tablegateway.repository;
+package org.coder.alpha.txscriptejb.datasource.repository;
 
 import javax.persistence.EntityManager;
-
-import org.coder.alpha.framework.registry.EJBComponentFinder;
-import org.coder.alpha.framework.registry.ServiceLocator;
-import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 
 
 /**
@@ -62,9 +58,5 @@ public class DefaultTableRepository<T> {
 		em.persist(entity);
 	}
 	
-	protected CriteriaQueryFactory createCriteriaQueryFactory() {
-		EJBComponentFinder finder = ServiceLocator.getComponentFinder();
-		return finder.getQueryFactoryFinder().createCriteriaQueryFactory();
-	}
-	
+
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.tablegateway.entity;
+package org.coder.alpha.txscriptejb.datasource.entity;
 
 import java.util.Date;
 
