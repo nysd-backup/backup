@@ -16,7 +16,7 @@ import javax.persistence.Version;
 import org.coder.alpha.query.criteria.Metadata;
 
 /**
- * function.
+ * Order.
  *
  * @author yoshida-n
  * @version	created.

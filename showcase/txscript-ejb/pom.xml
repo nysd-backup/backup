@@ -14,6 +14,35 @@
 	
 	<build>
 	    <finalName>txscript-ejb</finalName>
+	    <plugins>
+	    <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/webapp/WEB-INF/lib</directory>							
+							<includes>
+								<include>**/*.jar</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/txscript-ejb</directory>							
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<webappDirectory>>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/txscript-ejb</webappDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	
 	<dependencies>

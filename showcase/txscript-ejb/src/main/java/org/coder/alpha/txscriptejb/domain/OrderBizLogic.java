@@ -4,11 +4,12 @@
 package org.coder.alpha.txscriptejb.domain;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import org.coder.alpha.txscriptejb.datasource.entity.Order;
-import org.coder.alpha.txscriptejb.datasource.repository.OrderRepository;
+import org.coder.alpha.txscriptejb.datasource.gateway.OrderGateway;
 
 
 /**
@@ -17,8 +18,10 @@ import org.coder.alpha.txscriptejb.datasource.repository.OrderRepository;
  * @author yoshida-n
  * @version	created.
  */
-@Stateless
-public class OrderBizLogic extends BizLogic{
+public class OrderBizLogic{
+	
+	@Inject
+	private OrderGateway repository;
 	
 	/**
 	 * Persist
@@ -26,8 +29,8 @@ public class OrderBizLogic extends BizLogic{
 	 * @return
 	 */
 	public void persist(String orderNo){
-		OrderRepository repository = createRepository(OrderRepository.class);
-		Order order = repository.find(orderNo);
+		assert orderNo != null;
+		Order order = repository.find(new Long(orderNo));
 		if(order == null){
 			order = repository.create();
 			order.setCustomerCd("aaa");
@@ -39,6 +42,16 @@ public class OrderBizLogic extends BizLogic{
 			order.setOrderDt(new Date());
 			order.setOrderNo(new Long(orderNo));
 		}
+	}
+	
+	/**
+	 * Persist
+	 * @param orderNo
+	 * @return
+	 */
+	public List<Order> search(String customerCd){
+		assert customerCd != null;
+		return repository.getResultByCustomerCd(customerCd);		
 	}
 	
 }

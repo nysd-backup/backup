@@ -4,9 +4,15 @@
 package alpha.domain.spring.example.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,15 +29,23 @@ public class OrderDto implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private Long orderNo = null;
 	
+	@NotNull
+	@Max(10)
 	private String customerCd = null;
 	
 	private Date orderDt = null;
 	
 	private Long version = null;
 	
-	private List<OrderDtlDto> detailDto = null;
+	private Map<Long,String> versionMap = new LinkedHashMap<Long,String>();
+	
+	private String viewStatus = "0";
+	
+	@Valid
+	private List<OrderDtlDto> detailDto = new ArrayList<OrderDtlDto>();
 
 	/**
 	 * @return the orderNo
@@ -102,6 +116,33 @@ public class OrderDto implements Serializable{
 	public void setDetailDto(List<OrderDtlDto> detailDto) {
 		this.detailDto = detailDto;
 	}
-	
+
+	/**
+	 * @return the viewStatus
+	 */
+	public String getViewStatus() {
+		return viewStatus;
+	}
+
+	/**
+	 * @param viewStatus the viewStatus to set
+	 */
+	public void setViewStatus(String viewStatus) {
+		this.viewStatus = viewStatus;
+	}
+
+	/**
+	 * @return the versionMap
+	 */
+	public Map<Long,String> getVersionMap() {
+		return versionMap;
+	}
+
+	/**
+	 * @param versionMap the versionMap to set
+	 */
+	public void setVersionMap(Map<Long,String> versionMap) {
+		this.versionMap = versionMap;
+	}
 	
 }

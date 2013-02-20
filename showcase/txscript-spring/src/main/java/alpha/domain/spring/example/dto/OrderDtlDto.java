@@ -4,10 +4,14 @@
 package alpha.domain.spring.example.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.Size;
 
 /**
  * function.
@@ -30,6 +34,7 @@ public class OrderDtlDto implements Serializable{
 	private String detailNo = null;
 	
 	@Column(name="ITEM_CODE")
+	@Size(min=1)
 	private String itemCode = null;
 	
 	@Column(name="COUNT")
@@ -38,6 +43,10 @@ public class OrderDtlDto implements Serializable{
 	@Column(name="VERSION")
 	@Version
 	private Long version = null;
+	
+	@Transient
+	private List<CheckBoxModel> checkBoxes = new ArrayList<CheckBoxModel>();
+
 
 	/**
 	 * @return the orderNo
@@ -107,6 +116,20 @@ public class OrderDtlDto implements Serializable{
 	 */
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+
+	/**
+	 * @return the checkBoxes
+	 */
+	public List<CheckBoxModel> getCheckBoxes() {
+		return checkBoxes;
+	}
+
+	/**
+	 * @param checkBoxes the checkBoxes to set
+	 */
+	public void setCheckBoxes(List<CheckBoxModel> checkBoxes) {
+		this.checkBoxes = checkBoxes;
 	}
 
 }

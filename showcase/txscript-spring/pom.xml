@@ -13,7 +13,47 @@
 	</parent>
 	
 	<build>
-	    <finalName>txscript-springe</finalName>
+	    <finalName>txscript-spring</finalName>
+    	<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<wtpversion>2.0</wtpversion>
+					<useProjectReferences>false</useProjectReferences>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/webapp/WEB-INF/lib</directory>							
+							<includes>
+								<include>**/*.jar</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/txscript-spring</directory>							
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<webappDirectory>>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/txscript-spring</webappDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	
 	<dependencies>
@@ -73,6 +113,11 @@
 		    <version>3.0.1</version>
 		    <scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>		            
 		<dependency>
 		  <groupId>com.oracle</groupId>
 		    <artifactId>ojdbc6</artifactId>
