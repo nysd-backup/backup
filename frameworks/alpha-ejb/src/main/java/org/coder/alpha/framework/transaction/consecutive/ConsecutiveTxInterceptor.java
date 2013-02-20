@@ -7,10 +7,8 @@ import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.interceptor.InvocationContext;
 
-import org.coder.alpha.framework.advice.InternalPerfInterceptor;
 import org.coder.alpha.framework.advice.DefaultInvocationAdapter;
-import org.coder.alpha.framework.registry.EJBComponentFinder;
-import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.advice.InternalPerfInterceptor;
 import org.coder.alpha.framework.transaction.AbstractTxInterceptor;
 import org.coder.alpha.framework.transaction.TransactionContext;
 
@@ -109,9 +107,8 @@ public class ConsecutiveTxInterceptor extends AbstractTxInterceptor{
 	 * @throws Exception
 	 */
 	protected Object proceed(InvocationContext ic) throws Throwable{
-		try{
-			EJBComponentFinder finder = ServiceLocator.getComponentFinder();
-			InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
+		try{			
+			InternalPerfInterceptor interceptor = new InternalPerfInterceptor();
 			if(interceptor.isEnabled()){
 				return interceptor.around(new DefaultInvocationAdapter(ic));
 			}else {

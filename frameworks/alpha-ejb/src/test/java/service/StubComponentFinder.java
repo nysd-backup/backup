@@ -8,8 +8,6 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
-import org.coder.alpha.framework.registry.ObjectMessageClientFactoryFiinder;
 import org.coder.alpha.framework.registry.UnifiedComponentFinder;
 
 
@@ -23,11 +21,6 @@ import org.coder.alpha.framework.registry.UnifiedComponentFinder;
  * @version	created.
  */
 public class StubComponentFinder extends UnifiedComponentFinder{
-	
-	public StubComponentFinder(){
-		setQueryFactoryFinder(new DefaultQueryFactoryFinder());	
-		setMessageClientFactoryFinder(new ObjectMessageClientFactoryFiinder());
-	}
 
 	/**
 	 * @see org.coder.alpha.framework.registry.UnifiedComponentFinder#getBean(java.lang.String)

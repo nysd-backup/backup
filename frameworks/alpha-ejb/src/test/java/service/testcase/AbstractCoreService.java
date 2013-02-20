@@ -9,8 +9,7 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
-import org.coder.alpha.framework.registry.UnifiedComponentFinder;
+import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
 import org.coder.alpha.framework.transaction.TransactionContext;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
@@ -45,10 +44,9 @@ public abstract class AbstractCoreService {
 	 * コンストラクタで初期化した場合、他のSessionBeanがまだ作成済みになっていないので生成できない。
 	 */
 	@PostConstruct
-	public void postConstruct(){
-		UnifiedComponentFinder finder = ServiceLocator.getComponentFinder();		
-		ormQueryFactory = finder.getQueryFactoryFinder().createCriteriaQueryFactory();
-		queryFactory = finder.getQueryFactoryFinder().createQueryFactory();	
+	public void postConstruct(){;		
+		ormQueryFactory = new DefaultQueryFactoryFinder().createCriteriaQueryFactory();
+		queryFactory = new DefaultQueryFactoryFinder().createQueryFactory();	
 	}
 	
 	/**

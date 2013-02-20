@@ -8,8 +8,6 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.coder.alpha.framework.advice.InternalPerfInterceptor;
-
 
 /**
  * ComponentFindeer 4 EJB.
@@ -18,15 +16,6 @@ import org.coder.alpha.framework.advice.InternalPerfInterceptor;
  * @version	created.
  */
 public abstract class EJBComponentFinder implements ComponentFinder{
-	
-	/** QueryFactoryFinder */
-	private QueryFactoryFinder queryFactoryFinder = new DefaultQueryFactoryFinder();
-	
-	/** MessageClientFactoryFinder */
-	private MessageClientFactoryFinder messageClientFactoryFinder = null; 
-	
-	/** the trace interceptor */
-	private InternalPerfInterceptor internaPerflInterceptor = new InternalPerfInterceptor();
 	
 	/**
 	 * Gets the resource
@@ -127,50 +116,5 @@ public abstract class EJBComponentFinder implements ComponentFinder{
 			}
 		}
 	}
-	
-	/**
-	 * @return the QueryFactoryFinder
-	 */
-	public QueryFactoryFinder getQueryFactoryFinder() {
-		return queryFactoryFinder;
-	}
 
-	/**
-	 * @param queryFactoryFinder the queryFactoryFinder to set
-	 */
-	public void setQueryFactoryFinder(QueryFactoryFinder queryFactoryFinder) {
-		this.queryFactoryFinder = queryFactoryFinder;
-	}
-
-	/**
-	 * @return the MessageClientFactoryFinder
-	 */
-	public MessageClientFactoryFinder getMessageClientFactoryFinder() {
-		return messageClientFactoryFinder;
-	}
-
-	/**
-	 * @param messageClientFactoryFinder the messageClientFactoryFinder to set
-	 */
-	public void setMessageClientFactoryFinder(
-			MessageClientFactoryFinder messageClientFactoryFinder) {
-		this.messageClientFactoryFinder = messageClientFactoryFinder;
-	}
-
-	/**
-	 * @return the InternalPerfInterceptor
-	 */
-	public InternalPerfInterceptor getInternaPerflInterceptor() {
-		return internaPerflInterceptor;
-	}
-
-	/**
-	 * @param internaPerflInterceptor the internaPerflInterceptor to set
-	 */
-	public void setInternaPerflInterceptor(InternalPerfInterceptor internaPerflInterceptor) {
-		this.internaPerflInterceptor = internaPerflInterceptor;
-	}
-
-	
-	
 }

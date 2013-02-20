@@ -3,10 +3,8 @@
  */
 package org.coder.alpha.framework.registry;
 
-import org.coder.alpha.framework.advice.InternalPerfInterceptor;
 import org.coder.alpha.framework.advice.InternalQueryBuilderInterceptor;
 import org.coder.alpha.framework.advice.ProxyFactory;
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.jdbc.strategy.QueryLoader;
 import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
@@ -69,13 +67,7 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	protected PersistenceGateway createJpqlGateway(QueryLoader builder){
 		EclipseLinkJpqlGateway named = new EclipseLinkJpqlGateway();
 		named.setQueryLoader(builder);				
-		EJBComponentFinder finder = ServiceLocator.getComponentFinder();
-		InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
-		if(interceptor.isEnabled()){
-			return  ProxyFactory.create(PersistenceGateway.class, named, interceptor,"*");	
-		}else{
-			return named;
-		}
+		return named;
 	}
 	
 	/**
@@ -86,14 +78,8 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 */
 	protected PersistenceGateway createNativeGateway(QueryLoader builder){
 		EclipseLinkNativeGateway ntv = new EclipseLinkNativeGateway();
-		ntv.setQueryLoader(builder);
-		EJBComponentFinder finder = ServiceLocator.getComponentFinder();
-		InternalPerfInterceptor interceptor = finder.getInternaPerflInterceptor();
-		if(interceptor.isEnabled()){
-			return ProxyFactory.create(PersistenceGateway.class, ntv, interceptor,"*");
-		}else{
-			return ntv;
-		}
+		ntv.setQueryLoader(builder);	
+		return ntv;
 	}
 	
 	/**
