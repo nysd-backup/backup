@@ -294,9 +294,9 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		update.setEntityManager(per);
 		update.setTest("1");
 		update.setAttr2set(900);
-		int count = update.update();
+		int count = update.update();		
 		assertEquals(1,count);
-		
+	
 		SingleReadQuery<TestEntity> e = ormQueryFactory.createSingleReadQuery(TestEntity.class,per);
 		e.eq(TEST, "1");
 		TestEntity res = e.call();

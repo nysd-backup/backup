@@ -15,20 +15,13 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 
-	<!-- SQL作成 -->
-  	<bean id="queryLoader" class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy" scope="singleton"/>
-  	
   	<!-- 内部Namedクエリ -->
-	<bean id="jpqlGateway" class="org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" >
-		<property name="queryLoader" ref="queryLoader"/>			
-	</bean>	
+	<bean id="jpqlGateway" class="org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" />
 
 	<!-- クエリファクトリ開発者API -->
 	<bean id="queryFactory" class="org.coder.alpha.query.free.QueryFactory" scope="prototype" >
 		<property name="nativeGateway">
-			<bean class="org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" >		
-				<property name="queryLoader" ref="queryLoader"/>			
-			</bean>
+			<bean class="org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" />						
 		</property>		
 		<property name="jpqlGateway" ref="jpqlGateway"/>			
 	</bean>

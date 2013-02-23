@@ -16,7 +16,6 @@ import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.transaction.TransactionContext;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
@@ -24,6 +23,7 @@ import org.coder.alpha.query.criteria.query.UpdateQuery;
 import org.coder.alpha.query.exception.UniqueConstraintException;
 import org.eclipse.persistence.config.QueryHints;
 
+import service.Registry;
 import service.entity.DateEntity;
 import service.entity.IDateEntity;
 import service.entity.ITestEntity;
@@ -478,7 +478,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 
 	public void invalidFindWithLockNoWaitError(){
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();
 		
 		TransactionContext impl = TransactionContext.getCurrentInstance();
@@ -497,7 +497,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	 */
 	public void findWithLockNoWaitError(){	
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
@@ -530,7 +530,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 
 	public void crushExceptionInAutonomousTransaction(){	
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
@@ -549,7 +549,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 
 	public void queryPessimisticLockError(){	
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();
 		
 				
@@ -585,7 +585,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		TransactionContext impl = TransactionContext.getCurrentInstance();
 		impl.setRequestId("IGNORE_TEST");
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();
 		
 				

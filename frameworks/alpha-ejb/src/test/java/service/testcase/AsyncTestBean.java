@@ -9,9 +9,7 @@ import java.util.concurrent.Future;
 
 import javax.ejb.Stateless;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
-
-
+import service.Registry;
 import service.services.AsyncSession;
 
 /**
@@ -24,7 +22,7 @@ import service.services.AsyncSession;
 public class AsyncTestBean extends BaseCase{
 
 	public void asyncService() throws InterruptedException, ExecutionException ,CancellationException{
-		AsyncSession session = ServiceLocator.getService(AsyncSession.class.getSimpleName());
+		AsyncSession session = Registry.getComponentFinder().getBean(AsyncSession.class.getSimpleName());
 		Future<String> value = session.execute(em);
 		String res = value.get();
 		assertEquals("aaa", res);

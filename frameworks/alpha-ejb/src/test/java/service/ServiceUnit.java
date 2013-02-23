@@ -10,8 +10,6 @@ import java.util.Map;
 
 import javax.ejb.embeddable.EJBContainer;
 
-import org.coder.alpha.framework.registry.ComponentFinder;
-import org.coder.alpha.framework.registry.ServiceLocatorInitializer;
 import org.coder.alpha.jdbc.domain.ConstantCache;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -42,9 +40,7 @@ public abstract class ServiceUnit extends Assert{
 		prop.put(EJBContainer.APP_NAME, "test");
 		prop.put("org.glassfish.ejb.embedded.glassfish.instance.root", "C:/Project/Personal/glassfishv3/glassfish/domains/domain1");
 		container = EJBContainer.createEJBContainer(prop);
-				
-		ComponentFinder finder = new StubComponentFinder();
-		new ServiceLocatorInitializer().initiazie(finder);
+						
 		try{
 			Class<?> clazz = Class.forName(CachableConst.class.getName());					
 			Field[] fs = clazz.getFields();

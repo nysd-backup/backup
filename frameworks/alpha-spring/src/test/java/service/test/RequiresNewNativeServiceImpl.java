@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.transaction.TransactionContext;
 import org.coder.alpha.query.criteria.EntityManagerImpl;
 import org.eclipse.persistence.config.QueryHints;
@@ -79,6 +78,15 @@ public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 		rollbackOnly =  TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 	}
 
+	@Autowired(required=false)
+	private RequireService service;
+	
+	@Autowired(required=false)
+	private RequireService service2;
+	
+	@Autowired(required=false)
+	private RequiresNewService newService;
+	
 	/**
 	 * @see alpha.domain.framework.test.RequiresNewService#callTwoServices()
 	 */
@@ -86,11 +94,11 @@ public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 	public void callTwoServices() {
 		
 		//業務例外化
-		RequireService service = ServiceLocator.getService(RequireService.class);
+		//RequireService service = getService(RequireService.class);
 		service.addMessage();
 		
 		//永続化
-		RequireService service2 = ServiceLocator.getService(RequireService.class);
+		//RequireService service2 = getService(RequireService.class);
 		state= service2.persist();		
 		
 		rollbackOnly = TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
@@ -121,9 +129,9 @@ public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 
 	@Override
 	public String another() {
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);;
-		service.addMessage();
-		if(!service.isRollbackOnly()){
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);;
+		newService.addMessage();
+		if(!newService.isRollbackOnly()){
 			throw new IllegalStateException();
 		}
 		rollbackOnly = TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();

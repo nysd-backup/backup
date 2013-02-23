@@ -29,13 +29,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- 内部クエリ -->
 	<bean id="nativeGateway" class="org.coder.alpha.query.free.gateway.NativeGateway" scope="prototype" >
 		<property name="queryService">
-			<bean id="queryService" class="org.coder.alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
-				<property name="queryBuilder">
-					<bean class="org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy" scope="singleton"/>	
-				</property>
-				<property name="provider">
-					<bean class="org.coder.alpha.jdbc.strategy.impl.DefaultStatementProvider" scope="singleton"/>		
-				</property>
+			<bean class="org.coder.alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
 				<property name="exceptionHandler">
 					<bean class="org.coder.alpha.query.free.NativeQueryExceptionHandler" scope="singleton"/>
 				</property>

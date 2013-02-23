@@ -1,8 +1,8 @@
 package org.coder.alpha.framework.registry;
 
-import org.coder.alpha.framework.messaging.client.MessageClientFactory;
-import org.coder.alpha.framework.messaging.client.DefaultMessageClientFactory;
-import org.coder.alpha.framework.messaging.client.XmlMessageProducer;
+import org.coder.alpha.framework.messaging.DefaultMessageClientFactory;
+import org.coder.alpha.framework.messaging.MessageClientFactory;
+import org.coder.alpha.framework.messaging.XmlMessageProducer;
 
 
 

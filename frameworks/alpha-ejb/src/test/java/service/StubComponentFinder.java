@@ -27,7 +27,7 @@ public class StubComponentFinder extends UnifiedComponentFinder{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getBean(String serviceName){
+	public <T> T getBean(String serviceName,Properties prop){
 		
 		String test = String.format("java:global/test/test-classes/%s",serviceName);		
 		String format = String.format("java:global/test/classes/%s",serviceName);		

@@ -3,10 +3,10 @@
  */
 package service.testcase;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import service.Registry;
 import service.ServiceUnit;
 
 /**
@@ -19,7 +19,7 @@ import service.ServiceUnit;
 public class JMSTest extends ServiceUnit{
 	
 	private JMSTestBean bean(){
-		return ServiceLocator.getService(JMSTestBean.class.getSimpleName());
+		return Registry.getComponentFinder().getBean(JMSTestBean.class.getSimpleName());
 	}
 
 	@Test

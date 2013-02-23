@@ -5,11 +5,9 @@ package service.testcase;
 
 import java.sql.SQLException;
 
-
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Test;
 
-
+import service.Registry;
 import service.ServiceUnit;
 import service.entity.ITestEntity;
 
@@ -23,7 +21,7 @@ import service.entity.ITestEntity;
 public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	private LocalEntityQueryTestBean bean(){
-		return ServiceLocator.getService(LocalEntityQueryTestBean.class.getSimpleName());
+		return Registry.getComponentFinder().getBean(LocalEntityQueryTestBean.class.getSimpleName());
 	}
 	
 	/**

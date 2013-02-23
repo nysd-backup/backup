@@ -3,7 +3,7 @@
  */
 package org.coder.alpha.framework.registry;
 
-import org.coder.alpha.framework.messaging.client.MessageClientFactory;
+import org.coder.alpha.framework.messaging.MessageClientFactory;
 
 /**
  * Provides the factory of messaging client.

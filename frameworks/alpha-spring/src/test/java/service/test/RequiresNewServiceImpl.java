@@ -12,11 +12,14 @@ import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PessimisticLockException;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.transaction.TransactionContext;
 import org.coder.alpha.query.criteria.EntityManagerImpl;
 import org.eclipse.persistence.config.QueryHints;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -36,7 +39,7 @@ import service.test.entity.TestEntity;
 @Service
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Transactional(propagation=Propagation.REQUIRES_NEW)
-public class RequiresNewServiceImpl implements RequiresNewService{
+public class RequiresNewServiceImpl implements RequiresNewService, ApplicationContextAware{
 
 	@PersistenceContext(unitName="oracle")
 	private EntityManager per;
@@ -77,6 +80,13 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 		TransactionContext.getCurrentInstance().addMessage(new RollbackableImpl("100"));
 		rollbackOnly =  TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 	}
+	
+	@Autowired(required=false)
+	private RequireService service;
+	
+	@Autowired(required=false)
+	private RequireService service2;
+	
 
 	/**
 	 * @see alpha.domain.framework.test.RequiresNewService#callTwoServices()
@@ -85,11 +95,11 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 	public void callTwoServices() {
 		
 		//業務例外化
-		RequireService service = ServiceLocator.getService(RequireService.class);
+		//RequireService service = ServiceLocator.getService(RequireService.class);
 		service.addMessage();
 		
 		//永続化
-		RequireService service2 = ServiceLocator.getService(RequireService.class);
+		//RequireService service2 = ServiceLocator.getService(RequireService.class);
 		state= service2.persist();		
 		
 		rollbackOnly = TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
@@ -120,13 +130,21 @@ public class RequiresNewServiceImpl implements RequiresNewService{
 
 	@Override
 	public String another() {
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);;
-		service.addMessage();
-		if(!service.isRollbackOnly()){
+		RequiresNewService newService = context.getBean(RequiresNewService.class);;
+		newService.addMessage();
+		if(!newService.isRollbackOnly()){
 			throw new IllegalStateException();
 		}
 		rollbackOnly = TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 		return "OK";
+	}
+
+	private ApplicationContext context;
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext)
+			throws BeansException {
+		this.context = applicationContext;
+		
 	}
 
 }

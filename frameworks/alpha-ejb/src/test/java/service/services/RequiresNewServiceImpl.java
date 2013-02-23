@@ -12,11 +12,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
+import org.coder.alpha.framework.transaction.NestedTransactionContext;
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.framework.transaction.autonomous.AutonomousTxContext;
 import org.eclipse.persistence.config.QueryHints;
 
+import service.Registry;
 import service.entity.TestEntity;
 import service.testcase.BaseCase;
 
@@ -35,7 +35,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		rollbackOnly =  ((AutonomousTxContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly =  ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
 		return "OK";
 	}
 
@@ -59,7 +59,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	@Override
 	public void addMessage() {
 		TransactionContext.getCurrentInstance().addMessage(new RollbackableImpl("100"));
-		rollbackOnly =  ((AutonomousTxContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly =  ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
 	}
 
 	/**
@@ -69,14 +69,14 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	public void callTwoServices() {
 		
 		//業務例外化
-		RequireService service = ServiceLocator.getService(RequireService.class);
+		RequireService service = Registry.getComponentFinder().getBean(RequireService.class);
 		service.addMessage();
 		
 		//永続化
-		RequireService service2 = ServiceLocator.getService(RequireService.class);
+		RequireService service2 = Registry.getComponentFinder().getBean(RequireService.class);
 		state= service2.persist();		
 		
-		rollbackOnly = ((AutonomousTxContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly = ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
 		
 	}
 	

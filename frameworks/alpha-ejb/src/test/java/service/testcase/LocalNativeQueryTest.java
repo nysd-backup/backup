@@ -4,9 +4,9 @@
 package service.testcase;
 
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Test;
 
+import service.Registry;
 import service.ServiceUnit;
 import service.entity.ITestEntity;
 
@@ -20,7 +20,7 @@ import service.entity.ITestEntity;
 public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 
 	private LocalNativeQueryTestBean bean(){
-		return ServiceLocator.getService(LocalNativeQueryTestBean.class.getSimpleName());
+		return Registry.getComponentFinder().getBean(LocalNativeQueryTestBean.class.getSimpleName());
 	}
 	
 	/**

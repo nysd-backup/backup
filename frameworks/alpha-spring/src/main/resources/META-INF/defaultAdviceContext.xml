@@ -22,9 +22,9 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>
-	<bean id="internalPerfInterceptor" class="org.coder.alpha.framework.advice.InternalPerfInterceptor"/>
+	<bean id="internalTraceInterceptor" class="org.coder.alpha.framework.trace.InternalTraceInterceptor"/>
 	<bean id="perfInterceptor" class="org.coder.alpha.framework.advice.DelegatingInterceptor">
-		<property name="internal" ref="internalPerfInterceptor"/>
+		<property name="internal" ref="internalTraceInterceptor"/>
 	</bean>
 	
 </beans>

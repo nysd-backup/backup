@@ -6,8 +6,8 @@ package service.core.jms;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.framework.messaging.client.MessageClientFactory;
-import org.coder.alpha.framework.messaging.client.MessagingProperty;
+import org.coder.alpha.framework.messaging.MessageClientFactory;
+import org.coder.alpha.framework.messaging.MessagingProperty;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

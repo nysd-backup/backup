@@ -14,7 +14,7 @@ import javax.interceptor.InvocationContext;
  */
 public class DefaultInvocationAdapter implements InvocationAdapter{
 	
-	private InvocationContext context;
+	private final InvocationContext context;
 	
 	/**
 	 * @param joinPoint the joinPoint

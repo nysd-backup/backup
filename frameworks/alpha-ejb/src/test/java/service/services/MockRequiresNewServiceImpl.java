@@ -6,8 +6,8 @@ package service.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.coder.alpha.framework.transaction.NestedTransactionContext;
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.framework.transaction.autonomous.AutonomousTxContext;
 
 
 import service.entity.TestEntity;
@@ -37,7 +37,7 @@ public class MockRequiresNewServiceImpl extends BaseCase implements MockRequires
 		e.setAttr2(2);
 		em.persist(e);
 		if( v.equals("AA")){
-			((AutonomousTxContext)TransactionContext.getCurrentInstance()).setRollbackOnly();
+			((NestedTransactionContext)TransactionContext.getCurrentInstance()).setRollbackOnly();
 		}
 		return v;
 	}

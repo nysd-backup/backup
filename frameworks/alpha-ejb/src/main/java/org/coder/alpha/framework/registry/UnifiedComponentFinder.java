@@ -10,7 +10,7 @@ package org.coder.alpha.framework.registry;
  * @author yoshida-n
  * @version	created.
  */
-public class UnifiedComponentFinder extends EJBComponentFinder{
+public class UnifiedComponentFinder extends ComponentFinder{
 	
 	/**
 	 * @return prefix

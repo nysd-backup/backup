@@ -22,7 +22,6 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!-- コネクションが別セッションにならないのでこちらを単体テストで使用する。javaagentの設定をテストクラス毎に実行するのはしんどい ので[java]→[Installed JREs]でデフォルトVM引数を変更する-->
 	
 	<import resource="classpath:META-INF/defaultJpaQueryContext.xml"/>
-	<import resource="classpath:META-INF/defaultQueryAdviceContext.xml"/>
 	<import resource="classpath:META-INF/defaultAdviceContext.xml"/>
  	
  	<!-- <import resource="classpath:META-INF/context/remotingApplicationContext.xml"/>

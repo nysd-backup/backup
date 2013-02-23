@@ -25,7 +25,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.framework.transaction.TransactionContext;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
@@ -36,7 +35,6 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.TransactionSystemException;
 
-import service.test.RequiresNewReadOnlyService;
 import service.test.RequiresNewService;
 import service.test.ServiceTestContextImpl;
 import service.test.ServiceUnit;
@@ -63,6 +61,9 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 
 	@PersistenceContext(unitName="oracle")
 	private EntityManager per;
+	
+	@Resource
+	private RequiresNewService service;
 	
 	@Test
 	public void test() throws Exception{
@@ -540,7 +541,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
 		assertEquals("OK",service.test());	
 		
@@ -557,7 +558,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
 		try{
 			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
@@ -583,7 +584,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
 		try{
 			//呼び出し�Eで例外握りつぶしてぁE��もロールバックフラグがたってぁE��ばトランザクション墁E��でコミット要求が実行されて例外発甁E
@@ -606,7 +607,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	public void catchTransactionSystemException(){	
 		
 		//Transactionをrollback状態としても例外がすろーされなければ呼び出し元でも例外にならない。
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		service.addMessage();
 		
 	}
@@ -623,7 +624,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		RequiresNewReadOnlyService service = ServiceLocator.getService(RequiresNewReadOnlyService.class);
+		//RequiresNewReadOnlyService service = ServiceLocator.getService(RequiresNewReadOnlyService.class);
 		
 		try{
 			//呼び出し�Eで例外握りつぶしてぁE��もロールバックフラグがたってぁE��ばトランザクション墁E��でコミット要求が実行されて例外発甁E
@@ -653,7 +654,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		query.call();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
 		
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 		
 		try{
 			service.test();
@@ -683,7 +684,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		query.setHint(QueryHints.HINT, "/* TEST */");
 		
 		query.call();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		//RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
 				
 		assertEquals("OK",service.test());
 			

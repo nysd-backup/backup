@@ -20,7 +20,6 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 import javax.sql.DataSource;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.coder.alpha.query.criteria.ComparingOperand;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.EntityManagerImpl;
@@ -94,7 +93,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	protected void setUpDataForceCommit(String dataPath){
 		
 		try{
-			DataSource ds = ServiceLocator.getService("dataSource");
+			DataSource ds = getService("dataSource");
 			Connection con = ds.getConnection();
 			String userName = con.getMetaData().getUserName();
 			connection = new DatabaseConnection(con,userName);
@@ -490,7 +489,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		RequiresNewNativeService service = ServiceLocator.getService(RequiresNewNativeService.class);
+		RequiresNewNativeService service = getService(RequiresNewNativeService.class);
 		
 		try{
 			//トランザクション墁E��でもスローされた例外�Eそ�EままキャチE��可能
@@ -517,7 +516,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		
-		RequiresNewNativeService service = ServiceLocator.getService(RequiresNewNativeService.class);
+		RequiresNewNativeService service = getService(RequiresNewNativeService.class);
 		
 		assertEquals("NG",service.crushException());
 		
@@ -532,7 +531,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 	public void catchTransactionSystemException(){	
 		
 		//Transactionをrollback状態としても例外がすろーされなければ呼び出し元でも例外にならない。
-		RequiresNewNativeService service = ServiceLocator.getService(RequiresNewNativeService.class);
+		RequiresNewNativeService service = getService(RequiresNewNativeService.class);
 		service.addMessage();
 		
 	}
@@ -550,7 +549,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		per.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 
-		RequiresNewNativeReadOnlyService service = ServiceLocator.getService(RequiresNewNativeReadOnlyService.class);
+		RequiresNewNativeReadOnlyService service = getService(RequiresNewNativeReadOnlyService.class);
 		
 		assertEquals("NG",service.crushException());
 	
@@ -573,7 +572,7 @@ public class LocalPureNativeEntityQueryTest extends ServiceUnit implements ITest
 		query.call();	//getSingleResultめEaxResult持E���E場吁EQL構文エラー　ↁEEclipseLinkのバグ
 		
 		
-		RequiresNewNativeService service = ServiceLocator.getService(RequiresNewNativeService.class);
+		RequiresNewNativeService service = getService(RequiresNewNativeService.class);
 		
 		try{
 			service.test();

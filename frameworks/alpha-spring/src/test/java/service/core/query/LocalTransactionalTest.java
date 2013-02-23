@@ -6,7 +6,6 @@ package service.core.query;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.framework.registry.ServiceLocator;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,7 +32,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	@Test
 	@Rollback(false)
 	public void addMessageInNewTransaction(){
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = getService(RequiresNewService.class);
 		
 		service.addMessage();
 		assertTrue(service.isRollbackOnly());
@@ -46,7 +45,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	@Test
 	@Rollback(false)
 	public void throwInNewTransaction(){
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = getService(RequiresNewService.class);
 		
 		try{
 			service.throwError();
@@ -67,7 +66,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	@Transactional
 	public void addMessageAndPersistInNewTransaction(){
 		
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = getService(RequiresNewService.class);
 		service.callTwoServices();
 		
 		assertEquals(1,service.getState());
@@ -82,7 +81,7 @@ public class LocalTransactionalTest extends ServiceUnit{
 	@Rollback(false)
 	public void errorInCurrentAfterSuccessInNew(){
 	
-		RequiresNewService service = ServiceLocator.getService(RequiresNewService.class);
+		RequiresNewService service = getService(RequiresNewService.class);
 		assertEquals("OK",service.another());
 		assertFalse(service.isRollbackOnly());		
 

@@ -14,8 +14,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
-import org.coder.alpha.framework.registry.ServiceLocatorInitializer;
-import org.coder.alpha.framework.registry.SpringComponentFinder;
+import org.coder.alpha.framework.registry.Registry;
 import org.coder.alpha.jdbc.domain.ConstantCache;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -70,6 +69,15 @@ public abstract class ServiceUnit extends Assert{
 		MDC.remove("transactionId");
 	}
 	
+
+	protected <T> T getService(Class<T> serviceType){
+		return Registry.getService(serviceType);
+	}
+	
+	protected <T> T getService(String serviceName){
+		return Registry.getService(serviceName);
+	}
+	
 	/**
 	 * コンチE��ストロード、個別チE��トケースで使用するServiceLocatorめEontextConfigurationを使用できるようにする
 	 * AutowiredよりもResourceの方がタイミング皁E��早ぁE��めResourceを使用する
@@ -79,7 +87,7 @@ public abstract class ServiceUnit extends Assert{
 	@Resource
 	public void setApplicationContext(final ApplicationContext applicationContext){
 
-		new ServiceLocatorInitializer().initiazie(new SpringComponentFinder(applicationContext));
+		Registry.init(applicationContext);
 		
 		context = new ServiceTestContextImpl();	
 		context.initialize();	
