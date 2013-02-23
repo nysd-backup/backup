@@ -15,7 +15,7 @@ import javax.persistence.Query;
 import org.coder.alpha.jdbc.strategy.ConstantAccessor;
 import org.coder.alpha.jdbc.strategy.QueryLoader;
 import org.coder.alpha.jdbc.strategy.impl.DefaultConstantAccessor;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
+import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
 import org.coder.alpha.query.free.Conditions;
 import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.ModifyingConditions;
@@ -36,7 +36,7 @@ public class EclipseLinkJpqlGateway implements PersistenceGateway{
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
 	
 	/** the <code>QueryLoader</code> */
-	private QueryLoader loader = new QueryLoaderProxy();
+	private QueryLoader loader = new QueryLoaderTrace();
 	
 	/** the <code>ConstantAccessor</code> */
 	private ConstantAccessor accessor = new DefaultConstantAccessor();

@@ -25,7 +25,7 @@ import org.coder.alpha.jdbc.strategy.RecordHandlerFactory;
 import org.coder.alpha.jdbc.strategy.ResultSetHandler;
 import org.coder.alpha.jdbc.strategy.impl.DefaultRecordHandlerFactory;
 import org.coder.alpha.jdbc.strategy.impl.DefaultResultSetHandler;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
+import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
 import org.coder.alpha.query.elink.free.LazyList;
 import org.coder.alpha.query.elink.free.NativeQueryExceptionHandler;
 import org.coder.alpha.query.free.Conditions;
@@ -53,7 +53,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
 public class EclipseLinkNativeGateway implements PersistenceGateway {
 		
 	/** the <code>QueryLoader</code> */
-	private QueryLoader loader = new QueryLoaderProxy();
+	private QueryLoader loader = new QueryLoaderTrace();
 
 	/** the ResultSetHandler */
 	private ResultSetHandler handler = new DefaultResultSetHandler();

@@ -32,7 +32,7 @@ import org.coder.alpha.jdbc.strategy.impl.DefaultResultSetHandler;
 import org.coder.alpha.jdbc.strategy.impl.DefaultSelector;
 import org.coder.alpha.jdbc.strategy.impl.DefaultStatementProvider;
 import org.coder.alpha.jdbc.strategy.impl.DefaultUpdater;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderProxy;
+import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
 
 
 
@@ -53,7 +53,7 @@ public class QueryServiceImpl implements QueryService{
 	private ResultSetHandler resultSetHandler = new DefaultResultSetHandler();
 
 	/** the QueryLoader */
-	private QueryLoader queryBuilder = new QueryLoaderProxy();
+	private QueryLoader queryBuilder = new QueryLoaderTrace();
 	
 	/** the StatementProvider */
 	private StatementProvider provider = new DefaultStatementProvider();

@@ -12,33 +12,32 @@ import org.coder.alpha.jdbc.domain.PreparedQuery;
 import org.coder.alpha.jdbc.strategy.QueryLoader;
 
 
-
 /**
- * SQLをキャッシュに保存する.
+ * Cache for Query.
  *
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
 public class QueryLoaderProxy implements QueryLoader{
 	
-	/** SQLキャッシュ. */
+	/** cache. */
 	private static final Map<String, String> CACHE = new ConcurrentHashMap<String, String>();
 
-	/** デリゲート. */
+	/** delegate */
 	private QueryLoader delegate = new DefaultQueryLoader();
 	
-	/** キャッシュ使用有無. */
+	/** enable cache. */
 	private boolean useCache = true;
 	
 	/**
-	 * @param delegate デリゲート
+	 * @param delegate the delegate to set
 	 */
 	public void setDelegate(QueryLoader delegate){
 		this.delegate = delegate;
 	}
 	
 	/**
-	 * @param useCache キャッシュ使用有無
+	 * @param useCache the useCache to set
 	 */
 	public void setUseCache(boolean useCache){
 		this.useCache = useCache;
