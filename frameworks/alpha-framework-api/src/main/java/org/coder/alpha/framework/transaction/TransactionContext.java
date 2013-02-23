@@ -18,9 +18,6 @@ public abstract class TransactionContext {
 	
 	private Locale locale;
 	
-	/** the level of call stack */
-	private int callStackLevel = 0;
-	
 	/** the requestId */
 	private String requestId = null;
 
@@ -71,27 +68,6 @@ public abstract class TransactionContext {
 	}
 	
 	/**
-	 * @return the level of the call stack
-	 */
-	public int getCallStackLevel(){
-		return callStackLevel;
-	}
-	
-	/**
-	 * push call stack.
-	 */
-	public void pushCallStack(){
-		callStackLevel++;
-	}
-	
-	/**
-	 * pop call stack.
-	 */
-	public void popCallStack(){
-		callStackLevel--;
-	}
-	
-	/**
 	 * @param rollbackable the rollbackable object 
 	 */
 	public void addMessage(Rollbackable rollbackable){		
@@ -131,7 +107,6 @@ public abstract class TransactionContext {
 	 */
 	public void release(){			
 		locale = null;
-		callStackLevel = 0;
 		requestId = null;	
 		failed = false;
 		messageList = new ArrayList<Object>();

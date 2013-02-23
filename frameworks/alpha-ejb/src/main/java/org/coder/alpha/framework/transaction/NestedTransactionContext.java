@@ -8,7 +8,6 @@ import java.util.Stack;
 import org.coder.alpha.framework.transaction.TransactionContext;
 
 
-
 /**
  * the context.
  *
@@ -17,7 +16,7 @@ import org.coder.alpha.framework.transaction.TransactionContext;
  */
 public class NestedTransactionContext extends TransactionContext{
 
-	private Stack<TransactionScope> transactionScopes = new Stack<TransactionScope>();;
+	private Stack<TransactionScope> transactionScopes = new Stack<TransactionScope>();
 	
 	/**
 	 * @see org.coder.alpha.framework.transaction.TransactionContext#setRollbackOnly()
