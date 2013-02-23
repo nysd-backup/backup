@@ -5,7 +5,6 @@ package org.coder.alpha.txscriptejb.datasource.gateway;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,6 +12,7 @@ import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.txscriptejb.datasource.entity.Order;
+import org.coder.alpha.txscriptejb.interceptor.Traceable;
 
 
 /**
@@ -23,17 +23,13 @@ import org.coder.alpha.txscriptejb.datasource.entity.Order;
  * @author yoshida-n
  * @version	created.
  */
+@Traceable
 public class OrderGateway {
 	
 	@PersistenceContext
 	protected EntityManager em;
 	
-	private CriteriaQueryFactory criteriaFactory;
-	
-	@PostConstruct
-	void construct(){
-		criteriaFactory = new DefaultQueryFactoryFinder().createCriteriaQueryFactory();
-	}
+	private CriteriaQueryFactory criteriaFactory = new DefaultQueryFactoryFinder().createCriteriaQueryFactory();
 	
 	/**
 	 * Finds the entity.

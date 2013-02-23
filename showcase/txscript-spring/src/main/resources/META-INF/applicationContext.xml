@@ -30,7 +30,6 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd"
 	
 	<import resource="classpath:META-INF/defaultAdviceContext.xml"/>
 	<import resource="classpath:META-INF/defaultJpaQueryContext.xml"/>
-	<import resource="classpath:META-INF/defaultQueryAdviceContext.xml"/>
 	
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">     
         <property name="persistenceUnitName" value="default" />           

@@ -5,7 +5,7 @@
      id="WebApp_ID" version="3.0">
 
   <listener>
-    <listener-class>alpha.domain.spring.example.ContextLoaderListener</listener-class>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>  
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -13,7 +13,6 @@
       classpath:META-INF/applicationContext.xml
     </param-value>
   </context-param>
-
 
  <servlet>
      <servlet-name>SpringServlet</servlet-name>
@@ -28,21 +27,5 @@
       <servlet-name>SpringServlet</servlet-name>
       <url-pattern>*.do</url-pattern>
   </servlet-mapping>
-
- <servlet>
-    <servlet-name>Jersey Servlet</servlet-name>
-    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-    <load-on-startup>2</load-on-startup>
-    <init-param>
-        <param-name>com.sun.jersey.config.property.packages</param-name>
-        <param-value>alpha.domain.spring.example.ws</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Jersey Servlet</servlet-name>
-    <url-pattern>/api/*</url-pattern>
-  </servlet-mapping> 
-
 
 </web-app>

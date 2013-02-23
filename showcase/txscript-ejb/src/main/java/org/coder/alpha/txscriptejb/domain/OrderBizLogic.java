@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import org.coder.alpha.txscriptejb.datasource.entity.Order;
 import org.coder.alpha.txscriptejb.datasource.gateway.OrderGateway;
+import org.coder.alpha.txscriptejb.interceptor.Traceable;
 
 
 /**
@@ -18,10 +19,12 @@ import org.coder.alpha.txscriptejb.datasource.gateway.OrderGateway;
  * @author yoshida-n
  * @version	created.
  */
+@Traceable
 public class OrderBizLogic{
 	
+	/** デフォルトだとOrderBizLogicと同じライフサイクルになる */
 	@Inject
-	private OrderGateway repository;
+	private OrderGateway gateway;
 	
 	/**
 	 * Persist
@@ -30,13 +33,13 @@ public class OrderBizLogic{
 	 */
 	public void persist(String orderNo){
 		assert orderNo != null;
-		Order order = repository.find(new Long(orderNo));
+		Order order = gateway.find(new Long(orderNo));
 		if(order == null){
-			order = repository.create();
+			order = gateway.create();
 			order.setCustomerCd("aaa");
 			order.setOrderDt(new Date());
 			order.setOrderNo(new Long(orderNo));
-			repository.persist(order);
+			gateway.persist(order);
 		}else{
 			order.setCustomerCd("aaa");
 			order.setOrderDt(new Date());
@@ -51,7 +54,7 @@ public class OrderBizLogic{
 	 */
 	public List<Order> search(String customerCd){
 		assert customerCd != null;
-		return repository.getResultByCustomerCd(customerCd);		
+		return gateway.getResultByCustomerCd(customerCd);		
 	}
 	
 }

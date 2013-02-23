@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.coder.alpha.txscriptejb.domain.OrderBizLogic;
+import org.coder.alpha.txscriptejb.interceptor.Traceable;
 
 /**
  * OrderService.
@@ -14,9 +15,11 @@ import org.coder.alpha.txscriptejb.domain.OrderBizLogic;
  * @author yoshida-n
  * @version	created.
  */
-@Stateless
+@Traceable
+@Stateless	//SessionBeanでなくてもCMTに対応してほしい
 public class OrderService {
 
+	/** デフォルトだとOrderServiceと同じライフサイクルになる */
 	@Inject
 	private OrderBizLogic bizLogic;
 	
