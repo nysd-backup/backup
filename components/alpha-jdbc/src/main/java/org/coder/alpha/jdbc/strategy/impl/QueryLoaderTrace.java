@@ -5,9 +5,11 @@ package org.coder.alpha.jdbc.strategy.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.coder.alpha.jdbc.domain.PreparedQuery;
@@ -24,7 +26,7 @@ public class QueryLoaderTrace implements QueryLoader{
 	private static final Log LOG = LogFactory.getLog("QUERY." +QueryLoaderTrace.class);
 	
 	/** delegate */
-	private QueryLoader delegate = new QueryLoaderProxy();
+	private QueryLoader delegate = new QueryLoaderCache();
 	
 	/** the list contains query id */
 	private List<String> ignoreList = new ArrayList<String>();
@@ -87,13 +89,42 @@ public class QueryLoaderTrace implements QueryLoader{
 			String queryId) {
 		if(ignoreList.contains(queryId)){
 			return delegate.prepare(originalSql, parameter, wrapClause, queryId);
-		}else{
-			PreparedQuery value = delegate.prepare(originalSql, parameter, wrapClause, queryId);
+		}else{		
+			PreparedQuery value = delegate.prepare(originalSql, parameter, wrapClause, queryId);			
+			if(LOG.isDebugEnabled()){
+				StringBuilder builder = new StringBuilder();
+				for(List<Object> e : value.getBindList()){					
+					builder.append("[");
+					boolean first = true;
+					for(Object o : e){
+						if(first){
+							first = false;
+						}else{
+							builder.append(",");
+						}
+						builder.append((o instanceof String) ? "\'" + o  + "\'" : o);
+					}
+					builder.append("]\n");			
+				}
+				LOG.debug(String.format("executing sql = \n%s\n%s",value.getQueryStatement(),builder.toString()));		
+			}
 			if(LOG.isInfoEnabled()){
-				String query = value.toString();
-				String[] splited = query.split(";");				
-				LOG.info(splited[0]);
-				LOG.debug(splited[1]);
+				StringBuilder convertedQuery = new StringBuilder();
+				for(List<Object> param : value.getBindList()){
+					Iterator<Object> ite = param.iterator();
+					String converted = value.getQueryStatement();
+					
+					//?にパラメータを埋め込む
+					while(converted.contains("?")){
+						if( !ite.hasNext() ){
+							throw new IllegalStateException("count of ? is different from parameter count");
+						}
+						Object v = ite.next();
+						converted = StringUtils.replaceOnce(converted, "?", (v instanceof String) ? "\'" + v  + "\'" : String.valueOf(v));		
+					}	
+					convertedQuery.append(String.format("complete sql = \n%s",converted));
+				}
+				LOG.info(convertedQuery.toString());
 			}
 			return value;			
 		}

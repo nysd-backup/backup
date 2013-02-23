@@ -6,10 +6,8 @@ package org.coder.alpha.jdbc.domain;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.coder.alpha.jdbc.strategy.StatementProvider;
 
 
@@ -82,46 +80,7 @@ public class PreparedQuery {
 		PreparedStatement stmt = provider.createStatement(queryId, con, statement);	
 		return new StatementWrapper(stmt,bindList,provider);
 	}
-	
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		for(List<Object> e : bindList){					
-			builder.append("[");
-			boolean first = true;
-			for(Object o : e){
-				if(first){
-					first = false;
-				}else{
-					builder.append(",");
-				}
-				builder.append((o instanceof String) ? "\'" + o  + "\'" : o);
-			}
-			builder.append("]\n");			
-		}
-		String query = String.format("executing sql = \n%s\n%s",statement,builder.toString());		
-		
-		StringBuilder convertedQuery = new StringBuilder();
-		for(List<Object> param : bindList){
-			Iterator<Object> ite = param.iterator();
-			String converted = statement;
-			
-			//?にパラメータを埋め込む
-			while(converted.contains("?")){
-				if( !ite.hasNext() ){
-					throw new IllegalStateException("count of ? is different from parameter count");
-				}
-				Object v = ite.next();
-				converted = StringUtils.replaceOnce(converted, "?", (v instanceof String) ? "\'" + v  + "\'" : String.valueOf(v));		
-			}	
-			convertedQuery.append(String.format("complete sql = \n%s",converted));
-		}
-		
-		return query + ";" + convertedQuery.toString();
-	}
+
 
 
 }

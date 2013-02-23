@@ -17,14 +17,10 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<aop:aspectj-autoproxy/>
 	
 	<aop:config>
-		<aop:aspect id="perfAspect" ref="perfInterceptor">	
+		<aop:aspect id="perfAspect" ref="traceInterceptor">	
 			<aop:pointcut expression="@annotation(org.springframework.stereotype.Service)" id="pointcut"/>	
 			<aop:around pointcut-ref="pointcut" method="around"/>
 		</aop:aspect>			
 	</aop:config>
-	<bean id="internalTraceInterceptor" class="org.coder.alpha.framework.trace.InternalTraceInterceptor"/>
-	<bean id="perfInterceptor" class="org.coder.alpha.framework.advice.DelegatingInterceptor">
-		<property name="internal" ref="internalTraceInterceptor"/>
-	</bean>
-	
+	<bean id="traceInterceptor" class="org.coder.alpha.framework.trace.TraceInterceptor"/>
 </beans>

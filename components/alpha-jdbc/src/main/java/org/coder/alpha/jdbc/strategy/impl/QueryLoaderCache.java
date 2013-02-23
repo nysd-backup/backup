@@ -18,7 +18,7 @@ import org.coder.alpha.jdbc.strategy.QueryLoader;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class QueryLoaderProxy implements QueryLoader{
+public class QueryLoaderCache implements QueryLoader{
 	
 	/** cache. */
 	private static final Map<String, String> CACHE = new ConcurrentHashMap<String, String>();

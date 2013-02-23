@@ -12,20 +12,21 @@ import org.apache.commons.logging.LogFactory;
  * @author yoshida-n
  * @version	created.
  */
-public class TraceWatcher {
+public class InvocationWatcher {
 	
 	/** the logger */
-	private static final Log LOG = LogFactory.getLog("TRACE." +TraceWatcher.class);
+	private static final Log LOG = LogFactory.getLog("TRACE." +InvocationWatcher.class);
 	
 	/** the startTime */
 	private long startTime = 0L;
 	
+	/** call stack */
 	private final int callStack;
 
-	/** the className */
+	/** the target className */
 	private final String className;
 	
-	/** the method name */
+	/** the target method name */
 	private final String methodName;
 	
 	/**
@@ -39,7 +40,7 @@ public class TraceWatcher {
 	 * @param className the className to set
 	 * @param methodName the methodName to set
 	 */
-	public TraceWatcher(Class<?> declaringType, String methodName, int callStack){
+	public InvocationWatcher(Class<?> declaringType, String methodName, int callStack){
 		this.className = declaringType.getName();
 		this.methodName = methodName;
 		this.callStack = callStack;

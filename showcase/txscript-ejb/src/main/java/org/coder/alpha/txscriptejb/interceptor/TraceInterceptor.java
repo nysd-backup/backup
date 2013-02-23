@@ -9,7 +9,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.coder.alpha.framework.trace.TraceContext;
+import org.coder.alpha.framework.trace.Tracer;
 
 /**
  * TraceInterceptor.
@@ -29,20 +29,11 @@ public class TraceInterceptor {
 	@AroundInvoke
 	public Object around(InvocationContext context) throws Throwable {
 		Method method = context.getMethod();
-		TraceContext trace = TraceContext.getCurrentInstance();
-		boolean isRoot = trace == null;
-		if(isRoot){
-			trace = new TraceContext();
-			trace.initialize();
-		}
-		trace.startWatch(method.getDeclaringClass(),method.getName());		
+		Tracer.start(method.getDeclaringClass(),method.getName());		
 		try{
 			return context.proceed();
 		}finally {
-			trace.stopWatch();
-			if(isRoot){
-				trace.release();
-			}
+			Tracer.stop();
 		}
 	}
 

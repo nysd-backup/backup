@@ -12,6 +12,7 @@ import org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway;
 import org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway;
 import org.coder.alpha.query.free.QueryFactory;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
+import org.coder.alpha.query.free.gateway.PersistenceGatewayTrace;
 
 
 /**
@@ -65,7 +66,13 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	protected PersistenceGateway createJpqlGateway(QueryLoader builder){
 		EclipseLinkJpqlGateway named = new EclipseLinkJpqlGateway();
 		named.setQueryLoader(builder);				
-		return named;
+		if(PersistenceGatewayTrace.isEnabled()){
+			PersistenceGatewayTrace trace = new PersistenceGatewayTrace();
+			trace.setDelegate(named);
+			return trace;
+		}else{
+			return named;
+		}
 	}
 	
 	/**
@@ -74,10 +81,16 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param builder the builder
 	 * @return the query
 	 */
-	protected PersistenceGateway createNativeGateway(QueryLoader builder){
+	protected PersistenceGateway createNativeGateway(QueryLoader builder){	
 		EclipseLinkNativeGateway ntv = new EclipseLinkNativeGateway();
 		ntv.setQueryLoader(builder);	
-		return ntv;
+		if(PersistenceGatewayTrace.isEnabled()){
+			PersistenceGatewayTrace trace = new PersistenceGatewayTrace();
+			trace.setDelegate(ntv);
+			return trace;
+		}else{
+			return ntv;
+		}
 	}
 	
 	/**

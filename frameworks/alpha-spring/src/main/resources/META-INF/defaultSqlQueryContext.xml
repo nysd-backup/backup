@@ -27,24 +27,28 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	-->
 
 	<!-- 内部クエリ -->
-	<bean id="nativeGateway" class="org.coder.alpha.query.free.gateway.NativeGateway" scope="prototype" >
-		<property name="queryService">
-			<bean class="org.coder.alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
-				<property name="exceptionHandler">
-					<bean class="org.coder.alpha.query.free.NativeQueryExceptionHandler" scope="singleton"/>
-				</property>
+	<bean id="nativeGatewayTrace" class="org.coder.alpha.query.free.gateway.PersistenceGatewayTrace">
+		<property name="delegate">
+			<bean class="org.coder.alpha.query.free.gateway.NativeGateway" scope="prototype" >
+				<property name="queryService">
+					<bean class="org.coder.alpha.jdbc.service.impl.QueryServiceImpl" scope="singleton">
+						<property name="exceptionHandler">
+							<bean class="org.coder.alpha.query.free.NativeQueryExceptionHandler" scope="singleton"/>
+						</property>
+					</bean>
+				</property>		
 			</bean>
-		</property>		
+		</property>
 	</bean>
 	
 	<!--　バッチクエリファクトリ -->
 	<bean id="batchUpdateFactory" class="org.coder.alpha.query.free.BatchModifyQueryFactory" scope="prototype">
-		<property name="persistenceGateway" ref="nativeGateway"/>	
+		<property name="persistenceGateway" ref="nativeGatewayTrace"/>	
 	</bean>
 	
 	<!-- クエリファクトリ -->
 	<bean id="queryFactory" class="org.coder.alpha.query.free.QueryFactory" scope="prototype">
-		<property name="nativeGateway" ref="nativeGateway"/>			
+		<property name="nativeGateway" ref="nativeGatewayTrace"/>			
 	</bean>
 	
 	<!-- ORMクエリファクトリ -->
@@ -52,7 +56,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="builderFactory">
 			<bean class="org.coder.alpha.query.criteria.statement.SQLBuilderFactory" scope="singleton" />
 		</property>
-		<property name="persistenceGateway" ref="nativeGateway"/>
+		<property name="persistenceGateway" ref="nativeGatewayTrace"/>
 	</bean>
 	
 </beans>

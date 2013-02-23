@@ -15,15 +15,22 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config/>
 
-  	<!-- 内部Namedクエリ -->
-	<bean id="jpqlGateway" class="org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" />
+	<bean id="jpqlGatewayTrace" class="org.coder.alpha.query.free.gateway.PersistenceGatewayTrace" scope="prototype" >
+	 	 <property name="delegate">
+			<bean class="org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway" scope="prototype" />						
+		</property>		
+	</bean>
+	
+	<bean id="nativeGatewayTrace" class="org.coder.alpha.query.free.gateway.PersistenceGatewayTrace" scope="prototype" >
+	 	 <property name="delegate">
+			<bean class="org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" />						
+		</property>		
+	</bean>
 
 	<!-- クエリファクトリ開発者API -->
 	<bean id="queryFactory" class="org.coder.alpha.query.free.QueryFactory" scope="prototype" >
-		<property name="nativeGateway">
-			<bean class="org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway" scope="prototype" />						
-		</property>		
-		<property name="jpqlGateway" ref="jpqlGateway"/>			
+		<property name="nativeGateway" ref="nativeGatewayTrace"/>
+		<property name="jpqlGateway" ref="jpqlGatewayTrace"/>			
 	</bean>
 
 	<!-- ORMクエリファクトリ開発者API -->
@@ -31,7 +38,7 @@ http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 		<property name="builderFactory">
 			<bean class="org.coder.alpha.query.criteria.statement.JPQLBuilderFactory" scope="singleton" />
 		</property>
-		<property name="persistenceGateway" ref="jpqlGateway"/>
+		<property name="persistenceGateway" ref="jpqlGatewayTrace"/>
 	</bean>
  
 </beans>
