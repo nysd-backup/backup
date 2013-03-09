@@ -176,7 +176,7 @@ public abstract class CriteriaQuery<E,T> {
 	public T call(){
 		return doCall(criterias);
 	}
-
+	
 	/**
 	 * Call the specified query.
 	 * @param builder the builder

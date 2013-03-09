@@ -3,9 +3,8 @@
  */
 package org.coder.alpha.framework.transaction;
 
-import java.util.Stack;
-
-import org.coder.alpha.framework.transaction.TransactionContext;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 /**
@@ -16,7 +15,7 @@ import org.coder.alpha.framework.transaction.TransactionContext;
  */
 public class NestedTransactionContext extends TransactionContext{
 
-	private Stack<TransactionScope> transactionScopes = new Stack<TransactionScope>();
+	private Deque<TransactionScope> transactionScopes = new ArrayDeque<TransactionScope>();
 	
 	/**
 	 * @see org.coder.alpha.framework.transaction.TransactionContext#setRollbackOnly()
@@ -61,7 +60,7 @@ public class NestedTransactionContext extends TransactionContext{
 	@Override
 	public void initialize(){
 		super.initialize();
-		transactionScopes = new Stack<TransactionScope>();		
+		transactionScopes = new ArrayDeque<TransactionScope>();		
 		newTransactionScope();
 	}
 	
