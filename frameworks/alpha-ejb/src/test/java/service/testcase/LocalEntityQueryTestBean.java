@@ -16,7 +16,7 @@ import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 
-import org.coder.alpha.framework.transaction.TransactionContext;
+import org.apache.log4j.MDC;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
 import org.coder.alpha.query.criteria.query.UpdateQuery;
@@ -392,8 +392,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void ignoreUniqueConstraintError(){
 		setUpData("TEST.xls");
 		//一意制紁E��効匁E
-		TransactionContext impl = TransactionContext.getCurrentInstance();
-		impl.setRequestId("IGNORE_TEST");
+		MDC.put("ID","IGNORE_TEST");
 	
 		TestEntity entity = new TestEntity();
 		entity.setTest("1");
@@ -403,7 +402,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		em.persist(entity);	
 		em.flush();
 		
-		impl.setRequestId("aaa");
+		MDC.put("ID","aaa");
 		
 		TestEntity entity2 = new TestEntity();
 		entity2.setTest("530");
@@ -437,8 +436,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	public void ignoreVersionNoError(){
 		setUpData("TEST.xls");
 		//ロチE��連番エラー無効匁E行単位�E更新をさせる場合、こぁE��るか自律トランザクションにする忁E��がある�E�E
-		TransactionContext impl = TransactionContext.getCurrentInstance();
-		impl.setRequestId("IGNORE_TEST");
+		MDC.put("ID","IGNORE_TEST");
 					
 
 		final TestEntity result = em.find(TestEntity.class,"1");
@@ -459,7 +457,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 //			
 //		}
 				);
-		impl.setRequestId("IGNORE_TE");
+		MDC.put("ID","IGNORE_TE");
 		
 		//バ�Eジョン番号を指定しなぁE��め更新成功
 		TestEntity res2 =  em.find(TestEntity.class,"2");
@@ -481,8 +479,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();
 		
-		TransactionContext impl = TransactionContext.getCurrentInstance();
-		impl.setRequestId("IGNORE_TEST");
+		MDC.put("ID","IGNORE_TEST");
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
@@ -581,9 +578,7 @@ public class LocalEntityQueryTestBean extends BaseCase {
 	 */
 
 	public void invalidQueryPessimisticLockError(){	
-		
-		TransactionContext impl = TransactionContext.getCurrentInstance();
-		impl.setRequestId("IGNORE_TEST");
+		MDC.put("ID","IGNORE_TEST");
 		
 		RequiresNewService service = Registry.getComponentFinder().getBean(RequiresNewService.class);
 		service.persist();

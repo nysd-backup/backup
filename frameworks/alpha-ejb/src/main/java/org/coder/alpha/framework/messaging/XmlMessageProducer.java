@@ -7,9 +7,6 @@ import javax.jms.Destination;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import org.coder.alpha.framework.messaging.MessagingProperty;
-import org.coder.alpha.framework.messaging.XmlUtils;
-
 
 
 /**

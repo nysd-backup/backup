@@ -27,7 +27,7 @@ public class RequireServiceImpl extends BaseCase implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		TransactionContext.getCurrentInstance().addMessage(new RollbackableImpl("100"));
+		TransactionContext.getCurrentInstance().acceptRollbackTrigger(new RollbackableImpl("100"));
 	}
 
 	/**

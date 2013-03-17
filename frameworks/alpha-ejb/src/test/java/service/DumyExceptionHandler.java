@@ -4,8 +4,7 @@
 package service;
 
 
-import org.coder.alpha.framework.transaction.NestedTransactionContext;
-import org.coder.alpha.framework.transaction.TransactionContext;
+import org.apache.log4j.MDC;
 import org.coder.alpha.query.elink.customizer.JPQLExceptionHandler;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
@@ -24,9 +23,8 @@ public class DumyExceptionHandler extends JPQLExceptionHandler{
 	//TODO ここで判定するにはDat
 	
 	protected Object handleOptimisticLockException(OptimisticLockException e){
-		NestedTransactionContext context = (NestedTransactionContext)TransactionContext.getCurrentInstance();
-
-		if( "IGNORE_TEST".equals(context.getRequestId()) ){
+	
+		if( "IGNORE_TEST".equals(MDC.get("ID"))){
 			System.out.println("ロック連番");
 		}else{
 			throw e;
@@ -43,8 +41,7 @@ public class DumyExceptionHandler extends JPQLExceptionHandler{
 			try{
 				return super.handleException(exception);
 			}catch(RuntimeException uce){
-				NestedTransactionContext context = (NestedTransactionContext)TransactionContext.getCurrentInstance();
-				if( "IGNORE_TEST".equals(context.getRequestId()) ){
+					if( "IGNORE_TEST".equals(MDC.get("ID")) ){
 					System.out.println("ロック連番");
 				}else{
 					throw uce;

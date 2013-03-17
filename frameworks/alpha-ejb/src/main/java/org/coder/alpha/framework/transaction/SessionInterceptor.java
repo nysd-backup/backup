@@ -86,11 +86,7 @@ public class SessionInterceptor {
 			context.newTransactionScope();
 		}
 		try{		
-			Object retValue = proceed(ic);
-			if(isTransactionBoundary){
-				finishTransactionBoundary(retValue);
-			}
-			return retValue;
+			return proceed(ic);
 		}finally{			
 			//Synchronization 			
 			if(isTransactionBoundary){
@@ -144,13 +140,6 @@ public class SessionInterceptor {
 	 */
 	protected TransactionContext createContext(){
 		return new NestedTransactionContext();
-	}
-
-	/**
-	 * Transaction border event.
-	 * @param retValue value to return
-	 */
-	protected void finishTransactionBoundary(Object retValue){	
 	}
 	
 	/**

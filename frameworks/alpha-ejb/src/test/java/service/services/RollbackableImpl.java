@@ -3,7 +3,7 @@
  */
 package service.services;
 
-import org.coder.alpha.framework.transaction.Rollbackable;
+import org.coder.alpha.framework.transaction.RollbackTrigger;
 
 /**
  * function.
@@ -11,7 +11,7 @@ import org.coder.alpha.framework.transaction.Rollbackable;
  * @author yoshida-n
  * @version	created.
  */
-public class RollbackableImpl implements Rollbackable{
+public class RollbackableImpl implements RollbackTrigger{
 	
 	private final String source;
 	

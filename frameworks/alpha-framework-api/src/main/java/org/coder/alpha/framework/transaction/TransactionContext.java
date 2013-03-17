@@ -3,9 +3,7 @@
  */
 package org.coder.alpha.framework.transaction;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -16,18 +14,12 @@ import java.util.Locale;
  */
 public abstract class TransactionContext {
 	
-	private Locale locale;
-	
-	/** the requestId */
-	private String requestId = null;
-
-	/** the messageList */
-	private List<Object> messageList = new ArrayList<Object>();
-	
 	/** flag of error message */
 	private boolean failed = false;
-
-
+	
+	/** the rollback trigger */
+	private RollbackTriggers triggers;
+	
 	/** the thread local instance*/
 	private static ThreadLocal<TransactionContext> instance = new ThreadLocal<TransactionContext>(){
 		protected TransactionContext initialValue() {
@@ -52,45 +44,23 @@ public abstract class TransactionContext {
 	public static TransactionContext getCurrentInstance(){
 		return instance.get();
 	}
-		
+
 	/**
-	 * @param requestId
+	 * @param trigger the trigger to append 
 	 */
-	public void setRequestId(String requestId){
-		this.requestId = requestId;
-	}
-	
-	/**
-	 * @return
-	 */
-	public String getRequestId(){
-		return this.requestId;
-	}
-	
-	/**
-	 * @param rollbackable the rollbackable object 
-	 */
-	public void addMessage(Rollbackable rollbackable){		
-		//重複しているメッセージは追加しない
-		for(Object o : messageList){
-			if(o.equals(rollbackable.getSource().toString())){
-				return;
-			}
-		}
-		messageList.add(rollbackable.getSource());
-		if(rollbackable.isRollbackRequired()){
+	public void acceptRollbackTrigger(RollbackTrigger trigger){		
+		if(trigger.isRollbackRequired()){
 			setRollbackOnly();
-			setFailed(true);
 		}
-			
+		triggers.append(trigger.getSource());
 	}	
 
 	/**
 	 * @return the globalMessageList
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> List<T> getMessageList(){
-		return (List<T>)messageList;
+	public <T> List<T> getRollbackTriggers(){
+		return (List<T>)this.triggers.getTriggers();
 	}
 	
 	/**
@@ -106,32 +76,23 @@ public abstract class TransactionContext {
 	 * Releases the context.
 	 */
 	public void release(){			
-		locale = null;
-		requestId = null;	
 		failed = false;
-		messageList = new ArrayList<Object>();
+		triggers = new RollbackTriggers();
 		setCurrentInstance(null);
 	}
 
-	/**
-	 * @return the locale
-	 */
-	public Locale getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale the locale to set
-	 */
-	public void setLocale(Locale locale) {
-		this.locale = locale;
-	}
-	
 	/**
 	 * @return failed
 	 */
 	public boolean isFailed() {
 		return failed;
+	}
+	
+	/**
+	 * @param listener the listener to set
+	 */
+	public void setRollbackTriggerListener(RollbackTriggerListener listener){
+		this.triggers.setEventListener(listener);
 	}
 
 	/**
@@ -142,13 +103,13 @@ public abstract class TransactionContext {
 	}
 	
 	/**
-	 * Set the current transaction to rolling back.
-	 */
-	public abstract void setRollbackOnly();
-	
-	/**
 	 * @return true:rollback only
 	 */
 	public abstract boolean isRollbackOnly();
+	
+	/**
+	 * Set the transaction to rollback.
+	 */
+	public abstract void setRollbackOnly();
 
 }

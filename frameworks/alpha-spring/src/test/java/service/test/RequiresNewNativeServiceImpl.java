@@ -74,7 +74,7 @@ public class RequiresNewNativeServiceImpl implements RequiresNewNativeService{
 	 */
 	@Override
 	public void addMessage() {
-		TransactionContext.getCurrentInstance().addMessage( new RollbackableImpl("100"));
+		TransactionContext.getCurrentInstance().acceptRollbackTrigger( new RollbackableImpl("100"));
 		rollbackOnly =  TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
 	}
 
