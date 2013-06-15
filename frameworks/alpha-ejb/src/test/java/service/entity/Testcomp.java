@@ -19,8 +19,6 @@ import org.coder.alpha.query.criteria.Pair;
 
 
 
-
-
 /**
  * TESTCOMPエンティティ
  *

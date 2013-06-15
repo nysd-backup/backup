@@ -9,8 +9,6 @@ import javax.persistence.LockModeType;
 import javax.persistence.Table;
 
 import org.coder.alpha.query.criteria.FixString;
-import org.coder.alpha.query.criteria.statement.AbstractStatementBuilder;
-import org.coder.alpha.query.criteria.statement.StatementBuilder;
 
 
 /**

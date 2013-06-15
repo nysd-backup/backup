@@ -23,7 +23,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	private LocalEntityQueryTestBean bean(){
 		return Registry.getComponentFinder().getBean(LocalEntityQueryTestBean.class.getSimpleName());
 	}
-	
+
 	/**
 	 * 条件追加
 	 * @throws SQLException 

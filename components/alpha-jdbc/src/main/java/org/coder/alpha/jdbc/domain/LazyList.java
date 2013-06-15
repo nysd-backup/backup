@@ -34,7 +34,7 @@ public class LazyList<E> implements List<E>{
 	 * @see java.lang.Object#finalize()
 	 */
 	@Override
-	public void finalize(){
+	protected void finalize(){
 		itr.close();
 	}
 	
@@ -260,18 +260,21 @@ public class LazyList<E> implements List<E>{
 				try{
 					stmt = rs.getStatement();
 				} catch (SQLException e) {
+					throw new IllegalStateException(e);
 				}
 				try{
 					if(!rs.isClosed()){
 						rs.close();
 					}
 				} catch (SQLException e) {
+					throw new IllegalStateException(e);
 				}finally{
 					try{
 						if(stmt != null && !stmt.isClosed()){
 							stmt.close();
 						}
 					}catch(SQLException sqle){
+						throw new IllegalStateException(sqle);
 					}					
 				}
 			}

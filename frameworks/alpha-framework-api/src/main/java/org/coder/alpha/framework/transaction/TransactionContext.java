@@ -52,7 +52,7 @@ public abstract class TransactionContext {
 		if(trigger.isRollbackRequired()){
 			setRollbackOnly();
 		}
-		triggers.append(trigger.getSource());
+		triggers.append(trigger);
 	}	
 
 	/**

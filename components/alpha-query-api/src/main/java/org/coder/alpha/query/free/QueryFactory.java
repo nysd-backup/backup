@@ -58,7 +58,7 @@ public class QueryFactory {
 		if(namedQuery){
 			instance.setPersistenceGateway(jpqlGateway);
 		}else{
-			instance.setPersistenceGateway(nativeGateway);;
+			instance.setPersistenceGateway(nativeGateway);
 		}		
 		return instance;
 	}

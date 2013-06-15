@@ -17,6 +17,7 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PessimisticLockException;
 
 import org.apache.log4j.MDC;
+import org.coder.alpha.query.criteria.ComparingOperand;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
 import org.coder.alpha.query.criteria.query.UpdateQuery;
@@ -25,6 +26,8 @@ import org.eclipse.persistence.config.QueryHints;
 
 import service.Registry;
 import service.entity.DateEntity;
+import service.entity.EmbeddPK;
+import service.entity.EmbeddedEntity;
 import service.entity.IDateEntity;
 import service.entity.ITestEntity;
 import service.entity.TestEntity;
@@ -48,6 +51,24 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		UpdateQuery<TestEntity> modifier = createUpdater(TestEntity.class);
 		modifier.isNotNull(ITestEntity.ATTR).isNull(ITestEntity.ATTR);
 		modifier.set(ITestEntity.ATTR2, 100).call();
+	}
+	
+	public void embed() {
+		
+		SingleReadQuery<EmbeddedEntity> query = createSingleReader(EmbeddedEntity.class);
+		query.addCriteria("id.keyAbc", ComparingOperand.Equal, "11");
+		query.call();
+		
+		
+		EmbeddPK pk = new EmbeddPK();
+		EmbeddedEntity e = new EmbeddedEntity();
+		pk.setKeyAbc("ABC");
+		pk.setKeyDef("DEF");
+		e.setAttr("aaa");
+		e.setAttr2(100);
+		e.setPrimaryKeys(pk);
+		persist(e);
+		flush();
 	}
 	
 	

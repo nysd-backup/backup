@@ -41,7 +41,7 @@ public class LazyList<E> implements List<E>{
 	 * @see java.lang.Object#finalize()
 	 */
 	@Override
-	public void finalize(){
+	protected void finalize(){
 		itr.close();
 	}
 	

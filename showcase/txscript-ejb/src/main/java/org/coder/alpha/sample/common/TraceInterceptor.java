@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.interceptor;
+package org.coder.alpha.sample.common;
 
 import java.lang.reflect.Method;
 

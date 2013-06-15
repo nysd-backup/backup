@@ -2,6 +2,7 @@ package org.coder.alpha.jdbc.strategy.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,7 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
-
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -85,7 +85,7 @@ public class VelocityTemplateEngine implements TemplateEngine{
 						templateSQL.append(line).append(SEPARATOR);
 					}
 				}
-			};
+			}
 			return convert(templateSQL.toString());
 		} finally {
 			if (scanner != null) {
@@ -190,8 +190,10 @@ public class VelocityTemplateEngine implements TemplateEngine{
 	}
 	
 	/** */
-	private static class LengthComparator implements Comparator<String> {
+	private static class LengthComparator implements Comparator<String>,Serializable {
 		
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * @param arg0 the token
 		 * @param arg1 the token

@@ -161,7 +161,7 @@ public class DefaultQueryLoader implements QueryLoader{
 						binds.add(convert(variable,variableName,sqlId));
 					}				
 				}else{
-					binds.add(convert(variable,variableName,sqlId));
+					binds.add(variable);
 				}
 
 			}

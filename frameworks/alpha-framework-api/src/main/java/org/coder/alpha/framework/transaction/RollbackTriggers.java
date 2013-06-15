@@ -37,15 +37,15 @@ public class RollbackTriggers {
 	/**
 	 * @param message the target message
 	 */
-	public boolean append(Object trigger){	
+	public boolean append(RollbackTrigger trigger){	
 		boolean appendable = listener == null ? true: listener.onBeforeAppend(triggers);
 		if(appendable){		
 			for(Object o : triggers){
-				if(o.equals(trigger)){
+				if(o.equals(trigger.getSource())){
 					return false;
 				}
 			}			
-			triggers.add(trigger);
+			triggers.add(trigger.getSource());
 			return true;
 		}
 		return appendable;

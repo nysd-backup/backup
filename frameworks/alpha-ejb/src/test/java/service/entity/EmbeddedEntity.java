@@ -1,13 +1,11 @@
 /**
  * Copyright 2011 the original author
  */
-package service.test.entity;
+package service.entity;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -19,16 +17,11 @@ import javax.persistence.Version;
  * @version 2011/08/31 created.
  */
 @Entity
-@Table(name="CHILD_A")
-public class ChildAEntity{
-	
-	@Id
-	@Column
-	private String test;
-	
-	@Id
-	@Column
-	private String parent_test;
+@Table(name="embedded_test")
+public class EmbeddedEntity{
+
+	@EmbeddedId
+	private EmbeddPK primaryKeys;
 
 	@Column
 	private String attr;
@@ -39,12 +32,11 @@ public class ChildAEntity{
 	@Version
 	@Column
 	private int version;
-	
-	
+
 	/**
 	 * @param attr the attr to set
 	 */
-	public ChildAEntity setAttr(String attr) {
+	public EmbeddedEntity setAttr(String attr) {
 		this.attr = attr;
 		return this;
 	}
@@ -52,8 +44,6 @@ public class ChildAEntity{
 	/**
 	 * @return the atstr
 	 */
-	@Id
-	@Column
 	public String getAttr() {
 		return attr;
 	}
@@ -61,7 +51,7 @@ public class ChildAEntity{
 	/**
 	 * @param attr2 the attr2 to set
 	 */
-	public ChildAEntity setAttr2(int attr2) {
+	public EmbeddedEntity setAttr2(int attr2) {
 		this.attr2 = attr2;
 		return this;
 	}
@@ -69,7 +59,6 @@ public class ChildAEntity{
 	/**
 	 * @return the attr2
 	 */
-	@Column
 	public int getAttr2() {
 		return attr2;
 	}
@@ -77,7 +66,7 @@ public class ChildAEntity{
 	/**
 	 * @param version the version to set
 	 */
-	public ChildAEntity setVersion(int version) {
+	public EmbeddedEntity setVersion(int version) {
 		this.version = version;
 		return this;
 	}
@@ -85,40 +74,22 @@ public class ChildAEntity{
 	/**
 	 * @return the version
 	 */
-	@Version
-	@Column
 	public int getVersion() {
 		return version;
 	}
 
 	/**
-	 * @param test the test to set
+	 * @return the primaryKeys
 	 */
-	public void setTest(String test) {
-		this.test = test;
+	public EmbeddPK getPrimaryKeys() {
+		return primaryKeys;
 	}
 
 	/**
-	 * @return the test
+	 * @param primaryKeys the primaryKeys to set
 	 */
-	@Column
-	public String getTest() {
-		return test;
-	}
-
-	/**
-	 * @param parent_test the parent_test to set
-	 */
-	public void setParent_test(String parent_test) {
-		this.parent_test = parent_test;
-	}
-
-	/**
-	 * @return the parent_test
-	 */
-	@Column
-	public String getParent_test() {
-		return parent_test;
+	public void setPrimaryKeys(EmbeddPK primaryKeys) {
+		this.primaryKeys = primaryKeys;
 	}
 
 }

@@ -8,8 +8,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -26,6 +26,7 @@ import javax.persistence.Version;
 public class ParentAEntity{
 	
 	@Id
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column
 	private String test;
 
@@ -38,8 +39,9 @@ public class ParentAEntity{
 	@Version
 	@Column
 	private int version;
-	
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="parent_test",referencedColumnName="test",insertable=false,updatable=false)
 	private List<ChildAEntity> childs;
 	
 	/**

@@ -69,13 +69,13 @@ public class QueryLoaderTrace implements QueryLoader{
 					builder.append(v.getKey()).append("=").append(v.getValue()).append(" ");
 				}
 			}
-			LOG.trace(String.format("sql before prepared statement \n%s\n[%s]",query,builder.toString()));				
+			LOG.trace(String.format("sql before prepared statement %n%s%n[%s]",query,builder.toString()));				
 		}
 		//変換後ログ
 		String result = delegate.evaluate(query, parameter, queryId);
 		if(LOG.isTraceEnabled() && !ignoreList.contains(queryId)){		
 			String replaced = String.class.cast(result);	
-			LOG.trace(String.format("sql after evaluate \n%s\n",replaced));				
+			LOG.trace(String.format("sql after evaluate %n%s%n",replaced));				
 		}
 		return result;
 	}
@@ -106,7 +106,7 @@ public class QueryLoaderTrace implements QueryLoader{
 					}
 					builder.append("]\n");			
 				}
-				LOG.debug(String.format("executing sql = \n%s\n%s",value.getQueryStatement(),builder.toString()));		
+				LOG.debug(String.format("executing sql = %n%s%n%s",value.getQueryStatement(),builder.toString()));		
 			}
 			if(LOG.isInfoEnabled()){
 				StringBuilder convertedQuery = new StringBuilder();
@@ -122,7 +122,7 @@ public class QueryLoaderTrace implements QueryLoader{
 						Object v = ite.next();
 						converted = StringUtils.replaceOnce(converted, "?", (v instanceof String) ? "\'" + v  + "\'" : String.valueOf(v));		
 					}	
-					convertedQuery.append(String.format("complete sql = \n%s",converted));
+					convertedQuery.append(String.format("complete sql = %n%s",converted));
 				}
 				LOG.info(convertedQuery.toString());
 			}

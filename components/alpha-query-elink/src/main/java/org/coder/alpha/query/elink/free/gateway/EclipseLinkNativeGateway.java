@@ -36,6 +36,7 @@ import org.coder.alpha.query.free.ResultSetFilter;
 import org.coder.alpha.query.free.gateway.PersistenceGateway;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
+import org.eclipse.persistence.config.ResultSetType;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
 
@@ -153,6 +154,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 	@Override
 	public List getFetchResult(ReadingConditions parameter) {
 		Query query = setRangeAndCursor(parameter.getFirstResult(),parameter.getMaxResults(),createQuery(parameter));	
+		query.setHint(QueryHints.RESULT_SET_TYPE, ResultSetType.ForwardOnly);
 		ScrollableCursor cursor = (ScrollableCursor)query.getSingleResult();
 		try{
 			return new LazyList(cursor, recordHandlerFactory.create(parameter.getResultType(), cursor.getResultSet()),exceptionHandler,parameter.getFilter());

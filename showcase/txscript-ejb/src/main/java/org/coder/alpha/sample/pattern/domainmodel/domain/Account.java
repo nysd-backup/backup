@@ -1,19 +1,21 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.txscriptejb.datasource.entity;
+package org.coder.alpha.sample.pattern.domainmodel.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-
-import org.coder.alpha.query.criteria.Metadata;
 
 /**
  * Order.
@@ -22,17 +24,9 @@ import org.coder.alpha.query.criteria.Metadata;
  * @version	created.
  */
 @Entity
-@Table(name="ORD")
-public class Order{
+@Table(name="ACCOUNT")
+public class Account{
 
-	public static final Metadata<Order,Long> ORDER_NO = new Metadata<Order,Long>("orderNo");
-	
-	public static final Metadata<Order,String> CUSTOMER_CD = new Metadata<Order,String>("customerCd");
-	
-	public static final Metadata<Order,Date> ORDER_DT = new Metadata<Order,Date>("orderDt");
-	
-	public static final Metadata<Order,Long> VERSION = new Metadata<Order,Long>("version");
-	
 	@Id
 	@Column(name="ORDER_NO")
 	private Long orderNo = null;
@@ -47,6 +41,9 @@ public class Order{
 	@Column(name="VERSION")
 	@Version
 	private Long version = null;
+	
+	@OneToMany(cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
+	private List<AccountDetail> detail;
 
 	/**
 	 * @return the orderNo
@@ -103,5 +100,43 @@ public class Order{
 	public void setVersion(Long version) {
 		this.version = version;
 	}
+
+	/**
+	 * @return the detail
+	 */
+	public List<AccountDetail> getDetail() {
+		return detail;
+	}
 	
+	/**
+	 * @param detail
+	 * @return
+	 */
+	public boolean addDetail(AccountDetail detail){
+		for(AccountDetail d : getDetail()){
+			String key = d.getDetailNo() + ":" + d.getOrderNo();
+			if(key.equals(detail.getDetailNo() + ":" + detail.getOrderNo())){
+				return false;
+			}
+		}
+		this.detail.add(detail);
+		return true;
+	}
+	
+	/**
+	 * @return
+	 */
+	public static Account create() {
+		return new Account();
+	}
+	
+	/**
+	 * @param object
+	 * @return
+	 */
+	public static Account createFrom(Object object) {
+		Account accnt = new Account();
+		//TODO reflection
+		return accnt;
+	}
 }

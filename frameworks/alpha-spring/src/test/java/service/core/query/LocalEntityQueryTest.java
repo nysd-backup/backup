@@ -9,9 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -29,7 +26,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.query.criteria.AsyncCriteriaQuery;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
@@ -42,9 +38,11 @@ import org.springframework.transaction.TransactionSystemException;
 import service.test.RequiresNewService;
 import service.test.ServiceTestContextImpl;
 import service.test.ServiceUnit;
+import service.test.entity.ChildAEntity;
 import service.test.entity.DateEntity;
 import service.test.entity.IDateEntity;
 import service.test.entity.ITestEntity;
+import service.test.entity.ParentAEntity;
 import service.test.entity.TestEntity;
 import service.test.entity.Testcomp;
 import service.test.entity.TestcompPK;
@@ -69,6 +67,77 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	@Resource
 	private RequiresNewService service;
 	
+	/**
+	 * Lazyのテスト
+	 * @throws Exception
+	 */
+	@Test
+	public void modelTest() throws Exception {
+		ParentAEntity parent = new ParentAEntity();
+		parent.setTest("01");
+		parent.setAttr("aaa");
+		ChildAEntity c1 = new ChildAEntity();
+		c1.setTest("01");
+		c1.setParent_test(parent.getTest());
+		
+		ChildAEntity c2 = new ChildAEntity();
+		c2.setTest("02");
+		c2.setParent_test(parent.getTest());
+		
+		//登録
+		parent.setChilds(Arrays.asList(c1,c2));
+		per.persist(parent);
+		per.flush();
+		per.clear();
+		
+		//Lazy Load
+		ParentAEntity p = per.find(ParentAEntity.class, "01");
+		List<ChildAEntity> cs = p.getChilds();
+		System.out.println( cs.size() );
+		
+		//更新
+		p.setAttr("AAAB");
+		per.flush();
+		for(ChildAEntity e :cs){
+			e.setAttr("AAA");
+		}
+		per.flush();	
+		
+		//子だけ更新、子だけ更新しても親は更新されない
+		cs.get(0).setAttr("UPDT");
+		per.flush();
+		
+		//空にする→親＋全部の子のロック連番の更新UPDATEだけ走ってしまう
+		p.setChilds(null);
+		per.flush();
+		
+		//新規登録
+		ParentAEntity parent2 = new ParentAEntity();
+		parent2.setTest("02");
+		parent2.setAttr("aaa");
+		ChildAEntity c21 = new ChildAEntity();
+		c21.setTest("01");
+		c21.setParent_test(parent2.getTest());
+		ChildAEntity c22 = new ChildAEntity();
+		c22.setTest("02");
+		c22.setParent_test(parent2.getTest());
+		parent2.setChilds(Arrays.asList(c21,c22));
+		per.merge(parent2);
+		per.flush();
+		per.clear();
+		
+		//detachされた後の更新
+		//mergeの時はnullの項目もupdateが走るので、全ての項目が画面からわたってこなくてはならない。
+		//setChildsしてなくても親を更新すると全ての子のバージョンもあがるため全ての子のUPDATEも走る。
+		ParentAEntity parent3 = new ParentAEntity();
+		parent3.setTest("02");
+		parent3.setAttr2(100);
+		parent3.setVersion(1);
+		per.merge(parent3);
+		per.flush();
+	}
+	
+	
 	@Test
 	public void test() throws Exception{
 		CriteriaBuilder b = per.getCriteriaBuilder();
@@ -84,18 +153,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		TypedQuery<TestEntity> t = per.createQuery(q);
 		t.getResultList();		
 		
-		//非同期処理、コネクションが解放されないのでNG
-		AsyncCriteriaQuery<List<TestEntity>> async = new AsyncCriteriaQuery<List<TestEntity>>( ormQueryFactory.createListReadQuery(TestEntity.class,per));	
-		ExecutorService service = Executors.newSingleThreadExecutor();
-		Future<List<TestEntity>> res1 = service.submit(async);
-		Future<List<TestEntity>> res2 = service.submit(async);
-		Future<List<TestEntity>> res3 = service.submit(async);
-		Future<List<TestEntity>> res4 = service.submit(async);
-		System.out.println(res1.get().toString());
-		System.out.println(res2.get().toString());
-		System.out.println(res3.get().toString());
-		System.out.println(res4.get().toString());
-		service.shutdown();
+	
 	}
 	
 	/**

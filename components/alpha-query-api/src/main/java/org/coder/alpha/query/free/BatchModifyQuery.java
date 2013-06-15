@@ -3,8 +3,6 @@
  */
 package org.coder.alpha.query.free;
 
-import org.coder.alpha.query.free.AbstractNativeModifyQuery;
-import org.coder.alpha.query.free.ModifyingConditions;
 
 
 /**
