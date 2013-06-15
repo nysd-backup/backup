@@ -4,7 +4,7 @@
 	<groupId>alpha</groupId>
 	<artifactId>alpha-ejb</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<name>alpha-ejb</name>
 	<description>
 		Business logic framework on EJB.
@@ -13,25 +13,20 @@
 	<parent>
 		<groupId>alpha</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	
 	<dependencies>				
 		<dependency>
 		    <groupId>alpha</groupId>
-		    <artifactId>alpha-query-api</artifactId>
+		    <artifactId>alpha-query</artifactId>
 		    <version>${framework.version}</version>		    
 		</dependency>								
 		<dependency>
 		    <groupId>alpha</groupId>
 		    <artifactId>alpha-framework-api</artifactId>
 		    <version>${framework.version}</version>
-		</dependency>	
-		<dependency>
-		    <groupId>alpha</groupId>
-		    <artifactId>alpha-query-elink</artifactId>
-		    <version>${framework.version}</version>		   
-		</dependency>				
+		</dependency>					
 		<dependency>
 		    <groupId>org.eclipse.persistence</groupId>
 		    <artifactId>eclipselink</artifactId>
@@ -60,7 +55,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>${poi.version}</version>
+			<version>3.2-FINAL</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -78,11 +73,9 @@
 		<dependency>
 		    <groupId>javax</groupId>
 		    <artifactId>javaee-api</artifactId>
-		    <version>${javaee.version}</version>
+		    <version>6.0</version>
 		    <scope>provided</scope>
 		</dependency>			
 	</dependencies>
 	
-	
-
 </project>

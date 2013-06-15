@@ -4,7 +4,7 @@
 	<groupId>alpha</groupId>
 		<artifactId>alpha-framework-api</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<name>alpha-framework-api</name>
 	<description>
 		API of business logic framework.
@@ -13,14 +13,14 @@
 	<parent>
 		<groupId>alpha</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	
 	<dependencies>			
 		<dependency>
 		    <groupId>javax.jms</groupId>
 		    <artifactId>jms</artifactId>
-		    <version>${jms.version}</version>
+		    <version>1.1</version>
 		    <scope>provided</scope>
 		</dependency>	
 	</dependencies>
