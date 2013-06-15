@@ -4,41 +4,27 @@
 	<groupId>alpha</groupId>
 	<artifactId>components</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<name>Alpha Component</name>
 
 	<parent>
 		<groupId>alpha</groupId>
 		<artifactId>base</artifactId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
 	<profiles>
 		<profile>
 			<id>all</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<modules>						
-				<module>alpha-utility</module>		
-				<module>alpha-jdbc</module>			
-				<module>alpha-query-api</module>
-				<module>alpha-query-original</module>				
-				<module>alpha-query-elink</module>									
-				<module>alpha-httpclient</module>										
-			</modules>
-		</profile>
-		<profile>
-			<id>ejbset</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<modules>							
 				<module>alpha-jdbc</module>			
-				<module>alpha-query-api</module>			
-				<module>alpha-query-elink</module>																		
+				<module>alpha-query</module>								
+				<module>alpha-httpclient</module>										
 			</modules>
-		</profile>
+		</profile>	
 	</profiles>	
 
 </project>

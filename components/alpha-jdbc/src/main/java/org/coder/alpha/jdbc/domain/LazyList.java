@@ -11,9 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.coder.alpha.jdbc.exception.ExceptionHandler;
+import javax.persistence.PersistenceException;
+
+import org.coder.alpha.jdbc.strategy.MetadataMapper;
 import org.coder.alpha.jdbc.strategy.RecordFilter;
-import org.coder.alpha.jdbc.strategy.RecordHandler;
 
 
 
@@ -43,8 +44,8 @@ public class LazyList<E> implements List<E>{
 	 * @param handler the handler
 	 * @param exceptionHandler the exceptionHandler
 	 */
-	public LazyList(ResultSet rs, RecordHandler handler,ExceptionHandler exceptionHandler,RecordFilter filter){
-		this.itr = new Cursor(rs, handler,exceptionHandler,filter);
+	public LazyList(ResultSet rs, MetadataMapper handler,RecordFilter filter){
+		this.itr = new Cursor(rs, handler,filter);
 	}
 	
 	/**
@@ -237,16 +238,13 @@ public class LazyList<E> implements List<E>{
 		private final ResultSet rs;
 		
 		/** the record handler */
-		private final RecordHandler handler;
-		
-		private final ExceptionHandler exceptionHandler;
-		
+		private final MetadataMapper handler;
+
 		private final RecordFilter filter;
 		
-		public Cursor(ResultSet rs ,RecordHandler handler,ExceptionHandler exceptionHandler,RecordFilter filter){
+		public Cursor(ResultSet rs ,MetadataMapper handler,RecordFilter filter){
 			this.rs = rs;
 			this.handler = handler;
-			this.exceptionHandler =exceptionHandler ;
 			this.filter = filter;
 		}
 		
@@ -292,7 +290,7 @@ public class LazyList<E> implements List<E>{
 				return hasNext;
 			}catch(SQLException t){
 				close();
-				throw exceptionHandler.rethrow(t);
+				throw new PersistenceException(t);
 			}catch(RuntimeException re){
 				close();
 				throw re;
@@ -313,7 +311,7 @@ public class LazyList<E> implements List<E>{
 				return filter != null ? filter.edit(record):record;
 			}catch(SQLException t){
 				close();
-				throw exceptionHandler.rethrow(t);
+				throw new PersistenceException(t);
 			}catch(RuntimeException re){
 				close();
 				throw re;

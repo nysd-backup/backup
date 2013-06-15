@@ -13,10 +13,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.coder.alpha.jdbc.exception.QueryException;
 import org.coder.alpha.jdbc.strategy.ConstantAccessor;
 import org.coder.alpha.jdbc.strategy.TemplateEngine;
 
@@ -165,7 +163,7 @@ public class VelocityTemplateEngine implements TemplateEngine{
 		try {
 			Velocity.evaluate(context, writer, "", rowString);
 		} catch (Exception e) {
-			throw new QueryException(e);
+			throw new IllegalStateException(e);
 		}
 		writer.flush();
 		// エスケープしても"\#'となるのでそれでも"#'に戻す
@@ -173,7 +171,7 @@ public class VelocityTemplateEngine implements TemplateEngine{
 		try {
 			writer.close();
 		} catch (IOException e) {
-			throw new QueryException(e);
+			throw new IllegalStateException(e);
 		}
 		return sql;
 	}

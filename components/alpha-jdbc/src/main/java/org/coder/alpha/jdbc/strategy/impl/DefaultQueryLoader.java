@@ -16,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.coder.alpha.jdbc.domain.PreparedQuery;
-import org.coder.alpha.jdbc.exception.QueryException;
 import org.coder.alpha.jdbc.strategy.ConstantAccessor;
 import org.coder.alpha.jdbc.strategy.QueryLoader;
 import org.coder.alpha.jdbc.strategy.TemplateEngine;
@@ -84,12 +83,12 @@ public class DefaultQueryLoader implements QueryLoader{
 				try{
 					stream = new FileInputStream(new File(dirRoot,filePath));
 				}catch(FileNotFoundException fnfe){
-					throw new QueryException(fnfe);
+					throw new IllegalStateException(fnfe);
 				}
 			}
 		
 			if (stream == null) {
-				throw new QueryException(String.format("file not found : sqlId = %s , filePath = %s",queryId, dirRoot +filePath));
+				throw new IllegalStateException(String.format("file not found : sqlId = %s , filePath = %s",queryId, dirRoot +filePath));
 			}
 			return engine.load(stream);		
 		} else {
@@ -173,7 +172,7 @@ public class DefaultQueryLoader implements QueryLoader{
 			if(parameterCount == -1 ){
 				parameterCount = bindList.get(i).size();
 			}else if(bindList.get(i).size() != parameterCount){
-				throw new QueryException("batch parameter count must be same : current=" + bindList.get(i).size() + " : previous=" + parameterCount + " : batchIndex=" + i);				
+				throw new IllegalStateException("batch parameter count must be same : current=" + bindList.get(i).size() + " : previous=" + parameterCount + " : batchIndex=" + i);				
 			}
 		}
 		
@@ -199,7 +198,7 @@ public class DefaultQueryLoader implements QueryLoader{
 			if(accessor.isValidKey(variableName)){
 				return accessor.getConstTarget(variableName);		
 			}else{
-				throw new QueryException("invalid parameter : name=" + variableName );
+				throw new IllegalStateException("invalid parameter : name=" + variableName );
 			}
 		}else{
 			return paramMap.get(variableName);	

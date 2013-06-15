@@ -10,24 +10,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.PersistenceException;
+
 import org.coder.alpha.jdbc.domain.LazyList;
 import org.coder.alpha.jdbc.domain.PreparedQuery;
 import org.coder.alpha.jdbc.domain.ResultSetWrapper;
 import org.coder.alpha.jdbc.domain.StatementWrapper;
 import org.coder.alpha.jdbc.domain.TotalList;
-import org.coder.alpha.jdbc.exception.ExceptionHandler;
-import org.coder.alpha.jdbc.exception.impl.DefaultExceptionHandler;
 import org.coder.alpha.jdbc.service.ModifyingRequest;
 import org.coder.alpha.jdbc.service.QueryRequest;
 import org.coder.alpha.jdbc.service.QueryService;
 import org.coder.alpha.jdbc.service.ReadingRequest;
+import org.coder.alpha.jdbc.strategy.MetadataMapperFactory;
 import org.coder.alpha.jdbc.strategy.QueryLoader;
-import org.coder.alpha.jdbc.strategy.RecordHandlerFactory;
 import org.coder.alpha.jdbc.strategy.ResultSetHandler;
 import org.coder.alpha.jdbc.strategy.Selector;
 import org.coder.alpha.jdbc.strategy.StatementProvider;
 import org.coder.alpha.jdbc.strategy.Updater;
-import org.coder.alpha.jdbc.strategy.impl.DefaultRecordHandlerFactory;
+import org.coder.alpha.jdbc.strategy.impl.DefaultMetadataMapperFactory;
 import org.coder.alpha.jdbc.strategy.impl.DefaultResultSetHandler;
 import org.coder.alpha.jdbc.strategy.impl.DefaultSelector;
 import org.coder.alpha.jdbc.strategy.impl.DefaultStatementProvider;
@@ -46,8 +46,6 @@ import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
  */
 public class QueryServiceImpl implements QueryService{
 
-	/** the ExceptionHandler */
-	private ExceptionHandler exceptionHandler = new DefaultExceptionHandler();
 	
 	/** the ResultSetHandler */
 	private ResultSetHandler resultSetHandler = new DefaultResultSetHandler();
@@ -59,25 +57,18 @@ public class QueryServiceImpl implements QueryService{
 	private StatementProvider provider = new DefaultStatementProvider();
 	
 	/** the RecordHandlerFactory */
-	private RecordHandlerFactory recordHandlerFactory = new DefaultRecordHandlerFactory();
+	private MetadataMapperFactory recordHandlerFactory = new DefaultMetadataMapperFactory();
 	
 	/** the selector */
 	private Selector selector = new DefaultSelector();
 	
 	/** the updater*/
 	private Updater updater = new DefaultUpdater();
-
-	/**
-	 * @param exceptionHandler the exceptionHandler to set
-	 */
-	public void setExceptionHandler(ExceptionHandler exceptionHandler){
-		this.exceptionHandler = exceptionHandler;
-	}
 	
 	/**
 	 * @param recordHandlerFactory the recordHandlerFactory to set
 	 */
-	public void setRecordHandlerFactory(RecordHandlerFactory recordHandlerFactory){
+	public void setRecordHandlerFactory(MetadataMapperFactory recordHandlerFactory){
 		this.recordHandlerFactory = recordHandlerFactory;
 	}
 
@@ -130,7 +121,7 @@ public class QueryServiceImpl implements QueryService{
 			stmt.configure(0,param.getFetchSize(),param.getTimeoutSeconds());
 			return stmt.read(selector).getOnlyOne(Number.class).longValue();
 		}catch(SQLException sqle){
-			throw exceptionHandler.rethrow(sqle);
+			throw new PersistenceException(sqle);
 		}finally{
 			close(rs,stmt);
 		}
@@ -157,7 +148,7 @@ public class QueryServiceImpl implements QueryService{
 			List<T> result = rs.loadIntoMemory(param.getResultType(),resultSetHandler);
 			return result;
 		}catch(SQLException sqle){
-			throw exceptionHandler.rethrow(sqle);
+			throw new PersistenceException(sqle);
 		}finally{
 			close(rs,stmt);
 		}
@@ -180,12 +171,12 @@ public class QueryServiceImpl implements QueryService{
 			rs= stmt.read(selector);
 			rs.setStartPosition(param.getFirstResult());
 			@SuppressWarnings("unchecked")
-			LazyList<T> resultList = rs.getLazyList(exceptionHandler,recordHandlerFactory,param.getResultType());
+			LazyList<T> resultList = rs.getLazyList(recordHandlerFactory,param.getResultType());
 			return resultList;
 			
 		}catch(SQLException sqle){
 			close(rs,stmt);
-			throw exceptionHandler.rethrow(sqle);
+			throw new PersistenceException(sqle);
 		}catch(Exception t){
 			close(rs,stmt);
 			throw new RuntimeException(t);
@@ -211,7 +202,7 @@ public class QueryServiceImpl implements QueryService{
 			return rs.loadIntoMemory(param.getResultType(),resultSetHandler,param.getMaxSize());
 			
 		}catch(SQLException sqle){
-			throw exceptionHandler.rethrow(sqle);
+			throw new PersistenceException(sqle);
 		}finally{
 			close(rs,stmt);
 		}
@@ -233,7 +224,7 @@ public class QueryServiceImpl implements QueryService{
 			stmt.configure(0,0,param.getTimeoutSeconds());
 			return stmt.modify(updater);
 		}catch(SQLException sqle){
-			throw exceptionHandler.rethrow(sqle);
+			throw new PersistenceException(sqle);
 		}finally{
 			close(stmt);
 		}
@@ -268,7 +259,7 @@ public class QueryServiceImpl implements QueryService{
 			return stmt.batchModify(updater);
 	
 		}catch(SQLException sqle){
-			throw exceptionHandler.rethrow(sqle);
+			throw new PersistenceException(sqle);
 		}finally{
 			close(stmt);
 		}

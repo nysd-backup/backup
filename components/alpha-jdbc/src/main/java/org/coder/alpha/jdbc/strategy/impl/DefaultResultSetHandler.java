@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.coder.alpha.jdbc.domain.TotalList;
 import org.coder.alpha.jdbc.strategy.RecordFilter;
-import org.coder.alpha.jdbc.strategy.RecordHandler;
-import org.coder.alpha.jdbc.strategy.RecordHandlerFactory;
+import org.coder.alpha.jdbc.strategy.MetadataMapper;
+import org.coder.alpha.jdbc.strategy.MetadataMapperFactory;
 import org.coder.alpha.jdbc.strategy.ResultSetHandler;
 
 
@@ -27,12 +27,12 @@ import org.coder.alpha.jdbc.strategy.ResultSetHandler;
 public class DefaultResultSetHandler implements ResultSetHandler{
 	
 	/** the factory */
-	private RecordHandlerFactory factory = new DefaultRecordHandlerFactory();
+	private MetadataMapperFactory factory = new DefaultMetadataMapperFactory();
 	
 	/**
 	 * @param factory the factory to set
 	 */
-	public void setFactory(RecordHandlerFactory factory){
+	public void setFactory(MetadataMapperFactory factory){
 		this.factory = factory;
 	}
 	
@@ -44,7 +44,7 @@ public class DefaultResultSetHandler implements ResultSetHandler{
 	throws SQLException{ 
 
 		TotalList<T> result = new TotalList<T>();			
-		RecordHandler handler = factory.create(resultType, resultSet);
+		MetadataMapper handler = factory.create(resultType, resultSet);
 		int hitCount = 0;
 		int startPosition = resultSet.getRow();
 		while (resultSet.next()) {	
@@ -83,7 +83,7 @@ public class DefaultResultSetHandler implements ResultSetHandler{
 	public <T> List<T> getResultList(ResultSet rs, Class<?> resultType,RecordFilter filter) throws SQLException {
 		
 		List<T> result = new ArrayList<T>();				
-		RecordHandler handler = factory.create(resultType, rs);
+		MetadataMapper handler = factory.create(resultType, rs);
 		while (rs.next()) {			
 			// 1行の情報カラム取得
 			@SuppressWarnings("unchecked")

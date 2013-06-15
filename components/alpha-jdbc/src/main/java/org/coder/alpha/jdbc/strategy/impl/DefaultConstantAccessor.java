@@ -4,7 +4,6 @@
 package org.coder.alpha.jdbc.strategy.impl;
 
 import org.coder.alpha.jdbc.domain.ConstantCache;
-import org.coder.alpha.jdbc.exception.QueryException;
 import org.coder.alpha.jdbc.strategy.ConstantAccessor;
 
 /**
@@ -37,10 +36,10 @@ public class DefaultConstantAccessor implements ConstantAccessor {
 			if (ConstantCache.containsKey(fieldName)) {
 				return ConstantCache.get(fieldName);
 			} else {
-				throw new QueryException("[Poor Implementation ] No cache was found . key = " + fieldName);
+				throw new IllegalStateException("[Poor Implementation ] No cache was found . key = " + fieldName);
 			}
 		}
-		throw new QueryException("[Poor Implementation ] Illegal const key . key = " + variableName);
+		throw new IllegalStateException("[Poor Implementation ] Illegal const key . key = " + variableName);
 	}
 
 	/**

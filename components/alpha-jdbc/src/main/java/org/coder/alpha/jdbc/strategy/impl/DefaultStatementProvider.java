@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.coder.alpha.jdbc.exception.QueryException;
 import org.coder.alpha.jdbc.strategy.StatementProvider;
 import org.coder.alpha.jdbc.strategy.TypeConverter;
 
@@ -63,7 +62,7 @@ public class DefaultStatementProvider implements StatementProvider{
 		try{
 			statement = con.prepareStatement(sql,resultSetType,resultSetConcurrency);			
 		}catch(SQLException sqle){		
-			throw new QueryException(sqle);
+			throw new IllegalStateException(sqle);
 		}
 		return statement;
 	}

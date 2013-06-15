@@ -7,11 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.coder.alpha.jdbc.exception.ExceptionHandler;
-import org.coder.alpha.jdbc.exception.QueryException;
+import javax.persistence.PersistenceException;
+
+import org.coder.alpha.jdbc.strategy.MetadataMapper;
+import org.coder.alpha.jdbc.strategy.MetadataMapperFactory;
 import org.coder.alpha.jdbc.strategy.RecordFilter;
-import org.coder.alpha.jdbc.strategy.RecordHandler;
-import org.coder.alpha.jdbc.strategy.RecordHandlerFactory;
 import org.coder.alpha.jdbc.strategy.ResultSetHandler;
 
 
@@ -102,9 +102,9 @@ public class ResultSetWrapper {
 	 * @return the LazyList
 	 * @throws SQLException
 	 */
-	public <T> LazyList<T> getLazyList(ExceptionHandler exceptionHandler, RecordHandlerFactory recordHandlerFactory,Class<T> resultType) throws SQLException {
-		RecordHandler recordHandler = recordHandlerFactory.create(resultType, resultSet);
-		return new LazyList<T>(resultSet,recordHandler,exceptionHandler,filter);
+	public <T> LazyList<T> getLazyList( MetadataMapperFactory recordHandlerFactory,Class<T> resultType) throws SQLException {
+		MetadataMapper recordHandler = recordHandlerFactory.create(resultType, resultSet);
+		return new LazyList<T>(resultSet,recordHandler,filter);
 	}
 	
 	/**
@@ -114,7 +114,7 @@ public class ResultSetWrapper {
 		try{
 			resultSet.close();
 		}catch(SQLException sqle){
-			throw new QueryException(sqle);
+			throw new PersistenceException(sqle);
 		}
 	}
 	
