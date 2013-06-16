@@ -112,58 +112,64 @@
 		    <artifactId>spring-jms</artifactId>
 		    <version>${spring.version}</version>
 		    <scope>compile</scope>
-		</dependency>
-		
-		<!-- for test -->		
-		<dependency>
-			<groupId>org.glassfish.extras</groupId>
-			<artifactId>glassfish-embedded-all</artifactId>
-  			<version>3.1</version>
-			<scope>test</scope>					
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.persistence</groupId>
-		    <artifactId>eclipselink</artifactId>
-		    <version>${eclipselink.version}</version>
-		    <scope>test</scope>
-		</dependency>	
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>2.4.8</version>
-			<scope>test</scope>		
-			<exclusions>
-				<exclusion>
-					<groupId>poi</groupId>
-					<artifactId>poi</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-		    <groupId>com.oracle</groupId>
-		    <artifactId>ojdbc6</artifactId>
-		    <version>${oracle.jdbc.version}</version>
-		    <scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.2-FINAL</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.6</version>
-			<scope>test</scope>
 		</dependency>		
+		<dependency>
+					<groupId>org.glassfish.extras</groupId>
+					<artifactId>glassfish-embedded-all</artifactId>
+		  			<version>3.1</version>
+					<scope>test</scope>					
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-test</artifactId>
+					<version>${spring.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+				    <groupId>org.eclipse.persistence</groupId>
+				    <artifactId>eclipselink</artifactId>
+				    <version>${eclipselink.version}</version>
+				    <scope>test</scope>
+				</dependency>	
+				<dependency>
+					<groupId>org.dbunit</groupId>
+					<artifactId>dbunit</artifactId>
+					<version>2.4.8</version>
+					<scope>test</scope>		
+					<exclusions>
+						<exclusion>
+							<groupId>poi</groupId>
+							<artifactId>poi</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi</artifactId>
+					<version>3.2-FINAL</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+					<version>1.5.6</version>
+					<scope>test</scope>
+				</dependency>	       
 	</dependencies>
+	
+	<profiles>
+	    <profile>
+	        <id>test</id>
+	        <dependencies>	            	
+				<dependency>
+				    <groupId>com.oracle</groupId>
+				    <artifactId>ojdbc6</artifactId>
+				    <version>${oracle.jdbc.version}</version>
+				    <scope>test</scope>
+				</dependency>		     
+	        </dependencies>
+	    </profile>
+	</profiles>
 	
 	<properties>
 	    <spring.version>3.2.3.RELEASE</spring.version>	    
