@@ -5,8 +5,6 @@ package service.test;
 
 import java.util.HashMap;
 
-import org.coder.alpha.jdbc.domain.AccessorDeclared;
-
 
 
 
@@ -18,7 +16,6 @@ import org.coder.alpha.jdbc.domain.AccessorDeclared;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-@AccessorDeclared
 public class SampleNativeResult extends HashMap<String,Object>{
 	
 	private static final long serialVersionUID = 1L;

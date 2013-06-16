@@ -3,20 +3,11 @@
  */
 package service.test.entity;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
-
-import org.coder.alpha.query.criteria.Pair;
-
-
-
-
 
 
 /**
@@ -27,7 +18,7 @@ import org.coder.alpha.query.criteria.Pair;
  */
 @Entity
 @Table(name="fast")
-public class FastEntity implements org.coder.alpha.query.criteria.FastEntity{
+public class FastEntity {
 
 	@Id
 	@Column
@@ -122,34 +113,5 @@ public class FastEntity implements org.coder.alpha.query.criteria.FastEntity{
 		return entity;
 	}
 
-	/**
-	 * @see alpha.sqlclient.elink.orm.FastEntity#getVersioningValue()
-	 */
-	@Override
-	public Pair<String> toVersioningValue() {
-		return new Pair<String>("version",version);
-	}
-
-	/**
-	 * @see alpha.sqlclient.elink.orm.FastEntity#getPrimaryKeys()
-	 */
-	@Override
-	public Map<String, Object> toPrimaryKeys() {
-		Map<String,Object> map = new LinkedHashMap<String,Object>();
-		map.put("test", test);
-		return map;
-	}
-
-	/**
-	 * @see alpha.sqlclient.elink.orm.FastEntity#getAttributes()
-	 */
-	@Override
-	public Map<String, Object> toAttributes() {
-		Map<String,Object> map = new LinkedHashMap<String,Object>();
-		map.put("attr", attr);
-		map.put("attr2", attr2);
-		map.put("version", version);
-		return map;
-	}
 	
 }

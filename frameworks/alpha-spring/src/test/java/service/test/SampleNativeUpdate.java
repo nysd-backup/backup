@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import org.coder.alpha.query.free.AbstractNativeModifyQuery;
+import org.coder.alpha.query.free.query.AbstractModifyQuery;
 
 /**
  * function.
@@ -11,7 +11,7 @@ import org.coder.alpha.query.free.AbstractNativeModifyQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SampleNativeUpdate extends AbstractNativeModifyQuery{
+public class SampleNativeUpdate extends AbstractModifyQuery{
 
 	public SampleNativeUpdate() {
 		getParameter().setSql("@SAMPLE_NATIVE_UPDATE.sql");

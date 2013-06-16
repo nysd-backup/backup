@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 import org.coder.alpha.framework.registry.Registry;
-import org.coder.alpha.query.free.opt.ConstantCache;
+import org.coder.alpha.query.free.ConstantCache;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.AbstractDataSet;

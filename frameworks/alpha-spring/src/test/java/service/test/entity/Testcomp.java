@@ -3,9 +3,6 @@
  */
 package service.test.entity;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +11,6 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import org.coder.alpha.query.criteria.Metadata;
-import org.coder.alpha.query.criteria.Pair;
 
 
 
@@ -29,7 +25,7 @@ import org.coder.alpha.query.criteria.Pair;
 @Generated("kosmos.tool.entity-generator")
 @Entity
 @Table(name="TESTCOMP")
-public class Testcomp implements org.coder.alpha.query.criteria.FastEntity , Cloneable{
+public class Testcomp implements Cloneable{
 
 	/** PK1 */
 	public static final Metadata<Testcomp, java.lang.String> PK1 = new Metadata<Testcomp, java.lang.String>("pk1");
@@ -102,35 +98,6 @@ public class Testcomp implements org.coder.alpha.query.criteria.FastEntity , Clo
 	}
 	
 
-	/**
-	 * @see alpha.sqlclient.elink.api.FastEntity#getVersioningValue()
-	 */
-	@Override
-	public Pair<String> toVersioningValue() {	
-		return null;		
-	}
-	
-	/**
-	 * @see alpha.sqlclient.elink.api.FastEntity#getPrimaryKeys()
-	 */
-	@Override
-	public Map<String, Object> toPrimaryKeys() {
-		Map<String,Object> map = new LinkedHashMap<String,Object>();
-		map.put(PK1.name(),pk1);
-		map.put(PK2.name(),pk2);
-		return map;
-	}
-
-	/**
-	 * @see alpha.sqlclient.elink.api.FastEntity#getAttributes()
-	 */
-	@Override
-	public Map<String, Object> toAttributes() {
-		Map<String,Object> map = new LinkedHashMap<String,Object>();
-		map.put(VALUE.name(),value);
-		return map;
-	}
-	
 	/**
 	 * @see org.coder.alpha.framework.core.base.AbstractBean#clone()
 	 */

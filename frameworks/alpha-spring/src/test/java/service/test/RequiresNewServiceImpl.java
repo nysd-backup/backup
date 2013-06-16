@@ -13,7 +13,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PessimisticLockException;
 
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.query.criteria.EntityManagerImpl;
 import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +44,7 @@ public class RequiresNewServiceImpl implements RequiresNewService, ApplicationCo
 	private EntityManager per;
 	
 	@PostConstruct
-	protected void postConstruct(){
-		if( per == null){
-			per = new EntityManagerImpl();
-		}
+	protected void postConstruct(){		
 	}
 	
 	public String test() {

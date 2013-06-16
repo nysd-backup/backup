@@ -5,7 +5,7 @@ package service.test;
 
 import java.util.List;
 
-import org.coder.alpha.query.free.AbstractNativeReadQuery;
+import org.coder.alpha.query.free.query.AbstractReadQuery;
 
 
 
@@ -15,7 +15,7 @@ import org.coder.alpha.query.free.AbstractNativeReadQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SampleNativeQuery extends AbstractNativeReadQuery{
+public class SampleNativeQuery extends AbstractReadQuery{
 	
 	public SampleNativeQuery(){
 		getParameter().setSql("@SAMPLE_NATIVE_QUERY.sql");

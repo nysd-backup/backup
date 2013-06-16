@@ -13,9 +13,9 @@ import javax.persistence.PersistenceContext;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
-import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.QueryCallback;
 import org.coder.alpha.query.free.QueryFactory;
+import org.coder.alpha.query.free.result.TotalList;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.junit.Test;
@@ -214,20 +214,6 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * ヒット件数等取征E
-	 */
-	@Test
-	public void count(){
-		
-		setUpData("TEST.xls");
-		
-		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,per);
-		query.setEntityManager(per);
-		query.setFirstResult(10).setMaxResults(100);
-		assertEquals(2,query.count());
-	}
-	
-	/**
 	 * total result
 	 */
 	@Test
@@ -238,7 +224,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,per);
 		query.setEntityManager(per);
 		query.setMaxResults(1);
-		HitData<SampleNativeResult> result = query.getTotalResult();
+		TotalList<SampleNativeResult> result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertTrue(result.isLimited());
 		assertEquals(1,result.size());
@@ -371,7 +357,7 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 		SampleNativeQuery query = queryFactory.createReadQuery(SampleNativeQuery.class,getEntityManager());		
 		query.getParameter().setSql("select * from testa order by test");
 		query.setMaxResults(30);
-		HitData<SampleNativeResult> data = query.getTotalResult();
+		TotalList<SampleNativeResult> data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
 		List<SampleNativeResult> resultList = data;
 		assertEquals(30,resultList.size());
