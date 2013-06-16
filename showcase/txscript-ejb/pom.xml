@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>alpha</groupId>
-	<artifactId>txscript-ejb</artifactId>
+	<artifactId>javaee6sample</artifactId>
 	<packaging>war</packaging>
 	<version>1.2.0-SNAPSHOT</version>
 	
@@ -13,7 +13,7 @@
 	</parent>
 	
 	<build>
-	    <finalName>txscript-ejb</finalName>
+	    <finalName>javaee6sample</finalName>
 	    <plugins>
 	    <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -29,7 +29,7 @@
 							<followSymlinks>false</followSymlinks>
 						</fileset>
 						<fileset>
-							<directory>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/txscript-ejb</directory>							
+							<directory>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/javaee6sample</directory>							
 						</fileset>
 					</filesets>
 				</configuration>
@@ -39,7 +39,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-					<webappDirectory>>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/txscript-ejb</webappDirectory>
+					<webappDirectory>>../../../../../../../glassfishv3/glassfish/domains/domain1/applications/javaee6sample</webappDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -88,7 +88,7 @@
 		    <scope>provided</scope>
 		</dependency>			
 		<dependency>
-		  <groupId>com.oracle</groupId>
+		  	<groupId>com.oracle</groupId>
 		    <artifactId>ojdbc6</artifactId>
 		    <version>${oracle.jdbc.version}</version>
 			<scope>runtime</scope>
