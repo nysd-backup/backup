@@ -154,22 +154,14 @@
 					<artifactId>slf4j-log4j12</artifactId>
 					<version>1.5.6</version>
 					<scope>test</scope>
-				</dependency>	       
-	</dependencies>
-	
-	<profiles>
-	    <profile>
-	        <id>test</id>
-	        <dependencies>	            	
+				</dependency>	  
 				<dependency>
 				    <groupId>com.oracle</groupId>
 				    <artifactId>ojdbc6</artifactId>
 				    <version>${oracle.jdbc.version}</version>
 				    <scope>test</scope>
-				</dependency>		     
-	        </dependencies>
-	    </profile>
-	</profiles>
+				</dependency>		        
+	</dependencies>
 	
 	<properties>
 	    <spring.version>3.2.3.RELEASE</spring.version>	    
