@@ -10,7 +10,7 @@ import org.coder.alpha.framework.transaction.NestedTransactionContext;
 import org.coder.alpha.framework.transaction.TransactionContext;
 
 
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.testcase.BaseCase;
 
 
@@ -31,7 +31,7 @@ public class MockRequiresNewServiceImpl extends BaseCase implements MockRequires
 	@Override	
 	public Object exec(Object v) {
 		s2.exec("111");
-		TestEntity e = new TestEntity();
+		TargetEntity e = new TargetEntity();
 		e.setTest("1");
 		e.setAttr("aaa");
 		e.setAttr2(2);

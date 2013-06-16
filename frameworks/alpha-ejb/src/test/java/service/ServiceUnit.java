@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.ejb.embeddable.EJBContainer;
 
-import org.coder.alpha.jdbc.domain.ConstantCache;
+import org.coder.alpha.query.free.ConstantCache;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;

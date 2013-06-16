@@ -5,6 +5,8 @@ package org.coder.alpha.query.free;
 
 import javax.persistence.EntityManager;
 
+import org.coder.alpha.query.free.query.AbstractModifyQuery;
+import org.coder.alpha.query.free.query.AbstractReadQuery;
 import org.coder.alpha.query.gateway.PersistenceGateway;
 
 

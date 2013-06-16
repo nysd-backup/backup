@@ -19,8 +19,7 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<modules>							
-				<module>alpha-jdbc</module>			
+			<modules>									
 				<module>alpha-query</module>								
 				<module>alpha-httpclient</module>										
 			</modules>

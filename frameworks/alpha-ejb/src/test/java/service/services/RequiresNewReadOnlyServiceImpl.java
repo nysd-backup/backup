@@ -14,7 +14,7 @@ import javax.persistence.PessimisticLockException;
 
 import org.eclipse.persistence.config.QueryHints;
 
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.testcase.BaseCase;
 
 
@@ -31,7 +31,7 @@ public class RequiresNewReadOnlyServiceImpl extends BaseCase implements Requires
 	public String test() {		
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
-		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
+		em.find(TargetEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		return "OK";
 	}
 
@@ -41,7 +41,7 @@ public class RequiresNewReadOnlyServiceImpl extends BaseCase implements Requires
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			Map<String,Object> hints = new HashMap<String,Object>();
 			hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
-			em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
+			em.find(TargetEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}

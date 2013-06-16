@@ -5,9 +5,9 @@ package org.coder.alpha.query.gateway;
 
 import java.util.List;
 
-import org.coder.alpha.jdbc.domain.TotalList;
-import org.coder.alpha.query.free.Conditions;
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.query.Conditions;
+import org.coder.alpha.query.free.query.ReadingConditions;
+import org.coder.alpha.query.free.result.TotalList;
 
 
 
@@ -31,13 +31,6 @@ public interface PersistenceGateway {
 	 * @return the updated count
 	 */
 	int executeUpdate(Conditions param);
-	
-	/**
-	 * Updates the table.
-	 * 
-	 * @return the each updated count
-	 */
-	int[] executeBatch(List<Conditions> param);
 
 	/**
 	 * @return the total result
@@ -48,11 +41,6 @@ public interface PersistenceGateway {
 	 * @return the result holding the <code>ResultSet</code>
 	 */
 	<T> List<T> getFetchResult(ReadingConditions param);
-
-	/**
-	 * @return the hit count.
-	 */
-	long count(ReadingConditions param);
 
 	/**
 	 * Selects the table.

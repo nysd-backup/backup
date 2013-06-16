@@ -25,13 +25,13 @@ public abstract class JMSUtils {
 	 */
 	public static void setPropertyAndHeader(MessagingProperty property, Message message)
 	throws JMSException{
-		if(StringUtils.isNotEmpty(property.getJMSCorrelationID())){
-			message.setJMSCorrelationID(property.getJMSCorrelationID());
+		if(StringUtils.isNotEmpty(property.getJmsCorrelationID())){
+			message.setJMSCorrelationID(property.getJmsCorrelationID());
 		}
-		if(StringUtils.isNotEmpty(property.getJMSType())){
-			message.setJMSType(property.getJMSType());
+		if(StringUtils.isNotEmpty(property.getJmsType())){
+			message.setJMSType(property.getJmsType());
 		}
-		for(Entry<String,Object> e : property.getJMSProperty().entrySet()){
+		for(Entry<String,Object> e : property.getJmsProperty().entrySet()){
 			Object v = e.getValue();
 			if(v instanceof String){
 				message.setStringProperty(e.getKey(), v.toString());

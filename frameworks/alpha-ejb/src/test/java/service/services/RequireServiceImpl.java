@@ -7,7 +7,7 @@ import javax.ejb.Stateless;
 
 import org.coder.alpha.framework.transaction.TransactionContext;
 
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.testcase.BaseCase;
 
 
@@ -35,7 +35,7 @@ public class RequireServiceImpl extends BaseCase implements RequireService {
 	 */
 	@Override
 	public int persist() {
-		TestEntity e = new TestEntity();
+		TargetEntity e = new TargetEntity();
 		e.setTest("105").setAttr("aaa").setAttr2(2222);
 		persist(e);
 		flush();

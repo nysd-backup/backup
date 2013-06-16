@@ -10,15 +10,15 @@ import javax.persistence.Query;
 
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
-import org.coder.alpha.query.free.HitData;
 import org.coder.alpha.query.free.QueryCallback;
+import org.coder.alpha.query.free.result.TotalList;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
 import service.CachableConst;
 import service.entity.ITestEntity;
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.query.SampleNativeQuery;
 import service.query.SampleNativeQueryConst;
 import service.query.SampleNativeResult;
@@ -47,7 +47,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		em.createNativeQuery("delete from testa").executeUpdate();
 		for(int i = 0 ; i < 100; i ++){
-			TestEntity e = new TestEntity();
+			TargetEntity e = new TargetEntity();
 			String v = i+"";
 			if( v.length() == 1) v = "0" +v;
 			e.setTest(v);
@@ -56,7 +56,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		SampleNativeQuery query = createSelect(SampleNativeQuery.class);		
 		query.getParameter().setSql("select * from testa order by test");
 		query.setMaxResults(30);
-		HitData<SampleNativeResult> data = query.getTotalResult();
+		TotalList<SampleNativeResult> data = query.getTotalResult();
 		assertEquals(100,data.getHitCount());
 		List<SampleNativeResult> resultList = data;
 		assertEquals(30,resultList.size());
@@ -98,7 +98,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void fetch() {
 		em.createNativeQuery("delete from testa").executeUpdate();
 		for(int i = 0 ; i < 100; i ++){
-			TestEntity e = new TestEntity();
+			TargetEntity e = new TargetEntity();
 			String v = i+"";
 			if( v.length() == 1) v = "0" +v;
 			e.setTest(v);
@@ -246,7 +246,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	 */
 	
 	public void setMaxSize(){
-		TestEntity entity = new TestEntity();
+		TargetEntity entity = new TargetEntity();
 		entity.setTest("1000").setAttr("aa").setAttr2(111);
 		setUpData("TEST.xls");
 		SampleNativeQuery query = createSelect(SampleNativeQuery.class).setMaxResults(2);
@@ -264,15 +264,15 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void setFirstResult(){
 		setUpData("TEST.xls");
 		
-		TestEntity f = new TestEntity();
+		TargetEntity f = new TargetEntity();
 		f.setTest("900").setAttr("900").setAttr2(900);
 		persist(f);
 		
-		TestEntity s = new TestEntity();
+		TargetEntity s = new TargetEntity();
 		s.setTest("901").setAttr("901").setAttr2(900).setVersion(100);	//versionNoの持E���E無視される
 		persist(s);
 		
-		TestEntity t = new TestEntity();
+		TargetEntity t = new TargetEntity();
 		t.setTest("902").setAttr("902").setAttr2(900);
 		persist(t);
 		flush();
@@ -325,7 +325,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void constVersionNo(){
 	
 		setUpData("TEST.xls");
-		SingleReadQuery<TestEntity> eq = createSingleReader(TestEntity.class);
+		SingleReadQuery<TargetEntity> eq = createSingleReader(TargetEntity.class);
 		eq.eq(ITestEntity.TEST, "1").call().setAttr2(CachableConst.TARGET_INT);
 		flush();
 		
@@ -335,21 +335,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		assertEquals(1,e.size());
 		context.setRollbackOnly();	
 	}
-	
-	/**
-	 * ヒット件数等取征E
-	 */
-	
-	public void count(){
-		
-		setUpData("TEST.xls");
-		
-		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
-		query.setFirstResult(10).setMaxResults(100);
-		assertEquals(2L,query.count());
-		context.setRollbackOnly();	
-	}
-	
+
 	/**
 	 * total result
 	 */
@@ -360,7 +346,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		
 		SampleNativeQuery query = createSelect(SampleNativeQuery.class);
 		query.setMaxResults(1);
-		HitData<SampleNativeResult> result = query.getTotalResult();
+		TotalList<SampleNativeResult> result = query.getTotalResult();
 		assertEquals(2,result.getHitCount());
 		assertEquals(true,result.isLimited());
 		assertEquals(1,result.size());
@@ -422,8 +408,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 
-		SingleReadQuery<TestEntity> e = createSingleReader(TestEntity.class);
-		TestEntity res = e.eq(ITestEntity.TEST, "1").call();
+		SingleReadQuery<TargetEntity> e = createSingleReader(TargetEntity.class);
+		TargetEntity res = e.eq(ITestEntity.TEST, "1").call();
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
 		
@@ -443,8 +429,8 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		ListReadQuery<TestEntity> e = createListReader(TestEntity.class);
-		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).call().get(0);
+		ListReadQuery<TargetEntity> e = createListReader(TargetEntity.class);
+		TargetEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).call().get(0);
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	
 		
@@ -457,7 +443,7 @@ public class LocalNativeQueryTestBean extends BaseCase{
 	public void updateConstVersionNo(){
 	
 		setUpData("TEST.xls");
-		SingleReadQuery<TestEntity> eq = createSingleReader(TestEntity.class);
+		SingleReadQuery<TargetEntity> eq = createSingleReader(TargetEntity.class);
 		eq.eq(ITestEntity.TEST, "1").call().setAttr2(CachableConst.TARGET_INT);				
 		
 		SampleNativeUpdate update = createUpsert(SampleNativeUpdate.class);
@@ -466,13 +452,13 @@ public class LocalNativeQueryTestBean extends BaseCase{
 		int count = update.update();
 		assertEquals(1,count);
 		
-		ListReadQuery<TestEntity> e = createListReader(TestEntity.class);
+		ListReadQuery<TargetEntity> e = createListReader(TargetEntity.class);
 		
 		//NativeUpdateを実行しても永続化コンチE��スト�E実行されなぁE��従って最初に検索した永続化コンチE��スト�EのエンチE��チE��が�E利用される、E
 		//これを防ぎ、NamedUpdateの実行結果を反映したDB値を取得するためにrefleshする、E
 		e.setHint(QueryHints.REFRESH, HintValues.TRUE);
 		
-		TestEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).call().get(0);
+		TargetEntity res = e.eq(ITestEntity.ATTR, CachableConst.TARGET_TEST_1).call().get(0);
 
 		assertEquals(900,res.getAttr2());
 		context.setRollbackOnly();	

@@ -12,13 +12,13 @@ import java.util.regex.Pattern;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
-import org.coder.alpha.jdbc.domain.TotalList;
-import org.coder.alpha.jdbc.strategy.ConstantAccessor;
-import org.coder.alpha.jdbc.strategy.QueryLoader;
-import org.coder.alpha.jdbc.strategy.impl.DefaultConstantAccessor;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
-import org.coder.alpha.query.free.Conditions;
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.loader.ConstantAccessor;
+import org.coder.alpha.query.free.loader.DefaultConstantAccessor;
+import org.coder.alpha.query.free.loader.QueryLoader;
+import org.coder.alpha.query.free.loader.QueryLoaderTrace;
+import org.coder.alpha.query.free.query.Conditions;
+import org.coder.alpha.query.free.query.ReadingConditions;
+import org.coder.alpha.query.free.result.TotalList;
 
 
 
@@ -54,15 +54,7 @@ public class EclipseLinkJpqlGateway implements PersistenceGateway{
 	}
 	
 	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#count(org.coder.alpha.query.elink.free.ReadingConditions)
-	 */
-	@Override
-	public long count(ReadingConditions param){
-		throw new UnsupportedOperationException();
-	}	
-	
-	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getResultList(org.coder.alpha.query.elink.free.ReadingConditions)
+	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getResultList(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -164,7 +156,7 @@ public class EclipseLinkJpqlGateway implements PersistenceGateway{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.elink.free.ReadingConditions)
+	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
 	 */
 	@Override
 	public <T> TotalList<T> getTotalResult(ReadingConditions param){
@@ -172,18 +164,10 @@ public class EclipseLinkJpqlGateway implements PersistenceGateway{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.elink.free.ReadingConditions)
+	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
 	 */
 	@Override
 	public <T> List<T> getFetchResult(ReadingConditions param){
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#executeBatch(java.util.List)
-	 */
-	@Override
-	public int[] executeBatch(List<Conditions> param) {
 		throw new UnsupportedOperationException();
 	}
 

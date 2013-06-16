@@ -3,7 +3,8 @@
  */
 package service.query;
 
-import org.coder.alpha.query.free.AbstractNativeReadQuery;
+import org.coder.alpha.query.free.query.AbstractReadQuery;
+
 
 /**
  * function.
@@ -11,7 +12,7 @@ import org.coder.alpha.query.free.AbstractNativeReadQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SampleNativeQuery extends AbstractNativeReadQuery{
+public class SampleNativeQuery extends AbstractReadQuery{
 	
 	public SampleNativeQuery(){
 		getParameter().setSql("@SAMPLE_NATIVE_QUERY.sql");

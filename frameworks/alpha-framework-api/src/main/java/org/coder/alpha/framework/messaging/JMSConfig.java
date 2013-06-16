@@ -20,10 +20,8 @@ import java.lang.annotation.Target;
 public @interface JMSConfig {
 
 	String jmsType() default "";
-
-	JMSProperty[] property() default {};
 	
-	String destinationPrefix() default "";
+	int priority() default -1;
 	
 	String destinationName() default "";
 }

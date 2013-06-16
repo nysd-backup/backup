@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.query.ReadingConditions;
 import org.coder.alpha.query.gateway.PersistenceGateway;
 
 /**
@@ -25,7 +25,8 @@ public class ListReadQuery<E> extends ReadQuery<E,List<E>>{
 	private int maxResults = -1;
 	
 	/**
-	 * Constructor
+	 * Constructor.
+	 * 
 	 * @param entityClass the entityClass
 	 * @param em the entityManager
 	 * @param builderFactory the builderFactory
@@ -46,7 +47,7 @@ public class ListReadQuery<E> extends ReadQuery<E,List<E>>{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.criteria.query.ReadQuery#doCallInternal(org.coder.alpha.query.free.ReadingConditions)
+	 * @see org.coder.alpha.query.criteria.query.ReadQuery#doCallInternal(org.coder.alpha.query.free.query.ReadingConditions)
 	 */
 	@Override
 	protected List<E> doCallInternal(ReadingConditions conditions) {

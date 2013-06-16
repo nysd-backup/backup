@@ -132,14 +132,6 @@ public class LocalNativeQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 	/**
-	 * ヒット件数等取征E
-	 */
-	@Test
-	public void count(){
-		bean().count();
-	}
-	
-	/**
 	 * total result
 	 */
 	@Test

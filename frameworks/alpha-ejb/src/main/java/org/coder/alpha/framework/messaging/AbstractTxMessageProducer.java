@@ -31,13 +31,13 @@ public abstract class AbstractTxMessageProducer extends AbstractMessageProducer{
 	 * @see org.coder.alpha.framework.messaging.AbstractMessageProducer#invoke(java.io.Serializable, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(Object parameter, String destinationName,MessagingProperty property) {
+	protected Object invoke(Object parameter, MessagingProperty property) {
 		
 		ConnectionFactory factory = property.getConnectionFactory();
 		if(factory == null){
 			throw new IllegalArgumentException("ConnectionFactory is required");
 		}
-		Destination destination = createDestination(destinationName);
+		Destination destination = createDestination(property.getDestinationName());
 		
 		Object data = preProduce(parameter,destination,property);
 		

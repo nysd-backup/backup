@@ -13,12 +13,12 @@ import org.coder.alpha.query.criteria.Metadata;
  */
 public interface ITestEntity {
 
-	public static final Metadata<TestEntity,String> TEST = new Metadata<TestEntity,String>("test");
+	public static final Metadata<TargetEntity,String> TEST = new Metadata<TargetEntity,String>("test");
 	
-	public static final Metadata<TestEntity,String> ATTR = new Metadata<TestEntity,String>("attr");
+	public static final Metadata<TargetEntity,String> ATTR = new Metadata<TargetEntity,String>("attr");
 
-	public static final Metadata<TestEntity,Integer> ATTR2 = new Metadata<TestEntity,Integer>("attr2");
+	public static final Metadata<TargetEntity,Integer> ATTR2 = new Metadata<TargetEntity,Integer>("attr2");
 	
-	public static final Metadata<TestEntity,Integer> VERSION = new Metadata<TestEntity,Integer>("version");
+	public static final Metadata<TargetEntity,Integer> VERSION = new Metadata<TargetEntity,Integer>("version");
 	
 }

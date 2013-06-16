@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.coder.alpha.jdbc.domain.TotalList;
-import org.coder.alpha.query.free.Conditions;
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.query.Conditions;
+import org.coder.alpha.query.free.query.ReadingConditions;
+import org.coder.alpha.query.free.result.TotalList;
 
 
 /**
@@ -53,15 +53,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.gateway.PersistenceGateway#executeBatch(java.util.List)
-	 */
-	@Override
-	public int[] executeBatch(List<Conditions> param) {
-		return delegate.executeBatch(param);
-	}
-
-	/**
-	 * @see org.coder.alpha.query.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.ReadingConditions)
+	 * @see org.coder.alpha.query.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.query.ReadingConditions)
 	 */
 	@Override
 	public <T> TotalList<T> getTotalResult(ReadingConditions param) {
@@ -76,7 +68,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.ReadingConditions)
+	 * @see org.coder.alpha.query.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.query.ReadingConditions)
 	 */
 	@Override
 	public <T> List<T> getFetchResult(ReadingConditions param) {
@@ -84,15 +76,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.gateway.PersistenceGateway#count(org.coder.alpha.query.free.ReadingConditions)
-	 */
-	@Override
-	public long count(ReadingConditions param) {
-		return delegate.count(param);
-	}
-
-	/**
-	 * @see org.coder.alpha.query.gateway.PersistenceGateway#getResultList(org.coder.alpha.query.free.ReadingConditions)
+	 * @see org.coder.alpha.query.gateway.PersistenceGateway#getResultList(org.coder.alpha.query.free.query.ReadingConditions)
 	 */
 	@Override
 	public <T> List<T> getResultList(ReadingConditions param) {

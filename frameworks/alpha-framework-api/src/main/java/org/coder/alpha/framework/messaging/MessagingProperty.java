@@ -21,17 +21,15 @@ public class MessagingProperty{
 
 	private ConnectionFactory connectionFactory = null;
 	
-	private Map<String,Object> clientOption = new HashMap<String,Object>();
+	private String destinationName = null;
 	
-	private String destinationPrefix = null;
+	private String jmsCorrelationID = null;
 	
-	private String dynamicDestinationName = null;
+	private String jmsType = null;
 	
-	private String JMSCorrelationID = null;
+	private int priority = -1;
 	
-	private String JMSType = null;
-	
-	private Map<String,Object> JMSProperty = new HashMap<String,Object>();
+	private Map<String,Object> jmsProperty = new HashMap<String,Object>();
 
 	/**
 	 * @return the connectionFactory
@@ -48,98 +46,79 @@ public class MessagingProperty{
 	}
 
 	/**
-	 * @return the dynamicDestinationName
+	 * @return the destinationName
 	 */
-	public String getDynamicDestinationName() {
-		return dynamicDestinationName;
+	public String getDestinationName() {
+		return destinationName;
 	}
 
 	/**
-	 * @param dynamicDestinationName the dynamicDestinationName to set
+	 * @param destinationName the destinationName to set
 	 */
-	public void setDynamicDestinationName(String dynamicDestinationName) {
-		this.dynamicDestinationName = dynamicDestinationName;
+	public void setDestinationName(String destinationName) {
+		this.destinationName = destinationName;
 	}
 
 
 	/**
 	 * @param jmsProperty the jmsProperty to set
 	 */
-	public void addJMSProperty(String key, Object value) {
-		this.JMSProperty.put(key, value);
+	public void addJmsProperty(String key, Object value) {
+		this.jmsProperty.put(key, value);
 	}
 
 	/**
 	 * @return the jMSCorrelationID
 	 */
-	public String getJMSCorrelationID() {
-		return JMSCorrelationID;
+	public String getJmsCorrelationID() {
+		return jmsCorrelationID;
 	}
 
 	/**
 	 * @param jMSCorrelationID the jMSCorrelationID to set
 	 */
-	public void setJMSCorrelationID(String jMSCorrelationID) {
-		JMSCorrelationID = jMSCorrelationID;
+	public void setJmsCorrelationID(String jMSCorrelationID) {
+		jmsCorrelationID = jMSCorrelationID;
 	}
 
 	/**
 	 * @return the jMSType
 	 */
-	public String getJMSType() {
-		return JMSType;
+	public String getJmsType() {
+		return jmsType;
 	}
 
 	/**
 	 * @param jMSType the jMSType to set
 	 */
-	public void setJMSType(String jMSType) {
-		JMSType = jMSType;
+	public void setJmsType(String jMSType) {
+		jmsType = jMSType;
 	}
 
 	/**
 	 * @return the jMSProperty
 	 */
-	public Map<String,Object> getJMSProperty() {
-		return JMSProperty;
+	public Map<String,Object> getJmsProperty() {
+		return jmsProperty;
 	}
 
 	/**
 	 * @param jMSProperty the jMSProperty to set
 	 */
-	public void setJMSProperty(Map<String,Object> jMSProperty) {
-		JMSProperty = jMSProperty;
+	public void setJmsProperty(Map<String,Object> jMSProperty) {
+		jmsProperty = jMSProperty;
 	}
 
-	/**
-	 * @return the destinationPrefix
-	 */
-	public String getDestinationPrefix() {
-		return destinationPrefix;
-	}
-
-	/**
-	 * @param destinationPrefix the destinationPrefix to set
-	 */
-	public void setDestinationPrefix(String destinationPrefix) {
-		this.destinationPrefix = destinationPrefix;
-	}
-	
 	/**
 	 * @param config the config to create
 	 * @return the property
 	 */
 	public static MessagingProperty createFrom(JMSConfig config){
 		MessagingProperty property = new MessagingProperty();
-		if(config != null){
-			property.setDestinationPrefix(config.destinationPrefix());
-			property.setDynamicDestinationName(config.destinationName());
-			property.setJMSType(config.jmsType());
-			Map<String,Object> prop = new HashMap<String,Object>();
-			for(JMSProperty p : config.property()){
-				prop.put(p.name(), p.value());
-			}
-			property.setJMSProperty(prop);
+		if(config != null){			
+			property.setDestinationName(config.destinationName());
+			property.setJmsType(config.jmsType());
+			property.setPriority(config.priority());
 		}
 		return property;
 	}
@@ -149,53 +128,37 @@ public class MessagingProperty{
 	 * @param property the property
 	 */
 	public void override(MessagingProperty property){
-		if(StringUtils.isNotEmpty(property.getDestinationPrefix())){
-			setDestinationPrefix(property.getDestinationPrefix());
-		}
-		if(StringUtils.isNotEmpty(property.getDynamicDestinationName())){
-			setDynamicDestinationName(property.getDynamicDestinationName());
+		if(StringUtils.isNotEmpty(property.getDestinationName())){
+			setDestinationName(property.getDestinationName());
 		}
 		if(property.getConnectionFactory() != null){
 			setConnectionFactory(property.getConnectionFactory());
 		}
-		if(StringUtils.isNotEmpty(property.getJMSCorrelationID())){
-			setJMSCorrelationID(property.getJMSCorrelationID());
+		if(StringUtils.isNotEmpty(property.getJmsCorrelationID())){
+			setJmsCorrelationID(property.getJmsCorrelationID());
 		}
-		if(StringUtils.isNotEmpty(property.getJMSType())){
-			setJMSType(property.getJMSType());
+		if(StringUtils.isNotEmpty(property.getJmsType())){
+			setJmsType(property.getJmsType());
 		}
-		Map<String,Object> copt = property.getClientOption();
-		for(Entry<String,Object> p : copt.entrySet()){
-			clientOption.put(p.getKey(), p.getValue());
-		}
-		Map<String,Object> props = property.getJMSProperty();
+		Map<String,Object> props = property.getJmsProperty();
 		for(Entry<String,Object> p : props.entrySet()){
-			this.JMSProperty.put(p.getKey(), p.getValue());
+			this.jmsProperty.put(p.getKey(), p.getValue());
 		}
 		
 	}
-	
+
 	/**
-	 * @param key the key
-	 * @param value the value
+	 * @return the priority
 	 */
-	public void putClientOption(String key , Object value){
-		this.clientOption.put(key, value);
+	public int getPriority() {
+		return priority;
 	}
 
 	/**
-	 * @return the clientOption
+	 * @param priority the priority to set
 	 */
-	public Map<String, Object> getClientOption() {
-		return clientOption;
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
-
-	/**
-	 * @param clientOption the clientOption to set
-	 */
-	public void setClientOption(Map<String, Object> clientOption) {
-		this.clientOption = clientOption;
-	}
-
 	
 }

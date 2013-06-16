@@ -7,9 +7,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 
-
-
-
 /**
  * the message producer.
  *
@@ -18,22 +15,12 @@ import java.lang.reflect.Method;
  */
 public abstract class AbstractMessageProducer implements InvocationHandler{
 	
-	/** the selector for JMS destination */
-	private DestinationNameResolver destinationNameResolver = new PackageDestinationNameResolver();
-	
 	/** the hint */
 	private MessagingProperty property = null;
 	
 	public static final String SERVICE_NAME = "alpha.mdb.serviceName";
 	
 	public static final String METHOD_NAME = "alpha.mdb.methodName";
-	
-	/**
-	 * @param destinationNameResolver the destinationNameResolver to set
-	 */
-	public void setDestinationNameResolver(DestinationNameResolver destinationNameResolver){
-		this.destinationNameResolver = destinationNameResolver;
-	}
 	
 	/**
 	 * @param property the property to set
@@ -51,10 +38,9 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 		JMSConfig config = method.getAnnotation(JMSConfig.class);
 		MessagingProperty property = MessagingProperty.createFrom(config);
 		property.override(this.property);
-		property.addJMSProperty(SERVICE_NAME, method.getDeclaringClass().getName());
-		property.addJMSProperty(METHOD_NAME, method.getName());			
-		String dst = destinationNameResolver.createDestinationName(method,property);	
-		return invoke(args[0],dst,property);
+		property.addJmsProperty(SERVICE_NAME, method.getDeclaringClass().getName());
+		property.addJmsProperty(METHOD_NAME, method.getName());			
+		return invoke(args[0],property);
 	}
 	
 	/**
@@ -64,5 +50,5 @@ public abstract class AbstractMessageProducer implements InvocationHandler{
 	 * @return the result
 	 * @throws Throwable　any error
 	 */
-	protected abstract Object invoke(Object parameter ,String destinationName,MessagingProperty property);
+	protected abstract Object invoke(Object parameter ,MessagingProperty property);
 }

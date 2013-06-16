@@ -17,7 +17,7 @@ import org.coder.alpha.framework.transaction.TransactionContext;
 import org.eclipse.persistence.config.QueryHints;
 
 import service.Registry;
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.testcase.BaseCase;
 
 
@@ -34,7 +34,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	public String test() {		
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
-		em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
+		em.find(TargetEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		rollbackOnly =  ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
 		return "OK";
 	}
@@ -46,7 +46,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 			//握り潰し、ただしExceptionHandlerでにぎり潰してぁE��ければJPASessionのロールバックフラグはtrueになめE
 			Map<String,Object> hints = new HashMap<String,Object>();
 			hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
-			em.find(TestEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
+			em.find(TargetEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
 		}catch(PessimisticLockException pe){
 			return "NG";
 		}
@@ -103,9 +103,9 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	
 	@Override
 	public void persist() {		
-		TestEntity result = em.find(TestEntity.class,"1");
+		TargetEntity result = em.find(TargetEntity.class,"1");
 		if(result == null){
-			TestEntity e = new TestEntity();
+			TargetEntity e = new TargetEntity();
 			e.setTest("1");
 			e.setAttr("aa");
 			e.setAttr2(22);

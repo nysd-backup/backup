@@ -5,7 +5,7 @@ package org.coder.alpha.query.criteria;
 
 import java.util.List;
 
-import org.coder.alpha.query.free.Conditions;
+import org.coder.alpha.query.free.query.Conditions;
 
 
 

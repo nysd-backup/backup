@@ -3,31 +3,26 @@
  */
 package org.coder.alpha.query.gateway;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
-import org.coder.alpha.jdbc.domain.PreparedQuery;
-import org.coder.alpha.jdbc.domain.TotalList;
-import org.coder.alpha.jdbc.service.ModifyingRequest;
-import org.coder.alpha.jdbc.service.QueryService;
-import org.coder.alpha.jdbc.service.impl.QueryServiceImpl;
-import org.coder.alpha.jdbc.strategy.MetadataMapperFactory;
-import org.coder.alpha.jdbc.strategy.QueryLoader;
-import org.coder.alpha.jdbc.strategy.ResultSetHandler;
-import org.coder.alpha.jdbc.strategy.impl.DefaultMetadataMapperFactory;
-import org.coder.alpha.jdbc.strategy.impl.DefaultResultSetHandler;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
-import org.coder.alpha.query.free.Conditions;
-import org.coder.alpha.query.free.LazyList;
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.RecordFilter;
+import org.coder.alpha.query.free.loader.PreparedQuery;
+import org.coder.alpha.query.free.loader.QueryLoader;
+import org.coder.alpha.query.free.loader.QueryLoaderTrace;
+import org.coder.alpha.query.free.mapper.DefaultMetadataMapperFactory;
+import org.coder.alpha.query.free.mapper.MetadataMapper;
+import org.coder.alpha.query.free.mapper.MetadataMapperFactory;
+import org.coder.alpha.query.free.query.Conditions;
+import org.coder.alpha.query.free.query.ReadingConditions;
+import org.coder.alpha.query.free.result.LazyList;
+import org.coder.alpha.query.free.result.TotalList;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.queries.ScrollableCursor;
@@ -45,9 +40,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * @version	created.
  */
 public class EclipseLinkNativeGateway implements PersistenceGateway {
-	
-	private QueryService queryService = new QueryServiceImpl(); 
-		
+			
 	/**
      * <pre>
      *      QueryLoader .
@@ -57,17 +50,10 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
 
     /**
      * <pre>
-     *      ResultSetHandler .
-     * </pre>
-     */
-    private ResultSetHandler handler = new DefaultResultSetHandler();
-
-    /**
-     * <pre>
      *      MetadataMapperFactory .
      * </pre>
      */
-    private MetadataMapperFactory recordHandlerFactory = new DefaultMetadataMapperFactory();
+    private MetadataMapperFactory metadataMapperFactory = new DefaultMetadataMapperFactory();
 
     /**
      * set query loader.
@@ -78,63 +64,40 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
     public void setQueryLoader(QueryLoader loader) {
         this.loader = loader;
     }
-    
-    /**
-     * set query service.
-     * 
-     * @param queryService
-     *            QueryLoader
-     */
-    public void setQueryService(QueryService queryService) {
-        this.queryService = queryService;
-    }
 
     /**
      * <pre>
-     *    ResultSetHandlerを設定する .
+     *    set MetadataMapperFactory .
      * </pre>
      * 
-     * @param handler
-     *            ResultSetHandler
-     */
-    public void setResultSetHandler(ResultSetHandler handler) {
-        this.handler = handler;
-    }
-
-    /**
-     * <pre>
-     *    MetadataMapperFactoryを設定する .
-     * </pre>
-     * 
-     * @param recordHandlerFactory
+     * @param metadataMapperFactory
      *            MetadataMapperFactory
      */
-    public void setRecordHandlerFactory(
-            MetadataMapperFactory recordHandlerFactory) {
-        this.recordHandlerFactory = recordHandlerFactory;
+    public void setMetadataMapperFactory(
+            MetadataMapperFactory metadataMapperFactory) {
+        this.metadataMapperFactory = metadataMapperFactory;
     }
 
     /**
-     * <pre>
-     *    結果リストを取得する .
-     * </pre>
-     * 
-     * @param <T>
-     *            テンプレート
-     * @param parameter
-     *            ReadingConditions
-     * @return 結果リスト
-     * @see jp.co.benesse.marketing.framework.ejb.query.free.gateway.PersistenceGateway#getResultList(jp.co.benesse.marketing.framework.ejb.query.free.ReadingConditions)
+     * @see org.coder.alpha.query.gateway.PersistenceGateway#getResultList(org.coder.alpha.query.free.query.ReadingConditions)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> List<T> getResultList(ReadingConditions parameter) {
 
         Query query = setRangeAndCursor(parameter.getFirstResult(),
                 parameter.getMaxResults(), createQuery(parameter));
         ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
         try {
-            return handler.getResultList(cursor.getResultSet(),
-                    parameter.getResultType(), parameter.getFilter());
+        	ResultSet rs = cursor.getResultSet();
+        	List<T> result = new ArrayList<T>();				
+    		MetadataMapper mapper = metadataMapperFactory.create(parameter.getResultType(), rs);
+    		RecordFilter filter = parameter.getFilter();
+    		
+    		while (rs.next()) {			    			
+    			result.add((T)getRecord(mapper, rs, filter));
+    		}
+    		return result;
         } catch (SQLException e) {
             throw new PersistenceException(e);
         } finally {
@@ -143,30 +106,43 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
     }
 
     /**
-     * <pre>
-     *    全結果を取得する .
-     * </pre>
-     * 
-     * @param <T>
-     *            テンプレート
-     * @param parameter
-     *            ReadingConditions
-     * @return 全結果
-     * @see jp.co.benesse.marketing.framework.ejb.query.free.gateway.PersistenceGateway#getTotalResult(jp.co.benesse.marketing.framework.ejb.query.free.ReadingConditions)
+     * @see org.coder.alpha.query.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.query.ReadingConditions)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <T> TotalList<T> getTotalResult(final ReadingConditions parameter) {
 
         Query query = setRangeAndCursor(parameter.getFirstResult(), 0,
                 createQuery(parameter));
-        TotalList<T> result;
-        @SuppressWarnings("unchecked")
+        TotalList<T> result = new TotalList<T>();	
+        RecordFilter filter = parameter.getFilter();        
         Class<T> resultType = (Class<T>) parameter.getResultType();
+        int maxSize = parameter.getMaxResults();
         ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
         try {
-            ResultSet rs = cursor.getResultSet();
-            result = handler.getResultList(rs, resultType,
-                    parameter.getFilter(), parameter.getMaxResults());
+            ResultSet rs = cursor.getResultSet();            		
+    		MetadataMapper mapper = metadataMapperFactory.create(resultType, rs);
+    		int hitCount = 0;
+    		int startPosition = rs.getRow();
+    		while (rs.next()) {	
+    			hitCount++;
+    			//最大件数超過していたら終了
+    			if( !result.isLimited() ){
+    				if( maxSize > 0 && hitCount > maxSize){
+    					result.limited();
+    					if(rs.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
+    						rs.last();	
+    						hitCount = rs.getRow();
+    						break;
+    					}else{
+    						continue;
+    					}
+    				}
+    				result.add((T)getRecord(mapper,rs,filter));
+    			}			
+    		}
+    		hitCount = result.isLimited() ? hitCount:hitCount+startPosition;
+    		result.setHitCount(hitCount);
         } catch (SQLException e) {
             throw new PersistenceException(e);
         } finally {
@@ -174,16 +150,28 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
         }
         return result;
     }
+    
+    /**
+     * Get record.
+     * 
+     * @param mapper the mapper
+     * @param rs the result set
+     * @param filter the filter
+     * @return record
+     * @throws SQLException
+     */
+    private <T> T getRecord(MetadataMapper mapper,ResultSet rs ,RecordFilter filter) throws SQLException{
+    	T row = mapper.getRecord(rs);		
+		
+		//必要に応じて加工
+		if( filter != null){
+			filter.edit(row);
+		}
+		return row;
+    }
 
     /**
-     * <pre>
-     *    Fetch結果を取得する .
-     * </pre>
-     * 
-     * @param parameter
-     *            ReadingConditions
-     * @return Fetch結果
-     * @see jp.co.benesse.marketing.framework.ejb.query.free.gateway.PersistenceGateway#getFetchResult(jp.co.benesse.marketing.framework.ejb.query.free.ReadingConditions)
+     * @see org.coder.alpha.query.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.query.ReadingConditions)
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
@@ -192,7 +180,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
                 parameter.getMaxResults(), createQuery(parameter));
         ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
         try {
-            return new LazyList(cursor, recordHandlerFactory.create(
+            return new LazyList(cursor, metadataMapperFactory.create(
                     parameter.getResultType(), cursor.getResultSet()),
                     parameter.getFilter());
         } catch (SQLException e) {
@@ -202,31 +190,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
     }
 
     /**
-     * <pre>
-     *    カウントする .
-     * </pre>
-     * 
-     * @param param
-     *            ReadingConditions
-     * @return カウント結果
-     * @see jp.co.benesse.marketing.framework.ejb.query.free.gateway.PersistenceGateway#count(jp.co.benesse.marketing.framework.ejb.query.free.ReadingConditions)
-     */
-    @Override
-    public long count(ReadingConditions param) {
-        Query query = createQuery(param);
-        Object value = query.getSingleResult();
-        return Long.parseLong(value.toString());
-    }
-
-    /**
-     * <pre>
-     *    更新処理を行う .
-     * </pre>
-     * 
-     * @param param
-     *            ModifyingConditions
-     * @return 処理した行数
-     * @see jp.co.benesse.marketing.framework.ejb.query.free.gateway.PersistenceGateway#executeUpdate(jp.co.benesse.marketing.framework.ejb.query.free.ModifyingConditions)
+     * @see org.coder.alpha.query.gateway.PersistenceGateway#executeUpdate(org.coder.alpha.query.free.query.Conditions)
      */
     @Override
     public int executeUpdate(Conditions param) {
@@ -234,15 +198,10 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
     }
 
     /**
-     * <pre>
-     *    Queryを生成する .
-     * </pre>
-     * 
-     * @param param
-     *            Conditions
-     * @return Query
+     * Get query.
+     * @param param the param
+     * @return the query
      */
-    @SuppressWarnings("unchecked")
     protected Query createQuery(Conditions param) {
 
         // build the sql
@@ -252,7 +211,7 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
             str = loader.evaluate(str, param.getParam(), param.getQueryId());
         }
         PreparedQuery preparedQuery = loader.prepare(str,
-                Arrays.asList(param.getParam()), param.getWrappingClause(),
+        		param.getParam(), param.getWrappingClause(),
                 param.getQueryId());
 
         Query query = param.getEntityManager().createNativeQuery(
@@ -263,24 +222,19 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
             query.setHint(h.getKey(), h.getValue());
         }
         // parameter
-        for (int i = 0; i < preparedQuery.getFirstList().size(); i++) {
-            query.setParameter(i + 1, preparedQuery.getFirstList().get(i));
+        for (int i = 0; i < preparedQuery.getBindList().size(); i++) {
+            query.setParameter(i + 1, preparedQuery.getBindList().get(i));
         }
         return query;
     }
 
     /**
-     * <pre>
-     *    範囲を設定する .
-     * </pre>
+     * Set range.
      * 
-     * @param firstResult
-     *            開始位置
-     * @param maxSize
-     *            最大数
-     * @param query
-     *            Query
-     * @return Query
+     * @param firstResult the firstResult
+     * @param maxSize the maxSize
+     * @param query the query
+     * @return the query
      */
     protected Query setRangeAndCursor(int firstResult, int maxSize, Query query) {
 
@@ -294,33 +248,5 @@ public class EclipseLinkNativeGateway implements PersistenceGateway {
         query.setHint(QueryHints.SCROLLABLE_CURSOR, HintValues.TRUE);
         return query;
     }
-
-	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#executeBatch(java.util.List)
-	 */
-	@Override
-	public int[] executeBatch(List<Conditions> param) {
-		
-		//TODO 要検証		
-		
-		List<ModifyingRequest> engineParams = new ArrayList<ModifyingRequest>();
-		for(Conditions p: param){
-			ModifyingRequest ep = new ModifyingRequest();
-			ep.setAllParameter(p.getParam());		
-			ep.setSqlId(p.getQueryId());
-			ep.setSql(p.getSql());
-			ep.setUseRowSql(p.isUseRowSql());	
-			Object value = p.getHints().get(QueryHints.JDBC_TIMEOUT);
-			if( value != null){
-				ep.setTimeoutSeconds((Integer)value);
-			}
-			engineParams.add(ep);
-		}		
-		
-		Connection con = param.get(0).getEntityManager().unwrap(Connection.class);
-		
-		return queryService.executeBatch(engineParams, con);
-		
-	}
 
 }

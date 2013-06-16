@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.query.ReadingConditions;
 import org.coder.alpha.query.gateway.PersistenceGateway;
 
 
@@ -34,7 +34,7 @@ public class SingleReadQuery<E> extends ReadQuery<E,E>{
 	}
 
 	/**
-	 * @see org.coder.alpha.query.criteria.query.ReadQuery#doCallInternal(org.coder.alpha.query.free.ReadingConditions)
+	 * @see org.coder.alpha.query.criteria.query.ReadQuery#doCallInternal(org.coder.alpha.query.free.query.ReadingConditions)
 	 */
 	@Override
 	protected E doCallInternal(ReadingConditions conditions) {

@@ -2,7 +2,7 @@ package service.services;
 
 import javax.ejb.Stateless;
 
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.testcase.BaseCase;
 
 
@@ -13,7 +13,7 @@ public class MockService2Impl extends BaseCase implements MockService2{
 	
 	@Override
 	public void exec(String v) {
-		TestEntity e = new TestEntity();
+		TargetEntity e = new TargetEntity();
 		e.setTest("10");
 		e.setAttr("aaa");
 		e.setAttr2(2);

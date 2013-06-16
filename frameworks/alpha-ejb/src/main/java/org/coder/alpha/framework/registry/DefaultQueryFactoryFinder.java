@@ -3,16 +3,16 @@
  */
 package org.coder.alpha.framework.registry;
 
-import org.coder.alpha.jdbc.strategy.QueryLoader;
-import org.coder.alpha.jdbc.strategy.impl.QueryLoaderTrace;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
-import org.coder.alpha.query.elink.free.gateway.EclipseLinkJpqlGateway;
-import org.coder.alpha.query.elink.free.gateway.EclipseLinkNativeGateway;
 import org.coder.alpha.query.free.QueryFactory;
-import org.coder.alpha.query.free.gateway.PersistenceGateway;
-import org.coder.alpha.query.free.gateway.PersistenceGatewayTrace;
+import org.coder.alpha.query.free.loader.QueryLoader;
+import org.coder.alpha.query.free.loader.QueryLoaderTrace;
+import org.coder.alpha.query.gateway.EclipseLinkJpqlGateway;
+import org.coder.alpha.query.gateway.EclipseLinkNativeGateway;
+import org.coder.alpha.query.gateway.PersistenceGateway;
+import org.coder.alpha.query.gateway.PersistenceGatewayTrace;
 
 
 /**
@@ -29,9 +29,8 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	@Override
 	public QueryFactory createQueryFactory() {
 		QueryLoader builder = createQueryLoader();		
-		PersistenceGateway namedQuery = createJpqlGateway(builder);
 		PersistenceGateway nativeQuery = createNativeGateway(builder);
-		return createQueryFactory(namedQuery,nativeQuery);	
+		return createQueryFactory(nativeQuery);	
 	}
 	
 	/**
@@ -99,10 +98,9 @@ public class DefaultQueryFactoryFinder implements QueryFactoryFinder{
 	 * @param ntv the native query
 	 * @return the query factory
 	 */
-	protected QueryFactory createQueryFactory(PersistenceGateway named , PersistenceGateway ntv){
+	protected QueryFactory createQueryFactory(PersistenceGateway ntv){
 		QueryFactory nf = new QueryFactory();
 		nf.setNativeGateway(ntv);
-		nf.setJpqlGateway(named);
 		return nf;
 	}
 

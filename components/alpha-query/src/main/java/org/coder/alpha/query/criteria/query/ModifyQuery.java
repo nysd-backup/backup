@@ -9,23 +9,27 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import org.coder.alpha.query.criteria.Criteria;
-import org.coder.alpha.query.free.Conditions;
+import org.coder.alpha.query.free.query.Conditions;
 
 /**
- * function.
+ * ModifyQuery.
  *
  * @author yoshida-n
  * @version	created.
  */
 public abstract class ModifyQuery<E> extends CriteriaQuery<E,Integer>{
 
+	/** entity class. */
 	private Class<E> entityClass;
 	
+	/** entity manager. */
 	private final EntityManager em;
 
 	/**
-	 * @param entityClass
-	 * @param em
+	 * Constructor.
+	 * 
+	 * @param entityClass the entityClass
+	 * @param em the entity manager
 	 */
 	public ModifyQuery(Class<E> entityClass,EntityManager em){
 		this.em = em;
@@ -49,8 +53,12 @@ public abstract class ModifyQuery<E> extends CriteriaQuery<E,Integer>{
 	}
 	
 	/**
-	 * @param conditions
-	 * @return
+	 * Calls query.
+	 * 
+	 * @param conditions the conditions
+	 * @param criterias the criteria
+	 * @param entityClass the entityClass
+	 * @return the result
 	 */
 	protected abstract Integer doCallInternal(Conditions conditions,List<Criteria> criterias,Class<E> entityClass);
 	

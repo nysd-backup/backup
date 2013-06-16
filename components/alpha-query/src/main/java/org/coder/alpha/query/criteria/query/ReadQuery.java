@@ -10,13 +10,13 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
-import org.coder.alpha.jdbc.strategy.RecordFilter;
 import org.coder.alpha.query.criteria.Criteria;
 import org.coder.alpha.query.criteria.Metadata;
 import org.coder.alpha.query.criteria.SortKey;
 import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
-import org.coder.alpha.query.free.ReadingConditions;
+import org.coder.alpha.query.free.RecordFilter;
+import org.coder.alpha.query.free.query.ReadingConditions;
 import org.eclipse.persistence.config.QueryHints;
 
 /**
@@ -49,9 +49,10 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	private List<SortKey> sortKeys = new ArrayList<SortKey>();
 	
 	/**
-	 * @param entityClass
-	 * @param em
-	 * @param builderFactory
+	 * Constuctor.
+	 * 
+	 * @param entityClass the entity class
+	 * @param em the entity manager
 	 */
 	public ReadQuery(Class<E> entityClass,EntityManager em){
 		this.entityClass = entityClass;
@@ -66,7 +67,10 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	}
 	
 	/**
+	 * Set lock mode type.
+	 * 
 	 * @param lockModeType
+	 * @return self
 	 */
 	public ReadQuery<E,T> setLockModeType(LockModeType lockModeType) {
 		this.lockModeType = lockModeType;
@@ -80,7 +84,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	}
 
 	/**
-	 * Set the start position
+	 * Set the start position.
 	 * @param firstResult the firstResult
 	 * @return self
 	 */
@@ -90,7 +94,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	}
 	
 	/**
-	 * Set the query filter
+	 * Set the query filter.
 	 * @param filter the filter
 	 * @return self
 	 */

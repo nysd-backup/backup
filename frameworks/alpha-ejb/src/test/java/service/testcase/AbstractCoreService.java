@@ -15,9 +15,9 @@ import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
 import org.coder.alpha.query.criteria.query.UpdateQuery;
-import org.coder.alpha.query.free.AbstractNativeModifyQuery;
-import org.coder.alpha.query.free.AbstractNativeReadQuery;
 import org.coder.alpha.query.free.QueryFactory;
+import org.coder.alpha.query.free.query.AbstractModifyQuery;
+import org.coder.alpha.query.free.query.AbstractReadQuery;
 
 
 
@@ -191,7 +191,7 @@ public abstract class AbstractCoreService {
 	 * @param queryClass クエリクラス
 	 * @return クエリ
 	 */
-	protected <T extends AbstractNativeReadQuery> T createSelect(Class<T> queryClass){
+	protected <T extends AbstractReadQuery> T createSelect(Class<T> queryClass){
 		T query = queryFactory.createReadQuery(queryClass,getEntityManager());
 		return query;
 	}
@@ -210,7 +210,7 @@ public abstract class AbstractCoreService {
 	 * @param updateClass アップデータクラス
 	 * @return アップデータ
 	 */
-	protected <T extends AbstractNativeModifyQuery> T createUpsert(Class<T> updateClass){
+	protected <T extends AbstractModifyQuery> T createUpsert(Class<T> updateClass){
 		T query = queryFactory.createModifyQuery(updateClass,getEntityManager());
 		return query;
 	}

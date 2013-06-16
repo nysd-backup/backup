@@ -7,7 +7,7 @@ import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 
-import service.entity.TestEntity;
+import service.entity.TargetEntity;
 import service.testcase.BaseCase;
 
 @Stateless
@@ -15,7 +15,7 @@ public class AsyncSession extends BaseCase{
 
 	@Asynchronous
 	public Future<String> execute(EntityManager em) {	
-		TestEntity e = new TestEntity();
+		TargetEntity e = new TargetEntity();
 		e.setTest("aaab");
 		e.setAttr("aaa");
 		e.setAttr2(100);

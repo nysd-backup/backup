@@ -14,7 +14,7 @@ import org.coder.alpha.query.criteria.FixString;
 import org.coder.alpha.query.criteria.Metadata;
 import org.coder.alpha.query.criteria.statement.StatementBuilder;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
-import org.coder.alpha.query.free.Conditions;
+import org.coder.alpha.query.free.query.Conditions;
 import org.coder.alpha.query.gateway.PersistenceGateway;
 
 /**
