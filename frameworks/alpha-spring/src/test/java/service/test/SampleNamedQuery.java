@@ -3,7 +3,7 @@
  */
 package service.test;
 
-import org.coder.alpha.query.free.AbstractNamedReadQuery;
+import org.coder.alpha.query.free.query.AbstractReadQuery;
 
 /**
  * function.
@@ -11,7 +11,7 @@ import org.coder.alpha.query.free.AbstractNamedReadQuery;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class SampleNamedQuery extends AbstractNamedReadQuery{
+public class SampleNamedQuery extends AbstractReadQuery{
 	
 	public SampleNamedQuery(){
 		getParameter().setSql("@SAMPLE_QUERY.sql");

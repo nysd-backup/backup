@@ -9,9 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -29,7 +26,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.coder.alpha.framework.transaction.TransactionContext;
-import org.coder.alpha.query.criteria.AsyncCriteriaQuery;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
@@ -83,19 +79,7 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 		q.where(b.and(pre1,pre2,pre3));
 		TypedQuery<TestEntity> t = per.createQuery(q);
 		t.getResultList();		
-		
-		//非同期処理、コネクションが解放されないのでNG
-		AsyncCriteriaQuery<List<TestEntity>> async = new AsyncCriteriaQuery<List<TestEntity>>( ormQueryFactory.createListReadQuery(TestEntity.class,per));	
-		ExecutorService service = Executors.newSingleThreadExecutor();
-		Future<List<TestEntity>> res1 = service.submit(async);
-		Future<List<TestEntity>> res2 = service.submit(async);
-		Future<List<TestEntity>> res3 = service.submit(async);
-		Future<List<TestEntity>> res4 = service.submit(async);
-		System.out.println(res1.get().toString());
-		System.out.println(res2.get().toString());
-		System.out.println(res3.get().toString());
-		System.out.println(res4.get().toString());
-		service.shutdown();
+				
 	}
 	
 	/**

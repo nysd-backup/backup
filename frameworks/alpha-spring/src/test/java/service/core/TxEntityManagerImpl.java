@@ -7,7 +7,7 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import org.coder.alpha.query.criteria.EntityManagerImpl;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 

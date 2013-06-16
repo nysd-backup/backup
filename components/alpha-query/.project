@@ -1,9 +1,7 @@
 <projectDescription>
   <name>alpha-query</name>
   <comment>Gateway for the query execution. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects>
-    <project>alpha-jdbc</project>
-  </projects>
+  <projects/>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>

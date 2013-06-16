@@ -40,7 +40,7 @@ public class QueueTest extends ServiceUnit{
 	public void queueSend(){
 		
 		MessagingProperty property = new MessagingProperty();
-		property.setDynamicDestinationName("jms/DefaultQueue");
+		property.setDestinationName("jms/DefaultQueue");
 		MockService service = 
 			messageClientFactory.createSender(MockService.class, property);
 		
@@ -56,7 +56,7 @@ public class QueueTest extends ServiceUnit{
 	@Rollback(false)
 	public void topicSend(){
 		MessagingProperty property = new MessagingProperty();
-		property.setDynamicDestinationName("jms/DefaultTopic");
+		property.setDestinationName("jms/DefaultTopic");
 		MockService service = messageClientFactory.createPublisher(MockService.class, property);
 		service.exec("TEST");		
 	}

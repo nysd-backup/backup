@@ -51,7 +51,7 @@ public class ObjectMessageProducer extends AbstractMessageProducer{
 	 * @see org.coder.alpha.framework.messaging.AbstractMessageProducer#invoke(java.lang.Object, java.lang.String)
 	 */
 	@Override
-	protected Object invoke(Object parameter, String destinationName,final MessagingProperty property){
+	protected Object invoke(Object parameter,final MessagingProperty property){
 		
 		final Serializable param = (Serializable)parameter;
 		MessageCreator creater =new MessageCreator() {			
@@ -63,10 +63,10 @@ public class ObjectMessageProducer extends AbstractMessageProducer{
 			}
 		};	
 		
-		if(destinationName == null ){
+		if(property.getDestinationName() == null ){
 			getJmsTemplate(param,null).send(creater);
 		}else{
-			getJmsTemplate(param,destinationName).send(destinationName, creater);
+			getJmsTemplate(param,property.getDestinationName()).send(property.getDestinationName(), creater);
 		}
 		return null;
 	}
