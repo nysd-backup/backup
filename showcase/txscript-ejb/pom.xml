@@ -54,24 +54,19 @@
 		</dependency>	
 		<dependency>
 		    <groupId>alpha</groupId>
-		    <artifactId>alpha-utility</artifactId>
-		    <version>${framework.version}</version>
-		</dependency>	
-		<dependency>
-		    <groupId>alpha</groupId>
-		    <artifactId>alpha-query-elink</artifactId>
+		    <artifactId>alpha-query</artifactId>
 		    <version>${framework.version}</version>
 		</dependency>			
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-core</artifactId>
-			<version>${jersey.version}</version>
+			<version>1.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>${jersey.version}</version>
+			<version>1.9</version>
 			<scope>provided</scope>
 		</dependency>	
 		<dependency>
@@ -89,7 +84,7 @@
 		<dependency>
 		    <groupId>javax</groupId>
 		    <artifactId>javaee-api</artifactId>
-		    <version>${javaee.version}</version>
+		    <version>6.0</version>
 		    <scope>provided</scope>
 		</dependency>			
 		<dependency>
