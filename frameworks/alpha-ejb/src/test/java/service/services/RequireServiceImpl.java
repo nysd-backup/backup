@@ -5,7 +5,9 @@ package service.services;
 
 import javax.ejb.Stateless;
 
-import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.message.context.MessageContext;
+import org.coder.alpha.message.target.Message;
+import org.coder.alpha.message.target.MessageLevel;
 
 import service.entity.TargetEntity;
 import service.testcase.BaseCase;
@@ -27,7 +29,9 @@ public class RequireServiceImpl extends BaseCase implements RequireService {
 	 */
 	@Override
 	public void addMessage() {
-		TransactionContext.getCurrentInstance().acceptRollbackTrigger(new RollbackableImpl("100"));
+		Message msg = new Message();
+		msg.setMessageLevel(MessageLevel.ERROR.ordinal());
+		MessageContext.getCurrentInstance().addMessage(msg);
 	}
 
 	/**

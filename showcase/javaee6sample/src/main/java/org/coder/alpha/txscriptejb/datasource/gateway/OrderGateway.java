@@ -8,7 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
+import org.coder.alpha.message.registry.DefaultQueryFactoryFinder;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.txscriptejb.datasource.entity.Order;

@@ -9,8 +9,8 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
-import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.framework.registry.QueryFactoryFinder;
+import org.coder.alpha.message.context.MessageContext;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.query.criteria.query.SingleReadQuery;
@@ -45,15 +45,15 @@ public abstract class AbstractCoreService {
 	 */
 	@PostConstruct
 	public void postConstruct(){;		
-		ormQueryFactory = new DefaultQueryFactoryFinder().createCriteriaQueryFactory();
-		queryFactory = new DefaultQueryFactoryFinder().createQueryFactory();	
+		ormQueryFactory = new QueryFactoryFinder().createCriteriaQueryFactory();
+		queryFactory = new QueryFactoryFinder().createQueryFactory();	
 	}
 	
 	/**
 	 * @see alpha.domain.framework.base.AbstractService#isRollbackOnly()
 	 */
 	protected boolean isRollbackOnly(){
-		return TransactionContext.getCurrentInstance().isRollbackOnly() || context.getRollbackOnly();
+		return MessageContext.getCurrentInstance().isRollbackOnly() || context.getRollbackOnly();
 	}
 	
 	/**

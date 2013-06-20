@@ -12,6 +12,19 @@
 	    <url>https://github.com/judas-i/personal-remote/tree/master/</url>
 	</scm>
 	
+		
+	<distributionManagement>
+		<repository>
+		    <id>cloudbees-release</id>
+		    <url>https://repository-nao001.forge.cloudbees.com/release</url>
+		</repository>
+		<snapshotRepository>
+		    <id>cloudbees-snapshot</id>
+		    <url>https://repository-nao001.forge.cloudbees.com/snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	
 	<build>
 		<plugins>
 			<plugin>

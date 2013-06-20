@@ -165,24 +165,26 @@ public class LocalEntityQueryTestBean extends BaseCase {
 		context.setRollbackOnly();
 	}
 	
-
-	/**
-	 * 2件目取征E
-	 */
-
-	public void callSetFirstWithDesc(){
-		setUpData("TEST.xls");
-		
-
-		SingleReadQuery<TargetEntity> query = createSingleReader(TargetEntity.class);
-		query.desc(ITestEntity.TEST);
-		query.setFirstResult(1);
-		TargetEntity result = query.call();
-		assertEquals("3",result.getAttr());
-		
-		context.setRollbackOnly();
-	}
-	
+//
+//	/**
+//	 * 2件目取征E
+//	 */
+//
+//	public void callSetFirstWithDesc(){
+//		DeleteQuery<TargetEntity> e = super.(TargetEntity.class);
+//		
+//		setUpData("TEST.xls");
+//		
+//
+//		SingleReadQuery<TargetEntity> query = createSingleReader(TargetEntity.class);
+//		query.desc(ITestEntity.TEST);
+//		query.setFirstResult(1);
+//		TargetEntity result = query.call();
+//		assertEquals("3",result.getAttr());
+//		
+//		context.setRollbackOnly();
+//	}
+//	
 	/**
 	 * 2件目から取征E
 	 */

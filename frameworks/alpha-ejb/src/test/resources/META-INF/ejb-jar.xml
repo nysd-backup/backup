@@ -18,7 +18,7 @@
   	<!--単体テストではこの定義必須 -->
   	<interceptors>
   		<interceptor>
-  			<interceptor-class>org.coder.alpha.framework.transaction.SessionInterceptor</interceptor-class>
+  			<interceptor-class>org.coder.alpha.framework.interceptor.SessionInterceptor</interceptor-class>
   		</interceptor>	   		
   	</interceptors>
   	
@@ -26,7 +26,7 @@
 	       <interceptor-binding>
 	         <ejb-name>*</ejb-name>
 	         <interceptor-order>
-		         <interceptor-class>org.coder.alpha.framework.transaction.SessionInterceptor</interceptor-class>
+		         <interceptor-class>org.coder.alpha.framework.interceptor.SessionInterceptor</interceptor-class>
 	         </interceptor-order> 	         
 	      </interceptor-binding>
     </assembly-descriptor>

@@ -21,7 +21,8 @@
 			</activation>
 			<modules>									
 				<module>alpha-query</module>								
-				<module>alpha-httpclient</module>										
+				<module>alpha-httpclient</module>
+				<module>alpha-message</module>											
 			</modules>
 		</profile>	
 	</profiles>	

@@ -79,14 +79,14 @@ public class LocalEntityQueryTest extends ServiceUnit implements ITestEntity{
 	}
 	
 
-	/**
-	 * 2件目取征E
-	 */
-	@Test
-	public void getSingleResultSetFirstWithDesc(){
-		
-		bean().callSetFirstWithDesc();
-	}
+//	/**
+//	 * 2件目取征E
+//	 */
+//	@Test
+//	public void getSingleResultSetFirstWithDesc(){
+//		
+//		bean().callSetFirstWithDesc();
+//	}
 	
 	/**
 	 * 2件目から取征E

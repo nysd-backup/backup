@@ -24,7 +24,7 @@
 		</dependency>								
 		<dependency>
 		    <groupId>alpha</groupId>
-		    <artifactId>alpha-framework-api</artifactId>
+		    <artifactId>alpha-message</artifactId>
 		    <version>${framework.version}</version>
 		</dependency>					
 		<dependency>
@@ -66,7 +66,7 @@
 		<dependency>
 		    <groupId>javax</groupId>
 		    <artifactId>javaee-api</artifactId>
-		    <version>6.0</version>
+		    <version>7.0</version>
 		    <scope>provided</scope>
 		</dependency>
 		<dependency>

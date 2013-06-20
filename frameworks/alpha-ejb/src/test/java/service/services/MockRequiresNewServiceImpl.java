@@ -6,9 +6,9 @@ package service.services;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.coder.alpha.framework.transaction.NestedTransactionContext;
-import org.coder.alpha.framework.transaction.TransactionContext;
-
+import org.coder.alpha.message.context.MessageContext;
+import org.coder.alpha.message.target.Message;
+import org.coder.alpha.message.target.MessageLevel;
 
 import service.entity.TargetEntity;
 import service.testcase.BaseCase;
@@ -37,7 +37,9 @@ public class MockRequiresNewServiceImpl extends BaseCase implements MockRequires
 		e.setAttr2(2);
 		em.persist(e);
 		if( v.equals("AA")){
-			((NestedTransactionContext)TransactionContext.getCurrentInstance()).setRollbackOnly();
+			Message msg = new Message();
+			msg.setMessageLevel(MessageLevel.ERROR.ordinal());
+			(MessageContext.getCurrentInstance()).addMessage(msg);
 		}
 		return v;
 	}

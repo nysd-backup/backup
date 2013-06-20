@@ -3,10 +3,8 @@
  */
 package service;
 
+import org.coder.alpha.framework.messaging.MessageClientFactory;
 import org.coder.alpha.framework.registry.ComponentFinder;
-import org.coder.alpha.framework.registry.DefaultQueryFactoryFinder;
-import org.coder.alpha.framework.registry.MessageClientFactoryFinder;
-import org.coder.alpha.framework.registry.ObjectMessageClientFactoryFiinder;
 import org.coder.alpha.framework.registry.QueryFactoryFinder;
 
 /**
@@ -19,14 +17,14 @@ public class Registry {
 	
 	
 	public static QueryFactoryFinder getQueryFactoryFinder(){
-		return new DefaultQueryFactoryFinder();
+		return new QueryFactoryFinder();
 	}
 	
 	public static ComponentFinder getComponentFinder(){
 		return new StubComponentFinder();
 	}
 	
-	public static MessageClientFactoryFinder getMessageClientFactoryFinder(){
-		return new ObjectMessageClientFactoryFiinder();
+	public static MessageClientFactory getMessageClientFactoryFinder(){
+		return new MessageClientFactory();
 	}
 }

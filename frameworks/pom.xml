@@ -19,9 +19,7 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<modules>								
-				<module>alpha-framework-api</module>
-				<module>alpha-spring</module>				
+			<modules>											
 				<module>alpha-ejb</module>												
 			</modules>
 		</profile>	

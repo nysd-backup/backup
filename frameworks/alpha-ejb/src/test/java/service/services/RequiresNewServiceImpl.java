@@ -12,8 +12,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
-import org.coder.alpha.framework.transaction.NestedTransactionContext;
-import org.coder.alpha.framework.transaction.TransactionContext;
+import org.coder.alpha.message.context.MessageContext;
+import org.coder.alpha.message.target.Message;
+import org.coder.alpha.message.target.MessageLevel;
 import org.eclipse.persistence.config.QueryHints;
 
 import service.Registry;
@@ -35,7 +36,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		Map<String,Object> hints = new HashMap<String,Object>();
 		hints.put(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
 		em.find(TargetEntity.class,"1",LockModeType.PESSIMISTIC_READ,hints);
-		rollbackOnly =  ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly =  (MessageContext.getCurrentInstance()).isRollbackOnly();
 		return "OK";
 	}
 
@@ -58,8 +59,10 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 	 */
 	@Override
 	public void addMessage() {
-		TransactionContext.getCurrentInstance().acceptRollbackTrigger(new RollbackableImpl("100"));
-		rollbackOnly =  ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
+		Message msg = new Message();
+		msg.setMessageLevel(MessageLevel.ERROR.ordinal());
+		MessageContext.getCurrentInstance().addMessage(msg);		
+		rollbackOnly =  (MessageContext.getCurrentInstance()).isRollbackOnly();
 	}
 
 	/**
@@ -76,7 +79,7 @@ public class RequiresNewServiceImpl extends BaseCase implements RequiresNewServi
 		RequireService service2 = Registry.getComponentFinder().getBean(RequireService.class);
 		state= service2.persist();		
 		
-		rollbackOnly = ((NestedTransactionContext)TransactionContext.getCurrentInstance()).isRollbackOnly();
+		rollbackOnly = (MessageContext.getCurrentInstance()).isRollbackOnly();
 		
 	}
 	

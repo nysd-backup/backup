@@ -9,7 +9,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.coder.alpha.framework.trace.Tracer;
+import org.coder.alpha.message.trace.Tracer;
 
 /**
  * TraceInterceptor.
