@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.framework.messaging;
+package org.coder.alpha.ejb.messaging;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -15,7 +15,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.coder.alpha.framework.registry.ComponentFinder;
+import org.coder.alpha.ejb.registry.ComponentFinder;
 
 
 /**

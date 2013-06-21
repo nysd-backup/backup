@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.framework.messaging;
+package org.coder.alpha.ejb.messaging;
 
 import java.io.StringReader;
 import java.io.StringWriter;

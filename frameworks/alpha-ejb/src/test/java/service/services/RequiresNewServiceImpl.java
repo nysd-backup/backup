@@ -13,8 +13,8 @@ import javax.persistence.LockModeType;
 import javax.persistence.PessimisticLockException;
 
 import org.coder.alpha.message.context.MessageContext;
-import org.coder.alpha.message.target.Message;
-import org.coder.alpha.message.target.MessageLevel;
+import org.coder.alpha.message.object.Message;
+import org.coder.alpha.message.object.MessageLevel;
 import org.eclipse.persistence.config.QueryHints;
 
 import service.Registry;

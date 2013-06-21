@@ -3,8 +3,8 @@
  */
 package org.coder.alpha.message.context;
 
-import org.coder.alpha.message.target.Message;
-import org.coder.alpha.message.target.MessageLevel;
+import org.coder.alpha.message.object.Message;
+import org.coder.alpha.message.object.MessageLevel;
 
 /**
  * ErrorRollbackOnly.
@@ -15,7 +15,7 @@ import org.coder.alpha.message.target.MessageLevel;
 public class ErrorMessageHandler implements MessageHandler{
 
 	/**
-	 * @see org.coder.alpha.message.context.MessageHandler#isRollbackOnly(org.coder.alpha.message.target.Message)
+	 * @see org.coder.alpha.message.context.MessageHandler#isRollbackOnly(org.coder.alpha.message.object.Message)
 	 */
 	public boolean isRollbackOnly(Message message){
 		return MessageLevel.ERROR.ordinal() <= message.getMessageLevel();

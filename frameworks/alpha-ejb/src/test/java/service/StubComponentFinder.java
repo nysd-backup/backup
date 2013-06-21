@@ -8,7 +8,7 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.coder.alpha.framework.registry.UnifiedComponentFinder;
+import org.coder.alpha.ejb.registry.UnifiedComponentFinder;
 
 
 
@@ -23,7 +23,7 @@ import org.coder.alpha.framework.registry.UnifiedComponentFinder;
 public class StubComponentFinder extends UnifiedComponentFinder{
 
 	/**
-	 * @see org.coder.alpha.framework.registry.UnifiedComponentFinder#getBean(java.lang.String)
+	 * @see org.coder.alpha.ejb.registry.UnifiedComponentFinder#getBean(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

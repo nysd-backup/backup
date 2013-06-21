@@ -3,9 +3,9 @@
  */
 package service;
 
-import org.coder.alpha.framework.messaging.MessageClientFactory;
-import org.coder.alpha.framework.registry.ComponentFinder;
-import org.coder.alpha.framework.registry.QueryFactoryFinder;
+import org.coder.alpha.ejb.messaging.MessageClientFactory;
+import org.coder.alpha.ejb.registry.ComponentFinder;
+import org.coder.alpha.ejb.registry.QueryFactoryFinder;
 
 /**
  * Registory.

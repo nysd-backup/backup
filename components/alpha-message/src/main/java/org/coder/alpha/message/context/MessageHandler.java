@@ -3,7 +3,7 @@
  */
 package org.coder.alpha.message.context;
 
-import org.coder.alpha.message.target.Message;
+import org.coder.alpha.message.object.Message;
 
 /**
  * function.

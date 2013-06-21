@@ -9,7 +9,7 @@ import javax.ejb.EJBContext;
 import javax.jms.ConnectionFactory;
 import javax.persistence.EntityManager;
 
-import org.coder.alpha.framework.registry.QueryFactoryFinder;
+import org.coder.alpha.ejb.registry.QueryFactoryFinder;
 import org.coder.alpha.message.context.MessageContext;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;

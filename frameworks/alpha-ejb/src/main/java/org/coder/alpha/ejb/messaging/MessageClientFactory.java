@@ -1,13 +1,13 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.framework.messaging;
+package org.coder.alpha.ejb.messaging;
 
 import java.lang.reflect.Proxy;
 
 import javax.jms.JMSContext;
 
-import org.coder.alpha.framework.registry.ComponentFinder;
+import org.coder.alpha.ejb.registry.ComponentFinder;
 
 
 /**

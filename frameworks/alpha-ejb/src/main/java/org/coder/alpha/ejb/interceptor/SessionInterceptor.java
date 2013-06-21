@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.framework.interceptor;
+package org.coder.alpha.ejb.interceptor;
 
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;

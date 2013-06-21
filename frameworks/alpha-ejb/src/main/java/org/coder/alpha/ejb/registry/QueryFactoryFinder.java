@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.framework.registry;
+package org.coder.alpha.ejb.registry;
 
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
