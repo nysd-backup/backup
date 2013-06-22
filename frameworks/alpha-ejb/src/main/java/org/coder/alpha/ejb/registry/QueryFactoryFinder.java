@@ -9,8 +9,8 @@ import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.QueryFactory;
 import org.coder.alpha.query.free.loader.QueryLoader;
 import org.coder.alpha.query.free.loader.QueryLoaderTrace;
-import org.coder.alpha.query.gateway.EclipseLinkJpqlGateway;
-import org.coder.alpha.query.gateway.EclipseLinkNativeGateway;
+import org.coder.alpha.query.gateway.JpqlGateway;
+import org.coder.alpha.query.gateway.NativeGateway;
 import org.coder.alpha.query.gateway.PersistenceGateway;
 import org.coder.alpha.query.gateway.PersistenceGatewayTrace;
 
@@ -65,7 +65,7 @@ public class QueryFactoryFinder {
 	 * @return the query
 	 */
 	protected PersistenceGateway createJpqlGateway(QueryLoader builder){
-		EclipseLinkJpqlGateway named = new EclipseLinkJpqlGateway();
+		JpqlGateway named = new JpqlGateway();
 		named.setQueryLoader(builder);				
 		if(PersistenceGatewayTrace.isEnabled()){
 			PersistenceGatewayTrace trace = new PersistenceGatewayTrace();
@@ -83,7 +83,7 @@ public class QueryFactoryFinder {
 	 * @return the query
 	 */
 	protected PersistenceGateway createNativeGateway(QueryLoader builder){	
-		EclipseLinkNativeGateway ntv = new EclipseLinkNativeGateway();
+		NativeGateway ntv = new NativeGateway();
 		ntv.setQueryLoader(builder);	
 		if(PersistenceGatewayTrace.isEnabled()){
 			PersistenceGatewayTrace trace = new PersistenceGatewayTrace();

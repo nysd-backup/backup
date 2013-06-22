@@ -5,7 +5,7 @@ package service;
 
 
 import org.apache.log4j.MDC;
-import org.coder.alpha.query.exception.EclipseLinkExceptionHandler;
+import org.coder.alpha.query.exception.DefaultExceptionHandler;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.OptimisticLockException;
 
@@ -18,7 +18,7 @@ import org.eclipse.persistence.exceptions.OptimisticLockException;
  * @author yoshida-n
  * @version 2011/08/31 created.
  */
-public class DumyExceptionHandler extends EclipseLinkExceptionHandler{
+public class DumyExceptionHandler extends DefaultExceptionHandler{
 
 	//TODO ここで判定するにはDat
 	

@@ -28,7 +28,7 @@ import org.coder.alpha.query.free.result.TotalList;
  * @author yoshida-n
  * @version created.
  */
-public class EclipseLinkJpqlGateway implements PersistenceGateway{
+public class JpqlGateway implements PersistenceGateway{
 	
 	/** the pattern */
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");

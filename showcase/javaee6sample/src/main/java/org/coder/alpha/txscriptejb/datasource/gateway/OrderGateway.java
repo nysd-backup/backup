@@ -8,7 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.coder.alpha.message.registry.DefaultQueryFactoryFinder;
+import org.coder.alpha.ejb.registry.QueryFactoryFinder;
 import org.coder.alpha.query.criteria.CriteriaQueryFactory;
 import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.txscriptejb.datasource.entity.Order;
@@ -29,7 +29,7 @@ public class OrderGateway {
 	@PersistenceContext
 	protected EntityManager em;
 	
-	private CriteriaQueryFactory criteriaFactory = new DefaultQueryFactoryFinder().createCriteriaQueryFactory();
+	private CriteriaQueryFactory criteriaFactory = new QueryFactoryFinder().createCriteriaQueryFactory();
 	
 	/**
 	 * Finds the entity.

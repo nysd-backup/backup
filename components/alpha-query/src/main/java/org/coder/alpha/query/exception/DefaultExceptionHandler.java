@@ -13,7 +13,7 @@ import org.eclipse.persistence.exceptions.ExceptionHandler;
  * @author Administrator
  * @version 2013/05/02 新規作成
  */
-public class EclipseLinkExceptionHandler implements ExceptionHandler {
+public class DefaultExceptionHandler implements ExceptionHandler {
 
     /**
      * <pre>

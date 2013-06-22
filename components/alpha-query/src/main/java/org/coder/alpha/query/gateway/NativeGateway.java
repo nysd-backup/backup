@@ -39,7 +39,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * @author yoshida-n
  * @version	created.
  */
-public class EclipseLinkNativeGateway implements PersistenceGateway {
+public class NativeGateway implements PersistenceGateway {
 			
 	/**
      * <pre>
