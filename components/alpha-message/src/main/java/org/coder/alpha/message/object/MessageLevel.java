@@ -4,7 +4,7 @@
 package org.coder.alpha.message.object;
 
 /**
- * function.
+ * MessageLevel.
  *
  * @author yoshida-n
  * @version	created.
@@ -16,6 +16,10 @@ public enum MessageLevel {
 	ERROR,
 	FATAL;
 	
+	/**
+	 * @param level the level
+	 * @return the MessageLevel
+	 */
 	public static MessageLevel valueOf(int level){
 		if(INFO.ordinal() == level){
 			return INFO;

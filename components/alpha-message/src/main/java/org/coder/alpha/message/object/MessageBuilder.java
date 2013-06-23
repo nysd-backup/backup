@@ -12,23 +12,41 @@ import java.util.ResourceBundle;
 
 
 /**
- * function.
+ * MessageBuilder.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class MessageBuilder {
 
+	/**
+	 * messageId .
+	 */
 	private final String messageId;
 	
+	/**
+	 * the row number .
+	 */
 	private int rowNumber;
 	
+	/**
+	 * the arguments.
+	 */
 	private Object[] args;
 	
+	/**
+	 * the base name.
+	 */
 	private String baseName = "META-INF/application_message";
 	
+	/**
+	 * the locale.
+	 */
 	private Locale locale = Locale.getDefault();
 	
+	/**
+	 * the suffix of rownum.
+	 */
 	private String rowNumberSuffix = "";
 	
 	/**
@@ -46,16 +64,28 @@ public class MessageBuilder {
 		this.messageId = messageId;
 	}
 	
+	/**
+	 * @param rowNumberSuffix to set
+	 * @return self
+	 */
 	public MessageBuilder withRowNumberSuffix(String rowNumberSuffix){
 		this.rowNumberSuffix = rowNumberSuffix;
 		return this;
 	}
 	
+	/**
+	 * @param baseName to set
+	 * @return self
+	 */
 	public MessageBuilder withBaseName(String baseName){
 		this.baseName = baseName;
 		return this;
 	}
 	
+	/**
+	 * @param locale to set
+	 * @return self
+	 */
 	public MessageBuilder withLocale(Locale locale){
 		this.locale = locale;
 		return this;

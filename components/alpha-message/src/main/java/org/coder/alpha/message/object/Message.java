@@ -3,21 +3,26 @@ package org.coder.alpha.message.object;
 import java.io.Serializable;
 
 /**
- * function.
+ * Message.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class Message implements Serializable{
 
+	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
+	/** messageId. */
 	private String messageId = null;
 	
+	/** message. */
 	private String message = null;
 	
+	/** messageLevel. */
 	private int messageLevel = MessageLevel.INFO.ordinal();
 	
+	/** notifiable. */
 	private boolean notifiable = false;
 	
 	/**

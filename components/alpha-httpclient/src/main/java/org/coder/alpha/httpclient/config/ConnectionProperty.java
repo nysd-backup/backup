@@ -14,7 +14,7 @@ public class ConnectionProperty {
 	/** keep connection between request or thread */
 	private KeepAliveScope keepAliveScope = KeepAliveScope.REQUEST;
 	
-//	/** pool connection *
+	/** pool connection */
 	private boolean poolable = false;
 
 	/**

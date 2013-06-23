@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * TraceWatcher.
+ * InvocationWatcher.
  *
  * @author yoshida-n
  * @version	created.
