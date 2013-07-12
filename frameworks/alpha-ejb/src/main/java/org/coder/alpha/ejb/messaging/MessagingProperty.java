@@ -62,7 +62,7 @@ public class MessagingProperty{
 	/**
 	 * @param config to set
 	 */
-	public void merge(Produceable config){
+	public void merge(Consumes config){
 		if(type == null){
 			setJMSType(config.type());
 		}

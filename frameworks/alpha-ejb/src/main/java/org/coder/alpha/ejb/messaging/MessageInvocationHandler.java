@@ -46,7 +46,7 @@ public class MessageInvocationHandler implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
-		Produceable config = method.getAnnotation(Produceable.class);
+		Consumes config = method.getAnnotation(Consumes.class);
 		property.merge(config); 	
 		Destination destination = componentFinder.getResource(property.getDestinationName());
 		

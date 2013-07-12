@@ -1,10 +1,7 @@
 <projectDescription>
   <name>alpha-ejb</name>
   <comment>Business logic framework on EJB. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects>
-    <project>alpha-message</project>
-    <project>alpha-query</project>
-  </projects>
+  <projects/>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>
