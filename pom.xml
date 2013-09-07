@@ -82,21 +82,4 @@
 		</dependency>	
 	</dependencies>
 	
-	<properties>
-		<framework.version>1.2.0-SNAPSHOT</framework.version>						
-		<eclipselink.version>2.5.0</eclipselink.version>
-		<jpa.version>2.1.0</jpa.version>	
-		<oracle.jdbc.version>11.1.0.7</oracle.jdbc.version>
-	</properties>
-
-	<profiles>
-		<profile>
-			<id>all</id>
-			<modules>							
-				<module>components</module>			
-				<module>frameworks</module>											
-			</modules>
-		</profile>		
-	</profiles>
-
 </project>
