@@ -3,7 +3,6 @@
  */
 package org.coder.alpha.message;
 
-import org.coder.alpha.message.object.Message;
 
 /**
  * MessageHandler.

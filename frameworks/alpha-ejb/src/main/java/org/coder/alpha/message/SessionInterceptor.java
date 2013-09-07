@@ -8,9 +8,6 @@ import javax.ejb.EJBContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import org.coder.alpha.message.context.ErrorMessageHandler;
-import org.coder.alpha.message.context.MessageContext;
-
 /**
  * SessionInterceptor.
  *

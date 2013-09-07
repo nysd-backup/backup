@@ -3,8 +3,6 @@
  */
 package org.coder.alpha.message;
 
-import org.coder.alpha.message.object.Message;
-import org.coder.alpha.message.object.MessageLevel;
 
 /**
  * ErrorRollbackOnly.

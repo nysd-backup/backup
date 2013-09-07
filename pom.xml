@@ -82,4 +82,12 @@
 		</dependency>	
 	</dependencies>
 	
+	<profiles>
+		<profile>
+			<id>all</id>
+			<modules>
+				<module>frameworks/alpha-ejb</module>
+			</modules>
+		</profile>
+	</profiles>	
 </project>

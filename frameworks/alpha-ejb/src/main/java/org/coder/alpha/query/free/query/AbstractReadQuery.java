@@ -172,6 +172,8 @@ public abstract class AbstractReadQuery{
 				count++;
 			}			
 			call.postRead(count);
+		}catch(Exception e){
+			throw new IllegalStateException(e);
 		}
 		return count;
 	}
