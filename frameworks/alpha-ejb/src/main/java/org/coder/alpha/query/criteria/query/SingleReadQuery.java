@@ -17,7 +17,7 @@ import org.coder.alpha.query.gateway.PersistenceGateway;
  * @author yoshida-n
  * @version	created.
  */
-public class SingleReadQuery<E> extends ReadQuery<E,E>{
+public class SingleReadQuery<E> extends ReadQuery<E>{
 	
 	/** the gateway */
 	private final PersistenceGateway gateway;

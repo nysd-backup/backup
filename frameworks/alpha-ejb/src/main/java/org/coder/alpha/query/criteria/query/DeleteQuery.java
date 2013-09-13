@@ -20,7 +20,7 @@ import org.coder.alpha.query.gateway.PersistenceGateway;
  * @author yoshida-n
  * @version	created.
  */
-public class DeleteQuery<E> extends ModifyQuery<E>{
+public class DeleteQuery extends ModifyQuery{
 	
 	/** the persistenceGateway */
 	private PersistenceGateway gateway;
@@ -34,7 +34,7 @@ public class DeleteQuery<E> extends ModifyQuery<E>{
 	 * @param entityClass the entityClass
 	 * @param gateway the gateway to set
 	 */
-	public DeleteQuery(Class<E> entityClass,EntityManager em,PersistenceGateway gateway) {
+	public DeleteQuery(Class<?> entityClass,EntityManager em,PersistenceGateway gateway) {
 		super(entityClass,em);
 		this.gateway = gateway;
 	}
@@ -51,7 +51,7 @@ public class DeleteQuery<E> extends ModifyQuery<E>{
 	 */
 	@Override
 	protected Integer doCallInternal(Conditions conditions,
-			List<Criteria> criterias,Class<E> entityClass) {
+			List<Criteria> criterias,Class<?> entityClass) {
 		StatementBuilder builder  = builderFactory.createBuilder();
 		String sql = builder.withDelete(entityClass).withWhere(criterias).build();
 		conditions.setQueryId(entityClass.getSimpleName() + ".delete");

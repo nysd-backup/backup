@@ -8,9 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.coder.alpha.query.criteria.Operand;
 import org.coder.alpha.query.criteria.Criteria;
-import org.coder.alpha.query.criteria.Metadata;
+import org.coder.alpha.query.criteria.Operand;
 
 /**
  * function.
@@ -18,7 +17,7 @@ import org.coder.alpha.query.criteria.Metadata;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class CriteriaQuery<E,T> {
+public abstract class CriteriaQuery<T> {
 	
 	/** the criteria */
 	private List<Criteria> criterias = new ArrayList<Criteria>();
@@ -32,7 +31,7 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value
 	 * @return self
 	 */
-	public CriteriaQuery<E,T> setHint(String key , Object value){
+	public CriteriaQuery<T> setHint(String key , Object value){
 		hints.put(key, value);
 		return this;
 	}
@@ -51,8 +50,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param column the column to add to
 	 * @return self
 	 */
-	public CriteriaQuery<E,T> isNull(Metadata<E, ?> column){
-		return addCriteria(column.name(), Operand.IsNull,null);
+	public CriteriaQuery<T> isNull(String column){
+		return addCriteria(column, Operand.IsNull,null);
 	}
 	
 	/**
@@ -61,8 +60,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param column the column to add to
 	 * @return self
 	 */
-	public CriteriaQuery<E,T> isNotNull(Metadata<E, ?> column){
-		return addCriteria(column.name(), Operand.IsNotNull,null);
+	public CriteriaQuery<T> isNotNull(String column){
+		return addCriteria(column, Operand.IsNotNull,null);
 	}
 	
 	/**
@@ -73,8 +72,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> eq(Metadata<E, V> column, V value){
-		return addCriteria(column.name(), Operand.Equal,value);
+	public <V> CriteriaQuery<T> eq(String column, Object value){
+		return addCriteria(column, Operand.Equal,value);
 	}
 	
 	/**
@@ -85,8 +84,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> ne(Metadata<E, V> column, V value){
-		return addCriteria(column.name(), Operand.NotEqual,value);
+	public <V> CriteriaQuery<T> ne(String column, Object value){
+		return addCriteria(column, Operand.NotEqual,value);
 	}
 
 	/**
@@ -97,8 +96,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> gt(Metadata<E, V> column, V value){
-		return addCriteria(column.name(), Operand.GreaterThan,value);
+	public <V> CriteriaQuery<T> gt(String column, Object value){
+		return addCriteria(column, Operand.GreaterThan,value);
 	}
 
 	/**
@@ -109,8 +108,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> lt(Metadata<E, V> column, V value){
-		return addCriteria(column.name(), Operand.LessThan,value);
+	public <V> CriteriaQuery<T> lt(String column, Object value){
+		return addCriteria(column, Operand.LessThan,value);
 	}
 
 	/**
@@ -121,8 +120,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> gtEq(Metadata<E, V> column, V value){
-		return addCriteria(column.name(), Operand.GreaterEqual,value);
+	public <V> CriteriaQuery<T> gtEq(String column, Object value){
+		return addCriteria(column, Operand.GreaterEqual,value);
 	}
 
 	/**
@@ -133,8 +132,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> ltEq(Metadata<E, V> column, V value){
-		return addCriteria(column.name(), Operand.LessEqual,value);
+	public <V> CriteriaQuery<T> ltEq(String column, Object value){
+		return addCriteria(column, Operand.LessEqual,value);
 	}
 
 	/**
@@ -146,11 +145,11 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param to the to-value to be added 
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> between(Metadata<E, V> column, V from , V to){
+	public <V> CriteriaQuery<T> between(String column, V from , V to){
 		List<V> values = new ArrayList<V>();
 		values.add(from);
 		values.add(to);
-		addCriteria(column.name(),Operand.Between,values);
+		addCriteria(column,Operand.Between,values);
 		return this;
 	}
 
@@ -162,8 +161,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> contains(Metadata<E, V> column, List<V> value){
-		addCriteria(column.name(),Operand.IN,value);
+	public <V> CriteriaQuery<T> contains(String column, List<V> value){
+		addCriteria(column,Operand.IN,value);
 		return this;
 	}
 	
@@ -175,8 +174,8 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param value the value to be added
 	 * @return self
 	 */
-	public <V> CriteriaQuery<E,T> like(Metadata<E, V> column, V value){
-		addCriteria(column.name(),Operand.LIKE,value);
+	public <V> CriteriaQuery<T> like(String column, Object value){
+		addCriteria(column,Operand.LIKE,value);
 		return this;
 	}
 	
@@ -188,7 +187,7 @@ public abstract class CriteriaQuery<E,T> {
 	 * @param operand the operand
 	 * @return self
 	 */
-	public CriteriaQuery<E,T> addCriteria(String column,Operand operand,Object value) {
+	private CriteriaQuery<T> addCriteria(String column,Operand operand,Object value) {
 		criterias.add(new Criteria(column,criterias.size()+1,operand,value));
 		return this;
 	}
@@ -198,7 +197,7 @@ public abstract class CriteriaQuery<E,T> {
 	 * @return the result
 	 */
 	public T call(){
-		return doCall(criterias);
+		return (T)doCall(criterias);
 	}
 	
 	/**

@@ -74,8 +74,8 @@ public class CriteriaQueryFactory {
 	 * @param entityClass the entityClass
 	 * @return query
 	 */
-	public <E> DeleteQuery<E> createDeleteQuery(Class<E> entityClass, EntityManager em){
-		DeleteQuery<E> query = new DeleteQuery<E>(entityClass,em,gateway);
+	public DeleteQuery createDeleteQuery(Class<?> entityClass, EntityManager em){
+		DeleteQuery query = new DeleteQuery(entityClass,em,gateway);
 		query.setStatementBuilderFactory(builderFactory);
 		return query;
 	}
@@ -87,8 +87,8 @@ public class CriteriaQueryFactory {
 	 * @param entityClass the entityClass
 	 * @return query
 	 */
-	public <E> UpdateQuery<E> createUpdateQuery(Class<E> entityClass, EntityManager em){
-		UpdateQuery<E> query = new UpdateQuery<E>(entityClass,em,gateway);
+	public UpdateQuery createUpdateQuery(Class<?> entityClass, EntityManager em){
+		UpdateQuery query = new UpdateQuery(entityClass,em,gateway);
 		query.setStatementBuilderFactory(builderFactory);
 		return query;
 	}

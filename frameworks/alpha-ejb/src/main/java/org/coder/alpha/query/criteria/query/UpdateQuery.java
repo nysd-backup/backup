@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 
 import org.coder.alpha.query.criteria.Criteria;
 import org.coder.alpha.query.criteria.FixString;
-import org.coder.alpha.query.criteria.Metadata;
 import org.coder.alpha.query.criteria.statement.StatementBuilder;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
 import org.coder.alpha.query.free.query.Conditions;
@@ -23,7 +22,7 @@ import org.coder.alpha.query.gateway.PersistenceGateway;
  * @author yoshida-n
  * @version	created.
  */
-public class UpdateQuery<E> extends ModifyQuery<E>{
+public class UpdateQuery extends ModifyQuery{
 	
 	/** the persistenceGateway */
 	private PersistenceGateway gateway;
@@ -40,7 +39,7 @@ public class UpdateQuery<E> extends ModifyQuery<E>{
 	 * @param entityClass the entityClass
 	 * @param gateway the gateway to set
 	 */
-	public UpdateQuery(Class<E> entityClass,EntityManager em,PersistenceGateway gateway) {
+	public UpdateQuery(Class<?> entityClass,EntityManager em,PersistenceGateway gateway) {
 		super(entityClass,em);
 		this.gateway = gateway;
 	}
@@ -51,24 +50,13 @@ public class UpdateQuery<E> extends ModifyQuery<E>{
 	public void setStatementBuilderFactory(StatementBuilderFactory builderFactory){
 		this.builderFactory = builderFactory;
 	}
-
 	
 	/**
 	 * Low level API for String-based object.
 	 * @param column the column 
 	 * @return self
 	 */
-	public <V> UpdateQuery<E> set(Metadata<E,V> column , V value){
-		setValues.put(column.name(), value);
-		return this;
-	}
-	
-	/**
-	 * Low level API for String-based object.
-	 * @param column the column 
-	 * @return self
-	 */
-	public UpdateQuery<E> set(String column , FixString value){
+	public UpdateQuery set(String column , FixString value){
 		setValues.put(column, value);
 		return this;
 	}
@@ -78,7 +66,7 @@ public class UpdateQuery<E> extends ModifyQuery<E>{
 	 */
 	@Override
 	protected Integer doCallInternal(Conditions conditions,
-			List<Criteria> criterias,Class<E> entityClass) {
+			List<Criteria> criterias,Class<?> entityClass) {
 		
 		StatementBuilder builder  = builderFactory.createBuilder();
 		String sql = builder.withUpdate(entityClass).withSet(setValues).withWhere(criterias).build();

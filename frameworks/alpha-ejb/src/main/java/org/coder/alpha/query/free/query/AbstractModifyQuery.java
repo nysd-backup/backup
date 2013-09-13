@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import org.coder.alpha.query.gateway.PersistenceGateway;
 
 
-
-
 /**
  * The base of the updater.
  *
@@ -87,7 +85,7 @@ public abstract class AbstractModifyQuery {
 	 * @param arg1 the value
 	 * @return self
 	 */
-	public <T extends AbstractModifyQuery> T  setHint(String arg0, Object arg1) {
+	public <T extends AbstractModifyQuery> T setHint(String arg0, Object arg1) {
 		parameter.getHints().put(arg0,arg1);
 		return (T)this;
 	}

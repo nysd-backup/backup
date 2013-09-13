@@ -16,7 +16,7 @@ import org.coder.alpha.query.gateway.PersistenceGateway;
  * @author yoshida-n
  * @version	created.
  */
-public class ListReadQuery<E> extends ReadQuery<E,List<E>>{
+public class ListReadQuery<E> extends ReadQuery<List<E>>{
 	
 	/** the persistenceGateway */
 	private PersistenceGateway gateway;

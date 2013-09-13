@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
 import org.coder.alpha.query.criteria.Criteria;
-import org.coder.alpha.query.criteria.Metadata;
 import org.coder.alpha.query.criteria.SortKey;
 import org.coder.alpha.query.criteria.statement.JPQLBuilderFactory;
 import org.coder.alpha.query.criteria.statement.StatementBuilderFactory;
@@ -25,10 +24,10 @@ import org.eclipse.persistence.config.QueryHints;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
+public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	
 	/** resultClass */
-	private final Class<E> entityClass;
+	private final Class<?> entityClass;
 
 	/** entity manager */
 	private final EntityManager em;
@@ -54,7 +53,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param entityClass the entity class
 	 * @param em the entity manager
 	 */
-	public ReadQuery(Class<E> entityClass,EntityManager em){
+	public ReadQuery(Class<?> entityClass,EntityManager em){
 		this.entityClass = entityClass;
 		this.em = em;
 	}
@@ -72,7 +71,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param lockModeType
 	 * @return self
 	 */
-	public ReadQuery<E,T> setLockModeType(LockModeType lockModeType) {
+	public ReadQuery<T> setLockModeType(LockModeType lockModeType) {
 		this.lockModeType = lockModeType;
 		//ロック指定の場合はタイムアウト設定、先にタイムアウト設定されていた場合は何もしない
 		if(getLockTimeout() <= 0){
@@ -88,7 +87,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param firstResult the firstResult
 	 * @return self
 	 */
-	public ReadQuery<E,T> setFirstResult(int firstResult){
+	public ReadQuery<T> setFirstResult(int firstResult){
 		this.firstResult = firstResult;
 		return this;
 	}
@@ -98,7 +97,7 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param filter the filter
 	 * @return self
 	 */
-	public ReadQuery<E,T> setFilter(RecordFilter filter){
+	public ReadQuery<T> setFilter(RecordFilter filter){
 		this.filter = filter;
 		return this;
 	}
@@ -110,8 +109,8 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param column the column to add to
 	 * @return self
 	 */
-	public ReadQuery<E,T> desc(Metadata<E,?> column){
-		sortKeys.add(new SortKey(false,column.name()));
+	public ReadQuery<T> desc(String column){
+		sortKeys.add(new SortKey(false,column));
 		return this;
 	}
 	
@@ -122,8 +121,8 @@ public abstract class ReadQuery<E,T> extends CriteriaQuery<E,T>{
 	 * @param column the column to add to
 	 * @return self
 	 */
-	public ReadQuery<E,T> asc(Metadata<E, ?> column){
-		sortKeys.add(new SortKey(true,column.name()));
+	public ReadQuery<T> asc(String column){
+		sortKeys.add(new SortKey(true,column));
 		return this;
 	}
 

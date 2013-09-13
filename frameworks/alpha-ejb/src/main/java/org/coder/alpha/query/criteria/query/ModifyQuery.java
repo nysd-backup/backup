@@ -17,10 +17,10 @@ import org.coder.alpha.query.free.query.Conditions;
  * @author yoshida-n
  * @version	created.
  */
-public abstract class ModifyQuery<E> extends CriteriaQuery<E,Integer>{
+public abstract class ModifyQuery extends CriteriaQuery<Integer>{
 
 	/** entity class. */
-	private Class<E> entityClass;
+	private Class<?> entityClass;
 	
 	/** entity manager. */
 	private final EntityManager em;
@@ -31,7 +31,7 @@ public abstract class ModifyQuery<E> extends CriteriaQuery<E,Integer>{
 	 * @param entityClass the entityClass
 	 * @param em the entity manager
 	 */
-	public ModifyQuery(Class<E> entityClass,EntityManager em){
+	public ModifyQuery(Class<?> entityClass,EntityManager em){
 		this.em = em;
 		this.entityClass = entityClass;
 	}
@@ -60,6 +60,6 @@ public abstract class ModifyQuery<E> extends CriteriaQuery<E,Integer>{
 	 * @param entityClass the entityClass
 	 * @return the result
 	 */
-	protected abstract Integer doCallInternal(Conditions conditions,List<Criteria> criterias,Class<E> entityClass);
+	protected abstract Integer doCallInternal(Conditions conditions,List<Criteria> criterias,Class<?> entityClass);
 	
 }
