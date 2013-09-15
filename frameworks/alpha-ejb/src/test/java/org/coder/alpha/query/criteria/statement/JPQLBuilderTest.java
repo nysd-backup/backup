@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.alpha.query.free.loader;
+package org.coder.alpha.query.criteria.statement;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
