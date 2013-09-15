@@ -6,8 +6,6 @@ package org.coder.alpha.query.criteria.statement;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.LockModeType;
-
 import org.coder.alpha.query.criteria.Criteria;
 import org.coder.alpha.query.criteria.SortKey;
 
@@ -22,20 +20,12 @@ import org.coder.alpha.query.criteria.SortKey;
 public interface StatementBuilder {
 	
 	/**
-	 * Creates the lock statement
-	 * @param lock lock mode type
-	 * @param timeout lock time out
-	 * @return builder
-	 */
-	public StatementBuilder withLock(LockModeType lock,long timeout);
-
-	/**
 	 * Creates the delete statement.
 	 * 
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public StatementBuilder withDelete(Class<?> entityClass);
+	public String buildDelete(Class<?> entityClass);
 	
 	/**
 	 * Creates the update statement.
@@ -43,7 +33,7 @@ public interface StatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public StatementBuilder withUpdate(Class<?> entityClass);
+	public String buildUpdate(Class<?> entityClass);
 	
 	/**
 	 * Creates the select statement.
@@ -51,16 +41,8 @@ public interface StatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public StatementBuilder withSelect(Class<?> entityClass);
-	
-	/**
-	 * Creates the insert statement.
-	 * 
-	 * @param condition the condition
-	 * @return　the statement
-	 */
-	public StatementBuilder withInsert(Class<?> entityClass,Map<String,Object> values);
-	
+	public String buildSelect(Class<?> entityClass);
+		
 	/**
 	 * Creates the where statement.
 	 * 
@@ -85,9 +67,4 @@ public interface StatementBuilder {
 	 */
 	public StatementBuilder withSet(Map<String,Object> set);
 
-	/**
-	 * Creates the query
-	 * @return  the statement
-	 */
-	public String build();
 }

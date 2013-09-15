@@ -53,7 +53,7 @@ public class DeleteQuery extends ModifyQuery{
 	protected Integer doCallInternal(Conditions conditions,
 			List<Criteria> criterias,Class<?> entityClass) {
 		StatementBuilder builder  = builderFactory.createBuilder();
-		String sql = builder.withDelete(entityClass).withWhere(criterias).build();
+		String sql = builder.withWhere(criterias).buildDelete(entityClass);
 		conditions.setQueryId(entityClass.getSimpleName() + ".delete");
 		conditions.setSql(sql);		
 		return gateway.executeUpdate(conditions);

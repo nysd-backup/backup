@@ -69,7 +69,7 @@ public class UpdateQuery extends ModifyQuery{
 			List<Criteria> criterias,Class<?> entityClass) {
 		
 		StatementBuilder builder  = builderFactory.createBuilder();
-		String sql = builder.withUpdate(entityClass).withSet(setValues).withWhere(criterias).build();
+		String sql = builder.withSet(setValues).withWhere(criterias).buildUpdate(entityClass);
 		conditions.setQueryId(entityClass.getSimpleName() + ".update");
 		conditions.setSql(sql);
 		//set

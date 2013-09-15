@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -122,16 +123,16 @@ public class DefaultQueryLoader implements QueryLoader{
 				Object val = variable.getClass().isArray() ? Arrays.asList((Object[])variable) : variable;				
 				
 				// List型へのバインドの場合はサイズ文?を追加する
-				if((val instanceof List<?>) && !((List<?>)val).isEmpty()) {
-					List<?> list = (List<?>) val;
+				if((val instanceof Collection<?>) && !((Collection<?>)val).isEmpty()) {
+					Collection<?> list = (Collection<?>) val;
 					// リストの1番目の追加
 					StringBuilder questions = new StringBuilder(question);
-					bindList.add(list.get(0));
-					// リストの番目以降に追加
-					for (int i = 1; i < list.size(); i++) {
-						questions.append(",?");
-						bindList.add(convert(list.get(i),variableName,sqlId));
-					}
+					int i = 0;
+					for(Object o : list){
+						questions.append(i == 0 ? "" : ",").append("?");
+						bindList.add(convert(o,variableName,sqlId));
+						i++;
+					}					
 					question = questions.toString();						
 				}else {
 					bindList.add(convert(variable,variableName,sqlId));

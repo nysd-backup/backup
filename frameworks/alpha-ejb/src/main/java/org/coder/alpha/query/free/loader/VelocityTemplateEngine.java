@@ -38,12 +38,6 @@ public class VelocityTemplateEngine implements TemplateEngine{
 	
 	/** the pattern for velocity-statement */
 	private static final Pattern controlStatementPattern = Pattern.compile("--%\\s*(\\w+)");
-
-	/** the pattern that indicates the 1 line comment */
-	private static final Pattern singleLineCommentPattern = Pattern.compile("--([^+].*[\n\r]*)");
-	
-	/** the pattern that indicates the multiple line comment */
-	private static final Pattern multiLineCommentPattern = Pattern.compile("/\\*\\**[^+]([^/*][^*]*\\*+)*/", Pattern.MULTILINE);
 	
 	/** the accessor */
 	private ConstantAccessor accessor = new DefaultConstantAccessor();
@@ -66,22 +60,10 @@ public class VelocityTemplateEngine implements TemplateEngine{
 			scanner.useDelimiter(SEPARATOR);
 
 			StringBuffer templateSQL = new StringBuffer();
-			int mode = 0; // モード
 			while (scanner.hasNext()) {
 				String line = scanner.next();
-				if (line.startsWith("--% end") && mode == 1) {
-					// define
-					mode = 0;
-				} else if (line.startsWith("--% define")) {
-					// define
-					mode = 1;
-				} else {
-					if (mode != 1) {
-						// defineモード以外だと行追加
-						templateSQL.append(line).append(SEPARATOR);
-					}
-				}
-			};
+				templateSQL.append(line).append(SEPARATOR);
+			}
 			return convert(templateSQL.toString());
 		} finally {
 			if (scanner != null) {
@@ -103,9 +85,6 @@ public class VelocityTemplateEngine implements TemplateEngine{
 		vtl = vtl.replaceAll("#", "\\\\#");
 		// 制御構文"--%"を"#"に変換
 		vtl = controlStatementPattern.matcher(vtl).replaceAll("#$1");
-		// SQLコメントを削除
-		vtl = singleLineCommentPattern.matcher(vtl).replaceAll("##$1");
-		vtl = multiLineCommentPattern.matcher(vtl).replaceAll("#*$1*#");
 		// if変数置換
 		String[] lines = vtl.split("[\r\n]");
 		StringBuilder buff = new StringBuilder();
