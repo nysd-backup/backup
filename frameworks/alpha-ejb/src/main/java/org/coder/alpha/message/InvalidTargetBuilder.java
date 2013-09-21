@@ -24,16 +24,20 @@ public class InvalidTargetBuilder {
     private String containerId = null;
 
     /**
-     * <pre>
-     *    コンストラクタ .
-     * </pre>
-     * 
      * @param componentId
      *            to set
      */
-    public InvalidTargetBuilder(String componentId) {
-        this.componentId = componentId;
+    public static InvalidTargetBuilder targetFor(String componentId) {
+        return new InvalidTargetBuilder(componentId);
     }
+    
+    /**
+	 * @param componentId to set
+	 */
+	private InvalidTargetBuilder(String componentId){
+		this.componentId = componentId;
+	}
+
 
     /**
      * <pre>

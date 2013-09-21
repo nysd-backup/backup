@@ -5,6 +5,7 @@ package org.coder.alpha.rs;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +13,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.coder.alpha.rs.balancer.LoadBalancer;
+import org.coder.alpha.rs.balancer.Requester;
 
 /**
  * HttpInvocationHandler.
@@ -23,25 +27,25 @@ import javax.ws.rs.core.Response;
  * @author yoshida-n
  * @version	created.
  */
-public class HttpInvocationHandler implements InvocationHandler{
+public class HttpInvocationHandler implements InvocationHandler, Requester<Object>{
 	
-	/** context root. */
-	private String contextRoot;
+	/** fail over. */
+	private final List<String> failoverCandidate;
 	
-	/** client. */
-	private Client client = ClientBuilder.newClient();
+	/** Http Client */
+	private final Client client;
+	
+	/** method */
+	private Method method = null;
+	
+	/** parameter */
+	private Object parameter = null;
 	
 	/**
-	 * @param contextRoot to set
+	 * Constructor .
 	 */
-	public void setContextRoot(String contextRoot){
-		this.contextRoot = contextRoot;
-	}
-	
-	/**
-	 * @param client to set
-	 */
-	public void setClient(Client client){
+	HttpInvocationHandler(List<String> failoverCandidate, Client client){
+		this.failoverCandidate = failoverCandidate;
 		this.client = client;
 	}
 
@@ -50,14 +54,31 @@ public class HttpInvocationHandler implements InvocationHandler{
 	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
-			throws Throwable {
-		
+			throws Throwable {		
+		this.parameter = args[0];
+		this.method = method;
+		LoadBalancer balancer = new LoadBalancer();
+		balancer.setCandidate(failoverCandidate);		
+		return balancer.request(this);		
+	}
+
+	/**
+	 * @see org.coder.alpha.rs.balancer.Requester#request(java.lang.String)
+	 */
+	@Override
+	public Object request(String server) throws SocketException {
 		List<Path> listPath = new ArrayList<Path>();
 		Path path = method.getDeclaringClass().getAnnotation(Path.class);
-		listPath.add(path);
-			
+		if (path != null ){
+			listPath.add(path);
+		}
+		Path methodPath = method.getAnnotation(Path.class);
+		if (methodPath != null ){
+			listPath.add(methodPath);
+		}
+		
 		//URL生成
-		WebTarget target = client.target(contextRoot);
+		WebTarget target = client.target(server);
 		for(Path p : listPath){
 			target.path(p.value());
 		}
@@ -69,13 +90,11 @@ public class HttpInvocationHandler implements InvocationHandler{
 		Produces pds = method.getDeclaringClass().getAnnotation(Produces.class);
 		if(pds == null){
 			pds = method.getAnnotation(Produces.class);
-		}
-		
-		//送信
-		Response response = target.request(cms.value()).accept(pds.value())
-			.post(Entity.entity(null, cms.value()[0]));
-		
+		}		
+		MediaType requestType = MediaType.valueOf(cms.value()[0]);
+		Response response =  target.request(pds.value()).post(Entity.entity(parameter, requestType));
 		return response.readEntity(method.getReturnType());
+	
 	}
 
 }

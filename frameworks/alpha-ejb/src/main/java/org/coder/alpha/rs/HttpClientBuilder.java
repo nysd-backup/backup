@@ -4,29 +4,36 @@
 package org.coder.alpha.rs;
 
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+
+import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
+import org.glassfish.jersey.client.ClientConfig;
 
 
 /**
- * HttpClientFactoryImpl.
+ * HttpClientBuilder.
  *
  * @author yoshida-n
  * @version	created.
  */
 public class HttpClientBuilder {
 	
+	/** type */
 	private Class<?> serviceType;
-	
-	private String contextRoot;
-	
+
+	/** client */
 	private Client client;
 	
 	/**
 	 * Restrict construction .
 	 */
 	private HttpClientBuilder(){
-		
+		ClientConfig clientConfig = new ClientConfig();
+		clientConfig.getClasses().add(MOXyJsonProvider.class);	
+		client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 	}
 	
 	/**
@@ -40,31 +47,20 @@ public class HttpClientBuilder {
 	}
 	
 	/**
-	 * @param contextRoot to set 
-	 * @return self
-	 */
-	public HttpClientBuilder contextRoot(String contextRoot){
-		this.contextRoot = contextRoot;
-		return this;
-	}
-	
-	/**
 	 * @param client to set
 	 * @return self
 	 */
-	public HttpClientBuilder client(Client client){
+	public HttpClientBuilder withClient(Client client){
 		this.client = client;
 		return this;
 	}
 	
-
+	/**
+	 * @return proxy
+	 */
 	@SuppressWarnings("unchecked")
-	public <T> T build() {
-		HttpInvocationHandler handler = new HttpInvocationHandler();
-		handler.setContextRoot(contextRoot);
-		if(client != null){
-			handler.setClient(client);
-		}
+	public <T> T build(List<String> contextRoot) {
+		HttpInvocationHandler handler = new HttpInvocationHandler(contextRoot,client);		
 		return (T) Proxy.newProxyInstance(serviceType.getClassLoader(), new Class[]{serviceType}, handler);
 	}
 
