@@ -6,7 +6,6 @@ package org.coder.alpha.rs;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -67,21 +66,18 @@ public class HttpInvocationHandler implements InvocationHandler, Requester<Objec
 	 */
 	@Override
 	public Object request(String server) throws SocketException {
-		List<Path> listPath = new ArrayList<Path>();
+		StringBuilder paths = new StringBuilder();
 		Path path = method.getDeclaringClass().getAnnotation(Path.class);
 		if (path != null ){
-			listPath.add(path);
+			paths.append(path.value());
 		}
 		Path methodPath = method.getAnnotation(Path.class);
 		if (methodPath != null ){
-			listPath.add(methodPath);
+			paths.append(methodPath.value());
 		}
 		
 		//URL生成
-		WebTarget target = client.target(server);
-		for(Path p : listPath){
-			target.path(p.value());
-		}
+		WebTarget target = client.target(String.format("%s/%s",server,paths.toString()));		
 		
 		Consumes cms = method.getDeclaringClass().getAnnotation(Consumes.class);
 		if(cms == null){
@@ -91,10 +87,17 @@ public class HttpInvocationHandler implements InvocationHandler, Requester<Objec
 		if(pds == null){
 			pds = method.getAnnotation(Produces.class);
 		}		
-		MediaType requestType = MediaType.valueOf(cms.value()[0]);
-		Response response =  target.request(pds.value()).post(Entity.entity(parameter, requestType));
-		return response.readEntity(method.getReturnType());
-	
+		
+		//実行
+		Response response =  target.request(MediaType.valueOf(pds.value()[0])).post(Entity.entity(parameter,MediaType.valueOf(cms.value()[0])));
+		
+		//レスポンス取得 TODO exception handlerにする
+		if(response.getStatus() == Response.Status.OK.getStatusCode()){
+			return response.readEntity(method.getReturnType());
+		}else if(response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()){
+			throw new SocketException("internal server error");
+		}else {
+			throw new IllegalStateException(String.valueOf(response.getStatus()));
+		}
 	}
-
 }
