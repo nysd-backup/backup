@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * Builds the SQL from the file.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class DefaultQueryLoader implements QueryLoader{
 	

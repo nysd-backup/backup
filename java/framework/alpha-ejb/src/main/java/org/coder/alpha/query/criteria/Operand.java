@@ -13,7 +13,7 @@ import org.coder.alpha.query.free.query.Conditions;
  * The operand.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public enum Operand {
 	/** ＞ */

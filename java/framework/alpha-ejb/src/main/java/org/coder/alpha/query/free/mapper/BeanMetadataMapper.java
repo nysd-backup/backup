@@ -14,7 +14,7 @@ import java.util.Map;
  * Gets the one record from ResultSet for JavaBean.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class BeanMetadataMapper implements MetadataMapper {
 

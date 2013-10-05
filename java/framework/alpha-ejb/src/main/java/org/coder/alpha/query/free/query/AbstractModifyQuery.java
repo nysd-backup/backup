@@ -12,7 +12,7 @@ import org.coder.alpha.query.gateway.PersistenceGateway;
  * The base of the updater.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractModifyQuery {

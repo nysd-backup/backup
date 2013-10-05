@@ -128,9 +128,9 @@ public class NativeGateway implements PersistenceGateway {
     		while (rs.next()) {	
     			hitCount++;
     			//最大件数超過していたら終了
-    			if( !result.isLimited() ){
+    			if( !result.isExceededLimit() ){
     				if( maxSize > 0 && hitCount > maxSize){
-    					result.limited();
+    					result.exceededLimit();
     					if(rs.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
     						rs.last();	
     						hitCount = rs.getRow();
@@ -142,7 +142,7 @@ public class NativeGateway implements PersistenceGateway {
     				result.add((T)getRecord(mapper,rs,filter));
     			}			
     		}
-    		hitCount = result.isLimited() ? hitCount:hitCount+startPosition;
+    		hitCount = result.isExceededLimit() ? hitCount:hitCount+startPosition;
     		result.setHitCount(hitCount);
         } catch (SQLException e) {
             throw new PersistenceException(e);

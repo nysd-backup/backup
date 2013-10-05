@@ -9,7 +9,7 @@ package org.coder.alpha.message;
  * The thread-local context.
  *
  * @author	yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class MessageContext {
 	

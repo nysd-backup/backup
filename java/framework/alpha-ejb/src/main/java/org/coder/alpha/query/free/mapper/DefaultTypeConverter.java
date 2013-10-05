@@ -16,7 +16,7 @@ import java.sql.Timestamp;
  * Convert the result.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class DefaultTypeConverter implements TypeConverter{
 

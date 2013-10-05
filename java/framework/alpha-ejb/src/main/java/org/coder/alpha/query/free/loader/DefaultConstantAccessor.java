@@ -9,7 +9,7 @@ import org.coder.alpha.query.free.ConstantCache;
  * Gets the constant.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class DefaultConstantAccessor implements ConstantAccessor {
 

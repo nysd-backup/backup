@@ -12,7 +12,7 @@ import javax.jms.ConnectionFactory;
  * The factory to create JMS producer.
  *
  * @author	yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class MessageClientFactory{
 

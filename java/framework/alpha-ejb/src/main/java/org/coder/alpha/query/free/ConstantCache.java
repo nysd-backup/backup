@@ -10,7 +10,7 @@ import java.util.Map;
  * The cache of the constant to bind to SQL.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class ConstantCache {
 

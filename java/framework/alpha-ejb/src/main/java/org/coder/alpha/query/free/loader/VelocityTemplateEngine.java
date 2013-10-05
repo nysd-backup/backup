@@ -23,7 +23,7 @@ import org.apache.velocity.app.Velocity;
  * The template engine using the Velocity.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class VelocityTemplateEngine implements TemplateEngine{
 

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Cache for Query.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class QueryLoaderCache implements QueryLoader{
 	

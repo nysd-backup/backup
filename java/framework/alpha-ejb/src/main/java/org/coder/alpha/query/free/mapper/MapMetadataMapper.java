@@ -19,7 +19,7 @@ import java.util.TreeMap;
  * Gets the one record from ResultSet to map. 
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class MapMetadataMapper implements MetadataMapper{
 	

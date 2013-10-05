@@ -17,7 +17,7 @@ import org.coder.alpha.query.free.result.TotalList;
  * Trace query result
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class PersistenceGatewayTrace implements PersistenceGateway{
 	
@@ -63,7 +63,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 			LOG.info(String.format("%s:hitdata=%d, datasize=%d, limited=%s",
 					param.getQueryId(),
 					result.getHitCount(),result.size(),
-					String.valueOf(result.isLimited())));
+					String.valueOf(result.isExceededLimit())));
 		}
 		return result;
 	}

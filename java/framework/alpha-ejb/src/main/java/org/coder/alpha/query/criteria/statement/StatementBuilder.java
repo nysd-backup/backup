@@ -15,7 +15,7 @@ import org.coder.alpha.query.criteria.SortKey;
  * The query builder.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public interface StatementBuilder {
 	

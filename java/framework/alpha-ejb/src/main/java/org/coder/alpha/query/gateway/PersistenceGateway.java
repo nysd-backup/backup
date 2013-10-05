@@ -22,7 +22,7 @@ import org.coder.alpha.query.free.result.TotalList;
  * </pre>
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public interface PersistenceGateway {
 	

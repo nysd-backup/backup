@@ -9,14 +9,14 @@ import java.util.ArrayList;
  * The query result.
  *
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class TotalList<E> extends ArrayList<E>{
 
 	private static final long serialVersionUID = 5672526496382132804L;
 
 	/** if true hit count is more than max size */
-	private boolean limited = false;
+	private boolean exceededLimit = false;
 	
 	/** the hit count */
 	private int hitCount = 0;
@@ -31,15 +31,15 @@ public class TotalList<E> extends ArrayList<E>{
 	/**
 	 * Set the limit.
 	 */
-	public void limited(){
-		limited = true;
+	public void exceededLimit(){
+		exceededLimit = true;
 	}
 	
 	/**
 	 * @return f true hit count is more than max size
 	 */
-	public boolean isLimited(){
-		return this.limited;
+	public boolean isExceededLimit(){
+		return this.exceededLimit;
 	}
 
 	/**

@@ -13,7 +13,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * when the get(i) is called.
  * 
  * @author yoshida-n
- * @version 2011/08/31 created.
+ * @version	1.0
  */
 public class FetchIterator<E> extends CloseableIterator<E> {
 
@@ -35,36 +35,23 @@ public class FetchIterator<E> extends CloseableIterator<E> {
        this.filter = filter;
        this.handler = handler;
     }
+
     /**
-     * <pre>
-     *   ■説明
-     *      ScrollableCursor .
-     * </pre>
+     * ScrollableCursor .
      */
     private final ScrollableCursor cursor;
 
     /**
-     * <pre>
-     *   ■説明
-     *      MetadataMapper .
-     * </pre>
+     * MetadataMapper .
      */
     private final MetadataMapper handler;
 
     /**
-     * <pre>
-     *   ■説明
-     *      RecordFilter .
-     * </pre>
+     * RecordFilter .
      */
     private final RecordFilter filter;
 
     /**
-     * <pre>
-     *    次の要素があるか判定 .
-     * </pre>
-     * 
-     * @return 次の要素があるか
      * @see java.util.Iterator#hasNext()
      */
     @Override
@@ -77,11 +64,6 @@ public class FetchIterator<E> extends CloseableIterator<E> {
     }
 
     /**
-     * <pre>
-     *    次の要素を取得する .
-     * </pre>
-     * 
-     * @return 次の要素
      * @see java.util.Iterator#next()
      */
     @SuppressWarnings("unchecked")
@@ -90,16 +72,12 @@ public class FetchIterator<E> extends CloseableIterator<E> {
         try {
             E record = (E) handler.getRecord(cursor.getResultSet());
             return filter != null ? filter.edit(record) : record;
-        } catch (SQLException t) {
+        } catch (Exception t) {
             throw new PersistenceException(t);
         } 
     }
 
     /**
-     * <pre>
-     *    削除する .
-     * </pre>
-     * 
      * @see java.util.Iterator#remove()
      */
     @Override
@@ -112,6 +90,16 @@ public class FetchIterator<E> extends CloseableIterator<E> {
 	 */
 	@Override
 	public void close() throws Exception {
-		cursor.close();		
+		if(!cursor.isClosed()){
+			cursor.close();		
+		}
+	}
+	
+	/**
+	 * @see java.lang.Object#finalize()
+	 */
+	@Override
+	protected void finalize() throws Exception{
+		close();
 	}
 }
