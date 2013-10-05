@@ -4,7 +4,7 @@ package org.coder.alpha.message;
  * InvalidTargetBuilder.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class InvalidTargetBuilder {
 

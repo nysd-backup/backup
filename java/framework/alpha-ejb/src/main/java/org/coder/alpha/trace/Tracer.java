@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.trace;
 
@@ -11,7 +11,7 @@ import java.util.Deque;
  * Tracer.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class Tracer {
 	

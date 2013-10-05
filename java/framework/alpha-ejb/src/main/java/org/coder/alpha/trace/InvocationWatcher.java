@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.trace;
 
@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
  * InvocationWatcher.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class InvocationWatcher {
 	

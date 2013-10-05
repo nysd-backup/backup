@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query.free.query;
 
@@ -13,7 +13,7 @@ import org.coder.alpha.query.free.result.TotalList;
  * Concrete native reading query.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class NativeReadQuery extends AbstractReadQuery{
 	

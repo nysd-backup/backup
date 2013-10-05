@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query.free;
 
@@ -7,7 +7,7 @@ package org.coder.alpha.query.free;
  * Call backs the process after the query.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public abstract class QueryCallback<T> implements AutoCloseable {
 	

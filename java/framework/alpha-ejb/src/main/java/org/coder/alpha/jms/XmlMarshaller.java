@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.jms;
 
@@ -22,7 +22,7 @@ import org.apache.commons.lang.StringUtils;
  * Utility for XML.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public abstract class XmlMarshaller {
 	

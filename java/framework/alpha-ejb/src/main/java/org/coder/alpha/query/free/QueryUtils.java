@@ -12,7 +12,7 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
  * Utility.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class QueryUtils {
 

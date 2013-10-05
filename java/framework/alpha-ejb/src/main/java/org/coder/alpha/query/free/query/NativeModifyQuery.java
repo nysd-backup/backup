@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query.free.query;
 
@@ -10,7 +10,7 @@ import org.coder.alpha.query.free.QueryUtils;
  * Concrete native modifying query.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class NativeModifyQuery extends AbstractModifyQuery{
 	

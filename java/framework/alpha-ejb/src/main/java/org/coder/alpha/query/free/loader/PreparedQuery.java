@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query.free.loader;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * A prepared query.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class PreparedQuery {
 

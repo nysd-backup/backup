@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query.free.query;
 
@@ -16,7 +16,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * The query parameter.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class Conditions{
 	

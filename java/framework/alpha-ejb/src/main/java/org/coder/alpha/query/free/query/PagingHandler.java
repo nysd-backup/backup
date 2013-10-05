@@ -6,7 +6,7 @@ import org.coder.alpha.query.free.result.TotalList;
  * Handler .
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class PagingHandler {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.jms;
 
@@ -12,7 +12,7 @@ import javax.jms.DeliveryMode;
  * MessagingProperty.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class MessagingProperty{
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query;
 
@@ -18,7 +18,7 @@ import org.coder.alpha.query.gateway.PersistenceGatewayTrace;
  * Provides the QueryFactory.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class QueryFactoryFinder {
 

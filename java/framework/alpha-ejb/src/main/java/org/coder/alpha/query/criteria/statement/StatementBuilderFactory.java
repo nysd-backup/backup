@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.query.criteria.statement;
 
@@ -9,7 +9,7 @@ package org.coder.alpha.query.criteria.statement;
  * Internal Query Object.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public interface StatementBuilderFactory {
 

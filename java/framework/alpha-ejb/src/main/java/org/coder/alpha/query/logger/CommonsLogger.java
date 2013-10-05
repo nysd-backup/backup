@@ -13,7 +13,7 @@ import org.eclipse.persistence.logging.SessionLogEntry;
  * logger.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class CommonsLogger extends AbstractSessionLog {
 

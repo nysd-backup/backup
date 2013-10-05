@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.message;
 
@@ -8,7 +8,7 @@ package org.coder.alpha.message;
  * ErrorRollbackOnly.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class ErrorMessageHandler implements MessageHandler{
 

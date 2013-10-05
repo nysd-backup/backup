@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.registry;
 
@@ -13,7 +13,7 @@ import javax.naming.NamingException;
  * ComponentFindeer 4 EJB.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public abstract class ComponentFinder {
 	

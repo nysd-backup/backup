@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * Message.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class Message implements Serializable{
 
