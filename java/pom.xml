@@ -86,14 +86,14 @@
 		<profile>
 			<id>framework</id>
 			<modules>
-				<module>gear-ejb</module>
+				<module>framework/gear-ejb</module>
 			</modules>
 		</profile>
 		<profile>
 			<id>verify</id>
 			<modules>
-				<module>javaee-sample</module> 
-				<module>spring-sample</module>
+				<module>verify/javaee-sample</module> 
+				<module>verify/spring-sample</module>
 			</modules>
 		</profile>
 	</profiles>	
