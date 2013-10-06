@@ -22,20 +22,7 @@ class VersionsController < ApplicationController
 	# get distinct sorted list
   	@verLocalList = CreateDate.localVersions()
   	get_erd_diff(@verLocalList){ |current,previous|
-  	#	@tableData = TableVersion.localDiffWith(current.version,previous.version)
   		@tableRoot = current
-  	}
-  	
-  	@verExecList = CreateDate.execVersions()
-  	get_erd_diff(@verExecList){ |current,previous|
-  	#	@tableExecData = TableVersion.execDiffWith(current.version,previous.version)
-  		@tableExecRoot = current
-  	}
-  
-  	@verMartList = CreateDate.martVersions()
-  	get_erd_diff(@verMartList){ |current,previous|
-  	#	@tableMartData = TableVersion.martDiffWith(current.version,previous.version)
-  		@tableMartRoot = current
   	}
 	
     respond_to do |format|
@@ -105,33 +92,6 @@ class VersionsController < ApplicationController
       format.csv  { send_data @tableData, type: 'text/csv; charset=utf-8', filename: "local_table.csv" } 
     end
   end 
-  
-   # GET /versions/diff/tables/:cver/:dver.json
-  def diff_tablesExec
-   	currentVersion = params[:cver].gsub("_",".")
-   	diffVersion = params[:dver].gsub("_",".")
-   	
-   	@tableExecData = TableVersion.execDiffWith(currentVersion,diffVersion)
-   	
-   	respond_to do |format|
-      format.json { render json: @tableExecData }
-      format.csv  { send_data @tableExecData, type: 'text/csv; charset=utf-8', filename: "exec_table.csv" } 
-    end
-  end 
-  
-   # GET /versions/diff/tables/:cver/:dver.json
-  def diff_tablesMart
-   	currentVersion = params[:cver].gsub("_",".")
-   	diffVersion = params[:dver].gsub("_",".")
-   	
-   	@tableMartData = TableVersion.martDiffWith(currentVersion,diffVersion)
-   	
-   	respond_to do |format|
-      format.json { render json: @tableMartData }
-       format.csv  { send_data @tableMartData, type: 'text/csv; charset=utf-8', filename: "mart_table.csv" } 
-    end
-  end 
- 
    
   # get erd diff
   def get_erd_diff( versionList ) 
