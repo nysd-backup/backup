@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Continuous Delivery Manager</title>	
+	<!-- Place cursor after this and select a
+	JavaScript library from the menu above -->
+	<script>
+		var ua = navigator.userAgent.toLowerCase();
+		
+		if(ua.indexOf("chrome") == -1){
+    		alert("Only chrome can access");
+    		window.location="/invalid_browser";
+    	}
+
+	</script>
+	
+  	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  	<script src="/assets/jquery.tablesorter.js" charset="utf-8"></script>
+  	<script src="/assets/jquery.tablesorter.widgets.js" charset="utf-8"></script>
+	<link rel="stylesheet" href="/theme.blue.css">
+		
+	<!-- Supports context-sensitive CSS3 auto-completion -->
+	<!-- Style starts here. Try adding new CSS tags. -->
+
+	<!-- Style ends here -->  
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="preloader">
+	<div>
+		<span>Loading Now...</span>
+	</div>
+</div>
+
+<%= yield %>
+
+<script>
+	var Connector = function () {
+	}
+	
+	Connector.prototype = {
+		get:function(url,callback,loader) {		
+			$.ajax({
+				  type: "GET",
+				  url: url,
+				  dataType: "json",
+				  async: true,
+				  statusCode: {
+					    404: function() {
+					      alert("url not found");
+					    },
+					    500: function() {
+					      alert("internal server error");
+					    }
+				  },
+				  beforeSend : function() {		
+				  	if(loader == undefined){				  	 		  	
+						$('div.preloader').show();									  					
+					}
+				  },		
+				  complete :function() {				  	 	
+				  	  	$('div.preloader').hide();				  	
+				  },
+				  error : function(req,status,trace) {
+				  	
+				  },
+				  success : function(data){
+				  	var json = eval(data);
+				  	callback(json);
+				  }
+			});		
+		},
+	
+	}
+
+	var TableSorter = function() {
+	}
+	
+	TableSorter.prototype = {
+		
+		enable : function(id) {
+			 $("#" + id).tablesorter(
+	        	{
+					theme : 'blue', 
+					widgets : ['zebra', 'filter']	,
+					widgetOptions : {				
+				      	filter_childRows : false,
+				     	filter_columnFilters : true,
+		  				filter_cssFilter : 'tablesorter-filter',
+					    filter_filteredRow   : 'filtered',
+					    filter_formatter : null,
+				 	    filter_functions : null,
+				      	filter_hideFilters : false, // true, (see note in the options section above)
+						filter_ignoreCase : true,
+					    filter_liveSearch : true,
+	      				filter_reset : 'button.reset',
+	     				filter_searchDelay : 300,
+	      				filter_serversideFiltering: false,
+	      				filter_startsWith : false,
+	      				filter_useParsedData : false
+					}	
+				}        
+	        );        
+		}
+	
+	}
+</script>
+
+</body>
+</html>

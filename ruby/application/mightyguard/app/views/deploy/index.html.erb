@@ -1,0 +1,128 @@
+<section class="title">
+	環境別デプロイ状況
+</section>
+<div class="versions" id="versions">
+	<table id="versionTables">
+		<thead>
+			<tr>
+				<th><span>環境ID</span></th>
+				<th><span>環境名</span></th>
+				<th><span>現在バージョン</span></th>
+				<th><span>稼働状態</span></th>
+				<th><span>アクション</span></th>
+			</tr>
+		</thead>
+		<tbody>				
+			<% @envList.each { |env| %>
+				<tr id="<%=env.env_id%>">
+					<td><span><%=env.env_id%></span></td>
+					<td>
+						<a href=<%=env.url%>" target="blank"><%=env.env_nm%></a><br/>
+					</td>
+					<td><span name="version"><%=@versionPerEnv[env.env_id]%></span></td>
+					<td><div title="<%=env.check_ip%>:<%=env.check_port%>"  class="healthcheck" data-host="<%=env.check_ip%>" data-port="<%=env.check_port%>" data-operation="check"><span class="blinking"></span></div></td>				
+					<td class="action">
+						<select>
+							<% @verList.each do |info| %>		    				  	
+					     			<option value="<%=info["versionno"]%>"><%=info["versionno"]+" ： "+info["createdate"].to_s[0..18]%></option>			     
+					      	<% end %>
+						</select><br/>
+						<button class="view">View</button> 
+						<button class="deploy" data-job="Deploy<%=env.env_id%>">Deploy</button> 
+					</td>	
+				</tr>						
+			<% } %>		
+		</tbody>
+	</table>			
+</div>
+
+<div style="display:none">
+	<a id="viewLink" href="#" target="about:blank" >View</a> 
+	<a id="deployLink" href="#" target="about:blank" >Deploy</a> 
+</div>
+<script>
+
+    
+    var EventHandler = function(me) {
+    	this.me = me;
+    }
+    
+    /**
+     * Functions
+     */
+    EventHandler.prototype = {
+    
+    	view:function() {
+    		var version = this.me.parent('td').children('select').first().val();
+	    	version = version.replace(/\./g,"\_")
+	    	var link = $('#viewLink');
+	    	link.attr("href","/versions/" + version);
+	    	document.getElementById('viewLink').click();     	
+    	},
+    	
+    	deploy:function() {
+    		if(!confirm("本当にデプロイしますか?")){
+    			return;
+    		}
+    		var version = this.me.parent('td').children('select').first().val();
+    		version = version.replace(/\./g,"\_")
+    		var jobName = this.me.data("job");
+    		url = "/deploy/deployTo/" + version + "/" + jobName + ".json";
+    		
+    		var con = new Connector();
+    		con.get(url, function(data){
+		  		var jsonData = eval(data)	
+		  		if( typeof jsonData.URL != "undefined" ) {
+	  				alert('Jenkinsにデプロイ要求を発行しました。')		  	
+			  		var link = $('#deployLink');
+    				link.attr("href",jsonData.URL);
+    				document.getElementById('deployLink').click(); 		  			
+		  		}else {
+		  			alert('STに入るまでは結合環境への過去バージョンのデプロイは禁止です。');
+	  				alert('現在ビルド可能なバージョンは' + jsonData.LATEST + 'です。選択リストに表示されていない場合は単体テスト等で失敗しているためjenkinsのコンソールを確認してください');		  	
+		  		}
+		  	
+		  	});  
+    		
+    	}
+    	
+	}    
+	
+	$(document).ready(function(){ 
+       	new TableSorter().enable("versionTables");          	
+       	$('td.action button.view').each(function() {
+       		var b = $(this);
+       		b.click( function() {
+				new EventHandler(b).view();
+       		});
+       	});
+       	
+       	$('td.action button.deploy').each(function() {
+       		var b = $(this);
+       		b.click( function() {
+				new EventHandler(b).deploy();
+       		});
+       	});
+       	
+       	$("div.healthcheck").each(function() {
+       		var obj = $(this);       		
+       		obj.click(function() {
+       			obj.children("span").html("Checking...");
+       			obj.attr("class","loading")
+       			var host = this.dataset.host.replace(/\./g,"\_");
+       			var port = this.dataset.port;
+       			var ope = this.dataset.operation;
+       			var url = "/deploy/" + ope + "/" + host + "/" + port;
+       			var con = new Connector();       			
+       			con.get(url, function(data) {
+       				var json = eval(data);
+  					obj.children("span").html("");
+       				obj.attr("class",json.css);
+       			},true);
+       		});
+       		obj.click();
+       	});
+      
+    } );    
+</script>    
+

@@ -11,14 +11,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 
 /**
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @Ignore
 public class HttpClientTest {

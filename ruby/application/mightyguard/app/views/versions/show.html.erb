@@ -1,0 +1,254 @@
+<section class="title">
+構成モジュール
+</section>
+<div class="header">	
+     <article class="ac-version-header">
+     	<div class="container">
+     		<div id="headerDiv" class="scroll">
+			<table id="headerTable" class="tablesorter">
+				<thead>
+					<tr>
+						<th><span>モジュール</span></th>
+						<th ><span>最終リビジョン</span></th>
+						<th ><span>最終コミッタ</span></th>
+						<th ><span>最終コミット日時</span></th>
+					</tr>
+				</thead>
+				<tbody>
+				<% @headerData.each do |info| %>			
+					<tr>
+						<td><span><%= info.moduleid %></span>
+						<td><span><%= info.lastchangedrev %></span>
+						<td><span><%= info.lastchangedauthor %></span>
+						<td><span><%= info.lastchangeddate[0..18] %></span>
+					</tr>
+				<% end %>
+				</tbody>
+			</table>
+			</div>			
+		</div>
+	</article>	
+</div>
+
+<section class="title">
+	バージョン間差分
+</section>
+
+<div>
+show diff between current and 
+	<select data-current-version="<%=@currentVersion%>">	
+           <% @verList.each do |info| %>		    				  	
+     			<option value="<%=info.versionno%>"><%=info.versionno%></option>				     
+      	<% end %>
+      	<option value="0.0.0">0.0.0</option>	
+     </select>
+     <a href="#" class="aggregate">download</a>      
+</div>
+<section class="ac-container">
+	<div id="d1">
+        <input id="ac-1" name="accordion-1" type="checkbox" />
+        <label for="ac-1" class="title">変更履歴</label>
+        <article class="ac-version-header">        	
+	        <div class="container">	        
+	        	
+				<div class="scroll"></div>
+		</article>
+	</div>
+	<div id="d2">
+        <input id="ac-2" name="accordion-1" type="checkbox" />
+        <label for="ac-2" class="title">差分ソース</label>
+        <article class="ac-version-header">
+	        <div class="container">	        	        	        	
+				
+				<div class="scroll"></div>
+		</article>
+	</div>	
+	<div id="d3">
+        <input id="ac-5" name="accordion-1" type="checkbox" />
+        <label for="ac-5" class="title">ERD差分</label>
+        <article class="ac-version-header">			
+	        <div class="container">	        	    	        					
+				<div class="scroll"></div>
+			</div>
+		</article>
+	</div>	
+</section>
+<div style="display:none">
+		<a href="#" class="download" data-target="downloadRevisions" data-url="revisions">download</a>
+		<a href="#" class="download" data-target="downloadSrcs"  data-url="srcs" >download</a>
+		<a href="#" class="download" data-target="downloadTables"  data-url="tables">download</a>
+		<a href="#" class="download" data-target="downloadTablesExec" data-url="tables-exec">download</a>	
+		<iframe width="0" height="0" src="" id="downloadTablesExec"></iframe>
+		<iframe width="0" height="0" src="" id="downloadTables"></iframe>
+		<iframe width="0" height="0" src="" id="downloadSrcs"></iframe>
+		<iframe width="0" height="0" src="" id="downloadRevisions"></iframe>
+</div>
+
+<script type="text/template" id="revisionHeader">
+	<table id="logsTable" class="tablesorter">
+		<thead>
+			<tr>
+				<th width="70px" ><span>リビジョン</span></th>
+				<th  width="80px" ><span>コミッタ</span></th>
+				<th  width="80px" ><span>チケット番号</span></th>
+				<th ><span>メッセージ</span></th>
+				<th  width="150px" ><span>コミット日時</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			$body
+		</tbody>
+	</table>
+</script>
+<script type="text/template" id="revisionBody">
+	<tr>
+		<td><span>$revision</span></td>
+		<td><span>$commiter</span></td>
+		<td><span>$ticket</span></td>
+		<td><span>$message</span></td>
+		<td><span>$commitdate</span></td>
+	</tr>
+</script>
+<script type="text/template" id="srcHeader">
+	<table id="srcTable" class="tablesorter">
+		<thead>
+			<tr>
+				<th width="100px" ><span>リビジョン</span></th>
+				<th width="150px" ><span>モジュール</span></th>
+				<th width="80px" data-placeholder="M/A/D"><span>区分</span></th>
+				<th ><span>パス</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			$body
+		</tbody>
+	</table>
+</script>
+<script type="text/template" id="srcBody">
+	<tr>
+		<td><span>$revision</span></td>
+		<td><span>$moduleId</span></td>
+		<td><span>$type</span></td>
+		<td><span>$path</span></td>
+	</tr>
+</script>
+
+<script>
+
+ 	/**
+ 	 * Constructor
+ 	 */
+	var Renderer = function() {}
+	
+	/**
+	 * Functions
+	 */	
+	Renderer.prototype = {
+	
+		renderRevision : function (json) {
+			var div = $('div#d1  article div div.scroll').first();
+		  	var table = document.querySelector("#revisionHeader").innerHTML;
+		  		  	  	  
+		  	var contents = '';
+		  	jQuery.each(json, function() {	  
+		  		var body = $("#revisionBody").html();
+		  		body = body.replace("$revision",this.REVISION);
+		  		body = body.replace("$commiter",this.COMMITER);
+	  			body = body.split("$ticket").join(this.TICKETNO);	
+				body = body.replace("$message",this.MESSAGE);
+				body = body.replace("$commitdate",this.COMMITDATE);	
+		  		contents = contents + body;
+		  	
+		  	});		  	
+		  	table = table.replace("$body",contents);		  	
+		  	div.html(table);
+		  	new TableSorter().enable("logsTable");			  	
+		},
+		
+		renderSources : function (json) {
+		  	var div = $('div#d2 article div div.scroll').first();
+		  	var table = document.querySelector("#srcHeader").innerHTML;	
+		  	
+	  	  	  var contents = ''; 	  	  
+		  	jQuery.each(json, function() {
+		  		var body = $("#srcBody").html();
+		  		body = body.replace("$revision",this.revision);
+		  		body = body.replace("$moduleId",this.moduleid);
+	  			body = body.split("$type").join(this.type);	
+				body = body.replace("$path",this.path);
+		  		contents = contents + body;
+		  	
+		  	});		  	
+		  	table = table.replace("$body",contents);
+		  	div.html(table);
+		  	new TableSorter().enable("srcTable");			
+		},
+		
+		renderLocalTable : function (json) {
+		  	var div = $('div#d3 article div div.scroll').first();
+			var table = '<table id="tableTable" class="tablesorter">';
+			<%= render 'js_manage' %>				
+			table = table + "</tbody></table>";
+			div.html(table);
+			new TableSorter().enable("tableTable");	
+		},
+		
+		renderExecTable : function (json) {
+		  	var div = $('div#d4 article div div.scroll').first();
+		  	var table = '<table id="tableExecTable" class="tablesorter">';
+		  	<%= render 'js_manage' %>				
+		  	table = table + "</tbody></table>";
+		  	div.html(table);
+		  	new TableSorter().enable("tableExecTable");		
+		},
+		
+	}
+	
+	$(document).ready(function(){ 
+		var sorter = new TableSorter();
+	
+       	sorter.enable("headerTable"); 
+		sorter.enable("logsTable");
+        sorter.enable("srcTable");      
+        sorter.enable("tableTable");       
+       	
+       	var selects = $('select');
+   		selects.each( function(index) {
+   			var object = $(this);
+			var connector = new Connector();
+			var renderer = new Renderer();
+   			object.change(function() {
+   				var cver = object.data('current-version');
+   				var dver = object.val().replace(/\./g,"\_");
+   				if(dver == '0_0_0'){
+					 alert("only you can do is download");
+					 dver = cver; 				
+   				}
+   				var url =  "diff/x_type/" + cver + "/" + dver+ ".json";
+   				connector.get(url.replace("x_type","tables"),function(json){ renderer.renderLocalTable(json); });
+	    		connector.get(url.replace("x_type","revisions"),function(json){ renderer.renderRevision(json); });
+	    		connector.get(url.replace("x_type","srcs"),function(json){ renderer.renderSources(json); });
+   			});
+   			object.change();
+   		});
+   		
+   		$('a.download').each(function(index){   		
+   			$(this).click(function() {
+				var cver = selects.first().data('current-version');
+	   			var dver = selects.first().val().replace(/\./g,"\_");
+				var url = "diff/x_type/" + cver + "/" + dver+ ".csv";
+	   			url = url.replace("x_type",$(this).data("url"));
+	   			$('#' + $(this).data("target")).attr("src",url);	   	
+	   			return false;	
+	   		 });
+		});
+		
+		$('a.aggregate').click(function(){
+			$('a.download').each(function(index){   
+				$(this).click();
+			});
+		});
+   		
+    } );    
+    
+</script>

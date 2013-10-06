@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.txscriptejb.domain;
 
@@ -17,7 +17,7 @@ import org.coder.alpha.txscriptejb.interceptor.Traceable;
  * OrderBizLogic.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @Traceable
 public class OrderBizLogic{

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.txscriptejb.web;
 
@@ -18,7 +18,7 @@ import javax.websocket.server.ServerEndpoint;
  * OrderBean.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @ServerEndpoint("/endpoint")
 public class OrderSocket{

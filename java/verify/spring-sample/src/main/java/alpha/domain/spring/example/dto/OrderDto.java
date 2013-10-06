@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package alpha.domain.spring.example.dto;
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @XmlRootElement
 public class OrderDto implements Serializable{

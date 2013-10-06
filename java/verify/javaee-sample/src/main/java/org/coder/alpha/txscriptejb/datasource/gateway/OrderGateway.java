@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.txscriptejb.datasource.gateway;
 
@@ -21,7 +21,7 @@ import org.coder.alpha.txscriptejb.interceptor.Traceable;
  * this class is not required.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @Traceable
 public class OrderGateway {

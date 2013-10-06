@@ -1,0 +1,58 @@
+table = table + '<thead>' +
+		'<tr>' +
+			'<th colspan="11"><span>現在バージョン</span></th>' +
+			'<th colspan="11"><span>比較バージョン</span></th>' +	
+		'</tr>' +
+		'<tr>' +
+				'<th ><span>テーブル物理名</span></th>' +
+				'<th ><span>ID</span></th>	' +
+				'<th ><span>カラム物理名</span></th>' +	
+				'<th ><span>型</span></th>		' +
+				'<th ><span>長さ</span></th>' +
+				'<th ><span>精度</span></th>' +
+				'<th ><span>規模</span></th>' +
+				'<th ><span>PK</span></th>	' +	
+				'<th ><span>NULL可</span></th>' +		
+				'<th ><span>文字長</span></th>' +		
+				'<th ><span>文字種</span></th>' +			
+				'<th ><span>テーブル物理名</span></th>' +
+				'<th ><span>ID</span></th>	' +
+				'<th ><span>カラム物理名</span></th>' +	
+				'<th ><span>型</span></th>	' +	
+				'<th ><span>長さ</span></th>' +
+				'<th ><span>精度</span></th>' +
+				'<th ><span>規模</span></th>' +
+				'<th ><span>PK</span></th>	' +	
+				'<th ><span>NULL可</span></th>' +		
+				'<th ><span>文字長</span></th>' +		
+				'<th ><span>文字種</span></th>' +	
+		'</tr>' +
+		'</thead><tbody>'		  	  	  
+jQuery.each(json, function() {
+    var record = "<tr>"
+    var ctn = "<td><span>" + (this.ctn == null ? '' : this.ctn) + "</span></td>";
+  	var cid = "<td><span class='" + (this.cid != this.pid ? "red" : "") + "' >" + (this.cid == null ? '' : this.cid) + "</span></td>";
+    var ccn = "<td><span>" + (this.ccn == null ? '' : this.ccn)+ "</span></td>";
+    var cdt = "<td><span class='" + (this.cdt != this.pdt ? "red" : "") + "' >" + (this.cdt == null ? '' : this.cdt) + "</span></td>";
+    var cdl = "<td><span class='" + (this.cdl != this.pdl ? "red" : "")  + "'>" +(this.cdl == null ? '' : this.cdl) + "</span></td>";
+    var cdp = "<td><span class='" + (this.cdp != this.pdp ? "red" : "")  + "'>" +(this.cdp == null ? '' : this.cdp) + "</span></td>";
+    var cds = "<td><span class='" + (this.cds != this.pds ? "red" : "")  + "'>" +(this.cds == null ? '' : this.cds)  + "</span></td>";
+    var cpk = "<td><span class='" + (this.cpk != this.ppk ? "red" : "")  + "'>" +(this.cpk == null ? '' : this.cpk)  + "</span></td>";
+    var cnl = "<td><span class='" + (this.cnl != this.pnl ? "red" : "")  + "'>" +(this.cnl == null ? '' : this.cnl)  + "</span></td>";
+    var ccl = "<td><span class='" + (this.ccl != this.pcl ? "red" : "")  + "'>" +(this.ccl == null ? '' : this.ccl)  + "</span></td>";
+    var ccu = "<td><span class='" + (this.ccu != this.pcu ? "red" : "")  + "'>" +(this.ccu == null ? '' : this.ccu)  + "</span></td>"; 
+    var ptn = "<td><span>" + (this.ptn == null ? '' : this.ptn) + "</span></td>";
+    var pid = "<td><span>" + (this.pid == null ? '' : this.pid)+ "</span></td>";
+    var pcn = "<td><span>" + (this.pcn == null ? '' : this.pcn)+ "</span></td>";
+    var pdt = "<td><span>" +(this.pdt == null ? '' : this.pdt) + "</span></td>";
+    var pdl = "<td><span>" +(this.pdl == null ? '' : this.pdl) + "</span></td>";		
+    var pdp = "<td><span>" +(this.pdp == null ? '' : this.pdp) + "</span></td>";
+    var pds = "<td><span>" +(this.pds == null ? '' : this.pds) + "</span></td>";	  	
+    var ppk = "<td><span>" +(this.ppk == null ? '' : this.ppk) + "</span></td>";	  		
+    var pnl = "<td><span>" +(this.pnl == null ? '' : this.pnl) + "</span></td>";	  		
+    var pcl = "<td><span>" +(this.pcl == null ? '' : this.pcl) + "</span></td>";	  		
+    var pcu = "<td><span>" +(this.pcu == null ? '' : this.pcu) + "</span></td>";	  		
+    record = ctn + cid + ccn + cdt + cdl + cdp + cds + cpk + cnl + ccl + ccu + ptn + pid + pcn +pdt + pdl + pdp + pds + ppk + pnl + pcl + pcu +"</tr>";
+    table = table + record;
+
+});		  	

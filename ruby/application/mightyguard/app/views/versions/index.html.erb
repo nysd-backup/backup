@@ -1,0 +1,27 @@
+<section class="title">
+	Deployable versions
+</section>
+
+<div class="list">
+<% @versions.each do |info| %>
+  <div class="fadein" data-id="<%= info.versionno.gsub(".","_") %>">	  			
+  		<span><%= info.versionno %></span> <span class="date"><%= info.createdate.strftime("%Y-%m-%d %H:%M:%S") %></span> <% if info.createdate.strftime("%Y%m%d") == Time.now.strftime("%Y%m%d") then %><span class="blinking">NEW!</span> <%end%>
+  </div>
+  <a id="<%= info.versionno.gsub(".","_") %>" href="/versions/<%= info.versionno.gsub(".","_") %>" style="display:none"></a>
+<% end %>
+</div>
+<script>
+	$(document).ready(function() {			
+	      
+		var children = $("div.list").children("div.fadein");	
+	   	children.click(function(e){	 
+	   		var targetId = this.dataset.id;	 	   		
+	   		document.getElementById(targetId).click();
+	   	});  
+	   	
+	   	$('div.preloader').hide();  
+	});
+ </script>
+
+<br />
+

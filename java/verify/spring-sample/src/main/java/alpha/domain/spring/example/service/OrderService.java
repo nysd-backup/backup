@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package alpha.domain.spring.example.service;
 
@@ -27,7 +27,7 @@ import alpha.domain.spring.example.entity.OrderDtl;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @Service
 @Transactional

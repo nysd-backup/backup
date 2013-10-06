@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.txscriptejb.web;
 
@@ -15,7 +15,7 @@ import org.coder.alpha.txscriptejb.service.OrderService;
  * OrderBean.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @WebServlet(name = "orderServlet", urlPatterns = { "/order" })
 public class OrderServlet extends HttpServlet{

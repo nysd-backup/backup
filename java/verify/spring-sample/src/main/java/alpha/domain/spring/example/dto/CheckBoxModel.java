@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package alpha.domain.spring.example.dto;
 
@@ -8,7 +8,7 @@ package alpha.domain.spring.example.dto;
  * function.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 public class CheckBoxModel {
 

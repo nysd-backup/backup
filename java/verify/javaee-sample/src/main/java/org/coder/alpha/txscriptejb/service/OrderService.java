@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 the original author
+ * Copyright 2011 the original author, All Rights Reserved.
  */
 package org.coder.alpha.txscriptejb.service;
 
@@ -13,7 +13,7 @@ import org.coder.alpha.txscriptejb.interceptor.Traceable;
  * OrderService.
  *
  * @author yoshida-n
- * @version	created.
+ * @version	1.0
  */
 @Traceable
 @Stateless	//SessionBeanでなくてもCMTに対応してほしい
