@@ -11,48 +11,33 @@ import org.eclipse.persistence.exceptions.ExceptionHandler;
 /**
  * EclipseLinkの例外Handller . 
  * 
- * @author Administrator
- * @version 2013/05/02 新規作成
+ * @author yoshida-n
+ * @version 1.0
  */
 public class DefaultExceptionHandler implements ExceptionHandler {
 
     /**
-     * <pre>
-     *   ■説明
-     *      一意制約エラー .
-     * </pre>
+     *  一意制約エラー .
      */
     private static final int UNIQUE_ERR_CD = 1;
 
     /**
-     * <pre>
-     *   ■説明
-     *      悲観ロックエラー .
-     * </pre>
+     *  悲観ロックエラー .
      */
     private static final int PESSIMISTIC_ERR_CD = 54;
 
     /**
-     * <pre>
-     *   ■説明
-     *      デッドロック .
-     * </pre>
+     *  デッドロックエラー .
      */
     private static final int DEAD_LOCK_ERR_CD = 60;
 
     /**
-     * <pre>
-     *   ■説明
-     *      JDBCタイムアウトエラー .
-     * </pre>
+     * JDBCタイムアウトエラー  .
      */
     private static final int TIMEOUT_ERR_CD = 1013;
 
     /**
-     * <pre>
-     *   ■説明
-     *      悲観ロックタイムアウトエラー .
-     * </pre>
+     * 悲観ロックタイムアウトエラー .
      */
     private static final int LOCK_TIMEOUT_ERR_CD = 30006;
 
@@ -61,13 +46,6 @@ public class DefaultExceptionHandler implements ExceptionHandler {
      */
 
     /**
-     * <pre>
-     *    例外処理 .
-     * </pre>
-     * 
-     * @param exception
-     *            例外
-     * @return Object
      * @see org.eclipse.persistence.exceptions.ExceptionHandler#handleException(java.lang.RuntimeException)
      */
     @Override
