@@ -10,7 +10,9 @@ import javax.ws.rs.core.Response;
 import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.junit.Test;
+import org.junit.Ignore;
 
+@Ignore
 public class HttpInvocationHandlerTest {
 
 	@Test
