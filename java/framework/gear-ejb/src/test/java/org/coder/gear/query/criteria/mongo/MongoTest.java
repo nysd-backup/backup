@@ -14,7 +14,6 @@ import org.junit.Test;
  * @author yoshida-n
  *
  */
-@Ignore
 public class MongoTest {
 
 	@Test
@@ -23,7 +22,7 @@ public class MongoTest {
 		EntityManagerFactory factory= Persistence.createEntityManagerFactory("mongo-example");
 	    EntityManager em = factory.createEntityManager();
 	    em.getTransaction().begin();
-	    for(int i = 11; i < 100000; i++){
+	    for(int i = 0; i < 10000; i++){
 	    	Logger time = new Logger();
 	    	time.setMonth((i % 11 + 1) + "");
 	    	time.setTime("122400");
