@@ -10,12 +10,14 @@ import javax.persistence.Persistence;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.coder.gear.query.QueryFactoryFinder;
 import org.coder.gear.query.criteria.query.SingleReadQuery;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author yoshida-n
  *
  */
+@Ignore
 public class MongoTest {
 
 	@Test
