@@ -1,4 +1,4 @@
-package org.coder.mightyguard.register.domain.log;
+package org.coder.mightyguard.register.domain.application;
 
 import java.io.Serializable;
 

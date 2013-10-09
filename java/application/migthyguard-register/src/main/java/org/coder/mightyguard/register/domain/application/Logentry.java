@@ -1,21 +1,29 @@
-package org.coder.mightyguard.register.domain.headers;
+package org.coder.mightyguard.register.domain.application;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+
 /**
  * @author yoshida-n
  *
  */
-public class Commit implements Serializable{
+public class Logentry implements Serializable{
 
+    /**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
-    @XmlAttribute
+	@XmlAttribute
     public String revision;
 
     public String author;
 
     public String date;
+
+    public Paths paths;
+
+    public String msg;
 }

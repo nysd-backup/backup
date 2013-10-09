@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Date;
 
-import org.coder.mightyguard.register.domain.Data;
+import org.coder.mightyguard.register.domain.application.AppVersion;
 import org.coder.mightyguard.register.repository.DataRepository;
 
 /**
  * @author yoshida-n
  *
  */
-public class RegisterService {
+public class ApplicationVersionService {
 
     private DataRepository dataRepository;
     
@@ -50,7 +50,7 @@ public class RegisterService {
 
         Date date = new Date();
         for (File f : versionFiles) {           
-            Data data = dataRepository.load(f);
+            AppVersion data = dataRepository.load(f);
             data.version = version;
             data.date = date.toString(); 
             dataRepository.persist(data);

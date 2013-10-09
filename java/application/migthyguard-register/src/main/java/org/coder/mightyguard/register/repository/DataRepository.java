@@ -19,9 +19,9 @@ import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.coder.mightyguard.register.domain.Data;
-import org.coder.mightyguard.register.domain.headers.Info;
-import org.coder.mightyguard.register.domain.log.Log;
+import org.coder.mightyguard.register.domain.application.AppVersion;
+import org.coder.mightyguard.register.domain.application.Info;
+import org.coder.mightyguard.register.domain.application.Log;
 import org.coder.mightyguard.register.service.TaskOutputSweaper;
 
 /**
@@ -64,12 +64,12 @@ public class DataRepository {
     /**
      * @param data the data to persist
      */
-    public void persist(Data data){
+    public void persist(AppVersion data){
     	Query query = em.createQuery("select e from Data e where e.version = :version and e.moduleId = :moduleId");
     	query.setParameter("version", data.version);
     	query.setParameter("moduleId", data.moduleId);
     	try{
-    		Data found = (Data)query.getSingleResult();
+    		AppVersion found = (AppVersion)query.getSingleResult();
         	em.remove(found);        	
     	}catch(NoResultException nre){    		
     	}
@@ -82,8 +82,8 @@ public class DataRepository {
 	 * @param f file 
 	 * @return domain object
 	 */
-	public Data load(File f) throws Exception{
-		  Data data = new Data();
+	public AppVersion load(File f) throws Exception{
+		  AppVersion data = new AppVersion();
 
           // モジュール名
           data.moduleId = f.getName().split("\\.")[0];
