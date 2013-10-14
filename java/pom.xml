@@ -99,5 +99,11 @@
 				<module>verify/spring-sample</module>
 			</modules>
 		</profile>
+		<profile>
+			<id>application</id>
+			<modules>
+				<module>application/mightyguard-register</module> 
+			</modules>
+		</profile>
 	</profiles>	
 </project>

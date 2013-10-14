@@ -8,11 +8,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.coder.alpha.query.QueryFactoryFinder;
-import org.coder.alpha.query.criteria.CriteriaQueryFactory;
-import org.coder.alpha.query.criteria.query.ListReadQuery;
 import org.coder.alpha.txscriptejb.datasource.entity.Order;
 import org.coder.alpha.txscriptejb.interceptor.Traceable;
+import org.coder.gear.query.QueryFactoryFinder;
+import org.coder.gear.query.criteria.CriteriaQueryFactory;
+import org.coder.gear.query.criteria.query.ListReadQuery;
 
 
 /**
