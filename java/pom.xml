@@ -93,13 +93,6 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>verify</id>
-			<modules>
-				<module>verify/javaee-sample</module> 
-				<module>verify/spring-sample</module>
-			</modules>
-		</profile>
-		<profile>
 			<id>application</id>
 			<modules>
 				<module>application/mightyguard-register</module> 
