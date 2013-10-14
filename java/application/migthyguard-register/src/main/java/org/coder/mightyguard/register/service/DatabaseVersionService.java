@@ -20,6 +20,8 @@ import com.mongodb.DBCollection;
  *
  */
 public class DatabaseVersionService {
+	
+	private String sql = null;
 
 	private EntityManager rem;
 	
@@ -39,6 +41,20 @@ public class DatabaseVersionService {
     	this.rem = rem;
     }
     
+    /**
+     * @return
+     */
+    public String getSql() {
+		return sql;
+	}
+
+	/**
+	 * @param sql to set
+	 */
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
+  
 
     /**
      * @param version
@@ -51,16 +67,19 @@ public class DatabaseVersionService {
     	DBCollection collection = db.getCollection("ERDVERSION");
     	collection.remove(new BasicDBObjectBuilder().add("VERSION", version).add("OWNER", owner).get());
     	
-    	InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("oracleSql.sql");    	
+    	InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(sql);    	
     	StringWriter writer = new StringWriter();
     	IOUtils.copy(stream,writer,"UTF-8");
     	String sql = writer.toString();
     
     	Query query = rem.createNativeQuery(String.format(sql,version,owner,"%$%",owner,"%$%"), ErdVersion.class);
 
-    	List<ErdVersion> tables = (List<ErdVersion>)query.getResultList();
+    	@SuppressWarnings("unchecked")
+		List<ErdVersion> tables = (List<ErdVersion>)query.getResultList();
     	for(ErdVersion t : tables){
     		em.persist(t);
     	}    	
     }
+
+	
 }
