@@ -1,7 +1,0 @@
-target
-.settings
-.checkstyle
-.classpath
-logs
-
-*.log
