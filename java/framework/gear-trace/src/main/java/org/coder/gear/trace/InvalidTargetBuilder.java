@@ -1,4 +1,4 @@
-package org.coder.gear.message;
+package org.coder.gear.trace;
 
 /**
  * InvalidTargetBuilder.
