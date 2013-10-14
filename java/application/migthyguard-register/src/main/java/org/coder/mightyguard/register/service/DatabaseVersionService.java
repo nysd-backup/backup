@@ -64,7 +64,7 @@ public class DatabaseVersionService {
     
     	//削除
     	DB db = ((MongoConnection)em.unwrap(javax.resource.cci.Connection.class)).getDB();
-    	DBCollection collection = db.getCollection("ERDVERSION");
+    	DBCollection collection = db.getCollection(ErdVersion.class.getSimpleName().toUpperCase());
     	collection.remove(new BasicDBObjectBuilder().add("VERSION", version).add("OWNER", owner).get());
     	
     	InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(sql);    	
@@ -72,7 +72,8 @@ public class DatabaseVersionService {
     	IOUtils.copy(stream,writer,"UTF-8");
     	String sql = writer.toString();
     
-    	Query query = rem.createNativeQuery(String.format(sql,version,owner,"%$%",owner,"%$%"), ErdVersion.class);
+    	Query query = rem.createNativeQuery(sql, ErdVersion.class);
+    	query.setParameter(1, version).setParameter(2, owner).setParameter(3, owner);
 
     	@SuppressWarnings("unchecked")
 		List<ErdVersion> tables = (List<ErdVersion>)query.getResultList();

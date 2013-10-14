@@ -1,5 +1,5 @@
 select 
-  '%s' AS VERSION,
+  ? AS VERSION,
   UTCM.OWNER AS OWNER,
   UTCM.TABLE_NAME AS TABLENAME,
   UTCM.COMMENTS AS TABLECOMMENTS,
@@ -33,9 +33,9 @@ FROM
 			    OWNER
 			  FROM ALL_CONSTRAINTS  
 			  WHERE CONSTRAINT_TYPE = 'P' 
-	      	  AND OWNER = '%s'
+	      	  AND OWNER = ?
         AND
-            TABLE_NAME not like '%s'    
+            TABLE_NAME not like '%$%'  
       		) P
 	WHERE  
 		  P.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME
@@ -45,7 +45,7 @@ FROM
     UCC.OWNER = P.OWNER
 	) PK
 WHERE
-  UTCM.OWNER = '%s'
+  UTCM.OWNER = ?
 AND  
   UTCM.TABLE_NAME 	= UTCL.TABLE_NAME
 AND  
@@ -61,7 +61,7 @@ AND
 AND
 	UTCL.COLUMN_NAME = PK.COLUMN_NAME(+) 
 AND
-	 UTCL.TABLE_NAME not like '%s'
+	 UTCL.TABLE_NAME not like '%$%'
 ORDER BY 
 	TABLENAME ,ISPK ,COLUMNNAME
   
