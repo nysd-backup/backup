@@ -15,19 +15,12 @@
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 		
-	<dependencies>
-	    <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>			
-			<scope>test</scope>
-		</dependency>			
-			<dependency>
+	<dependencies>			
+		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>11.1.0.7</version>
-		</dependency>
-		
+		</dependency>		
 		<dependency>
 		    <groupId>org.eclipse.persistence</groupId>
 		    <artifactId>eclipselink</artifactId>

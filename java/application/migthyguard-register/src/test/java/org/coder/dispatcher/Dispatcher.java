@@ -31,6 +31,7 @@ public class Dispatcher {
 		
 		DatabaseVersionService dvs  =  new DatabaseVersionService();
 		dvs.setEntityManager(em);
+		dvs.setSql("oracleSql.sql");
 		dvs.setRemoteEntityManager(rem);
 		dvs.register("1.0.277", "A999");
 		em.flush();
