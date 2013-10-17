@@ -65,7 +65,7 @@ public class DataRepository {
      * @param data the data to persist
      */
     public void persist(AppVersion data){
-    	Query query = em.createQuery("select e from Data e where e.version = :version and e.moduleId = :moduleId");
+    	Query query = em.createQuery("select e from AppVersion e where e.version = :version and e.moduleId = :moduleId");
     	query.setParameter("version", data.version);
     	query.setParameter("moduleId", data.moduleId);
     	try{
