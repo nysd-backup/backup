@@ -46,12 +46,12 @@ public class ReferenceService {
 		EntityManager em = factory.createEntityManager();
 		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
 		List<AppVersion> cList = currentQuery.lt("version", version).call();
-		Map<String,String> tree = new TreeMap<String,String>();
+		TreeMap<String,String> tree = new TreeMap<String,String>();
 		for(AppVersion v : cList){
 			tree.put(v.date, v.version);
 		}
 		List<Version> vlist = new ArrayList<Version>();
-		for(Map.Entry<String, String> v : tree.entrySet()){
+		for(Map.Entry<String, String> v : tree.descendingMap().entrySet()){
 			Version e = new Version();
 			e.date = v.getKey();
 			e.version = v.getValue();
