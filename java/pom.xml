@@ -95,7 +95,7 @@
 		<profile>
 			<id>application</id>
 			<modules>
-				<module>application/mightyguard-register</module> 
+				<module>application/mightyguard</module> 
 			</modules>
 		</profile>
 	</profiles>	
