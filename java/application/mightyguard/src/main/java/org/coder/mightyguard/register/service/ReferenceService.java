@@ -64,8 +64,8 @@ public class ReferenceService {
 		TreeMap<String, String> map = new TreeMap<String,String>();
 		for(AppVersion e : cList){
 			map.put(e.date,e.version);
-		}
-		String prevVer = map.values().iterator().next();
+		}		
+		String prevVer = map.descendingMap().values().iterator().next();
 		return doDiff(version,prevVer,em);		
 	}
 	
