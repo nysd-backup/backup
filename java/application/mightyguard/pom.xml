@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gear</groupId>
-	<artifactId>mightyguard-register</artifactId>
+	<artifactId>mightyguard</artifactId>
 	<packaging>jar</packaging>
 	<version>1.2.0-SNAPSHOT</version>
-	<name>mightyguard-register</name>
+	<name>mightyguard</name>
 	<description>	
 	</description>
 	
@@ -15,7 +15,12 @@
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 		
-	<dependencies>			
+	<dependencies>	
+		<dependency>
+			<groupId>gear</groupId>
+			<artifactId>gear-query</artifactId>
+			<version>1.2.0-SNAPSHOT</version>
+		</dependency>		
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
