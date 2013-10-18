@@ -59,7 +59,7 @@ public class ReferenceService {
 		EntityManager em = factory.createEntityManager();
 		
 		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
-		List<AppVersion> cList = currentQuery.lt("VERSION", version).call();
+		List<AppVersion> cList = currentQuery.lt("version", version).call();
 		
 		TreeMap<String, String> map = new TreeMap<String,String>();
 		for(AppVersion e : cList){
@@ -79,10 +79,10 @@ public class ReferenceService {
 	private List<AppVersion> doDiff(String version , String previous , EntityManager em){
 				
 		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
-		List<AppVersion> cList = currentQuery.eq("VERSION", version).call();
+		List<AppVersion> cList = currentQuery.eq("version", version).call();
 		
 		ListReadQuery<AppVersion> previousQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
-		List<AppVersion> pList = previousQuery.eq("VERSION", previous).call();
+		List<AppVersion> pList = previousQuery.eq("version", previous).call();
 		
 		//前回バージョンのリビジョン設定
     	Map<String,String> moduleMaxRevs = new HashMap<String,String>();
