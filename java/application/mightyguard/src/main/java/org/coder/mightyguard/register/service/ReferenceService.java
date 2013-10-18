@@ -65,7 +65,7 @@ public class ReferenceService {
 		for(AppVersion e : cList){
 			map.put(e.date,e.version);
 		}
-		String prevVer = map.get(0);
+		String prevVer = map.values().iterator().next();
 		return doDiff(version,prevVer,em);		
 	}
 	
