@@ -3,12 +3,12 @@
  */
 package org.coder.mightyguard.register.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.NavigableMap;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,6 +22,7 @@ import javax.ws.rs.QueryParam;
 
 import org.coder.gear.query.QueryFactoryFinder;
 import org.coder.gear.query.criteria.query.ListReadQuery;
+import org.coder.mightyguard.register.domain.Version;
 import org.coder.mightyguard.register.domain.application.AppVersion;
 import org.eclipse.persistence.internal.nosql.adapters.mongo.MongoConnection;
 
@@ -51,7 +52,7 @@ public class ReferenceService {
 	@Path("list")
 	@GET
 	@Produces("application/json")
-	public Set<String> previousList(@QueryParam("current") String version,@QueryParam("limit") @DefaultValue("10") int limit){
+	public List<Version> previousList(@QueryParam("current") String version,@QueryParam("limit") @DefaultValue("10") int limit){
 		EntityManager em = factory.createEntityManager();
 		em.getTransaction().begin();		
 		MongoConnection mc = MongoConnection.class.cast(em.unwrap(Connection.class));
@@ -68,19 +69,29 @@ public class ReferenceService {
 		DBObject project = dbo("$project", projectOption);
 		
 		//グループ
-		Object groupOption = dbo("_id","$VERSION");
+		DBObject dbo = dbo("VERSION","$VERSION");
+		dbo.put("DATE", "$DATE");
+		Object groupOption = dbo("_id",dbo);
 		DBObject group = dbo("$group",groupOption);		
 		
 		CommandResult result = cl.aggregate(match,project,group).getCommandResult();
 		BasicDBList list = BasicDBList.class.cast(result.get("result"));
 		
-		TreeSet<String> set = new TreeSet<String>();
+		TreeMap<String,String> set = new TreeMap<String,String>();
 		for(Object e : list){
 			BasicDBObject o = BasicDBObject.class.cast(e);
-			String ver= (String)o.get("_id");
-			set.add(ver);
+			BasicDBObject ver = (BasicDBObject)o.get("_id");
+			set.put(ver.getString("DATE"),ver.getString("VERSION"));
 		}
-		return set.descendingSet();
+		NavigableMap<String, String> desc = set.descendingMap();
+		List<Version> verlist = new ArrayList<Version>();
+		for(Map.Entry<String, String> e : desc.entrySet()){
+			Version v = new Version();
+			v.date = e.getKey();
+			v.version = e.getValue();
+			verlist.add(v);
+		}
+		return verlist;
 	}
 	
 	/**
@@ -125,10 +136,10 @@ public class ReferenceService {
 	@Path("show")
 	@GET
 	@Produces("application/json")
-	public List<AppVersion> show(@QueryParam("current") String version){
+	public List<AppVersion> show(@QueryParam("current") String version, @QueryParam("date") String date ){
 		EntityManager em = factory.createEntityManager();		
 		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
-		List<AppVersion> cList = currentQuery.lt("version", version).call();
+		List<AppVersion> cList = currentQuery.lt("date", date).call();
 		
 		TreeMap<String, String> map = new TreeMap<String,String>();
 		for(AppVersion e : cList){
