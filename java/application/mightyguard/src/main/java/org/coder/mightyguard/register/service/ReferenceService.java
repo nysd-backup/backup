@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
@@ -45,6 +44,37 @@ public class ReferenceService {
 	private static final QueryFactoryFinder finder = new QueryFactoryFinder();
 	
 	/**
+	 * @param limit the limit
+	 * @return get list
+	 */
+	@Path("allTheList")
+	@GET
+	@Produces("application/json")
+	public List<Version> allTheList(@QueryParam("limit") @DefaultValue("10") int limit){
+
+		DBCollection cl = getCollection();
+		
+		//プロジェクト
+		DBObject projectOption = dbo("VERSION",1);
+		projectOption.put("DATE", 1);
+		DBObject project = dbo("$project", projectOption);
+		
+		//ソート
+		DBObject sortOption = dbo("DATE",1);
+		DBObject sort = dbo("$sort", sortOption);
+		
+		//グループ
+		DBObject dbo = dbo("VERSION","$VERSION");
+		dbo.put("DATE", "$DATE");
+		Object groupOption = dbo("_id",dbo);
+		DBObject group = dbo("$group",groupOption);		
+		
+		CommandResult result = cl.aggregate(project,sort,group).getCommandResult();
+		return getSortedList(result);
+		
+	}
+	
+	/**
 	 * Gets the version list
 	 * @param version
 	 * @return
@@ -53,11 +83,8 @@ public class ReferenceService {
 	@GET
 	@Produces("application/json")
 	public List<Version> previousList(@QueryParam("current") String version,@QueryParam("limit") @DefaultValue("10") int limit){
-		EntityManager em = factory.createEntityManager();
-		em.getTransaction().begin();		
-		MongoConnection mc = MongoConnection.class.cast(em.unwrap(Connection.class));
-		DB db = mc.getDB();
-		DBCollection cl = db.getCollection(AppVersion.class.getSimpleName().toUpperCase());
+		
+		DBCollection cl = getCollection();
 		
 		//検索条件
 		Object matchOption = dbo("DATE",dbo("$lt",getDate(version,cl)));
@@ -68,30 +95,18 @@ public class ReferenceService {
 		projectOption.put("DATE", 1);
 		DBObject project = dbo("$project", projectOption);
 		
+		//ソート
+		DBObject sortOption = dbo("DATE",1);
+		DBObject sort = dbo("$sort", sortOption);
+		
 		//グループ
 		DBObject dbo = dbo("VERSION","$VERSION");
 		dbo.put("DATE", "$DATE");
 		Object groupOption = dbo("_id",dbo);
 		DBObject group = dbo("$group",groupOption);		
 		
-		CommandResult result = cl.aggregate(match,project,group).getCommandResult();
-		BasicDBList list = BasicDBList.class.cast(result.get("result"));
-		
-		TreeMap<String,String> set = new TreeMap<String,String>();
-		for(Object e : list){
-			BasicDBObject o = BasicDBObject.class.cast(e);
-			BasicDBObject ver = (BasicDBObject)o.get("_id");
-			set.put(ver.getString("DATE"),ver.getString("VERSION"));
-		}
-		NavigableMap<String, String> desc = set.descendingMap();
-		List<Version> verlist = new ArrayList<Version>();
-		for(Map.Entry<String, String> e : desc.entrySet()){
-			Version v = new Version();
-			v.date = e.getKey();
-			v.version = e.getValue();
-			verlist.add(v);
-		}
-		return verlist;
+		CommandResult result = cl.aggregate(match,project,sort,group).getCommandResult();
+		return getSortedList(result);
 	}
 	
 	/**
@@ -178,6 +193,36 @@ public class ReferenceService {
     		e.log.removeUnderRevision(Integer.parseInt(moduleMaxRevs.get(e.moduleId)));    	
     	}
     	return cList;		
+	}
+	
+	/**
+	 * @return the collection
+	 */
+	private DBCollection getCollection(){
+		EntityManager em = factory.createEntityManager();
+		em.getTransaction().begin();		
+		MongoConnection mc = MongoConnection.class.cast(em.unwrap(Connection.class));
+		DB db = mc.getDB();
+		DBCollection cl = db.getCollection(AppVersion.class.getSimpleName().toUpperCase());
+		return cl;
+	}
+	
+	/**
+	 * @param result sorted list
+	 * @return
+	 */
+	private List<Version> getSortedList(CommandResult result){	
+		BasicDBList list = BasicDBList.class.cast(result.get("result"));
+		List<Version> verlist = new ArrayList<Version>();
+		for(Object e : list){
+			BasicDBObject o = BasicDBObject.class.cast(e);
+			BasicDBObject ver = (BasicDBObject)o.get("_id");
+			Version v = new Version();
+			v.date = ver.getString("DATE");
+			v.version = ver.getString("VERSION");
+			verlist.add(v);
+		}	
+		return verlist;
 	}
 	
 	/**
