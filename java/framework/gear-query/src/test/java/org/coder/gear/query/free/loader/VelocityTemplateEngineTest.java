@@ -26,7 +26,7 @@ public class VelocityTemplateEngineTest extends Assert{
 	@Test
 	public void load() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("/* コメント */").append("\n");
+		builder.append("/* cmnt */").append("\n");
 		builder.append("SELECT /* queryId */ FROM TEST WHERE TEST = $test").append("\n");
 		builder.append("--% if($a == $b)").append("\n");
 		builder.append("--% end");
@@ -37,7 +37,7 @@ public class VelocityTemplateEngineTest extends Assert{
 		String sql = engine.load(stream);
 
 		StringBuilder expected = new StringBuilder();
-		expected.append("/* コメント */").append("\n");
+		expected.append("/* cmnt */").append("\n");
 		expected.append("SELECT /* queryId */ FROM TEST WHERE TEST = $test").append("\n");
 		expected.append("#if($a == $b)").append("\n");
 		expected.append("#end");
