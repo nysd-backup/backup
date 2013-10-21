@@ -136,10 +136,13 @@ public class ReferenceService {
 	@Path("show")
 	@GET
 	@Produces("application/json")
-	public List<AppVersion> show(@QueryParam("current") String version, @QueryParam("date") String date ){
+	public List<AppVersion> show(@QueryParam("current") String version){
 		EntityManager em = factory.createEntityManager();		
+		
+		AppVersion app = finder.createCriteriaQueryFactory().createSingleReadQuery(AppVersion.class, em).eq("version", version).call();
+		
 		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
-		List<AppVersion> cList = currentQuery.lt("date", date).call();
+		List<AppVersion> cList = currentQuery.lt("date", app.date).call();
 		
 		TreeMap<String, String> map = new TreeMap<String,String>();
 		for(AppVersion e : cList){
