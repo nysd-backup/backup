@@ -41,7 +41,7 @@ public class ListReadQuery<E> extends ReadQuery<List<E>>{
 	 * @param maxSize the maxSize to set
 	 * @return self
 	 */
-	public ListReadQuery<E> setMaxResults(int maxResults){
+	public ListReadQuery<E> limit(int maxResults){
 		this.maxResults = maxResults;
 		return this;
 	}

@@ -39,7 +39,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	private LockModeType lockModeType = null;
 			
 	/** start position to search */
-	private int firstResult = -1;
+	private int offset = -1;
 		
 	/** filter of the result */
 	private RecordFilter filter = null;
@@ -71,7 +71,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 * @param lockModeType
 	 * @return self
 	 */
-	public ReadQuery<T> setLockModeType(LockModeType lockModeType) {
+	public ReadQuery<T> lock(LockModeType lockModeType) {
 		this.lockModeType = lockModeType;
 		//ロック指定の場合はタイムアウト設定、先にタイムアウト設定されていた場合は何もしない
 		if(getLockTimeout() <= 0){
@@ -87,8 +87,8 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 * @param firstResult the firstResult
 	 * @return self
 	 */
-	public ReadQuery<T> setFirstResult(int firstResult){
-		this.firstResult = firstResult;
+	public ReadQuery<T> offset(int offset){
+		this.offset = offset;
 		return this;
 	}
 	
@@ -97,7 +97,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 * @param filter the filter
 	 * @return self
 	 */
-	public ReadQuery<T> setFilter(RecordFilter filter){
+	public ReadQuery<T> filter(RecordFilter filter){
 		this.filter = filter;
 		return this;
 	}
@@ -144,7 +144,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 		for(Map.Entry<String, Object> e: getHints().entrySet()){
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}
-		parameter.setFirstResult(firstResult);		
+		parameter.setFirstResult(offset);		
 		
 		return doCallInternal(parameter);
 	}
