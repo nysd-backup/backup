@@ -2,6 +2,7 @@ package org.coder.mightyguard.register.service;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.coder.mightyguard.register.domain.application.AppVersion;
@@ -16,6 +17,8 @@ public class ApplicationVersionService {
     private DataRepository dataRepository;
     
     private String downloadDir = "target/dependency";
+    
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd HHmmss");
     
     /**
      * @param dataRepository to set
@@ -52,7 +55,7 @@ public class ApplicationVersionService {
         for (File f : versionFiles) {           
             AppVersion data = dataRepository.load(f);
             data.version = version;
-            data.date = date.toString(); 
+            data.date = format.format(date); 
             dataRepository.persist(data);
         }       
     }
