@@ -6,7 +6,6 @@ package org.coder.gear.mail;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.mail.Address;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Session;
