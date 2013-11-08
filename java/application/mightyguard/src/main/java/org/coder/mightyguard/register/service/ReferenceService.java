@@ -3,7 +3,7 @@
  */
 package org.coder.mightyguard.register.service;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.coder.gear.mongo.aggregation.Query;
 import org.coder.gear.query.QueryFactoryFinder;
 import org.coder.gear.query.criteria.query.ListReadQuery;
 import org.coder.mightyguard.register.domain.Version;
@@ -27,7 +28,6 @@ import org.eclipse.persistence.internal.nosql.adapters.mongo.MongoConnection;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
@@ -50,27 +50,28 @@ public class ReferenceService {
 	@Path("allTheList")
 	@GET
 	@Produces("application/json")
-	public List<Version> allTheList(@QueryParam("limit") @DefaultValue("10") int limit){
+	public Collection<Version> allTheList(@QueryParam("limit") @DefaultValue("10") int limit){
 
 		DBCollection cl = getCollection();
-		
-		//プロジェクト
-		DBObject projectOption = dbo("VERSION",1);
-		projectOption.put("DATE", 1);
-		DBObject project = dbo("$project", projectOption);
-		
-		//ソート
-		DBObject sortOption = dbo("DATE",1);
-		DBObject sort = dbo("$sort", sortOption);
-		
-		//グループ
-		DBObject dbo = dbo("VERSION","$VERSION");
-		dbo.put("DATE", "$DATE");
-		Object groupOption = dbo("_id",dbo);
-		DBObject group = dbo("$group",groupOption);		
-		
-		CommandResult result = cl.aggregate(project,sort,group).getCommandResult();
-		return getSortedList(result);
+		Query query = new Query(cl).keys("VERSION","DATE").limit(limit);
+//		
+//		
+//		DBObject projectOption = dbo("VERSION",1);
+//		projectOption.put("DATE", 1);
+//		DBObject project = dbo("$project", projectOption);
+//		
+//		//ソート
+//		DBObject sortOption = dbo("DATE",1);
+//		DBObject sort = dbo("$sort", sortOption);
+//		
+//		//グループ
+//		DBObject dbo = dbo("VERSION","$VERSION");
+//		dbo.put("DATE", "$DATE");
+//		Object groupOption = dbo("_id",dbo);
+//		DBObject group = dbo("$group",groupOption);		
+//		
+//		CommandResult result = cl.aggregate(project,sort,group).getCommandResult();
+		return getSortedList(query.aggregate());
 		
 	}
 	
@@ -82,31 +83,33 @@ public class ReferenceService {
 	@Path("list")
 	@GET
 	@Produces("application/json")
-	public List<Version> previousList(@QueryParam("current") String version,@QueryParam("limit") @DefaultValue("10") int limit){
+	public Collection<Version> previousList(@QueryParam("current") String version,@QueryParam("limit") @DefaultValue("10") int limit){
 		
 		DBCollection cl = getCollection();
-		
-		//検索条件
-		Object matchOption = dbo("DATE",dbo("$lt",getDate(version,cl)));
-		DBObject match = dbo("$match", matchOption);
-		
-		//プロジェクト
-		DBObject projectOption = dbo("VERSION",1);
-		projectOption.put("DATE", 1);
-		DBObject project = dbo("$project", projectOption);
-		
-		//ソート
-		DBObject sortOption = dbo("DATE",1);
-		DBObject sort = dbo("$sort", sortOption);
-		
-		//グループ
-		DBObject dbo = dbo("VERSION","$VERSION");
-		dbo.put("DATE", "$DATE");
-		Object groupOption = dbo("_id",dbo);
-		DBObject group = dbo("$group",groupOption);		
-		
-		CommandResult result = cl.aggregate(match,project,sort,group).getCommandResult();
-		return getSortedList(result);
+		Query query = new Query(cl);
+		query.lt("DATE", getDate(version,cl)).keys("VERSION","DATE").limit(limit);
+//		
+//		//検索条件
+//		Object matchOption = dbo("DATE",dbo("$lt",getDate(version,cl)));
+//		DBObject match = dbo("$match", matchOption);
+//		
+//		//プロジェクト
+//		DBObject projectOption = dbo("VERSION",1);
+//		projectOption.put("DATE", 1);
+//		DBObject project = dbo("$project", projectOption);
+//		
+//		//ソート
+//		DBObject sortOption = dbo("DATE",1);
+//		DBObject sort = dbo("$sort", sortOption);
+//		
+//		//グループ
+//		DBObject dbo = dbo("VERSION","$VERSION");
+//		dbo.put("DATE", "$DATE");
+//		Object groupOption = dbo("_id",dbo);
+//		DBObject group = dbo("$group",groupOption);		
+//		
+//		CommandResult result = cl.aggregate(match,project,sort,group).getCommandResult();
+		return getSortedList(query.aggregate());
 	}
 	
 	/**
@@ -211,18 +214,17 @@ public class ReferenceService {
 	 * @param result sorted list
 	 * @return
 	 */
-	private List<Version> getSortedList(CommandResult result){	
-		BasicDBList list = BasicDBList.class.cast(result.get("result"));
-		List<Version> verlist = new ArrayList<Version>();
-		for(Object e : list){
+	private Collection<Version> getSortedList(BasicDBList result){	
+		TreeMap<String,Version> versions = new TreeMap<String,Version>(); 
+		for(Object e : result){
 			BasicDBObject o = BasicDBObject.class.cast(e);
 			BasicDBObject ver = (BasicDBObject)o.get("_id");
 			Version v = new Version();
 			v.date = ver.getString("DATE");
 			v.version = ver.getString("VERSION");
-			verlist.add(v);
+			versions.put(v.date,v);
 		}	
-		return verlist;
+		return versions.descendingMap().values();
 	}
 	
 	/**

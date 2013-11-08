@@ -225,7 +225,7 @@ public class Query {
 		}
 		LOGGER.info(option.toString());
 		
-		CommandResult result = col.aggregate(option.get(0), option.subList(1, option.size()-1).toArray(new DBObject[0])).getCommandResult();
+		CommandResult result = col.aggregate(option.get(0), option.subList(1, option.size()).toArray(new DBObject[0])).getCommandResult();
 		return BasicDBList.class.cast(result.get("result"));
 	}
 	
