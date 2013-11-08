@@ -54,23 +54,6 @@ public class ReferenceService {
 
 		DBCollection cl = getCollection();
 		Query query = new Query(cl).keys("VERSION","DATE").limit(limit);
-//		
-//		
-//		DBObject projectOption = dbo("VERSION",1);
-//		projectOption.put("DATE", 1);
-//		DBObject project = dbo("$project", projectOption);
-//		
-//		//ソート
-//		DBObject sortOption = dbo("DATE",1);
-//		DBObject sort = dbo("$sort", sortOption);
-//		
-//		//グループ
-//		DBObject dbo = dbo("VERSION","$VERSION");
-//		dbo.put("DATE", "$DATE");
-//		Object groupOption = dbo("_id",dbo);
-//		DBObject group = dbo("$group",groupOption);		
-//		
-//		CommandResult result = cl.aggregate(project,sort,group).getCommandResult();
 		return getSortedList(query.aggregate());
 		
 	}
@@ -88,27 +71,6 @@ public class ReferenceService {
 		DBCollection cl = getCollection();
 		Query query = new Query(cl);
 		query.lt("DATE", getDate(version,cl)).keys("VERSION","DATE").limit(limit);
-//		
-//		//検索条件
-//		Object matchOption = dbo("DATE",dbo("$lt",getDate(version,cl)));
-//		DBObject match = dbo("$match", matchOption);
-//		
-//		//プロジェクト
-//		DBObject projectOption = dbo("VERSION",1);
-//		projectOption.put("DATE", 1);
-//		DBObject project = dbo("$project", projectOption);
-//		
-//		//ソート
-//		DBObject sortOption = dbo("DATE",1);
-//		DBObject sort = dbo("$sort", sortOption);
-//		
-//		//グループ
-//		DBObject dbo = dbo("VERSION","$VERSION");
-//		dbo.put("DATE", "$DATE");
-//		Object groupOption = dbo("_id",dbo);
-//		DBObject group = dbo("$group",groupOption);		
-//		
-//		CommandResult result = cl.aggregate(match,project,sort,group).getCommandResult();
 		return getSortedList(query.aggregate());
 	}
 	
@@ -119,18 +81,13 @@ public class ReferenceService {
 	 * @return
 	 */
 	private String getDate(String version,DBCollection cl){
-			Object dateMatchObject = dbo("VERSION",version);
-			DBObject dateMatch = dbo("$match", dateMatchObject);		
-			DBObject dateProjectObject = dbo("DATE", 1);
-			dateProjectObject.put("VERSION", 1);
-			DBObject dateProject = dbo("$project", dateProjectObject);
-			Object dateGroupObject = dbo("_id",dbo("DATE","$DATE"));		
-			DBObject dateGroup = dbo("$group",dateGroupObject);
-			BasicDBList dateResult = (BasicDBList)cl.aggregate(dateMatch, dateProject,dateGroup).getCommandResult().get("result");
-			DBObject object = (DBObject)dateResult.get(0);
-			DBObject resultId = (DBObject)object.get("_id");
-			String lastDate = (String)resultId.get("DATE");
-			return lastDate;
+		Query query = new Query(cl);
+		query.eq("VERSION",version).keys("DATE","VERSION");
+		BasicDBList dateResult =query.aggregate();
+		DBObject object = (DBObject)dateResult.get(0);
+		DBObject resultId = (DBObject)object.get("_id");
+		String lastDate = (String)resultId.get("DATE");
+		return lastDate;
 	}
 
 	/**
@@ -225,14 +182,5 @@ public class ReferenceService {
 			versions.put(v.date,v);
 		}	
 		return versions.descendingMap().values();
-	}
-	
-	/**
-	 * @param key
-	 * @param value
-	 * @return
-	 */
-	private BasicDBObject dbo(String key, Object value){
-		return new BasicDBObject(key, value);
-	}
+	}	
 }
