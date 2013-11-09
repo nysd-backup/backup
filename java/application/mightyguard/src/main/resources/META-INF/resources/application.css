@@ -1,0 +1,343 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+body {
+	padding: 1em;
+	word-break:break-all;
+}
+
+section.title {
+					background-color: black;
+					font-size: 20px;
+			margin-top: 0;
+			font-family: Arial, sans-serif;
+			text-shadow: 2px 1px 10px #292929;
+			text-decoration: none;
+			color: #DDDDDD;
+					margin-bottom: 0px;
+					padding: 10px;
+					text-align: center;
+}
+
+.red {
+	color:red;
+}
+
+div.versions table tbody tr td{
+	text-align: center;
+	vertical-align: middle;
+}
+
+div.versions table tbody tr td.action{
+	text-align: left;
+}
+
+div.versions table thead tr th{
+	text-align: center;
+	vertical-align: middle;
+}
+
+
+
+div.list div {
+				border-radius: 0em;
+				border: 1px solid grey;
+				margin-bottom: -1px;
+				font-size:20px;
+		margin-top: 0;
+		font-family: Arial, sans-serif;
+		text-shadow: 1px 1px 2px #292929;
+		text-decoration: none;
+		color: whitesmoke;
+				padding:10px 30px;
+				-webkit-box-shadow: #999 3px 3px 3px ;
+				-moz-box-shadow: #999 3px 3px 3px ;
+				box-shadow: #999 3px 3px 3px ;
+				background:-webkit-gradient(
+					linear,
+					left top,
+					left bottom,
+					from(#cccccc),
+					to(#eeeeee)
+				);
+}
+
+div.list div:hover {
+				background:-webkit-gradient(
+					linear,
+					left top,
+					left bottom,
+					from(#eeeeee),
+					to(#cccccc)
+				);
+				cursor:pointer;
+}
+
+div.list div:active {
+				background:-webkit-gradient(
+					linear,
+					left top,
+					left bottom,
+					from(#eeeeee),
+					to(#eeeeee)
+				);
+}
+
+div.list div span.blinking {
+				color : red;
+				font-size : 12px;
+}
+
+div.list div span.date {
+			font-size : 14px;
+			text-shadow: 0px 0px 0px;
+			color:black;
+}
+
+@-webkit-keyframes pulse {
+			from {
+				opacity: 1.0;
+			}
+			to {
+				opacity: 0.4;
+			}
+}
+
+.blinking{
+				-webkit-animation-name: pulse;
+				-webkit-animation-duration: 0.3s;
+				-webkit-animation-iteration-count:infinite;
+				-webkit-animation-timing-function:ease-in-out;
+				-webkit-animation-direction: alternate;
+				-webkit-animation-delay: 0.5s;
+}
+
+.fadein {
+				-webkit-animation-name: fadein;
+				-webkit-animation-duration: 1s;
+				-webkit-animation-timing-function:ease-out;
+				-webkit-animation-delay: 0s;
+}
+
+@-webkit-keyframes fadein {
+	from {
+			opacity: 0.0;
+	}
+		to {
+				opacity: 1.0;
+		}
+}
+
+section.ac-container {
+	width:100% !important;
+}
+
+section.ac-container input:checked ~ article.ac-version-header{
+	max-height:25000px;	/* height:100% is invalid so set max-height to something bigger than expected. */
+}
+
+.ac-container input:checked ~ article{
+	height:auto; /* this is required to animate */
+		transition:
+			height 1s ease-in,
+			max-height 3s ease-in,
+				box-shadow 0.1s linear !important;
+}
+
+article div.container {
+	padding-top:10px;
+}
+
+article div.container div {
+	width:98%;margin: 0 auto;
+}
+
+article div.container div input{
+	display:inline-block;
+	width:80px;border:0px
+}
+
+article div.container div.scroll {
+	/* overflow-y: auto; */
+	padding-bottom: 10px;
+	overflow-x:auto;
+	/* height:380px; */
+}
+
+article div.container div.scroll table.tablesorter-blue {
+	margin:0px;
+}
+
+div.dialog-form div.list {
+	overflow-y:auto;
+}
+
+
+div.preloader{
+	background-color:rgba(0,0,0,0.4);
+	z-index: 100;
+	position: fixed;
+	width:100%;
+	height:100%;
+	top: 0px;
+	left:0px;
+	display:table;  /* display:table is required for vertical centering. */
+		text-align:center;
+}
+
+div.preloader div{
+	display:table-cell;
+	vertical-align:middle;	/* displya:table-cell and vertical-align:middle is required for vertical centering. */
+	height:100%;
+	font-size: 20px;
+	font-family: Arial, sans-serif;
+	text-shadow: 2px 1px 10px #292929;
+	text-decoration: none;
+	color:white;
+	text-align:center;
+}
+
+div.preloader div div{
+	display:inline;
+}
+
+a {
+	text-decoration:underline !important;
+}
+
+table.tablesorter tbody.table tr td span{
+	font-size:10px;
+}
+
+.ac-container{
+	width: 400px;
+	margin: 10px auto 30px auto;
+	text-align: left;
+}
+.ac-container label{
+	font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
+	padding: 5px 20px;
+	position: relative;
+	z-index: 20;
+	display: block;
+	height: 30px;
+	cursor: pointer;
+	color: #777;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
+	line-height: 33px;
+	font-size: 19px;
+	background: #ffffff;
+	background: -moz-linear-gradient(top, #ffffff 1%, #eaeaea 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(100%,#eaeaea));
+	background: -webkit-linear-gradient(top, #ffffff 1%,#eaeaea 100%);
+	background: -o-linear-gradient(top, #ffffff 1%,#eaeaea 100%);
+	background: -ms-linear-gradient(top, #ffffff 1%,#eaeaea 100%);
+	background: linear-gradient(top, #ffffff 1%,#eaeaea 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eaeaea',GradientType=0 );
+	box-shadow:
+		0px 0px 0px 1px rgba(155,155,155,0.3),
+		1px 0px 0px 0px rgba(255,255,255,0.9) inset,
+		0px 2px 2px rgba(0,0,0,0.1);
+}
+.ac-container label:hover{
+	background: #fff;
+}
+.ac-container input:checked + label,
+.ac-container input:checked + label:hover{
+	background: #c6e1ec;
+	color: #3d7489;
+	text-shadow: 0px 1px 1px rgba(255,255,255, 0.6);
+	box-shadow:
+		0px 0px 0px 1px rgba(155,155,155,0.3),
+		0px 2px 2px rgba(0,0,0,0.1);
+}
+.ac-container label:hover:after,
+.ac-container input:checked + label:hover:after{
+	content: '';
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	right: 13px;
+	top: 7px;
+	background: transparent url(../images/arrow_down.png) no-repeat center center;
+}
+.ac-container input:checked + label:hover:after{
+	background-image: url(../images/arrow_up.png);
+}
+.ac-container input{
+	display: none;
+}
+.ac-container article{
+	background: rgba(255, 255, 255, 0.5);
+	margin-top: -1px;
+	overflow: hidden;
+	height: 0px;
+	position: relative;
+	z-index: 10;
+	-webkit-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+	-moz-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+	-o-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+	-ms-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+	transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+}
+.ac-container article p{
+	font-style: italic;
+	color: #777;
+	line-height: 23px;
+	font-size: 14px;
+	padding: 20px;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
+}
+.ac-container input:checked ~ article{
+	-webkit-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+	-moz-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+	-o-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+	-ms-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+	transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+	box-shadow: 0px 0px 0px 1px rgba(155,155,155,0.3);
+}
+.ac-container input:checked ~ article.ac-small{
+	height: 140px;
+}
+.ac-container input:checked ~ article.ac-medium{
+	height: 180px;
+}
+.ac-container input:checked ~ article.ac-large{
+	height: 230px;
+}
+
+.failure {
+	margin: 0 auto;
+	background: #ff3019;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404));
+	background: -webkit-linear-gradient(top,  #ff3019 0%,#cf0404 100%);
+	border-radius: 50%;
+	width:40px;
+	height:40px;
+}
+
+.success {
+	margin: 0 auto;
+	background: #d0e4f7;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d0e4f7), color-stop(24%,#73b1e7), color-stop(50%,#0a77d5), color-stop(79%,#539fe1), color-stop(100%,#87bcea));
+	background: -webkit-linear-gradient(top,  #d0e4f7 0%,#73b1e7 24%,#0a77d5 50%,#539fe1 79%,#87bcea 100%);
+	border-radius: 50%;
+	width:40px;
+	height:40px;
+}
+
+a.link {
+	margin-left: 10px;
+
+}

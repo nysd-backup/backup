@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script>
+			var ua = navigator.userAgent.toLowerCase();
+			if(ua.indexOf("chrome") == -1){
+					//alert("Only chrome can access");
+				//	window.location="/invalid_browser";
+			}
+		</script>
+		<title>Mighty Guard</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src="jquery.tablesorter.js"></script>
+		<script src="jquery.tablesorter.widgets.js"></script>
+		<script src="application.js"></script>
+		<link rel="stylesheet" href="scaffolds.css"/>
+		<link rel="stylesheet" href="application.css"/>
+		<link rel="stylesheet" href="theme.blue.css"/>
+	</head>
+	<body>
+	<div class="preloader"><div><span>Loading Now...</span></div></div>
+		<section class="title">構成モジュール</section>
+		<div class="header">
+			<article class="ac-version-header">
+				<div class="container"><div id="headerDiv" class="scroll"></div></div>
+			</article>
+		</div>
+		<section class="title">バージョン間差分</section>
+		<div>
+			show diff between current and
+			<select id="versionList"></select>
+		</div>
+		<section class="ac-container">
+			<div id="d1">
+				<input id="ac-1" name="accordion-1" type="checkbox" checked/>
+				<label for="ac-1" class="title">変更履歴</label>
+				<article class="ac-version-header">
+					<div class="container"><div class="scroll"></div></div>
+				</article>
+			</div>
+			<div id="d2">
+				<input id="ac-2" name="accordion-1" type="checkbox" checked/>
+				<label for="ac-2" class="title">差分ソース</label>
+				<article class="ac-version-header">
+					<div class="container">
+						<div class="scroll"></div>
+					</div>
+				</article>
+			</div>
+		</section>
+	<script type="text/template" id="headerHeader">
+		<table id="headerTable" class="tablesorter">
+			<thead>
+				<tr>
+					<th><span>モジュール</span></th>
+					<th ><span>最終リビジョン</span></th>
+					<th ><span>最終コミッタ</span></th>
+					<th ><span>最終コミット日時</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				$body
+			</tbody>
+		</table>
+	</script>
+	<script type="text/template" id="headerBody">
+		<tr>
+			<td><span>$moduleId</span>
+			<td><span>$revision</span>
+			<td><span>$commiter</span>
+			<td><span>$date</span>
+		</tr>
+	</script>
+	<script type="text/template" id="revisionHeader">
+			<table id="logsTable" class="tablesorter">
+				<thead>
+					<tr>
+						<th width="150px"><span>モジュール</span></th>
+						<th width="60px" ><span>リビジョン</span></th>
+						<th width="100px" ><span>コミッタ</span></th>
+						<th width="60px" ><span>チケット</span></th>
+						<th><span>メッセージ</span></th>
+						<th width="150px" ><span>コミット日時</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					$body
+				</tbody>
+			</table>
+	</script>
+	<script type="text/template" id="revisionBody">
+		<tr>
+			<td><span>$module</span></td>
+			<td><span>$revision</span></td>
+			<td><span>$commiter</span></td>
+			<td><a href="https://nasa.future.co.jp/bne/redmine/issues/$ticket" target="_blank">$ticket</a></td>
+			<td><span>$message</span></td>
+			<td><span>$commitdate</span></td>
+		</tr>
+	</script>
+	<script type="text/template" id="srcHeader">
+		<table id="srcTable" class="tablesorter">
+			<thead>
+				<tr>
+					<th width="60px"><span>リビジョン</span></th>
+					<th width="150px"><span>モジュール</span></th>
+					<th width="50px" data-placeholder="M/A/D"><span>区分</span></th>
+					<th ><span>パス</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				$body
+			</tbody>
+		</table>
+	</script>
+	<script type="text/template" id="srcBody">
+		<tr>
+			<td><span>$revision</span></td>
+			<td><span>$module</span></td>
+			<td><span>$type</span></td>
+			<td><span>$path</span></td>
+		</tr>
+	</script>
+	<script>
+
+			/**
+				* Constructor
+				*/
+			var Renderer = function() {}
+
+			/**
+			 * Functions
+			 */
+			Renderer.prototype = {
+
+				renderRevision : function (json) {
+					var div = $('div#d1  article div div.scroll').first();
+					var table = document.querySelector("#revisionHeader").innerHTML;
+					var contents = '';
+					jQuery.each(json, function() {
+						var module = this.moduleId;
+						jQuery.each(this.log.logentry, function() {
+							var body = $("#revisionBody").html();
+							body = body.replace("$module",module);
+							body = body.replace("$revision",this["@revision"]);
+							body = body.replace("$commiter",this.author);
+							var ticket = "nothing";
+							var maker = "refs #";
+							if(this.msg != null && this.msg.indexOf(maker) >= 0){
+								ticket = this.msg.substring(this.msg.indexOf(maker) + maker.length);
+							}
+							body = body.split("$ticket").join(ticket);
+							body = body.replace("$message",this.msg);
+							body = body.replace("$commitdate",this.date);
+							contents = contents + body;
+						});
+					});
+					table = table.replace("$body",contents);
+					div.html(table);
+					new TableSorter().enable("logsTable");
+				},
+
+				renderSources : function (json) {
+					var div = $('div#d2  article div div.scroll').first();
+					var table = document.querySelector("#srcHeader").innerHTML;
+					var contents = '';
+					jQuery.each(json, function() {
+						var module = this.moduleId;
+						jQuery.each(this.log.logentry, function() {
+							var revision = this["@revision"]
+							jQuery.each(this.paths.path, function() {
+								var body = $("#srcBody").html();
+								body = body.replace("$module",module);
+								body = body.replace("$revision",revision);
+								body = body.replace("$type",this["@action"]);
+								body = body.replace("$path",this.$.substring(31));
+								contents = contents + body;
+							});
+
+						});
+					});
+					table = table.replace("$body",contents);
+					div.html(table);
+					new TableSorter().enable("srcTable");
+				},
+
+				renderInit : function(json ){
+					var div = $('#headerDiv').first();
+					var table = document.querySelector("#headerHeader").innerHTML;
+					var contents = '';
+					jQuery.each(json, function() {
+						var body = $("#headerBody").html();
+						body = body.replace("$revision",this.info.entry.commit["@revision"]);
+						body = body.replace("$moduleId",this.moduleId);
+						body = body.replace("$commiter",this.info.entry.commit.author);
+						body = body.replace("$date",this.info.entry.commit.date);
+						contents = contents + body;
+					});
+					table = table.replace("$body",contents);
+					div.html(table);
+					new TableSorter().enable("headerTable");
+				}
+			}
+
+			$(document).ready(function(){
+				var c = new Connector();
+				var renderer = new Renderer();
+
+				var currentv = window.location.search.substring(1);
+
+				//初期表示
+				c.get("api/version/show?current=" + currentv,function(json){
+					renderer.renderInit(json);
+					renderer.renderRevision(json);
+					renderer.renderSources(json);
+				});
+
+				//選択リスト取得
+				c.get("api/version/list?current=" + currentv + "&limit=10",function(json){
+					var select = $("#versionList");
+					var contents = "";
+					jQuery.each(json,function(){
+						contents += "<option value='" + this.version + "'>" + this.version + ":" + this.date +"</option>";
+					});
+					select.data('current-version',currentv)
+					select.html(contents);
+					select.each( function(index) {
+						var object = $(this);
+						var connector = new Connector();
+						var renderer = new Renderer();
+						object.change(function() {
+							var cver = object.data('current-version');
+							var dver = object.val();
+							var url =  "api/version/diff?current=" + cver + "&previous=" + dver;
+							connector.get(url,function(json){
+								renderer.renderInit(json);
+								renderer.renderRevision(json);
+								renderer.renderSources(json);
+							});
+						});
+					});
+				});
+			} );
+		</script>
+
+	</body>
+</html>
