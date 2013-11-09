@@ -11,7 +11,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.CommandResult;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import com.sun.istack.internal.logging.Logger;
+import java.util.logging.Logger;
 
 /**
  * Query API.
@@ -21,7 +21,7 @@ import com.sun.istack.internal.logging.Logger;
  */
 public class Query {
 	
-	private static final Logger LOGGER = Logger.getLogger(Query.class);
+	private static final Logger LOGGER = Logger.getLogger(Query.class.getName());
 
 	/**
 	 * Target Collection.
