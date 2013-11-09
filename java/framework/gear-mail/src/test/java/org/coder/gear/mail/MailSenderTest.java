@@ -13,12 +13,14 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author yoshida-n
  *
  */
+@Ignore
 public class MailSenderTest {
 
 	@Test
