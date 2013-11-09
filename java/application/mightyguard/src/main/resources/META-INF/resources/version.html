@@ -5,8 +5,8 @@
 		<script>
 			var ua = navigator.userAgent.toLowerCase();
 			if(ua.indexOf("chrome") == -1){
-					alert("Only chrome can access");
-					window.location="/invalid_browser";
+					//alert("Only chrome can access");
+				//	window.location="/invalid_browser";
 			}
 		</script>
 		<title>Mighty Guard</title>
@@ -21,7 +21,7 @@
 	</head>
 	<body>
 	<div class="preloader"><div><span>Loading Now...</span></div></div>
-		<section class="title">構成モジュール</section>
+	<section class="title">構成モジュール</section>
 		<div class="header">
 			<article class="ac-version-header">
 				<div class="container"><div id="headerDiv" class="scroll"></div></div>
@@ -95,7 +95,7 @@
 			<td><span>$module</span></td>
 			<td><span>$revision</span></td>
 			<td><span>$commiter</span></td>
-			<td><span>$ticket</span></td>
+			<td><a href="https://nasa.future.co.jp/bne/redmine/issues/$ticket" target="_blank">$ticket</a></td>
 			<td><span>$message</span></td>
 			<td><span>$commitdate</span></td>
 		</tr>
@@ -124,10 +124,17 @@
 		</tr>
 	</script>
 	<script>
+	
+			/** 
+			 *	String extension
+			 */
+			String.prototype.isEmpty = function() {
+				return this == null || this.length == 0;
+			} 
 
 			/**
-				* Constructor
-				*/
+			* Constructor
+			*/
 			var Renderer = function() {}
 
 			/**
@@ -209,6 +216,16 @@
 				var renderer = new Renderer();
 
 				var currentv = window.location.search.substring(1);
+				if(currentv.isEmpty()){
+					c.get("api/version/allTheList",function(json){
+						var vl = 'Available version list \n';					
+						jQuery.each(json,function(){
+							vl += this.version +"  :  " + this.date +  "\n"
+						});
+						alert(vl);							
+					});
+					return;
+				}								
 
 				//初期表示
 				c.get("api/version/show?current=" + currentv,function(json){
