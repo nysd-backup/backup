@@ -5,8 +5,8 @@
 		<script>
 			var ua = navigator.userAgent.toLowerCase();
 			if(ua.indexOf("chrome") == -1){
-					//alert("Only chrome can access");
-				//	window.location="/invalid_browser";
+					alert("Only chrome can access");
+					window.location="/invalid_browser";
 			}
 		</script>
 		<title>Mighty Guard</title>
@@ -95,7 +95,7 @@
 			<td><span>$module</span></td>
 			<td><span>$revision</span></td>
 			<td><span>$commiter</span></td>
-			<td><a href="https://nasa.future.co.jp/bne/redmine/issues/$ticket" target="_blank">$ticket</a></td>
+			<td><span>$ticket</span></td>
 			<td><span>$message</span></td>
 			<td><span>$commitdate</span></td>
 		</tr>
