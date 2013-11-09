@@ -153,7 +153,7 @@
 							body = body.replace("$module",module);
 							body = body.replace("$revision",this["@revision"]);
 							body = body.replace("$commiter",this.author);
-							var ticket = "nothing";
+							var ticket = "";
 							var maker = "refs #";
 							if(this.msg != null && this.msg.indexOf(maker) >= 0){
 								ticket = this.msg.substring(this.msg.indexOf(maker) + maker.length);
