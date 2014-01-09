@@ -3,7 +3,6 @@
  */
 package org.coder.gear.query.gateway;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -17,7 +16,6 @@ import org.coder.gear.query.free.loader.DefaultConstantAccessor;
 import org.coder.gear.query.free.loader.QueryLoader;
 import org.coder.gear.query.free.loader.QueryLoaderTrace;
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.free.query.ReadingConditions;
 import org.coder.gear.query.free.result.CloseableIterator;
 import org.coder.gear.query.free.result.TotalList;
 
@@ -59,18 +57,10 @@ public class JpqlGateway implements PersistenceGateway{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> getResultList(ReadingConditions param){
+	public <T> List<T> getResultList(Conditions param){
 		Query query = setRangeAndLockMode(param.getLockMode(),param.getFirstResult(),param.getMaxResults(),createQuery(param));	
 		List<T> resultList = query.getResultList();		
-		if(param.getFilter() != null){
-			List<T> edited = new ArrayList<T>();
-			for(T res : resultList){
-				edited.add(param.getFilter().edit(res));
-			}
-			return edited;
-		}else {
-			return resultList;
-		}
+		return resultList;		
 	}
 	
 	/**
@@ -160,7 +150,7 @@ public class JpqlGateway implements PersistenceGateway{
 	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
 	 */
 	@Override
-	public <T> TotalList<T> getTotalResult(ReadingConditions param){
+	public <T> TotalList<T> getTotalResult(Conditions param){
 		throw new UnsupportedOperationException();
 	}
 
@@ -168,7 +158,7 @@ public class JpqlGateway implements PersistenceGateway{
 	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
 	 */
 	@Override
-	public <T> CloseableIterator<T> getFetchResult(ReadingConditions param){
+	public <T> CloseableIterator<T> getFetchResult(Conditions param){
 		throw new UnsupportedOperationException();
 	}
 

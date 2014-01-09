@@ -5,10 +5,8 @@ package org.coder.gear.query.criteria.query;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.coder.gear.query.free.query.ReadingConditions;
-import org.coder.gear.query.gateway.PersistenceGateway;
+import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.free.query.Conditions;
 
 /**
  * ListReadQuery.
@@ -18,24 +16,8 @@ import org.coder.gear.query.gateway.PersistenceGateway;
  */
 public class ListReadQuery<E> extends ReadQuery<List<E>>{
 	
-	/** the persistenceGateway */
-	private PersistenceGateway gateway;
-	
 	/** the max size */
 	private int maxResults = -1;
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param entityClass the entityClass
-	 * @param em the entityManager
-	 * @param builderFactory the builderFactory
-	 * @param gateway the gateway
-	 */
-	public ListReadQuery(Class<E> entityClass, EntityManager em,PersistenceGateway gateway) {
-		super(entityClass, em);
-		this.gateway = gateway;
-	}
 	
 	/**
 	 * @param maxSize the maxSize to set
@@ -45,13 +27,22 @@ public class ListReadQuery<E> extends ReadQuery<List<E>>{
 		this.maxResults = maxResults;
 		return this;
 	}
+	
+	/**
+	 * @see org.coder.gear.query.criteria.query.ReadQuery#createConditions(java.util.List)
+	 */
+	@Override
+	protected Conditions createConditions(List<Criteria> criterias) {
+		Conditions condition = super.createConditions(criterias);
+		condition.setMaxResults(maxResults);
+		return condition;
+	}
 
 	/**
 	 * @see org.coder.gear.query.criteria.query.ReadQuery#doCallInternal(org.coder.gear.query.free.query.ReadingConditions)
 	 */
 	@Override
-	protected List<E> doCallInternal(ReadingConditions conditions) {
-		conditions.setMaxResults(maxResults);
+	protected List<E> doCallInternal(Conditions conditions) {
 		return gateway.getResultList(conditions);
 	}
 	

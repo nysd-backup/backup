@@ -83,12 +83,12 @@ public class QueryLoaderTrace implements QueryLoader{
 	 */
 	@Override
 	public PreparedQuery prepare(String originalSql,
-			Map<String, Object> parameter, String wrapClause,
+			Map<String, Object> parameter,
 			String queryId) {
 		if(ignoreList.contains(queryId)){
-			return delegate.prepare(originalSql, parameter, wrapClause, queryId);
+			return delegate.prepare(originalSql, parameter,  queryId);
 		}else{		
-			PreparedQuery value = delegate.prepare(originalSql, parameter, wrapClause, queryId);			
+			PreparedQuery value = delegate.prepare(originalSql, parameter, queryId);			
 			if(LOG.isDebugEnabled()){
 				StringBuilder builder = new StringBuilder();				
 				builder.append("[");

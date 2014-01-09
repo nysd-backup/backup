@@ -8,11 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
-import org.coder.gear.query.criteria.FixString;
 import org.coder.gear.query.criteria.Operand;
 import org.coder.gear.query.criteria.SortKey;
-import org.coder.gear.query.criteria.statement.JPQLBuilderFactory;
-import org.coder.gear.query.criteria.statement.StatementBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,9 +27,9 @@ public class JPQLBuilderTest extends Assert{
 	@Test
 	public void select() {
 
-		StatementBuilder builder = new JPQLBuilderFactory().createBuilder();
+		StatementBuilder builder = new JPQLBuilder();
 		Criteria criteria = new Criteria("col", 1, Operand.Equal, 1);
-		Criteria criteria2 = new Criteria("co2", 1, Operand.Equal, new FixString("COL2"));
+		Criteria criteria2 = new Criteria("co2", 1, Operand.Equal,2);
 		builder.withWhere(Arrays.asList(criteria,criteria2));
 
 		SortKey key = new SortKey(true, "SRT1");
@@ -44,7 +41,7 @@ public class JPQLBuilderTest extends Assert{
 		StringBuilder expected = new StringBuilder();
 		expected.append("select e from JPQLBuilderTest e ").append("\n");
 		expected.append(" where  e.col  =  :col_1 ").append("\n");
-		expected.append(" and  e.co2  =  COL2  ").append("\n");
+		expected.append(" and  e.co2  =  :co2_1  ").append("\n");
 		expected.append(" order by  e.SRT1  asc  ").append("\n");
 		expected.append(" ,  e.SRT2  desc   ");
 
@@ -56,9 +53,9 @@ public class JPQLBuilderTest extends Assert{
 	 */
 	@Test
 	public void delete() {
-		StatementBuilder builder = new JPQLBuilderFactory().createBuilder();
+		StatementBuilder builder = new JPQLBuilder();
 		Criteria criteria = new Criteria("col", 1, Operand.GreaterEqual, 1);
-		Criteria criteria2 = new Criteria("co2", 1, Operand.GreaterThan, new FixString("COL2"));
+		Criteria criteria2 = new Criteria("co2", 1, Operand.GreaterThan, 2);
 		builder.withWhere(Arrays.asList(criteria,criteria2));
 
 		String actual = builder.buildDelete(this.getClass());
@@ -66,7 +63,7 @@ public class JPQLBuilderTest extends Assert{
 		StringBuilder expected = new StringBuilder();
 		expected.append("delete from JPQLBuilderTest e ").append("\n");
 		expected.append(" where  e.col  >=  :col_1 ").append("\n");
-		expected.append(" and  e.co2  >  COL2  ");
+		expected.append(" and  e.co2  >  :co2_1  ");
 
 		assertEquals(expected.toString(),actual);
 	}
@@ -76,9 +73,9 @@ public class JPQLBuilderTest extends Assert{
 	 */
 	@Test
 	public void update() {
-		StatementBuilder builder = new JPQLBuilderFactory().createBuilder();
+		StatementBuilder builder = new JPQLBuilder();
 		Criteria criteria = new Criteria("col", 1, Operand.LessEqual, 1);
-		Criteria criteria2 = new Criteria("co2", 2, Operand.LessThan, new FixString("COL2"));
+		Criteria criteria2 = new Criteria("co2", 2, Operand.LessThan, 2);
 		Criteria criteria3 = new Criteria("col3", 3, Operand.IN, Arrays.asList("100,200"));
 		Criteria criteria4 = new Criteria("col4", 4, Operand.IsNotNull,null);
 		Criteria criteria5 = new Criteria("col5", 5, Operand.IsNull,null);
@@ -98,7 +95,7 @@ public class JPQLBuilderTest extends Assert{
 		expected.append(" e.col = :col").append("\n");
 		expected.append(" , e.co2 = :co2 ").append("\n");
 		expected.append(" where  e.col  <=  :col_1 ").append("\n");
-		expected.append(" and  e.co2  <  COL2 ").append("\n");
+		expected.append(" and  e.co2  <  :co2_2 ").append("\n");
 		expected.append(" and  e.col3 IN(:col3_3_0) ").append("\n");
 		expected.append(" and  e.col4  IS NOT NULL ").append("\n");
 		expected.append(" and  e.col5 IS NULL ").append("\n");

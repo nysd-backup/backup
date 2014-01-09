@@ -72,8 +72,8 @@ public class QueryLoaderCache implements QueryLoader{
 	 * @see org.coder.gear.query.free.loader.QueryLoader#prepare(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public PreparedQuery prepare(String originalSql, Map<String, Object> parameter,String wrapClause,String queryId) {
-		return delegate.prepare(originalSql, parameter, wrapClause,queryId);
+	public PreparedQuery prepare(String originalSql, Map<String, Object> parameter,String queryId) {
+		return delegate.prepare(originalSql, parameter,queryId);
 	}
 
 }

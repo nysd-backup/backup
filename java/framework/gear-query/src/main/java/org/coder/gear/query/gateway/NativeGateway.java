@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
-import org.coder.gear.query.free.RecordFilter;
 import org.coder.gear.query.free.loader.PreparedQuery;
 import org.coder.gear.query.free.loader.QueryLoader;
 import org.coder.gear.query.free.loader.QueryLoaderTrace;
@@ -20,9 +19,8 @@ import org.coder.gear.query.free.mapper.DefaultMetadataMapperFactory;
 import org.coder.gear.query.free.mapper.MetadataMapper;
 import org.coder.gear.query.free.mapper.MetadataMapperFactory;
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.free.query.ReadingConditions;
 import org.coder.gear.query.free.result.CloseableIterator;
-import org.coder.gear.query.free.result.FetchIterator;
+import org.coder.gear.query.free.result.ResultSetIterator;
 import org.coder.gear.query.free.result.TotalList;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -80,11 +78,11 @@ public class NativeGateway implements PersistenceGateway {
     }
 
     /**
-     * @see org.coder.gear.query.gateway.PersistenceGateway#getResultList(org.coder.gear.query.free.query.ReadingConditions)
+     * @see org.coder.gear.query.gateway.PersistenceGateway#getResultList(org.coder.gear.query.free.query.Conditions)
      */
     @SuppressWarnings("unchecked")
 	@Override
-    public <T> List<T> getResultList(ReadingConditions parameter) {
+    public <T> List<T> getResultList(Conditions parameter) {
 
         Query query = setRangeAndCursor(parameter.getFirstResult(),
                 parameter.getMaxResults(), createQuery(parameter));
@@ -93,10 +91,9 @@ public class NativeGateway implements PersistenceGateway {
         	ResultSet rs = cursor.getResultSet();
         	List<T> result = new ArrayList<T>();				
     		MetadataMapper mapper = metadataMapperFactory.create(parameter.getResultType(), rs);
-    		RecordFilter filter = parameter.getFilter();
     		
     		while (rs.next()) {			    			
-    			result.add((T)getRecord(mapper, rs, filter));
+    			result.add((T)getRecord(mapper, rs));
     		}
     		return result;
         } catch (SQLException e) {
@@ -111,12 +108,11 @@ public class NativeGateway implements PersistenceGateway {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> TotalList<T> getTotalResult(final ReadingConditions parameter) {
+    public <T> TotalList<T> getTotalResult(final Conditions parameter) {
 
         Query query = setRangeAndCursor(parameter.getFirstResult(), 0,
                 createQuery(parameter));
-        TotalList<T> result = new TotalList<T>();	
-        RecordFilter filter = parameter.getFilter();        
+        TotalList<T> result = new TotalList<T>();	      
         Class<T> resultType = (Class<T>) parameter.getResultType();
         int maxSize = parameter.getMaxResults();
         ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
@@ -139,7 +135,7 @@ public class NativeGateway implements PersistenceGateway {
     						continue;
     					}
     				}
-    				result.add((T)getRecord(mapper,rs,filter));
+    				result.add((T)getRecord(mapper,rs));
     			}			
     		}
     		hitCount = result.isExceededLimit() ? hitCount:hitCount+startPosition;
@@ -161,13 +157,8 @@ public class NativeGateway implements PersistenceGateway {
      * @return record
      * @throws SQLException
      */
-    private <T> T getRecord(MetadataMapper mapper,ResultSet rs ,RecordFilter filter) throws SQLException{
-    	T row = mapper.getRecord(rs);		
-		
-		//必要に応じて加工
-		if( filter != null){
-			filter.edit(row);
-		}
+    private <T> T getRecord(MetadataMapper mapper,ResultSet rs) throws SQLException{
+    	T row = mapper.getRecord(rs);				
 		return row;
     }
 
@@ -176,14 +167,13 @@ public class NativeGateway implements PersistenceGateway {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public CloseableIterator getFetchResult(ReadingConditions parameter) {
+    public CloseableIterator getFetchResult(Conditions parameter) {
         Query query = setRangeAndCursor(parameter.getFirstResult(),
                 parameter.getMaxResults(), createQuery(parameter));
         ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
         try {
-            return new FetchIterator(cursor, metadataMapperFactory.create(
-                    parameter.getResultType(), cursor.getResultSet()),
-                    parameter.getFilter());
+            return new ResultSetIterator(cursor, metadataMapperFactory.create(
+                    parameter.getResultType(), cursor.getResultSet()));
         } catch (SQLException e) {
             cursor.close();
             throw new PersistenceException(e);
@@ -212,8 +202,7 @@ public class NativeGateway implements PersistenceGateway {
             str = loader.evaluate(str, param.getParam(), param.getQueryId());
         }
         PreparedQuery preparedQuery = loader.prepare(str,
-        		param.getParam(), param.getWrappingClause(),
-                param.getQueryId());
+        		param.getParam(),param.getQueryId());
 
         Query query = param.getEntityManager().createNativeQuery(
                 preparedQuery.getQueryStatement());

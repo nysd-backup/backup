@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import javax.persistence.PersistenceException;
 
-import org.coder.gear.query.free.RecordFilter;
 import org.coder.gear.query.free.mapper.MetadataMapper;
 import org.eclipse.persistence.queries.ScrollableCursor;
 
@@ -15,7 +14,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * @author yoshida-n
  * @version	1.0
  */
-public class FetchIterator<E> extends CloseableIterator<E> {
+public class ResultSetIterator<E> extends CloseableIterator<E> {
 
     /**
      * <pre>
@@ -26,13 +25,9 @@ public class FetchIterator<E> extends CloseableIterator<E> {
      *            ScrollableCursor
      * @param handler
      *            MetadataMapper
-     * @param filter
-     *            RecordFilter
      */
-    public FetchIterator(ScrollableCursor cursor, MetadataMapper handler,
-            RecordFilter filter) {
+    public ResultSetIterator(ScrollableCursor cursor, MetadataMapper handler) {
        this.cursor = cursor;
-       this.filter = filter;
        this.handler = handler;
     }
 
@@ -45,11 +40,6 @@ public class FetchIterator<E> extends CloseableIterator<E> {
      * MetadataMapper .
      */
     private final MetadataMapper handler;
-
-    /**
-     * RecordFilter .
-     */
-    private final RecordFilter filter;
 
     /**
      * @see java.util.Iterator#hasNext()
@@ -71,7 +61,7 @@ public class FetchIterator<E> extends CloseableIterator<E> {
     public E next() {
         try {
             E record = (E) handler.getRecord(cursor.getResultSet());
-            return filter != null ? filter.edit(record) : record;
+            return record;
         } catch (Exception t) {
             throw new PersistenceException(t);
         } 

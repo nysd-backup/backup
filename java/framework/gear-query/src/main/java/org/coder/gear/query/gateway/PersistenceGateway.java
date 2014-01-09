@@ -6,11 +6,8 @@ package org.coder.gear.query.gateway;
 import java.util.List;
 
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.free.query.ReadingConditions;
 import org.coder.gear.query.free.result.CloseableIterator;
 import org.coder.gear.query.free.result.TotalList;
-
-
 
 
 
@@ -36,19 +33,19 @@ public interface PersistenceGateway {
 	/**
 	 * @return the total result
 	 */
-	<T> TotalList<T> getTotalResult(ReadingConditions param);
+	<T> TotalList<T> getTotalResult(Conditions param);
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>
 	 */
-	<T> CloseableIterator<T> getFetchResult(ReadingConditions param);
+	<T> CloseableIterator<T> getFetchResult(Conditions param);
 
 	/**
 	 * Selects the table.
 	 * 
 	 * @return the found data.
 	 */
-	<T> List<T> getResultList(ReadingConditions param);
+	<T> List<T> getResultList(Conditions param);
 
 
 }

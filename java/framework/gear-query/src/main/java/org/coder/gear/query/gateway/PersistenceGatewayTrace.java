@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.free.query.ReadingConditions;
 import org.coder.gear.query.free.result.CloseableIterator;
 import org.coder.gear.query.free.result.TotalList;
 
@@ -57,7 +56,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	 * @see org.coder.gear.query.gateway.PersistenceGateway#getTotalResult(org.coder.gear.query.free.query.ReadingConditions)
 	 */
 	@Override
-	public <T> TotalList<T> getTotalResult(ReadingConditions param) {
+	public <T> TotalList<T> getTotalResult(Conditions param) {
 		TotalList<T> result = delegate.getTotalResult(param);
 		if(LOG.isInfoEnabled()){
 			LOG.info(String.format("%s:hitdata=%d, datasize=%d, limited=%s",
@@ -72,7 +71,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	 * @see org.coder.gear.query.gateway.PersistenceGateway#getFetchResult(org.coder.gear.query.free.query.ReadingConditions)
 	 */
 	@Override
-	public <T> CloseableIterator<T> getFetchResult(ReadingConditions param) {
+	public <T> CloseableIterator<T> getFetchResult(Conditions param) {
 		return delegate.getFetchResult(param);
 	}
 
@@ -80,7 +79,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	 * @see org.coder.gear.query.gateway.PersistenceGateway#getResultList(org.coder.gear.query.free.query.ReadingConditions)
 	 */
 	@Override
-	public <T> List<T> getResultList(ReadingConditions param) {
+	public <T> List<T> getResultList(Conditions param) {
 		List<T> result = delegate.getResultList(param);
 		if(LOG.isInfoEnabled()){
 			LOG.info(String.format("%s:datasize=%d",

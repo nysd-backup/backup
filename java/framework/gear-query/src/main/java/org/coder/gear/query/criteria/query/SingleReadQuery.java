@@ -5,10 +5,7 @@ package org.coder.gear.query.criteria.query;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.coder.gear.query.free.query.ReadingConditions;
-import org.coder.gear.query.gateway.PersistenceGateway;
+import org.coder.gear.query.free.query.Conditions;
 
 
 /**
@@ -19,25 +16,12 @@ import org.coder.gear.query.gateway.PersistenceGateway;
  */
 public class SingleReadQuery<E> extends ReadQuery<E>{
 	
-	/** the gateway */
-	private final PersistenceGateway gateway;
-	
-	/**
-	 * Constructor
-	 * @param entityClass the entityClass
-	 * @param em the entityManager
-	 * @param gateway the gateway
-	 */
-	public SingleReadQuery(Class<E> entityClass, EntityManager em,PersistenceGateway gateway) {
-		super(entityClass, em);
-		this.gateway = gateway;
-	}
 
 	/**
-	 * @see org.coder.gear.query.criteria.query.ReadQuery#doCallInternal(org.coder.gear.query.free.query.ReadingConditions)
+	 * @see org.coder.gear.query.criteria.query.ReadQuery#doCallInternal(org.coder.gear.query.free.query.Conditions)
 	 */
 	@Override
-	protected E doCallInternal(ReadingConditions conditions) {
+	protected E doCallInternal(Conditions conditions) {
 		List<E> result = gateway.getResultList(conditions);
 		return result.isEmpty() ? null : result.get(0);
 	}

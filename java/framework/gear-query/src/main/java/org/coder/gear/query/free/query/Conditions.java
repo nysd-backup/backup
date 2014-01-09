@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -26,9 +27,6 @@ public class Conditions{
 	/** the SQL */
 	private String sql = null;
 	
-	/** the SQL to wrap */
-	private String wrappingClause = null;
-	
 	/** if true dont analyze the template*/
 	private boolean useRowSql = true;
 	
@@ -40,6 +38,74 @@ public class Conditions{
 
 	/** the entity manager */
 	private EntityManager entityManager;
+	
+	/** the resultType */
+	private Class<?> resultType;
+	
+	/** the lock mode */
+	private LockModeType lock = null;
+
+	/** the max size */
+	private int maxResults = 0;
+	
+	/** the start position */
+	private int firstResult = 0;
+	
+	/**
+	 * @return the maxResults
+	 */
+	public int getMaxResults() {
+		return maxResults;
+	}
+
+	/**
+	 * @param maxResults the maxResults to set
+	 */
+	public void setMaxResults(int maxResults) {
+		this.maxResults = maxResults;
+	}
+
+	/**
+	 * @return the firstResult
+	 */
+	public int getFirstResult() {
+		return firstResult;
+	}
+
+	/**
+	 * @param firstResult the firstResult to set
+	 */
+	public void setFirstResult(int firstResult) {
+		this.firstResult = firstResult;
+	}
+
+	/**
+	 * @return the lock
+	 */
+	public LockModeType getLockMode() {
+		return lock;
+	}
+
+	/**
+	 * @param lock the lock to set
+	 */
+	public void setLockMode(LockModeType lock) {
+		this.lock = lock;
+	}
+
+	/**
+	 * @return the resultType
+	 */
+	public Class<?> getResultType() {
+		return resultType;
+	}
+
+	/**
+	 * @param resultType the resultType to set
+	 */
+	public void setResultType(Class<?> resultType) {
+		this.resultType = resultType;
+	}
 
 	/**
 	 * @return the entityManager
@@ -125,20 +191,7 @@ public class Conditions{
 	 */
 	public void setQueryId(String queryId) {
 		this.queryId = queryId;
-	}
-
-	/**
-	 * @return the wrapClause
-	 */
-	public String getWrappingClause() {
-		return wrappingClause;
-	}
-
-	/**
-	 * @param wrapClause the wrapClause to set
-	 */
-	public void setWrappingClause(String wrappingClause) {
-		this.wrappingClause = wrappingClause;
+		setSql("@"+queryId);
 	}
 
 }

@@ -42,7 +42,7 @@ public interface QueryLoader {
 	 * @param queryId the queryId
 	 * @return the replaced SQL
 	 */
-	PreparedQuery prepare(String originalSql, Map<String,Object> parameter, String wrapClause,String queryId);
+	PreparedQuery prepare(String originalSql, Map<String,Object> parameter,String queryId);
 
 }
 

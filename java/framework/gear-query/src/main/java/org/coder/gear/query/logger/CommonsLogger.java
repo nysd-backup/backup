@@ -47,16 +47,16 @@ public class CommonsLogger extends AbstractSessionLog {
     public void log(SessionLogEntry arg0) {
         String nameSpace = arg0.getNameSpace();
         if (NAME_SPACE_SQL.equals(nameSpace)) {
+        	
+        	QUERY_LOG.info(arg0.getMessage());
+        	
             if (QUERY_LOG.isDebugEnabled()) {
                 String sql = StringUtils.replace(
                         StringUtils.replace(arg0.getMessage(), "\n", " "),
                         "\r", " ");
                 String completeQuery = getCompleteQuery(sql);
                 if (completeQuery != null) {
-                    QUERY_LOG.trace(arg0.getMessage());
                     QUERY_LOG.debug(completeQuery);
-                } else {
-                    QUERY_LOG.debug(arg0.getMessage());
                 }
             }
         } else {

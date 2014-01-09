@@ -6,8 +6,6 @@ package org.coder.gear.query.criteria.query;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.coder.gear.query.criteria.Criteria;
 import org.coder.gear.query.free.query.Conditions;
 
@@ -18,21 +16,14 @@ import org.coder.gear.query.free.query.Conditions;
  * @version	1.0
  */
 public abstract class ModifyQuery extends CriteriaQuery<Integer>{
-
-	/** entity class. */
-	private Class<?> entityClass;
 	
-	/** entity manager. */
-	private final EntityManager em;
-
+	/** entity class. */
+	protected Class<?> entityClass;
+	
 	/**
-	 * Constructor.
-	 * 
-	 * @param entityClass the entityClass
-	 * @param em the entity manager
+	 * @param entityClass to set
 	 */
-	public ModifyQuery(Class<?> entityClass,EntityManager em){
-		this.em = em;
+	public void setEntityClass(Class<?> entityClass){
 		this.entityClass = entityClass;
 	}
 
@@ -49,7 +40,7 @@ public abstract class ModifyQuery extends CriteriaQuery<Integer>{
 		for(Map.Entry<String, Object> e: getHints().entrySet()){
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}
-		return doCallInternal(parameter,criterias,entityClass);
+		return doCallInternal(parameter,criterias);
 	}
 	
 	/**
@@ -60,6 +51,6 @@ public abstract class ModifyQuery extends CriteriaQuery<Integer>{
 	 * @param entityClass the entityClass
 	 * @return the result
 	 */
-	protected abstract Integer doCallInternal(Conditions conditions,List<Criteria> criterias,Class<?> entityClass);
+	protected abstract Integer doCallInternal(Conditions conditions,List<Criteria> criterias);
 	
 }

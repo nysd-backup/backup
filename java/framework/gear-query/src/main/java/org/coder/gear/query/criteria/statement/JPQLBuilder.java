@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
-import org.coder.gear.query.criteria.FixString;
 import org.coder.gear.query.criteria.SortKey;
 
 
@@ -30,13 +29,6 @@ public class JPQLBuilder implements StatementBuilder{
 	
 	/** where */
 	private List<Criteria> wheres = new ArrayList<Criteria>();
-	
-	/**
-	 * Constructor
-	 */
-	protected JPQLBuilder(){
-		
-	}
 	
 	/**
 	 * @see org.coder.gear.query.criteria.statement.StatementBuilder#withSet(java.util.Map)
@@ -124,18 +116,13 @@ public class JPQLBuilder implements StatementBuilder{
 		StringBuilder builder = new StringBuilder();
 		boolean first=true;
 		for(Map.Entry<String, Object> e :set.entrySet()){	
-			Object value = e.getValue();
 			if( first ){			
 				builder.append("\n e.");
 				first = false;
 			}else{				
 				builder.append("\n , e.");
 			}
-			if( value instanceof FixString){
-				builder.append(e.getKey()).append(" = ").append(value.toString());
-			}else{
-				builder.append(e.getKey()).append(" = :").append(e.getKey());
-			}
+			builder.append(e.getKey()).append(" = :").append(e.getKey());			
 		}
 		query.append(builder.toString());
 		return query.toString();

@@ -8,8 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import org.coder.gear.query.criteria.Criteria;
 import org.coder.gear.query.criteria.Operand;
+import org.coder.gear.query.criteria.statement.JPQLBuilder;
+import org.coder.gear.query.criteria.statement.StatementBuilder;
+import org.coder.gear.query.free.loader.QueryLoaderTrace;
+import org.coder.gear.query.gateway.JpqlGateway;
+import org.coder.gear.query.gateway.PersistenceGateway;
+import org.coder.gear.query.gateway.PersistenceGatewayTrace;
 
 /**
  * function.
@@ -23,6 +31,38 @@ public abstract class CriteriaQuery<T> {
 	private List<Criteria> criterias = new ArrayList<Criteria>();
 
 	private Map<String,Object> hints = new HashMap<String,Object>();
+	
+	/** the persistenceGateway */
+	protected PersistenceGateway gateway;
+	
+	/** the query builder factory */
+	protected StatementBuilder builder;
+	
+	/** entity manager */
+	protected EntityManager em;
+	
+	/**
+	 * Constructor
+	 */
+	public CriteriaQuery() {
+		construct();
+	}
+	
+	/**
+	 * Construct
+	 */
+	protected void construct() {
+		builder = new JPQLBuilder();
+		JpqlGateway named = new JpqlGateway();
+		named.setQueryLoader(new QueryLoaderTrace());				
+		if(PersistenceGatewayTrace.isEnabled()){
+			PersistenceGatewayTrace trace = new PersistenceGatewayTrace();
+			trace.setDelegate(named);
+			gateway = trace;
+		}else{
+			gateway = named;
+		}
+	}
 	
 	/**
 	 * Add hint.

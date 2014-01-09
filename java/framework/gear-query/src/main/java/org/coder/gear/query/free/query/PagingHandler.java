@@ -19,7 +19,7 @@ public class PagingHandler {
 	 * @param result 結果
 	 * @return 再実行有無
 	 */
-	public boolean shouldRetry(ReadingConditions conditions , TotalList<?> result) {
+	public boolean shouldRetry(Conditions conditions , TotalList<?> result) {
 		boolean shouldRetry = result.getHitCount() > 0 && result.isEmpty() && conditions.getFirstResult() > 1;
 		if(shouldRetry){
 			newStart = conditions.getFirstResult() -conditions.getMaxResults();

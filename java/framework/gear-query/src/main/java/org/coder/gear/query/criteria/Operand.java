@@ -36,16 +36,9 @@ public enum Operand {
 			List<Object> values = (List<Object>)value;
 			Object from = values.get(0);
 			Object to = values.get(1);
-			if(from instanceof FixString){
-				from = from.toString();
-			}else{
-				from = ":" + bindName;
-			}	
-			if(to instanceof FixString){
-				to = from.toString();
-			}else{
-				to = ":" + bindName + "_to";
-			}	
+			from = ":" + bindName;				
+			to = ":" + bindName + "_to";
+				
 			return String.format(" %s %s %s and %s ",colName,getOperand(),from,to);
 		}
 		
@@ -55,12 +48,8 @@ public enum Operand {
 			List<Object> values = (List<Object>)value;
 			Object from = values.get(0);
 			Object to = values.get(1);
-			if(!(from instanceof FixString)){
-				delegate.getParam().put(bindName, from);
-			}
-			if(!(to instanceof FixString)){
-				delegate.getParam().put(bindName + "_to",to);
-			}				
+			delegate.getParam().put(bindName, from);
+			delegate.getParam().put(bindName + "_to",to);			
 		}
 	},
 	/** IS NOT NULL */
@@ -129,17 +118,12 @@ public enum Operand {
 	}
 	
 	public String getExpression(String colName,String bindName,Object value){
-		if(value instanceof FixString){
-			return String.format(" %s %s %s ",colName,operand,value.toString());
-		}else{
-			return String.format(" %s %s :%s ",colName,operand,bindName);
-		}			
+		return String.format(" %s %s :%s ",colName,operand,bindName);
+					
 	}
 	
 	public void setParameter(Conditions delegate,String bindName,Object value){
-		if(!(value instanceof FixString)){
-			delegate.getParam().put(bindName, value);
- 		}
+		delegate.getParam().put(bindName, value); 		
 	}
 	
 }

@@ -3,19 +3,17 @@
  */
 package org.coder.gear.query.criteria.query;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
 import org.coder.gear.query.criteria.Criteria;
 import org.coder.gear.query.criteria.SortKey;
-import org.coder.gear.query.criteria.statement.JPQLBuilderFactory;
-import org.coder.gear.query.criteria.statement.StatementBuilderFactory;
-import org.coder.gear.query.free.RecordFilter;
-import org.coder.gear.query.free.query.ReadingConditions;
+import org.coder.gear.query.free.query.Conditions;
 import org.eclipse.persistence.config.QueryHints;
 
 /**
@@ -25,63 +23,37 @@ import org.eclipse.persistence.config.QueryHints;
  * @version	1.0
  */
 public abstract class ReadQuery<T> extends CriteriaQuery<T>{
-	
-	/** resultClass */
-	private final Class<?> entityClass;
 
-	/** entity manager */
-	private final EntityManager em;
-	
-	/** factory of statement builder */
-	private StatementBuilderFactory builderFactory = new JPQLBuilderFactory();
-	
 	/** lock type */
 	private LockModeType lockModeType = null;
 			
 	/** start position to search */
 	private int offset = -1;
-		
-	/** filter of the result */
-	private RecordFilter filter = null;
 	
 	/** sorting keys */
 	private List<SortKey> sortKeys = new ArrayList<SortKey>();
 	
 	/**
-	 * Constuctor.
-	 * 
-	 * @param entityClass the entity class
-	 * @param em the entity manager
-	 */
-	public ReadQuery(Class<?> entityClass,EntityManager em){
-		this.entityClass = entityClass;
-		this.em = em;
-	}
-	
-	/**
-	 * @param builderFactory the builderFactory to set
-	 */
-	public void setStatementBuilderFactory(StatementBuilderFactory builderFactory){
-		this.builderFactory = builderFactory;
-	}
-	
-	/**
 	 * Set lock mode type.
 	 * 
-	 * @param lockModeType
+	 * @param timeout timeout
 	 * @return self
 	 */
-	public ReadQuery<T> lock(LockModeType lockModeType) {
-		this.lockModeType = lockModeType;
-		//ロック指定の場合はタイムアウト設定、先にタイムアウト設定されていた場合は何もしない
-		if(getLockTimeout() <= 0){
-			if(LockModeType.OPTIMISTIC == lockModeType){
-				setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,0);
-			}
-		}
+	public ReadQuery<T> forUpdate(int timeout) {
+		this.lockModeType = LockModeType.PESSIMISTIC_READ;
+		setHint(QueryHints.PESSIMISTIC_LOCK_TIMEOUT,timeout);
 		return this;
 	}
 
+	/**
+	 * Set lock mode type.
+	 * 
+	 * @return self
+	 */
+	public ReadQuery<T> forUpdateNoWait() {
+		return forUpdate(0);
+	}
+	
 	/**
 	 * Set the start position.
 	 * @param firstResult the firstResult
@@ -89,16 +61,6 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 */
 	public ReadQuery<T> offset(int offset){
 		this.offset = offset;
-		return this;
-	}
-	
-	/**
-	 * Set the query filter.
-	 * @param filter the filter
-	 * @return self
-	 */
-	public ReadQuery<T> filter(RecordFilter filter){
-		this.filter = filter;
 		return this;
 	}
 
@@ -131,11 +93,24 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 */
 	@Override
 	protected T doCall(List<Criteria> criterias){
-		ReadingConditions parameter = new ReadingConditions();		
+		return doCallInternal(createConditions(criterias));
+	}
+	
+	/**
+	 * @param criterias to set
+	 * @return condition 
+	 */
+	@SuppressWarnings("unchecked")
+	protected Conditions createConditions(List<Criteria> criterias) {
+		
+		ParameterizedType t = (ParameterizedType) this.getClass().getGenericSuperclass();
+		Type[] types = t.getActualTypeArguments();				
+		Class<?>  entityClass = (Class<T>)types[0];
+
+		Conditions parameter = new Conditions();		
 		parameter.setEntityManager(em);
 		parameter.setLockMode(lockModeType);
-		parameter.setFilter(filter);
-		parameter.setSql(builderFactory.createBuilder().withWhere(criterias).withOrderBy(sortKeys).buildSelect(entityClass));
+		parameter.setSql(builder.withWhere(criterias).withOrderBy(sortKeys).buildSelect(entityClass));
 		parameter.setResultType(entityClass);
 		parameter.setQueryId(entityClass+".select");
 		for(Criteria criteria : criterias){
@@ -145,19 +120,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}
 		parameter.setFirstResult(offset);		
-		
-		return doCallInternal(parameter);
-	}
-	
-	/**
-	 * get the timeout.
-	 * 
-	 * @return the timeout
-	 */
-	private int getLockTimeout(){
-		Map<String,Object> hints = getHints();
-		Object v = hints.get(QueryHints.PESSIMISTIC_LOCK_TIMEOUT);
-		return v == null ? 0 : (Integer)v;
+		return parameter;
 	}
 	
 	/**
@@ -165,6 +128,6 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 * @param conditions conditions to set
 	 * @return result
 	 */
-	protected abstract T doCallInternal(ReadingConditions conditions);
+	protected abstract T doCallInternal(Conditions conditions);
 	
 }

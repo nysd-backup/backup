@@ -5,14 +5,8 @@ package org.coder.gear.query.criteria.query;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.coder.gear.query.criteria.Criteria;
-import org.coder.gear.query.criteria.statement.JPQLBuilderFactory;
-import org.coder.gear.query.criteria.statement.StatementBuilder;
-import org.coder.gear.query.criteria.statement.StatementBuilderFactory;
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.gateway.PersistenceGateway;
 
 /**
  * UpdateQuery.
@@ -22,37 +16,13 @@ import org.coder.gear.query.gateway.PersistenceGateway;
  */
 public class DeleteQuery extends ModifyQuery{
 	
-	/** the persistenceGateway */
-	private PersistenceGateway gateway;
-	
-	/** the query builder factory */
-	private StatementBuilderFactory builderFactory = new JPQLBuilderFactory();
-	
-	/**
-	 * Constructor.
-	 * @param em the em to set
-	 * @param entityClass the entityClass
-	 * @param gateway the gateway to set
-	 */
-	public DeleteQuery(Class<?> entityClass,EntityManager em,PersistenceGateway gateway) {
-		super(entityClass,em);
-		this.gateway = gateway;
-	}
-	
-	/**
-	 * @param builderFactory the builderFactory to set
-	 */
-	public void setStatementBuilderFactory(StatementBuilderFactory builderFactory){
-		this.builderFactory = builderFactory;
-	}
 
 	/**
-	 * @see org.coder.gear.query.criteria.query.ModifyQuery#doCallInternal(org.coder.alpha.query.free.ModifyingConditions, java.util.List)
+	 * @see org.coder.gear.query.criteria.query.ModifyQuery#doCallInternal(org.coder.gear.query.free.query.Conditions, java.util.List)
 	 */
 	@Override
 	protected Integer doCallInternal(Conditions conditions,
-			List<Criteria> criterias,Class<?> entityClass) {
-		StatementBuilder builder  = builderFactory.createBuilder();
+			List<Criteria> criterias) {
 		String sql = builder.withWhere(criterias).buildDelete(entityClass);
 		conditions.setQueryId(entityClass.getSimpleName() + ".delete");
 		conditions.setSql(sql);		

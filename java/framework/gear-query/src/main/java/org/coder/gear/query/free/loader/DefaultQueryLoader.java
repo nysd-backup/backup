@@ -104,7 +104,7 @@ public class DefaultQueryLoader implements QueryLoader{
 	 * @see org.coder.gear.query.free.loader.QueryLoader#prepare(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public PreparedQuery prepare(String sql , Map<String,Object> params ,String wrapClause,String sqlId){
+	public PreparedQuery prepare(String sql , Map<String,Object> params ,String sqlId){
 
 		List<Object> bindList = new ArrayList<Object>();	
 		final StringBuffer buff = new StringBuffer(sql.length());
@@ -146,9 +146,6 @@ public class DefaultQueryLoader implements QueryLoader{
 		match.appendTail(buff);
 		
 		String preparedSql = buff.toString();
-		if(wrapClause != null && !wrapClause.isEmpty()){
-			preparedSql = String.format(wrapClause, preparedSql);
-		}
 		return new PreparedQuery(preparedSql,bindList,sqlId);
 		
 	}
