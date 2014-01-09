@@ -33,7 +33,7 @@ public class JavaLogger extends JavaLog {
 		//通常のログ
 		super.internalLog(entry, javaLevel, logger);
 		 
-		//SQlの詳細なログ
+		//SQlの詳細なログ		
 		String nameSpace = entry.getNameSpace();
 		if (SessionLog.SQL.equals(nameSpace)) {
 			String sql = StringUtils.replace(StringUtils.replace(entry.getMessage(), "\n", " "), "\r", " ");
