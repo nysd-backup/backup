@@ -72,7 +72,7 @@ public class BeanMetadataMapper implements MetadataMapper {
 				
 				try {
 					Class<?> type = m.getParameterTypes()[0];
-					m.invoke(row,converter.getParameter(type,resultSet,columnLabel));					
+					m.invoke(row,converter.getParameter(type,resultSet,columnLabel,i+1));					
 				} catch(SQLException sqle){
 					throw sqle;
 				} catch (Exception e) {

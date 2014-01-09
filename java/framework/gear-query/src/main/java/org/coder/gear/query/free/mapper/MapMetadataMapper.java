@@ -76,7 +76,7 @@ public class MapMetadataMapper implements MetadataMapper{
 			String label = labels[i];
 			String javaLabel = javaLabels[i];
 			try{
-				Object value = converter.getParameter(Object.class, resultSet, label);
+				Object value = converter.getParameter(Object.class, resultSet, label, i+1);
 				((Map)row).put(javaLabel, value);
 			}catch(SQLException sqle){
 				throw sqle;

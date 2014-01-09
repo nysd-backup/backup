@@ -22,7 +22,7 @@ public interface TypeConverter {
 	 * @return the casted object
 	 * @throws SQLException the exception
 	 */
-	Object getParameter(Class<?> cast , ResultSet resultSet , String columnLabel)throws SQLException ;
+	Object getParameter(Class<?> cast , ResultSet resultSet  ,String columnLabel, int columnPosition)throws SQLException ;
 	
 	/**
 	 * @param arg

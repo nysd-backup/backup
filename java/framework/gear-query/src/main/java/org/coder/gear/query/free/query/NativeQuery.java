@@ -64,9 +64,8 @@ public class NativeQuery{
 	/**
 	 * @param em the em to set
 	 */
-	public NativeQuery setEntityManager(EntityManager em){
+	public void setEntityManager(EntityManager em){
 		this.condition.setEntityManager(em);
-		return this;
 	}
 	
 	/**

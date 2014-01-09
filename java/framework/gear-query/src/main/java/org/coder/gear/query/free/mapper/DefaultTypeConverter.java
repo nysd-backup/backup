@@ -5,12 +5,15 @@ package org.coder.gear.query.free.mapper;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.sql.Types;
 
 /**
  * Convert the result.
@@ -20,13 +23,19 @@ import java.sql.Timestamp;
  */
 public class DefaultTypeConverter implements TypeConverter{
 
+
 	/**
-	 * @see org.coder.gear.query.free.mapper.TypeConverter#getParameter(java.lang.Class, java.sql.ResultSet, java.lang.String)
+	 * @see org.coder.gear.query.free.mapper.TypeConverter#getParameter(java.lang.Class, java.sql.ResultSet, int, java.lang.String)
 	 */
 	@Override
-	public Object getParameter(Class<?> type, ResultSet resultSet , String columnLabel) throws SQLException {
+	public Object getParameter(Class<?> type, ResultSet resultSet ,String columnLabel, int columnPosition) throws SQLException {
 		if( String.class.equals(type)) {
-			return resultSet.getString(columnLabel);
+			if(resultSet.getMetaData().getColumnType(columnPosition) == Types.CLOB){
+				Clob clob = resultSet.getClob(columnLabel);
+				return clob == null ? null : clob.getSubString(0, (int)clob.length());			
+			}else{
+				return resultSet.getString(columnLabel);		
+			}
 		}else if( BigDecimal.class.equals(type)){
 			return resultSet.getBigDecimal(columnLabel);
 		}else if( Long.class.equals(type) || long.class.equals(type)){
@@ -38,7 +47,12 @@ public class DefaultTypeConverter implements TypeConverter{
 		}else if( Byte.class.equals(type) || byte.class.equals(type)){
 			return resultSet.getByte(columnLabel);		
 		}else if( byte[].class.equals(type)){
-			return resultSet.getBytes(columnLabel);		
+			if(resultSet.getMetaData().getColumnType(columnPosition) == Types.BLOB){
+				Blob blob = resultSet.getBlob(columnLabel);
+				return blob == null ? null : blob.getBytes(1L, (int)blob.length());				
+			}else{
+				return resultSet.getBytes(columnLabel);		
+			}
 		}else if(Date.class.equals(type)|| Timestamp.class.equals(type)|| Time.class.equals(type) || java.util.Date.class.equals(type)){
 			Timestamp tm = resultSet.getTimestamp(columnLabel);			
 			return tm == null ? null : new java.util.Date(tm.getTime()); 
