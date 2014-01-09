@@ -3,21 +3,17 @@
  */
 package org.coder.sample.s2jdbc.repository;
 
-import javax.annotation.Resource;
-
 import org.coder.sample.s2jdbc.domain.Parent;
-import org.seasar.extension.jdbc.JdbcManager;
+import org.seasar.extension.jdbc.service.S2AbstractService;
 import org.seasar.extension.jdbc.where.SimpleWhere;
 
 /**
  * @author yoshida-n
  *
  */
-public class ParentRepository{
+public class ParentRepository extends S2AbstractService<Parent>{
 
-	@Resource
-	private JdbcManager jdbcManager;
-	
+
 	/**
 	 * @param entity
 	 */
