@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+    "http://www.seasar.org/dtd/components24.dtd">
+    
+<components >
+	<include path="aop.dicon"/>
+	<include path="j2ee.dicon"/> 
+	<include path="jta.dicon"/> 
+   	<include path="s2jdbc-internal.dicon"/>
+	<include path="jdbc.dicon"/> 	
+	 
+    <component name="jdbcManager" class="org.seasar.extension.jdbc.manager.JdbcManagerImpl">
+        <property name="maxRows">0</property>
+        <property name="fetchSize">0</property>
+        <property name="queryTimeout">0</property>
+        <property name="dialect">
+        	<component class="org.seasar.extension.jdbc.dialect.OracleDialect" />
+        </property>
+        <property name="allowVariableSqlForBatchUpdate">true</property>       
+    </component>
+    
+    <!-- conventionに配置すると@ResourceでjdbcManagerが取得できない -->
+    <component
+        class="org.seasar.framework.container.autoregister.FileSystemComponentAutoRegister">
+        <property name="autoNaming">
+	          <component class="org.seasar.framework.container.autoregister.DefaultAutoNaming"/>
+        </property>
+        <initMethod name="addClassPattern">
+          <arg>"org.coder.sample.s2jdbc"</arg>
+          <arg>"..*Service"</arg>                    
+        </initMethod>        
+        <initMethod name="addClassPattern">
+          <arg>"org.coder.sample.s2jdbc"</arg>
+          <arg>"..*Repository"</arg>
+        </initMethod>
+    </component>	
+    
+</components>
