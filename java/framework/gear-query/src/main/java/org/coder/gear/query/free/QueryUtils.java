@@ -1,4 +1,5 @@
 /**
+
  * Copyright 2012 the original author
  */
 package org.coder.gear.query.free;
