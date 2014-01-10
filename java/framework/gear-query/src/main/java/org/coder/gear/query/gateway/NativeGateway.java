@@ -3,24 +3,20 @@
  */
 package org.coder.gear.query.gateway;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 import org.coder.gear.query.free.loader.PreparedQuery;
 import org.coder.gear.query.free.loader.QueryLoader;
 import org.coder.gear.query.free.loader.QueryLoaderTrace;
 import org.coder.gear.query.free.mapper.DefaultMetadataMapperFactory;
-import org.coder.gear.query.free.mapper.MetadataMapper;
 import org.coder.gear.query.free.mapper.MetadataMapperFactory;
 import org.coder.gear.query.free.query.Conditions;
 import org.coder.gear.query.free.result.CloseableIterator;
-import org.coder.gear.query.free.result.ResultSetIterator;
+import org.coder.gear.query.free.result.CursorAdapter;
 import org.coder.gear.query.free.result.TotalList;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -80,104 +76,66 @@ public class NativeGateway implements PersistenceGateway {
     /**
      * @see org.coder.gear.query.gateway.PersistenceGateway#getResultList(org.coder.gear.query.free.query.Conditions)
      */
-    @SuppressWarnings("unchecked")
 	@Override
     public <T> List<T> getResultList(Conditions parameter) {
-
-        Query query = setRangeAndCursor(parameter.getFirstResult(),
-                parameter.getMaxResults(), createQuery(parameter));
-        ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
-        try {
-        	ResultSet rs = cursor.getResultSet();
-        	List<T> result = new ArrayList<T>();				
-    		MetadataMapper mapper = metadataMapperFactory.create(parameter.getResultType(), rs);
-    		
-    		while (rs.next()) {			    			
-    			result.add((T)getRecord(mapper, rs));
-    		}
-    		return result;
-        } catch (SQLException e) {
-            throw new PersistenceException(e);
-        } finally {
-            cursor.close();
-        }
+    	List<T> result = new ArrayList<T>();
+        try(CloseableIterator<T> adapter = getFetchResult(parameter)){
+        	 while (adapter.hasNext()){			    			
+     			result.add(adapter.next());
+        	 }
+        	 return result;
+        } 
     }
 
     /**
      * @see org.coder.gear.query.gateway.PersistenceGateway#getTotalResult(org.coder.gear.query.free.query.ReadingConditions)
      */
-    @SuppressWarnings("unchecked")
     @Override
     public <T> TotalList<T> getTotalResult(final Conditions parameter) {
 
         Query query = setRangeAndCursor(parameter.getFirstResult(), 0,
                 createQuery(parameter));
         TotalList<T> result = new TotalList<T>();	      
-        Class<T> resultType = (Class<T>) parameter.getResultType();
         int maxSize = parameter.getMaxResults();
-        ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
-        try {
-            ResultSet rs = cursor.getResultSet();            		
-    		MetadataMapper mapper = metadataMapperFactory.create(resultType, rs);
+        try(CursorAdapter<T> adapter = new CursorAdapter<T>((ScrollableCursor) query.getSingleResult())){
+        	
+        	adapter.construct( parameter.getResultType(), metadataMapperFactory);
+
     		int hitCount = 0;
-    		int startPosition = rs.getRow();
-    		while (rs.next()) {	
+    		int startPosition = adapter.getCurrentRow();
+    		while (adapter.hasNext()) {	
     			hitCount++;
     			//最大件数超過していたら終了
     			if( !result.isExceededLimit() ){
     				if( maxSize > 0 && hitCount > maxSize){
     					result.exceededLimit();
-    					if(rs.getType() >= ResultSet.TYPE_SCROLL_INSENSITIVE){
-    						rs.last();	
-    						hitCount = rs.getRow();
+    					if(adapter.isTypeScrollableInsensitive()){
+    						adapter.moveLast();
+    						hitCount = adapter.getCurrentRow();
     						break;
     					}else{
     						continue;
     					}
     				}
-    				result.add((T)getRecord(mapper,rs));
+    				result.add(adapter.next());
     			}			
     		}
     		hitCount = result.isExceededLimit() ? hitCount:hitCount+startPosition;
     		result.setHitCount(hitCount);
-        } catch (SQLException e) {
-            throw new PersistenceException(e);
-        } finally {
-            cursor.close();
         }
         return result;
     }
     
     /**
-     * Get record.
-     * 
-     * @param mapper the mapper
-     * @param rs the result set
-     * @param filter the filter
-     * @return record
-     * @throws SQLException
-     */
-    private <T> T getRecord(MetadataMapper mapper,ResultSet rs) throws SQLException{
-    	T row = mapper.getRecord(rs);				
-		return row;
-    }
-
-    /**
      * @see org.coder.gear.query.gateway.PersistenceGateway#getFetchResult(org.coder.gear.query.free.query.ReadingConditions)
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public CloseableIterator getFetchResult(Conditions parameter) {
+    public <T> CloseableIterator<T> getFetchResult(Conditions parameter) {
         Query query = setRangeAndCursor(parameter.getFirstResult(),
                 parameter.getMaxResults(), createQuery(parameter));
-        ScrollableCursor cursor = (ScrollableCursor) query.getSingleResult();
-        try {
-            return new ResultSetIterator(cursor, metadataMapperFactory.create(
-                    parameter.getResultType(), cursor.getResultSet()));
-        } catch (SQLException e) {
-            cursor.close();
-            throw new PersistenceException(e);
-        }
+        CursorAdapter<T> adapter = new CursorAdapter<T>((ScrollableCursor) query.getSingleResult());
+        adapter.construct(parameter.getResultType(), metadataMapperFactory);        	
+        return adapter;
     }
 
     /**

@@ -68,7 +68,7 @@ public class PersistenceGatewayTrace implements PersistenceGateway{
 	}
 
 	/**
-	 * @see org.coder.gear.query.gateway.PersistenceGateway#getFetchResult(org.coder.gear.query.free.query.ReadingConditions)
+	 * @see org.coder.gear.query.gateway.PersistenceGateway#getFetchResult(org.coder.gear.query.free.query.Conditions)
 	 */
 	@Override
 	public <T> CloseableIterator<T> getFetchResult(Conditions param) {

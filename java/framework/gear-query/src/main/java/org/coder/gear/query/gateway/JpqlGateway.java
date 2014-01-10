@@ -16,7 +16,7 @@ import org.coder.gear.query.free.loader.DefaultConstantAccessor;
 import org.coder.gear.query.free.loader.QueryLoader;
 import org.coder.gear.query.free.loader.QueryLoaderTrace;
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.free.result.CloseableIterator;
+import org.coder.gear.query.free.result.CursorAdapter;
 import org.coder.gear.query.free.result.TotalList;
 
 
@@ -158,7 +158,7 @@ public class JpqlGateway implements PersistenceGateway{
 	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
 	 */
 	@Override
-	public <T> CloseableIterator<T> getFetchResult(Conditions param){
+	public <T> CursorAdapter<T> getFetchResult(Conditions param){
 		throw new UnsupportedOperationException();
 	}
 

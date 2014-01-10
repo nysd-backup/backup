@@ -12,5 +12,11 @@ import java.util.Iterator;
  * @version	1.0
  */
 public abstract class CloseableIterator<T> implements Iterator<T> ,AutoCloseable {
+	
+	/**
+	 * @see java.lang.AutoCloseable#close()
+	 */
+	@Override
+	public abstract void close();
 
 }

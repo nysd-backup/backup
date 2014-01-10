@@ -121,7 +121,7 @@ public class NativeQuery{
 	/**
 	 * @param queryId the queryId
 	 */
-	public NativeQuery setQueryId(String queryId){
+	public NativeQuery id(String queryId){
 		condition.setQueryId(queryId);
 		return this;
 	}
