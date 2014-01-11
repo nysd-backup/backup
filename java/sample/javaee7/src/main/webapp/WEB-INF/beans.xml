@@ -1,0 +1,14 @@
+<beans xmlns="http://java.sun.com/xml/ns/javaee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+      
+    <!-- 
+    	別jarのinterceptorはロードできない。自分のjarで定義したクラスのみ宣言可能のようだ 
+    	別jarであっても簡単にCDIの管理対象にできるようになって欲しい 
+    -->
+  <interceptors>
+    <class>org.coder.gear.sample.javaee7.interceptor.TraceInterceptor</class>
+  </interceptors>
+
+</beans>
