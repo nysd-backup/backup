@@ -91,7 +91,6 @@
 				<module>framework/gear-rs</module>
 				<module>framework/gear-trace</module>
 				<module>framework/gear-mongo</module>
-				<module>framework/gear-mail</module>
 			</modules>
 		</profile>
 		<profile>

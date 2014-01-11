@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${weblogic.Name},%c{1},%m%n" />
+		</layout>
+	</appender>
+	<!-- デバッグ -->
+	<appender name="AppDebug" class="org.coder.gear.fluentd.log4j.FluentdAppender">
+		<param name="host" value="10.3.220.23" />
+		<param name="tag" value="debug.tag" />
+		<param name="label" value="LABEL" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${weblogic.Name},%m%n" />
+		</layout>
+	</appender>
+
+	<category name="DEBUG">
+		<level value="debug" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="AppDebug" />
+	</category>
+
+</log4j:configuration>
