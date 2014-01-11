@@ -6,14 +6,14 @@ package org.coder.gear.sample.javaee7.service;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.coder.gear.message.Message;
+import org.coder.gear.message.MessageContext;
 import org.coder.gear.sample.javaee7.domain.Order;
 import org.coder.gear.sample.javaee7.domain.OrderDetail;
 import org.coder.gear.sample.javaee7.domain.Stock;
-import org.coder.gear.sample.javaee7.interceptor.Traceable;
 import org.coder.gear.sample.javaee7.repository.OrderRepository;
 import org.coder.gear.sample.javaee7.repository.StockRepository;
-import org.coder.gear.trace.Message;
-import org.coder.gear.trace.MessageContext;
+import org.coder.gear.trace.Traceable;
 
 /**
  * OrderOperationService.

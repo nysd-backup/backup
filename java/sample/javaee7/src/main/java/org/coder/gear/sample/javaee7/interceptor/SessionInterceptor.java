@@ -8,7 +8,7 @@ import javax.ejb.EJBContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
-import org.coder.gear.trace.MessageContext;
+import org.coder.gear.message.MessageContext;
 
 /**
  * SessionInterceptor.

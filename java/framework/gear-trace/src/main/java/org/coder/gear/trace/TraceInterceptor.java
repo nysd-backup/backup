@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.gear.sample.javaee7.interceptor;
+package org.coder.gear.trace;
 
 import java.lang.reflect.Method;
 
@@ -9,7 +9,6 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.coder.gear.trace.Tracer;
 
 /**
  * TraceInterceptor.

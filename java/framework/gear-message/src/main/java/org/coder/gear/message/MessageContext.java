@@ -1,7 +1,10 @@
 /**
  * Copyright 2011 the original author, All Rights Reserved.
  */
-package org.coder.gear.trace;
+package org.coder.gear.message;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -13,8 +16,10 @@ package org.coder.gear.trace;
  */
 public class MessageContext {
 	
+	private int maxLevel = MessageLevel.INFO.ordinal();
+	
 	/** the messages. */
-	private Messages messages;
+	private List<Message> messages;
 	
 	private boolean rollbackOnly = false;
 	
@@ -56,13 +61,16 @@ public class MessageContext {
 		if(messageHandler.shouldRollback(message)){
 			this.rollbackOnly = true;
 		}
-		this.messages.add(message);
+		if(maxLevel < message.getMessageLevel()){
+			maxLevel = message.getMessageLevel();
+		}
+		this.messages.add(message);		
 	}	
 
 	/**
 	 * @return the messages
 	 */
-	public Messages getMessages(){
+	public List<Message> getMessageList(){
 		return this.messages;
 	}
 	
@@ -86,7 +94,7 @@ public class MessageContext {
 	 */
 	public void release(){	
 		rollbackOnly = false;
-		messages = new Messages();
+		messages = new ArrayList<Message>();
 		messageHandler = null;
 		setCurrentInstance(null);
 	}

@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.gear.sample.javaee7.interceptor;
+package org.coder.gear.trace;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

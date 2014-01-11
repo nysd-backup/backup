@@ -1,4 +1,4 @@
-package org.coder.gear.trace;
+package org.coder.gear.message;
 
 import java.io.Serializable;
 

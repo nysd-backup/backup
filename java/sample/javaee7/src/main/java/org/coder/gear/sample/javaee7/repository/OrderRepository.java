@@ -4,7 +4,7 @@
 package org.coder.gear.sample.javaee7.repository;
 
 import org.coder.gear.sample.javaee7.domain.Order;
-import org.coder.gear.sample.javaee7.interceptor.Traceable;
+import org.coder.gear.trace.Traceable;
 
 
 /**

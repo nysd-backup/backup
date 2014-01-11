@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author, All Rights Reserved.
  */
-package org.coder.gear.trace;
+package org.coder.gear.message;
 
 /**
  * MessageLevel.
