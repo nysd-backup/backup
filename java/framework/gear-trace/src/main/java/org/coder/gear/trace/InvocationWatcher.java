@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 public class InvocationWatcher {
 	
 	/** the logger */
-	private static final Log LOG = LogFactory.getLog("TRACE." +InvocationWatcher.class);
+	private static final Log LOG = LogFactory.getLog(InvocationWatcher.class);
 	
 	/** the startTime */
 	private long startTime = 0L;

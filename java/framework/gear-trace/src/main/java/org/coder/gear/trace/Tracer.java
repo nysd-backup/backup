@@ -32,7 +32,7 @@ public class Tracer {
 			trace = new Tracer();
 			instances.set(trace);
 		}
-		InvocationWatcher watcher = new InvocationWatcher(declaringClass, methodName, 0);
+		InvocationWatcher watcher = new InvocationWatcher(declaringClass, methodName, trace.watchers.size());
 		watcher.start();
 		trace.watchers.push(watcher);
 	}
