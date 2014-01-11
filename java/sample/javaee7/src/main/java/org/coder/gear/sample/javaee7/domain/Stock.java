@@ -14,6 +14,9 @@ import javax.persistence.Version;
 @Entity
 public class Stock {
 	
+	//データアクセスロジックを持たせてActiveRecordにするのもあり
+	//ただし、別途Factoryは作らないといけないので、シンプルな場合にはDomainModel + DataMapper(JPA)が楽
+	
 	@Id
 	public Long itemNo;
 	
