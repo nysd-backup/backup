@@ -17,6 +17,7 @@ import org.coder.gear.trace.Traceable;
 
 /**
  * OrderOperationService.
+ * アプリケーションサービス兼/ドメインサービス　外部のドメインを呼び出す場合には相手先はInterfaceの方が疎結合になる。
  *
  * @author yoshida-n
  * @version	created.
