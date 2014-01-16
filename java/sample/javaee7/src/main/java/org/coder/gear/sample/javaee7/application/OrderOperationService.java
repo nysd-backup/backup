@@ -1,18 +1,18 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.gear.sample.javaee7.service;
+package org.coder.gear.sample.javaee7.application;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.coder.gear.message.Message;
 import org.coder.gear.message.MessageContext;
-import org.coder.gear.sample.javaee7.domain.Order;
-import org.coder.gear.sample.javaee7.domain.OrderDetail;
-import org.coder.gear.sample.javaee7.domain.Stock;
-import org.coder.gear.sample.javaee7.repository.OrderRepository;
-import org.coder.gear.sample.javaee7.repository.StockRepository;
+import org.coder.gear.sample.javaee7.domain.entity.Order;
+import org.coder.gear.sample.javaee7.domain.entity.OrderDetail;
+import org.coder.gear.sample.javaee7.domain.entity.Stock;
+import org.coder.gear.sample.javaee7.infra.repository.OrderRepository;
+import org.coder.gear.sample.javaee7.infra.repository.StockRepository;
 import org.coder.gear.trace.Traceable;
 
 /**
@@ -26,7 +26,10 @@ import org.coder.gear.trace.Traceable;
 @Stateless	//SessionBeanでなくてもCMTに対応してほしい
 public class OrderOperationService {
 
-	/** デフォルトだとOrderOperationServiceと同じライフサイクルになる */
+	/** 
+	 * '@IntejectするとデフォルトだとOrderOperationServiceと同じライフサイクルになる
+	 *	教科書どおりだとRepositoryはIFにしているが実際DataAccess方法が変わることはないので実体でよい。インターセプターはさめないわけでもないし。
+	 */
 	@Inject
 	private OrderRepository orderRepository;
 	

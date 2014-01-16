@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.coder.gear.sample.javaee7.domain.Order;
-import org.coder.gear.sample.javaee7.domain.OrderDetail;
-import org.coder.gear.sample.javaee7.service.OrderOperationService;
+import org.coder.gear.sample.javaee7.application.OrderOperationService;
+import org.coder.gear.sample.javaee7.domain.entity.Order;
+import org.coder.gear.sample.javaee7.domain.entity.OrderDetail;
 
 /**
  * OrderBean.

@@ -1,9 +1,9 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.gear.sample.javaee7.repository;
+package org.coder.gear.sample.javaee7.infra.repository;
 
-import org.coder.gear.sample.javaee7.domain.Stock;
+import org.coder.gear.sample.javaee7.domain.entity.Stock;
 import org.coder.gear.trace.Traceable;
 
 

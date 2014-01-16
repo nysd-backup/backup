@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author
  */
-package org.coder.gear.sample.javaee7.domain;
+package org.coder.gear.sample.javaee7.domain.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,7 +1,7 @@
 /**
  * Copyright 2011 the original author, All Rights Reserved.
  */
-package org.coder.gear.sample.javaee7.interceptor;
+package org.coder.gear.sample.javaee7.infra.interceptor;
 
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;

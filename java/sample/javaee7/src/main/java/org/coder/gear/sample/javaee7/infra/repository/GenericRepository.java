@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.coder.gear.sample.javaee7.repository;
+package org.coder.gear.sample.javaee7.infra.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
