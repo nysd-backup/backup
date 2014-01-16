@@ -13,7 +13,7 @@ import javax.persistence.Version;
  *
  */
 @Entity
-public class Item {
+public class Item extends AbstractEntity{
 	
 	@Id
 	@GeneratedValue

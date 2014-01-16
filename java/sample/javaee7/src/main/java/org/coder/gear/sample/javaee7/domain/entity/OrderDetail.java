@@ -16,7 +16,7 @@ import javax.persistence.Version;
  * @version	created.
  */
 @Entity
-public class OrderDetail{
+public class OrderDetail extends AbstractEntity{
 	
 	@ManyToOne
 	public Order order;

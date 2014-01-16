@@ -24,7 +24,7 @@ import javax.persistence.Version;
  * @version	created.
  */
 @Entity
-public class Order{
+public class Order extends AbstractEntity{
 	
 	@Id
 	@GeneratedValue
