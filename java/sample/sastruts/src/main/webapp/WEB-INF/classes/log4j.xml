@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${tomcat.Name},%c{1},%m%n" />
+		</layout>
+	</appender>
+
+	<!-- オンラインログ -->
+	<appender name="WEBLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/var/log/app/web/m4/weblog.log" />
+		<param name="append" value="true" />
+		<param name="datePattern" value="'.'yyyyMMdd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%m]%n" />
+		</layout>
+	</appender>
+
+	<!-- デバッグ -->
+	<appender name="AppDebug" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/var/log/app/web/m4/application_debug_web_M29_M4_${tomcat.Name}.log" />
+		<param name="append" value="true" />
+		<param name="datePattern" value="'.'yyyyMMdd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${tomcat.Name},%m%n" />
+		</layout>
+	</appender>
+
+	<!-- 業務例外情報 -->
+	<appender name="BizError" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file"
+			value="/var/log/app/web/m4/application_bizerror_web_M29_M4_${tomcat.Name}.log" />
+		<param name="append" value="true" />
+		<param name="datePattern" value="'.'yyyyMMdd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${tomcat.Name},%m%n" />
+		</layout>
+	</appender>
+
+	<!-- システム例外情報 -->
+	<appender name="SysError" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file"
+			value="/var/log/app/web/m4/application_syserror_web_M29_M4_${tomcat.Name}.log" />
+		<param name="append" value="true" />
+		<param name="datePattern" value="'.'yyyyMMdd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${tomcat.Name},%m%n" />
+		</layout>
+	</appender>
+
+	<!-- トレース情報 -->
+	<appender name="AppTrace" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/var/log/app/web/m4/application_trace_web_M29_M4_${tomcat.Name}.log" />
+		<param name="append" value="true" />
+		<param name="datePattern" value="'.'yyyyMMdd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%t,M29,%X{requestId},%X{userId},%X{jobId},%X{hostName},${tomcat.Name},%m,%X{clientIp},%X{sessionId}%n" />
+		</layout>
+	</appender>
+
+	<!-- システム障害ログ -->
+	<appender name="Notify" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="/var/log/app/web/m4/sysError_web_M29_M4_${tomcat.Name}.log" />
+		<param name="append" value="true" />
+		<param name="datePattern" value="'.'yyyyMMdd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy/MM/dd HH:mm:ss.SSS},%p,%X{requestId},%m%n" />
+		</layout>
+	</appender>
+
+	<category name="WEBLOG">
+		<level value="debug" />
+		<appender-ref ref="WEBLOG" />
+	</category>
+	<category name="DEBUG">
+		<level value="debug" />
+		<appender-ref ref="AppDebug" />
+	</category>
+	<category name="TRACE">
+		<level value="info" />
+		<appender-ref ref="AppTrace" />
+	</category>
+	<category name="BIZERR">
+		<level value="debug" />
+		<appender-ref ref="BizError" />
+	</category>
+	<category name="SYSERR">
+		<level value="fatal" />
+		<appender-ref ref="SysError" />
+		<appender-ref ref="STDOUT" />
+	</category>
+	<category name="NOTIFY">
+		<level value="debug" />
+		<appender-ref ref="Notify" />
+	</category>
+
+</log4j:configuration>

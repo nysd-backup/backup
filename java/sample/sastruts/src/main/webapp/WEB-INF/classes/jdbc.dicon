@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR2.1//DTD S2Container//EN"
+	"http://www.seasar.org/dtd/components21.dtd">
+<components namespace="jdbc">
+	<include path="jta.dicon"/>
+
+	<!-- for Oracle -->
+	<component name="xaDataSource"
+		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
+		<property name="driverClassName">
+			"oracle.jdbc.OracleDriver"
+		</property>
+		<property name="URL">
+			"jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.3.220.27)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=10.3.220.28)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=10.3.220.29)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=SM901R)))"
+		</property>
+		<property name="user">"TEST"</property>
+		<property name="password">"test"</property>
+	</component>
+	<component name="connectionPool"
+            class="org.seasar.extension.dbcp.impl.ConnectionPoolImpl">
+        <property name="timeout">600</property>
+        <property name="maxPoolSize">10</property>
+        <property name="allowLocalTx">true</property>
+        <property name="validationQuery">"select * from dual"</property>
+        <property name="validationInterval">10000</property>
+        <destroyMethod name="close"/>
+    </component>
+	<component name="dataSource"
+       class="org.seasar.extension.dbcp.impl.DataSourceImpl"/>
+	
+</components>
