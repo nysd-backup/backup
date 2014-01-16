@@ -3,11 +3,7 @@
  */
 package org.coder.gear.sample.sastruts.action;
 
-import java.util.concurrent.Executors;
-
 import javax.annotation.Resource;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 
 import org.coder.gear.sample.sastruts.entity.Order;
 import org.coder.gear.sample.sastruts.entity.OrderDetail;
@@ -19,11 +15,14 @@ import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 
 /**
+ * DDDのapplication層と一体にさせる方がよい。
+ * 
  * @author yoshida-n
  *
  */
 public class OrderAction {
 	
+	/** Repository(S2の世界ではServiceとRepositoryが一体になってServiceと呼んでいるようなのでService)に委譲した方がよい . */
 	@Resource
 	private JdbcManager jdbcManager;
 	
