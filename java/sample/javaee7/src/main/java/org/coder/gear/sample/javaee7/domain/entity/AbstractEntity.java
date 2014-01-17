@@ -17,5 +17,7 @@ public abstract class AbstractEntity {
 	 * 
 	 * EJBの場合ActiveRecordにはせずにEntityにはRepositoryを定義せずにアプリケーション層とかServiceでRepositoryを呼び出すのがよいと思う。	
 	 * ただそれだと貧血ドメインモデルになりがち、EJBでActiveRecordにするにはどうするか。
+	 * 
+	 * そもそもJPAのEntityをドメインオブジェクトとして使用することに無理があるのではないか。
 	 */
 }
