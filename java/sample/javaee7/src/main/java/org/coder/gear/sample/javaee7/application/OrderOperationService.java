@@ -11,13 +11,14 @@ import org.coder.gear.message.MessageContext;
 import org.coder.gear.sample.javaee7.domain.entity.Order;
 import org.coder.gear.sample.javaee7.domain.entity.OrderDetail;
 import org.coder.gear.sample.javaee7.domain.entity.Stock;
-import org.coder.gear.sample.javaee7.infra.repository.OrderRepository;
-import org.coder.gear.sample.javaee7.infra.repository.StockRepository;
+import org.coder.gear.sample.javaee7.domain.repository.OrderRepository;
+import org.coder.gear.sample.javaee7.domain.repository.StockRepository;
 import org.coder.gear.trace.Traceable;
 
 /**
  * OrderOperationService.
- * アプリケーションサービス兼/ドメインサービス　外部のドメインを呼び出す場合には相手先はInterfaceの方が疎結合になる。
+ * 
+ * アプリケーション層　外部のドメインを呼び出す場合には相手先はInterfaceの方が疎結合になる。
  *
  * @author yoshida-n
  * @version	created.
@@ -27,8 +28,10 @@ import org.coder.gear.trace.Traceable;
 public class OrderOperationService {
 
 	/** 
-	 * '@IntejectするとデフォルトだとOrderOperationServiceと同じライフサイクルになる
-	 *	教科書どおりだとRepositoryはIFにしているが実際DataAccess方法が変わることはないので実体でよい。インターセプターはさめないわけでもないし。
+	 * '@InjectするとOrderOperationServiceと同じライフサイクルになる。
+	 * 
+	 * interface宣言しているが実際DataAccess方法が変わることはないのでアプリケーション層にDIするなら実体でもよいと思う。
+	 *　インターセプターはさめないわけでもないし。
 	 */
 	@Inject
 	private OrderRepository orderRepository;
@@ -37,7 +40,7 @@ public class OrderOperationService {
 	private StockRepository stockRepository;
 	
 	/**
-	 * @param order
+	 * @param order ここではEntityをDTOにしている
 	 */
 	public void order(Order order){
 		

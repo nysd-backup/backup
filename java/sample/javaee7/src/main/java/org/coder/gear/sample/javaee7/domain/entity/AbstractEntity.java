@@ -12,8 +12,10 @@ package org.coder.gear.sample.javaee7.domain.entity;
 public abstract class AbstractEntity {
 
 	/**
-	 * DDDのサンプルだとEntityにRepositoryのIFを定義してDIさせてActiveRecordのようにしているが、
-	 * JPAの場合、EntityManagerがEntityのライフサイクルを管理しているので向かない。
-	 * ここはDataMapperパターンを採用してEntityにはRepositoryを定義せずにServiceでRepositoryを呼び出すのがよいと思う。	
+	 * DDDのサンプルだとEntityにRepositoryのinterfaceを定義してDIさせてActiveRecordにしているが、
+	 * EJB+JPAの場合、EntityManagerがEntityのライフサイクルを管理しているので向かない。
+	 * 
+	 * ここはDataMapperパターンを採用してEntityにはRepositoryを定義せずにアプリケーション層とかServiceでRepositoryを呼び出すのがよいと思う。	
+	 * ただそれだとRepsoitory持っていくと貧血ドメインモデルになりがち、EJBだとActiveRecordは難しいか。
 	 */
 }

@@ -10,11 +10,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
+ * リポジトリの基底 .
+ * 
+ * ドメインオブジェクトを受けとって永続化する。
+ * DAOではない。もっと粒度の大きいビジネス的な観点。
+ * 
  * @author yoshida-n
  *
  */
 public abstract class GenericRepository<T> {
 
+	/** JPAだとこいつがDAOに該当か . */
 	@PersistenceContext
 	private EntityManager em;
 	

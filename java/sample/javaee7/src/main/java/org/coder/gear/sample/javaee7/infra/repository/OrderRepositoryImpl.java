@@ -3,12 +3,13 @@
  */
 package org.coder.gear.sample.javaee7.infra.repository;
 
-import org.coder.gear.sample.javaee7.domain.entity.Stock;
+import org.coder.gear.sample.javaee7.domain.entity.Order;
+import org.coder.gear.sample.javaee7.domain.repository.OrderRepository;
 import org.coder.gear.trace.Traceable;
 
 
 /**
- * ItemRepository.
+ * OrderRepository.
  * 
  * this class is not required.
  *
@@ -16,6 +17,7 @@ import org.coder.gear.trace.Traceable;
  * @version	created.
  */
 @Traceable
-public class StockRepository extends GenericRepository<Stock>{
+public class OrderRepositoryImpl extends GenericRepository<Order> implements OrderRepository{
+
 	
 }
