@@ -25,7 +25,7 @@ public abstract class GenericRepository<T> {
 
 	/** DataMapperはRepository内に隠ぺいする . */
 	@PersistenceContext
-	private EntityManager em;
+	protected EntityManager em;
 	
 	private Class<T> entityClass;
 	

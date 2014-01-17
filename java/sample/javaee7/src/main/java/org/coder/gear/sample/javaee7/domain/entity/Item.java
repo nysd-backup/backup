@@ -3,9 +3,11 @@
  */
 package org.coder.gear.sample.javaee7.domain.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 /**
@@ -16,7 +18,6 @@ import javax.persistence.Version;
 public class Item extends AbstractEntity{
 	
 	@Id
-	@GeneratedValue
 	public Long no;
 	
 	public String name;
@@ -27,4 +28,7 @@ public class Item extends AbstractEntity{
 
 	@Version
 	public Long version;
+	
+	@OneToMany(mappedBy="item")
+	public List<Stock> stock;
 }

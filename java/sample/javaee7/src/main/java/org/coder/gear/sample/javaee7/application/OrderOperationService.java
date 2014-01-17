@@ -3,18 +3,19 @@
  */
 package org.coder.gear.sample.javaee7.application;
 
+import java.util.logging.Logger;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.coder.gear.message.Message;
-import org.coder.gear.message.MessageContext;
 import org.coder.gear.sample.javaee7.domain.entity.Order;
 import org.coder.gear.sample.javaee7.domain.entity.OrderDetail;
+import org.coder.gear.sample.javaee7.domain.entity.OrderDetailPK;
 import org.coder.gear.sample.javaee7.domain.entity.Stock;
-import org.coder.gear.sample.javaee7.domain.repository.OrderRepository;
-import org.coder.gear.sample.javaee7.domain.repository.StockRepository;
 import org.coder.gear.sample.javaee7.factory.OrderFactory;
 import org.coder.gear.sample.javaee7.factory.StockFactory;
+import org.coder.gear.sample.javaee7.infra.repository.OrderRepository;
+import org.coder.gear.sample.javaee7.infra.repository.StockRepository;
 import org.coder.gear.trace.Traceable;
 
 /**
@@ -52,23 +53,33 @@ public class OrderOperationService {
 	 */
 	public void order(Order dto){
 		
-		Order domainObject = orderFactory.createFrom(dto);
+		Order domainObject = orderFactory.createFrom(dto);		
 		
-		//在庫引き当て
-		for(OrderDetail e : domainObject.orderDetails){
-			Stock stock = stockRepository.find(e.itemNo);
-			if(stock.canReserve(e.count)){
-				stock.reserve(e.count);
-			}else {
-				Message msg = new Message();
-				msg.setMessage("error :" + e.itemNo);
-				MessageContext.getCurrentInstance().addMessage(msg);
-			}
-		}
+//		//在庫引き当て
+//		for(OrderDetail e : domainObject.orderDetails){
+//			Stock stock = stockRepository.find(e.itemNo);
+//			if(stock.canReserve(e.count)){
+//				stock.reserve(e.count);
+//			}else {
+//				Message msg = new Message();
+//				msg.setMessage("error :" + e.itemNo);
+//				MessageContext.getCurrentInstance().addMessage(msg);
+//			}
+//		}
 		
 		//注文
 		orderRepository.persist(domainObject);
 		
+		//検索して出力
+		Order order = orderRepository.find(dto.no);
+		Logger logger = java.util.logging.Logger.getLogger("TEST");
+		logger.info(order.toString());
+		
+		//明細だけ検索してみる
+		OrderDetailPK pk = new OrderDetailPK();
+		pk.order = dto.no;
+		pk.detailNo = 1L;
+		logger.info(orderRepository.findChild(pk).toString());
 	}
 	
 	/**

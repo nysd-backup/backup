@@ -3,6 +3,9 @@
  */
 package org.coder.gear.sample.javaee7.domain.entity;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * ドメイン層のエンティティの規定 .
  * 
@@ -20,5 +23,14 @@ public abstract class AbstractEntity {
 	 * 
 	 * そもそもJPAのEntityをドメインオブジェクトとして使用することに無理があるのではないか。
 	 * JPAのEntityをインフラストラクチャのエンティティとみるならPOJOをドメインオブジェクトにしてRepository内でマップするのがよい。
+	 * しかしそれだとJPAはただの永続化機能の意味しかないな。。。	
 	 */
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
 }

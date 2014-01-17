@@ -5,6 +5,7 @@ package org.coder.gear.sample.javaee7.domain.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 /**
@@ -14,9 +15,9 @@ import javax.persistence.Version;
 @Entity
 public class Stock extends AbstractEntity{
 	
-
 	@Id
-	public Long itemNo;
+	@ManyToOne
+	public Item item;
 	
 	public Long reserved;
 	
