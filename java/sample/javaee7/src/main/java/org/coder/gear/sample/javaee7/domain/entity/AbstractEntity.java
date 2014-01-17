@@ -19,5 +19,6 @@ public abstract class AbstractEntity {
 	 * ただそれだと貧血ドメインモデルになりがち、EJBでActiveRecordにするにはどうするか。
 	 * 
 	 * そもそもJPAのEntityをドメインオブジェクトとして使用することに無理があるのではないか。
+	 * JPAのEntityをインフラストラクチャのエンティティとみるならPOJOをドメインオブジェクトにしてRepository内でマップするのがよい。
 	 */
 }
