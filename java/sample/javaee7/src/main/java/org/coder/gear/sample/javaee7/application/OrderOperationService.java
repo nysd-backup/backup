@@ -13,6 +13,8 @@ import org.coder.gear.sample.javaee7.domain.entity.OrderDetail;
 import org.coder.gear.sample.javaee7.domain.entity.Stock;
 import org.coder.gear.sample.javaee7.domain.repository.OrderRepository;
 import org.coder.gear.sample.javaee7.domain.repository.StockRepository;
+import org.coder.gear.sample.javaee7.factory.OrderFactory;
+import org.coder.gear.sample.javaee7.factory.StockFactory;
 import org.coder.gear.trace.Traceable;
 
 /**
@@ -27,9 +29,15 @@ import org.coder.gear.trace.Traceable;
 @Stateless	//SessionBeanでなくてもCMTに対応してほしい
 public class OrderOperationService {
 
+	//'@InjectするとOrderOperationServiceと同じライフサイクルになる。
+	
+	@Inject
+	private OrderFactory orderFactory;
+	
+	@Inject
+	private StockFactory stockFactory;
+	
 	/** 
-	 * '@InjectするとOrderOperationServiceと同じライフサイクルになる。
-	 * 
 	 * interface宣言しているが実際DataAccess方法が変わることはないのでアプリケーション層にDIするなら実体でもよいと思う。
 	 *　インターセプターはさめないわけでもないし。
 	 */
@@ -42,10 +50,12 @@ public class OrderOperationService {
 	/**
 	 * @param order ここではEntityをDTOにしている
 	 */
-	public void order(Order order){
+	public void order(Order dto){
+		
+		Order domainObject = orderFactory.createFrom(dto);
 		
 		//在庫引き当て
-		for(OrderDetail e : order.orderDetails){
+		for(OrderDetail e : domainObject.orderDetails){
 			Stock stock = stockRepository.find(e.itemNo);
 			if(stock.canReserve(e.count)){
 				stock.reserve(e.count);
@@ -57,7 +67,7 @@ public class OrderOperationService {
 		}
 		
 		//注文
-		orderRepository.persist(order);
+		orderRepository.persist(domainObject);
 		
 	}
 	
