@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
  * DAOではない。もっと粒度の大きいビジネス的な観点。
  * QueryObjectもここに含めるべき。
  * メソッド名は単なるCRUDではなくユビキタス言語にする。
+ * JPAのエンティティをドメインオブジェクトにせずPOJOをドメインオブジェクトにするならここでPOJOドメインオブジェクトをEntityに設定するためのマッピングも行う。
  * 
  * @author yoshida-n
  *
