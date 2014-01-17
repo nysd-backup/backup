@@ -14,13 +14,15 @@ import javax.persistence.PersistenceContext;
  * 
  * ドメインオブジェクトを受けとって永続化する。
  * DAOではない。もっと粒度の大きいビジネス的な観点。
+ * QueryObjectもここに含めるべき。
+ * メソッド名は単なるCRUDではなくユビキタス言語にする。
  * 
  * @author yoshida-n
  *
  */
 public abstract class GenericRepository<T> {
 
-	/** JPAだとこいつがDAOに該当か . */
+	/** DataMapperはRepository内に隠ぺいする . */
 	@PersistenceContext
 	private EntityManager em;
 	
