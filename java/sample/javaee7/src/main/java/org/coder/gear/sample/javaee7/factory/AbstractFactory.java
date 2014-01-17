@@ -11,6 +11,10 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.coder.gear.sample.javaee7.domain.entity.AbstractEntity;
 
 /**
+ * オブジェクトの生成が複雑な場合の生成処理を担う。
+ * 引数が多かったりする場合はBuilderにした方がよい。
+ * 必要に応じて作成するため、一律作るわけではない。
+ * 
  * @author yoshida-n
  *
  */
