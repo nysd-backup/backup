@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.coder.gear.sample.javaee7.domain.factory;
+package org.coder.gear.sample.javaee7.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
