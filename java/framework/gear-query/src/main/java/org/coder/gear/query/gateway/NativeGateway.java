@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.coder.gear.query.free.loader.PreparedQuery;
@@ -35,6 +36,11 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * @version	1.0
  */
 public class NativeGateway implements PersistenceGateway {
+	
+	/**
+	 * em 
+	 */
+	private EntityManager em;
 			
 	/**
      * <pre>
@@ -49,6 +55,14 @@ public class NativeGateway implements PersistenceGateway {
      * </pre>
      */
     private MetadataMapperFactory metadataMapperFactory = new DefaultMetadataMapperFactory();
+    
+    /**
+     * @param em to set
+     */
+    public void setEntityManager(EntityManager em){
+    	this.em = em;
+    }
+    
 
     /**
      * set query loader.
@@ -162,7 +176,7 @@ public class NativeGateway implements PersistenceGateway {
         PreparedQuery preparedQuery = loader.prepare(str,
         		param.getParam(),param.getQueryId());
 
-        Query query = param.getEntityManager().createNativeQuery(
+        Query query = em.createNativeQuery(
                 preparedQuery.getQueryStatement());
 
         // hints

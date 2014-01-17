@@ -108,7 +108,6 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 		Class<?>  entityClass = (Class<T>)types[0];
 
 		Conditions parameter = new Conditions();		
-		parameter.setEntityManager(em);
 		parameter.setLockMode(lockModeType);
 		parameter.setSql(builder.withWhere(criterias).withOrderBy(sortKeys).buildSelect(entityClass));
 		parameter.setResultType(entityClass);

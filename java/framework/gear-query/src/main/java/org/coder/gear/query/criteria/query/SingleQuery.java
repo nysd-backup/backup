@@ -14,7 +14,7 @@ import org.coder.gear.query.free.query.Conditions;
  * @author yoshida-n
  * @version	1.0
  */
-public class SingleReadQuery<E> extends ReadQuery<E>{
+public class SingleQuery<E> extends ReadQuery<E>{
 	
 
 	/**

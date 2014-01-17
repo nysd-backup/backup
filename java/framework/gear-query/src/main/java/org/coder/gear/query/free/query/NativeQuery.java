@@ -6,19 +6,14 @@ package org.coder.gear.query.free.query;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.coder.gear.query.free.QueryCallback;
-import org.coder.gear.query.free.loader.QueryLoaderTrace;
 import org.coder.gear.query.free.result.CloseableIterator;
 import org.coder.gear.query.free.result.Record;
 import org.coder.gear.query.free.result.TotalList;
-import org.coder.gear.query.gateway.NativeGateway;
 import org.coder.gear.query.gateway.PersistenceGateway;
-import org.coder.gear.query.gateway.PersistenceGatewayTrace;
 
 
 
@@ -43,29 +38,6 @@ public class NativeQuery{
 	 */
 	public NativeQuery(){
 		result(Record.class);
-		defaultConstruct();
-	}
-	
-	/**
-	 * Construct
-	 */
-	protected void defaultConstruct() {
-		NativeGateway ntv = new NativeGateway();
-		ntv.setQueryLoader(new QueryLoaderTrace());	
-		if(PersistenceGatewayTrace.isEnabled()){
-			PersistenceGatewayTrace trace = new PersistenceGatewayTrace();
-			trace.setDelegate(ntv);
-			this.persistenceGateway = trace;
-		}else{
-			this.persistenceGateway = ntv;
-		}
-	}
-	
-	/**
-	 * @param em the em to set
-	 */
-	public void setEntityManager(EntityManager em){
-		this.condition.setEntityManager(em);
 	}
 	
 	/**

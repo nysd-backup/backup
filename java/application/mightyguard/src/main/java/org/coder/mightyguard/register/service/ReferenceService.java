@@ -20,8 +20,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.coder.gear.mongo.aggregation.Query;
-import org.coder.gear.query.QueryFactoryFinder;
-import org.coder.gear.query.criteria.query.ListReadQuery;
+import org.coder.gear.query.QueryFactory;
+import org.coder.gear.query.criteria.query.ListQuery;
+import org.coder.gear.query.criteria.query.SingleQuery;
 import org.coder.mightyguard.register.domain.Version;
 import org.coder.mightyguard.register.domain.application.AppVersion;
 import org.eclipse.persistence.internal.nosql.adapters.mongo.MongoConnection;
@@ -40,8 +41,6 @@ import com.mongodb.DBObject;
 public class ReferenceService {
 	
 	private EntityManagerFactory factory = Persistence.createEntityManagerFactory("mightyguard");
-	
-	private static final QueryFactoryFinder finder = new QueryFactoryFinder();
 	
 	/**
 	 * @param limit the limit
@@ -113,10 +112,12 @@ public class ReferenceService {
 	@Produces("application/json")
 	public List<AppVersion> show(@QueryParam("current") String version){
 		EntityManager em = factory.createEntityManager();		
-		
-		AppVersion app = finder.createCriteriaQueryFactory().createSingleReadQuery(AppVersion.class, em).eq("version", version).call();
-		
-		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
+		QueryFactory factory = new QueryFactory(em);
+				
+		SingleQuery<AppVersion> query = factory.singleQuery();
+		AppVersion app = query.eq("version", version).call();
+
+		ListQuery<AppVersion> currentQuery = factory.listQuery();
 		List<AppVersion> cList = currentQuery.lt("date", app.date).call();
 		
 		TreeMap<String, String> map = new TreeMap<String,String>();
@@ -136,10 +137,11 @@ public class ReferenceService {
 	 */
 	private List<AppVersion> doDiff(String version , String previous , EntityManager em){
 				
-		ListReadQuery<AppVersion> currentQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
+		QueryFactory factory = new QueryFactory(em);
+		ListQuery<AppVersion> currentQuery = factory.listQuery();
 		List<AppVersion> cList = currentQuery.eq("version", version).call();
 		
-		ListReadQuery<AppVersion> previousQuery = finder.createCriteriaQueryFactory().createListReadQuery(AppVersion.class, em);
+		ListQuery<AppVersion> previousQuery = factory.listQuery();
 		List<AppVersion> pList = previousQuery.eq("version", previous).call();
 		
 		//前回バージョンのリビジョン設定

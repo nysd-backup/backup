@@ -14,7 +14,7 @@ import org.coder.gear.query.free.query.Conditions;
  * @author yoshida-n
  * @version	1.0
  */
-public class ListReadQuery<E> extends ReadQuery<List<E>>{
+public class ListQuery<E> extends ReadQuery<List<E>>{
 	
 	/** the max size */
 	private int maxResults = -1;
@@ -23,7 +23,7 @@ public class ListReadQuery<E> extends ReadQuery<List<E>>{
 	 * @param maxSize the maxSize to set
 	 * @return self
 	 */
-	public ListReadQuery<E> limit(int maxResults){
+	public ListQuery<E> limit(int maxResults){
 		this.maxResults = maxResults;
 		return this;
 	}

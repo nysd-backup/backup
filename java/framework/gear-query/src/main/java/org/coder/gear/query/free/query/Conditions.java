@@ -6,7 +6,6 @@ package org.coder.gear.query.free.query;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -35,9 +34,6 @@ public class Conditions{
 		
 	/** the JPA hint */
 	private Map<String,Object> hints = new HashMap<String,Object>();
-
-	/** the entity manager */
-	private EntityManager entityManager;
 	
 	/** the resultType */
 	private Class<?> resultType;
@@ -107,20 +103,6 @@ public class Conditions{
 		this.resultType = resultType;
 	}
 
-	/**
-	 * @return the entityManager
-	 */
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
-
-	/**
-	 * @param entityManager the entityManager to set
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-	
 	/**
 	 * @param sql the sql to set
 	 */

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
@@ -37,6 +38,16 @@ public class JpqlGateway implements PersistenceGateway{
 	
 	/** the <code>ConstantAccessor</code> */
 	private ConstantAccessor accessor = new DefaultConstantAccessor();
+	
+	/** the em */
+	private EntityManager em;
+	
+	/**
+	 * @param em to set
+	 */
+	public void setEntityManager(EntityManager em){
+		this.em = em;
+	}
 	
 	/**
 	 * @param loader the loader to set
@@ -83,14 +94,14 @@ public class JpqlGateway implements PersistenceGateway{
 	
 		//解析未使用
 		if( param.isUseRowSql() ){					
-			query = param.getEntityManager().createQuery(executingSql);			
+			query = em.createQuery(executingSql);			
 			for(Map.Entry<String, Object> p : param.getParam().entrySet()){
 				query.setParameter(p.getKey(), convert(p.getValue()));				
 			}
 		}else{				
 			executingSql = loader.build(param.getQueryId(), executingSql);
 			executingSql = loader.evaluate(executingSql, param.getParam(),param.getQueryId());	
-			query = param.getEntityManager().createQuery(executingSql);	
+			query = em.createQuery(executingSql);	
 
 			// バインド変数を検索
 			Matcher match = BIND_VAR_PATTERN.matcher(executingSql);

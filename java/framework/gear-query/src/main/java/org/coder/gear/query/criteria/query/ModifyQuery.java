@@ -33,7 +33,6 @@ public abstract class ModifyQuery extends CriteriaQuery<Integer>{
 	@Override
 	protected Integer doCall(List<Criteria> criterias){
 		Conditions parameter = new Conditions();		
-		parameter.setEntityManager(em);
 		for(Criteria criteria : criterias){
 			criteria.accept(parameter);
 		}
