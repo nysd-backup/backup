@@ -5,7 +5,7 @@
 	<artifactId>gear-gcm</artifactId>
 	<packaging>jar</packaging>
 	<version>1.2.0-SNAPSHOT</version>
-	<name>gear-gcnm</name>
+	<name>gear-gcm</name>
 	
 	<parent>
 		<groupId>gear</groupId>
