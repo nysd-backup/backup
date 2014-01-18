@@ -7,10 +7,8 @@ import javax.annotation.Resource;
 
 import org.coder.gear.sample.sastruts.entity.Order;
 import org.coder.gear.sample.sastruts.entity.OrderDetail;
-import org.coder.gear.sample.sastruts.entity.Stock;
 import org.coder.gear.sample.sastruts.form.OrderForm;
 import org.seasar.extension.jdbc.JdbcManager;
-import org.seasar.extension.jdbc.where.SimpleWhere;
 import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 
@@ -49,7 +47,7 @@ public class OrderAction {
 		//在庫引き当て
 		long i= 0;
 		for(OrderDetail e : orderForm.order.orderDetails){
-			Stock stock = jdbcManager.from(Stock.class).where(new SimpleWhere().eq("itemNo",e.itemNo)).getSingleResult();
+//			Stock stock = jdbcManager.from(Stock.class).where(new SimpleWhere().eq("itemNo",e.itemNo)).getSingleResult();
 //			if(stock != null && stock.canReserve(e.count)){
 //				stock.reserve(e.count);
 //			}else {

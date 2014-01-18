@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.coder.gear.sample.android.fragment.CameraFragment;
-import org.coder.gear.sample.android.fragment.ServiceFragment;
+import org.coder.gear.sample.android.fragment.DownloadFragment;
+import org.coder.gear.sample.android.fragment.MusicFragment;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -37,14 +38,19 @@ public class TabActivity extends Activity implements TabListener{
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        ServiceFragment sf = new ServiceFragment();
+        MusicFragment sf = new MusicFragment();
         managedFragment.add(sf);
-        actionBar.addTab(actionBar.newTab().setText("SERVICE").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("MUSIC").setTabListener(this));
 
         CameraFragment camera = new CameraFragment();
         managedFragment.add(camera);
         actionBar.addTab(actionBar.newTab().setText("CAMERA").setTabListener(this));
+	
+        DownloadFragment download = new DownloadFragment();
+        managedFragment.add(download);
+        actionBar.addTab(actionBar.newTab().setText("DOWNLOAD").setTabListener(this));
 	}
+	
 	
 	/**
 	 * @see android.app.ActionBar.TabListener#onTabSelected(android.app.ActionBar.Tab, android.app.FragmentTransaction)

@@ -92,6 +92,8 @@
 				<module>framework/gear-message</module>
 				<module>framework/gear-trace</module>
 				<module>framework/gear-mongo</module>
+				<module>framework/gear-gcm</module>
+				<module>framework/gear-fluentd-log4j</module>
 			</modules>
 		</profile>
 		<profile>

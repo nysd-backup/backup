@@ -8,14 +8,38 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="18" />
     
+    <!-- for GCM -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <permission android:name="org.coder.gear.sample.android.permission.C2D_MESSAGE"  android:protectionLevel="signature" /> 
+    <uses-permission android:name="org.coder.gear.sample.android.permission.C2D_MESSAGE" />
+   
+   	<!-- for CAMERA -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
-
+    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <!-- for GCM -->
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        
+       <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="org.coder.gear.sample.android" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".GcmIntentService" />
+        
         <activity
             android:name="org.coder.gear.sample.android.MainActivity"
             android:label="@string/app_name" >
@@ -33,6 +57,7 @@
             android:name="org.coder.gear.sample.android.TabActivity" >           
         </activity>
         <service android:name="org.coder.gear.sample.android.service.MusicPlayerService"></service>
+        <service android:name="org.coder.gear.sample.android.service.DownloadService"></service> 
     </application>
 
 </manifest>

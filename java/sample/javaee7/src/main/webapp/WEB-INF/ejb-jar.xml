@@ -6,7 +6,7 @@
                                http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd">
   <interceptors>
   		<interceptor>
-  			<interceptor-class>org.coder.gear.sample.javaee7.interceptor.SessionInterceptor</interceptor-class>
+  			<interceptor-class>org.coder.gear.sample.javaee7.infra.interceptor.SessionInterceptor</interceptor-class>
   		</interceptor>	  	
   	</interceptors>
   	
@@ -14,7 +14,7 @@
 	       <interceptor-binding>
 	         <ejb-name>*</ejb-name>
 	         <interceptor-order>
-		         <interceptor-class>org.coder.gear.sample.javaee7.interceptor.SessionInterceptor</interceptor-class>		       
+		         <interceptor-class>org.coder.gear.sample.javaee7.infra.interceptor.SessionInterceptor</interceptor-class>		       
 	         </interceptor-order> 	         
 	      </interceptor-binding>
     </assembly-descriptor>

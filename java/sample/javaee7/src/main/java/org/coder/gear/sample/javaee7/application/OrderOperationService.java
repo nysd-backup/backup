@@ -51,6 +51,7 @@ public class OrderOperationService {
 	/**
 	 * @param order ここではEntityをDTOにしている
 	 */
+	@SuppressWarnings("deprecation")
 	public void order(Order dto){
 		
 		Order domainObject = orderFactory.createFrom(dto);		
