@@ -16,7 +16,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
+
+import org.coder.gear.sample.spring.domain.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 
 /**
@@ -25,9 +30,15 @@ import javax.persistence.Version;
  * @author yoshida-n
  * @version	created.
  */
+@Configurable
 @Entity
 @Table(name="ORD")
 public class Order extends AbstractEntity{
+	
+	//Configurableを指定することでnewした時に自動でinjectされる
+	@Autowired(required=false)
+	@Transient
+	private OrderRepository repository;
 	
 	@Id	
 	public Long no = null;
@@ -66,4 +77,10 @@ public class Order extends AbstractEntity{
 		return amnt;
 	}
 	
+	/**
+	 * 
+	 */
+	public void save(){
+		repository.persist(this);
+	}
 }

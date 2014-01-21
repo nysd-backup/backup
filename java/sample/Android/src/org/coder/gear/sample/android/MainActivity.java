@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -110,17 +111,21 @@ public class MainActivity extends Activity {
 	 * @return
 	 */
 	private boolean checkPlayServices() {
-	    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-	    if (resultCode != ConnectionResult.SUCCESS) {
-	        if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-	            GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-	                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
-	        } else {
-	            Log.i(TAG, "This device is not supported.");
-	            finish();
-	        }
-	        return false;
-	    }
+		try{
+		    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		    if (resultCode != ConnectionResult.SUCCESS) {
+		        if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+		            GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+		                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
+		        } else {
+		            Log.i(TAG, "This device is not supported.");
+		            finish();
+		        }
+		        return false;
+		    }
+		}catch(Exception e){
+			Toast.makeText(this, "Play Service Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
+		}
 	    return true;
 	}
 	

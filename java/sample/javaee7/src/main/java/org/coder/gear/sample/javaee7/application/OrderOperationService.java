@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jws.WebService;
 
 import org.coder.gear.sample.javaee7.domain.entity.Order;
 import org.coder.gear.sample.javaee7.domain.entity.OrderDetail;
@@ -26,6 +27,7 @@ import org.coder.gear.trace.Traceable;
  * @author yoshida-n
  * @version	created.
  */
+@WebService
 @Traceable
 @Stateless	//SessionBeanでなくてもCMTに対応してほしい
 public class OrderOperationService {
@@ -67,6 +69,8 @@ public class OrderOperationService {
 //				MessageContext.getCurrentInstance().addMessage(msg);
 //			}
 //		}
+		
+		//単一のEntityに閉じないような処理（バリデーションとか複数Entity間での計算）は、消極的に別途Serviceに切り出すことも可能。
 		
 		//注文
 		orderRepository.persist(domainObject);
