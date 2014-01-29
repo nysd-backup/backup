@@ -1,6 +1,10 @@
 package org.coder.gear.sample.android;
 
-import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.coder.gear.sample.android.task.LoginTask;
@@ -16,13 +20,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,11 +52,9 @@ public class MainActivity extends Activity {
      */
     static final String TAG = "GCMDemo";
 
-    TextView mDisplay;
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
-    Context context;
 	
     String regid;
     
@@ -89,11 +90,24 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		 if (checkPlayServices()) {
+		 if (checkPlayServices()) {			 
 			 gcm = GoogleCloudMessaging.getInstance(this);
-	         regid = getRegistrationId(context); 
+	         regid = getRegistrationId(this); 	    
+	         Toast.makeText(this, "RegistrationId is " + regid, Toast.LENGTH_SHORT).show();
 	         if (regid.isEmpty()) {
 	                registerInBackground();
+	         }else{
+	        	 //RegistrationIdは変化するのでサーバに登録しなおす必要がある。
+	        	 File regId = new File(Environment.getExternalStoragePublicDirectory(
+	   	              Environment.DIRECTORY_PICTURES), "regid.txt");
+	        	 try{
+	        		 BufferedWriter writer = new BufferedWriter(new FileWriter(regId));
+	        		 writer.write(regid);
+	        		 writer.flush();
+	        		 writer.close();
+	        	 }catch(Exception e){
+	        		 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+	        	 }
 	         }
 		  }
 		 
@@ -110,7 +124,7 @@ public class MainActivity extends Activity {
 	/**
 	 * @return
 	 */
-	private boolean checkPlayServices() {
+	private boolean checkPlayServices() {		
 		try{
 		    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 		    if (resultCode != ConnectionResult.SUCCESS) {
@@ -118,7 +132,7 @@ public class MainActivity extends Activity {
 		            GooglePlayServicesUtil.getErrorDialog(resultCode, this,
 		                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
 		        } else {
-		            Log.i(TAG, "This device is not supported.");
+		        	Toast.makeText(this, "This Device is not supported ", Toast.LENGTH_LONG).show();
 		            finish();
 		        }
 		        return false;
@@ -129,20 +143,25 @@ public class MainActivity extends Activity {
 	    return true;
 	}
 	
-	private String getRegistrationId(Context context) {
-	    final SharedPreferences prefs = getGCMPreferences(context);
+	private String getRegistrationId(Context context) {		
+		//SharedPreferencesはローカルから値を取得するためのもののようだ
+	    final SharedPreferences prefs = getGCMPreferences(context);	    
 	    String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+	    
+	    //アプリバージョンがあがると空になるらしい
 	    if (registrationId.isEmpty()) {
-	        Log.i(TAG, "Registration not found.");
+	    	Toast.makeText(this, "Reg Id not Found ", Toast.LENGTH_LONG).show();
 	        return "";
 	    }
 	    // Check if app was updated; if so, it must clear the registration ID
 	    // since the existing regID is not guaranteed to work with the new
 	    // app version.
 	    int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+	    Toast.makeText(this, "Get App Version :" + registeredVersion, Toast.LENGTH_LONG).show();
+	    
 	    int currentVersion = getAppVersion(context);
 	    if (registeredVersion != currentVersion) {
-	        Log.i(TAG, "App version changed.");
+	    	 Toast.makeText(this, "App Version Changed ", Toast.LENGTH_LONG).show();
 	        return "";
 	    }
 	    return registrationId;
@@ -185,8 +204,9 @@ public class MainActivity extends Activity {
 	            String msg = "";
 	            try {
 	                if (gcm == null) {
-	                    gcm = GoogleCloudMessaging.getInstance(context);
+	                    gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
 	                }
+	               
 	                regid = gcm.register(SENDER_ID);
 	                msg = "Device registered, registration ID=" + regid;
 
@@ -201,9 +221,12 @@ public class MainActivity extends Activity {
 	                // message using the 'from' address in the message.
 
 	                // Persist the regID - no need to register again.
-	                storeRegistrationId(context, regid);
-	            } catch (IOException ex) {
-	                msg = "Error :" + ex.getMessage();
+	                storeRegistrationId(getApplicationContext(), regid);
+	            } catch (Exception ex) {
+	            	StringWriter writer = new StringWriter();
+	            	PrintWriter pw = new PrintWriter(writer);
+	            	ex.printStackTrace(pw);
+	                msg = msg + "Error :" + writer.toString();
 	                // If there is an error, don't just keep trying to register.
 	                // Require the user to click a button again, or perform
 	                // exponential back-off.
@@ -213,7 +236,7 @@ public class MainActivity extends Activity {
 
 	        @Override
 	        protected void onPostExecute(String msg) {
-	            mDisplay.append(msg + "\n");
+	        	 Toast.makeText(getApplication(), msg, Toast.LENGTH_LONG).show();
 	        }
 	    }.execute(null, null, null);
 	    
@@ -236,11 +259,10 @@ public class MainActivity extends Activity {
 	 * @param context application's context.
 	 * @param regId registration ID
 	 */
-	private void storeRegistrationId(Context context, String regId) {
+	private void storeRegistrationId(Context context, String regId) {		
 	    final SharedPreferences prefs = getGCMPreferences(context);
 	    int appVersion = getAppVersion(context);
-	    Log.i(TAG, "Saving regId on app version " + appVersion);
-	    SharedPreferences.Editor editor = prefs.edit();
+	    SharedPreferences.Editor editor = prefs.edit();	
 	    editor.putString(PROPERTY_REG_ID, regId);
 	    editor.putInt(PROPERTY_APP_VERSION, appVersion);
 	    editor.commit();

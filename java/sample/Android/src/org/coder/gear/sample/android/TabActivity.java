@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.coder.gear.sample.android.fragment.CameraFragment;
 import org.coder.gear.sample.android.fragment.DownloadFragment;
+import org.coder.gear.sample.android.fragment.GcmFragment;
 import org.coder.gear.sample.android.fragment.MusicFragment;
 
 import android.app.ActionBar;
@@ -49,6 +50,10 @@ public class TabActivity extends Activity implements TabListener{
         DownloadFragment download = new DownloadFragment();
         managedFragment.add(download);
         actionBar.addTab(actionBar.newTab().setText("DOWNLOAD").setTabListener(this));
+        
+        GcmFragment gcm = new GcmFragment();
+        managedFragment.add(gcm);
+        actionBar.addTab(actionBar.newTab().setText("GCM").setTabListener(this));
 	}
 	
 	
