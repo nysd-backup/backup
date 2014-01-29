@@ -12,6 +12,8 @@ import org.seasar.extension.jdbc.JdbcManager;
 import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 
+import com.sun.xml.internal.bind.v2.runtime.JAXBContextImpl;
+
 /**
  * DDDのapplication層と一体にさせる方がよい。
  * 
