@@ -12,8 +12,6 @@ import org.seasar.extension.jdbc.JdbcManager;
 import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 
-import com.sun.xml.internal.bind.v2.runtime.JAXBContextImpl;
-
 /**
  * DDDのapplication層と一体にさせる方がよい。
  * 
@@ -22,7 +20,7 @@ import com.sun.xml.internal.bind.v2.runtime.JAXBContextImpl;
  */
 public class OrderAction {
 	
-	/** Repository(S2の世界ではServiceとRepositoryが一体になってServiceと呼んでいるようなのでService)に委譲した方がよい . */
+	/** Repository(S2の世界ではDomainServiceとRepositoryが一体になってServiceと呼んでいるようなのでService)に委譲した方がよい . */
 	@Resource
 	private JdbcManager jdbcManager;
 	
