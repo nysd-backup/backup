@@ -19,6 +19,7 @@ public class GcmClientTest {
 	public void test() throws Exception{
 		GcmClient client = new GcmClient();
 		client.addPacketListener(new DefaultPacketListener(), new PacketTypeFilter(Message.class));
-		client.login("380188014792@gcm.googleapis.com", "AIzaSyAhC1q44MtjeyCEVXQTtjo_YidrfVJV1qk");
+		//サーバAPIキーを使用する
+		client.login("380188014792@gcm.googleapis.com", "AIzaSyAEP573ikx83g5nqKmFHRXv0eKGsT02h18");
 	}
 }

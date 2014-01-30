@@ -75,11 +75,11 @@ public class GcmClient {
 	
 	/**
 	 * @param senderId
-	 * @param apikey
+	 * @param serverApikey サーバキーを使用する。アンドロイドキーではない
 	 * @throws XMPPException 
 	 */
-	public void login(String senderId , String apikey) throws XMPPException{
-		connection.login(senderId, apikey);
+	public void login(String senderId , String serverApikey) throws XMPPException{
+		connection.login(senderId, serverApikey);
 	}
 	
 	/**
