@@ -105,6 +105,7 @@ public class QueryLoaderTrace implements QueryLoader{
 						}
 						builder.append((o instanceof String) ? "\'" + o  + "\'" : o);
 					}
+					
 					builder.append("]\n");						
 					LOG.debug(String.format("executing sql = \n%s\n%s",e,builder.toString()));		
 				}
