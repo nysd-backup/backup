@@ -25,7 +25,7 @@ import org.apache.velocity.app.Velocity;
  * @author yoshida-n
  * @version	1.0
  */
-public class VelocityTemplateEngine implements TemplateEngine{
+public class VelocityTemplateEngine implements TemplateEngine, ConstantAccessible{
 
 	/** the encoding */
 	protected static final String CHARSET = "UTF-8";
@@ -38,16 +38,6 @@ public class VelocityTemplateEngine implements TemplateEngine{
 	
 	/** the pattern for velocity-statement */
 	private static final Pattern controlStatementPattern = Pattern.compile("--%\\s*(\\w+)");
-	
-	/** the accessor */
-	private ConstantAccessor accessor = new DefaultConstantAccessor();
-	
-	/**
-	 * @param accessor the accessor to set
-	 */
-	public void setConstAccessor(ConstantAccessor accessor){
-		this.accessor = accessor;
-	}
 	
 	/**
 	 * @see org.coder.gear.query.free.loader.TemplateEngine#load(java.io.InputStream)
@@ -107,8 +97,8 @@ public class VelocityTemplateEngine implements TemplateEngine{
 						continue;
 					}
 					// 定数置換
-					if (accessor.isValidKey(token)) {
-						Object o = accessor.getConstTarget(token);				
+					if (isValidKey(token)) {
+						Object o = getConstTarget(token);				
 						if( o instanceof String){	
 							replaceString = replaceString.replace(token, "\"" + o.toString() + "\"");
 						}else{

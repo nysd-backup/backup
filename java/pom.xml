@@ -31,8 +31,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-				<source>1.7</source>
-				<target>1.7</target>
+				<source>1.8</source>
+				<target>1.8</target>
 				<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -103,4 +103,41 @@
 			</modules>
 		</profile>
 	</profiles>	
+
+	<repositories>
+    	<repository>
+		    <id>cloudbees-release</id>
+		    <name>cloudbees-releases</name>
+		    <url>https://repository-nao001.forge.cloudbees.com/release</url>
+		      <snapshots>
+		        <enabled>false</enabled>
+		      </snapshots>
+		</repository>
+		<repository>
+		    <id>cloudbees-snapshot</id>
+		    <name>cloudbees-snapshot</name>
+		    <url>https://repository-nao001.forge.cloudbees.com/snapshot</url>
+		</repository>
+	    <repository>
+	      <id>maven.seasar.org</id>
+	      <name>The Seasar Foundation Maven Repository</name>
+	      <url>http://maven.seasar.org/maven2</url>
+	      <snapshots>
+	        <enabled>false</enabled>
+	      </snapshots>
+	    </repository>
+	    <repository>
+	      <id>maven-snapshot.seasar.org</id>
+	      <name>The Seasar Foundation Maven Snapshot Repository</name>
+	      <url>http://maven.seasar.org/maven2-snapshot</url>
+	      <releases>
+	        <enabled>false</enabled>
+	      </releases>
+	      <snapshots>
+	        <enabled>true</enabled>
+	        <updatePolicy>always</updatePolicy>
+	      </snapshots>
+	    </repository>
+  </repositories>
+
 </project>

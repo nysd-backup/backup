@@ -3,12 +3,11 @@
  */
 package org.coder.gear.query.criteria.statement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.criteria.SortKey;
 
 
@@ -22,13 +21,13 @@ import org.coder.gear.query.criteria.SortKey;
 public class JPQLBuilder implements StatementBuilder{
 	
 	/** sort key */
-	private List<SortKey> orderby = new ArrayList<SortKey>();
+	private ListHolder<SortKey> orderby = new ListHolder<SortKey>();
 	
 	/** set */
 	private Map<String,Object> set = new HashMap<String,Object>();
 	
 	/** where */
-	private List<Criteria> wheres = new ArrayList<Criteria>();
+	private ListHolder<Criteria> wheres = new ListHolder<Criteria>();
 	
 	/**
 	 * @see org.coder.gear.query.criteria.statement.StatementBuilder#withSet(java.util.Map)
@@ -43,7 +42,7 @@ public class JPQLBuilder implements StatementBuilder{
 	 * @see org.coder.gear.query.criteria.statement.StatementBuilder#withOrderBy(java.util.List)
 	 */
 	@Override
-	public StatementBuilder withOrderBy(List<SortKey> orderby ){	
+	public StatementBuilder withOrderBy(ListHolder<SortKey> orderby ){	
 		this.orderby = orderby;
 		return this;
 	}		
@@ -52,7 +51,7 @@ public class JPQLBuilder implements StatementBuilder{
 	 * @see org.coder.gear.query.criteria.statement.StatementBuilder#withWhere(java.util.List)
 	 */
 	@Override
-	public StatementBuilder withWhere(List<Criteria> wheres){	
+	public StatementBuilder withWhere(ListHolder<Criteria> wheres){	
 		this.wheres = wheres;
 		return this;
 	}
@@ -87,20 +86,11 @@ public class JPQLBuilder implements StatementBuilder{
 	 */
 	protected String buildWhere() {
 		StringBuilder query = new StringBuilder();
-		if( wheres != null && !wheres.isEmpty()){
-			StringBuilder builder = new StringBuilder();			
-			boolean first=true;
-			for(Criteria where :wheres){			
-				if( first ){
-					builder.append("\n where ");
-					first = false;
-				}else {
-					builder.append("\n and ");
-				}
-				builder.append(where.getExpression("e"));
-			}
-			query.append(builder.toString());
-		}
+		StringBuilder builder = new StringBuilder();			
+		wheres.forEach(e -> builder.append(" where")
+					,e -> builder.append(" and ")
+					,(e,i) -> builder.append(e.getExpression(i)));			
+		query.append(builder.toString());
 		return query.toString();
 	}
 	
@@ -117,10 +107,10 @@ public class JPQLBuilder implements StatementBuilder{
 		boolean first=true;
 		for(Map.Entry<String, Object> e :set.entrySet()){	
 			if( first ){			
-				builder.append("\n e.");
+				builder.append(" e.");
 				first = false;
 			}else{				
-				builder.append("\n , e.");
+				builder.append(" , e.");
 			}
 			builder.append(e.getKey()).append(" = :").append(e.getKey());			
 		}
@@ -134,22 +124,12 @@ public class JPQLBuilder implements StatementBuilder{
 	 */
 	protected String buildOrderBy(){
 		StringBuilder query = new StringBuilder();
-		if(orderby != null && !orderby.isEmpty()){
-			StringBuilder builder = new StringBuilder();
-			boolean first=true;		
-			for(SortKey sort :orderby){				
-				if( first ){
-					builder.append("\n order by ");
-					first = false;
-				}else {
-					builder.append("\n , ");
-				}
-				String colName = sort.getColumn();
-				String ascending = sort.isAscending()?" asc ":" desc ";			
-				builder.append(String.format(" e.%s %s ",colName,ascending));
-			}
-			query.append(builder.toString());
-		}
+		StringBuilder builder = new StringBuilder();
+		orderby.forEach(e-> builder.append(" order by ")
+				, e -> builder.append(" ,")
+				, (e,i) -> builder.append(String.format(" e.%s %s ",e.getColumn(),e.isAscending()? " asc " : " desc"))
+				);
+		query.append(builder.toString());
 		return query.toString();
 	}
 }

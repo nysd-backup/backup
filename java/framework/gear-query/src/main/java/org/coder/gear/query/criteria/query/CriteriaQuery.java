@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.criteria.Operand;
 import org.coder.gear.query.criteria.statement.StatementBuilder;
 import org.coder.gear.query.gateway.PersistenceGateway;
@@ -22,7 +23,7 @@ import org.coder.gear.query.gateway.PersistenceGateway;
 public abstract class CriteriaQuery<T> {
 	
 	/** the criteria */
-	private List<Criteria> criterias = new ArrayList<Criteria>();
+	private ListHolder<Criteria> criterias = new ListHolder<Criteria>();
 
 	private Map<String,Object> hints = new HashMap<String,Object>();
 	
@@ -210,7 +211,7 @@ public abstract class CriteriaQuery<T> {
 	 * @return self
 	 */
 	private CriteriaQuery<T> addCriteria(String column,Operand operand,Object value) {
-		criterias.add(new Criteria(column,criterias.size()+1,operand,value));
+		criterias.add(new Criteria(column,operand,value));
 		return this;
 	}
 
@@ -227,5 +228,5 @@ public abstract class CriteriaQuery<T> {
 	 * @param builder the builder
 	 * @return the result
 	 */
-	protected abstract T doCall(List<Criteria> criterias);
+	protected abstract T doCall(ListHolder<Criteria> criterias);
 }

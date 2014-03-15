@@ -3,10 +3,10 @@
  */
 package org.coder.gear.query.criteria.query;
 
-import java.util.List;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.free.query.Conditions;
 
 /**
@@ -31,11 +31,10 @@ public abstract class ModifyQuery extends CriteriaQuery<Integer>{
 	 * @see org.coder.gear.query.criteria.query.CriteriaQuery#doCall(org.coder.alpha.query.criteria.statement.StatementBuilder)
 	 */
 	@Override
-	protected Integer doCall(List<Criteria> criterias){
-		Conditions parameter = new Conditions();		
-		for(Criteria criteria : criterias){
-			criteria.accept(parameter);
-		}
+	protected Integer doCall(ListHolder<Criteria> criterias){
+		Conditions parameter = new Conditions();
+		criterias.eachWithIndex((e,i) -> e.accept(parameter, i));
+		
 		for(Map.Entry<String, Object> e: getHints().entrySet()){
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}
@@ -50,6 +49,6 @@ public abstract class ModifyQuery extends CriteriaQuery<Integer>{
 	 * @param entityClass the entityClass
 	 * @return the result
 	 */
-	protected abstract Integer doCallInternal(Conditions conditions,List<Criteria> criterias);
+	protected abstract Integer doCallInternal(Conditions conditions,ListHolder<Criteria> criterias);
 	
 }
