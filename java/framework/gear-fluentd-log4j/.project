@@ -1,5 +1,5 @@
 <projectDescription>
-  <name>gear-fluentd-log4j</name>
+  <name>gear-fluent-log4j</name>
   <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>

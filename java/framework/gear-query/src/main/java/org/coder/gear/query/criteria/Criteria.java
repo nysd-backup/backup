@@ -20,9 +20,6 @@ public class Criteria {
 	/** the column name */
 	private final String colName; 
 	
-	/** the binding value's count */
-	private int bindCount;
-	
 	/** the operand */
 	private final Operand operand;
 	
@@ -36,9 +33,8 @@ public class Criteria {
 	 * @param value the from value
 	 * @param toValue the to value 
 	 */
-	public Criteria(String colName , int bindCount ,Operand operand , Object value){
+	public Criteria(String colName , Operand operand , Object value){
 		this.colName = colName;
-		this.bindCount = bindCount;
 		this.operand = operand;
 		this.value = value;
 	}
@@ -65,13 +61,6 @@ public class Criteria {
 	}
 	
 	/**
-	 * @return the colName
-	 */
-	public int getBindCount() {
-		return bindCount;
-	}
-	
-	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -84,8 +73,8 @@ public class Criteria {
 	 * @param tableAlias the alias
 	 * @return expression
 	 */
-	public String getExpression(String tableAlias){
-		String name = tableAlias == null ? colName : tableAlias + "." + colName;
+	public String getExpression( int bindCount){
+		String name = "e." +colName;
 		return operand.getExpression(name, colName+"_" + bindCount, value);
 	}
 	
@@ -94,7 +83,7 @@ public class Criteria {
 	 * @param tableAlias the alias
 	 * @return expression
 	 */
-	public void accept(Conditions conditions){
-		operand.setParameter(conditions, colName + "_" + bindCount, value);
+	public void accept(Conditions conditions, int index){
+		conditions.getParam().put(getExpression(index), value);
 	}
 }

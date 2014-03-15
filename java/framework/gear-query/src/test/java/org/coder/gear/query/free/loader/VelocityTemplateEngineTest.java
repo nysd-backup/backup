@@ -7,8 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.coder.gear.query.free.loader.ConstantAccessor;
-import org.coder.gear.query.free.loader.VelocityTemplateEngine;
+import org.coder.gear.query.free.ConstantCache;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,19 +55,11 @@ public class VelocityTemplateEngineTest extends Assert{
 		builder.append("#if($a == $b)").append("\n");
 		builder.append("#end");
 
+		ConstantCache.put("test", "TEST_V");
+		ConstantCache.put("C_a", "10");
+		ConstantCache.put("b", "10_V");
 		VelocityTemplateEngine engine = new VelocityTemplateEngine();
-		engine.setConstAccessor(new ConstantAccessor() {
-
-			@Override
-			public boolean isValidKey(String key) {
-				return key.startsWith("C_");
-			}
-
-			@Override
-			public Object getConstTarget(String variableName) {
-				return variableName + "_V";
-			}
-		});
+		
 
 		Map<String,Object> value = new HashMap<String,Object>();
 		value.put("test", "TEST");

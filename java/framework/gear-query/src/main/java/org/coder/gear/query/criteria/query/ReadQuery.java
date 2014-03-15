@@ -5,13 +5,12 @@ package org.coder.gear.query.criteria.query;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.LockModeType;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.criteria.SortKey;
 import org.coder.gear.query.free.query.Conditions;
 import org.eclipse.persistence.config.QueryHints;
@@ -31,7 +30,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	private int offset = -1;
 	
 	/** sorting keys */
-	private List<SortKey> sortKeys = new ArrayList<SortKey>();
+	private ListHolder<SortKey> sortKeys = new ListHolder<SortKey>();
 	
 	/**
 	 * Set lock mode type.
@@ -92,7 +91,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 * @see org.coder.gear.query.criteria.query.CriteriaQuery#doCall(org.coder.gear.query.criteria.statement.StatementBuilder)
 	 */
 	@Override
-	protected T doCall(List<Criteria> criterias){
+	protected T doCall(ListHolder<Criteria> criterias){
 		return doCallInternal(createConditions(criterias));
 	}
 	
@@ -101,7 +100,7 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 	 * @return condition 
 	 */
 	@SuppressWarnings("unchecked")
-	protected Conditions createConditions(List<Criteria> criterias) {
+	protected Conditions createConditions(ListHolder<Criteria> criterias) {
 		
 		ParameterizedType t = (ParameterizedType) this.getClass().getGenericSuperclass();
 		Type[] types = t.getActualTypeArguments();				
@@ -112,9 +111,8 @@ public abstract class ReadQuery<T> extends CriteriaQuery<T>{
 		parameter.setSql(builder.withWhere(criterias).withOrderBy(sortKeys).buildSelect(entityClass));
 		parameter.setResultType(entityClass);
 		parameter.setQueryId(entityClass+".select");
-		for(Criteria criteria : criterias){
-			criteria.accept(parameter);
-		}
+		criterias.eachWithIndex((e,i) -> e.accept(parameter, i));;
+		
 		for(Map.Entry<String, Object> e: getHints().entrySet()){
 			parameter.getHints().put(e.getKey(), e.getValue());
 		}

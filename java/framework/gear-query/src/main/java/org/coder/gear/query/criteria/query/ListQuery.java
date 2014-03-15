@@ -6,6 +6,7 @@ package org.coder.gear.query.criteria.query;
 import java.util.List;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.free.query.Conditions;
 
 /**
@@ -32,7 +33,7 @@ public class ListQuery<E> extends ReadQuery<List<E>>{
 	 * @see org.coder.gear.query.criteria.query.ReadQuery#createConditions(java.util.List)
 	 */
 	@Override
-	protected Conditions createConditions(List<Criteria> criterias) {
+	protected Conditions createConditions(ListHolder<Criteria> criterias) {
 		Conditions condition = super.createConditions(criterias);
 		condition.setMaxResults(maxResults);
 		return condition;
