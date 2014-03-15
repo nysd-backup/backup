@@ -3,9 +3,8 @@
  */
 package org.coder.gear.query.criteria.query;
 
-import java.util.List;
-
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.free.query.Conditions;
 
 /**
@@ -22,7 +21,7 @@ public class DeleteQuery extends ModifyQuery{
 	 */
 	@Override
 	protected Integer doCallInternal(Conditions conditions,
-			List<Criteria> criterias) {
+			ListHolder<Criteria> criterias) {
 		String sql = builder.withWhere(criterias).buildDelete(entityClass);
 		conditions.setQueryId(entityClass.getSimpleName() + ".delete");
 		conditions.setSql(sql);		

@@ -12,13 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
-import org.coder.gear.query.free.loader.ConstantAccessor;
-import org.coder.gear.query.free.loader.DefaultConstantAccessor;
+import org.coder.gear.query.free.loader.ConstantAccessible;
 import org.coder.gear.query.free.loader.QueryLoader;
 import org.coder.gear.query.free.loader.QueryLoaderTrace;
 import org.coder.gear.query.free.query.Conditions;
-import org.coder.gear.query.free.result.CursorAdapter;
-import org.coder.gear.query.free.result.TotalList;
 
 
 
@@ -28,17 +25,14 @@ import org.coder.gear.query.free.result.TotalList;
  * @author yoshida-n
  * @version created.
  */
-public class JpqlGateway implements PersistenceGateway{
+public class JpqlGateway implements PersistenceGateway ,ConstantAccessible{
 	
 	/** the pattern */
 	private static final Pattern BIND_VAR_PATTERN = Pattern.compile("([\\s,(=]+):([a-z][a-zA-Z0-9_]*)");
 	
 	/** the <code>QueryLoader</code> */
 	private QueryLoader loader = new QueryLoaderTrace();
-	
-	/** the <code>ConstantAccessor</code> */
-	private ConstantAccessor accessor = new DefaultConstantAccessor();
-	
+		
 	/** the em */
 	private EntityManager em;
 	
@@ -54,13 +48,6 @@ public class JpqlGateway implements PersistenceGateway{
 	 */
 	public void setQueryLoader(QueryLoader loader){
 		this.loader = loader;
-	}
-
-	/**
-	 * @param accessor the accessor to set
-	 */
-	public void setConstAccessor(ConstantAccessor accessor){
-		this.accessor = accessor;
 	}
 	
 	/**
@@ -110,8 +97,8 @@ public class JpqlGateway implements PersistenceGateway{
 				// マッチしたバインド変数名を取得(前後の空白、1文字目のコロンを除く)
 				String variableName = match.group(2);
 				//定数
-				if( accessor.isValidKey(variableName) ){
-					query.setParameter(variableName, convert(accessor.getConstTarget(variableName)));
+				if( isValidKey(variableName) ){
+					query.setParameter(variableName, convert(getConstTarget(variableName)));
 				//定数以外
 				}else{
 					if(param.getParam().containsKey(variableName)){				
@@ -155,22 +142,6 @@ public class JpqlGateway implements PersistenceGateway{
 			query.setLockMode(lock);
 		}
 		return query;
-	}
-
-	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getTotalResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
-	 */
-	@Override
-	public <T> TotalList<T> getTotalResult(Conditions param){
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * @see org.coder.alpha.query.gateway.elink.free.gateway.PersistenceGateway#getFetchResult(org.coder.alpha.query.free.query.elink.free.ReadingConditions)
-	 */
-	@Override
-	public <T> CursorAdapter<T> getFetchResult(Conditions param){
-		throw new UnsupportedOperationException();
 	}
 
 }

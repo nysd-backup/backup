@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.coder.gear.query.free.loader.PreparedQuery;
 import org.coder.gear.query.free.loader.QueryLoader;
 import org.coder.gear.query.free.loader.QueryLoaderTrace;
 import org.coder.gear.query.free.mapper.DefaultMetadataMapperFactory;
@@ -62,7 +61,6 @@ public class NativeGateway implements PersistenceGateway {
     public void setEntityManager(EntityManager em){
     	this.em = em;
     }
-    
 
     /**
      * set query loader.
@@ -93,12 +91,9 @@ public class NativeGateway implements PersistenceGateway {
 	@Override
     public <T> List<T> getResultList(Conditions parameter) {
     	List<T> result = new ArrayList<T>();
-        try(CloseableIterator<T> adapter = getFetchResult(parameter)){
-        	 while (adapter.hasNext()){			    			
-     			result.add(adapter.next());
-        	 }
-        	 return result;
-        } 
+        CloseableIterator<T> iterator = getFetchResult(parameter);
+        iterator.forEachRemaining(e -> result.add(e));       
+        return result;         
     }
 
     /**
@@ -173,21 +168,20 @@ public class NativeGateway implements PersistenceGateway {
             str = loader.build(param.getQueryId(), str);
             str = loader.evaluate(str, param.getParam(), param.getQueryId());
         }
-        PreparedQuery preparedQuery = loader.prepare(str,
-        		param.getParam(),param.getQueryId());
+        return loader.prepare(str,
+        		param.getParam(),param.getQueryId(),(e,b) -> {
+        	 Query query = em.createNativeQuery(e);
 
-        Query query = em.createNativeQuery(
-                preparedQuery.getQueryStatement());
-
-        // hints
-        for (Map.Entry<String, Object> h : param.getHints().entrySet()) {
-            query.setHint(h.getKey(), h.getValue());
-        }
-        // parameter
-        for (int i = 0; i < preparedQuery.getBindList().size(); i++) {
-            query.setParameter(i + 1, preparedQuery.getBindList().get(i));
-        }
-        return query;
+             // hints
+             for (Map.Entry<String, Object> h : param.getHints().entrySet()) {
+                 query.setHint(h.getKey(), h.getValue());
+             }
+             // parameter
+             for (int i = 0; i < b.size(); i++) {
+                 query.setParameter(i + 1, b.get(i));
+             }
+             return query;        	
+        });
     }
 
     /**

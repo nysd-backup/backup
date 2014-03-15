@@ -33,12 +33,16 @@ public interface PersistenceGateway {
 	/**
 	 * @return the total result
 	 */
-	<T> TotalList<T> getTotalResult(Conditions param);
+	default <T> TotalList<T> getTotalResult(Conditions param){
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * @return the result holding the <code>ResultSet</code>
 	 */
-	<T> CloseableIterator<T> getFetchResult(Conditions param);
+	default <T> CloseableIterator<T> getFetchResult(Conditions param){
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Selects the table.

@@ -3,10 +3,10 @@
  */
 package org.coder.gear.query.criteria.statement;
 
-import java.util.List;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.criteria.SortKey;
 
 
@@ -49,7 +49,7 @@ public interface StatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public StatementBuilder withWhere(List<Criteria> criteria);
+	public StatementBuilder withWhere(ListHolder<Criteria> criteria);
 	
 	/**
 	 * Creates the order by statement.
@@ -57,7 +57,7 @@ public interface StatementBuilder {
 	 * @param condition the condition
 	 * @return　the statement
 	 */
-	public StatementBuilder withOrderBy(List<SortKey> sortKey);
+	public StatementBuilder withOrderBy(ListHolder<SortKey> sortKey);
 	
 	/**
 	 * Creates the set statement.

@@ -5,6 +5,7 @@ package org.coder.gear.query.free.result;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 import javax.persistence.PersistenceException;
 
@@ -42,6 +43,18 @@ public class CursorAdapter<T> extends CloseableIterator<T>{
 		} catch (Exception e) {
 			close();
 			throw new PersistenceException(e);
+		}
+	}
+	
+	/**
+	 * @param action
+	 */
+	@Override
+	public void forEachRemaining(Consumer<? super T> action){
+		try{
+			super.forEachRemaining(action);
+		}finally {
+			close();
 		}
 	}
 	

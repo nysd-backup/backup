@@ -3,7 +3,11 @@
  */
 package org.coder.gear.query.free.loader;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+
+import javax.persistence.Query;
 
 
 
@@ -42,7 +46,7 @@ public interface QueryLoader {
 	 * @param queryId the queryId
 	 * @return the replaced SQL
 	 */
-	PreparedQuery prepare(String originalSql, Map<String,Object> parameter,String queryId);
+	Query prepare(String originalSql, Map<String,Object> parameter,String queryId,BiFunction<String,List<Object>,Query> proc);
 
 }
 

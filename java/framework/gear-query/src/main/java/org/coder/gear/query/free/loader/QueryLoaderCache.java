@@ -3,9 +3,13 @@
  */
 package org.coder.gear.query.free.loader;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.regex.Pattern;
+
+import javax.persistence.Query;
 
 
 /**
@@ -72,8 +76,8 @@ public class QueryLoaderCache implements QueryLoader{
 	 * @see org.coder.gear.query.free.loader.QueryLoader#prepare(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public PreparedQuery prepare(String originalSql, Map<String, Object> parameter,String queryId) {
-		return delegate.prepare(originalSql, parameter,queryId);
+	public Query prepare(String originalSql, Map<String, Object> parameter,String queryId, BiFunction<String,List<Object>,Query> proc){
+		return delegate.prepare(originalSql, parameter,queryId,proc);
 	}
 
 }

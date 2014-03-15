@@ -13,8 +13,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.persistence.Query;
 
 
 
@@ -24,7 +27,7 @@ import java.util.regex.Pattern;
  * @author yoshida-n
  * @version	1.0
  */
-public class DefaultQueryLoader implements QueryLoader{
+public class DefaultQueryLoader implements QueryLoader, ConstantAccessible{
 	
 	/** the classpath prefix */
 	private static final String CLASSPATH_PREFIX = "classpath:";
@@ -34,20 +37,10 @@ public class DefaultQueryLoader implements QueryLoader{
 
 	/** the template engine */
 	private TemplateEngine engine = new VelocityTemplateEngine();
-	
-	/** the accessor */ 
-	private ConstantAccessor accessor = new DefaultConstantAccessor();
-	
+		
 	/** the root directory */
 	private String dirRoot = CLASSPATH_PREFIX + "query/";
-	
-	/**
-	 * @param accessor the accessor to set
-	 */
-	public void setConstAccessor(DefaultConstantAccessor accessor){
-		this.accessor = accessor;
-	}
-	
+		
 	/**
 	 * @param dirRoot the dirRoot to set
 	 */
@@ -104,7 +97,7 @@ public class DefaultQueryLoader implements QueryLoader{
 	 * @see org.coder.gear.query.free.loader.QueryLoader#prepare(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public PreparedQuery prepare(String sql , Map<String,Object> params ,String sqlId){
+	public Query prepare(String sql, Map<String,Object> params,String sqlId,BiFunction<String,List<Object>,Query> proc){
 
 		List<Object> bindList = new ArrayList<Object>();	
 		final StringBuffer buff = new StringBuffer(sql.length());
@@ -146,7 +139,7 @@ public class DefaultQueryLoader implements QueryLoader{
 		match.appendTail(buff);
 		
 		String preparedSql = buff.toString();
-		return new PreparedQuery(preparedSql,bindList,sqlId);
+		return proc.apply(preparedSql, bindList);
 		
 	}
 	
@@ -159,8 +152,8 @@ public class DefaultQueryLoader implements QueryLoader{
 	protected Object getValue(Map<String,Object> paramMap , String variableName){
 		//パラメータがなければ定数キャッシュから取得する
 		if(!paramMap.containsKey(variableName) ){
-			if(accessor.isValidKey(variableName)){
-				return accessor.getConstTarget(variableName);		
+			if(isValidKey(variableName)){
+				return getConstTarget(variableName);		
 			}else{
 				throw new IllegalStateException("invalid parameter : name=" + variableName );
 			}

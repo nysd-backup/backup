@@ -4,10 +4,10 @@
 package org.coder.gear.query.criteria.query;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.coder.gear.query.criteria.Criteria;
+import org.coder.gear.query.criteria.ListHolder;
 import org.coder.gear.query.free.query.Conditions;
 
 /**
@@ -36,7 +36,7 @@ public class UpdateQuery extends ModifyQuery{
 	 */
 	@Override
 	protected Integer doCallInternal(Conditions conditions,
-			List<Criteria> criterias) {
+			ListHolder<Criteria> criterias) {
 		
 		String sql = builder.withSet(setValues).withWhere(criterias).buildUpdate(entityClass);
 		conditions.setQueryId(entityClass.getSimpleName() + ".update");

@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+
+import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -82,46 +85,42 @@ public class QueryLoaderTrace implements QueryLoader{
 	 * @see org.coder.gear.query.free.loader.QueryLoader#prepare(java.lang.String, java.util.List, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public PreparedQuery prepare(String originalSql,
+	public Query prepare(String originalSql,
 			Map<String, Object> parameter,
-			String queryId) {
+			String queryId,BiFunction<String,List<Object>,Query> proc) {
 		if(ignoreList.contains(queryId)){
-			return delegate.prepare(originalSql, parameter,  queryId);
+			return delegate.prepare(originalSql, parameter,  queryId,proc);
 		}else{		
-			PreparedQuery value = delegate.prepare(originalSql, parameter, queryId);			
-			if(LOG.isDebugEnabled()){
-				StringBuilder builder = new StringBuilder();				
-				builder.append("[");
-				boolean first = true;
-				for(Object o : value.getBindList()){
-					if(first){
-						first = false;
-					}else{
-						builder.append(",");
+			//ラッパーファンクション
+			return delegate.prepare(originalSql, parameter, queryId, (e,b) -> {				
+				if(LOG.isDebugEnabled()){
+					StringBuilder builder = new StringBuilder();				
+					builder.append("[");
+					boolean first = true;
+					for(Object o : b){
+						if(first){
+							first = false;
+						}else{
+							builder.append(",");
+						}
+						builder.append((o instanceof String) ? "\'" + o  + "\'" : o);
 					}
-					builder.append((o instanceof String) ? "\'" + o  + "\'" : o);
+					builder.append("]\n");						
+					LOG.debug(String.format("executing sql = \n%s\n%s",e,builder.toString()));		
 				}
-				builder.append("]\n");						
-				LOG.debug(String.format("executing sql = \n%s\n%s",value.getQueryStatement(),builder.toString()));		
-			}
-			if(LOG.isInfoEnabled()){
-				StringBuilder convertedQuery = new StringBuilder();				
-				Iterator<Object> ite = value.getBindList().iterator();
-				String converted = value.getQueryStatement();
-				
-				//?にパラメータを埋め込む
-				while(converted.contains("?")){
-					if( !ite.hasNext() ){
-						throw new IllegalStateException("count of ? is different from parameter count");
-					}
-					Object v = ite.next();
-					converted = StringUtils.replaceOnce(converted, "?", (v instanceof String) ? "\'" + v  + "\'" : String.valueOf(v));		
-				}	
-				convertedQuery.append(String.format("complete sql = \n%s",converted));
-			
-				LOG.info(convertedQuery.toString());
-			}
-			return value;			
+				if(LOG.isInfoEnabled()){
+					StringBuilder convertedQuery = new StringBuilder();				
+					Iterator<Object> ite = b.iterator();
+					String[] converted = {e};
+					ite.forEachRemaining(v -> {
+						converted[0] = StringUtils.replaceOnce(converted[0], "?", (v instanceof String) ? "\'" + v  + "\'" : String.valueOf(v));
+					});
+					convertedQuery.append(String.format("complete sql = \n%s",converted[0]));				
+					LOG.info(convertedQuery.toString());
+				}
+				//最初に指定されて関数
+				return proc.apply(e,b);
+			});
 		}
 	}
 
