@@ -86,9 +86,8 @@ public class QueryLoaderTrace implements QueryLoader{
 	 */
 	@Override
 	public Query prepare(String originalSql,
-			Map<String, Object> parameter,
-			String queryId,BiFunction<String,List<Object>,Query> proc) {
-		
+			Map<String, Object> parameter,	String queryId,BiFunction<String,List<Object>,Query> proc) {
+	
 		if(ignoreList.contains(queryId)){
 			return delegate.prepare(originalSql, parameter,  queryId,proc);						
 		}else{		
