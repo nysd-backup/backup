@@ -5,7 +5,6 @@ package org.coder.gear.query.free.result;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.function.Consumer;
 
 import javax.persistence.PersistenceException;
 
@@ -17,7 +16,7 @@ import org.eclipse.persistence.queries.ScrollableCursor;
  * @author yoshida-n
  *
  */
-public class CursorAdapter<T> extends CloseableIterator<T>{
+public class CursorAdapter<T> implements CloseableIterator<T>{
 
 	private ScrollableCursor cursor;
 	
@@ -43,18 +42,6 @@ public class CursorAdapter<T> extends CloseableIterator<T>{
 		} catch (Exception e) {
 			close();
 			throw new PersistenceException(e);
-		}
-	}
-	
-	/**
-	 * @param action
-	 */
-	@Override
-	public void forEachRemaining(Consumer<? super T> action){
-		try{
-			super.forEachRemaining(action);
-		}finally {
-			close();
 		}
 	}
 	
@@ -124,7 +111,7 @@ public class CursorAdapter<T> extends CloseableIterator<T>{
 			throw new PersistenceException(e);
 		}
 	}
-	
+
 	/**
 	 * @see java.util.Iterator#remove()
 	 */
